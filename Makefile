@@ -8,9 +8,9 @@ OUTPUT=prog.exe
 all: $(OUTPUT)
 
 $(OUTPUT):
-	$(CC) -o $(OUTPUT) *.cpp $(CFLAGS) -Wl,-Bdynamic res/USMCDLL.dll
+	$(CC) -o $(OUTPUT) *.cpp $(CFLAGS) -Wl,-Bdynamic -Lres -lUSMCDLL
 stub:
 	$(CC) -shared -o USMCDLL.dll *.cxx $(CFLAGS) -Wno-attributes
-clear:
+clean:
 	@rm -f USMCDLL.dll
 	@rm -f $(OUTPUT)
