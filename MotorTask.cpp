@@ -38,13 +38,13 @@ namespace Controller {
 	bool MotorTask::start() {
 		USMC_StartParameters startPrms;
 		if (USMC_GetStartParameters(dev->getID(), startPrms)) {
-			dev->getDeviceManager()->printError();
+			dev->getDeviceManager()->saveError();
 			return false;
 		}
 		startPrms.SDivisor = this->step_divisor;
 		startPrms.SlStart = this->slow_start;
 		if (USMC_Start(dev->getID(), dest, speed, startPrms)) {
-			dev->getDeviceManager()->printError();
+			dev->getDeviceManager()->saveError();
 			return false;
 		}
 		dev->getDeviceManager()->setLastDevice(this->dev);

@@ -35,11 +35,11 @@ namespace Controller {
 
 	bool Device::flush() {
 		if (USMC_SetMode(dev, mode)) {
-			devman->printError();
+			devman->saveError();
 			return false;
 		}
 		if (USMC_SetParameters(dev, prms)) {
-			devman->printError();
+			devman->saveError();
 			return false;
 		}
 		return true;
@@ -51,7 +51,7 @@ namespace Controller {
 
 	bool Device::setCurrentPosition(int pos) {
 		if (USMC_SetCurrentPosition(dev, pos)) {
-			devman->printError();
+			devman->saveError();
 			return false;
 		}
 		return true;
@@ -59,7 +59,7 @@ namespace Controller {
 
 	bool Device::updateMode() {
 		if (USMC_GetMode(dev, mode)) {
-			devman->printError();
+			devman->saveError();
 			return false;
 		}
 		return true;
@@ -67,7 +67,7 @@ namespace Controller {
 
 	void Device::updateState() {
 		if (USMC_GetState(dev, state)) {
-			devman->printError();
+			devman->saveError();
 		}
 	}
 
@@ -144,12 +144,12 @@ namespace Controller {
 	bool Device::flipPower() {
 		bool current = this->getPowerState() != Power::NoPower;
 		if (USMC_GetMode(dev, mode)) {
-			this->devman->printError();
+			this->devman->saveError();
 			return false;
 		}
 		this->mode.ResetD = !current;
 		if (USMC_SetMode(dev, mode)) {
-			this->devman->printError();
+			this->devman->saveError();
 			return false;
 		}
 		return true;
@@ -157,12 +157,12 @@ namespace Controller {
 
 	bool Device::revertStart() {
 		if(USMC_GetParameters(dev, prms)) {
-			devman->printError();
+			devman->saveError();
 			return false;
 		}
 		prms.StartPos = 0;
 		if(USMC_SetParameters(dev, prms)) {
-			devman->printError();
+			devman->saveError();
 			return false;
 		}
 		return true;
@@ -170,7 +170,7 @@ namespace Controller {
 
 	bool Device::saveToFlash() {
 		if (USMC_SaveParametersToFlash(dev)) {
-			devman->printError();
+			devman->saveError();
 			return false;
 		}
 		return true;
@@ -178,13 +178,13 @@ namespace Controller {
 
 	bool Device::start(int dest, float speed, unsigned char divisor) {
 		if (USMC_GetStartParameters(dev, startPrms)) {
-			devman->printError();
+			devman->saveError();
 			return false;
 		}
 		startPrms.SDivisor = divisor;
 		startPrms.SlStart = this->slow_start;
 		if (USMC_Start(dev, dest, speed, startPrms)) {
-			devman->printError();
+			devman->saveError();
 			return false;
 		}
 		this->devman->setLastDevice(this);
@@ -193,12 +193,12 @@ namespace Controller {
 
 	bool Device::start(int dest, float speed) {
 		if (USMC_GetStartParameters(dev, startPrms)) {
-			devman->printError();
+			devman->saveError();
 			return false;
 		}
 		startPrms.SlStart = this->slow_start;
 		if (USMC_Start(dev, dest, speed, startPrms)) {
-			devman->printError();
+			devman->saveError();
 			return false;
 		}
 		this->devman->setLastDevice(this);
@@ -211,7 +211,7 @@ namespace Controller {
 
 	bool Device::stop() {
 		if (USMC_Stop(dev)) {
-			devman->printError();
+			devman->saveError();
 			return false;
 		}
 		return true;
@@ -235,7 +235,7 @@ namespace Controller {
 
 	void Device::updateParameters() {
 		if(USMC_GetParameters(dev, prms)) {
-			devman->printError();
+			devman->saveError();
 		}
 	}
 
@@ -265,45 +265,45 @@ namespace Controller {
 
 	int Device::getEncoderPosition() {
 		if (USMC_GetEncoderState(dev, encState)) {
-			devman->printError();
+			devman->saveError();
 		}
 		return encState.EncoderPos;
 	}
 
 	int Device::getEncoderSyncPosition() {
 		if (USMC_GetEncoderState(dev, encState)) {
-			devman->printError();
+			devman->saveError();
 		}
 		return encState.ECurPos;
 	}
 
 	void Device::resetSyncCounter() {
 		if (USMC_GetMode(dev, mode)) {
-			devman->printError();
+			devman->saveError();
 			return;\
 		}
 		mode.SyncOUTR = true;
 		if (USMC_SetMode(dev, mode)) {
-			devman->printError();
+			devman->saveError();
 		}
 	}
 
 	#define MODE_ACCESS(n1, n2, prop)\
 	bool Device::n1() {\
 		if (this->autoSaveConfig && USMC_GetMode(dev, mode)) {\
-			devman->printError();\
+			devman->saveError();\
 		}\
 		return this->mode.prop;\
 	}\
 \
 	void Device::n2(bool sync) {\
 		if (this->autoSaveConfig && USMC_GetMode(dev, mode)) {\
-			devman->printError();\
+			devman->saveError();\
 			return;\
 		}\
 		mode.prop = sync;\
 		if (this->autoSaveConfig && USMC_SetMode(dev, mode)) {\
-			devman->printError();\
+			devman->saveError();\
 		}\
 	}
 

@@ -14,7 +14,7 @@ namespace Controller {
 			DeviceManager();
 			virtual ~DeviceManager();
 			void refresh();				// USMC_Init
-			void printError();			// USMC_GetLastErr
+			void saveError();			// USMC_GetLastErr
 			Device *getDevice(DWORD);
 			unsigned int getDeviceCount();
 			std::string getDeviceSerial(DWORD);
@@ -22,9 +22,13 @@ namespace Controller {
 			// To support fast motor stop
 			void setLastDevice(Device*);
 			Device *getLastDevice();
+			// Error handling
+			bool hasError();
+			std::string pollError();
 		private:
 			USMC_Devices devs;
 			std::vector<Device*> dev;
+			std::vector<std::string> error_queue;
 			Device *last_device;
 	};
 }

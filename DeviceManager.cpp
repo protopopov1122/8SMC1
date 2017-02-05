@@ -18,21 +18,21 @@ namespace Controller {
 		}
 		this->dev.clear();
 		if (USMC_Close()) {
-			printError();
+			saveError();
 		}
 	}
 
 	void DeviceManager::refresh() {
 		if (USMC_Init(this->devs)) {
-			printError();
+			saveError();
 		}
 	}
 
-	void DeviceManager::printError() {
+	void DeviceManager::saveError() {
 		char er[101];
 		USMC_GetLastErr(er,100);
 		er[100] = '\0';
-		printf("\n%s",er);
+		this->error_queue.push_back(std::string(er));
 	}
 
 	Device *DeviceManager::getDevice(DWORD d) {
@@ -66,5 +66,18 @@ namespace Controller {
 
 	Device *DeviceManager::getLastDevice() {
 		return this->last_device;
+	}
+	
+	bool DeviceManager::hasError() {
+		return !this->error_queue.empty();
+	}
+	
+	std::string DeviceManager::pollError() {
+		if (!hasError()) {
+			return "";
+		}
+		std::string err = this->error_queue.at(0);
+		this->error_queue.erase(this->error_queue.begin());
+		return err;
 	}
 }

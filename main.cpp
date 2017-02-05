@@ -52,6 +52,13 @@ int main(int argc, char **argv) {
 	cli.addCommand("x", new StopLastCommand(&devman));
 	cli.addCommand("mode", new ModeSetCommand(&devman));
 	cli.addCommand("help", new HelpCMD());
-	while (cli.shell()) {}
+	while (cli.shell()) {
+		if (devman.hasError()) {
+			std::cout << "Errors occured during execution" << std::endl;
+			while (!devman.hasError()) {
+			std::cout << "Error: " << devman.pollError() << std::endl;
+			}
+		}
+	}
 	return EXIT_SUCCESS;
 }
