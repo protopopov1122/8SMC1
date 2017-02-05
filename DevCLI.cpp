@@ -22,6 +22,10 @@ namespace Controller {
 					return;
 				}
 				Device *dev = devman->getDevice(std::stoi(args.at(1)));
+				if (dev == nullptr) {
+					std::cout << "Device not found" << std::endl;
+					return;
+				}
 				std::cout << "Device #" << dev->getID() << " state" << std::endl;
 				std::cout << "\tCurrent position\t" << dev->getPosition() << std::endl;
 				std::cout << "\tTemperature\t" << dev->getTemperature() << std::endl;
@@ -46,6 +50,10 @@ namespace Controller {
 					return;
 				}
 				Device *dev = devman->getDevice(std::stoi(args.at(1)));
+				if (dev == nullptr) {
+					std::cout << "Device not found" << std::endl;
+					return;
+				}
 				#define PRINT(nm, meth) std::cout << "\t" << nm << "\t" <<\
 							(dev->meth() ? "true" : "false") << std::endl;
 				PRINT("output-sync-enabled", isOutputSyncEnabled)
@@ -69,6 +77,10 @@ namespace Controller {
 			std::cout << "Provide device id" << std::endl;
 		} else {
 			Device *dev = devman->getDevice(std::stoi(args.at(0)));
+			if (dev == nullptr) {
+				std::cout << "Device not found" << std::endl;
+				return;
+			}
 			if (dev->flipPower()) {
 				std::cout << "\tPower\t" << (dev->getPowerState() == Power::FullPower ?
 								"full" : (dev->getPowerState() == Power::HalfPower ?
@@ -82,6 +94,10 @@ namespace Controller {
 			std::cout << "Provide device id" << std::endl;
 		} else {
 			Device *dev = devman->getDevice(std::stoi(args.at(0)));
+			if (dev == nullptr) {
+				std::cout << "Device not found" << std::endl;
+				return;
+			}
 			if (dev->revertStart()) {
 				std::cout << "\tOk" << std::endl;
 			}
@@ -93,6 +109,10 @@ namespace Controller {
 			std::cout << "Provide device id" << std::endl;
 		} else {
 			Device *dev = devman->getDevice(std::stoi(args.at(0)));
+			if (dev == nullptr) {
+				std::cout << "Device not found" << std::endl;
+				return;
+			}
 			if (dev->saveToFlash()) {
 				std::cout << "\tOk" << std::endl;
 			}
@@ -106,6 +126,10 @@ namespace Controller {
 			std::cout << "Provide current position" << std::endl;
 		} else {
 			Device *dev = devman->getDevice(std::stoi(args.at(0)));
+			if (dev == nullptr) {
+				std::cout << "Device not found" << std::endl;
+				return;
+			}
 			int pos = std::stoi(args.at(1));
 			if (dev->setCurrentPosition(pos)) {
 				std::cout << "\tOk" << std::endl;
@@ -122,6 +146,10 @@ namespace Controller {
 				return;
 			}
 			Device *dev = devman->getDevice(std::stoi(args.at(0)));
+			if (dev == nullptr) {
+				std::cout << "Device not found" << std::endl;
+				return;
+			}
 			int dest = std::stoi(args.at(1));
 			float speed = dev->getSpeed();
 			int div = dev->getStepDivisor();
@@ -147,6 +175,10 @@ namespace Controller {
 			std::cout << "Provide device id" << std::endl;
 		} else {
 			Device *dev = devman->getDevice(std::stoi(args.at(0)));
+			if (dev == nullptr) {
+				std::cout << "Device not found" << std::endl;
+				return;
+			}
 			if (dev->stop()) {
 				std::cout << "\tStopped device #" << dev->getID() << std::endl;
 			}
@@ -174,6 +206,10 @@ namespace Controller {
 			return;
 		}
 		Device *dev = devman->getDevice(std::stoi(args.at(0)));
+		if (dev == nullptr) {
+			std::cout << "Device not found" << std::endl;
+			return;
+		}
 		std::string name = args.at(1);
 		bool value = args.at(2).compare("true") == 0;
 		#define PAR(nm, meth) if (name.length() == strlen(nm) &&\
