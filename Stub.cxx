@@ -5,8 +5,11 @@
 #include <iostream>
 
 
+char SER01[] = "01";
+char SER02[] = "02";
+
 char *Serials[] = {
-	"01", "02"
+	SER01, SER02
 };
 
 DWORD USMC_Init(USMC_Devices &devs) {
@@ -23,7 +26,7 @@ DWORD USMC_Close() {
 }
 
 DWORD USMC_GetState(DWORD dev, USMC_State &state) {
-//	std::cout << "Get #" << dev << " state" << std::endl;
+	std::cout << "Get #" << dev << " state" << std::endl;
 	return FALSE;
 }
 
@@ -74,4 +77,18 @@ DWORD USMC_SaveParametersToFlash(DWORD dev) {
 
 void USMC_GetLastErr(char *str, size_t len) {
 	std::cout << "Get last error" << std::endl;
+}
+
+DWORD USMC_GetEncoderState(DWORD dev, USMC_EncoderState &encState) {
+	std::cout << "Get #" << dev << " encoder state" << std::endl;
+	return FALSE;
+}
+
+void USMC_GetDllVersion( DWORD &dwHighVersion, DWORD &dwLowVersion) {
+	// Do nothing
+}
+
+DWORD USMC_RestoreCurPos(DWORD dev) {
+	// Also
+	return FALSE;
 }
