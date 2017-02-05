@@ -31,7 +31,7 @@ Code is not guaranted to work, project also may be discontinued. There are stand
 Builing
 ===================
 Project is built using MinGW cross compiler(build tested on top of Linux and Windows Subsystem for Linux).
-Create 'res' directory in root of project and copy 'USMCDLL.h' to it. You must install MiscoSMC driver.
+Create 'res' directory in root of project and copy 'USMCDLL.h' and 'USMCDLL.dll' to it. You must install MiscoSMC driver.
 Build commands:
 ```bash
 make clean	# Clean all
@@ -41,6 +41,6 @@ make stub	# Build stub to test CLI without controller
 
 Authors and Contributions
 ===================
-Code author: Eugene Protopopov <protopopov1122@yandex.ru>
+Code author: Eugene Protopopov <protopopov1122@yandex.ru>.
 Work with controllers is performed in command.
 By now code have no license, but feel free to use project, contribute code and ideas.

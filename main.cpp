@@ -55,8 +55,8 @@ int main(int argc, char **argv) {
 	while (cli.shell()) {
 		if (devman.hasError()) {
 			std::cout << "Errors occured during execution" << std::endl;
-			while (!devman.hasError()) {
-			std::cout << "Error: " << devman.pollError() << std::endl;
+			while (devman.hasError()) {
+				std::cout << "Error: " << devman.pollError() << std::endl;
 			}
 		}
 	}
