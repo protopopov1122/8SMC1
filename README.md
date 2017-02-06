@@ -4,6 +4,7 @@ This project contains library and command-line interface for 8SMC1 stepper motor
 Library consists of USMC API wrappers for C++ and use MicroSMC controller driver. By now, existing API is low level and directly mapped to USMC API.
 Command line inteface is used to test main library, controllers and stepper motors, as well as replace default MicroSMC test program, that is quite poor.
 Project also contains 'Stub.cxx' file that contains 'USMCDLL.h' stub implementaion.
+For details see README in appropriate subdirectories.
 
 Current goals
 ===================
@@ -21,7 +22,7 @@ This project started with goal to create two-axis moving laser using existing st
 Known issues
 ===================
 * Current MicroSMC driver works only on Windows 2000/XP/Vista - controller may be correctly used only on this platforms. Possible solution - reimplement all low level wrappers on top of another controller(like Arduino). Other project parts will depend only on these wrappers so will not be affected, but porting will be quite hard.
-* Project is on ultra-early development stage and isn't tested at all. By 05/02/17 it's never executed on real controller.
+* Project is on ultra-early development stage and isn't tested at all. By 06/02/17 it's executed on real controller once(See NEWS).
 * There are a lot of synchronization options and other parameters for our controller - we have not figured how to use them yet.
 
 Disclaimer
@@ -42,5 +43,7 @@ make stub	# Build stub to test CLI without controller
 Authors and Contributions
 ===================
 Code author: Eugene Protopopov <protopopov1122@yandex.ru>.
+
 Work with controllers is performed in command.
+
 By now code have no license, but feel free to use project, contribute code and ideas.
