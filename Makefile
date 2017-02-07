@@ -14,6 +14,8 @@ $(OUTPUT):
 	@cp $(LIB)/USMCDLL.dll .
 stub:
 	$(CC) -shared -o USMCDLL.dll misc/Stub.cxx $(CFLAGS) -Wno-attributes
+gcode:
+	$(CC) -o $(OUTPUT) gcode/*.cpp $(CFLAGS)
 clean:
 	@rm -f USMCDLL.dll
 	@rm -f $(OUTPUT)

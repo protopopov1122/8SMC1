@@ -1,6 +1,7 @@
 This file contains detailed information about project goals.
 ------------------------------------
 All work on the project may be splitted into few steps:
+* Write more tests for different parts of system.
 * Writing wrapper API to cover all existing USMC API functions. Reason: create abstraction layer on top of existing API(this may prevent compability problems, see 'Other' section)
 * Implement high-level API on top of wrappers. Reason: perform error processing, speed control, some more abstract but useful functions.
 * Create command-line interface(CLI) to test existing API and integrate all system. Reason: testing is easier, system may become useful earlier.

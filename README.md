@@ -38,6 +38,7 @@ Build commands:
 make clean	# Clean all
 make all	# Build command-line interface
 make stub	# Build stub to test CLI without controller
+make gcode	# Build testing G-Code parser
 ```
 
 Authors and Contributions
