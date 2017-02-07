@@ -147,7 +147,7 @@ namespace Controller {
 			this->devman->saveError();
 			return false;
 		}
-		this->mode.ResetD = !current;
+		this->mode.ResetD = current;
 		if (USMC_SetMode(dev, mode)) {
 			this->devman->saveError();
 			return false;

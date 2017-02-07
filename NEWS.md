@@ -12,3 +12,9 @@ What tested:
 * Controller mode modifying commands - failed. Reason: wrong parameters.
 
 Conclusion: need to fix power up/down commands, controller mode modifying and find out about all controller parameters.
+
+##### 07/02/2017
+* Added G-Code parser and test to it.
+* Maybe fixed power up bug.
+
+TODO: Test power up/down on real controller.
