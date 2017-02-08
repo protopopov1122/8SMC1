@@ -51,6 +51,9 @@ int main(int argc, char **argv) {
 	cli.addCommand("stop", new StopCommand(&devman));
 	cli.addCommand("x", new StopLastCommand(&devman));
 	cli.addCommand("mode", new ModeSetCommand(&devman));
+	cli.addCommand("roll", new RollCommand(&devman));
+	cli.addCommand("coord", new CoordCommand(&devman));
+	cli.addCommand("move", new MoveCommand(&devman));
 	cli.addCommand("help", new HelpCMD());
 	while (cli.shell()) {
 		if (devman.hasError()) {

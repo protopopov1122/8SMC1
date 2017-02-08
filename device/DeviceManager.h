@@ -3,12 +3,17 @@
 
 #include <vector>
 #include <string>
+#include <cinttypes>
 #include "Device.h"
 #include "USMCDLL.h"
 
 /* Device manager initialise existing controllers and keep track of usable devices */
 
 namespace Controller {
+
+	class DeviceController;	// For forward referencing
+	class CoordController;
+
 	class DeviceManager {
 		public:
 			DeviceManager();
@@ -16,9 +21,13 @@ namespace Controller {
 			void refresh();				// USMC_Init
 			void saveError();			// USMC_GetLastErr
 			Device *getDevice(DWORD);
+			DeviceController *getDeviceController(DWORD);
 			unsigned int getDeviceCount();
 			std::string getDeviceSerial(DWORD);
 			std::string getDeviceVersion(DWORD);
+			size_t getCoordCount();
+			CoordController *getCoord(size_t);
+			CoordController *createCoord(DWORD, DWORD);
 			// To support fast motor stop
 			void setLastDevice(Device*);
 			Device *getLastDevice();
@@ -27,7 +36,8 @@ namespace Controller {
 			std::string pollError();
 		private:
 			USMC_Devices devs;
-			std::vector<Device*> dev;
+			std::vector<DeviceController*> dev;
+			std::vector<CoordController*> coords;
 			std::vector<std::string> error_queue;
 			Device *last_device;
 	};

@@ -15,6 +15,7 @@ namespace Controller {
 			std::string req = args.at(0);
 			const std::string STATE = "state";
 			const std::string MODE = "mode";
+			const std::string COORDS = "coords";
 			#define cmp(str) (req.length() == str.length() && req.compare(0, str.length(), str) == 0)
 			if (cmp(STATE)) { // View device state
 				if (args.size() < 2) {
@@ -65,6 +66,12 @@ namespace Controller {
 				PRINT("trailer1-true-state", getTrailer1TrueState)
 				PRINT("trailer2-true-state", getTrailer2TrueState)
 				#undef PRINT
+			} else if (cmp(COORDS)) {
+				for (size_t i = 0; i < devman->getCoordCount(); i++) {
+					CoordController *ctrl = devman->getCoord(i);
+					std::cout << i << "\tdev: " << ctrl->getXAxis()->getDevice()->getID()
+						<< "; dev: " << ctrl->getYAxis()->getDevice()->getID() << std::endl;
+				}
 			} else {
 				std::cout << "Unknown parameter '" << req << "'" << std::endl;
 			}
@@ -145,14 +152,14 @@ namespace Controller {
 				std::cout << "Provide destination" << std::endl;
 				return;
 			}
-			Device *dev = devman->getDevice(std::stoi(args.at(0)));
+			DeviceController *dev = devman->getDeviceController(std::stoi(args.at(0)));
 			if (dev == nullptr) {
 				std::cout << "Device not found" << std::endl;
 				return;
 			}
 			int dest = std::stoi(args.at(1));
-			float speed = dev->getSpeed();
-			int div = dev->getStepDivisor();
+			float speed = dev->getDevice()->getSpeed();
+			int div = dev->getDevice()->getStepDivisor();
 			switch (args.size()) {
 				case 3: {
 					speed = std::stod(args.at(2));
@@ -162,11 +169,10 @@ namespace Controller {
 					int div = std::stoi(args.at(3));
 				} break;
 			}
-			if (dev->start(dest, speed, div)) {
-				std::cout << "\tStarted device #" << dev->getID() << " to " << dest
-					<< " with speed " << speed << " steps/sec and " << div << " step divisor"
-					<< std::endl;
-			}
+			std::cout << "\tStarted device #" << dev->getDevice()->getID() << " to " << dest
+				<< " with speed " << speed << " steps/sec and " << div << " step divisor"
+				<< std::endl;
+			dev->startMove(dest, speed, div, false);
 		}
 	}
 
@@ -232,5 +238,58 @@ namespace Controller {
 		#undef EPAR
 		#undef PAR
 		std::cout << "Parameter '" << name << "' set to " << (value ? "true" : "false") << std::endl;
+	}
+
+	void RollCommand::execute(std::vector<std::string> &args) {
+		if (args.empty()) {
+			std::cout << "Provide device id" << std::endl;
+		} else {
+			if (args.size() < 2) {
+				std::cout << "Provide trailer id" << std::endl;
+				return;
+			}
+			DeviceController *dev = devman->getDeviceController(std::stoi(args.at(0)));
+			if (dev == nullptr) {
+				std::cout << "Device not found" << std::endl;
+				return;
+			}
+			int dest = std::stoi(args.at(1));
+			dev->moveToTrailer(dest);
+		}
+	}
+
+	void CoordCommand::execute(std::vector<std::string> &args) {
+		if (args.size() < 2) {
+			std::cout << "Provide devices" << std::endl;
+		} else {
+			DWORD d1 = std::stoi(args.at(0));
+			DWORD d2 = std::stoi(args.at(1));
+			if (devman->createCoord(d1, d2) == nullptr) {
+				std::cout << "Wrong device ids" << std::endl;
+			} else {
+				std::cout << "Created coord #" << devman->getCoordCount() - 1 << std::endl;
+			}
+		}
+	}
+
+	void MoveCommand::execute(std::vector<std::string> &args) {
+		if (args.size() < 5) { // TODO Normal arg check
+			std::cout << "Provide arguments" << std::endl;
+		} else {
+			CoordController *ctrl = devman->getCoord(std::stoi(args.at(0)));
+			int x = std::stoi(args.at(1));
+			int y = std::stoi(args.at(2));
+			float speed = std::stod(args.at(3));
+			int div = std::stod(args.at(4));
+			if (ctrl == nullptr) {
+				std::cout << "Wrong coord id" << std::endl;
+			} else {
+				motor_point_t point = {x, y};
+				std::cout << "\tStarted coord #" << args.at(0) << " to " << x << "x" << y
+					<< " with base speed " << speed << " steps/sec and " << div << " step divisor"
+					<< std::endl;
+				ctrl->move(point, speed, div, true);
+			}
+		}
 	}
 }

@@ -10,7 +10,7 @@ OUTPUT=prog.exe
 all: $(OUTPUT)
 
 $(OUTPUT):
-	$(CC) -o $(OUTPUT) -Idevice -Icli device/*.cpp cli/*.cpp $(CFLAGS) -Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL
+	$(CC) -o $(OUTPUT) -Idevice -Icli -Ictrl-lib device/*.cpp cli/*.cpp ctrl-lib/*.cpp $(CFLAGS) -Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL
 	@cp $(LIB)/USMCDLL.dll .
 stub:
 	$(CC) -shared -o USMCDLL.dll misc/Stub.cxx $(CFLAGS) -Wno-attributes

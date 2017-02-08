@@ -2,7 +2,7 @@
 #define _8SMC1_DEVCLI_H_
 
 #include "CLI.h"
-#include "DeviceManager.h"
+#include "DeviceController.h"
 
 /* Defines cli commands to control Devices API */
 
@@ -35,6 +35,9 @@ namespace Controller {
 	CMD(StopCommand)
 	CMD(StopLastCommand)
 	CMD(ModeSetCommand)
+	CMD(RollCommand)
+	CMD(CoordCommand)
+	CMD(MoveCommand)
 
 	#undef CMD
 }
