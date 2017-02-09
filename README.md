@@ -22,7 +22,7 @@ This project started with goal to create two-axis moving laser using existing st
 Known issues
 ===================
 * Current MicroSMC driver works only on Windows 2000/XP/Vista - controller may be correctly used only on this platforms. Possible solution - reimplement all low level wrappers on top of another controller(like Arduino). Other project parts will depend only on these wrappers so will not be affected, but porting will be quite hard.
-* Project is on ultra-early development stage and isn't tested at all. By 06/02/17 it's executed on real controller once(See NEWS).
+* Project is on ultra-early development stage and isn't tested at all. By 09/02/17 existing functions are tested(See NEWS).
 * There are a lot of synchronization options and other parameters for our controller - we have not figured how to use them yet.
 
 Disclaimer

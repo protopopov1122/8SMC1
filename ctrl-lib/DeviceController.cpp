@@ -28,13 +28,14 @@ namespace Controller {
 		return ErrorCode::NoError;
 	}
 
-	err_code_t DeviceController::moveToTrailer(int tr) {
+	err_code_t DeviceController::moveToTrailer(int tr, int comeback) {
+		int DEFAULT_STEP = 300000;
+		const float SPEED = 16000.0f;
+		const unsigned char DIV = 8;
 		if (tr != 1 && tr != 2) {
 			return ErrorCode::WrongParameter;
 		}
-		int dest = (tr == 1 ? 1000 : -1000);
-		const float SPEED = 1500.0f;
-		const unsigned char DIV = 8;
+		int dest = (tr == 1 ? -DEFAULT_STEP : DEFAULT_STEP);
 		while (!dev->isTrailerPressed(tr)) {
 			if (!this->dev->isRunning()) {
 				this->dev->start(this->dev->getPosition() + dest, SPEED, DIV);
@@ -43,6 +44,11 @@ namespace Controller {
 		if (this->dev->isRunning()) {
 			this->dev->stop();
 		}
+		if (tr == 2) {
+			comeback *= -1;
+		}	
+		this->dev->start(this->dev->getPosition() + comeback, SPEED, DIV);
+		
 		return ErrorCode::NoError;
 	}
 

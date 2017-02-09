@@ -165,8 +165,8 @@ namespace Controller {
 					speed = std::stod(args.at(2));
 				} break;
 				case 4: {
-					float speed = std::stod(args.at(2));
-					int div = std::stoi(args.at(3));
+					speed = std::stod(args.at(2));
+					div = std::stoi(args.at(3));
 				} break;
 			}
 			std::cout << "\tStarted device #" << dev->getDevice()->getID() << " to " << dest
@@ -254,7 +254,7 @@ namespace Controller {
 				return;
 			}
 			int dest = std::stoi(args.at(1));
-			dev->moveToTrailer(dest);
+			dev->moveToTrailer(dest, 800);
 		}
 	}
 
@@ -291,5 +291,16 @@ namespace Controller {
 				ctrl->move(point, speed, div, true);
 			}
 		}
+	}
+	
+	void CalibrateCommand::execute (std::vector<std::string> &args) {
+		if (args.size() < 2) {
+			std::cout << "Provide arguments" << std::endl;
+			return;
+		}
+		int coordNum = std::stoi(args.at(0));
+		int coordTrailer = std::stoi(args.at(1));
+		CoordController *coordController = devman->getCoord(coordNum);
+		coordController->calibrate(coordTrailer);
 	}
 }

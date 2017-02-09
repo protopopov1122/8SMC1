@@ -18,3 +18,26 @@ Conclusion: need to fix power up/down commands, controller mode modifying and fi
 * Maybe fixed power up bug.
 
 TODO: Test power up/down on real controller.
+
+##### 08/02/2017
+System test on real controllers.
+Tested:
+* Power up - bug fixed, controller power ups motor by command.
+* Initialisation - failed. System can't initialise itself. TODO: Fix.
+* Movement - tested separate device movement(start/stop/x commands). Works well.
+* Roll to trailer - works. Trailer numbers were confused but this bug is fixed.
+* Coordinate plane - works, however speed check must be performed.
+* Calibration - basic calibration works(Basically it is both motor rolls).
+
+Other:
+* Detected maximal motor speed(approx. 6000 steps/s).
+* Detected required motor comeback after roll(approx. 800 steps).
+
+
+TODO:
+* Motor synchronization during movement.
+* Virtual coordinates mapping to real.
+* Maximal speed checks.
+* Refractoring.
+
+Conclusion: development goes well, most useful system core functions being sucessfully developed, however a lot of work should be done.

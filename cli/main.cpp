@@ -54,6 +54,7 @@ int main(int argc, char **argv) {
 	cli.addCommand("roll", new RollCommand(&devman));
 	cli.addCommand("coord", new CoordCommand(&devman));
 	cli.addCommand("move", new MoveCommand(&devman));
+	cli.addCommand("cal", new CalibrateCommand(&devman));
 	cli.addCommand("help", new HelpCMD());
 	while (cli.shell()) {
 		if (devman.hasError()) {

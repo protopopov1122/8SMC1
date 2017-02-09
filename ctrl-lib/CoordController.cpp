@@ -43,4 +43,14 @@ namespace Controller {
 		}
 		return ErrorCode::NoError;
 	}
+	
+	err_code_t CoordController::calibrate(int tr) {
+			const int TRAILER_COMEBACK = 800;
+			if (tr != 1 && tr != 2) {
+				return ErrorCode::WrongParameter;
+			}
+			xAxis->moveToTrailer(tr, TRAILER_COMEBACK);
+			yAxis->moveToTrailer(tr, TRAILER_COMEBACK);
+			return ErrorCode::NoError;
+	}	
 }

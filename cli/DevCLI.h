@@ -38,6 +38,7 @@ namespace Controller {
 	CMD(RollCommand)
 	CMD(CoordCommand)
 	CMD(MoveCommand)
+	CMD(CalibrateCommand)
 
 	#undef CMD
 }

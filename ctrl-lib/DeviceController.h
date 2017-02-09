@@ -30,7 +30,7 @@ namespace Controller {
 			Device *getDevice();
 
 			err_code_t waitWhileRunning();
-			err_code_t moveToTrailer(int);
+			err_code_t moveToTrailer(int, int);
 			err_code_t startMove(motor_coord_t, float, int, bool);
 		private:
 			Device *dev;
@@ -43,6 +43,7 @@ namespace Controller {
 			DeviceController *getXAxis();
 			DeviceController *getYAxis();
 			err_code_t move(motor_point_t, float, int, bool);
+			err_code_t calibrate(int);
 		private:
 			DeviceController *xAxis;
 			DeviceController *yAxis;
