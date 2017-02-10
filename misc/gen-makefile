@@ -1,0 +1,39 @@
+#!/bin/bash
+
+if [ $1 == "old" ]
+then
+	cat misc/mk-old 
+	exit
+fi
+
+# Append header to Makefile
+cat misc/mk-header 
+
+# Generate all rule
+printf "all: \$(OUTPUT) stub\n\n" 
+
+# Generate object file build targets
+printf "\n" 
+find . -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS) -c "$0"\n"}' 
+
+# Generate stub build target
+printf "stub: Stub.o\n\t\$(CC) -shared -o \$(BUILD)/USMCDLL.dll Stub.o -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread\n\n" 
+
+# Generate program build target
+printf "\$(OUTPUT): " 
+OBJS=`find device cli ctrl-lib -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
+echo $OBJS 
+printf "\t\$(CC) -o \$(BUILD)/\$(OUTPUT) " 
+printf "$OBJS" 
+printf " -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=\$(LIB) -lUSMCDLL\n\t@cp \$(LIB)/USMCDLL.dll \$(BUILD)\n\n" 
+
+# Generate gcode build target
+printf "gcode: " 
+OBJS=`find gcode -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
+echo $OBJS 
+printf "\t\$(CC) -o \$(BUILD)/\$(OUTPUT) " 
+printf "$OBJS" 
+printf " -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=\$(LIB) -lUSMCDLL\n\t@cp \$(LIB)/USMCDLL.dll \$(BUILD)\n\n" 
+
+# Append footer to Makefile
+cat misc/mk-footer 

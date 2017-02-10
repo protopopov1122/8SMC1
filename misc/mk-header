@@ -1,0 +1,17 @@
+CC=i686-w64-mingw32-g++
+LD=i686-w64-mingw32-ld
+
+OUTPUT=prog.exe
+BUILD=./build
+HEADERS=./res
+LIB=./res
+
+LANG=-std=c++11 -Wall -Wextra -pedantic -Wno-unused-parameter
+DBG=-g3 -ggdb -O3
+INCLUDES=-Idevice -Icli -Ictrl-lib
+EXTRA=
+CFLAGS=$(LANG) $(DBG) -I$(HEADERS) $(INCLUDES) $(EXTRA)
+
+LFLAGS=-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread
+LIBS=-Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL
+

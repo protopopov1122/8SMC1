@@ -33,7 +33,13 @@ Builing
 ===================
 Project is built using MinGW cross compiler(build tested on top of Linux and Windows Subsystem for Linux).
 Create 'res' directory in root of project and copy 'USMCDLL.h' and 'USMCDLL.dll' to it. You must install MiscoSMC driver.
-Build commands:
+Project has two build systems(simply two different Makefile). One is hand-written(old) and is convinient for development in terminal, other(new) is auto-generated and is useful for incremental build(used in IDEs). This repo contains new Makefile.
+You can generate them(NOTE: You should regenerate incremental Makefile if new file is added to project):
+```bash
+./misc/gen-makefile # For 'new' Makefile
+./misc/gen-makefile old # For 'old' one
+```
+Build commands for both are the same:
 ```bash
 make clean	# Clean all
 make all	# Build command-line interface

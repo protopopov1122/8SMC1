@@ -1,0 +1,4 @@
+clean:
+	@rm -f *.o
+	@rm -rf $(BUILD)
+	@mkdir -p $(BUILD)
