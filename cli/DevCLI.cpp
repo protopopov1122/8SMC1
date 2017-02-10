@@ -172,7 +172,7 @@ namespace Controller {
 			std::cout << "\tStarted device #" << dev->getDevice()->getID() << " to " << dest
 				<< " with speed " << speed << " steps/sec and " << div << " step divisor"
 				<< std::endl;
-			dev->startMove(dest, speed, div, false);
+			dev->startMove(dest, speed, div);
 		}
 	}
 

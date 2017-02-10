@@ -81,7 +81,8 @@ namespace Controller {
 			bool saveToFlash();		// USMC_SaveParametersToFlash
 			// Motor moving
 			/* Accept movement parameters or use presaved */
-			bool start(int, float, unsigned char);	// Specify location, speed, divisor 
+			bool start(int, float,
+					unsigned char, bool  = false);	// Specify location, speed, divisor
 			bool start(int, float);			// Specify location and speed
 			bool start(int);			// Specify only location
 			bool stop();				// Stop motor

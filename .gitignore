@@ -53,6 +53,7 @@ dkms.conf
 # Eclipse files
 .cproject
 .project
+.settings
 
 # Project related
 res

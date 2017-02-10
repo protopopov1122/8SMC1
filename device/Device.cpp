@@ -177,11 +177,13 @@ namespace Controller {
 		return true;
 	}
 
-	bool Device::start(int dest, float speed, unsigned char divisor) {
+	bool Device::start(int dest, float speed,
+			unsigned char divisor, bool syncIn) {
 		if (USMC_GetStartParameters(dev, startPrms)) {
 			devman->saveError();
 			return false;
 		}
+		startPrms.WSyncIN = syncIn;
 		startPrms.SDivisor = divisor;
 		startPrms.SlStart = this->slow_start;
 		if (USMC_Start(dev, dest, speed, startPrms)) {
