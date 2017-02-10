@@ -1,6 +1,8 @@
 #ifndef _8SMC1_DEVICE_MANAGER_H_
 #define _8SMC1_DEVICE_MANAGER_H_
 
+#include <stdlib.h>
+#include <string.h>
 #include <vector>
 #include <string>
 #include <cinttypes>

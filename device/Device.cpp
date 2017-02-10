@@ -11,7 +11,8 @@ namespace Controller {
 		this->speed = 1500;
 		this->slow_start = false;
 		this->autoSaveConfig = true;
-		memset(&this->state, 0, sizeof(USMC_State));	// Temporary
+		this->waitSync = false;
+		memset((void*) &this->state, (int) 0, (unsigned int) sizeof(USMC_State));	// Temporary
 		this->updateState();
 		this->updateMode();
 		this->updateParameters();

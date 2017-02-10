@@ -97,9 +97,9 @@ namespace Controller {
 			return nullptr;
 		}
 
-		GCodeCommand *com = new GCodeCommand(arr.at(0));
+		GCodeCommand *com = new GCodeCommand(arr[0]);
 		for (unsigned int i = 1; i < arr.size(); i++) {
-			std::string arg = arr.at(i);
+			std::string arg = arr[i];
 			char a = arg.c_str()[0];
 			arg.erase(arg.begin());
 			com->setArg(a, arg);
