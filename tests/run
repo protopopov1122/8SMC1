@@ -1,3 +1,3 @@
 #!/bin/bash
 
-cd build ; wine prog.exe
+cd build ; wine prog.exe ../$@
