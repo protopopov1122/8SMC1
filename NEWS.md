@@ -19,7 +19,7 @@ Conclusion: need to fix power up/down commands, controller mode modifying and fi
 
 TODO: Test power up/down on real controller.
 
-##### 08/02/2017
+##### 09/02/2017
 System test on real controllers.
 Tested:
 * Power up - bug fixed, controller power ups motor by command.
@@ -41,3 +41,9 @@ TODO:
 * Refractoring.
 
 Conclusion: development goes well, most useful system core functions being sucessfully developed, however a lot of work should be done.
+
+##### 10/02/2017
+Refractored code. TODO:
+* Retest all high level functions: roll, calibrate, coord move
+* Test synchronization(barely impossible but still)
+

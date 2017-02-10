@@ -7,6 +7,8 @@ namespace Controller {
 			DeviceController *yaxis) {
 		this->xAxis = xaxis;
 		this->yAxis = yaxis;
+		this->xAxis->getDevice()->setSyncInputMode(true);
+		this->yAxis->getDevice()->setOutputSyncEnabled(true);
 	}
 
 	CoordController::~CoordController() {
