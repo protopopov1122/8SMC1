@@ -5,7 +5,7 @@
 
 namespace Controller {
 	DeviceManager::DeviceManager() {
-		USMC_Init(this->devs);
+		this->refresh();
 		for (DWORD d = 0; d < devs.NOD; d++) {
 			this->dev.push_back(new DeviceController(new Device(d, this)));
 		}

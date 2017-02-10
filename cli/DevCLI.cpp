@@ -303,4 +303,8 @@ namespace Controller {
 		CoordController *coordController = devman->getCoord(coordNum);
 		coordController->calibrate(coordTrailer);
 	}
+	
+	void RefreshCommand::execute (std::vector<std::string> &args) {
+		devman->refresh();
+	}
 }

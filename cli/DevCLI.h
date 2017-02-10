@@ -39,6 +39,7 @@ namespace Controller {
 	CMD(CoordCommand)
 	CMD(MoveCommand)
 	CMD(CalibrateCommand)
+	CMD(RefreshCommand)
 
 	#undef CMD
 }
