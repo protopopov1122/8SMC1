@@ -21,6 +21,7 @@ namespace Controller {
 //		}
 		dev->wait_for_thread = false;
 		pthread_exit(nullptr);
+		return nullptr;
 	}
 
 	DeviceController::DeviceController(Device *dev) {

@@ -6,8 +6,8 @@ BUILD=./build
 HEADERS=./res
 LIB=./res
 
-LANG=-std=c++11 -Wall -Wextra -pedantic -Wno-unused-parameter
-DBG=-g3 -ggdb -O3
+LANG=-std=c++11 -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-attributes
+DBG=-O0
 INCLUDES=-Idevice -Icli -Ictrl-lib
 EXTRA=
 CFLAGS=$(LANG) $(DBG) -I$(HEADERS) $(INCLUDES) $(EXTRA)
