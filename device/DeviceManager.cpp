@@ -7,21 +7,15 @@
 namespace Controller {
 	DeviceManager::DeviceManager() {
 		this->refresh();
-		for (DWORD d = 0; d < devs.NOD; d++) {
-			this->dev.push_back(new DeviceController(new Device(d, this)));
+		for (size_t i = 0; i < devs.NOD; i++) {
+			this->dev.push_back(new Device((DWORD) i, this));
 		}
 		this->last_device = nullptr;
 	}
 
 	DeviceManager::~DeviceManager() {
-		for (size_t i = 0; i < this->tasks.size(); i++) {
-			delete this->tasks.at(i);
-		}
-		for (size_t i = 0; i < this->coords.size(); i++) {
-			delete this->coords.at(i);
-		}
-		for (DWORD d = 0; d < devs.NOD; d++) {
-			delete this->dev.at(d);
+		for (size_t i = 0; i < this->dev.size(); i++) {
+			delete this->dev.at(i);
 		}
 		this->dev.clear();
 		if (USMC_Close()) {
@@ -43,13 +37,6 @@ namespace Controller {
 	}
 
 	Device *DeviceManager::getDevice(DWORD d) {
-		if (d >= this->devs.NOD) {
-			return nullptr;
-		}
-		return this->dev.at(d)->getDevice();
-	}
-
-	DeviceController *DeviceManager::getDeviceController(DWORD d) {
 		if (d >= this->devs.NOD) {
 			return nullptr;
 		}
@@ -93,52 +80,5 @@ namespace Controller {
 		std::string err = this->error_queue.at(0);
 		this->error_queue.erase(this->error_queue.begin());
 		return err;
-	}
-
-	size_t DeviceManager::getCoordCount() {
-		return this->coords.size();
-	}
-
-	CoordController *DeviceManager::getCoord(size_t c) {
-		if (c >= this->coords.size()) {
-			return nullptr;
-		}
-		return this->coords.at(c);
-	}
-
-	CoordController *DeviceManager::createCoord(DWORD d1, DWORD d2) {
-		if (d1 >= this->devs.NOD || d2 >= this->devs.NOD) {
-			return nullptr;
-		}
-
-		CoordController *ctrl = new CoordController(this->dev.at(d1), this->dev.at(d2));
-		this->coords.push_back(ctrl);
-		return ctrl;
-	}
-
-	size_t DeviceManager::getTaskCount() {
-		return this->tasks.size();
-	}
-
-	CoordTask *DeviceManager::getTask(size_t i) {
-		if (i >= this->tasks.size()) {
-			return nullptr;
-		}
-		return this->tasks.at(i);
-	}
-
-	CoordTask *DeviceManager::createTask() {
-		CoordTask *task = new CoordTask();
-		this->tasks.push_back(task);
-		return task;
-	}
-
-	bool DeviceManager::removeTask(size_t i) {
-		if (i >= this->tasks.size()) {
-			return false;
-		}
-		delete this->tasks.at(i);
-		this->tasks.erase(this->tasks.begin() + i);
-		return true;
 	}
 }

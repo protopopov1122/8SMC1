@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <cinttypes>
+#include "SystemManager.h"
 #include "DevCLI.h"
 
 /* Creates device manager and runs command line*/
@@ -34,26 +35,27 @@ class HelpCMD : public CLICommand  {
 
 int main(int argc, char **argv) {
 	DeviceManager devman;
+	SystemManager sysman(&devman);
 	CLI cli;
 	cli.addCommand("echo", new EchoCMD());
-	cli.addCommand("ls", new LsCommand(&devman));
-	cli.addCommand("power", new PowerCommand(&devman));
-	cli.addCommand("revert", new RevertStartCommand(&devman));
-	cli.addCommand("pos", new PositionCommand(&devman));
-	cli.addCommand("reset", new ResetPositionCommand(&devman));
-	cli.addCommand("start", new StartCommand(&devman));
-	cli.addCommand("stop", new StopCommand(&devman));
-	cli.addCommand("x", new StopLastCommand(&devman));
-	cli.addCommand("mode", new ModeSetCommand(&devman));
-	cli.addCommand("roll", new RollCommand(&devman));
-	cli.addCommand("coord", new CoordCommand(&devman));
-	cli.addCommand("move", new MoveCommand(&devman));
-	cli.addCommand("cal", new CalibrateCommand(&devman));
-	cli.addCommand("refresh", new RefreshCommand(&devman));
-	cli.addCommand("task", new TaskCommand(&devman));
-	cli.addCommand("+move", new LinearCommand(&devman));
-	cli.addCommand("+cal", new CalibrateStepCommand(&devman));
-	cli.addCommand("exec", new ExecuteCommand(&devman));
+	cli.addCommand("ls", new LsCommand(&sysman));
+	cli.addCommand("power", new PowerCommand(&sysman));
+	cli.addCommand("revert", new RevertStartCommand(&sysman));
+	cli.addCommand("pos", new PositionCommand(&sysman));
+	cli.addCommand("reset", new ResetPositionCommand(&sysman));
+	cli.addCommand("start", new StartCommand(&sysman));
+	cli.addCommand("stop", new StopCommand(&sysman));
+	cli.addCommand("x", new StopLastCommand(&sysman));
+	cli.addCommand("mode", new ModeSetCommand(&sysman));
+	cli.addCommand("roll", new RollCommand(&sysman));
+	cli.addCommand("coord", new CoordCommand(&sysman));
+	cli.addCommand("move", new MoveCommand(&sysman));
+	cli.addCommand("cal", new CalibrateCommand(&sysman));
+	cli.addCommand("refresh", new RefreshCommand(&sysman));
+	cli.addCommand("task", new TaskCommand(&sysman));
+	cli.addCommand("+move", new LinearCommand(&sysman));
+	cli.addCommand("+cal", new CalibrateStepCommand(&sysman));
+	cli.addCommand("exec", new ExecuteCommand(&sysman));
 	cli.addCommand("help", new HelpCMD());
 	while (cli.shell()) {
 		if (devman.hasError()) {

@@ -47,3 +47,6 @@ Refractored code. TODO:
 * Retest all high level functions: roll, calibrate, coord move
 * Test synchronization(barely impossible but still)
 
+##### 11/02/2017
+Heavy refraactoring. Must recheck all functions on the next testing.
+

@@ -27,6 +27,9 @@ DeviceController.o:
 CoordTranslator.o:
 	$(CC) $(CFLAGS) -c ./ctrl-lib/CoordTranslator.cpp
 
+SystemManager.o:
+	$(CC) $(CFLAGS) -c ./ctrl-lib/SystemManager.cpp
+
 CoordController.o:
 	$(CC) $(CFLAGS) -c ./ctrl-lib/CoordController.cpp
 
@@ -57,8 +60,8 @@ GCodeParser.o:
 stub: Stub.o
 	$(CC) -shared -o $(BUILD)/USMCDLL.dll Stub.o -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread
 
-$(OUTPUT): MotorTask.o Device.o DeviceManager.o DevCLI.o main.o CLI.o CoordTask.o DeviceController.o CoordTranslator.o CoordController.o
-	$(CC) -o $(BUILD)/$(OUTPUT) MotorTask.o Device.o DeviceManager.o DevCLI.o main.o CLI.o CoordTask.o DeviceController.o CoordTranslator.o CoordController.o  -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL
+$(OUTPUT): MotorTask.o Device.o DeviceManager.o DevCLI.o main.o CLI.o CoordTask.o DeviceController.o CoordTranslator.o SystemManager.o CoordController.o
+	$(CC) -o $(BUILD)/$(OUTPUT) MotorTask.o Device.o DeviceManager.o DevCLI.o main.o CLI.o CoordTask.o DeviceController.o CoordTranslator.o SystemManager.o CoordController.o  -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL
 	@cp $(LIB)/USMCDLL.dll $(BUILD)
 
 gcode: GCodeParser.o

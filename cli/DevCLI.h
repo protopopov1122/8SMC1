@@ -2,27 +2,26 @@
 #define _8SMC1_DEVCLI_H_
 
 #include "CLI.h"
-#include "DeviceController.h"
-#include "CoordTask.h"
+#include "SystemManager.h"
 
 /* Defines cli commands to control Devices API */
 
 namespace Controller {
 	class DeviceCommand : public CLICommand {
 		public:
-			DeviceCommand(DeviceManager *devman) {
-				this->devman = devman;
+			DeviceCommand(SystemManager *sysman) {
+				this->sysman = sysman;
 			}
 			virtual ~DeviceCommand() {}
 			virtual void execute(std::vector<std::string> &args) = 0;
 		protected:
-			DeviceManager *devman;
+			SystemManager *sysman;
 	};
 	
 	#define CMD(name) class name : public DeviceCommand {\
 		public:\
-			name(DeviceManager *devman) :\
-				DeviceCommand::DeviceCommand(devman) {};\
+			name(SystemManager *sysman) :\
+				DeviceCommand::DeviceCommand(sysman) {};\
 			virtual ~name() {};\
 			virtual void execute(std::vector<std::string> &args);\
 	};

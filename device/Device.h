@@ -2,6 +2,7 @@
 #define _8SMC1_DEVICE_H_
 
 #include <string>
+#define WIN32_LEAN_AND_MEAN
 #include "USMCDLL.h"
 
 /* Device class contains USMC raw function wrappers */

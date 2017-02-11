@@ -5,8 +5,8 @@
 namespace Controller {
 	void LsCommand::execute(std::vector<std::string> &args) {
 		if (args.empty()) {	// For empty args list all devices
-			for (unsigned int i = 0; i < devman->getDeviceCount(); i++) {
-				Device *dev = devman->getDevice(i);
+			for (unsigned int i = 0; i < sysman->getDeviceManager()->getDeviceCount(); i++) {
+				Device *dev = sysman->getDeviceManager()->getDevice(i);
 				std::cout << "Device - " << dev->getID() << "; "
 					<< "Serial Number - " << dev->getSerial() << "; "
 					<< "Version - " << dev->getVersion() << std::endl;
@@ -23,7 +23,7 @@ namespace Controller {
 					std::cout << "Provide device id" << std::endl;
 					return;
 				}
-				Device *dev = devman->getDevice(std::stoi(args.at(1)));
+				Device *dev = sysman->getDeviceManager()->getDevice(std::stoi(args.at(1)));
 				if (dev == nullptr) {
 					std::cout << "Device not found" << std::endl;
 					return;
@@ -51,7 +51,7 @@ namespace Controller {
 					std::cout << "Provide device id" << std::endl;
 					return;
 				}
-				Device *dev = devman->getDevice(std::stoi(args.at(1)));
+				Device *dev = sysman->getDeviceManager()->getDevice(std::stoi(args.at(1)));
 				if (dev == nullptr) {
 					std::cout << "Device not found" << std::endl;
 					return;
@@ -68,14 +68,14 @@ namespace Controller {
 				PRINT("trailer2-true-state", getTrailer2TrueState)
 				#undef PRINT
 			} else if (cmp(COORDS)) {
-				for (size_t i = 0; i < devman->getCoordCount(); i++) {
-					CoordController *ctrl = devman->getCoord(i);
+				for (size_t i = 0; i < sysman->getCoordCount(); i++) {
+					CoordController *ctrl = sysman->getCoord(i);
 					std::cout << i << "\tdev: " << ctrl->getXAxis()->getDevice()->getID()
 						<< "; dev: " << ctrl->getYAxis()->getDevice()->getID() << std::endl;
 				}
 			} else if (cmp(TASKS)) {
-				for (size_t i = 0; i < devman->getTaskCount(); i++) {
-					CoordTask *task = devman->getTask(i);
+				for (size_t i = 0; i < sysman->getTaskCount(); i++) {
+					CoordTask *task = sysman->getTask(i);
 					std::cout << i << "\tsize: " << task->getSubCount() << std::endl;
 				}
 			} else {
@@ -89,7 +89,7 @@ namespace Controller {
 		if (args.empty()) {
 			std::cout << "Provide device id" << std::endl;
 		} else {
-			Device *dev = devman->getDevice(std::stoi(args.at(0)));
+			Device *dev = sysman->getDeviceManager()->getDevice(std::stoi(args.at(0)));
 			if (dev == nullptr) {
 				std::cout << "Device not found" << std::endl;
 				return;
@@ -106,7 +106,7 @@ namespace Controller {
 		if (args.empty()) {
 			std::cout << "Provide device id" << std::endl;
 		} else {
-			Device *dev = devman->getDevice(std::stoi(args.at(0)));
+			Device *dev = sysman->getDeviceManager()->getDevice(std::stoi(args.at(0)));
 			if (dev == nullptr) {
 				std::cout << "Device not found" << std::endl;
 				return;
@@ -121,7 +121,7 @@ namespace Controller {
 		if (args.empty()) {
 			std::cout << "Provide device id" << std::endl;
 		} else {
-			DeviceController *dev = devman->getDeviceController(std::stoi(args.at(0)));
+			DeviceController *dev = sysman->getDeviceController(std::stoi(args.at(0)));
 			if (dev == nullptr) {
 				std::cout << "Device not found" << std::endl;
 				return;
@@ -136,7 +136,7 @@ namespace Controller {
 		if (args.empty()) {
 			std::cout << "Provide device id" << std::endl;
 		} else {
-			Device *dev = devman->getDevice(std::stoi(args.at(0)));
+			Device *dev = sysman->getDeviceManager()->getDevice(std::stoi(args.at(0)));
 			if (dev == nullptr) {
 				std::cout << "Device not found" << std::endl;
 				return;
@@ -153,7 +153,7 @@ namespace Controller {
 		} else if (args.size() == 1) {
 			std::cout << "Provide current position" << std::endl;
 		} else {
-			Device *dev = devman->getDevice(std::stoi(args.at(0)));
+			Device *dev = sysman->getDeviceManager()->getDevice(std::stoi(args.at(0)));
 			if (dev == nullptr) {
 				std::cout << "Device not found" << std::endl;
 				return;
@@ -173,7 +173,7 @@ namespace Controller {
 				std::cout << "Provide destination" << std::endl;
 				return;
 			}
-			DeviceController *dev = devman->getDeviceController(std::stoi(args.at(0)));
+			DeviceController *dev = sysman->getDeviceController(std::stoi(args.at(0)));
 			if (dev == nullptr) {
 				std::cout << "Device not found" << std::endl;
 				return;
@@ -201,7 +201,7 @@ namespace Controller {
 		if (args.empty()) {
 			std::cout << "Provide device id" << std::endl;
 		} else {
-			DeviceController *dev = devman->getDeviceController(std::stoi(args.at(0)));
+			DeviceController *dev = sysman->getDeviceController(std::stoi(args.at(0)));
 			if (dev == nullptr) {
 				std::cout << "Device not found" << std::endl;
 				return;
@@ -212,7 +212,7 @@ namespace Controller {
 	}
 
 	void StopLastCommand::execute(std::vector<std::string> &args) {
-		Device *dev = devman->getLastDevice();
+		Device *dev = sysman->getDeviceManager()->getLastDevice();
 		if (dev == nullptr) {
 			std::cout << "No device was used" << std::endl;
 			return;
@@ -231,7 +231,7 @@ namespace Controller {
 			std::cout << "Provide parameter name and value" << std::endl;
 			return;
 		}
-		Device *dev = devman->getDevice(std::stoi(args.at(0)));
+		Device *dev = sysman->getDeviceManager()->getDevice(std::stoi(args.at(0)));
 		if (dev == nullptr) {
 			std::cout << "Device not found" << std::endl;
 			return;
@@ -268,7 +268,7 @@ namespace Controller {
 				std::cout << "Provide trailer id" << std::endl;
 				return;
 			}
-			DeviceController *dev = devman->getDeviceController(std::stoi(args.at(0)));
+			DeviceController *dev = sysman->getDeviceController(std::stoi(args.at(0)));
 			if (dev == nullptr) {
 				std::cout << "Device not found" << std::endl;
 				return;
@@ -284,10 +284,10 @@ namespace Controller {
 		} else {
 			DWORD d1 = std::stoi(args.at(0));
 			DWORD d2 = std::stoi(args.at(1));
-			if (devman->createCoord(d1, d2) == nullptr) {
+			if (sysman->createCoord(d1, d2) == nullptr) {
 				std::cout << "Wrong device ids" << std::endl;
 			} else {
-				std::cout << "Created coord #" << devman->getCoordCount() - 1 << std::endl;
+				std::cout << "Created coord #" << sysman->getCoordCount() - 1 << std::endl;
 			}
 		}
 	}
@@ -296,7 +296,7 @@ namespace Controller {
 		if (args.size() < 5) { // TODO Normal arg check
 			std::cout << "Provide arguments" << std::endl;
 		} else {
-			CoordController *ctrl = devman->getCoord(std::stoi(args.at(0)));
+			CoordController *ctrl = sysman->getCoord(std::stoi(args.at(0)));
 			int x = std::stoi(args.at(1));
 			int y = std::stoi(args.at(2));
 			float speed = std::stod(args.at(3));
@@ -320,7 +320,7 @@ namespace Controller {
 		}
 		int coordNum = std::stoi(args.at(0));
 		int coordTrailer = std::stoi(args.at(1));
-		CoordController *coordController = devman->getCoord(coordNum);
+		CoordController *coordController = sysman->getCoord(coordNum);
 		if (coordController == nullptr) {
 			std::cout << "Wrong coord id" << std::endl;
 		}
@@ -328,7 +328,7 @@ namespace Controller {
 	}
 	
 	void RefreshCommand::execute(std::vector<std::string> &args) {
-		devman->refresh();
+		sysman->getDeviceManager()->refresh();
 	}
 
 	void TaskCommand::execute(std::vector<std::string> &args) {
@@ -337,18 +337,18 @@ namespace Controller {
 			return;
 		}
 		if (args.at(0).compare("add") == 0) {
-			CoordTask *task = devman->createTask();
+			CoordTask *task = sysman->createTask();
 			if (task == nullptr) {
 				std::cout << "Error occured" << std::endl;
 			} else {
-				std::cout << "Created task #" << (this->devman->getTaskCount() - 1) << std::endl;
+				std::cout << "Created task #" << (this->sysman->getTaskCount() - 1) << std::endl;
 			}
 		} else if (args.at(0).compare("rm") == 0) {
 			if (args.size() < 2) {
 				std::cout << "Provide task id" << std::endl;
 				return;
 			}
-			if (!devman->removeTask(std::stoi(args.at(1)))) {
+			if (!sysman->removeTask(std::stoi(args.at(1)))) {
 				std::cout << "Wrong task id" << std::endl;
 			} else {
 				std::cout << "Ok" << std::endl;
@@ -361,7 +361,7 @@ namespace Controller {
 			std::cout << "Wrong argument count" << std::endl;
 			return;
 		}
-		CoordTask *task = devman->getTask(std::stoi(args.at(0)));
+		CoordTask *task = sysman->getTask(std::stoi(args.at(0)));
 		int x = std::stoi(args.at(1));
 		int y = std::stoi(args.at(2));
 		float sp = std::stod(args.at(3));
@@ -382,7 +382,7 @@ namespace Controller {
 			std::cout << "Wrong argument count" << std::endl;
 			return;
 		}
-		CoordTask *task = devman->getTask(std::stoi(args.at(0)));
+		CoordTask *task = sysman->getTask(std::stoi(args.at(0)));
 		int side = std::stoi(args.at(1));
 		if (task == nullptr) {
 			std::cout << "Wrong task id" << std::endl;
@@ -400,8 +400,8 @@ namespace Controller {
 			std::cout << "Wrong argument count" << std::endl;
 			return;
 		}
-		CoordTask *task = devman->getTask(std::stoi(args.at(0)));
-		CoordController *coord = devman->getCoord(std::stoi(args.at(1)));
+		CoordTask *task = sysman->getTask(std::stoi(args.at(0)));
+		CoordController *coord = sysman->getCoord(std::stoi(args.at(1)));
 		float speed = std::stod(args.at(2));
 		if (task == nullptr) {
 			std::cout << "Wrong task id" << std::endl;
