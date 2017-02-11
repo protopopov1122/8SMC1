@@ -110,6 +110,21 @@ namespace Controller {
 			}
 		}
 	}
+	
+	void ResetPositionCommand::execute(std::vector<std::string> &args) {
+		if (args.empty()) {
+			std::cout << "Provide device id" << std::endl;
+		} else {
+			DeviceController *dev = devman->getDeviceController(std::stoi(args.at(0)));
+			if (dev == nullptr) {
+				std::cout << "Device not found" << std::endl;
+				return;
+			}
+			if (dev->resetPosition() == ErrorCode::NoError) {
+				std::cout << "\tOk" << std::endl;
+			}
+		}
+	}
 
 	void SaveCommand::execute(std::vector<std::string> &args) {
 		if (args.empty()) {
@@ -180,14 +195,13 @@ namespace Controller {
 		if (args.empty()) {
 			std::cout << "Provide device id" << std::endl;
 		} else {
-			Device *dev = devman->getDevice(std::stoi(args.at(0)));
+			DeviceController *dev = devman->getDeviceController(std::stoi(args.at(0)));
 			if (dev == nullptr) {
 				std::cout << "Device not found" << std::endl;
 				return;
 			}
-			if (dev->stop()) {
-				std::cout << "\tStopped device #" << dev->getID() << std::endl;
-			}
+			dev->stop();
+			std::cout << "\tStopped device #" << dev->getDevice()->getID() << std::endl;
 		}
 	}
 

@@ -23,15 +23,20 @@ namespace Controller {
 		return this->yAxis;
 	}
 
-	err_code_t CoordController::move(motor_point_t point, float speed, int div,
+	ErrorCode CoordController::move(motor_point_t point, float speed, int div,
 			bool sync) {
 		// TODO Enable proper motor syncing
 		Device *xDev = this->xAxis->getDevice();
 		Device *yDev = this->yAxis->getDevice();
 		motor_coord_t dx = point.x - xDev->getPosition();
 		motor_coord_t dy = point.y - yDev->getPosition();
-		float y_speed = abs(sync ? speed * ((float) dy / dx) : speed);
-		this->xAxis->startMove(point.x, speed, div, sync);
+
+		// Calculate x and y axis speed v=sqrt(vx^2 + vy^2); vy = n*vx
+		float ncoef = ((float) dy) / dx;
+		float x_speed = sqrt(speed * speed / (1 + ncoef * ncoef));
+		float y_speed = ncoef * x_speed;
+
+		this->xAxis->startMove(point.x, x_speed, div, sync);
 		this->yAxis->startMove(point.y, y_speed, div, false);
 		while (xDev->isRunning() || yDev->isRunning()) {
 //		if (xDev->isTrailerPressed(1) || yDev->isTrailerPressed(1)) {
@@ -45,7 +50,7 @@ namespace Controller {
 //			return ErrorCode::Trailer2Pressed;
 //		}
 			if (xDev->isRunning()) {
-				err_code_t code = xAxis->checkTrailers();
+				ErrorCode code = xAxis->checkTrailers();
 				if (code != ErrorCode::NoError) {
 					xAxis->stop();
 					yAxis->stop();
@@ -53,7 +58,7 @@ namespace Controller {
 				}
 			}
 			if (yDev->isRunning()) {
-				err_code_t code = yAxis->checkTrailers();
+				ErrorCode code = yAxis->checkTrailers();
 				if (code != ErrorCode::NoError) {
 					xAxis->stop();
 					yAxis->stop();
@@ -64,7 +69,7 @@ namespace Controller {
 		return ErrorCode::NoError;
 	}
 
-	err_code_t CoordController::calibrate(int tr) {
+	ErrorCode CoordController::calibrate(int tr) {
 		int comeback = TRAILER_COMEBACK;
 		if (this->xAxis->getDevice()->isRunning()
 				|| this->yAxis->getDevice()->isRunning()) {
@@ -116,6 +121,9 @@ namespace Controller {
 		ROLL_SPEED, ROLL_DIV);
 		yAxis->startMove(yAxis->getDevice()->getPosition() + comeback,
 		ROLL_SPEED, ROLL_DIV);
+
+		xAxis->resetPosition();
+		yAxis->resetPosition();
 		return ErrorCode::NoError;
 	}
 }

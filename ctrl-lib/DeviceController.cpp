@@ -28,6 +28,7 @@ namespace Controller {
 		this->dest = MoveType::Stop;
 		this->exists = true;
 		this->wait_for_thread = true;
+		this->length = 0;
 		pthread_create(&this->dev_thread, nullptr, device_control_thread, this);
 	}
 
@@ -42,7 +43,7 @@ namespace Controller {
 		return this->dev;
 	}
 
-	err_code_t DeviceController::checkTrailers() {
+	ErrorCode DeviceController::checkTrailers() {
 		if (!this->dev->isRunning()) {
 			return ErrorCode::DeviceStopped;
 		}
@@ -61,9 +62,9 @@ namespace Controller {
 		return ErrorCode::NoError;
 	}
 
-	err_code_t DeviceController::waitWhileRunning() {
+	ErrorCode DeviceController::waitWhileRunning() {
 		while (this->dev->isRunning()) {
-			err_code_t code = this->checkTrailers();
+			ErrorCode code = this->checkTrailers();
 			if (code != ErrorCode::NoError) {
 				return code;
 			}
@@ -71,7 +72,7 @@ namespace Controller {
 		return ErrorCode::NoError;
 	}
 
-	err_code_t DeviceController::moveToTrailer(int tr, int comeback) {
+	ErrorCode DeviceController::moveToTrailer(int tr, int comeback) {
 		if (this->dev->isRunning()) {
 			return ErrorCode::DeviceRunning;
 		}
@@ -97,7 +98,7 @@ namespace Controller {
 		return ErrorCode::NoError;
 	}
 
-	err_code_t DeviceController::startMove(motor_coord_t dest,
+	ErrorCode DeviceController::startMove(motor_coord_t dest,
 			float speed, int div, bool syncIn) {
 		if (this->dev->isRunning()) {
 			return ErrorCode::DeviceRunning;
@@ -111,5 +112,22 @@ namespace Controller {
 	void DeviceController::stop() {
 		this->dest = MoveType::Stop;
 		this->dev->stop();
+	}
+
+	unsigned int DeviceController::getLength() {
+		if (this->length == 0) {
+			this->calculate_length();
+		}
+		return this->length;
+	}
+
+	ErrorCode DeviceController::resetPosition() {
+		this->dev->setCurrentPosition(0);
+		return ErrorCode::NoError;
+	}
+
+	void DeviceController::calculate_length() {
+		this->length = 300000;	// Just constant
+		// TODO Write proper calibration
 	}
 }

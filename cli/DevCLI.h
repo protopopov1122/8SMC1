@@ -31,6 +31,7 @@ namespace Controller {
 	CMD(RevertStartCommand)
 	CMD(SaveCommand)
 	CMD(PositionCommand)
+	CMD(ResetPositionCommand)
 	CMD(StartCommand)
 	CMD(StopCommand)
 	CMD(StopLastCommand)

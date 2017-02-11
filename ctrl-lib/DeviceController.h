@@ -10,8 +10,6 @@
    moves and synchronization. */
 
 typedef int32_t motor_coord_t;
-typedef uint8_t err_code_t;
-
 namespace Controller {
 
 	enum ErrorCode {
@@ -45,14 +43,18 @@ namespace Controller {
 			virtual ~DeviceController();
 			Device *getDevice();
 
-			err_code_t checkTrailers();
-			err_code_t waitWhileRunning();
-			err_code_t moveToTrailer(int, int);
-			err_code_t startMove(motor_coord_t, float, int, bool = false);
+			ErrorCode checkTrailers();
+			ErrorCode waitWhileRunning();
+			ErrorCode moveToTrailer(int, int);
+			ErrorCode resetPosition();
+			ErrorCode startMove(motor_coord_t, float, int, bool = false);
 			void stop();
+			unsigned int getLength();
 
 			friend void *device_control_thread(void*);
 		private:
+			// Calibration
+			void calculate_length();
 			// Threading related
 			pthread_t dev_thread;
 			bool exists;
@@ -60,6 +62,7 @@ namespace Controller {
 
 			Device *dev;
 			MoveType dest;
+			unsigned int length;
 	};
 
 	class CoordController {
@@ -68,8 +71,8 @@ namespace Controller {
 			virtual ~CoordController();
 			DeviceController *getXAxis();
 			DeviceController *getYAxis();
-			err_code_t move(motor_point_t, float, int, bool);
-			err_code_t calibrate(int);
+			ErrorCode move(motor_point_t, float, int, bool);
+			ErrorCode calibrate(int);
 		private:
 			DeviceController *xAxis;
 			DeviceController *yAxis;
