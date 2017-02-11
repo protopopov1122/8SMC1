@@ -15,6 +15,7 @@ namespace Controller {
 
 	class DeviceController;	// For forward referencing
 	class CoordController;
+	class CoordTask;
 
 	class DeviceManager {
 		public:
@@ -30,6 +31,10 @@ namespace Controller {
 			size_t getCoordCount();
 			CoordController *getCoord(size_t);
 			CoordController *createCoord(DWORD, DWORD);
+			size_t getTaskCount();
+			CoordTask *getTask(size_t);
+			CoordTask *createTask();
+			bool removeTask(size_t);
 			// To support fast motor stop
 			void setLastDevice(Device*);
 			Device *getLastDevice();
@@ -40,6 +45,7 @@ namespace Controller {
 			USMC_Devices devs;
 			std::vector<DeviceController*> dev;
 			std::vector<CoordController*> coords;
+			std::vector<CoordTask*> tasks;
 			std::vector<std::string> error_queue;
 			Device *last_device;
 	};

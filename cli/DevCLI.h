@@ -3,6 +3,7 @@
 
 #include "CLI.h"
 #include "DeviceController.h"
+#include "CoordTask.h"
 
 /* Defines cli commands to control Devices API */
 
@@ -41,6 +42,10 @@ namespace Controller {
 	CMD(MoveCommand)
 	CMD(CalibrateCommand)
 	CMD(RefreshCommand)
+	CMD(TaskCommand)
+	CMD(LinearCommand)
+	CMD(CalibrateStepCommand)
+	CMD(ExecuteCommand)
 
 	#undef CMD
 }

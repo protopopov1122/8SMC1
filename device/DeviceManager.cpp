@@ -1,4 +1,5 @@
 #include "DeviceController.h"
+#include "CoordTask.h"
 #include <stdio.h>
 #include <iostream>
 
@@ -13,6 +14,9 @@ namespace Controller {
 	}
 
 	DeviceManager::~DeviceManager() {
+		for (size_t i = 0; i < this->tasks.size(); i++) {
+			delete this->tasks.at(i);
+		}
 		for (size_t i = 0; i < this->coords.size(); i++) {
 			delete this->coords.at(i);
 		}
@@ -110,5 +114,31 @@ namespace Controller {
 		CoordController *ctrl = new CoordController(this->dev.at(d1), this->dev.at(d2));
 		this->coords.push_back(ctrl);
 		return ctrl;
+	}
+
+	size_t DeviceManager::getTaskCount() {
+		return this->tasks.size();
+	}
+
+	CoordTask *DeviceManager::getTask(size_t i) {
+		if (i >= this->tasks.size()) {
+			return nullptr;
+		}
+		return this->tasks.at(i);
+	}
+
+	CoordTask *DeviceManager::createTask() {
+		CoordTask *task = new CoordTask();
+		this->tasks.push_back(task);
+		return task;
+	}
+
+	bool DeviceManager::removeTask(size_t i) {
+		if (i >= this->tasks.size()) {
+			return false;
+		}
+		delete this->tasks.at(i);
+		this->tasks.erase(this->tasks.begin() + i);
+		return true;
 	}
 }

@@ -16,6 +16,7 @@ namespace Controller {
 			const std::string STATE = "state";
 			const std::string MODE = "mode";
 			const std::string COORDS = "coords";
+			const std::string TASKS = "tasks";
 			#define cmp(str) (req.length() == str.length() && req.compare(0, str.length(), str) == 0)
 			if (cmp(STATE)) { // View device state
 				if (args.size() < 2) {
@@ -71,6 +72,11 @@ namespace Controller {
 					CoordController *ctrl = devman->getCoord(i);
 					std::cout << i << "\tdev: " << ctrl->getXAxis()->getDevice()->getID()
 						<< "; dev: " << ctrl->getYAxis()->getDevice()->getID() << std::endl;
+				}
+			} else if (cmp(TASKS)) {
+				for (size_t i = 0; i < devman->getTaskCount(); i++) {
+					CoordTask *task = devman->getTask(i);
+					std::cout << i << "\tsize: " << task->getSubCount() << std::endl;
 				}
 			} else {
 				std::cout << "Unknown parameter '" << req << "'" << std::endl;
@@ -307,7 +313,7 @@ namespace Controller {
 		}
 	}
 	
-	void CalibrateCommand::execute (std::vector<std::string> &args) {
+	void CalibrateCommand::execute(std::vector<std::string> &args) {
 		if (args.size() < 2) {
 			std::cout << "Provide arguments" << std::endl;
 			return;
@@ -315,10 +321,97 @@ namespace Controller {
 		int coordNum = std::stoi(args.at(0));
 		int coordTrailer = std::stoi(args.at(1));
 		CoordController *coordController = devman->getCoord(coordNum);
+		if (coordController == nullptr) {
+			std::cout << "Wrong coord id" << std::endl;
+		}
 		coordController->calibrate(coordTrailer);
 	}
 	
-	void RefreshCommand::execute (std::vector<std::string> &args) {
+	void RefreshCommand::execute(std::vector<std::string> &args) {
 		devman->refresh();
+	}
+
+	void TaskCommand::execute(std::vector<std::string> &args) {
+		if (args.empty()) {
+			std::cout << "Provide parameter" << std::endl;
+			return;
+		}
+		if (args.at(0).compare("add") == 0) {
+			CoordTask *task = devman->createTask();
+			if (task == nullptr) {
+				std::cout << "Error occured" << std::endl;
+			} else {
+				std::cout << "Created task #" << (this->devman->getTaskCount() - 1) << std::endl;
+			}
+		} else if (args.at(0).compare("rm") == 0) {
+			if (args.size() < 2) {
+				std::cout << "Provide task id" << std::endl;
+				return;
+			}
+			if (!devman->removeTask(std::stoi(args.at(1)))) {
+				std::cout << "Wrong task id" << std::endl;
+			} else {
+				std::cout << "Ok" << std::endl;
+			}
+		}
+	}
+
+	void LinearCommand::execute(std::vector<std::string> &args) {
+		if (args.size() < 4) {
+			std::cout << "Wrong argument count" << std::endl;
+			return;
+		}
+		CoordTask *task = devman->getTask(std::stoi(args.at(0)));
+		int x = std::stoi(args.at(1));
+		int y = std::stoi(args.at(2));
+		float sp = std::stod(args.at(3));
+		if (task == nullptr) {
+			std::cout << "Wrong task id" << std::endl;
+			return;
+		}
+		if (sp <= 0 || sp > 1) {
+			std::cout << "Wrong speed coef" << std::endl;
+			return;
+		}
+		motor_point_t pnt = {x, y};
+		task->addStep(new MoveTaskStep(pnt, sp));
+	}
+
+	void CalibrateStepCommand::execute(std::vector<std::string> &args) {
+		if (args.size() < 2) {
+			std::cout << "Wrong argument count" << std::endl;
+			return;
+		}
+		CoordTask *task = devman->getTask(std::stoi(args.at(0)));
+		int side = std::stoi(args.at(1));
+		if (task == nullptr) {
+			std::cout << "Wrong task id" << std::endl;
+			return;
+		}
+		if (side != 1 && side != 2) {
+			std::cout << "Wrond calibration side" << std::endl;
+			return;
+		}
+		task->addStep(new CalibrateTaskStep(side));
+	}
+
+	void ExecuteCommand::execute(std::vector<std::string> &args) {
+		if (args.size() < 3) {
+			std::cout << "Wrong argument count" << std::endl;
+			return;
+		}
+		CoordTask *task = devman->getTask(std::stoi(args.at(0)));
+		CoordController *coord = devman->getCoord(std::stoi(args.at(1)));
+		float speed = std::stod(args.at(2));
+		if (task == nullptr) {
+			std::cout << "Wrong task id" << std::endl;
+			return;
+		}
+		if (coord == nullptr) {
+			std::cout << "Wrong coord id" << std::endl;
+			return;
+		}
+		TaskParameters prms = {speed};
+		task->perform(coord, prms);
 	}
 }
