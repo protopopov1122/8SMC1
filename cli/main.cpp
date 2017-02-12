@@ -39,23 +39,11 @@ int main(int argc, char **argv) {
 	CLI cli;
 	cli.addCommand("echo", new EchoCMD());
 	cli.addCommand("ls", new LsCommand(&sysman));
-	cli.addCommand("power", new PowerCommand(&sysman));
-	cli.addCommand("revert", new RevertStartCommand(&sysman));
-	cli.addCommand("pos", new PositionCommand(&sysman));
-	cli.addCommand("reset", new ResetPositionCommand(&sysman));
-	cli.addCommand("start", new StartCommand(&sysman));
-	cli.addCommand("stop", new StopCommand(&sysman));
-	cli.addCommand("x", new StopLastCommand(&sysman));
-	cli.addCommand("mode", new ModeSetCommand(&sysman));
-	cli.addCommand("roll", new RollCommand(&sysman));
+	cli.addCommand("x", new HaltCommand(&sysman));
+	cli.addCommand("dev", new MotorCommand(&sysman));
 	cli.addCommand("coord", new CoordCommand(&sysman));
-	cli.addCommand("move", new MoveCommand(&sysman));
-	cli.addCommand("cal", new CalibrateCommand(&sysman));
 	cli.addCommand("refresh", new RefreshCommand(&sysman));
 	cli.addCommand("task", new TaskCommand(&sysman));
-	cli.addCommand("+move", new LinearCommand(&sysman));
-	cli.addCommand("+cal", new CalibrateStepCommand(&sysman));
-	cli.addCommand("exec", new ExecuteCommand(&sysman));
 	cli.addCommand("help", new HelpCMD());
 	while (cli.shell()) {
 		if (devman.hasError()) {

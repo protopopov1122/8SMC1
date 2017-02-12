@@ -26,9 +26,6 @@ namespace Controller {
 			unsigned int getDeviceCount();
 			std::string getDeviceSerial(DWORD);
 			std::string getDeviceVersion(DWORD);
-			// To support fast motor stop
-			void setLastDevice(Device*);
-			Device *getLastDevice();
 			// Error handling
 			bool hasError();
 			std::string pollError();
@@ -36,7 +33,6 @@ namespace Controller {
 			USMC_Devices devs;
 			std::vector<Device*> dev;
 			std::vector<std::string> error_queue;
-			Device *last_device;
 	};
 }
 

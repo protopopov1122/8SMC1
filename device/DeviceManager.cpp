@@ -10,7 +10,6 @@ namespace Controller {
 		for (size_t i = 0; i < devs.NOD; i++) {
 			this->dev.push_back(new Device((DWORD) i, this));
 		}
-		this->last_device = nullptr;
 	}
 
 	DeviceManager::~DeviceManager() {
@@ -59,14 +58,6 @@ namespace Controller {
 			return "";
 		}
 		return std::string(this->devs.Version[id]);
-	}
-
-	void DeviceManager::setLastDevice(Device *dev) {
-		this->last_device = dev;
-	}
-
-	Device *DeviceManager::getLastDevice() {
-		return this->last_device;
 	}
 	
 	bool DeviceManager::hasError() {

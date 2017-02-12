@@ -47,7 +47,6 @@ namespace Controller {
 			dev->getDeviceManager()->saveError();
 			return false;
 		}
-		dev->getDeviceManager()->setLastDevice(this->dev);
 		return true;
 	}
 }

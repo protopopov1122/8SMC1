@@ -190,7 +190,6 @@ namespace Controller {
 			devman->saveError();
 			return false;
 		}
-		this->devman->setLastDevice(this);
 		return true;
 	}
 
@@ -204,7 +203,6 @@ namespace Controller {
 			devman->saveError();
 			return false;
 		}
-		this->devman->setLastDevice(this);
 		return true;
 	}
 

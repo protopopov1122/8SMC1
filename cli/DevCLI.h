@@ -27,24 +27,11 @@ namespace Controller {
 	};
 
 	CMD(LsCommand)
-	CMD(PowerCommand)
-	CMD(RevertStartCommand)
-	CMD(SaveCommand)
-	CMD(PositionCommand)
-	CMD(ResetPositionCommand)
-	CMD(StartCommand)
-	CMD(StopCommand)
-	CMD(StopLastCommand)
-	CMD(ModeSetCommand)
-	CMD(RollCommand)
+	CMD(HaltCommand)
 	CMD(CoordCommand)
-	CMD(MoveCommand)
-	CMD(CalibrateCommand)
 	CMD(RefreshCommand)
 	CMD(TaskCommand)
-	CMD(LinearCommand)
-	CMD(CalibrateStepCommand)
-	CMD(ExecuteCommand)
+	CMD(MotorCommand)
 
 	#undef CMD
 }
