@@ -18,26 +18,8 @@ LIBS=-Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL
 all: $(OUTPUT) stub
 
 
-CoordTask.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/CoordTask.cpp
-
-DeviceController.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/DeviceController.cpp
-
-CoordTranslator.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/CoordTranslator.cpp
-
-SystemManager.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/SystemManager.cpp
-
-CircleGenerator.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/CircleGenerator.cpp
-
-CoordController.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/CoordController.cpp
-
-Stub.o:
-	$(CC) $(CFLAGS) -c ./misc/Stub.cxx
+CLI.o:
+	$(CC) $(CFLAGS) -c ./cli/CLI.cpp
 
 DevCLI.o:
 	$(CC) $(CFLAGS) -c ./cli/DevCLI.cpp
@@ -45,11 +27,23 @@ DevCLI.o:
 main.o:
 	$(CC) $(CFLAGS) -c ./cli/main.cpp
 
-CLI.o:
-	$(CC) $(CFLAGS) -c ./cli/CLI.cpp
+CircleGenerator.o:
+	$(CC) $(CFLAGS) -c ./ctrl-lib/CircleGenerator.cpp
 
-MotorTask.o:
-	$(CC) $(CFLAGS) -c ./device/MotorTask.cpp
+CoordController.o:
+	$(CC) $(CFLAGS) -c ./ctrl-lib/CoordController.cpp
+
+CoordTask.o:
+	$(CC) $(CFLAGS) -c ./ctrl-lib/CoordTask.cpp
+
+CoordTranslator.o:
+	$(CC) $(CFLAGS) -c ./ctrl-lib/CoordTranslator.cpp
+
+DeviceController.o:
+	$(CC) $(CFLAGS) -c ./ctrl-lib/DeviceController.cpp
+
+SystemManager.o:
+	$(CC) $(CFLAGS) -c ./ctrl-lib/SystemManager.cpp
 
 Device.o:
 	$(CC) $(CFLAGS) -c ./device/Device.cpp
@@ -57,17 +51,25 @@ Device.o:
 DeviceManager.o:
 	$(CC) $(CFLAGS) -c ./device/DeviceManager.cpp
 
+MotorTask.o:
+	$(CC) $(CFLAGS) -c ./device/MotorTask.cpp
+
 GCodeParser.o:
 	$(CC) $(CFLAGS) -c ./gcode/GCodeParser.cpp
+
+Stub.o:
+	$(CC) $(CFLAGS) -c ./misc/Stub.cxx
 
 stub: Stub.o
 	$(CC) -shared -o $(BUILD)/USMCDLL.dll Stub.o -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread
 
-$(OUTPUT): MotorTask.o Device.o DeviceManager.o DevCLI.o main.o CLI.o CoordTask.o DeviceController.o CoordTranslator.o SystemManager.o CircleGenerator.o CoordController.o
-	$(CC) -o $(BUILD)/$(OUTPUT) MotorTask.o Device.o DeviceManager.o DevCLI.o main.o CLI.o CoordTask.o DeviceController.o CoordTranslator.o SystemManager.o CircleGenerator.o CoordController.o  -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL
+$(OUTPUT): Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CircleGenerator.o CoordController.o CoordTask.o CoordTranslator.o DeviceController.o SystemManager.o
+	mkdir -p $(BUILD)
+	$(CC) -o $(BUILD)/$(OUTPUT) Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CircleGenerator.o CoordController.o CoordTask.o CoordTranslator.o DeviceController.o SystemManager.o  -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL
 	@cp $(LIB)/USMCDLL.dll $(BUILD)
 
 gcode: GCodeParser.o
+	mkdir -p $(BUILD)
 	$(CC) -o $(BUILD)/$(OUTPUT) GCodeParser.o  -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL
 	@cp $(LIB)/USMCDLL.dll $(BUILD)
 

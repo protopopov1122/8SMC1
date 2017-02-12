@@ -36,8 +36,8 @@ Create 'res' directory in root of project and copy 'USMCDLL.h' and 'USMCDLL.dll'
 Project has two build systems(simply two different Makefile). One is hand-written(old) and is convinient for development in terminal, other(new) is auto-generated and is useful for incremental build(used in IDEs). This repo contains new Makefile.
 You can generate them(NOTE: You should regenerate incremental Makefile if new file is added to project):
 ```bash
-./misc/gen-makefile # For 'new' Makefile
-./misc/gen-makefile old # For 'old' one
+./misc/gen-makefile > Makefile # For 'new' Makefile
+./misc/gen-makefile old > Makefile # For 'old' one
 ```
 Build commands for both are the same:
 ```bash
