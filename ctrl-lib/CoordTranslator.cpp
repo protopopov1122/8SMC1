@@ -6,7 +6,7 @@
 
 #include <CoordTranslator.h>
 
-namespace Controller {
+namespace _8SMC1 {
 
 	CoordTranslator::CoordTranslator() {
 		// TODO Auto-generated constructor stub
@@ -17,4 +17,4 @@ namespace Controller {
 		// TODO Auto-generated destructor stub
 	}
 
-} /* namespace Controller */
+} /* namespace _8SMC1 */

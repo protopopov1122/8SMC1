@@ -5,7 +5,8 @@ All work on the project may be splitted into few steps:
 * Writing wrapper API to cover all existing USMC API functions. Reason: create abstraction layer on top of existing API(this may prevent compability problems, see 'Other' section)
 * Implement high-level API on top of wrappers. Reason: perform error processing, speed control, some more abstract but useful functions.
 * Create command-line interface(CLI) to test existing API and integrate all system. Reason: testing is easier, system may become useful earlier.
-* Write G-Code interpreter for system API, integrate interpreter into CLI. Reason: G-Code allows working with a lot of different existing applications, it is standart way for all CNCs;
+* Write G-Code interpreter for system API, integrate interpreter into CLI. Reason: G-Code allows working with a lot of different existing applications, it is standart way for all CNCs.
+* Write function graph generator that will allow plotting on plane.
 * Integrate system into CAD systems. Main project goal.
 
 Start goals:
@@ -26,9 +27,15 @@ G-Code interpreter:
 * Write interpreter for small subset of G-Code commands(seems we only need positioning commands).
 * Integrate interpreter with CLI or write standalone tool(for testing) and create GUI program.
 
+Function plotter:
+* Write simple math expression parser(req. constants, variables, functions and operators).
+* Write math expression evaluator based on parsed expression.
+* Integrate evaluator with other API and CLI.
+
 Integration:
 * Integrate G-Code interpreter with AutoCAD.
 * Write extension for Inkscape to use G-Code interpreter with Inkscape G-Code extension.
+* Write standalone application for function plotter.
 
 Other:
 * Current MicroSMC driver that is used by wrapper is available only for Windows 2000/XP/Vista. The simpliest solution is using old hardware or virtual machine, but then intergration with existing software may be hard. Another option is using different controller with same stepper motors. This will require a lot of work with writing new driver and C++ wrappers but benefits are significant(e.g. using with newer Windows versions and Linux, simplier integration). This is the main reason of separating low-level wrapper API and higher-level API and other tools(if we will change controller we will only rewrite wrappers, other project parts will be the same). By now development is continued on top of 8SMC1 controller using old Windows XP PC, but this problem should be solved anyway.

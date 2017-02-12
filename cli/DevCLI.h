@@ -6,7 +6,7 @@
 
 /* Defines cli commands to control Devices API */
 
-namespace Controller {
+namespace _8SMC1 {
 	class DeviceCommand : public CLICommand {
 		public:
 			DeviceCommand(SystemManager *sysman) {

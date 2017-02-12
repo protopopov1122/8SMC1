@@ -2,7 +2,7 @@
 
 /* Implementations of API wrappers */
 
-namespace Controller {
+namespace _8SMC1 {
 
 
 	Device::Device(DWORD dev, DeviceManager *devman) {

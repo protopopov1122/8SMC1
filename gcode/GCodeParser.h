@@ -10,7 +10,7 @@
    line-by-line skipping black lines and comments. Each parsed line is
    allocated as GCodeCommand object. */
 
-namespace Controller {
+namespace _8SMC1 {
 	
 	class GCodeCommand {
 		public:

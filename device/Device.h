@@ -7,7 +7,7 @@
 
 /* Device class contains USMC raw function wrappers */
 
-namespace Controller {
+namespace _8SMC1 {
 
 	class DeviceManager;	// For forward referencing
 

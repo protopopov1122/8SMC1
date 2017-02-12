@@ -1,7 +1,7 @@
 #include "DeviceController.h"
 #include <math.h>
 
-namespace Controller {
+namespace _8SMC1 {
 
 	CoordController::CoordController(DeviceController *xaxis,
 			DeviceController *yaxis) {

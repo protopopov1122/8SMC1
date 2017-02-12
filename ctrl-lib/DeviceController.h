@@ -10,7 +10,7 @@
    moves and synchronization. */
 
 typedef int32_t motor_coord_t;
-namespace Controller {
+namespace _8SMC1 {
 
 	enum ErrorCode {
 		NoError = 0, WrongParameter = 1,

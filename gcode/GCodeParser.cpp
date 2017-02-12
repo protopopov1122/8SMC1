@@ -7,7 +7,7 @@
 #include <vector>
 #include <map>
 
-namespace Controller {
+namespace _8SMC1 {
 
 	GCodeCommand::GCodeCommand(std::string com) {
 		this->command = com;
@@ -113,7 +113,7 @@ namespace Controller {
    main function, that reads file passes in first argument and 
    prints parsed commands. */
 
-using namespace Controller;
+using namespace _8SMC1;
 
 int main(int argc, char **argv) {
 	if (argc < 2) {

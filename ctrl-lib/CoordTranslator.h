@@ -7,7 +7,7 @@
 #ifndef CTRL_LIB_COORDTRANSLATOR_H_
 #define CTRL_LIB_COORDTRANSLATOR_H_
 
-namespace Controller {
+namespace _8SMC1 {
 
 	class CoordTranslator {
 		public:
@@ -15,6 +15,6 @@ namespace Controller {
 			virtual ~CoordTranslator();
 	};
 
-} /* namespace Controller */
+} /* namespace _8SMC1 */
 
 #endif /* CTRL_LIB_COORDTRANSLATOR_H_ */

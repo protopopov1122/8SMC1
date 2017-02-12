@@ -4,7 +4,7 @@
 #include <vector>
 #include <iostream>
 
-namespace Controller {
+namespace _8SMC1 {
 	
 	CLI::CLI() {
 
@@ -35,7 +35,6 @@ namespace Controller {
 		std::string input;
 		getline(std::cin, input);
 
-		// TODO Trim line
 		if (input.length() == 0) {
 			return true;
 		}
@@ -46,10 +45,14 @@ namespace Controller {
 		std::string token;
 		while ((pos = input.find(delimiter)) != std::string::npos) {
 			token = input.substr(0, pos);
-			args.push_back(token);
+			if (!token.empty()) {
+				args.push_back(token);
+			}
 			input.erase(0, pos + delimiter.length());
 		}
-		args.push_back(input);
+		if (!input.empty()) {
+			args.push_back(input);
+		}
 		std::string command = args.at(0);
 		args.erase(args.begin());
 

@@ -2,7 +2,7 @@
 #include <iostream>
 #include "DevCLI.h"
 
-namespace Controller {
+namespace _8SMC1 {
 	void LsCommand::execute(std::vector<std::string> &args) {
 		if (args.empty()) {	// For empty args list all devices
 			for (unsigned int i = 0; i < sysman->getDeviceManager()->getDeviceCount(); i++) {

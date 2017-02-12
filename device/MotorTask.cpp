@@ -1,6 +1,6 @@
 #include "DeviceManager.h"
 
-namespace Controller {
+namespace _8SMC1 {
 	
 	MotorTask::MotorTask(int dest, Device *dev) {
 		this->dest = dest;

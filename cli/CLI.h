@@ -5,7 +5,7 @@
 #include <vector>
 #include <map>
 
-namespace Controller {
+namespace _8SMC1 {
 		
 	class CLICommand {
 		public:

@@ -8,7 +8,7 @@
 
 /* Creates device manager and runs command line*/
 
-using namespace Controller;
+using namespace _8SMC1;
 
 class EchoCMD : public CLICommand  {
 	virtual ~EchoCMD() {
@@ -45,13 +45,13 @@ int main(int argc, char **argv) {
 	cli.addCommand("refresh", new RefreshCommand(&sysman));
 	cli.addCommand("task", new TaskCommand(&sysman));
 	cli.addCommand("help", new HelpCMD());
-	while (cli.shell()) {
+	do {
 		if (devman.hasError()) {
 			std::cout << "Errors occured during execution" << std::endl;
 			while (devman.hasError()) {
 				std::cout << "Error: " << devman.pollError() << std::endl;
 			}
 		}
-	}
+	} while (cli.shell());
 	return EXIT_SUCCESS;
 }

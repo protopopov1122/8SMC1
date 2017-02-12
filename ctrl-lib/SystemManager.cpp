@@ -1,6 +1,6 @@
 #include "SystemManager.h"
 
-namespace Controller {
+namespace _8SMC1 {
 
 	SystemManager::SystemManager(DeviceManager *devman) {
 		this->devman = devman;

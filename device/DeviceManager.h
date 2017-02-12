@@ -10,7 +10,7 @@
 
 /* Device manager initialise existing controllers and keep track of usable devices */
 
-namespace Controller {
+namespace _8SMC1 {
 
 	class DeviceController;	// For forward referencing
 	class CoordController;

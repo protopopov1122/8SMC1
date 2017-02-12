@@ -48,5 +48,7 @@ Refractored code. TODO:
 * Test synchronization(barely impossible but still)
 
 ##### 11/02/2017
-Heavy refraactoring. Must recheck all functions on the next testing.
+Heavy refractoring. Must recheck all functions on the next testing.
 
+##### 12/02/2017
+More refractoring. Before tests proper work not guaranteed. TODO: Test all cli functions one more time on real motors.

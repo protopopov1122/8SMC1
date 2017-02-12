@@ -1,7 +1,7 @@
 #include "DeviceController.h"
 #include <iostream>
 
-namespace Controller {
+namespace _8SMC1 {
 
 	// This thread stub may be used later
 	// Each device controller has attached thread,

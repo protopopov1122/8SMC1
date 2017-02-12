@@ -4,7 +4,7 @@
 #include <iostream>
 
 
-namespace Controller {
+namespace _8SMC1 {
 	DeviceManager::DeviceManager() {
 		this->refresh();
 		for (size_t i = 0; i < devs.NOD; i++) {

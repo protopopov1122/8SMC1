@@ -4,7 +4,7 @@
 #include <vector>
 #include "DeviceController.h"
 
-namespace Controller {
+namespace _8SMC1 {
 
 	struct TaskParameters {
 		float speed;

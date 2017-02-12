@@ -5,7 +5,7 @@
 #include "DeviceController.h"
 #include "CoordTask.h"
 
-namespace Controller {
+namespace _8SMC1 {
 
 	class SystemManager {
 		public:

@@ -1,7 +1,7 @@
 #include "CoordTask.h"
 #include <cinttypes>
 
-namespace Controller {
+namespace _8SMC1 {
 
 	CoordTask::CoordTask() {
 
