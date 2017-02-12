@@ -1,4 +1,5 @@
 #include "DeviceController.h"
+#include "CircleGenerator.h"
 #include <math.h>
 
 namespace _8SMC1 {
@@ -136,5 +137,38 @@ namespace _8SMC1 {
 		pos.x = xAxis->getPosition();
 		pos.y = yAxis->getPosition();
 		return pos;
+	}
+
+	ErrorCode CoordController::arc(motor_point_t dest, motor_point_t center, int splitter,
+				float speed, int div, bool clockwise) {
+		motor_point_t src = this->getPosition();
+		int r1 = (src.x - center.x) * (src.x - center.x) +
+			     (src.y - center.y) * (src.y - center.y);
+		int r2 = (dest.x - center.x) * (dest.x - center.x) +
+			     (dest.y - center.y) * (dest.y - center.y);
+		if (r1 != r2) {
+			return ErrorCode::ArcError;
+		}
+		Circle cir(center, (int) sqrt(r1));
+		int add = clockwise ? 1 : -1;
+		int start = cir.getFullSize() - 1;
+		while (cir.getElement(start).x != src.x ||
+			cir.getElement(start).y != src.y) {
+			start += add;
+		}
+		std::vector<motor_point_t> path;
+		while (cir.getElement(start).x != dest.x ||
+			cir.getElement(start).y != dest.y) {
+			motor_point_t point = cir.getElement(start);
+			path.push_back(point);
+			start += add;
+		}
+		for (size_t i = 0; i < (unsigned  int) splitter; i++) {
+			ErrorCode err = this->move(path.at(path.size() / splitter * i), speed, div, true);
+			if (err !=ErrorCode::NoError) {
+				return err;
+			}
+		}
+		return this->move(dest, speed, div, true);
 	}
 }

@@ -284,6 +284,53 @@ namespace _8SMC1 {
 					ctrl->move(point, speed, div, false);
 				}
 			}
+		} else if (com.compare("arc") == 0) {
+			if (args.size() < 8) {
+				std::cout << "Provide arguments" << std::endl;
+			} else {
+				CoordController *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+				int x = std::stoi(args.at(1));
+				int y = std::stoi(args.at(2));
+				int cx = std::stoi(args.at(3));
+				int cy = std::stoi(args.at(4));
+				int sp = std::stoi(args.at(5));
+				float speed = std::stod(args.at(6));
+				int div = std::stod(args.at(7));
+				if (ctrl == nullptr) {
+					std::cout << "Wrong coord id" << std::endl;
+				} else {
+					motor_point_t point = {x, y};
+					motor_point_t center = {cx, cy};
+					std::cout << "\tStarted coord arc #" << args.at(0) << " to " << x << "x" << y
+						<< " with base speed " << speed << " steps/sec and " << div << " step divisor"
+						<< std::endl;
+					ctrl->arc(point, center, sp, speed, div, true);
+				}
+			}
+		} else if (com.compare("carc") == 0) {
+			if (args.size() < 8) {
+				std::cout << "Provide arguments" << std::endl;
+			} else {
+				CoordController *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+				int x = std::stoi(args.at(1));
+				int y = std::stoi(args.at(2));
+				int cx = std::stoi(args.at(3));
+				int cy = std::stoi(args.at(4));
+				int sp = std::stoi(args.at(5));
+				float speed = std::stod(args.at(6));
+				int div = std::stod(args.at(7));
+				if (ctrl == nullptr) {
+					std::cout << "Wrong coord id" << std::endl;
+				} else {
+					motor_point_t point = {x, y};
+					motor_point_t center = {cx, cy};
+					std::cout << "\tStarted coord counter-clockwise arc #"
+						<< args.at(0) << " to " << x << "x" << y
+						<< " with base speed " << speed << " steps/sec and " << div << " step divisor"
+						<< std::endl;
+					ctrl->arc(point, center, sp, speed, div, false);
+				}
+			}
 		} else if (com.compare("cal") == 0) {
 			if (args.size() < 2) {
 				std::cout << "Provide arguments" << std::endl;

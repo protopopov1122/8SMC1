@@ -15,7 +15,8 @@ namespace _8SMC1 {
 	enum ErrorCode {
 		NoError = 0, WrongParameter = 1,
 		Trailer1Pressed = 2, Trailer2Pressed = 3,
-		DeviceRunning = 4, DeviceStopped = 5
+		DeviceRunning = 4, DeviceStopped = 5,
+		ArcError = 6
 	};
 
 	enum MoveType {
@@ -74,6 +75,7 @@ namespace _8SMC1 {
 			DeviceController *getXAxis();
 			DeviceController *getYAxis();
 			ErrorCode move(motor_point_t, float, int, bool);
+			ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool);
 			ErrorCode calibrate(int);
 			motor_point_t getPosition();
 		private:
