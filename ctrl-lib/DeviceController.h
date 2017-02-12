@@ -51,6 +51,8 @@ namespace _8SMC1 {
 			void stop();
 			unsigned int getLength();
 
+			motor_coord_t getPosition();
+
 			friend void *device_control_thread(void*);
 		private:
 			// Calibration
@@ -73,6 +75,7 @@ namespace _8SMC1 {
 			DeviceController *getYAxis();
 			ErrorCode move(motor_point_t, float, int, bool);
 			ErrorCode calibrate(int);
+			motor_point_t getPosition();
 		private:
 			DeviceController *xAxis;
 			DeviceController *yAxis;

@@ -131,4 +131,8 @@ namespace _8SMC1 {
 		this->length = 300000;	// Just constant
 		// TODO Write proper calibration
 	}
+
+	motor_coord_t DeviceController::getPosition() {
+		return this->dev->getPosition();
+	}
 }

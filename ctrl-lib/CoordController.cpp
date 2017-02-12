@@ -35,6 +35,10 @@ namespace _8SMC1 {
 		float ncoef = ((float) dy) / dx;
 		float x_speed = sqrt(speed * speed / (1 + ncoef * ncoef));
 		float y_speed = ncoef * x_speed;
+		if (!sync) {
+			x_speed = speed;
+			y_speed = speed;
+		}
 
 		this->xAxis->startMove(point.x, x_speed, div, sync);
 		this->yAxis->startMove(point.y, y_speed, div, false);
@@ -125,5 +129,12 @@ namespace _8SMC1 {
 		xAxis->resetPosition();
 		yAxis->resetPosition();
 		return ErrorCode::NoError;
+	}
+
+	motor_point_t CoordController::getPosition() {
+		motor_point_t pos;
+		pos.x = xAxis->getPosition();
+		pos.y = yAxis->getPosition();
+		return pos;
 	}
 }
