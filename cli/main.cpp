@@ -44,6 +44,7 @@ int main(int argc, char **argv) {
 	cli.addCommand("coord", new CoordCommand(&sysman));
 	cli.addCommand("refresh", new RefreshCommand(&sysman));
 	cli.addCommand("task", new TaskCommand(&sysman));
+	cli.addCommand("cir", new CircleCommand(&sysman));
 	cli.addCommand("help", new HelpCMD());
 	do {
 		if (devman.hasError()) {

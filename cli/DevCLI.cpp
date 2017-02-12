@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <iostream>
 #include "DevCLI.h"
+#include "CircleGenerator.h"
 
 namespace _8SMC1 {
 	void LsCommand::execute(std::vector<std::string> &args) {
@@ -368,4 +369,19 @@ namespace _8SMC1 {
 		}
 	}
 
+	void CircleCommand::execute(std::vector<std::string> &args) {
+		if (args.size() < 3) {
+			std::cout << "Provide arguments" << std::endl;
+			return;
+		}
+		int x = std::stoi(args.at(0));
+		int y = std::stoi(args.at(1));
+		int rad = std::stoi(args.at(2));
+		motor_point_t center = {x, y};
+		Circle cir(center, rad);
+		for (size_t i = 0; i < cir.getFullSize(); i++) {
+			motor_point_t pnt = cir.getElement(i);
+			std::cout << pnt.x << "x" << pnt.y << std::endl;
+		}
+	}
 }
