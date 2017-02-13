@@ -35,12 +35,22 @@ namespace _8SMC1 {
 		motor_coord_t dy = point.y - yDev->getPosition();
 
 		// Calculate x and y axis speed v=sqrt(vx^2 + vy^2); vy = n*vx
-		float ncoef = ((float) dy) / dx;
-		float x_speed = sqrt(speed * speed / (1 + ncoef * ncoef));
-		float y_speed = ncoef * x_speed;
+
+		float x_speed;
+		float y_speed;
 		if (!sync) {
 			x_speed = speed;
 			y_speed = speed;
+		} else if (dx == 0) {
+			x_speed = 0;
+			y_speed = speed;
+		} else if (dy == 0) {
+			x_speed = speed;
+			y_speed = 0;
+		} else {
+			float ncoef = ((float) dy) / dx;
+			x_speed = sqrt(speed * speed / (1 + ncoef * ncoef));
+			y_speed = ncoef * x_speed;
 		}
 
 		//this->xAxis->startMove(point.x, x_speed, div, sync);
