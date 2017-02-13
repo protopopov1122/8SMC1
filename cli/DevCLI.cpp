@@ -304,7 +304,9 @@ namespace _8SMC1 {
 					std::cout << "\tStarted coord arc #" << args.at(0) << " to " << x << "x" << y
 						<< " with base speed " << speed << " steps/sec and " << div << " step divisor"
 						<< std::endl;
-					ctrl->arc(point, center, sp, speed, div, true);
+					if (ctrl->arc(point, center, sp, speed, div, true) != ErrorCode::NoError) {
+						std::cout << "Arc error" << std::endl;
+					}
 				}
 			}
 		} else if (com.compare("carc") == 0) {
@@ -324,11 +326,12 @@ namespace _8SMC1 {
 				} else {
 					motor_point_t point = {x, y};
 					motor_point_t center = {cx, cy};
-					std::cout << "\tStarted coord counter-clockwise arc #"
-						<< args.at(0) << " to " << x << "x" << y
+					std::cout << "\tStarted coord arc #" << args.at(0) << " to " << x << "x" << y
 						<< " with base speed " << speed << " steps/sec and " << div << " step divisor"
 						<< std::endl;
-					ctrl->arc(point, center, sp, speed, div, false);
+					if (ctrl->arc(point, center, sp, speed, div, false) != ErrorCode::NoError) {
+						std::cout << "Arc error" << std::endl;
+					}
 				}
 			}
 		} else if (com.compare("cal") == 0) {
@@ -488,18 +491,6 @@ namespace _8SMC1 {
 	}
 
 	void CircleCommand::execute(std::vector<std::string> &args) {
-		if (args.size() < 3) {
-			std::cout << "Provide arguments" << std::endl;
-			return;
-		}
-		int x = std::stoi(args.at(0));
-		int y = std::stoi(args.at(1));
-		int rad = std::stoi(args.at(2));
-		motor_point_t center = {x, y};
-		Circle cir(center, rad);
-		for (size_t i = 0; i < cir.getFullSize(); i++) {
-			motor_point_t pnt = cir.getElement(i);
-			std::cout << pnt.x << "x" << pnt.y << std::endl;
-		}
+
 	}
 }

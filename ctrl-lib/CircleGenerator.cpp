@@ -1,12 +1,18 @@
 #include "CircleGenerator.h"
 #include <iostream>
+#include <stdio.h>
+#include <math.h>
 
 namespace _8SMC1 {
 
-	Circle::Circle(motor_point_t cen, int rad) {
+	Circle::Circle(motor_point_t cen, int rad, bool cw) {
 		this->center = cen;
 		this->radius = rad;
-		this->calculate();
+		this->curx = rad;
+		this->cury = 0;
+		this->curerr = 0;
+		this->stage = 0;
+		this->cw = cw;
 	}
 
 	Circle::~Circle() {
@@ -21,94 +27,120 @@ namespace _8SMC1 {
 		return this->radius;
 	}
 
-	size_t Circle::getOctantSize() {
-		return this->octant.size();
-	}
-
-	size_t Circle::getFullSize() {
-		return 8 * this->octant.size();
-	}
-
-	motor_point_t Circle::getOctantElement(size_t i) {
-		if (i >= this->octant.size()) {
-			motor_point_t point = {0, 0};
-			return point;
-		}
-		return this->octant.at(i);
-	}
-	
-	motor_point_t Circle::getElement(size_t i) {
-		if (i >= this->octant.size() * 8) {
-			i %= this->octant.size() * 8;
-		}
-		motor_point_t point = {0, 0};
-		size_t index = i % this->octant.size();
-		switch (i / this->octant.size()) {
-			case 0:
-				point = this->octant.at(index);
-				break;
-			case 1: {
-				motor_point_t pnt = this->octant.at(this->octant.size() - index - 1);
-				point = {pnt.y, pnt.x};
-			}
-				break;
-			case 2: {
-				motor_point_t pnt = this->octant.at(index);
-				point = {-pnt.y, pnt.x};
-			}
-				break;
-			case 3: {
-				motor_point_t pnt = this->octant.at(this->octant.size() - index - 1);
-				point = {-pnt.x, pnt.y};
-			}
-				break;
-			case 4: {
-				motor_point_t pnt = this->octant.at(index);
-				point = {-pnt.x, -pnt.y};
-			}
-				break;
-			case 5: {
-				motor_point_t pnt = this->octant.at(this->octant.size() - index - 1);
-				point = {-pnt.y, -pnt.x};
-			}
-				break;
-			case 6: {
-				motor_point_t pnt = this->octant.at(index);
-				point = {pnt.y, -pnt.x};
-			}
-				break;
-			case 7: {
-				motor_point_t pnt = this->octant.at(this->octant.size() - index - 1);
-				point = {pnt.x, -pnt.y};
-			}
-				break;
-			default:
-				break;
-		}
-
-		point.x += center.x;
-		point.y += center.y;
-
-		return point;
-	}
-	
-	void Circle::calculate() {
-		int x = this->radius;
-		int y = 0;
-		int err = 0;
-		while (x >= y) {
-			motor_point_t point = {x, y};
-			this->octant.push_back(point);
-			if (err <= 0)
-		        {
-		            y += 1;
-		            err += 2*y + 1;
-		        }
-		        if (err > 0)
-		        {
-		            x -= 1;
-		            err -= 2*x + 1;
+	motor_point_t Circle::getNextElement() {		
+		motor_point_t point;
+		if (stage % 4 == 0) {
+			if (curerr <= 0) {
+				cury += 1;
+			        curerr += 2 * cury + 1;
+			} else {
+				curx -= 1;
+			        curerr -= 2 * curx + 1;
+        		}
+		} else if (stage % 4 == 1) {
+			if (curerr <= 0) {
+				cury -= 1;
+			        curerr += 2 * cury - 1;
+			} else {
+				curx -= 1;
+			        curerr += 2 * curx - 1;
+        		}
+		} else if (stage % 4 == 2) {
+			if (curerr <= 0) {
+				cury -= 1;
+			        curerr -= 2 * cury - 1;
+			} else {
+				curx += 1;
+			        curerr += 2 * curx + 1;
+        		}
+		} else if (stage % 4 == 3) {	// TODO Fix coefs
+			if (curerr <= 0) {
+				cury += 1;
+			        curerr -= 2 * cury - 1;
+			} else {
+				curx += 1;
+			        curerr -= 2 * curx + 1;
         		}
 		}
+		point.x = curx + center.x;
+		point.y = cury + center.y;
+		if (curx == 0 || cury == 0) {
+			stage++;
+			stage %= 4;
+		}
+		return point;
+	}
+
+	motor_point_t Circle::getPrevElement() {		
+		motor_point_t point;
+		// TODO Rewrite code
+		if (stage % 4 == 0) {
+			if (curerr <= 0) {
+				cury += 1;
+			        curerr += 2 * cury + 1;
+			} else {
+				curx -= 1;
+			        curerr -= 2 * curx + 1;
+        		}
+		} else if (stage % 4 == 1) {
+			if (curerr <= 0) {
+				cury -= 1;
+			        curerr += 2 * cury - 1;
+			} else {
+				curx -= 1;
+			        curerr += 2 * curx - 1;
+        		}
+		} else if (stage % 4 == 2) {
+			if (curerr <= 0) {
+				cury -= 1;
+			        curerr -= 2 * cury - 1;
+			} else {
+				curx += 1;
+			        curerr += 2 * curx + 1;
+        		}
+		} else if (stage % 4 == 3) {
+			if (curerr <= 0) {
+				cury += 1;
+			        curerr -= 2 * cury - 1;
+			} else {
+				curx += 1;
+			        curerr -= 2 * curx + 1;
+        		}
+		}
+		point.x = curx + center.x;
+		point.y = cury + center.y;
+		if (curx == 0 || cury == 0) {
+			stage++;
+			stage %= 4;
+		}
+		return point;
+	}
+
+
+	bool Circle::skip(motor_point_t pnt) {
+		if (pnt.x == curx && pnt.y == cury) {
+			return false;
+		}
+		int r1 = (pnt.x - center.x) * (pnt.x - center.x) +
+				(pnt.y - center.y) * (pnt.y - center.y);
+		if (r1 != radius *  radius) {
+			return false;
+		}
+		motor_point_t  start = {curx, cury};
+		motor_point_t cur = start;
+		do {
+			if (!cw) {
+				cur = this->getNextElement();
+			} else {
+				cur = this->getPrevElement();
+			}
+			if (cur.x == start.x && cur.y == start.y) {
+				break;
+			}
+		} while (cur.x != pnt.x || cur.y != pnt.y);
+		if (cur.x == start.x && cur.y == start.y) {
+			return false;
+		}
+		return true;
 	}
 }

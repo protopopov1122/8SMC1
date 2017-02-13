@@ -1,6 +1,7 @@
 #include "DeviceController.h"
 #include "CircleGenerator.h"
 #include <iostream>
+#include <stdio.h>
 #include <math.h>
 
 namespace _8SMC1 {
@@ -166,11 +167,10 @@ namespace _8SMC1 {
 		int r2 = (dest.x - center.x) * (dest.x - center.x) +
 			     (dest.y - center.y) * (dest.y - center.y);
 		if (r1 != r2) {
-			std::cout << "No such arc" << std::endl;
 			return ErrorCode::ArcError;
 		}
-		Circle cir(center, (int) sqrt(r1));
-		int add = clockwise ? 1 : -1;
+		Circle cir(center, (int) sqrt(r1), clockwise);
+		/*int add = clockwise ? 1 : -1;
 		int start = cir.getFullSize() - 1;
 		while (cir.getElement(start).x != src.x ||
 			cir.getElement(start).y != src.y) {
@@ -189,7 +189,27 @@ namespace _8SMC1 {
 			if (err !=ErrorCode::NoError) {
 				return err;
 			}
+		}*/
+		if (!cir.skip(src)) {
+			return ErrorCode::ArcError;
 		}
+		motor_point_t pnt;
+		int count = 0;
+		do {
+			if (clockwise) {
+				pnt = cir.getPrevElement();
+			} else {
+				pnt = cir.getNextElement();
+			}
+			if (count++ % splitter == 0) {
+				ErrorCode err = this->move(pnt, speed, div, true);
+				std::cout << pnt.x << "x" << pnt.y << " " << dest.x << "x" << dest.y << std::endl;
+				getchar();
+				if (err != ErrorCode::NoError) {
+					return err;
+				}
+			}
+		} while (pnt.x != dest.x || pnt.y != dest.y);
 		return this->move(dest, speed, div, true);
 	}
 }
