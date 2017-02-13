@@ -1,5 +1,6 @@
 #include "DeviceController.h"
 #include "CircleGenerator.h"
+#include <iostream>
 #include <math.h>
 
 namespace _8SMC1 {
@@ -41,8 +42,18 @@ namespace _8SMC1 {
 			y_speed = speed;
 		}
 
-		this->xAxis->startMove(point.x, x_speed, div, sync);
-		this->yAxis->startMove(point.y, y_speed, div, false);
+		//this->xAxis->startMove(point.x, x_speed, div, sync);
+		//this->yAxis->startMove(point.y, y_speed, div, false);
+		if (xAxis->dev->isRunning() || yAxis->dev->isRunning()) {
+			return ErrorCode::DeviceRunning;
+		}
+		xAxis->dest = point.x > xAxis->dev->getPosition() ? MoveType::MoveUp :
+				MoveType::MoveDown;
+		xAxis->dev->start(point.x, x_speed, div, false);
+		
+		yAxis->dest = point.y > yAxis->dev->getPosition() ? MoveType::MoveUp :
+				MoveType::MoveDown;
+		yAxis->dev->start(point.y, y_speed, div, false);
 		while (xDev->isRunning() || yDev->isRunning()) {
 //		if (xDev->isTrailerPressed(1) || yDev->isTrailerPressed(1)) {
 //			xDev->stop();
@@ -88,26 +99,34 @@ namespace _8SMC1 {
 		int dest = (tr == 1 ? -ROLL_STEP : ROLL_STEP);
 		xAxis->dest = (tr == 1 ? MoveType::RollDown : MoveType::RollUp);
 		yAxis->dest = (tr == 1 ? MoveType::RollDown : MoveType::RollUp);
-		while (!(xAxis->getDevice()->isTrailerPressed(tr)
-				&& yAxis->getDevice()->isTrailerPressed(tr))) {
+		bool xpr = false;
+		bool ypr = false;
+		while (!(xpr && ypr)) {
 			if (!xAxis->getDevice()->isTrailerPressed(tr)) {
-				if (!xAxis->getDevice()->isRunning()) {
+				if (!xpr && !xAxis->getDevice()->isRunning()) {
 					xAxis->getDevice()->start(
 							xAxis->getDevice()->getPosition() + dest,
 							ROLL_SPEED, ROLL_DIV);
 				}
-			} else if (xAxis->getDevice()->isRunning()) {
-				xAxis->getDevice()->stop();
+			} else  {
+				xpr = true;
+				if (xAxis->getDevice()->isRunning()) {
+					xAxis->getDevice()->stop();
+				}
 			}
+				
 
 			if (!yAxis->getDevice()->isTrailerPressed(tr)) {
-				if (!yAxis->getDevice()->isRunning()) {
+				if (!ypr && !yAxis->getDevice()->isRunning()) {
 					yAxis->getDevice()->start(
 							yAxis->getDevice()->getPosition() + dest,
 							ROLL_SPEED, ROLL_DIV);
 				}
-			} else if (yAxis->getDevice()->isRunning()) {
-				yAxis->getDevice()->stop();
+			} else {
+				ypr = true;
+				if (yAxis->getDevice()->isRunning()) {
+					yAxis->getDevice()->stop();
+				}
 			}
 		}
 		if (xAxis->getDevice()->isRunning()) {
@@ -147,6 +166,7 @@ namespace _8SMC1 {
 		int r2 = (dest.x - center.x) * (dest.x - center.x) +
 			     (dest.y - center.y) * (dest.y - center.y);
 		if (r1 != r2) {
+			std::cout << "No such arc" << std::endl;
 			return ErrorCode::ArcError;
 		}
 		Circle cir(center, (int) sqrt(r1));
@@ -164,6 +184,7 @@ namespace _8SMC1 {
 			start += add;
 		}
 		for (size_t i = 0; i < (unsigned  int) splitter; i++) {
+			motor_point_t pnt = path.at(path.size() / splitter * i);
 			ErrorCode err = this->move(path.at(path.size() / splitter * i), speed, div, true);
 			if (err !=ErrorCode::NoError) {
 				return err;
