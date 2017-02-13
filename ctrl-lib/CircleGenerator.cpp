@@ -98,7 +98,7 @@ namespace _8SMC1 {
 				curx += 1;
 			        curerr += 2 * curx + 1;
         		}
-		} else if (stage % 4 == 3) {
+		} else if (stage % 4 == 3) {	// TODO Fix coefs
 			if (curerr <= 0) {
 				cury += 1;
 			        curerr -= 2 * cury - 1;
@@ -108,7 +108,7 @@ namespace _8SMC1 {
         		}
 		}
 		point.x = curx + center.x;
-		point.y = cury + center.y;
+		point.y = -cury + center.y;
 		if (curx == 0 || cury == 0) {
 			stage++;
 			stage %= 4;
