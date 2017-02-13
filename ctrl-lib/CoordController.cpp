@@ -203,8 +203,6 @@ namespace _8SMC1 {
 			}
 			if (count++ % splitter == 0) {
 				ErrorCode err = this->move(pnt, speed, div, true);
-				std::cout << pnt.x << "x" << pnt.y << " " << dest.x << "x" << dest.y << std::endl;
-				getchar();
 				if (err != ErrorCode::NoError) {
 					return err;
 				}
