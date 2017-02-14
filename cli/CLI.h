@@ -12,10 +12,13 @@ namespace _8SMC1 {
 		public:
 			virtual ~CLICommand() {};
 			virtual void execute(std::vector<std::string>&) = 0;
+		protected:
+			std::string requireArgument(std::vector<std::string>&, size_t, std::string, std::string);
 			int requireArgument(std::vector<std::string>&, size_t, std::string,
-						int);
+						int64_t);
 			float requireArgument(std::vector<std::string>&, size_t, std::string,
 						float);
+			
 	};
 	
 	class CLI {

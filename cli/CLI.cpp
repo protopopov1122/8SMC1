@@ -71,34 +71,30 @@ namespace _8SMC1 {
 		
 		return true;
 	}
-
-	int CLICommand::requireArgument(std::vector<std::string> &args, size_t position,
-					std::string prompt, int def) {
+	
+	std::string CLICommand::requireArgument(std::vector<std::string> &args, size_t position, std::string prompt, std::string def) {
 		std::cout << prompt;
 		if (position < args.size()) {
-			def = std::stoi(args.at(position));
+			def = args.at(position);
 		}
 		std::cout << "[" << def << "]: ";
 		std::string ret;
-		std::cin >> ret;
+		getline(std::cin, ret);
 		if (ret.empty()) {
 			return def;
 		}
-		return std::stoi(ret);
+		return ret;
+	}
+	
+	int CLICommand::requireArgument(std::vector<std::string> &args, size_t position,
+					std::string prompt, int64_t def) {
+		std::string arg = requireArgument(args, position, prompt, std::to_string(def));
+		return std::stoi(arg);
 	}
 
 	float CLICommand::requireArgument(std::vector<std::string> &args, size_t position,
 					std::string prompt, float def) {
-		std::cout << prompt;
-		if (position < args.size()) {
-			def = std::stod(args.at(position));
-		}
-		std::cout << "[" << def << "]: ";
-		std::string ret;
-		std::cin >> ret;
-		if (ret.empty()) {
-			return def;
-		}
-		return std::stod(ret);
+		std::string arg = requireArgument(args, position, prompt, std::to_string(def));
+		return std::stod(arg);
 	}
 }
