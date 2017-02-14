@@ -52,3 +52,7 @@ Heavy refractoring. Must recheck all functions on the next testing.
 
 ##### 12/02/2017
 More refractoring. Before tests proper work not guaranteed. TODO: Test all cli functions one more time on real motors.
+
+##### 14/02/2017
+After refractoring and code rewrite not all functions were tested, some bugs also were found, system will be more stable after few next test, but now not
+all functions work as expected.
