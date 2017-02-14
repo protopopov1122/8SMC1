@@ -5,7 +5,7 @@
 
 namespace _8SMC1 {
 
-	Circle::Circle(motor_point_t cen, int rad, bool cw) {
+	Circle::Circle(motor_point_t cen, int64_t rad, bool cw) {
 		this->center = cen;
 		this->radius = rad;
 		this->curx = rad;
@@ -121,7 +121,7 @@ namespace _8SMC1 {
 		if (pnt.x == curx && pnt.y == cury) {
 			return false;
 		}
-		int r1 = (pnt.x - center.x) * (pnt.x - center.x) +
+		int64_t r1 = (pnt.x - center.x) * (pnt.x - center.x) +
 				(pnt.y - center.y) * (pnt.y - center.y);
 		if (r1 != radius *  radius) {
 			return false;

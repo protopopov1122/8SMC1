@@ -9,7 +9,7 @@
    Library purpose is controlling device state, speed, complex
    moves and synchronization. */
 
-typedef int32_t motor_coord_t;
+typedef int64_t motor_coord_t;
 namespace _8SMC1 {
 
 	enum ErrorCode {

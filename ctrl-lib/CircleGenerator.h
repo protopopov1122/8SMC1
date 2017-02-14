@@ -11,7 +11,7 @@ namespace _8SMC1 {
 
 	class Circle {
 		public:
-			Circle(motor_point_t, int, bool);
+			Circle(motor_point_t, int64_t, bool);
 			virtual ~Circle();
 			int getRadius();
 			motor_point_t getCenter();
@@ -21,11 +21,11 @@ namespace _8SMC1 {
 		private:
 
 			motor_point_t center;
-			int radius;
+			int64_t radius;
 
-			int curx;
-			int cury;
-			int curerr;
+			int64_t curx;
+			int64_t cury;
+			int64_t curerr;
 
 			int stage;
 			bool cw;

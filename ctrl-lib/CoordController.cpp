@@ -172,14 +172,14 @@ namespace _8SMC1 {
 	ErrorCode CoordController::arc(motor_point_t dest, motor_point_t center, int splitter,
 				float speed, int div, bool clockwise) {
 		motor_point_t src = this->getPosition();
-		int r1 = (src.x - center.x) * (src.x - center.x) +
+		int64_t r1 = (src.x - center.x) * (src.x - center.x) +
 			     (src.y - center.y) * (src.y - center.y);
-		int r2 = (dest.x - center.x) * (dest.x - center.x) +
+		int64_t r2 = (dest.x - center.x) * (dest.x - center.x) +
 			     (dest.y - center.y) * (dest.y - center.y);
 		if (r1 != r2) {
 			return ErrorCode::ArcError;
 		}
-		Circle cir(center, (int) sqrt(r1), clockwise);
+		Circle cir(center, (int64_t) sqrt(r1), clockwise);
 		/*int add = clockwise ? 1 : -1;
 		int start = cir.getFullSize() - 1;
 		while (cir.getElement(start).x != src.x ||
@@ -204,7 +204,7 @@ namespace _8SMC1 {
 			return ErrorCode::ArcError;
 		}
 		motor_point_t pnt;
-		int count = 0;
+		size_t count = 0;
 		do {
 			if (clockwise) {
 				pnt = cir.getPrevElement();
