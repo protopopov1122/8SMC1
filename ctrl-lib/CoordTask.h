@@ -59,11 +59,25 @@ namespace _8SMC1 {
 			bool clockwise;
 	};
 
+	enum CoordTaskType {
+		ProgrammedTask, FunctionTask
+	};
+	
 	class CoordTask {
 		public:
-			CoordTask();
-			virtual ~CoordTask();
-			void perform(CoordController*, TaskParameters&);
+			CoordTask(CoordTaskType tp) {this->type = tp;}
+			virtual ~CoordTask() {}
+			CoordTaskType getType() {return this->type;}
+			virtual void perform(CoordController*, TaskParameters&) = 0;
+		private:
+			CoordTaskType type;
+	};
+	
+	class ProgrammedCoordTask : public CoordTask {
+		public:
+			ProgrammedCoordTask();
+			virtual ~ProgrammedCoordTask();
+			virtual void perform(CoordController*, TaskParameters&);
 			void addStep(TaskStep*);
 			size_t getSubCount();
 		private:

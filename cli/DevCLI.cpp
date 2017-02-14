@@ -77,7 +77,12 @@ namespace _8SMC1 {
 			} else if (cmp(TASKS)) {
 				for (size_t i = 0; i < sysman->getTaskCount(); i++) {
 					CoordTask *task = sysman->getTask(i);
-					std::cout << i << "\tsize: " << task->getSubCount() << std::endl;
+					std::cout << i;
+					if (task->getType() == CoordTaskType::ProgrammedTask) {
+						ProgrammedCoordTask *pct = (ProgrammedCoordTask*) task;
+						std::cout << "\tsize: " << pct->getSubCount();
+					}
+					std::cout << std::endl;
 				}
 			} else {
 				std::cout << "Unknown parameter '" << req << "'" << std::endl;
@@ -361,7 +366,7 @@ namespace _8SMC1 {
 			return;
 		}
 		if (args.at(0).compare("new") == 0) {
-			CoordTask *task = sysman->createTask();
+			CoordTask *task = sysman->createProgrammedTask();
 			if (task == nullptr) {
 				std::cout << "Error occured" << std::endl;
 			} else {
@@ -379,14 +384,19 @@ namespace _8SMC1 {
 			}
 		} else if (args.at(0).compare("add") == 0) {
 			args.erase(args.begin());
-			CoordTask *task = sysman->getTask(std::stoi(args.at(0)));
+			CoordTask *tsk = sysman->getTask(std::stoi(args.at(0)));
 			args.erase(args.begin());
 			std::string com = args.at(0);
 			args.erase(args.begin());
-			if (task == nullptr) {
+			if (tsk == nullptr) {
 				std::cout << "Wrong task id" << std::endl;
 				return;
 			}
+			if (tsk->getType() != CoordTaskType::ProgrammedTask) {
+					std::cout << "Can't add steps to this task" << std::endl;
+					return;
+			}
+			ProgrammedCoordTask *task = (ProgrammedCoordTask*) tsk;
 			if (com.compare("move") == 0) {
 				if (args.size() < 3) {
 					std::cout << "Wrong argument count" << std::endl;

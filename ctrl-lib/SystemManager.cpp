@@ -47,8 +47,8 @@ namespace _8SMC1 {
 		return this->tasks.at(i);
 	}
 
-	CoordTask *SystemManager::createTask() {
-		CoordTask *task = new CoordTask();
+	ProgrammedCoordTask *SystemManager::createProgrammedTask() {
+		ProgrammedCoordTask *task = new ProgrammedCoordTask();
 		this->tasks.push_back(task);
 		return task;
 	}

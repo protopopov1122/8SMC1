@@ -5,27 +5,28 @@
 
 namespace _8SMC1 {
 
-	CoordTask::CoordTask() {
+	ProgrammedCoordTask::ProgrammedCoordTask() :
+		CoordTask::CoordTask(CoordTaskType::ProgrammedTask){
 
 	}
 
-	CoordTask::~CoordTask() {
+	ProgrammedCoordTask::~ProgrammedCoordTask() {
 		for (size_t i = 0; i < this->list.size(); i++) {
 			delete this->list.at(i);
 		}
 	}
 
-	void CoordTask::perform(CoordController *ctrl, TaskParameters &prms) {
+	void ProgrammedCoordTask::perform(CoordController *ctrl, TaskParameters &prms) {
 		for (size_t i = 0; i < this->list.size(); i++) {
 			this->list.at(i)->perform(ctrl, prms);
 		}
 	}
 
-	void CoordTask::addStep(TaskStep *st) {
+	void ProgrammedCoordTask::addStep(TaskStep *st) {
 		this->list.push_back(st);
 	}
 
-	size_t CoordTask::getSubCount() {
+	size_t ProgrammedCoordTask::getSubCount() {
 		return this->list.size();
 	}
 

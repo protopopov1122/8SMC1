@@ -38,7 +38,7 @@ namespace _8SMC1 {
 
 		float x_speed;
 		float y_speed;
-		if (!sync) {
+		if (!sync || dx == dy) {
 			x_speed = speed;
 			y_speed = speed;
 		} else if (dx == 0) {

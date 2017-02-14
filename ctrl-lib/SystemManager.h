@@ -17,7 +17,7 @@ namespace _8SMC1 {
 			// Tasks control
 			size_t getTaskCount();
 			CoordTask *getTask(size_t);
-			CoordTask *createTask();
+			ProgrammedCoordTask *createProgrammedTask();
 			bool removeTask(size_t);
 			// Coordinate plane control
 			size_t getCoordCount();
