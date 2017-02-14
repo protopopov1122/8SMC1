@@ -48,7 +48,7 @@ namespace _8SMC1 {
 			x_speed = speed;
 			y_speed = 0;
 		} else {
-			float ncoef = ((float) dy) / dx;
+			float ncoef = abs(((float) dy) / dx);
 			x_speed = sqrt(speed * speed / (1 + ncoef * ncoef));
 			y_speed = ncoef * x_speed;
 		}
