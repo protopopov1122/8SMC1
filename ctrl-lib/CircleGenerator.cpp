@@ -123,11 +123,12 @@ namespace _8SMC1 {
 		}
 		int64_t r1 = (pnt.x - center.x) * (pnt.x - center.x) +
 				(pnt.y - center.y) * (pnt.y - center.y);
-		if (r1 != radius *  radius) {
+		if ((int64_t) sqrt(r1) != radius) {
 			return false;
 		}
 		motor_point_t  start = {curx, cury};
 		motor_point_t cur = start;
+		
 		do {
 			if (!cw) {
 				cur = this->getNextElement();
@@ -137,7 +138,8 @@ namespace _8SMC1 {
 			if (cur.x == start.x && cur.y == start.y) {
 				break;
 			}
-		} while (cur.x != pnt.x || cur.y != pnt.y);
+		} while (abs(cur.x - pnt.x) > COMPARISON_RADIUS ||
+				abs(cur.y - pnt.y) > COMPARISON_RADIUS);
 		if (cur.x == start.x && cur.y == start.y) {
 			return false;
 		}

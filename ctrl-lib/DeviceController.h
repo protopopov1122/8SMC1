@@ -54,6 +54,7 @@ namespace _8SMC1 {
 			ErrorCode moveToTrailer(int, int);
 			ErrorCode resetPosition();
 			ErrorCode startMove(motor_coord_t, float, int, bool = false);
+			ErrorCode startRelativeMove(motor_coord_t, float, int, bool = false);
 			void stop();
 			unsigned int getLength();
 
@@ -80,7 +81,9 @@ namespace _8SMC1 {
 			DeviceController *getXAxis();
 			DeviceController *getYAxis();
 			ErrorCode move(motor_point_t, float, int, bool);
+			ErrorCode relativeMove(motor_point_t, float, int, bool);
 			ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool);
+			ErrorCode relativeArc(motor_point_t, motor_point_t, int, float, int, bool);
 			ErrorCode calibrate(int);
 			motor_point_t getPosition();
 		private:

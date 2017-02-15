@@ -9,6 +9,8 @@
 
 namespace _8SMC1 {
 
+#define	COMPARISON_RADIUS 10
+
 	class Circle {
 		public:
 			Circle(motor_point_t, int64_t, bool);

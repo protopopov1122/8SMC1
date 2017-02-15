@@ -18,22 +18,24 @@ namespace _8SMC1 {
 
 	class MoveTaskStep : public TaskStep {
 		public:
-			MoveTaskStep(motor_point_t, float);
+			MoveTaskStep(motor_point_t, float, bool = false);
 			virtual ~MoveTaskStep();
 			virtual void perform(CoordController*, TaskParameters&);
 		private:
 			motor_point_t pos;
 			float speed_coef;
+			bool rel;
 	};
 
 	class JumpTaskStep : public TaskStep {
 		public:
-			JumpTaskStep(motor_point_t, float);
+			JumpTaskStep(motor_point_t, float, bool = false);
 			virtual ~JumpTaskStep();
 			virtual void perform(CoordController*, TaskParameters&);
 		private:
 			motor_point_t pos;
 			float speed_coef;
+			bool rel;
 	};
 
 	class CalibrateTaskStep : public TaskStep {
@@ -47,7 +49,7 @@ namespace _8SMC1 {
 
 	class ArcTaskStep : public TaskStep {
 		public:
-			ArcTaskStep(motor_point_t, motor_point_t, int, float);
+			ArcTaskStep(motor_point_t, motor_point_t, int, float, bool = false);
 			virtual ~ArcTaskStep();
 			virtual void perform(CoordController*, TaskParameters&);
 			void setClockwise(bool);
@@ -57,6 +59,7 @@ namespace _8SMC1 {
 			int splitter;
 			float speed;
 			bool clockwise;
+			bool rel;
 	};
 
 	enum CoordTaskType {

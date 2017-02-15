@@ -110,6 +110,12 @@ namespace _8SMC1 {
 		return this->waitWhileRunning();
 	}
 
+	ErrorCode DeviceController::startRelativeMove(motor_coord_t reldest,
+			float speed, int div, bool syncIn) {
+		motor_coord_t dest = getPosition() + reldest;
+		return startMove(dest, speed, div, syncIn);
+	}
+
 	void DeviceController::stop() {
 		this->dest = MoveType::Stop;
 		this->dev->stop();

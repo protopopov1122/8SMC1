@@ -96,6 +96,15 @@ namespace _8SMC1 {
 		return ErrorCode::NoError;
 	}
 
+
+	ErrorCode CoordController::relativeMove(motor_point_t relpoint, float speed, int div,
+			bool sync) {
+		motor_point_t point = getPosition();
+		point.x += relpoint.x;
+		point.y += relpoint.y;
+		return move(point, speed, div, sync);
+	}
+
 	ErrorCode CoordController::calibrate(int tr) {
 		int comeback = TRAILER_COMEBACK;
 		if (this->xAxis->getDevice()->isRunning()
@@ -217,7 +226,19 @@ namespace _8SMC1 {
 					return err;
 				}
 			}
-		} while (pnt.x != dest.x || pnt.y != dest.y);
+		} while (abs(dest.x - pnt.x) > COMPARISON_RADIUS ||
+			abs(dest.y - pnt.y) > COMPARISON_RADIUS);
 		return this->move(dest, speed, div, true);
+	}
+
+	ErrorCode CoordController::relativeArc(motor_point_t reldest, motor_point_t relcenter, int splitter,
+				float speed, int div, bool clockwise) {
+		motor_point_t dest = getPosition();
+		motor_point_t center = getPosition();
+		dest.x += reldest.x;
+		dest.y += reldest.y;
+		center.x += relcenter.x;
+		center.y += relcenter.y;
+		return arc(dest, center, splitter, speed, div, clockwise);
 	}
 }

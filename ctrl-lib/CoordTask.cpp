@@ -30,9 +30,10 @@ namespace _8SMC1 {
 		return this->list.size();
 	}
 
-	MoveTaskStep::MoveTaskStep(motor_point_t pos, float spc) : TaskStep::TaskStep() {
+	MoveTaskStep::MoveTaskStep(motor_point_t pos, float spc, bool rel) : TaskStep::TaskStep() {
 		this->pos = pos;
 		this->speed_coef = spc;
+		this->rel = rel;
 	}
 
 	MoveTaskStep::~MoveTaskStep() {
@@ -40,12 +41,17 @@ namespace _8SMC1 {
 	}
 
 	void MoveTaskStep::perform(CoordController *ctrl, TaskParameters &prms) {
-		ctrl->move(this->pos, this->speed_coef * prms.speed, 8, true);
+		if (this->rel) {
+			ctrl->relativeMove(this->pos, this->speed_coef * prms.speed, 8, true);
+		} else {
+			ctrl->move(this->pos, this->speed_coef * prms.speed, 8, true);
+		}
 	}
 
-	JumpTaskStep::JumpTaskStep(motor_point_t pos, float spc) : TaskStep::TaskStep() {
+	JumpTaskStep::JumpTaskStep(motor_point_t pos, float spc, bool rel) : TaskStep::TaskStep() {
 		this->pos = pos;
 		this->speed_coef = spc;
+		this->rel = rel;
 	}
 
 	JumpTaskStep::~JumpTaskStep() {
@@ -53,7 +59,11 @@ namespace _8SMC1 {
 	}
 
 	void JumpTaskStep::perform(CoordController *ctrl, TaskParameters &prms) {
-		ctrl->move(this->pos, this->speed_coef * prms.speed, 8, false);
+		if (this->rel) {
+			ctrl->relativeMove(this->pos, this->speed_coef * prms.speed, 8, false);
+		} else {
+			ctrl->move(this->pos, this->speed_coef * prms.speed, 8, false);
+		}
 	}
 
 	CalibrateTaskStep::CalibrateTaskStep(int side) : TaskStep::TaskStep() {
@@ -68,19 +78,25 @@ namespace _8SMC1 {
 		ctrl->calibrate(this->side);
 	}
 
-	ArcTaskStep::ArcTaskStep(motor_point_t dest, motor_point_t center, int sp, float speed) : TaskStep::TaskStep() {
+	ArcTaskStep::ArcTaskStep(motor_point_t dest, motor_point_t center, int sp, float speed, bool rel)
+			: TaskStep::TaskStep() {
 		this->dest = dest;
 		this->center = center;
 		this->splitter = sp;
 		this->speed = speed;
+		this->rel = rel;
 	}
 
 	ArcTaskStep::~ArcTaskStep() {
 
 	}
 
-	void ArcTaskStep::perform(CoordController *ctrl, TaskParameters &prms) {
-		ctrl->arc(dest, center, splitter, this->speed * prms.speed, 8, this->clockwise);
+	void ArcTaskStep::perform(CoordController *ctrl, TaskParameters &prms) {		
+		if (this->rel) {
+			ctrl->relativeArc(dest, center, splitter, this->speed * prms.speed, 8, this->clockwise);
+		} else {
+			ctrl->arc(dest, center, splitter, this->speed * prms.speed, 8, this->clockwise);
+		}
 	}
 
 	void ArcTaskStep::setClockwise(bool c) {

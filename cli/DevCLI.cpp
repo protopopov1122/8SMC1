@@ -122,7 +122,7 @@ namespace _8SMC1 {
 				int dest = std::stoi(args.at(1));
 				dev->moveToTrailer(dest, 800);
 			}
-		} else if (com.compare("start") == 0) {	
+		} else if (com.compare("move") == 0) {	
 			if (args.empty()) {
 				std::cout << "Provide device id" << std::endl;
 			} else {
@@ -151,6 +151,36 @@ namespace _8SMC1 {
 					<< " with speed " << speed << " steps/sec and " << div << " step divisor"
 					<< std::endl;
 				dev->startMove(dest, speed, div);
+			}
+		} else if (com.compare("rmove") == 0) {	
+			if (args.empty()) {
+				std::cout << "Provide device id" << std::endl;
+			} else {
+				if (args.size() < 2) {
+					std::cout << "Provide destination" << std::endl;
+					return;
+				}
+				DeviceController *dev = sysman->getDeviceController(std::stoi(args.at(0)));
+				if (dev == nullptr) {
+					std::cout << "Device not found" << std::endl;
+					return;
+				}
+				int dest = std::stoi(args.at(1));
+				float speed = dev->getDevice()->getSpeed();
+				int div = dev->getDevice()->getStepDivisor();
+				switch (args.size()) {
+					case 3: {
+						speed = std::stod(args.at(2));
+					} break;
+					case 4: {
+						speed = std::stod(args.at(2));
+						div = std::stoi(args.at(3));
+					} break;
+				}
+				std::cout << "\tStarted device #" << dev->getDevice()->getID() << " to " << dest
+					<< " with speed " << speed << " steps/sec and " << div << " step divisor"
+					<< std::endl;
+				dev->startRelativeMove(dest, speed, div);
 			}
 		} else if (com.compare("stop") == 0) {
 			if (args.empty()) {
@@ -270,6 +300,25 @@ namespace _8SMC1 {
 					ctrl->move(point, speed, div, true);
 				}
 			}
+		} else if (com.compare("rmove") == 0) {
+			if (args.size() < 5) {
+				std::cout << "Provide arguments" << std::endl;
+			} else {
+				CoordController *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+				int x = std::stoi(args.at(1));
+				int y = std::stoi(args.at(2));
+				float speed = std::stod(args.at(3));
+				int div = std::stod(args.at(4));
+				if (ctrl == nullptr) {
+					std::cout << "Wrong coord id" << std::endl;
+				} else {
+					motor_point_t point = {x, y};
+					std::cout << "\tStarted relative coord #" << args.at(0) << " to " << x << "x" << y
+						<< " with base speed " << speed << " steps/sec and " << div << " step divisor"
+						<< std::endl;
+					ctrl->relativeMove(point, speed, div, true);
+				}
+			}
 		} else if (com.compare("jump") == 0) {
 			if (args.size() < 5) {
 				std::cout << "Provide arguments" << std::endl;
@@ -283,10 +332,29 @@ namespace _8SMC1 {
 					std::cout << "Wrong coord id" << std::endl;
 				} else {
 					motor_point_t point = {x, y};
-					std::cout << "\tStarted coord #" << args.at(0) << " to " << x << "x" << y
+					std::cout << "\tStarted coord # jump " << args.at(0) << " to " << x << "x" << y
 						<< " with base speed " << speed << " steps/sec and " << div << " step divisor"
 						<< std::endl;
 					ctrl->move(point, speed, div, false);
+				}
+			}
+		}  else if (com.compare("rjump") == 0) {
+			if (args.size() < 5) {
+				std::cout << "Provide arguments" << std::endl;
+			} else {
+				CoordController *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+				int x = std::stoi(args.at(1));
+				int y = std::stoi(args.at(2));
+				float speed = std::stod(args.at(3));
+				int div = std::stod(args.at(4));
+				if (ctrl == nullptr) {
+					std::cout << "Wrong coord id" << std::endl;
+				} else {
+					motor_point_t point = {x, y};
+					std::cout << "\tStarted relative coord # jump " << args.at(0) << " to " << x << "x" << y
+						<< " with base speed " << speed << " steps/sec and " << div << " step divisor"
+						<< std::endl;
+					ctrl->relativeMove(point, speed, div, false);
 				}
 			}
 		} else if (com.compare("arc") == 0) {
@@ -335,6 +403,56 @@ namespace _8SMC1 {
 						<< " with base speed " << speed << " steps/sec and " << div << " step divisor"
 						<< std::endl;
 					if (ctrl->arc(point, center, sp, speed, div, false) != ErrorCode::NoError) {
+						std::cout << "Arc error" << std::endl;
+					}
+				}
+			}
+		} else if (com.compare("rarc") == 0) {
+			if (args.size() < 8) {
+				std::cout << "Provide arguments" << std::endl;
+			} else {
+				CoordController *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+				int x = std::stoi(args.at(1));
+				int y = std::stoi(args.at(2));
+				int cx = std::stoi(args.at(3));
+				int cy = std::stoi(args.at(4));
+				int sp = std::stoi(args.at(5));
+				float speed = std::stod(args.at(6));
+				int div = std::stod(args.at(7));
+				if (ctrl == nullptr) {
+					std::cout << "Wrong coord id" << std::endl;
+				} else {
+					motor_point_t point = {x, y};
+					motor_point_t center = {cx, cy};
+					std::cout << "\tStarted relative coord arc #" << args.at(0) << " to " << x << "x" << y
+						<< " with base speed " << speed << " steps/sec and " << div << " step divisor"
+						<< std::endl;
+					if (ctrl->relativeArc(point, center, sp, speed, div, true) != ErrorCode::NoError) {
+						std::cout << "Arc error" << std::endl;
+					}
+				}
+			}
+		} else if (com.compare("rcarc") == 0) {
+			if (args.size() < 8) {
+				std::cout << "Provide arguments" << std::endl;
+			} else {
+				CoordController *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+				int x = std::stoi(args.at(1));
+				int y = std::stoi(args.at(2));
+				int cx = std::stoi(args.at(3));
+				int cy = std::stoi(args.at(4));
+				int sp = std::stoi(args.at(5));
+				float speed = std::stod(args.at(6));
+				int div = std::stod(args.at(7));
+				if (ctrl == nullptr) {
+					std::cout << "Wrong coord id" << std::endl;
+				} else {
+					motor_point_t point = {x, y};
+					motor_point_t center = {cx, cy};
+					std::cout << "\tStarted relative coord arc #" << args.at(0) << " to " << x << "x" << y
+						<< " with base speed " << speed << " steps/sec and " << div << " step divisor"
+						<< std::endl;
+					if (ctrl->relativeArc(point, center, sp, speed, div, false) != ErrorCode::NoError) {
 						std::cout << "Arc error" << std::endl;
 					}
 				}
@@ -411,6 +529,20 @@ namespace _8SMC1 {
 				}
 				motor_point_t pnt = {x, y};
 				task->addStep(new MoveTaskStep(pnt, sp));
+			} else if (com.compare("rmove") == 0) {
+				if (args.size() < 3) {
+					std::cout << "Wrong argument count" << std::endl;
+					return;
+				}
+				int x = std::stoi(args.at(0));
+				int y = std::stoi(args.at(1));
+				float sp = std::stod(args.at(2));
+				if (sp <= 0 || sp > 1) {
+					std::cout << "Wrong speed coef" << std::endl;
+					return;
+				}
+				motor_point_t pnt = {x, y};
+				task->addStep(new MoveTaskStep(pnt, sp, true));
 			} else if (com.compare("jump") == 0) {
 				if (args.size() < 3) {
 					std::cout << "Wrong argument count" << std::endl;
@@ -425,6 +557,20 @@ namespace _8SMC1 {
 				}
 				motor_point_t pnt = {x, y};
 				task->addStep(new JumpTaskStep(pnt, sp));
+			} else if (com.compare("rjump") == 0) {
+				if (args.size() < 3) {
+					std::cout << "Wrong argument count" << std::endl;
+					return;
+				}
+				int x = std::stoi(args.at(0));
+				int y = std::stoi(args.at(1));
+				float sp = std::stod(args.at(2));
+				if (sp <= 0 || sp > 1) {
+					std::cout << "Wrong speed coef" << std::endl;
+					return;
+				}
+				motor_point_t pnt = {x, y};
+				task->addStep(new JumpTaskStep(pnt, sp, true));
 			} else if (com.compare("arc") == 0) {
 				if (args.size() < 6) {
 					std::cout << "Wrong argument count" << std::endl;
@@ -461,6 +607,44 @@ namespace _8SMC1 {
 				motor_point_t pnt = {x, y};
 				motor_point_t cpnt = {cx, cy};
 				ArcTaskStep *st = new ArcTaskStep(pnt, cpnt, sp, speed);
+				st->setClockwise(false);
+				task->addStep(st);
+			} else if (com.compare("rarc") == 0) {
+				if (args.size() < 6) {
+					std::cout << "Wrong argument count" << std::endl;
+					return;
+				}
+				int x = std::stoi(args.at(0));
+				int y = std::stoi(args.at(1));
+				int cx = std::stoi(args.at(2));
+				int cy = std::stoi(args.at(3));
+				int sp = std::stoi(args.at(4));
+				float speed = std::stod(args.at(5));
+				if (speed <= 0 || speed > 1) {
+					std::cout << "Wrong speed coef" << std::endl;
+					return;
+				}
+				motor_point_t pnt = {x, y};
+				motor_point_t cpnt = {cx, cy};
+				task->addStep(new ArcTaskStep(pnt, cpnt, sp, speed, true));
+			} else if (com.compare("rcarc") == 0) {
+				if (args.size() < 6) {
+					std::cout << "Wrong argument count" << std::endl;
+					return;
+				}
+				int x = std::stoi(args.at(0));
+				int y = std::stoi(args.at(1));
+				int cx = std::stoi(args.at(2));
+				int cy = std::stoi(args.at(3));
+				int sp = std::stoi(args.at(4));
+				float speed = std::stod(args.at(5));
+				if (speed <= 0 || speed > 1) {
+					std::cout << "Wrong speed coef" << std::endl;
+					return;
+				}
+				motor_point_t pnt = {x, y};
+				motor_point_t cpnt = {cx, cy};
+				ArcTaskStep *st = new ArcTaskStep(pnt, cpnt, sp, speed, true);
 				st->setClockwise(false);
 				task->addStep(st);
 			} else if (com.compare("cal") == 0) {
