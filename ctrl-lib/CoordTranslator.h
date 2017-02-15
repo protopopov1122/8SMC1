@@ -13,11 +13,16 @@ namespace _8SMC1 {
 
 	class CoordTranslator {
 		public:
-			CoordTranslator();
+			CoordTranslator(motor_point_t, motor_size_t, motor_size_t);
 			virtual ~CoordTranslator();
+			motor_point_t getCenter();
+			motor_size_t getSize();
+			motor_size_t getScale();
+			motor_point_t get(float, float);
 		private:
-			motor_point_t offset;
-			motor_point_t size;
+			motor_point_t center;
+			motor_size_t size;
+			motor_size_t scale;
 	};
 
 } /* namespace _8SMC1 */

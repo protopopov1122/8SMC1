@@ -29,6 +29,11 @@ namespace _8SMC1 {
 		motor_coord_t y;
 	};	
 
+	struct motor_size_t {
+		motor_coord_t w;
+		motor_coord_t h;
+	};
+
 #define ROLL_STEP 30000
 #define ROLL_SPEED 4000.0f
 #define ROLL_DIV 8
