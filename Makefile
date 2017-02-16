@@ -58,7 +58,7 @@ GCodeParser.o:
 	$(CC) $(CFLAGS) -c ./gcode/GCodeParser.cpp
 
 Stub.o:
-	$(CC) $(CFLAGS) -c ./misc/Stub.cxx
+	$(CC) $(CFLAGS) -c ./misc/Stub.cpp
 
 stub: Stub.o
 	$(CC) -shared -o $(BUILD)/USMCDLL.dll Stub.o -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread
