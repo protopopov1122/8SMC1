@@ -46,7 +46,7 @@ namespace _8SMC1 {
 
 	ErrorCode DeviceController::checkTrailers() {
 		if (!this->dev->isRunning()) {
-			return ErrorCode::DeviceStopped;
+			return ErrorCode::NoError;
 		}
 		if (this->dest == MoveType::MoveUp &&
 				this->dev->isTrailerPressed(2)) {

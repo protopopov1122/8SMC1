@@ -48,13 +48,13 @@ namespace _8SMC1 {
 			x_speed = speed;
 			y_speed = 0;
 		} else {
-			float ncoef = abs(((float) dy) / dx);
+			float ddx = (float) dx;
+			float ddy = (float) dy;
+			float ncoef = fabs(ddy / ddx);
 			x_speed = sqrt(speed * speed / (1 + ncoef * ncoef));
 			y_speed = ncoef * x_speed;
 		}
 
-		//this->xAxis->startMove(point.x, x_speed, div, sync);
-		//this->yAxis->startMove(point.y, y_speed, div, false);
 		if (xAxis->dev->isRunning() || yAxis->dev->isRunning()) {
 			return ErrorCode::DeviceRunning;
 		}
@@ -66,16 +66,6 @@ namespace _8SMC1 {
 				MoveType::MoveDown;
 		yAxis->dev->start(point.y, y_speed, div, false);
 		while (xDev->isRunning() || yDev->isRunning()) {
-//		if (xDev->isTrailerPressed(1) || yDev->isTrailerPressed(1)) {
-//			xDev->stop();
-//			yDev->stop();
-//			return ErrorCode::Trailer1Pressed;
-//		}
-//		if (xDev->isTrailerPressed(2) || yDev->isTrailerPressed(2)) {
-//			xDev->stop();
-//			yDev->stop();
-//			return ErrorCode::Trailer2Pressed;
-//		}
 			if (xDev->isRunning()) {
 				ErrorCode code = xAxis->checkTrailers();
 				if (code != ErrorCode::NoError) {
@@ -114,8 +104,6 @@ namespace _8SMC1 {
 		if (tr != 1 && tr != 2) {
 			return ErrorCode::WrongParameter;
 		}
-//			xAxis->moveToTrailer(tr, TRAILER_COMEBACK);
-//			yAxis->moveToTrailer(tr, TRAILER_COMEBACK);
 		int dest = (tr == 1 ? -ROLL_STEP : ROLL_STEP);
 		xAxis->dest = (tr == 1 ? MoveType::RollDown : MoveType::RollUp);
 		yAxis->dest = (tr == 1 ? MoveType::RollDown : MoveType::RollUp);
@@ -189,26 +177,6 @@ namespace _8SMC1 {
 			return ErrorCode::ArcError;
 		}
 		Circle cir(center, (int64_t) sqrt(r1), clockwise);
-		/*int add = clockwise ? 1 : -1;
-		int start = cir.getFullSize() - 1;
-		while (cir.getElement(start).x != src.x ||
-			cir.getElement(start).y != src.y) {
-			start += add;
-		}
-		std::vector<motor_point_t> path;
-		while (cir.getElement(start).x != dest.x ||
-			cir.getElement(start).y != dest.y) {
-			motor_point_t point = cir.getElement(start);
-			path.push_back(point);
-			start += add;
-		}
-		for (size_t i = 0; i < (unsigned  int) splitter; i++) {
-			motor_point_t pnt = path.at(path.size() / splitter * i);
-			ErrorCode err = this->move(path.at(path.size() / splitter * i), speed, div, true);
-			if (err !=ErrorCode::NoError) {
-				return err;
-			}
-		}*/
 		if (!cir.skip(src)) {
 			return ErrorCode::ArcError;
 		}
@@ -225,6 +193,7 @@ namespace _8SMC1 {
 				if (err != ErrorCode::NoError) {
 					return err;
 				}
+				pnt = getPosition();
 			}
 		} while (abs(dest.x - pnt.x) > COMPARISON_RADIUS ||
 			abs(dest.y - pnt.y) > COMPARISON_RADIUS);
