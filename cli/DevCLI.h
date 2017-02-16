@@ -3,6 +3,7 @@
 
 #include "CLI.h"
 #include "SystemManager.h"
+#include "GCodeParser.h"
 
 /* Defines cli commands to control Devices API */
 

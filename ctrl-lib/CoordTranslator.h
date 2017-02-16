@@ -18,7 +18,7 @@ namespace _8SMC1 {
 			motor_point_t getCenter();
 			motor_size_t getSize();
 			motor_size_t getScale();
-			motor_point_t get(float, float);
+			motor_point_t get(long double, long double);
 		private:
 			motor_point_t center;
 			motor_size_t size;

@@ -23,7 +23,7 @@ namespace _8SMC1 {
 		return this->scale;
 	}
 
-	motor_point_t CoordTranslator::get(float x, float y) {
+	motor_point_t CoordTranslator::get(long double x, long double y) {
 		int64_t xtr = x * this->scale.w;
 		int64_t ytr = y * this->scale.h;
 		motor_point_t pnt = {0, 0};

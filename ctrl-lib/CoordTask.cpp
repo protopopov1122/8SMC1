@@ -102,4 +102,32 @@ namespace _8SMC1 {
 	void ArcTaskStep::setClockwise(bool c) {
 		this->clockwise = c;
 	}
+
+	RelArcTaskStep::RelArcTaskStep(motor_point_t dest, motor_point_t center, int sp, float speed, bool rel)
+			: TaskStep::TaskStep() {
+		this->dest = dest;
+		this->center = center;
+		this->splitter = sp;
+		this->speed = speed;
+		this->rel = rel;
+	}
+
+	RelArcTaskStep::~RelArcTaskStep() {
+
+	}
+
+	void RelArcTaskStep::perform(CoordController *ctrl, TaskParameters &prms) {	
+		motor_point_t cen = ctrl->getPosition();
+		cen.x += center.x;
+		cen.y += center.y;
+		if (this->rel) {
+			ctrl->relativeArc(dest, cen, splitter, this->speed * prms.speed, 8, this->clockwise);
+		} else {
+			ctrl->arc(dest, cen, splitter, this->speed * prms.speed, 8, this->clockwise);
+		}
+	}
+
+	void RelArcTaskStep::setClockwise(bool c) {
+		this->clockwise = c;
+	}
 }

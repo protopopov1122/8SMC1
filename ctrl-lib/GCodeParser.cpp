@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "CoordTask.h"
 
 namespace _8SMC1 {
 
@@ -106,29 +107,53 @@ namespace _8SMC1 {
 		}
 		return com;
 	}
-}
-
-/* Currently this parser is not used by project, however it will be
-   included in it later. For testing purposes I created simple
-   main function, that reads file passes in first argument and 
-   prints parsed commands. */
-
-using namespace _8SMC1;
-
-int main(int argc, char **argv) {
-	if (argc < 2) {
-		std::cout << "Provide file name" << std::endl;
-		return EXIT_FAILURE;
-	}
-	GCodeParser gp(fopen(argv[1], "r"));
-
-	GCodeCommand *com;
-	while ((com = gp.nextCommand()) != nullptr) {
-		std::cout << "Command: " << com->getCommand() << std::endl;
-		for (auto it = com->argsBegin(); it != com->argsEnd(); ++it) {
-			std::cout << "\tArgument: " << it->first << " = " << it->second << std::endl;
+	
+	long double parse_double(std::string str) {
+		long double out = 0;
+		long double out2 = 0;
+		for (size_t i = 0; i < str.length() && str.at(i) != '.'; i++) {
+			out *= 10;
+			out += str.at(i) - '0';
 		}
-		delete com;
+		for (size_t i = str.length() - 1; i < str.length() && str.at(i) != '.'; i--) {
+			out2 += str.at(i) - '0';
+			out2 /= 10;
+		}
+		return out + out2;
 	}
-	return EXIT_SUCCESS;
+	
+	CoordTask *gcode_translate(CoordTranslator &ctr, GCodeParser &parser, SystemManager *sysman) {
+		ProgrammedCoordTask *task = sysman->createProgrammedTask();
+		GCodeCommand *cmd = nullptr;
+		while ((cmd = parser.nextCommand()) != nullptr) {
+			std::string code = cmd->getCommand();
+			if (cmd->hasArg('X') && cmd->hasArg('X')) {
+				long double x = parse_double(cmd->getArg('X'));
+				long double y = parse_double(cmd->getArg('Y'));
+				motor_point_t real = ctr.get(x, y);
+				if (code.compare("G00") == 0) {
+					task->addStep(new JumpTaskStep(real, 1.0f));
+				} else if (code.compare("G01") == 0) {
+					task->addStep(new MoveTaskStep(real, 1.0f));
+				} else if (code.compare("G02") == 0 && cmd->hasArg('I') && cmd->hasArg('J')) {
+					long double i = std::stold(cmd->getArg('I'));
+					long double j = std::stold(cmd->getArg('J'));
+					motor_point_t center = ctr.get(i, j);
+					RelArcTaskStep *step = new RelArcTaskStep(real, center, 100, 1.0f);
+					task->addStep(step);
+				} else if (code.compare("G03") == 0) {
+					long double i = std::stold(cmd->getArg('I'));
+					long double j = std::stold(cmd->getArg('J'));
+					motor_point_t center = ctr.get(i, j);
+					RelArcTaskStep *step = new RelArcTaskStep(real, center, 100, 1.0f);
+					step->setClockwise(false);
+					task->addStep(step);
+				}
+			}
+			delete cmd;
+		}
+		return task;
+	}
 }
+
+

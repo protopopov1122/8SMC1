@@ -5,12 +5,16 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "SystemManager.h"
+#include "CoordTask.h"
+#include "CoordTranslator.h"
 
 /* This file contains simple G-Code parser. It allows parsing simple G-Code files
    line-by-line skipping black lines and comments. Each parsed line is
    allocated as GCodeCommand object. */
 
 namespace _8SMC1 {
+	
 	
 	class GCodeCommand {
 		public:
@@ -36,6 +40,8 @@ namespace _8SMC1 {
 			int readChar();
 			FILE *fp;		
 	};
+	
+	CoordTask *gcode_translate(CoordTranslator&, GCodeParser&, SystemManager*);
 }
 
 #endif

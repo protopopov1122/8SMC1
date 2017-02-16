@@ -62,6 +62,22 @@ namespace _8SMC1 {
 			bool rel;
 	};
 
+	// Calculates center position relatively to current position
+	class RelArcTaskStep : public TaskStep {
+		public:
+			RelArcTaskStep(motor_point_t, motor_point_t, int, float, bool = false);
+			virtual ~RelArcTaskStep();
+			virtual void perform(CoordController*, TaskParameters&);
+			void setClockwise(bool);
+		private:
+			motor_point_t dest;
+			motor_point_t center;
+			int splitter;
+			float speed;
+			bool clockwise;
+			bool rel;
+	};
+
 	enum CoordTaskType {
 		ProgrammedTask, FunctionTask
 	};

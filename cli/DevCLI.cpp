@@ -2,6 +2,7 @@
 #include <iostream>
 #include "DevCLI.h"
 #include "CircleGenerator.h"
+#include "GCodeParser.h"
 
 namespace _8SMC1 {
 	void LsCommand::execute(std::vector<std::string> &args) {
@@ -679,6 +680,31 @@ namespace _8SMC1 {
 			}
 			TaskParameters prms = {speed};
 			task->perform(coord, prms);
+		} else if (args.at(0).compare("load") == 0) {
+			if (args.size() < 8) {
+				std::cout << "Wrong argument count" << std::endl;
+				return;
+			}
+			motor_point_t center = {
+				std::stoi(args.at(1)), std::stoi(args.at(2))
+			};
+			motor_size_t size = {
+				std::stoi(args.at(3)), std::stoi(args.at(4))
+			};
+			motor_size_t scale = {
+				std::stoi(args.at(5)), std::stoi(args.at(6))
+			};
+			CoordTranslator trans(center, size, scale);
+			std::string path = args.at(7);
+			for (size_t i = 8; i < args.size(); i++) {
+				path += args.at(i);
+				if (i + 1 < args.size()) {
+					path += " ";
+				}
+			}
+			std::string mode = "r";
+			GCodeParser parser(fopen(path.c_str(), mode.c_str()));
+			gcode_translate(trans, parser, this->sysman);
 		} else {
 			std::cout << "Wrong command '" << args.at(0) << "'" << std::endl;
 		}
