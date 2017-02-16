@@ -54,5 +54,10 @@ Heavy refractoring. Must recheck all functions on the next testing.
 More refractoring. Before tests proper work not guaranteed. TODO: Test all cli functions one more time on real motors.
 
 ##### 14/02/2017
-After refractoring and code rewrite not all functions were tested, some bugs also were found, system will be more stable after few next test, but now not
-all functions work as expected.
+After refractoring and code rewrite not all functions were tested, some bugs also were found, system will be more stable after few next test, but now not all functions work as expected.
+
+##### 16/02/2017
+Test on real controllers. Found bug: speed projections were not calculated as expected(should have fixed it but have not tested fix). This bug affected arc and synchronized movement. All other functions work. TODO: Retest all functions next time.
+
+Other:
+Now development will continue in two main branches(and some temporary ones): master(for the main development process) and testing(to commit bugfixes during tests). Some decisions were made about system integration(however they are not final) - see TODO.

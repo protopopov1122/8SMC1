@@ -23,8 +23,7 @@ Known issues
 ===================
 * Current MicroSMC driver works only on Windows 2000/XP/Vista - controller may be correctly used only on this platforms. Possible solution - reimplement all low level wrappers on top of another controller(like Arduino). Other project parts will depend only on these wrappers so will not be affected, but porting will be quite hard.
 * Project is on development stage and tests are performed two times a week, so new functions may be unstable or not work at all. See NEWS to track current project state.
-* There are a lot of synchronization options and other parameters for our controller - we have not figured how to use them yet. Probably not all controller 
-options will be used.
+* There are a lot of synchronization options and other parameters for our controller - we have not figured how to use them yet. Probably not all controller options will be used.
 
 Disclaimer
 ===================
