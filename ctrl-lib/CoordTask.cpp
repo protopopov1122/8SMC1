@@ -110,6 +110,7 @@ namespace _8SMC1 {
 		this->splitter = sp;
 		this->speed = speed;
 		this->rel = rel;
+		
 	}
 
 	RelArcTaskStep::~RelArcTaskStep() {

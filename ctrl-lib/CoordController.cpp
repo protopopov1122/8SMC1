@@ -2,12 +2,18 @@
 #include "CircleGenerator.h"
 #include <iostream>
 #include <stdio.h>
+#define _USE_MATH_DEFINES
 #include <math.h>
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 namespace _8SMC1 {
 
 	CoordController::CoordController(DeviceController *xaxis,
 			DeviceController *yaxis) {
+		this->scale = {1, 1};
 		this->xAxis = xaxis;
 		this->yAxis = yaxis;
 		this->xAxis->getDevice()->setSyncInputMode(true);
@@ -28,6 +34,8 @@ namespace _8SMC1 {
 
 	ErrorCode CoordController::move(motor_point_t point, float speed, int div,
 			bool sync) {
+		//point.x /= this->scale.w;
+		//point.y /= this->scale.h;
 		// TODO Enable proper motor syncing
 		Device *xDev = this->xAxis->getDevice();
 		Device *yDev = this->yAxis->getDevice();
@@ -161,21 +169,23 @@ namespace _8SMC1 {
 
 	motor_point_t CoordController::getPosition() {
 		motor_point_t pos;
-		pos.x = xAxis->getPosition();
-		pos.y = yAxis->getPosition();
+		pos.x = xAxis->getPosition();// * this->scale.w;
+		pos.y = yAxis->getPosition();// * this->scale.h;
 		return pos;
 	}
 
-	ErrorCode CoordController::arc(motor_point_t dest, motor_point_t center, int splitter,
-				float speed, int div, bool clockwise) {
+	ErrorCode CoordController::arc(motor_point_t dest, motor_point_t center, int spl,
+				float speed, int div, bool clockwise, bool strict) {
 		motor_point_t src = this->getPosition();
-		int64_t r1 = (src.x - center.x) * (src.x - center.x) +
-			     (src.y - center.y) * (src.y - center.y);
-		int64_t r2 = (dest.x - center.x) * (dest.x - center.x) +
-			     (dest.y - center.y) * (dest.y - center.y);
-		if (r1 != r2) {
-			return ErrorCode::ArcError;
+		double r1 = pow(src.x - center.x, 2) +
+			     pow(src.y - center.y, 2);
+		double r2 = pow(dest.x - center.x, 2) +
+			     pow(dest.y - center.y, 2);
+		if (fabs(sqrt(r1) - sqrt(r2)) >= COMPARISON_RADIUS) {
+				return ErrorCode::ArcError;
 		}
+		double fullCircle = 2 * M_PI * sqrt(r1);
+		int64_t splitter = (int64_t) (fullCircle / spl);
 		Circle cir(center, (int64_t) sqrt(r1), clockwise);
 		if (!cir.skip(src)) {
 			return ErrorCode::ArcError;
@@ -201,13 +211,13 @@ namespace _8SMC1 {
 	}
 
 	ErrorCode CoordController::relativeArc(motor_point_t reldest, motor_point_t relcenter, int splitter,
-				float speed, int div, bool clockwise) {
+				float speed, int div, bool clockwise, bool strict) {
 		motor_point_t dest = getPosition();
 		motor_point_t center = getPosition();
 		dest.x += reldest.x;
 		dest.y += reldest.y;
 		center.x += relcenter.x;
 		center.y += relcenter.y;
-		return arc(dest, center, splitter, speed, div, clockwise);
+		return arc(dest, center, splitter, speed, div, clockwise, strict);
 	}
 }

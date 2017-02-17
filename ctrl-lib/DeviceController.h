@@ -82,13 +82,16 @@ namespace _8SMC1 {
 			DeviceController *getYAxis();
 			ErrorCode move(motor_point_t, float, int, bool);
 			ErrorCode relativeMove(motor_point_t, float, int, bool);
-			ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool);
-			ErrorCode relativeArc(motor_point_t, motor_point_t, int, float, int, bool);
+			ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
+			ErrorCode relativeArc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
 			ErrorCode calibrate(int);
 			motor_point_t getPosition();
 		private:
 			DeviceController *xAxis;
 			DeviceController *yAxis;
+			
+			motor_size_t scale;
+			
 	};
 }
 
