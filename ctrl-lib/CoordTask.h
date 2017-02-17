@@ -13,14 +13,14 @@ namespace _8SMC1 {
 	class TaskStep {
 		public:
 			virtual ~TaskStep() {};
-			virtual void perform(CoordController*, TaskParameters&) = 0;
+			virtual void perform(CoordPlane*, TaskParameters&) = 0;
 	};
 
 	class MoveTaskStep : public TaskStep {
 		public:
 			MoveTaskStep(motor_point_t, float, bool = false);
 			virtual ~MoveTaskStep();
-			virtual void perform(CoordController*, TaskParameters&);
+			virtual void perform(CoordPlane*, TaskParameters&);
 		private:
 			motor_point_t pos;
 			float speed_coef;
@@ -31,7 +31,7 @@ namespace _8SMC1 {
 		public:
 			JumpTaskStep(motor_point_t, float, bool = false);
 			virtual ~JumpTaskStep();
-			virtual void perform(CoordController*, TaskParameters&);
+			virtual void perform(CoordPlane*, TaskParameters&);
 		private:
 			motor_point_t pos;
 			float speed_coef;
@@ -42,7 +42,7 @@ namespace _8SMC1 {
 		public:
 			CalibrateTaskStep(int);
 			virtual ~CalibrateTaskStep();
-			virtual void perform(CoordController*, TaskParameters&);
+			virtual void perform(CoordPlane*, TaskParameters&);
 		private:
 			int side;
 	};
@@ -51,7 +51,7 @@ namespace _8SMC1 {
 		public:
 			ArcTaskStep(motor_point_t, motor_point_t, int, float, bool = false);
 			virtual ~ArcTaskStep();
-			virtual void perform(CoordController*, TaskParameters&);
+			virtual void perform(CoordPlane*, TaskParameters&);
 			void setClockwise(bool);
 		private:
 			motor_point_t dest;
@@ -67,7 +67,7 @@ namespace _8SMC1 {
 		public:
 			RelArcTaskStep(motor_point_t, motor_point_t, int, float, bool = false);
 			virtual ~RelArcTaskStep();
-			virtual void perform(CoordController*, TaskParameters&);
+			virtual void perform(CoordPlane*, TaskParameters&);
 			void setClockwise(bool);
 		private:
 			motor_point_t dest;
@@ -87,7 +87,7 @@ namespace _8SMC1 {
 			CoordTask(CoordTaskType tp) {this->type = tp;}
 			virtual ~CoordTask() {}
 			CoordTaskType getType() {return this->type;}
-			virtual void perform(CoordController*, TaskParameters&) = 0;
+			virtual void perform(CoordPlane*, TaskParameters&) = 0;
 		private:
 			CoordTaskType type;
 	};
@@ -96,7 +96,7 @@ namespace _8SMC1 {
 		public:
 			ProgrammedCoordTask();
 			virtual ~ProgrammedCoordTask();
-			virtual void perform(CoordController*, TaskParameters&);
+			virtual void perform(CoordPlane*, TaskParameters&);
 			void addStep(TaskStep*);
 			size_t getSubCount();
 		private:

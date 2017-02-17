@@ -95,7 +95,7 @@ namespace _8SMC1 {
 	}
 
 
-	ErrorCode CoordController::relativeMove(motor_point_t relpoint, float speed, int div,
+	ErrorCode CoordPlane::relativeMove(motor_point_t relpoint, float speed, int div,
 			bool sync) {
 		motor_point_t point = getPosition();
 		point.x += relpoint.x;
@@ -210,7 +210,7 @@ namespace _8SMC1 {
 		return this->move(dest, speed, div, true);
 	}
 
-	ErrorCode CoordController::relativeArc(motor_point_t reldest, motor_point_t relcenter, int splitter,
+	ErrorCode CoordPlane::relativeArc(motor_point_t reldest, motor_point_t relcenter, int splitter,
 				float speed, int div, bool clockwise, bool strict) {
 		motor_point_t dest = getPosition();
 		motor_point_t center = getPosition();

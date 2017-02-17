@@ -16,7 +16,7 @@ namespace _8SMC1 {
 		}
 	}
 
-	void ProgrammedCoordTask::perform(CoordController *ctrl, TaskParameters &prms) {
+	void ProgrammedCoordTask::perform(CoordPlane *ctrl, TaskParameters &prms) {
 		for (size_t i = 0; i < this->list.size(); i++) {
 			this->list.at(i)->perform(ctrl, prms);
 		}
@@ -40,7 +40,7 @@ namespace _8SMC1 {
 
 	}
 
-	void MoveTaskStep::perform(CoordController *ctrl, TaskParameters &prms) {
+	void MoveTaskStep::perform(CoordPlane *ctrl, TaskParameters &prms) {
 		if (this->rel) {
 			ctrl->relativeMove(this->pos, this->speed_coef * prms.speed, 8, true);
 		} else {
@@ -58,7 +58,7 @@ namespace _8SMC1 {
 
 	}
 
-	void JumpTaskStep::perform(CoordController *ctrl, TaskParameters &prms) {
+	void JumpTaskStep::perform(CoordPlane *ctrl, TaskParameters &prms) {
 		if (this->rel) {
 			ctrl->relativeMove(this->pos, this->speed_coef * prms.speed, 8, false);
 		} else {
@@ -74,7 +74,7 @@ namespace _8SMC1 {
 
 	}
 
-	void CalibrateTaskStep::perform(CoordController *ctrl, TaskParameters &prms) {
+	void CalibrateTaskStep::perform(CoordPlane *ctrl, TaskParameters &prms) {
 		ctrl->calibrate(this->side);
 	}
 
@@ -91,7 +91,7 @@ namespace _8SMC1 {
 
 	}
 
-	void ArcTaskStep::perform(CoordController *ctrl, TaskParameters &prms) {		
+	void ArcTaskStep::perform(CoordPlane *ctrl, TaskParameters &prms) {		
 		if (this->rel) {
 			ctrl->relativeArc(dest, center, splitter, this->speed * prms.speed, 8, this->clockwise);
 		} else {
@@ -117,7 +117,7 @@ namespace _8SMC1 {
 
 	}
 
-	void RelArcTaskStep::perform(CoordController *ctrl, TaskParameters &prms) {	
+	void RelArcTaskStep::perform(CoordPlane *ctrl, TaskParameters &prms) {	
 		motor_point_t cen = ctrl->getPosition();
 		cen.x += center.x;
 		cen.y += center.y;

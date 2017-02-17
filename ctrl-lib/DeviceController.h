@@ -74,18 +74,27 @@ namespace _8SMC1 {
 			unsigned int length;
 	};
 
-	class CoordController {
+	class CoordPlane {
+		public:
+			virtual ~CoordPlane() {};
+			virtual ErrorCode move(motor_point_t, float, int, bool) = 0;
+			virtual ErrorCode relativeMove(motor_point_t, float, int, bool);
+			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false) = 0;
+			virtual ErrorCode relativeArc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
+			virtual ErrorCode calibrate(int) = 0;
+			virtual motor_point_t getPosition() = 0;
+	};
+	
+	class CoordController : public CoordPlane {
 		public:
 			CoordController(DeviceController*, DeviceController*);
 			virtual ~CoordController();
 			DeviceController *getXAxis();
 			DeviceController *getYAxis();
-			ErrorCode move(motor_point_t, float, int, bool);
-			ErrorCode relativeMove(motor_point_t, float, int, bool);
-			ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
-			ErrorCode relativeArc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
-			ErrorCode calibrate(int);
-			motor_point_t getPosition();
+			virtual ErrorCode move(motor_point_t, float, int, bool);
+			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
+			virtual ErrorCode calibrate(int);
+			virtual motor_point_t getPosition();
 		private:
 			DeviceController *xAxis;
 			DeviceController *yAxis;
