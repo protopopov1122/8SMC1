@@ -2,7 +2,6 @@
 #define _8SMC1_CTRL_LIB_DEVICE_CONTROLLER_H_
 
 #include <cinttypes>
-#include <pthread.h>
 #include "DeviceManager.h"
 #include "CtrlCore.h"
 
@@ -37,15 +36,9 @@ namespace _8SMC1 {
 			unsigned int getLength();
 
 			motor_coord_t getPosition();
-
-			friend void *device_control_thread(void*);
 		private:
 			// Calibration
 			void calculate_length();
-			// Threading related
-			pthread_t dev_thread;
-			bool exists;
-			bool wait_for_thread;
 
 			Device *dev;
 			MoveType dest;

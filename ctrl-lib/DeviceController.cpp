@@ -3,41 +3,13 @@
 
 namespace _8SMC1 {
 
-	// This thread stub may be used later
-	// Each device controller has attached thread,
-	// which monitors device state.
-	void *device_control_thread(void *ptr) {
-		DeviceController *dev = (DeviceController*) ptr;
-//		while (dev->exists) {
-//			if (dev->dest == MoveType::Stop) {
-//				continue;
-//			}
-//			if ((dev->dest == MoveType::MoveUp ||
-//					dev->dest == MoveType::MoveDown) &&
-//					dev->dev->isRunning()) {
-//				dev->checkTrailers();
-//			}
-//			sched_yield();
-//		}
-		dev->wait_for_thread = false;
-		pthread_exit(nullptr);
-		return nullptr;
-	}
-
 	DeviceController::DeviceController(Device *dev) {
 		this->dev = dev;
 		this->dest = MoveType::Stop;
-		this->exists = true;
-		this->wait_for_thread = true;
 		this->length = 0;
-		pthread_create(&this->dev_thread, nullptr, device_control_thread, this);
 	}
 
 	DeviceController::~DeviceController() {
-		this->exists = false;
-		while (this->wait_for_thread) {
-			sched_yield();
-		}
 	}
 
 	Device *DeviceController::getDevice() {
