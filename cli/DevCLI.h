@@ -33,7 +33,6 @@ namespace _8SMC1 {
 	CMD(RefreshCommand)
 	CMD(TaskCommand)
 	CMD(MotorCommand)
-	CMD(CircleCommand) // Testing
 
 	#undef CMD
 }

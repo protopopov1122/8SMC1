@@ -4,11 +4,15 @@ This directory contains higher level library. It controls complex device moves, 
 Abstractions:
 * Device controller - uses device API to create simpliest abstraction(rolling, position reset, state tracking, moving).
 * Coordinate controller - uses two devices to create coordinate plane abstraction.
-* Coordniate task - includes program to execute on coordinate controller.
+* Coordinate plane - abstractions to perform some actions on coordinate plane(log actions, validation, coordinate mapping and actual movement). These abstractions are stored in stack(the bottom stack element is coordinate controller).
+* Coordniate task - includes program to execute on coordinate plane.
 
 Components:
-* DeviceController - performs each device control functions(moving, rolling, trailer checking).
-* CoordController - stores two device controllers and creates coordinate plane abstraction on top of them(including calibration, trailer and error control, move synchronization).
-* CoordTask - implement task abstraction for coordinate plane. Each task contains list of separate steps to do(e.g. calibrate, move, jump) and may be performed on top of any coordinate plane.
-* CoordTranslator - not implemented yet. Purpose: translate virtual coordinates to real motor steps.
-* SystemManager -  central system component, holds DeviceManager, device and coord controllers, task list.
+* DeviceController.
+* CoordController.
+* CoordTask.
+* CoordTranslator - translates virtual g-code coordinates to motor steps.
+* SystemManager -  central system component, holds DeviceManager, device controllers and coord planes, task list.
+* CoordPlane - different abstractions to use as coordinate plane.
+* GCodeParser - parse G-Code file and translate it to coordinate task.
+* CircleGenerator - Bresenhams algorithm implementation for arc movement.

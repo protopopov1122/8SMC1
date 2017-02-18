@@ -1,10 +1,13 @@
 8SMC1 API wrappers
 ===================
-This project contains library and command-line interface for 8SMC1 stepper motor controllers.
-Library consists of USMC API wrappers for C++ and use MicroSMC controller driver. By now, existing API is low level and directly mapped to USMC API.
-Command line inteface is used to test main library, controllers and stepper motors, as well as replace default MicroSMC test program, that is quite poor.
-Project also contains 'Stub.cxx' file that contains 'USMCDLL.h' stub implementaion.
-For details see README in appropriate subdirectories.
+
+This project aims to create library to perform high-level control of 8SMC1 controllers and UI to use it. Currently project contains library core(still in development but already has most useful functions, however not all are tested) and command-line interface to test it(SEE cli/README.md to view command-line manual).
+
+Project has few levels: low-level Device wrapper API(wraps actual 8SMC1 driver API), high-level library(used to more complex stuff: different movement, logging, error checking, g-code and tasks), command-line interface(for testing purposes), device driver stubs(to test without hardware).
+
+Currently project is in development stage, so API may be unstable and contain bugs. Function testing on real hardware takes place two times a week(Monday and Thursday) so functionality that is added between this days may not work(track NEWS.md to view current state). All bugfixes added during tests firstly will be uploaded to testing branch and then refractored, but development code pushed in master(during the week testing and master will not be synchronized).
+
+For more info see READMEs in subdirectories.
 
 Current goals
 ===================
@@ -44,7 +47,6 @@ Build commands for both are the same:
 make clean	# Clean all
 make all	# Build command-line interface
 make stub	# Build stub to test CLI without controller
-make gcode	# Build testing G-Code parser
 ```
 
 Authors and Contributions

@@ -61,3 +61,6 @@ Test on real controllers. Found bug: speed projections were not calculated as ex
 
 Other:
 Now development will continue in two main branches(and some temporary ones): master(for the main development process) and testing(to commit bugfixes during tests). Some decisions were made about system integration(however they are not final) - see TODO.
+
+##### 18/02/2017
+A lot of refractoring and new features. Most bugs after last test should be fixed, althrought because of new features some functions might not work. Also integrated G-Code parser into system. Looking forward to the next test on motors(most likely will be on Monday 20/02/2017). If there will be no bugs then core of the system will be almost implemented(there are some other system functions to implement, however most of the work is done). The next task is writing GUI and integration on top of project core.

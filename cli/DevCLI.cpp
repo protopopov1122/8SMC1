@@ -757,8 +757,4 @@ namespace _8SMC1 {
 			std::cout << "Wrong command '" << args.at(0) << "'" << std::endl;
 		}
 	}
-
-	void CircleCommand::execute(std::vector<std::string> &args) {
-
-	}
 }

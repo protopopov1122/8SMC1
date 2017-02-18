@@ -80,11 +80,6 @@ $(OUTPUT): Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CircleGene
 	$(CC) -o $(BUILD)/$(OUTPUT) Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CircleGenerator.o CoordController.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o CoordTask.o CoordTranslator.o DeviceController.o GCodeParser.o SystemManager.o  -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL
 	@cp $(LIB)/USMCDLL.dll $(BUILD)
 
-gcode: 
-	mkdir -p $(BUILD)
-	$(CC) -o $(BUILD)/$(OUTPUT)  -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL
-	@cp $(LIB)/USMCDLL.dll $(BUILD)
-
 clean:
 	@rm -f *.o
 	@rm -rf $(BUILD)

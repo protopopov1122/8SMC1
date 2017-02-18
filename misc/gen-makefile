@@ -28,14 +28,5 @@ printf "\t\$(CC) -o \$(BUILD)/\$(OUTPUT) "
 printf "$OBJS" 
 printf " -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=\$(LIB) -lUSMCDLL\n\t@cp \$(LIB)/USMCDLL.dll \$(BUILD)\n\n" 
 
-# Generate gcode build target
-printf "gcode: " 
-OBJS=`find gcode -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
-echo $OBJS 
-printf "\tmkdir -p \$(BUILD)\n"
-printf "\t\$(CC) -o \$(BUILD)/\$(OUTPUT) " 
-printf "$OBJS" 
-printf " -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=\$(LIB) -lUSMCDLL\n\t@cp \$(LIB)/USMCDLL.dll \$(BUILD)\n\n" 
-
 # Append footer to Makefile
 cat misc/mk-footer 
