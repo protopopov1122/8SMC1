@@ -1,4 +1,5 @@
 #include "CoordTask.h"
+#include "SystemManager.h"
 #include <cinttypes>
 #include <iostream>
 #include <math.h>
@@ -16,10 +17,15 @@ namespace _8SMC1 {
 		}
 	}
 
-	void ProgrammedCoordTask::perform(CoordPlane *ctrl, TaskParameters &prms) {
+	ErrorCode ProgrammedCoordTask::perform(CoordPlane *ctrl, TaskParameters &prms, SystemManager *sysman) {
+		ErrorCode errcode;
 		for (size_t i = 0; i < this->list.size(); i++) {
-			this->list.at(i)->perform(ctrl, prms);
+			errcode = this->list.at(i)->perform(ctrl, prms, sysman);
+			if (errcode != ErrorCode::NoError) {
+				return errcode;
+			}
 		}
+		return ErrorCode::NoError;
 	}
 
 	void ProgrammedCoordTask::addStep(TaskStep *st) {
@@ -40,11 +46,11 @@ namespace _8SMC1 {
 
 	}
 
-	void MoveTaskStep::perform(CoordPlane *ctrl, TaskParameters &prms) {
+	ErrorCode MoveTaskStep::perform(CoordPlane *ctrl, TaskParameters &prms, SystemManager *sysman) {
 		if (this->rel) {
-			ctrl->relativeMove(this->pos, this->speed_coef * prms.speed, 8, true);
+			return ctrl->relativeMove(this->pos, this->speed_coef * prms.speed, 8, true);
 		} else {
-			ctrl->move(this->pos, this->speed_coef * prms.speed, 8, true);
+			return ctrl->move(this->pos, this->speed_coef * prms.speed, 8, true);
 		}
 	}
 
@@ -58,15 +64,15 @@ namespace _8SMC1 {
 
 	}
 
-	void JumpTaskStep::perform(CoordPlane *ctrl, TaskParameters &prms) {
+	ErrorCode JumpTaskStep::perform(CoordPlane *ctrl, TaskParameters &prms, SystemManager *sysman) {
 		if (this->rel) {
-			ctrl->relativeMove(this->pos, this->speed_coef * prms.speed, 8, false);
+			return ctrl->relativeMove(this->pos, this->speed_coef * prms.speed, 8, false);
 		} else {
-			ctrl->move(this->pos, this->speed_coef * prms.speed, 8, false);
+			return ctrl->move(this->pos, this->speed_coef * prms.speed, 8, false);
 		}
 	}
 
-	CalibrateTaskStep::CalibrateTaskStep(int side) : TaskStep::TaskStep() {
+	CalibrateTaskStep::CalibrateTaskStep(TrailerId side) : TaskStep::TaskStep() {
 		this->side = side;
 	}
 
@@ -74,8 +80,8 @@ namespace _8SMC1 {
 
 	}
 
-	void CalibrateTaskStep::perform(CoordPlane *ctrl, TaskParameters &prms) {
-		ctrl->calibrate(this->side);
+	ErrorCode CalibrateTaskStep::perform(CoordPlane *ctrl, TaskParameters &prms, SystemManager *sysman) {
+		return ctrl->calibrate(this->side);
 	}
 
 	ArcTaskStep::ArcTaskStep(motor_point_t dest, motor_point_t center, int sp, float speed, bool rel)
@@ -91,11 +97,11 @@ namespace _8SMC1 {
 
 	}
 
-	void ArcTaskStep::perform(CoordPlane *ctrl, TaskParameters &prms) {		
+	ErrorCode ArcTaskStep::perform(CoordPlane *ctrl, TaskParameters &prms, SystemManager *sysman) {		
 		if (this->rel) {
-			ctrl->relativeArc(dest, center, splitter, this->speed * prms.speed, 8, this->clockwise);
+			return ctrl->relativeArc(dest, center, splitter, this->speed * prms.speed, 8, this->clockwise);
 		} else {
-			ctrl->arc(dest, center, splitter, this->speed * prms.speed, 8, this->clockwise);
+			return ctrl->arc(dest, center, splitter, this->speed * prms.speed, 8, this->clockwise);
 		}
 	}
 
@@ -117,14 +123,14 @@ namespace _8SMC1 {
 
 	}
 
-	void RelArcTaskStep::perform(CoordPlane *ctrl, TaskParameters &prms) {	
+	ErrorCode RelArcTaskStep::perform(CoordPlane *ctrl, TaskParameters &prms, SystemManager *sysman) {	
 		motor_point_t cen = ctrl->getPosition();
 		cen.x += center.x;
 		cen.y += center.y;
 		if (this->rel) {
-			ctrl->relativeArc(dest, cen, splitter, this->speed * prms.speed, 8, this->clockwise);
+			return ctrl->relativeArc(dest, cen, splitter, this->speed * prms.speed, 8, this->clockwise);
 		} else {
-			ctrl->arc(dest, cen, splitter, this->speed * prms.speed, 8, this->clockwise);
+			return ctrl->arc(dest, cen, splitter, this->speed * prms.speed, 8, this->clockwise);
 		}
 	}
 

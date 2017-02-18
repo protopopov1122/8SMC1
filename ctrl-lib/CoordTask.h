@@ -2,9 +2,11 @@
 #define _8SMC1_CTRL_LIB_TASK_H_
 
 #include <vector>
-#include "DeviceController.h"
+#include "CoordPlane.h"
 
 namespace _8SMC1 {
+	
+	class SystemManager; // Forward referencing
 
 	struct TaskParameters {
 		float speed;
@@ -13,14 +15,14 @@ namespace _8SMC1 {
 	class TaskStep {
 		public:
 			virtual ~TaskStep() {};
-			virtual void perform(CoordPlane*, TaskParameters&) = 0;
+			virtual ErrorCode perform(CoordPlane*, TaskParameters&, SystemManager*) = 0;
 	};
 
 	class MoveTaskStep : public TaskStep {
 		public:
 			MoveTaskStep(motor_point_t, float, bool = false);
 			virtual ~MoveTaskStep();
-			virtual void perform(CoordPlane*, TaskParameters&);
+			virtual ErrorCode perform(CoordPlane*, TaskParameters&, SystemManager*);
 		private:
 			motor_point_t pos;
 			float speed_coef;
@@ -31,7 +33,7 @@ namespace _8SMC1 {
 		public:
 			JumpTaskStep(motor_point_t, float, bool = false);
 			virtual ~JumpTaskStep();
-			virtual void perform(CoordPlane*, TaskParameters&);
+			virtual ErrorCode perform(CoordPlane*, TaskParameters&, SystemManager*);
 		private:
 			motor_point_t pos;
 			float speed_coef;
@@ -40,18 +42,18 @@ namespace _8SMC1 {
 
 	class CalibrateTaskStep : public TaskStep {
 		public:
-			CalibrateTaskStep(int);
+			CalibrateTaskStep(TrailerId);
 			virtual ~CalibrateTaskStep();
-			virtual void perform(CoordPlane*, TaskParameters&);
+			virtual ErrorCode perform(CoordPlane*, TaskParameters&, SystemManager*);
 		private:
-			int side;
+			TrailerId side;
 	};
 
 	class ArcTaskStep : public TaskStep {
 		public:
 			ArcTaskStep(motor_point_t, motor_point_t, int, float, bool = false);
 			virtual ~ArcTaskStep();
-			virtual void perform(CoordPlane*, TaskParameters&);
+			virtual ErrorCode perform(CoordPlane*, TaskParameters&, SystemManager*);
 			void setClockwise(bool);
 		private:
 			motor_point_t dest;
@@ -67,7 +69,7 @@ namespace _8SMC1 {
 		public:
 			RelArcTaskStep(motor_point_t, motor_point_t, int, float, bool = false);
 			virtual ~RelArcTaskStep();
-			virtual void perform(CoordPlane*, TaskParameters&);
+			virtual ErrorCode perform(CoordPlane*, TaskParameters&, SystemManager*);
 			void setClockwise(bool);
 		private:
 			motor_point_t dest;
@@ -87,7 +89,7 @@ namespace _8SMC1 {
 			CoordTask(CoordTaskType tp) {this->type = tp;}
 			virtual ~CoordTask() {}
 			CoordTaskType getType() {return this->type;}
-			virtual void perform(CoordPlane*, TaskParameters&) = 0;
+			virtual ErrorCode perform(CoordPlane*, TaskParameters&, SystemManager*) = 0;
 		private:
 			CoordTaskType type;
 	};
@@ -96,7 +98,7 @@ namespace _8SMC1 {
 		public:
 			ProgrammedCoordTask();
 			virtual ~ProgrammedCoordTask();
-			virtual void perform(CoordPlane*, TaskParameters&);
+			virtual ErrorCode perform(CoordPlane*, TaskParameters&, SystemManager*);
 			void addStep(TaskStep*);
 			size_t getSubCount();
 		private:

@@ -1,4 +1,4 @@
-#include "DeviceController.h"
+#include "CoordPlane.h"
 #include "CircleGenerator.h"
 #include <iostream>
 #include <stdio.h>
@@ -13,7 +13,6 @@ namespace _8SMC1 {
 
 	CoordController::CoordController(DeviceController *xaxis,
 			DeviceController *yaxis) {
-		this->scale = {1, 1};
 		this->xAxis = xaxis;
 		this->yAxis = yaxis;
 		this->xAxis->getDevice()->setSyncInputMode(true);
@@ -103,7 +102,7 @@ namespace _8SMC1 {
 		return move(point, speed, div, sync);
 	}
 
-	ErrorCode CoordController::calibrate(int tr) {
+	ErrorCode CoordController::calibrate(TrailerId tr) {
 		int comeback = TRAILER_COMEBACK;
 		if (this->xAxis->getDevice()->isRunning()
 				|| this->yAxis->getDevice()->isRunning()) {

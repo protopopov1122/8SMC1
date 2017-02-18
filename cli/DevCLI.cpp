@@ -468,8 +468,13 @@ namespace _8SMC1 {
 			CoordController *coordController = sysman->getCoord(coordNum);
 			if (coordController == nullptr) {
 				std::cout << "Wrong coord id" << std::endl;
+				return;
 			}
-			coordController->calibrate(coordTrailer);
+			if (coordTrailer != 1 && coordTrailer != 2) {
+				std::cout << "Wrong trailer id" << std::endl;
+				return;
+			}
+			coordController->calibrate(coordTrailer == 1 ? TrailerId::Trailer1 : TrailerId::Trailer2);
 		} else {
 			std::cout << "Wrong command '" << com << "'" << std::endl;
 		}
@@ -658,7 +663,7 @@ namespace _8SMC1 {
 					std::cout << "Wrond calibration side" << std::endl;
 					return;
 				}
-				task->addStep(new CalibrateTaskStep(side));
+				task->addStep(new CalibrateTaskStep(side == 1 ? TrailerId::Trailer1 : TrailerId::Trailer2));
 			} else {
 				std::cout << "Wrong command '" << com << "'" << std::endl;
 			}
@@ -679,7 +684,7 @@ namespace _8SMC1 {
 				return;
 			}
 			TaskParameters prms = {speed};
-			task->perform(coord, prms);
+			task->perform(coord, prms, sysman);
 		} else if (args.at(0).compare("load") == 0) {
 			if (args.size() < 8) {
 				std::cout << "Wrong argument count" << std::endl;
