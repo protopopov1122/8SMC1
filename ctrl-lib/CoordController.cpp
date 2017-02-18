@@ -184,7 +184,10 @@ namespace _8SMC1 {
 				return ErrorCode::ArcError;
 		}
 		double fullCircle = 2 * M_PI * sqrt(r1);
-		int64_t splitter = (int64_t) (fullCircle / spl);
+		int64_t splitter = (int64_t) ceil(fullCircle / spl);
+		if (splitter == 0) {
+			splitter = 1;
+		}
 		Circle cir(center, (int64_t) sqrt(r1), clockwise);
 		if (!cir.skip(src)) {
 			return ErrorCode::ArcError;

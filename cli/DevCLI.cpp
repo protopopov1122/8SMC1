@@ -71,9 +71,7 @@ namespace _8SMC1 {
 				#undef PRINT
 			} else if (cmp(COORDS)) {
 				for (size_t i = 0; i < sysman->getCoordCount(); i++) {
-					CoordController *ctrl = sysman->getCoord(i);
-					std::cout << i << "\tdev: " << ctrl->getXAxis()->getDevice()->getID()
-						<< "; dev: " << ctrl->getYAxis()->getDevice()->getID() << std::endl;
+					std::cout << i << std::endl;
 				}
 			} else if (cmp(TASKS)) {
 				for (size_t i = 0; i < sysman->getTaskCount(); i++) {
@@ -282,11 +280,35 @@ namespace _8SMC1 {
 					std::cout << "Created coord #" << sysman->getCoordCount() - 1 << std::endl;
 				}
 			}
+		} else if (com.compare("log") == 0) {
+			if (args.empty()) {
+				std::cout << "Provide coord id" << std::endl;
+				return;
+			}
+			CoordPlaneStack *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+			if (ctrl == nullptr) {
+				std::cout << "Wrong coord id" << std::endl;
+				return;
+			}
+			ctrl->pushPlane(new CoordPlaneLog(ctrl->peekPlane(), std::cout));
+		} else if (com.compare("map") == 0) {
+			if (args.size() < 5) {
+				std::cout << "Provide arguments" << std::endl;
+				return;
+			}
+			CoordPlaneStack *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+			if (ctrl == nullptr) {
+				std::cout << "Wrong coord id" << std::endl;
+				return;
+			}
+			motor_point_t offset = {std::stoi(args.at(1)), std::stoi(args.at(2))};
+			motor_scale_t scale = {std::stod(args.at(3)), std::stod(args.at(4))};
+			ctrl->pushPlane(new CoordPlaneMap(offset, scale, ctrl->peekPlane()));
 		} else if (com.compare("move") == 0) {
 			if (args.size() < 5) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
-				CoordController *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+				CoordPlaneStack *ctrl = sysman->getCoord(std::stoi(args.at(0)));
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
 				float speed = std::stod(args.at(3));
@@ -305,7 +327,7 @@ namespace _8SMC1 {
 			if (args.size() < 5) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
-				CoordController *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+				CoordPlaneStack *ctrl = sysman->getCoord(std::stoi(args.at(0)));
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
 				float speed = std::stod(args.at(3));
@@ -324,7 +346,7 @@ namespace _8SMC1 {
 			if (args.size() < 5) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
-				CoordController *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+				CoordPlaneStack *ctrl = sysman->getCoord(std::stoi(args.at(0)));
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
 				float speed = std::stod(args.at(3));
@@ -343,7 +365,7 @@ namespace _8SMC1 {
 			if (args.size() < 5) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
-				CoordController *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+				CoordPlaneStack *ctrl = sysman->getCoord(std::stoi(args.at(0)));
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
 				float speed = std::stod(args.at(3));
@@ -362,7 +384,7 @@ namespace _8SMC1 {
 			if (args.size() < 8) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
-				CoordController *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+				CoordPlaneStack *ctrl = sysman->getCoord(std::stoi(args.at(0)));
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
 				int cx = std::stoi(args.at(3));
@@ -387,7 +409,7 @@ namespace _8SMC1 {
 			if (args.size() < 8) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
-				CoordController *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+				CoordPlaneStack *ctrl = sysman->getCoord(std::stoi(args.at(0)));
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
 				int cx = std::stoi(args.at(3));
@@ -412,7 +434,7 @@ namespace _8SMC1 {
 			if (args.size() < 8) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
-				CoordController *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+				CoordPlaneStack *ctrl = sysman->getCoord(std::stoi(args.at(0)));
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
 				int cx = std::stoi(args.at(3));
@@ -437,7 +459,7 @@ namespace _8SMC1 {
 			if (args.size() < 8) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
-				CoordController *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+				CoordPlaneStack *ctrl = sysman->getCoord(std::stoi(args.at(0)));
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
 				int cx = std::stoi(args.at(3));
@@ -465,7 +487,7 @@ namespace _8SMC1 {
 			}
 			int coordNum = std::stoi(args.at(0));
 			int coordTrailer = std::stoi(args.at(1));
-			CoordController *coordController = sysman->getCoord(coordNum);
+			CoordPlaneStack *coordController = sysman->getCoord(coordNum);
 			if (coordController == nullptr) {
 				std::cout << "Wrong coord id" << std::endl;
 				return;
@@ -673,7 +695,7 @@ namespace _8SMC1 {
 				return;
 			}
 			CoordTask *task = sysman->getTask(std::stoi(args.at(1)));
-			CoordController *coord = sysman->getCoord(std::stoi(args.at(2)));
+			CoordPlaneStack *coord = sysman->getCoord(std::stoi(args.at(2)));
 			float speed = std::stod(args.at(3));
 			if (task == nullptr) {
 				std::cout << "Wrong task id" << std::endl;

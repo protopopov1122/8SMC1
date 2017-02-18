@@ -2,6 +2,7 @@
 #define _8SMC1_CTRL_LIB_COORD_PLANE_H_
 
 #include <iostream>
+#include <vector>
 #include "DeviceController.h"
 
 /* This header contains coordinate plane interface definitions and some implementations.*/
@@ -42,7 +43,7 @@ namespace _8SMC1 {
 	class CoordPlaneLog : public CoordPlane {
 		public:
 			CoordPlaneLog(CoordPlane*, std::ostream&);
-			~CoordPlaneLog();
+			virtual ~CoordPlaneLog();
 			virtual ErrorCode move(motor_point_t, float, int, bool);
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
 			virtual ErrorCode calibrate(TrailerId);
@@ -50,6 +51,40 @@ namespace _8SMC1 {
 		private:
 			CoordPlane *plane;
 			std::ostream *out;
+	};
+	
+	// Mapping coordinates
+	class CoordPlaneMap : public CoordPlane {
+		public:
+			CoordPlaneMap(motor_point_t, motor_scale_t, CoordPlane*);
+			~CoordPlaneMap();
+						
+			virtual ErrorCode move(motor_point_t, float, int, bool);
+			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
+			virtual ErrorCode calibrate(TrailerId);
+			virtual motor_point_t getPosition();
+		private:
+			CoordPlane* plane;
+			motor_point_t offset;
+			motor_scale_t scale;
+	};
+	
+	// Coordinate plane abstraction stacking
+	class CoordPlaneStack : public CoordPlane {
+		public:
+			CoordPlaneStack(CoordPlane*);
+			virtual ~CoordPlaneStack();
+			
+			CoordPlane *peekPlane();
+			bool popPlane();
+			void pushPlane(CoordPlane*);
+			
+			virtual ErrorCode move(motor_point_t, float, int, bool);
+			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
+			virtual ErrorCode calibrate(TrailerId);
+			virtual motor_point_t getPosition();
+		private:
+			std::vector<CoordPlane*> stack;
 	};
 }
 

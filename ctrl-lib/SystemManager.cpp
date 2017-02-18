@@ -66,21 +66,22 @@ namespace _8SMC1 {
 		return this->coords.size();
 	}
 
-	CoordController *SystemManager::getCoord(size_t c) {
+	CoordPlaneStack *SystemManager::getCoord(size_t c) {
 		if (c >= this->coords.size()) {
 			return nullptr;
 		}
 		return this->coords.at(c);
 	}
 
-	CoordController *SystemManager::createCoord(DWORD d1, DWORD d2) {
+	CoordPlaneStack *SystemManager::createCoord(DWORD d1, DWORD d2) {
 		if (d1 >= this->devman->getDeviceCount() || d2 >= this->devman->getDeviceCount()) {
 			return nullptr;
 		}
 
 		CoordController *ctrl = new CoordController(this->getDeviceController(d1),
 			this->getDeviceController(d2));
-		this->coords.push_back(ctrl);
-		return ctrl;
+		CoordPlaneStack *stack = new CoordPlaneStack(ctrl);
+		this->coords.push_back(stack);
+		return stack;
 	}
 }

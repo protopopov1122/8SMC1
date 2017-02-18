@@ -2,7 +2,7 @@
 #define _8SMC1_CTRL_LIB_SYSTEM_MANAGER_H_
 
 #include "DeviceManager.h"
-#include "DeviceController.h"
+#include "CoordPlane.h"
 #include "CoordTask.h"
 
 namespace _8SMC1 {
@@ -21,13 +21,13 @@ namespace _8SMC1 {
 			bool removeTask(size_t);
 			// Coordinate plane control
 			size_t getCoordCount();
-			CoordController *getCoord(size_t);
-			CoordController *createCoord(DWORD, DWORD);
+			CoordPlaneStack *getCoord(size_t);
+			CoordPlaneStack *createCoord(DWORD, DWORD);
 		private:
 			DeviceManager *devman;
 			std::vector<DeviceController*> dev;
 			std::vector<CoordTask*> tasks;
-			std::vector<CoordController*> coords;
+			std::vector<CoordPlaneStack*> coords;
 
 	};
 
