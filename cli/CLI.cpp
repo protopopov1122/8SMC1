@@ -1,6 +1,7 @@
 #include "CLI.h"
 #include <stdio.h>
 #include <string>
+#include <string.h>
 #include <vector>
 #include <iostream>
 
@@ -39,7 +40,7 @@ namespace _8SMC1 {
 			return true;
 		}
 		// Split line into command and arguments
-		std::string delimiter = " ";
+		/*std::string delimiter = " ";
 		std::vector<std::string> args;
 		size_t pos = 0;
 		std::string token;
@@ -52,7 +53,53 @@ namespace _8SMC1 {
 		}
 		if (!input.empty()) {
 			args.push_back(input);
+		}*/
+		std::vector<std::string> args;
+		size_t pos = 0;
+		bool quote = false;
+		const char *line = input.c_str();
+		args.push_back("");
+		while (pos < strlen(line)) {
+			char chr = line[pos++];
+			if (chr == '\"') {
+				quote = !quote;
+				continue;
+			}
+			if (chr != '\\' && chr == ' ' && !quote && !args.at(args.size() - 1).empty()) {
+				args.push_back("");
+			} else {
+				if (chr == '\\' && pos < strlen(line)) {
+					switch (line[pos++]) {
+						case 'n':
+							chr = '\n';
+						break;
+						case 't':
+							chr = '\t';
+						break;
+						case 'r':
+							chr = '\r';
+						break;
+						case '\\':
+							chr = '\\';
+						break;
+						case '\"':
+							chr = '\"';
+						break;
+						case '\'':
+							chr = '\'';
+						break;
+						case ' ':
+							chr = ' ';
+						break;
+					}
+				}
+				std::string str = args.at(args.size() - 1);
+				str += chr;
+				args[args.size() - 1] = str;
+			}
 		}
+		
+		// Build command object
 		std::string command = args.at(0);
 		args.erase(args.begin());
 

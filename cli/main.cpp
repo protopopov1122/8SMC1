@@ -16,10 +16,10 @@ class EchoCMD : public CLICommand  {
 	}
 
 	virtual void execute(std::vector<std::string> &args) {
-		for (size_t i = 0; i < args.size(); i++) {
-			std::cout << args.at(i) << " ";
-		}
-		std::cout << std::endl;
+	//	for (size_t i = 0; i < args.size(); i++) {
+		//	std::cout << args.at(i) << " ";
+		//}
+		std::cout << args.at(0) << std::endl;
 	}
 };
 
