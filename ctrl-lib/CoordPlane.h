@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 #include "DeviceController.h"
 
 /* This header contains coordinate plane interface definitions and some implementations.*/
@@ -42,7 +43,7 @@ namespace _8SMC1 {
 	// Logging coordinate plane
 	class CoordPlaneLog : public CoordPlane {
 		public:
-			CoordPlaneLog(CoordPlane*, std::ostream&);
+			CoordPlaneLog(CoordPlane*, std::ostream&, std::string, bool = true, bool = true);
 			virtual ~CoordPlaneLog();
 			virtual ErrorCode move(motor_point_t, float, int, bool);
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
@@ -51,6 +52,9 @@ namespace _8SMC1 {
 		private:
 			CoordPlane *plane;
 			std::ostream *out;
+			std::string prefix;
+			bool log_actions;
+			bool log_errors;
 	};
 	
 	// Mapping coordinates
@@ -67,6 +71,23 @@ namespace _8SMC1 {
 			CoordPlane* plane;
 			motor_point_t offset;
 			motor_scale_t scale;
+	};
+	
+	// Coordinate and speed validation
+	class CoordPlaneValidator : public CoordPlane {
+		public:
+			CoordPlaneValidator(motor_point_t, motor_point_t, float, CoordPlane*);
+			~CoordPlaneValidator();
+						
+			virtual ErrorCode move(motor_point_t, float, int, bool);
+			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
+			virtual ErrorCode calibrate(TrailerId);
+			virtual motor_point_t getPosition();
+		private:
+			CoordPlane *plane;
+			motor_point_t min;
+			motor_point_t max;
+			float max_speed;
 	};
 	
 	// Coordinate plane abstraction stacking
