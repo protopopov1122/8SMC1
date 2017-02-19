@@ -15,7 +15,7 @@ class EchoCMD : public CLICommand  {
 
 	}
 
-	virtual void execute(std::vector<std::string> &args) {
+	virtual void execute(CLI *cli, std::vector<std::string> &args) {
 		for (size_t i = 0; i < args.size(); i++) {
 			std::cout << args.at(i) << " ";
 		}
@@ -28,7 +28,7 @@ class HelpCMD : public CLICommand  {
 
 	}
 
-	virtual void execute(std::vector<std::string> &args) {
+	virtual void execute(CLI *cli, std::vector<std::string> &args) {
 		std::cout << "See cli/README.md in project repo to get CLI manual" << std::endl;
 	}
 };
@@ -36,7 +36,7 @@ class HelpCMD : public CLICommand  {
 int main(int argc, char **argv) {
 	DeviceManager devman;
 	SystemManager sysman(&devman);
-	CLI cli;
+	CLI cli(std::cout, std::cin);
 	cli.addCommand("echo", new EchoCMD());
 	cli.addCommand("ls", new LsCommand(&sysman));
 	cli.addCommand("x", new HaltCommand(&sysman));

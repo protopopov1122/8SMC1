@@ -45,4 +45,9 @@ namespace _8SMC1 {
 		pnt.y /= this->scale.y;
 		return pnt;
 	}
+
+	void CoordPlaneMap::dump(std::ostream &os) {
+		os << "map(offset=" << this->offset.x << "x" << this->offset.y
+			<< "; scale=" << this->scale.x << "x" << this->scale.y << ")";
+	}
 }

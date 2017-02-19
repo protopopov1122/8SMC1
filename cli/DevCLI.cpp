@@ -5,7 +5,7 @@
 #include "GCodeParser.h"
 
 namespace _8SMC1 {
-	void LsCommand::execute(std::vector<std::string> &args) {
+	void LsCommand::execute(CLI *cli, std::vector<std::string> &args) {
 		if (args.empty()) {	// For empty args list all devices
 			for (unsigned int i = 0; i < sysman->getDeviceManager()->getDeviceCount(); i++) {
 				Device *dev = sysman->getDeviceManager()->getDevice(i);
@@ -71,7 +71,9 @@ namespace _8SMC1 {
 				#undef PRINT
 			} else if (cmp(COORDS)) {
 				for (size_t i = 0; i < sysman->getCoordCount(); i++) {
-					std::cout << i << std::endl;
+					std::cout << i;
+					sysman->getCoord(i)->dump(std::cout);
+					std::cout << std::endl;
 				}
 			} else if (cmp(TASKS)) {
 				for (size_t i = 0; i < sysman->getTaskCount(); i++) {
@@ -90,7 +92,7 @@ namespace _8SMC1 {
 		}
 	}
 
-	void HaltCommand::execute(std::vector<std::string> &args) {
+	void HaltCommand::execute(CLI *cli, std::vector<std::string> &args) {
 		DeviceManager *devman = sysman->getDeviceManager();
 		for (size_t i = 0; i < devman->getDeviceCount(); i++) {
 			Device *dev = devman->getDevice(i);
@@ -98,7 +100,7 @@ namespace _8SMC1 {
 		}
 	}
 
-	void MotorCommand::execute(std::vector<std::string> &args) {
+	void MotorCommand::execute(CLI *cli, std::vector<std::string> &args) {
 		if (args.empty()) {
 			std::cout << "Provide arguments" << std::endl;
 			return;
@@ -262,7 +264,7 @@ namespace _8SMC1 {
 		}
 	}
 
-	void CoordCommand::execute(std::vector<std::string> &args) {
+	void CoordCommand::execute(CLI *cli, std::vector<std::string> &args) {
 		if (args.empty()) {
 			std::cout << "Provide arguments" << std::endl;
 		}
@@ -279,6 +281,17 @@ namespace _8SMC1 {
 				} else {
 					std::cout << "Created coord #" << sysman->getCoordCount() - 1 << std::endl;
 				}
+			}
+		} else if (com.compare("pop") == 0) {
+			if (args.empty()) {
+				std::cout << "Provide arguments" << std::endl;
+				return;
+			}
+			CoordPlaneStack *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+			if (ctrl->popPlane()) {
+				std::cout << "\tOk" << std::endl;
+			} else {
+				std::cout << "\tFailed" << std::endl;
 			}
 		} else if (com.compare("log") == 0) {
 			if (args.empty()) {
@@ -523,11 +536,11 @@ namespace _8SMC1 {
 		}
 	}
 	
-	void RefreshCommand::execute(std::vector<std::string> &args) {
+	void RefreshCommand::execute(CLI *cli, std::vector<std::string> &args) {
 		sysman->getDeviceManager()->refresh();
 	}
 
-	void TaskCommand::execute(std::vector<std::string> &args) {
+	void TaskCommand::execute(CLI *cli, std::vector<std::string> &args) {
 		if (args.empty()) {
 			std::cout << "Provide parameter" << std::endl;
 			return;

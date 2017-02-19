@@ -14,7 +14,7 @@ namespace _8SMC1 {
 				this->sysman = sysman;
 			}
 			virtual ~DeviceCommand() {}
-			virtual void execute(std::vector<std::string> &args) = 0;
+			virtual void execute(CLI *cli, std::vector<std::string> &args) = 0;
 		protected:
 			SystemManager *sysman;
 	};
@@ -24,7 +24,7 @@ namespace _8SMC1 {
 			name(SystemManager *sysman) :\
 				DeviceCommand::DeviceCommand(sysman) {};\
 			virtual ~name() {};\
-			virtual void execute(std::vector<std::string> &args);\
+			virtual void execute(CLI *cli, std::vector<std::string> &args);\
 	};
 
 	CMD(LsCommand)

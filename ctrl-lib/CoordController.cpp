@@ -11,6 +11,19 @@
 
 namespace _8SMC1 {
 
+	void CoordPlane::dump(std::ostream &os) {
+		os << "coord_plane";
+	}
+
+	void CoordController::dump(std::ostream &os) {
+		os << "coord(" << this->xAxis->getID() << "; " << this->yAxis->getID() << ")";
+	}
+	
+	std::ostream& operator<<(std::ostream &os, CoordPlane &cp) {
+		cp.dump(os);
+		return os;
+	}
+
 	CoordController::CoordController(DeviceController *xaxis,
 			DeviceController *yaxis) {
 		this->xAxis = xaxis;

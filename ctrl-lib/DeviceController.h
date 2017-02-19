@@ -25,6 +25,7 @@ namespace _8SMC1 {
 			DeviceController(Device*);
 			virtual ~DeviceController();
 			Device *getDevice();
+			DWORD getID();
 
 			ErrorCode checkTrailers();
 			ErrorCode waitWhileRunning();

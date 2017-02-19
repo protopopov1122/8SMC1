@@ -5,13 +5,16 @@
 #include <cinttypes>
 #include <vector>
 #include <map>
+#include <iostream>
 
 namespace _8SMC1 {
+		
+	class CLI; // Forward referencing
 		
 	class CLICommand {
 		public:
 			virtual ~CLICommand() {};
-			virtual void execute(std::vector<std::string>&) = 0;
+			virtual void execute(CLI*, std::vector<std::string>&) = 0;
 		protected:
 			std::string requireArgument(std::vector<std::string>&, size_t, std::string, std::string);
 			int requireArgument(std::vector<std::string>&, size_t, std::string,
@@ -23,13 +26,15 @@ namespace _8SMC1 {
 	
 	class CLI {
 		public:
-			CLI();
+			CLI(std::ostream&, std::istream&);
 			virtual ~CLI();
 			bool shell();
 			void error(std::string);
 			void addCommand(std::string, CLICommand*);
 		private:
 			std::map<std::string, CLICommand*> commands;
+			std::ostream *out;
+			std::istream *in;
 	};
 }
 

@@ -15,6 +15,10 @@ namespace _8SMC1 {
 	Device *DeviceController::getDevice() {
 		return this->dev;
 	}
+	
+	DWORD DeviceController::getID() {
+		return this->dev->getID();
+	}
 
 	ErrorCode DeviceController::checkTrailers() {
 		if (!this->dev->isRunning()) {

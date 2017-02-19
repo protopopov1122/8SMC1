@@ -20,6 +20,9 @@ namespace _8SMC1 {
 			virtual ErrorCode relativeArc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
 			virtual ErrorCode calibrate(TrailerId) = 0;
 			virtual motor_point_t getPosition() = 0;
+			virtual void dump(std::ostream&);
+		private:
+			friend std::ostream& operator<<(std::ostream&, CoordPlane&);
 	};
 	
 	// Coordinate plane commuticating directly with hardware
@@ -34,6 +37,7 @@ namespace _8SMC1 {
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
 			virtual ErrorCode calibrate(TrailerId);
 			virtual motor_point_t getPosition();
+			virtual void dump(std::ostream&);
 		private:
 			DeviceController *xAxis;
 			DeviceController *yAxis;
@@ -49,6 +53,7 @@ namespace _8SMC1 {
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
 			virtual ErrorCode calibrate(TrailerId);
 			virtual motor_point_t getPosition();
+			virtual void dump(std::ostream&);
 		private:
 			CoordPlane *plane;
 			std::ostream *out;
@@ -67,6 +72,7 @@ namespace _8SMC1 {
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
 			virtual ErrorCode calibrate(TrailerId);
 			virtual motor_point_t getPosition();
+			virtual void dump(std::ostream&);
 		private:
 			CoordPlane* plane;
 			motor_point_t offset;
@@ -83,6 +89,7 @@ namespace _8SMC1 {
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
 			virtual ErrorCode calibrate(TrailerId);
 			virtual motor_point_t getPosition();
+			virtual void dump(std::ostream&);
 		private:
 			CoordPlane *plane;
 			motor_point_t min;
@@ -104,6 +111,7 @@ namespace _8SMC1 {
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
 			virtual ErrorCode calibrate(TrailerId);
 			virtual motor_point_t getPosition();
+			virtual void dump(std::ostream&);
 		private:
 			std::vector<CoordPlane*> stack;
 	};

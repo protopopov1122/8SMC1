@@ -7,8 +7,9 @@
 
 namespace _8SMC1 {
 	
-	CLI::CLI() {
-
+	CLI::CLI(std::ostream &os, std::istream &is) {
+		this->in = &is;
+		this->out = &os;
 	}
 
 	CLI::~CLI() {
@@ -18,7 +19,7 @@ namespace _8SMC1 {
 	}
 
 	void CLI::error(std::string err) {
-		std::cout << "Error: " << err << std::endl;
+		*out << "Error: " << err << std::endl;
 	}
 
 	void CLI::addCommand(std::string name, CLICommand *cmd) {
@@ -32,9 +33,9 @@ namespace _8SMC1 {
 	bool CLI::shell() {
 		// Read and execute one shell command
 		const std::string PROMPT = ">>> ";
-		std::cout << PROMPT;
+		*out << PROMPT;
 		std::string input;
-		getline(std::cin, input);
+		getline(*in, input);
 
 		if (input.length() == 0) {
 			return true;
@@ -99,7 +100,7 @@ namespace _8SMC1 {
 		}
 
 		CLICommand *cmd = this->commands[command];
-		cmd->execute(args);
+		cmd->execute(this, args);
 
 		
 		return true;
