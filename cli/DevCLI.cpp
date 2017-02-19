@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <iostream>
+#include <sstream>
 #include "DevCLI.h"
 #include "CircleGenerator.h"
 #include "GCodeParser.h"
+#include "graph/FunctionParser.h"
 
 namespace _8SMC1 {
 	void LsCommand::execute(CLI *cli, std::vector<std::string> &args) {
@@ -766,6 +768,15 @@ namespace _8SMC1 {
 			std::string mode = "r";
 			GCodeParser parser(fopen(path.c_str(), mode.c_str()));
 			gcode_translate(trans, parser, this->sysman);
+		} else if (args.at(0).compare("graph") == 0) {
+			if (args.size() < 2) {
+				std::cout << "Provide args" << std::endl;
+				return;
+			}
+			std::stringstream ss(args.at(1));
+			FunctionLexer lexer(ss);
+			FunctionParser parser(&lexer);
+			delete parser.parse();
 		} else {
 			std::cout << "Wrong command '" << args.at(0) << "'" << std::endl;
 		}
