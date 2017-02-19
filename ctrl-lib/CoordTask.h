@@ -3,6 +3,8 @@
 
 #include <vector>
 #include "CoordPlane.h"
+#include "CoordTranslator.h"
+#include "graph/FunctionEngine.h"
 
 namespace _8SMC1 {
 	
@@ -81,7 +83,7 @@ namespace _8SMC1 {
 	};
 
 	enum CoordTaskType {
-		ProgrammedTask, FunctionTask
+		ProgrammedTask, GraphTask
 	};
 	
 	class CoordTask {
@@ -103,6 +105,20 @@ namespace _8SMC1 {
 			size_t getSubCount();
 		private:
 			std::vector<TaskStep*> list;
+	};
+	
+	class GraphCoordTask : public CoordTask {
+		public:
+			GraphCoordTask(Node*, CoordTranslator*, coord_point_t, coord_point_t, long double, float);
+			virtual ~GraphCoordTask();
+			virtual ErrorCode perform(CoordPlane*, TaskParameters&, SystemManager*);
+		private:
+			Node *func;
+			CoordTranslator *trans;
+			coord_point_t min;
+			coord_point_t max;
+			long double step;
+			float scale;
 	};
 }
 

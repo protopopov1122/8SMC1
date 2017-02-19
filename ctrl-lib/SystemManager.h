@@ -4,6 +4,7 @@
 #include "DeviceManager.h"
 #include "CoordPlane.h"
 #include "CoordTask.h"
+#include "graph/FunctionEngine.h"
 
 namespace _8SMC1 {
 
@@ -14,10 +15,12 @@ namespace _8SMC1 {
 			DeviceManager *getDeviceManager();
 			DeviceController *getDeviceController(DWORD);
 			size_t getDeviceCount();
+			FunctionEngine *getFunctionEngine();
 			// Tasks control
 			size_t getTaskCount();
 			CoordTask *getTask(size_t);
 			ProgrammedCoordTask *createProgrammedTask();
+			size_t addTask(CoordTask*);
 			bool removeTask(size_t);
 			// Coordinate plane control
 			size_t getCoordCount();
@@ -28,6 +31,7 @@ namespace _8SMC1 {
 			std::vector<DeviceController*> dev;
 			std::vector<CoordTask*> tasks;
 			std::vector<CoordPlaneStack*> coords;
+			FunctionEngine engine;
 
 	};
 

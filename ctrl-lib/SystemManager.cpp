@@ -31,6 +31,10 @@ namespace _8SMC1 {
 		}
 		return this->dev.at(d);
 	}
+	
+	FunctionEngine *SystemManager::getFunctionEngine() {
+		return &this->engine;
+	}
 
 	size_t SystemManager::getDeviceCount() {
 		return this->devman->getDeviceCount();
@@ -45,6 +49,11 @@ namespace _8SMC1 {
 			return nullptr;
 		}
 		return this->tasks.at(i);
+	}
+	
+	size_t SystemManager::addTask(CoordTask *task) {
+		this->tasks.push_back(task);
+		return this->tasks.size() - 1;
 	}
 
 	ProgrammedCoordTask *SystemManager::createProgrammedTask() {

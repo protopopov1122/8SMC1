@@ -745,32 +745,23 @@ namespace _8SMC1 {
 			TaskParameters prms = {speed};
 			task->perform(coord, prms, sysman);
 		} else if (args.at(0).compare("load") == 0) {
-			if (args.size() < 8) {
+			if (args.size() < 6) {
 				std::cout << "Wrong argument count" << std::endl;
 				return;
 			}
 			motor_point_t center = {
 				std::stoi(args.at(1)), std::stoi(args.at(2))
 			};
-			motor_size_t size = {
+			motor_size_t scale = {
 				std::stoi(args.at(3)), std::stoi(args.at(4))
 			};
-			motor_size_t scale = {
-				std::stoi(args.at(5)), std::stoi(args.at(6))
-			};
-			CoordTranslator trans(center, size, scale);
-			std::string path = args.at(7);
-			for (size_t i = 8; i < args.size(); i++) {
-				path += args.at(i);
-				if (i + 1 < args.size()) {
-					path += " ";
-				}
-			}
+			CoordTranslator trans(center, scale);
+			std::string path = args.at(5);
 			std::string mode = "r";
 			GCodeParser parser(fopen(path.c_str(), mode.c_str()));
 			gcode_translate(trans, parser, this->sysman);
 		} else if (args.at(0).compare("graph") == 0) {
-			if (args.size() < 2) {
+			if (args.size() < 12) {
 				std::cout << "Provide args" << std::endl;
 				return;
 			}
@@ -778,14 +769,19 @@ namespace _8SMC1 {
 			FunctionLexer lexer(ss);
 			FunctionParser parser(&lexer);
 			Node *node = parser.parse();
-			FunctionEngine eng;
-			for (size_t i = 2; i < args.size(); i += 2) {
-				std::string id = args.at(i);
-				long double val = std::stold(args.at(i+1));
-				eng.getScope()->putVariable(id, val);
-			}
-			std::cout << "Result: " << eng.eval(node) << std::endl;
-			delete node;
+			motor_point_t toffset = {std::stoi(args.at(2)), std::stoi(args.at(3))};
+			motor_size_t tsize = {std::stoi(args.at(4)), std::stoi(args.at(5))};
+			long double minx = std::stold(args.at(6));
+			long double maxx = std::stold(args.at(7));
+			long double miny = std::stold(args.at(8));
+			long double maxy = std::stold(args.at(9));
+			long double step = std::stold(args.at(10));
+			float speed = std::stod(args.at(11));
+			CoordTranslator *trans = new CoordTranslator(toffset, tsize);
+			coord_point_t min = {minx, miny};
+			coord_point_t max = {maxx, maxy};
+			GraphCoordTask *task = new GraphCoordTask(node, trans, min, max, step, speed);
+			std::cout << "New graph task #" << sysman->addTask(task) << std::endl;
 		} else {
 			std::cout << "Wrong command '" << args.at(0) << "'" << std::endl;
 		}

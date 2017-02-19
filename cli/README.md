@@ -53,7 +53,8 @@ CLI used to test whole system while it has not GUI(however it can be included in
 		* task add [id] rcarc [x] [y] [center_x] [center_y] [splitter] [speed]
 		* task cal [id] [tr]
 	* task exec [id] [coordid] [speed] - execute task [id] on coordinate plane [coordid] and base speed [speed] steps/sec.
-	* task load [center_x] [center_y] [size_w] [size_y] [scale_x] [scale_y] [path] - load G-Code from path using ([scale_x]; [scale_y]) to get coordinates(used to get most precise coordinates, otherwise functional may not be stable); parameters [center_x] [center_y] [size_w] [size_y] are not used.
+	* task load [center_x] [center_y] [scale_x] [scale_y] [path] - load G-Code from path using ([scale_x]; [scale_y]) to get coordinates(used to get most precise coordinates, otherwise functional may not be stable).
+	* task graph [func] [offset_x] [offset_y] [scale_x] [scale_y] [x_min] [x_max] [y_min] [y_max] [step] [speed] - create function y=[func] graph task on coordinate plane(offset=[offset_x]x[offset_y]; scale=[scale_x]x[scale_y]) with x is from [x_min] to [x_max], accepted y is from [y_min] to [y_max] with x step [step] and speed coef [speed].
 	
 ## Notice
 Because of some bugs at the start of CLI you should execute some commands:

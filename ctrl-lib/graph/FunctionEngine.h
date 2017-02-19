@@ -8,6 +8,16 @@
 #include "AST.h"
 
 namespace _8SMC1 {
+	
+	struct coord_point_t {
+		long double x;
+		long double y;
+	};
+	
+	struct coord_size_t {
+		long double w;
+		long double h;
+	};
 		
 	class EngineFunction {
 		public:
