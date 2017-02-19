@@ -5,6 +5,7 @@
 #include "CircleGenerator.h"
 #include "GCodeParser.h"
 #include "graph/FunctionParser.h"
+#include "graph/FunctionEngine.h"
 
 namespace _8SMC1 {
 	void LsCommand::execute(CLI *cli, std::vector<std::string> &args) {
@@ -776,7 +777,15 @@ namespace _8SMC1 {
 			std::stringstream ss(args.at(1));
 			FunctionLexer lexer(ss);
 			FunctionParser parser(&lexer);
-			delete parser.parse();
+			Node *node = parser.parse();
+			FunctionEngine eng;
+			for (size_t i = 2; i < args.size(); i += 2) {
+				std::string id = args.at(i);
+				long double val = std::stold(args.at(i+1));
+				eng.getScope()->putVariable(id, val);
+			}
+			std::cout << "Result: " << eng.eval(node) << std::endl;
+			delete node;
 		} else {
 			std::cout << "Wrong command '" << args.at(0) << "'" << std::endl;
 		}

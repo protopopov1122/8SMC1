@@ -2,9 +2,14 @@
 #define _8SMC1_CTRL_LIB_GRAPH_AST_H_
 
 #include <vector>
+#include <string>
 #include <cinttypes>
 
 namespace _8SMC1 {
+	
+	typedef long double engine_value_t;
+	class FunctionEngine; // Forward referencing
+	
 	enum NodeType {
 		IntegerConstant, RealConstant,
 		Variable, Function,
@@ -16,6 +21,7 @@ namespace _8SMC1 {
 			Node(NodeType tp) {this->type = tp;}
 			virtual ~Node() {}
 			NodeType getType() {return this->type;}
+			virtual engine_value_t eval(FunctionEngine*) = 0;
 		private:
 			NodeType type;
 	};
@@ -25,6 +31,7 @@ namespace _8SMC1 {
 			IntegerConstantNode(int64_t v) : Node::Node(NodeType::IntegerConstant) {this->value = v;}
 			virtual ~IntegerConstantNode() {}
 			int64_t getValue() {return this->value;}
+			virtual engine_value_t eval(FunctionEngine *eng) {return this->value;}
 		private:
 			int64_t value;
 	};
@@ -34,17 +41,19 @@ namespace _8SMC1 {
 			RealConstantNode(long double v) : Node::Node(NodeType::RealConstant) {this->value = v;}
 			virtual ~RealConstantNode() {}
 			long double getValue() {return this->value;}
+			virtual engine_value_t eval(FunctionEngine *eng) {return this->value;}
 		private:
 			long double value;
 	};
 	
 	class VariableNode : public Node {
 		public:
-			VariableNode(uint32_t i) : Node::Node(NodeType::Variable) {this->id = i;};
+			VariableNode(std::string i) : Node::Node(NodeType::Variable) {this->id = i;};
 			virtual ~VariableNode() {}
-			uint32_t getId() {return this->id;}
+			std::string getId() {return this->id;}
+			virtual engine_value_t eval(FunctionEngine*);
 		private:
-			uint32_t id;
+			std::string id;
 	};
 	
 	enum BinaryOperation {
@@ -58,6 +67,7 @@ namespace _8SMC1 {
 			BinaryOperation getOperation() {return this->oper;}
 			Node *getLeft() {return this->left;}
 			Node *getRight() {return this->right;}
+			virtual engine_value_t eval(FunctionEngine *eng);
 		private:
 			BinaryOperation oper;
 			Node *left;
@@ -66,13 +76,14 @@ namespace _8SMC1 {
 	
 	class FunctionNode : public Node {
 		public:
-			FunctionNode(uint32_t, std::vector<Node*>*);
+			FunctionNode(std::string, std::vector<Node*>*);
 			virtual ~FunctionNode();
-			uint32_t getId();
+			std::string getId();
 			size_t getArgumentCount();
 			Node *getArgument(size_t);
+			virtual engine_value_t eval(FunctionEngine *eng);
 		private:
-			uint32_t id;
+			std::string id;
 			std::vector<Node*> *args;
 	};
 }

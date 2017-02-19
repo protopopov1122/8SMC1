@@ -30,7 +30,6 @@ namespace _8SMC1 {
 			this->nextToken();
 			Node *right = nextMuldiv();
 			node = new BinaryNode(plus ? BinaryOperation::Add : BinaryOperation::Subtract, node, right);
-			std::cout << (plus ? "add" : "sub") << std::endl;
 		}
 		return node;
 	}
@@ -43,7 +42,6 @@ namespace _8SMC1 {
 			this->nextToken();
 			Node *right = nextPower();
 			node = new BinaryNode(mul ? BinaryOperation::Multiply : BinaryOperation::Divide, node, right);
-			std::cout << (mul ? "mul" : "div") << std::endl;
 		}
 		return node;
 	}
@@ -54,7 +52,6 @@ namespace _8SMC1 {
 			this->nextToken();
 			Node *right = nextFactor();
 			node = new BinaryNode(BinaryOperation::PowerOp, node, right);
-			std::cout << "pow" << std::endl;
 		}
 		return node;
 	}
@@ -64,18 +61,15 @@ namespace _8SMC1 {
 			this->tokens[0]->type == TokenType::Integer) {
 			IntegerConstantNode *node = new IntegerConstantNode(this->tokens[0]->integer);
 			nextToken();
-			std::cout << "push " << node->getValue() << std::endl;
 			return node;
 		} else if (this->tokens[0] != nullptr &&
 			this->tokens[0]->type == TokenType::Real) {
 			RealConstantNode *node = new RealConstantNode(this->tokens[0]->real);
 			nextToken();
-			std::cout << "push " << node->getValue() << std::endl;
 			return node;
 		} else if (this->tokens[0] != nullptr &&
 			this->tokens[0]->type == TokenType::Literal) {
-			uint32_t id = this->symbols.size();
-			this->symbols[id] = this->tokens[0]->literal;
+			std::string id = this->tokens[0]->literal;
 			nextToken();
 			if (expectOperator(OperatorType::OPENING_PARENTHESE)) {
 				std::vector<Node*> *args = new std::vector<Node*>();
@@ -89,11 +83,9 @@ namespace _8SMC1 {
 				}
 				nextToken();
 				FunctionNode *node = new FunctionNode(id, args);
-				std::cout << "call " << id << "; " << args->size() << std::endl;
 				return node;
 			}
 			VariableNode *node = new VariableNode(id);
-			std::cout << "load " << id << std::endl;
 			return node;
 		} else if (expectOperator(OperatorType::OPENING_PARENTHESE)) {
 			nextToken();
