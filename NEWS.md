@@ -75,5 +75,5 @@ Test on real motors. All tested functions work:
 Conclusion: next time(probably 23/02/2017) more tests must be performed. The next test pack should include more G-Code patterns and graph types(including different arcs and so on), also some minor fixes and features will be included till the next test.
 
 TODO:
-* Implement facade pattern for all system functions to make simplier further work.
-* Create GUI for the system: GUI supposed to have client-server achitecture(currently, we don't know which technologies will be used). Server will be interact wil facade to control system and provide network protocol. Client will connect to server and send commands/receive data from it(client most likely will be native Windows or .NET application, but server will be implemented in C++). However on the next test time more detailed info about UI will be available.
+* Implement facade pattern for all system functions to make further work simplier.
+* Create GUI for the system: GUI supposed to have client-server architecture(currently, we don't know which technologies will be used). Server will interact with facade to control system and provide network protocol. Client will connect to server and send commands/receive data from it(client most likely will be native Windows or .NET application, but server will be implemented in C++). However on the next test time more detailed info about UI will be available.
