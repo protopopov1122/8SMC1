@@ -64,3 +64,16 @@ Now development will continue in two main branches(and some temporary ones): mas
 
 ##### 18/02/2017
 A lot of refractoring and new features. Most bugs after last test should be fixed, althrought because of new features some functions might not work. Also integrated G-Code parser into system. Looking forward to the next test on motors(most likely will be on Monday 20/02/2017). If there will be no bugs then core of the system will be almost implemented(there are some other system functions to implement, however most of the work is done). The next task is writing GUI and integration on top of project core.
+
+##### 20/02/2017
+Test on real motors. All tested functions work:
+* Clockwise and counter-clockwise arc movement.
+* G-Code - tested linear G-Code patterns(performs well), however all other also should work.
+* Function graphs - tested simple function graphs(e.g x, x^2), they work correctly.
+* All other functions(calibration, logging, mapping) - work.
+
+Conclusion: next time(probably 23/02/2017) more tests must be performed. The next test pack should include more G-Code patterns and graph types(including different arcs and so on), also some minor fixes and features will be included till the next test.
+
+TODO:
+* Implement facade pattern for all system functions to make simplier further work.
+* Create GUI for the system: GUI supposed to have client-server achitecture(currently, we don't know which technologies will be used). Server will be interact wil facade to control system and provide network protocol. Client will connect to server and send commands/receive data from it(client most likely will be native Windows or .NET application, but server will be implemented in C++). However on the next test time more detailed info about UI will be available.
