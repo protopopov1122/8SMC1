@@ -45,23 +45,22 @@ namespace _8SMC1 {
 		return this->args.end();
 	}
 
-	GCodeParser::GCodeParser(FILE *fp) {
-		this->fp = fp;
+	GCodeParser::GCodeParser(std::istream *is) {
+		this->is = is;
 	}	
 
 	GCodeParser::~GCodeParser() {
-		fclose(this->fp);
 	}
 
 	// Get next character skipping comments
 	int GCodeParser::readChar() {
-		int chr = fgetc(this->fp);
+		int chr = this->is->get();
 		while (chr == '(') {
 			while (chr != ')' && chr != EOF) {
-				chr = fgetc(this->fp);
+				chr = this->is->get();
 			}
 			if (chr == ')') {
-				chr = fgetc(this->fp);
+				chr = this->is->get();
 			}
 		}
 		return chr;

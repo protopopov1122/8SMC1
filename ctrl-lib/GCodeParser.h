@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <iostream>
 #include "SystemManager.h"
 #include "CoordTask.h"
 #include "CoordTranslator.h"
@@ -33,12 +34,12 @@ namespace _8SMC1 {
 	
 	class GCodeParser {
 		public:
-			GCodeParser(FILE*);
+			GCodeParser(std::istream*);
 			virtual ~GCodeParser();
 			GCodeCommand *nextCommand();
 		private:
 			int readChar();
-			FILE *fp;		
+			std::istream *is;		
 	};
 	
 	CoordTask *gcode_translate(CoordTranslator&, GCodeParser&, SystemManager*);

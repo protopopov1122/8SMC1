@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <iostream>
+#include <fstream>
 #include <sstream>
 #include "DevCLI.h"
 #include "CircleGenerator.h"
@@ -757,9 +758,10 @@ namespace _8SMC1 {
 			};
 			CoordTranslator trans(center, scale);
 			std::string path = args.at(5);
-			std::string mode = "r";
-			GCodeParser parser(fopen(path.c_str(), mode.c_str()));
+			std::ifstream is(path, std::ifstream::binary);
+			GCodeParser parser(&is);
 			gcode_translate(trans, parser, this->sysman);
+			is.close();
 		} else if (args.at(0).compare("graph") == 0) {
 			if (args.size() < 12) {
 				std::cout << "Provide args" << std::endl;
