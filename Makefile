@@ -60,6 +60,9 @@ GCodeParser.o:
 AST.o:
 	$(CC) $(CFLAGS) -c ./ctrl-lib/graph/AST.cpp
 
+DefaultFunctions.o:
+	$(CC) $(CFLAGS) -c ./ctrl-lib/graph/DefaultFunctions.cpp
+
 FunctionEngine.o:
 	$(CC) $(CFLAGS) -c ./ctrl-lib/graph/FunctionEngine.cpp
 
@@ -87,9 +90,9 @@ Stub.o:
 stub: Stub.o
 	$(CC) -shared -o $(BUILD)/USMCDLL.dll Stub.o -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread
 
-$(OUTPUT): Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CircleGenerator.o CoordController.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o CoordTask.o CoordTranslator.o DeviceController.o GCodeParser.o AST.o FunctionEngine.o FunctionLexer.o FunctionParser.o SystemManager.o
+$(OUTPUT): Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CircleGenerator.o CoordController.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o CoordTask.o CoordTranslator.o DeviceController.o GCodeParser.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o SystemManager.o
 	mkdir -p $(BUILD)
-	$(CC) -o $(BUILD)/$(OUTPUT) Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CircleGenerator.o CoordController.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o CoordTask.o CoordTranslator.o DeviceController.o GCodeParser.o AST.o FunctionEngine.o FunctionLexer.o FunctionParser.o SystemManager.o  -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL
+	$(CC) -o $(BUILD)/$(OUTPUT) Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CircleGenerator.o CoordController.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o CoordTask.o CoordTranslator.o DeviceController.o GCodeParser.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o SystemManager.o  -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL
 	@cp $(LIB)/USMCDLL.dll $(BUILD)
 
 clean:

@@ -7,6 +7,7 @@ namespace _8SMC1 {
 		for (DWORD d = 0; d < devman->getDeviceCount(); d++) {
 			this->dev.push_back(new DeviceController(devman->getDevice(d)));
 		}
+		FunctionEngine_add_default_functions(&this->engine);
 	}
 
 	SystemManager::~SystemManager() {

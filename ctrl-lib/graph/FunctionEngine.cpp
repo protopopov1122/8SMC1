@@ -13,17 +13,20 @@ namespace _8SMC1 {
 	}
 	
 	engine_value_t EngineScope::getVariable(std::string id) {
+		engine_value_t val = {0, MathError::MNoError};
 		if (this->vars.count(id) == 0) {
-			return 0;
+			val.err = MathError::MNoVariable;
+			return val;
 		}
-		return this->vars[id];
+		val.value = this->vars[id];
+		return val;
 	}
 	
 	bool EngineScope::hasVariable(std::string id) {
 		return this->vars.count(id) != 0;
 	}
 	
-	void EngineScope::putVariable(std::string id, engine_value_t val) {
+	void EngineScope::putVariable(std::string id, long double val) {
 		this->vars[id] = val;
 	}
 	
@@ -39,9 +42,10 @@ namespace _8SMC1 {
 		return true;
 	}
 	
-	engine_value_t EngineScope::evalFunction(std::string id, std::vector<engine_value_t> &args) {
+	engine_value_t EngineScope::evalFunction(std::string id, std::vector<long double> &args) {
 		if (this->func.count(id) == 0) {
-			return 0;
+			engine_value_t val = {0, MathError::MNoFunction};
+			return val;
 		}
 		EngineFunction *fun = this->func[id];
 		return fun->eval(args);

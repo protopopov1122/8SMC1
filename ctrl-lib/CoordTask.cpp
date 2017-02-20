@@ -163,7 +163,11 @@ namespace _8SMC1 {
 		ErrorCode errcode;
 		for (long double x = this->min.x; x <= this->max.x; x += this->step) {
 			engine->getScope()->putVariable("x", x);
-			long double y = engine->eval(this->func);
+			engine_value_t val = engine->eval(this->func);
+			if (val.err != MathError::MNoError) {
+				return ErrorCode::MathExprError;
+			}
+			long double y = val.value;
 			if (y > this->max.y || y < this->min.y) {
 				y = nan;
 			}

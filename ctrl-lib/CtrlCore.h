@@ -13,7 +13,8 @@ namespace _8SMC1 {
 		Trailer1Pressed = 2, Trailer2Pressed = 3,
 		DeviceRunning = 4, DeviceStopped = 5,
 		ArcError = 6,
-		InvalidCoordinates = 7, InvalidSpeed = 8
+		InvalidCoordinates = 7, InvalidSpeed = 8,
+		MathExprError = 9
 	};
 
 	enum MoveType {

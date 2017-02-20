@@ -22,7 +22,7 @@ namespace _8SMC1 {
 	class EngineFunction {
 		public:
 			virtual ~EngineFunction() {}
-			virtual engine_value_t eval(std::vector<engine_value_t>&) = 0;
+			virtual engine_value_t eval(std::vector<long double>&) = 0;
 	};
 	
 	class EngineScope {
@@ -31,12 +31,12 @@ namespace _8SMC1 {
 			virtual ~EngineScope();
 			engine_value_t getVariable(std::string);
 			bool hasVariable(std::string);
-			void putVariable(std::string, engine_value_t);
+			void putVariable(std::string, long double);
 			bool hasFunction(std::string);
-			engine_value_t evalFunction(std::string, std::vector<engine_value_t>&);
+			engine_value_t evalFunction(std::string, std::vector<long double>&);
 			bool addFunction(std::string, EngineFunction*);
 		private:
-			std::map<std::string, engine_value_t> vars;
+			std::map<std::string, long double> vars;
 			std::map<std::string, EngineFunction*> func;
 	};
 	
@@ -49,6 +49,8 @@ namespace _8SMC1 {
 		private:
 			EngineScope scope;
 	};
+	
+	void FunctionEngine_add_default_functions(FunctionEngine*);
 }
 
 #endif

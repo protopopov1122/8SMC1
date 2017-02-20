@@ -7,7 +7,15 @@
 
 namespace _8SMC1 {
 	
-	typedef long double engine_value_t;
+	enum MathError {
+		MNoError, MNoVariable, MNoFunction,
+		MWrongParameters
+	};
+	
+	struct engine_value_t {
+		long double value;
+		MathError err;
+	};
 	class FunctionEngine; // Forward referencing
 	
 	enum NodeType {
@@ -31,7 +39,7 @@ namespace _8SMC1 {
 			IntegerConstantNode(int64_t v) : Node::Node(NodeType::IntegerConstant) {this->value = v;}
 			virtual ~IntegerConstantNode() {}
 			int64_t getValue() {return this->value;}
-			virtual engine_value_t eval(FunctionEngine *eng) {return this->value;}
+			virtual engine_value_t eval(FunctionEngine *eng) {return {(long double) this->value, MathError::MNoError};}
 		private:
 			int64_t value;
 	};
@@ -41,7 +49,7 @@ namespace _8SMC1 {
 			RealConstantNode(long double v) : Node::Node(NodeType::RealConstant) {this->value = v;}
 			virtual ~RealConstantNode() {}
 			long double getValue() {return this->value;}
-			virtual engine_value_t eval(FunctionEngine *eng) {return this->value;}
+			virtual engine_value_t eval(FunctionEngine *eng) {return {this->value, MathError::MNoError};}
 		private:
 			long double value;
 	};
