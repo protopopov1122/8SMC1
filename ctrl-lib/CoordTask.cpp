@@ -139,53 +139,19 @@ namespace _8SMC1 {
 		this->clockwise = c;
 	}
 	
-	GraphCoordTask::GraphCoordTask(Node *func, CoordTranslator *trans,
-		coord_point_t min, coord_point_t max, long double step, float scale)
+	GraphCoordTask::GraphCoordTask(GraphBuilder *graph, CoordTranslator *trans, float scale)
 		: CoordTask::CoordTask(CoordTaskType::GraphTask) {
-		this->func = func;
+		this->graph = graph;
 		this->trans = trans;
-		this->min = min;
-		this->max = max;
-		this->step = step;
 		this->scale = scale;
 	}
 	
 	GraphCoordTask::~GraphCoordTask() {
-		delete this->func;
+		delete this->graph;
 		delete this->trans;
 	}
 	
 	ErrorCode GraphCoordTask::perform(CoordPlane *plane, TaskParameters &prms, SystemManager *sysman) {
-		FunctionEngine *engine = sysman->getFunctionEngine();
-		long double nan = std::numeric_limits<long double>::quiet_NaN();
-		long double last = nan;
-		float speed = this->scale * prms.speed;
-		ErrorCode errcode;
-		for (long double x = this->min.x; x <= this->max.x; x += this->step) {
-			engine->getScope()->putVariable("x", x);
-			engine_value_t val = engine->eval(this->func);
-			if (val.err != MathError::MNoError) {
-				return ErrorCode::MathExprError;
-			}
-			long double y = val.value;
-			if (y > this->max.y || y < this->min.y) {
-				y = nan;
-			}
-			if (isnan(y)) {
-				last = y;
-				continue;
-			}
-			motor_point_t pnt = this->trans->get(x, y);
-			if (isnan(last)) {
-				errcode = plane->move(pnt, speed, 8, false);
-			} else {
-				errcode = plane->move(pnt, speed, 8, true);
-			}
-			if (errcode != ErrorCode::NoError) {
-				return errcode;
-			}
-			last = y;
-		}
-		return ErrorCode::NoError;
+		return this->graph->build(sysman, plane, this->trans, this->scale * prms.speed);
 	}
 }

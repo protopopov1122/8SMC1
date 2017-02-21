@@ -4,6 +4,7 @@
 #include "DeviceManager.h"
 #include "CoordPlane.h"
 #include "CoordTask.h"
+#include "GraphBuilder.h"
 #include "graph/FunctionEngine.h"
 
 namespace _8SMC1 {

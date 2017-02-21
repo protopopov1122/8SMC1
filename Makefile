@@ -75,6 +75,9 @@ FunctionLexer.o:
 FunctionParser.o:
 	$(CC) $(CFLAGS) -c ./ctrl-lib/graph/FunctionParser.cpp
 
+GraphBuilder.o:
+	$(CC) $(CFLAGS) -c ./ctrl-lib/GraphBuilder.cpp
+
 SystemManager.o:
 	$(CC) $(CFLAGS) -c ./ctrl-lib/SystemManager.cpp
 
@@ -93,9 +96,9 @@ Stub.o:
 stub: Stub.o
 	$(CC) -shared -o $(BUILD)/USMCDLL.dll Stub.o -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread
 
-$(OUTPUT): Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CircleGenerator.o CoordController.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o CoordTask.o CoordTaskWrapper.o CoordTranslator.o DeviceController.o GCodeParser.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o SystemManager.o
+$(OUTPUT): Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CircleGenerator.o CoordController.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o CoordTask.o CoordTaskWrapper.o CoordTranslator.o DeviceController.o GCodeParser.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o GraphBuilder.o SystemManager.o
 	mkdir -p $(BUILD)
-	$(CC) -o $(BUILD)/$(OUTPUT) Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CircleGenerator.o CoordController.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o CoordTask.o CoordTaskWrapper.o CoordTranslator.o DeviceController.o GCodeParser.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o SystemManager.o  -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL
+	$(CC) -o $(BUILD)/$(OUTPUT) Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CircleGenerator.o CoordController.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o CoordTask.o CoordTaskWrapper.o CoordTranslator.o DeviceController.o GCodeParser.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o GraphBuilder.o SystemManager.o  -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL
 	@cp $(LIB)/USMCDLL.dll $(BUILD)
 
 clean:

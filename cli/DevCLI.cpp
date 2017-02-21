@@ -5,6 +5,7 @@
 #include "DevCLI.h"
 #include "CircleGenerator.h"
 #include "GCodeParser.h"
+#include "GraphBuilder.h"
 #include "graph/FunctionParser.h"
 #include "graph/FunctionEngine.h"
 
@@ -782,7 +783,8 @@ namespace _8SMC1 {
 			CoordTranslator *trans = new CoordTranslator(toffset, tsize);
 			coord_point_t min = {minx, miny};
 			coord_point_t max = {maxx, maxy};
-			GraphCoordTask *task = new GraphCoordTask(node, trans, min, max, step, speed);
+			GraphBuilder *graph = new GraphBuilder(node, min, max, step);
+			GraphCoordTask *task = new GraphCoordTask(graph, trans, speed);
 			std::cout << "New graph task #" << sysman->addTask(task) << std::endl;
 		} else {
 			std::cout << "Wrong command '" << args.at(0) << "'" << std::endl;
