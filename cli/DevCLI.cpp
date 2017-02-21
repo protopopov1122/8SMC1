@@ -772,10 +772,11 @@ namespace _8SMC1 {
 			};
 			CoordTranslator trans(center, scale);
 			std::string path = args.at(5);
-			std::ifstream is(path, std::ifstream::binary);
-			GCodeParser parser(&is);
+			std::ifstream *is = new std::ifstream(path, std::ifstream::in);
+			GCodeParser parser(is);
 			gcode_translate(trans, parser, this->sysman);
-			is.close();
+			is->close();
+			delete is;
 		} else if (args.at(0).compare("graph") == 0) {
 			if (args.size() < 12) {
 				std::cout << "Provide args" << std::endl;
