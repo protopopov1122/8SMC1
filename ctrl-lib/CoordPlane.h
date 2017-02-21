@@ -66,7 +66,7 @@ namespace _8SMC1 {
 	class CoordPlaneMap : public CoordPlane {
 		public:
 			CoordPlaneMap(motor_point_t, motor_scale_t, CoordPlane*);
-			~CoordPlaneMap();
+			virtual ~CoordPlaneMap();
 						
 			virtual ErrorCode move(motor_point_t, float, int, bool);
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
@@ -79,11 +79,28 @@ namespace _8SMC1 {
 			motor_scale_t scale;
 	};
 	
+	// Mapping logarithmic coordinates
+	class CoordPlaneMapLog : public CoordPlane {
+		public:
+			CoordPlaneMapLog(motor_scale_t, motor_scale_t, CoordPlane*);
+			virtual ~CoordPlaneMapLog();
+						
+			virtual ErrorCode move(motor_point_t, float, int, bool);
+			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
+			virtual ErrorCode calibrate(TrailerId);
+			virtual motor_point_t getPosition();
+			virtual void dump(std::ostream&);
+		private:
+			CoordPlane *plane;
+			motor_scale_t scale;
+			motor_scale_t logscale;
+	};
+	
 	// Coordinate and speed validation
 	class CoordPlaneValidator : public CoordPlane {
 		public:
 			CoordPlaneValidator(motor_point_t, motor_point_t, float, CoordPlane*);
-			~CoordPlaneValidator();
+			virtual ~CoordPlaneValidator();
 						
 			virtual ErrorCode move(motor_point_t, float, int, bool);
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
