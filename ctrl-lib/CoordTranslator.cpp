@@ -1,26 +1,26 @@
-#include <CoordTranslator.h>
+#include "CoordTranslator.h"
 #include <math.h>
 #include <iostream>
 
 namespace _8SMC1 {
 
-	CoordTranslator::CoordTranslator(motor_point_t cen, motor_size_t sc) {
+	LinearCoordTranslator::LinearCoordTranslator(motor_point_t cen, motor_size_t sc) {
 		this->center = cen;
 		this->scale = sc;
 	}
 
-	CoordTranslator::~CoordTranslator() {
+	LinearCoordTranslator::~LinearCoordTranslator() {
 	}
 
-	motor_point_t CoordTranslator::getCenter() {
+	motor_point_t LinearCoordTranslator::getCenter() {
 		return this->center;
 	}
 
-	motor_size_t CoordTranslator::getScale() {
+	motor_size_t LinearCoordTranslator::getScale() {
 		return this->scale;
 	}
 
-	motor_point_t CoordTranslator::get(long double x, long double y) {
+	motor_point_t LinearCoordTranslator::get(long double x, long double y) {
 		int64_t xtr = x * this->scale.w;
 		int64_t ytr = y * this->scale.h;
 		motor_point_t pnt = {0, 0};
@@ -31,7 +31,7 @@ namespace _8SMC1 {
 		return pnt;
 	}
 	
-	motor_point_t CoordTranslator::get(int64_t x, int64_t y) {
+	motor_point_t LinearCoordTranslator::get(int64_t x, int64_t y) {
 		motor_point_t pnt = {x, y};
 		pnt.x /= this->scale.w;
 		pnt.y /= this->scale.h;
@@ -40,7 +40,7 @@ namespace _8SMC1 {
 		return pnt;
 	}
 	
-	motor_point_t CoordTranslator::get(decimal_number x, decimal_number y) {
+	motor_point_t LinearCoordTranslator::get(decimal_number x, decimal_number y) {
 			
 		int8_t xs = x.s == 0 ? 1 : -1;
 		int8_t ys = y.s == 0 ? 1 : -1;
