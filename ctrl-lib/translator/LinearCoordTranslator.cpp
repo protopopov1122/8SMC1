@@ -40,8 +40,20 @@ namespace _8SMC1 {
 		return pnt;
 	}
 	
+	long double dec_to_dbl(decimal_number num) {
+		long double ret = num.i;
+		uint32_t j = num.j;
+		long double div = 10;
+		while (j > 0) {
+			ret += ((long double) (j % 10)) / div;
+			j /= 10;
+			div *= 10;
+		}
+		return ret * (num.s == 0 ? 1 : -1);
+	}
+	
 	motor_point_t LinearCoordTranslator::get(decimal_number x, decimal_number y) {
-			
+		/*	
 		int8_t xs = x.s == 0 ? 1 : -1;
 		int8_t ys = y.s == 0 ? 1 : -1;
 		int32_t ix = x.i;
@@ -79,6 +91,7 @@ namespace _8SMC1 {
 		out.x += this->center.x;
 		out.y += this->center.y;
 		
-		return out;
+		return out;*/
+		return this->get(dec_to_dbl(x), dec_to_dbl(y));
 	}
 }

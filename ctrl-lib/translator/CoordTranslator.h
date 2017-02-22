@@ -33,6 +33,20 @@ namespace _8SMC1 {
 			motor_point_t center;
 			motor_size_t scale;
 	};
+	
+	class LogarithmicCoordTranslator : public CoordTranslator {
+		public:
+			LogarithmicCoordTranslator(CoordTranslator*, motor_scale_t);
+			virtual ~LogarithmicCoordTranslator();
+			CoordTranslator *getBaseCoord();
+			motor_scale_t getScale();
+			virtual motor_point_t get(long double, long double);
+			virtual motor_point_t get(decimal_number, decimal_number);
+			virtual motor_point_t get(int64_t, int64_t);
+		private:
+			CoordTranslator *base;
+			motor_scale_t scale;
+	};
 
 }
 

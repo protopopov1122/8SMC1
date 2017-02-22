@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cinttypes>
 #include "ctrl-lib/SystemManager.h"
+#include "ctrl-lib/translator/CoordTranslator.h"
 #include "DevCLI.h"
 
 /* Creates device manager and runs command line*/

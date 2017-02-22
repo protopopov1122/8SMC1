@@ -83,6 +83,9 @@ CoordTaskWrapper.o:
 LinearCoordTranslator.o:
 	$(CC) $(CFLAGS) -c ./ctrl-lib/translator/LinearCoordTranslator.cpp
 
+LogarithmicCoordTranslator.o:
+	$(CC) $(CFLAGS) -c ./ctrl-lib/translator/LogarithmicCoordTranslator.cpp
+
 Device.o:
 	$(CC) $(CFLAGS) -c ./device/Device.cpp
 
@@ -98,9 +101,9 @@ Stub.o:
 stub: Stub.o
 	$(CC) -shared -o $(BUILD)/USMCDLL.dll Stub.o -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread
 
-$(OUTPUT): Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CoordController.o DeviceController.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o CircleGenerator.o GCodeParser.o GraphBuilder.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneMapLog.o CoordPlaneStack.o CoordPlaneValidator.o SystemManager.o CoordTask.o CoordTaskWrapper.o LinearCoordTranslator.o
+$(OUTPUT): Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CoordController.o DeviceController.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o CircleGenerator.o GCodeParser.o GraphBuilder.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneMapLog.o CoordPlaneStack.o CoordPlaneValidator.o SystemManager.o CoordTask.o CoordTaskWrapper.o LinearCoordTranslator.o LogarithmicCoordTranslator.o
 	mkdir -p $(BUILD)
-	$(CC) -o $(BUILD)/$(OUTPUT) Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CoordController.o DeviceController.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o CircleGenerator.o GCodeParser.o GraphBuilder.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneMapLog.o CoordPlaneStack.o CoordPlaneValidator.o SystemManager.o CoordTask.o CoordTaskWrapper.o LinearCoordTranslator.o  -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL
+	$(CC) -o $(BUILD)/$(OUTPUT) Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CoordController.o DeviceController.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o CircleGenerator.o GCodeParser.o GraphBuilder.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneMapLog.o CoordPlaneStack.o CoordPlaneValidator.o SystemManager.o CoordTask.o CoordTaskWrapper.o LinearCoordTranslator.o LogarithmicCoordTranslator.o  -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL
 	@cp $(LIB)/USMCDLL.dll $(BUILD)
 
 clean:
