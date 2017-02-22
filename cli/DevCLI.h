@@ -2,8 +2,8 @@
 #define _8SMC1_DEVCLI_H_
 
 #include "CLI.h"
-#include "SystemManager.h"
-#include "GCodeParser.h"
+#include "ctrl-lib/SystemManager.h"
+#include "ctrl-lib/misc/GCodeParser.h"
 
 /* Defines cli commands to control Devices API */
 

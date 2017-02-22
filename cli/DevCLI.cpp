@@ -3,11 +3,11 @@
 #include <fstream>
 #include <sstream>
 #include "DevCLI.h"
-#include "CircleGenerator.h"
-#include "GCodeParser.h"
-#include "GraphBuilder.h"
-#include "graph/FunctionParser.h"
-#include "graph/FunctionEngine.h"
+#include "ctrl-lib/misc/CircleGenerator.h"
+#include "ctrl-lib/misc/GCodeParser.h"
+#include "ctrl-lib/misc/GraphBuilder.h"
+#include "ctrl-lib/graph/FunctionParser.h"
+#include "ctrl-lib/graph/FunctionEngine.h"
 
 namespace _8SMC1 {
 	void LsCommand::execute(CLI *cli, std::vector<std::string> &args) {

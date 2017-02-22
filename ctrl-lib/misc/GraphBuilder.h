@@ -1,8 +1,8 @@
 #ifndef _8SMC1_CTRL_LIB_GRAPH_BUILDER_H_
 #define _8SMC1_CTRL_LIB_GRAPH_BUILDER_H_
 
-#include "graph/FunctionEngine.h"
-#include "CoordPlane.h"
+#include "ctrl-lib/graph/FunctionEngine.h"
+#include "ctrl-lib/plane/CoordPlane.h"
 
 namespace _8SMC1 {
 	class SystemManager;

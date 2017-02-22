@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <cinttypes>
-#include "DeviceController.h"
+#include "ctrl-lib/DeviceController.h"
 
 /* This file contains Bresenham algorithm implementation for circles */
 

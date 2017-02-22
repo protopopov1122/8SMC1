@@ -2,7 +2,7 @@
 #define _8SMC1_CTRL_LIB_DEVICE_CONTROLLER_H_
 
 #include <cinttypes>
-#include "DeviceManager.h"
+#include "device/DeviceManager.h"
 #include "CtrlCore.h"
 
 /* This file contains definitions of high-level controller library.

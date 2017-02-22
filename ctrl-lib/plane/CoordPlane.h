@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include "DeviceController.h"
+#include "ctrl-lib/DeviceController.h"
 
 /* This header contains coordinate plane interface definitions and some implementations.*/
 

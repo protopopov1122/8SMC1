@@ -1,5 +1,5 @@
-#include "DeviceController.h"
-#include "CoordTask.h"
+#include "DeviceManager.h"
+#include "Device.h"
 #include <stdio.h>
 #include <iostream>
 

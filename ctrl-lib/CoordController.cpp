@@ -1,5 +1,5 @@
-#include "CoordPlane.h"
-#include "CircleGenerator.h"
+#include "plane/CoordPlane.h"
+#include "misc/CircleGenerator.h"
 #include <iostream>
 #include <stdio.h>
 #define _USE_MATH_DEFINES

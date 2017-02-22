@@ -3,7 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <cinttypes>
-#include "SystemManager.h"
+#include "ctrl-lib/SystemManager.h"
 #include "DevCLI.h"
 
 /* Creates device manager and runs command line*/

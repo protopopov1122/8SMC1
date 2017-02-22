@@ -2,10 +2,10 @@
 #define _8SMC1_CTRL_LIB_TASK_H_
 
 #include <vector>
-#include "CoordPlane.h"
-#include "CoordTranslator.h"
-#include "GraphBuilder.h"
-#include "graph/FunctionEngine.h"
+#include "ctrl-lib/plane/CoordPlane.h"
+#include "ctrl-lib/translator/CoordTranslator.h"
+#include "ctrl-lib/misc/GraphBuilder.h"
+#include "ctrl-lib/graph/FunctionEngine.h"
 
 namespace _8SMC1 {
 	

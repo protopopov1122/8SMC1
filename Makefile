@@ -1,5 +1,4 @@
 CC=i686-w64-mingw32-g++
-LD=i686-w64-mingw32-ld
 
 OUTPUT=prog.exe
 BUILD=./build
@@ -8,7 +7,7 @@ LIB=./res
 
 LANG=-std=c++11 -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-attributes
 DBG=-O0
-INCLUDES=-Idevice -Icli -Ictrl-lib
+INCLUDES=-I.
 EXTRA=
 CFLAGS=$(LANG) $(DBG) -I$(HEADERS) $(INCLUDES) $(EXTRA)
 
@@ -27,41 +26,11 @@ DevCLI.o:
 main.o:
 	$(CC) $(CFLAGS) -c ./cli/main.cpp
 
-CircleGenerator.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/CircleGenerator.cpp
-
 CoordController.o:
 	$(CC) $(CFLAGS) -c ./ctrl-lib/CoordController.cpp
 
-CoordPlaneLog.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/CoordPlaneLog.cpp
-
-CoordPlaneMap.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/CoordPlaneMap.cpp
-
-CoordPlaneMapLog.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/CoordPlaneMapLog.cpp
-
-CoordPlaneStack.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/CoordPlaneStack.cpp
-
-CoordPlaneValidator.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/CoordPlaneValidator.cpp
-
-CoordTask.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/CoordTask.cpp
-
-CoordTaskWrapper.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/CoordTaskWrapper.cpp
-
-CoordTranslator.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/CoordTranslator.cpp
-
 DeviceController.o:
 	$(CC) $(CFLAGS) -c ./ctrl-lib/DeviceController.cpp
-
-GCodeParser.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/GCodeParser.cpp
 
 AST.o:
 	$(CC) $(CFLAGS) -c ./ctrl-lib/graph/AST.cpp
@@ -78,11 +47,41 @@ FunctionLexer.o:
 FunctionParser.o:
 	$(CC) $(CFLAGS) -c ./ctrl-lib/graph/FunctionParser.cpp
 
+CircleGenerator.o:
+	$(CC) $(CFLAGS) -c ./ctrl-lib/misc/CircleGenerator.cpp
+
+GCodeParser.o:
+	$(CC) $(CFLAGS) -c ./ctrl-lib/misc/GCodeParser.cpp
+
 GraphBuilder.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/GraphBuilder.cpp
+	$(CC) $(CFLAGS) -c ./ctrl-lib/misc/GraphBuilder.cpp
+
+CoordPlaneLog.o:
+	$(CC) $(CFLAGS) -c ./ctrl-lib/plane/CoordPlaneLog.cpp
+
+CoordPlaneMap.o:
+	$(CC) $(CFLAGS) -c ./ctrl-lib/plane/CoordPlaneMap.cpp
+
+CoordPlaneMapLog.o:
+	$(CC) $(CFLAGS) -c ./ctrl-lib/plane/CoordPlaneMapLog.cpp
+
+CoordPlaneStack.o:
+	$(CC) $(CFLAGS) -c ./ctrl-lib/plane/CoordPlaneStack.cpp
+
+CoordPlaneValidator.o:
+	$(CC) $(CFLAGS) -c ./ctrl-lib/plane/CoordPlaneValidator.cpp
 
 SystemManager.o:
 	$(CC) $(CFLAGS) -c ./ctrl-lib/SystemManager.cpp
+
+CoordTask.o:
+	$(CC) $(CFLAGS) -c ./ctrl-lib/task/CoordTask.cpp
+
+CoordTaskWrapper.o:
+	$(CC) $(CFLAGS) -c ./ctrl-lib/task/CoordTaskWrapper.cpp
+
+LinearCoordTranslator.o:
+	$(CC) $(CFLAGS) -c ./ctrl-lib/translator/LinearCoordTranslator.cpp
 
 Device.o:
 	$(CC) $(CFLAGS) -c ./device/Device.cpp
@@ -99,9 +98,9 @@ Stub.o:
 stub: Stub.o
 	$(CC) -shared -o $(BUILD)/USMCDLL.dll Stub.o -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread
 
-$(OUTPUT): Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CircleGenerator.o CoordController.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneMapLog.o CoordPlaneStack.o CoordPlaneValidator.o CoordTask.o CoordTaskWrapper.o CoordTranslator.o DeviceController.o GCodeParser.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o GraphBuilder.o SystemManager.o
+$(OUTPUT): Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CoordController.o DeviceController.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o CircleGenerator.o GCodeParser.o GraphBuilder.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneMapLog.o CoordPlaneStack.o CoordPlaneValidator.o SystemManager.o CoordTask.o CoordTaskWrapper.o LinearCoordTranslator.o
 	mkdir -p $(BUILD)
-	$(CC) -o $(BUILD)/$(OUTPUT) Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CircleGenerator.o CoordController.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneMapLog.o CoordPlaneStack.o CoordPlaneValidator.o CoordTask.o CoordTaskWrapper.o CoordTranslator.o DeviceController.o GCodeParser.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o GraphBuilder.o SystemManager.o  -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL
+	$(CC) -o $(BUILD)/$(OUTPUT) Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CoordController.o DeviceController.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o CircleGenerator.o GCodeParser.o GraphBuilder.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneMapLog.o CoordPlaneStack.o CoordPlaneValidator.o SystemManager.o CoordTask.o CoordTaskWrapper.o LinearCoordTranslator.o  -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL
 	@cp $(LIB)/USMCDLL.dll $(BUILD)
 
 clean:

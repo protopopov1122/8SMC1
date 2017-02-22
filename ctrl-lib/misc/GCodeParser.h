@@ -6,9 +6,9 @@
 #include <vector>
 #include <map>
 #include <iostream>
-#include "SystemManager.h"
-#include "CoordTask.h"
-#include "CoordTranslator.h"
+#include "ctrl-lib/SystemManager.h"
+#include "ctrl-lib/task/CoordTask.h"
+#include "ctrl-lib/translator/CoordTranslator.h"
 
 /* This file contains simple G-Code parser. It allows parsing simple G-Code files
    line-by-line skipping black lines and comments. Each parsed line is

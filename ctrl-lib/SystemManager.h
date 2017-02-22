@@ -1,10 +1,10 @@
 #ifndef _8SMC1_CTRL_LIB_SYSTEM_MANAGER_H_
 #define _8SMC1_CTRL_LIB_SYSTEM_MANAGER_H_
 
-#include "DeviceManager.h"
-#include "CoordPlane.h"
-#include "CoordTask.h"
-#include "GraphBuilder.h"
+#include "device/DeviceManager.h"
+#include "plane/CoordPlane.h"
+#include "task/CoordTask.h"
+#include "misc/GraphBuilder.h"
 #include "graph/FunctionEngine.h"
 
 namespace _8SMC1 {

@@ -2,7 +2,7 @@
 #define CTRL_LIB_COORDTRANSLATOR_H_
 
 #include <cinttypes>
-#include "DeviceController.h"
+#include "ctrl-lib/DeviceController.h"
 
 namespace _8SMC1 {
 

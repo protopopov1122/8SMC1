@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 #include <map>
-#include "CoordTask.h"
+#include "ctrl-lib/task/CoordTask.h"
 
 namespace _8SMC1 {
 
