@@ -549,6 +549,36 @@ namespace _8SMC1 {
 				return;
 			}
 			coordController->calibrate(coordTrailer == 1 ? TrailerId::Trailer1 : TrailerId::Trailer2);
+		} else if (com.compare("graph") == 0) {
+			if (args.size() < 13) {
+				std::cout << "Provide args" << std::endl;
+				return;
+			}
+			CoordPlane *plane = sysman->getCoord(std::stoi(args.at(0)));
+			if (plane == nullptr) {
+				std::cout << "Wrong coord id" << std::endl;
+				return;
+			}
+			std::stringstream ss(args.at(1));
+			FunctionLexer lexer(ss);
+			FunctionParser parser(&lexer);
+			Node *node = parser.parse();
+			motor_point_t toffset = {std::stoi(args.at(2)), std::stoi(args.at(3))};
+			motor_size_t tsize = {std::stoi(args.at(4)), std::stoi(args.at(5))};
+			long double minx = std::stold(args.at(6));
+			long double maxx = std::stold(args.at(7));
+			long double miny = std::stold(args.at(8));
+			long double maxy = std::stold(args.at(9));
+			long double step = std::stold(args.at(10));
+			float speed = std::stod(args.at(11));
+			LinearCoordTranslator trans(toffset, tsize);
+			coord_point_t min = {minx, miny};
+			coord_point_t max = {maxx, maxy};
+			GraphBuilder graph(node, min, max, step);
+			ErrorCode errcode = graph.build(sysman, plane, &trans, speed);
+			if (errcode != ErrorCode::NoError) {
+				std::cout << "Graph build error(" << errcode << ")" << std::endl;
+			}
 		} else {
 			std::cout << "Wrong command '" << com << "'" << std::endl;
 		}
