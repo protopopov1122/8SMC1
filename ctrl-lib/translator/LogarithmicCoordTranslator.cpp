@@ -42,30 +42,4 @@ namespace _8SMC1 {
 		return this->base->get(x, y);
 	}
 	
-	motor_point_t LogarithmicCoordTranslator::get(decimal_number x, decimal_number y) {		
-		long double dx = x.i;
-		long double div = 10;
-		uint32_t j = x.j;
-		while (j > 0) {
-			dx += (j % 10) / div;
-			div *= 10;
-			j /= 10;
-		}
-		if (this->scale.x > 0) {
-			dx = log(dx) / log(this->scale.x);
-		}
-		long double dy = y.i;
-		div = 10;
-		j = y.j;
-		while (j > 0) {
-			dy += (j % 10) / div;
-			div *= 10;
-			j /= 10;
-		}
-		if (this->scale.y > 0) {
-			dy = log(dy) / log(this->scale.y);
-		}
-		return this->base->get(dx, dy);
-	}
-	
 }

@@ -108,47 +108,7 @@ namespace _8SMC1 {
 	}
 	
 	long double parse_double(std::string str) {
-		long double out = 0;
-		long double out2 = 0;
-		for (size_t i = 0; i < str.length() && str.at(i) != '.'; i++) {
-			out *= 10;
-			out += str.at(i) - '0';
-		}
-		for (size_t i = str.length() - 1; i < str.length() && str.at(i) != '.'; i--) {
-			out2 += str.at(i) - '0';
-			out2 /= 10;
-		}
-		return out + out2;
-	}
-	
-	decimal_number process_number(std::string str) {
-		decimal_number out = {0, 0, 0};
-		if (str.empty()) {
-			return out;
-		}
-		int8_t c = 0;
-		if (str.at(0) == '-') {
-			c = 1;
-		}
-		uint32_t k = 0;
-		uint32_t j = 0;
-		
-		size_t i = c;
-		for (;i < str.length() && str.at(i) != '.'; i++) {
-			k *= 10;
-			k += str.at(i) - '0';
-		}
-		if (i < str.length() && str.at(i) == '.') {
-			i++;
-			for (i = str.length() - 1; i < str.length() && str.at(i) != '.'; i--) {
-				j *= 10;
-				j += str.at(i) - '0';
-			}
-		}
-		out.i = k;
-		out.j = j;
-		out.s = c;
-		return out;
+		return std::stold(str);
 	}
 	
 	CoordTask *gcode_translate(CoordTranslator &ctr, GCodeParser &parser, SystemManager *sysman) {
@@ -158,22 +118,22 @@ namespace _8SMC1 {
 		while ((cmd = parser.nextCommand()) != nullptr) {
 			std::string code = cmd->getCommand();
 			if (cmd->hasArg('X') && cmd->hasArg('X')) {
-				decimal_number x = process_number(cmd->getArg('X'));
-				decimal_number y = process_number(cmd->getArg('Y'));
+				long double x = parse_double(cmd->getArg('X'));
+				long double y = parse_double(cmd->getArg('Y'));
 				motor_point_t real = ctr.get(x, y);
 				if (code.compare("G00") == 0) {
 					task->addStep(new JumpTaskStep(real, 1.0f));
 				} else if (code.compare("G01") == 0) {
 					task->addStep(new MoveTaskStep(real, 1.0f));
 				} else if (code.compare("G02") == 0 && cmd->hasArg('I') && cmd->hasArg('J')) {
-					decimal_number i = process_number(cmd->getArg('I'));
-					decimal_number j = process_number(cmd->getArg('J'));
+					long double i = parse_double(cmd->getArg('I'));
+					long double j = parse_double(cmd->getArg('J'));
 					motor_point_t center = ctr.get(i, j);
 					RelArcTaskStep *step = new RelArcTaskStep(real, center, CHORD_COUNT, 1.0f);
 					task->addStep(step);
 				} else if (code.compare("G03") == 0) {
-					decimal_number i = process_number(cmd->getArg('I'));
-					decimal_number j = process_number(cmd->getArg('J'));
+					long double i = parse_double(cmd->getArg('I'));
+					long double j = parse_double(cmd->getArg('J'));
 					motor_point_t center = ctr.get(i, j);
 					RelArcTaskStep *step = new RelArcTaskStep(real, center, CHORD_COUNT, 1.0f);
 					step->setClockwise(false);
