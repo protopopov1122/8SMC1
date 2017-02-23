@@ -77,3 +77,21 @@ Conclusion: next time(probably 23/02/2017) more tests must be performed. The nex
 TODO:
 * Implement facade pattern for all system functions to make further work simplier.
 * Create GUI for the system: GUI supposed to have client-server architecture(currently, we don't know which technologies will be used). Server will interact with facade to control system and provide network protocol. Client will connect to server and send commands/receive data from it(client most likely will be native Windows or .NET application, but server will be implemented in C++). However on the next test time more detailed info about UI will be available.
+
+##### 23/02/2017
+Test on real motors. All system functions work, however GCode parser should be rewritten to be able using most crappy GCode(currently only good formatted one is working). Other system functions work fine.
+
+Tested(all subsystems works fine):
+* Complex GCode patterns.
+* Function drawing.
+* Coordinate plane filters.
+
+It was decided that client-server API is not necessarry, so GUI will be written for local computer(most likely C++ and Qt will be used).
+
+TODO:
+* Rewrite GCode parser.
+* Add laser related code(It will be integrated in different system parts).
+* Add some other components(polar coordinates, get/set options to coordinate plane filters, new filters - history filter, coord plane emulator).
+* Implement facade and GUI.
+
+Conclusion: project functional core is mostly implemented, however laser support must be integrated, so the next thing is GUI.
