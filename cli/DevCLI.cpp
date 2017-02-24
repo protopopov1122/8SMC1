@@ -550,7 +550,7 @@ namespace _8SMC1 {
 			}
 			coordController->calibrate(coordTrailer == 1 ? TrailerId::Trailer1 : TrailerId::Trailer2);
 		} else if (com.compare("graph") == 0) {
-			if (args.size() < 13) {
+			if (args.size() < 12) {
 				std::cout << "Provide args" << std::endl;
 				return;
 			}
