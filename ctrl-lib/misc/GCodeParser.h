@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <set>
 #include <iostream>
 #include "ctrl-lib/SystemManager.h"
 #include "ctrl-lib/task/CoordTask.h"
@@ -15,34 +16,63 @@
    allocated as GCodeCommand object. */
 
 namespace _8SMC1 {
-	
+		
+	struct GCodeValue {
+		bool fract;
+		union {
+			long double fraction;
+			int64_t integer;
+		} value;
+		
+		int64_t intValue() {return fract ? (int64_t) value.fraction : value.integer;}
+		long double fractValue() {return fract ? value.fraction : (long double) value.integer;}
+	};
 	
 	class GCodeCommand {
 		public:
-			GCodeCommand(std::string);
+			GCodeCommand(char, int);
 			virtual ~GCodeCommand();
-			std::string getCommand();
+			char getLetter();
+			int getCommand();
 			bool hasArg(char);
-			std::string getArg(char);
-			void setArg(char, std::string);
-			std::map<char, std::string>::iterator argsBegin();
-			std::map<char, std::string>::iterator argsEnd();
+			GCodeValue getArg(char);
+			void setArg(char, GCodeValue);
+			std::map<char, GCodeValue>::iterator argsBegin();
+			std::map<char, GCodeValue>::iterator argsEnd();
 		private:
-			std::string command;
-			std::map<char, std::string> args;
+			char letter;
+			int command;
+			std::map<char, GCodeValue> args;
+	};
+	
+	struct GCodeField {
+		char letter;
+		GCodeValue value;
+	};
+	
+	class GCodeLexer {
+		public:
+			GCodeLexer(std::istream*);
+			virtual ~GCodeLexer();
+			GCodeField *nextField();
+		private:
+			int readChar();
+			std::istream *is;
 	};
 	
 	class GCodeParser {
 		public:
-			GCodeParser(std::istream*);
+			GCodeParser(GCodeLexer*);
 			virtual ~GCodeParser();
 			GCodeCommand *nextCommand();
 		private:
-			int readChar();
-			std::istream *is;		
+			void nextField();
+			GCodeLexer *lexer;
+			GCodeField *queue[4];
+			std::set<char> PARAMETERS;
 	};
 	
-	CoordTask *gcode_translate(CoordTranslator&, GCodeParser&, SystemManager*);
+	CoordTask *gcode_translate(GCodeParser*, CoordTranslator*, SystemManager*);
 }
 
 #endif

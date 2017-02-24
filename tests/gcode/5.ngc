@@ -1,0 +1,45 @@
+(Generated with: DXF2GCODE, Version: Py3.4.4 PyQt5.4.1, Date: $Date: Sun Apr 17 16:32:22 2016 +0200 $)(Created from file: C:/Users/Eugene/Desktop/1.dxf)(Time: Fri Feb 24 13:24:38 2017)G21 (Units in millimeters)  G90 (Absolute programming) G64 (Default cutting) G17 (XY plane) G40 (Cancel radius comp.) G49 (Cancel length comp.)
+G0 Z  15.000 
+
+(*** LAYER: 0 ***)
+T1 M6
+S6000
+
+(* SHAPE Nr: 0 *)
+G0 X   8.994 Y   4.994
+M3 M8
+G0 Z   3.000 
+F150
+G1 Z  -1.500
+F400
+G2 X  19.506 Y  15.506 I   5.256 J   5.256
+G2 X   8.994 Y   4.994 I  -5.256 J  -5.256
+F150
+G1 Z  -3.000
+F400
+G2 X  19.506 Y  15.506 I   5.256 J   5.256
+G2 X   8.994 Y   4.994 I  -5.256 J  -5.256
+F150
+G1 Z   3.000
+G0 Z  15.000 
+M9 M5
+
+(* SHAPE Nr: 1 *)
+G0 X  24.149 Y  24.649
+M3 M8
+G0 Z   3.000 
+G1 Z  -1.500
+F400
+G2 X  49.351 Y  49.851 I  12.601 J  12.601
+G2 X  24.149 Y  24.649 I -12.601 J -12.601
+F150
+G1 Z  -3.000
+F400
+G2 X  49.351 Y  49.851 I  12.601 J  12.601
+G2 X  24.149 Y  24.649 I -12.601 J -12.601
+F150
+G1 Z   3.000
+G0 Z  15.000 
+M9 M5
+G0 X   0.000 Y   0.000
+M2 (Program end)

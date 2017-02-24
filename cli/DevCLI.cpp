@@ -802,11 +802,11 @@ namespace _8SMC1 {
 			};
 			LinearCoordTranslator trans(center, scale);
 			std::string path = args.at(5);
-			std::ifstream *is = new std::ifstream(path, std::ifstream::in);
-			GCodeParser parser(is);
-			gcode_translate(trans, parser, this->sysman);
-			is->close();
-			delete is;
+			std::ifstream is(path, std::ifstream::in);
+			GCodeLexer lex(&is);
+			GCodeParser parser(&lex);
+			gcode_translate(&parser, &trans, this->sysman);
+			is.close();
 		} else if (args.at(0).compare("graph") == 0) {
 			if (args.size() < 12) {
 				std::cout << "Provide args" << std::endl;
