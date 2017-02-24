@@ -47,6 +47,10 @@ namespace _8SMC1 {
 			return this->peekPlane()->getPosition();
 	}
 	
+	motor_rect_t CoordPlaneStack::getSize() {
+		return this->peekPlane()->getSize();
+	}
+	
 	void CoordPlaneStack::dump(std::ostream &os) {
 		for (size_t i = this->stack.size() - 1; i < this->stack.size(); i--) {
 			CoordPlane *plane = this->stack.at(i);

@@ -37,6 +37,13 @@ namespace _8SMC1 {
 		long double y;
 	};
 	
+	struct motor_rect_t {
+		motor_coord_t x;
+		motor_coord_t y;
+		motor_coord_t w;
+		motor_coord_t h;
+	};
+	
 	enum TrailerId {
 		Trailer1 = 1, Trailer2 = 2
 	};

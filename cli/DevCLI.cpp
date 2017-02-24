@@ -76,8 +76,11 @@ namespace _8SMC1 {
 				#undef PRINT
 			} else if (cmp(COORDS)) {
 				for (size_t i = 0; i < sysman->getCoordCount(); i++) {
-					std::cout << i;
-					sysman->getCoord(i)->dump(std::cout);
+					CoordPlane *plane = sysman->getCoord(i);
+					std::cout << i << "\tPosition: " << plane->getPosition().x << "x" << plane->getPosition().y
+							<< "; Dimension: start=" << plane->getSize().x << "x" << plane->getSize().y 
+							<< "; size=" << plane->getSize().w << "x" << plane->getSize().h << std::endl;
+					plane->dump(std::cout);
 					std::cout << std::endl;
 				}
 			} else if (cmp(TASKS)) {
@@ -329,19 +332,6 @@ namespace _8SMC1 {
 			motor_point_t offset = {std::stoi(args.at(1)), std::stoi(args.at(2))};
 			motor_scale_t scale = {std::stod(args.at(3)), std::stod(args.at(4))};
 			ctrl->pushPlane(new CoordPlaneMap(offset, scale, ctrl->peekPlane()));
-		} else if (com.compare("logmap") == 0) {
-			if (args.size() < 3) {
-				std::cout << "Provide arguments" << std::endl;
-				return;
-			}
-			CoordPlaneStack *ctrl = sysman->getCoord(std::stoi(args.at(0)));
-			if (ctrl == nullptr) {
-				std::cout << "Wrong coord id" << std::endl;
-				return;
-			}
-			motor_scale_t scale = {std::stod(args.at(1)), std::stod(args.at(2))};
-			motor_scale_t logscale = {std::stod(args.at(3)), std::stod(args.at(4))};
-			ctrl->pushPlane(new CoordPlaneMapLog(logscale, scale, ctrl->peekPlane()));
 		} else if (com.compare("validate") == 0) {
 			if (args.size() < 6) {
 				std::cout << "Provide arguments" << std::endl;
@@ -549,6 +539,23 @@ namespace _8SMC1 {
 				return;
 			}
 			coordController->calibrate(coordTrailer == 1 ? TrailerId::Trailer1 : TrailerId::Trailer2);
+		} else if (com.compare("meas") == 0) {
+			if (args.size() < 2) {
+				std::cout << "Provide arguments" << std::endl;
+				return;
+			}
+			int coordNum = std::stoi(args.at(0));
+			int coordTrailer = std::stoi(args.at(1));
+			CoordController *coordController = sysman->getCoordController(coordNum);
+			if (coordController == nullptr) {
+				std::cout << "Wrong coord id" << std::endl;
+				return;
+			}
+			if (coordTrailer != 1 && coordTrailer != 2) {
+				std::cout << "Wrong trailer id" << std::endl;
+				return;
+			}
+			coordController->measure(coordTrailer == 1 ? TrailerId::Trailer1 : TrailerId::Trailer2);
 		} else if (com.compare("graph") == 0) {
 			if (args.size() < 12) {
 				std::cout << "Provide args" << std::endl;

@@ -45,6 +45,17 @@ namespace _8SMC1 {
 		pnt.y /= this->scale.y;
 		return pnt;
 	}
+	
+	motor_rect_t CoordPlaneMap::getSize() {
+		motor_rect_t sz = this->plane->getSize();
+		sz.x -= this->offset.x;
+		sz.y -= this->offset.y;
+		sz.x /= this->scale.x;
+		sz.y /= this->scale.y;
+		sz.w /= this->scale.x;
+		sz.h /= this->scale.y;
+		return sz;
+	}
 
 	void CoordPlaneMap::dump(std::ostream &os) {
 		os << "map(offset=" << this->offset.x << "x" << this->offset.y

@@ -6,7 +6,6 @@ namespace _8SMC1 {
 	DeviceController::DeviceController(Device *dev) {
 		this->dev = dev;
 		this->dest = MoveType::Stop;
-		this->length = 0;
 	}
 
 	DeviceController::~DeviceController() {
@@ -97,21 +96,9 @@ namespace _8SMC1 {
 		this->dev->stop();
 	}
 
-	unsigned int DeviceController::getLength() {
-		if (this->length == 0) {
-			this->calculate_length();
-		}
-		return this->length;
-	}
-
 	ErrorCode DeviceController::resetPosition() {
 		this->dev->setCurrentPosition(0);
 		return ErrorCode::NoError;
-	}
-
-	void DeviceController::calculate_length() {
-		this->length = 300000;	// Just constant
-		// TODO Write proper calibration
 	}
 
 	motor_coord_t DeviceController::getPosition() {

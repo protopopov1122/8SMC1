@@ -34,16 +34,11 @@ namespace _8SMC1 {
 			ErrorCode startMove(motor_coord_t, float, int, bool = false);
 			ErrorCode startRelativeMove(motor_coord_t, float, int, bool = false);
 			void stop();
-			unsigned int getLength();
 
 			motor_coord_t getPosition();
 		private:
-			// Calibration
-			void calculate_length();
-
 			Device *dev;
 			MoveType dest;
-			unsigned int length;
 	};
 }
 

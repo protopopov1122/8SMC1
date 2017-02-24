@@ -20,6 +20,7 @@ namespace _8SMC1 {
 			virtual ErrorCode relativeArc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
 			virtual ErrorCode calibrate(TrailerId) = 0;
 			virtual motor_point_t getPosition() = 0;
+			virtual motor_rect_t getSize() = 0;
 			virtual void dump(std::ostream&);
 		private:
 			friend std::ostream& operator<<(std::ostream&, CoordPlane&);
@@ -37,10 +38,14 @@ namespace _8SMC1 {
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
 			virtual ErrorCode calibrate(TrailerId);
 			virtual motor_point_t getPosition();
+			virtual motor_rect_t getSize();
+			virtual void measure(TrailerId);
 			virtual void dump(std::ostream&);
 		private:
 			DeviceController *xAxis;
 			DeviceController *yAxis;
+			
+			motor_rect_t size;
 			
 	};
 	
@@ -53,6 +58,7 @@ namespace _8SMC1 {
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
 			virtual ErrorCode calibrate(TrailerId);
 			virtual motor_point_t getPosition();
+			virtual motor_rect_t getSize();
 			virtual void dump(std::ostream&);
 		private:
 			CoordPlane *plane;
@@ -72,28 +78,12 @@ namespace _8SMC1 {
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
 			virtual ErrorCode calibrate(TrailerId);
 			virtual motor_point_t getPosition();
+			virtual motor_rect_t getSize();
 			virtual void dump(std::ostream&);
 		private:
 			CoordPlane* plane;
 			motor_point_t offset;
 			motor_scale_t scale;
-	};
-	
-	// Mapping logarithmic coordinates
-	class CoordPlaneMapLog : public CoordPlane {
-		public:
-			CoordPlaneMapLog(motor_scale_t, motor_scale_t, CoordPlane*);
-			virtual ~CoordPlaneMapLog();
-						
-			virtual ErrorCode move(motor_point_t, float, int, bool);
-			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
-			virtual ErrorCode calibrate(TrailerId);
-			virtual motor_point_t getPosition();
-			virtual void dump(std::ostream&);
-		private:
-			CoordPlane *plane;
-			motor_scale_t scale;
-			motor_scale_t logscale;
 	};
 	
 	// Coordinate and speed validation
@@ -106,6 +96,7 @@ namespace _8SMC1 {
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
 			virtual ErrorCode calibrate(TrailerId);
 			virtual motor_point_t getPosition();
+			virtual motor_rect_t getSize();
 			virtual void dump(std::ostream&);
 		private:
 			CoordPlane *plane;
@@ -128,6 +119,7 @@ namespace _8SMC1 {
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
 			virtual ErrorCode calibrate(TrailerId);
 			virtual motor_point_t getPosition();
+			virtual motor_rect_t getSize();
 			virtual void dump(std::ostream&);
 		private:
 			std::vector<CoordPlane*> stack;

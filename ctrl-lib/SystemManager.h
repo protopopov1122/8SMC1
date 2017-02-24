@@ -26,12 +26,14 @@ namespace _8SMC1 {
 			// Coordinate plane control
 			size_t getCoordCount();
 			CoordPlaneStack *getCoord(size_t);
+			CoordController *getCoordController(size_t);
 			CoordPlaneStack *createCoord(DWORD, DWORD);
 		private:
 			DeviceManager *devman;
 			std::vector<DeviceController*> dev;
 			std::vector<CoordTask*> tasks;
 			std::vector<CoordPlaneStack*> coords;
+			std::vector<CoordController*> coordCtrl;
 			FunctionEngine engine;
 
 	};

@@ -52,6 +52,10 @@ namespace _8SMC1 {
 	motor_point_t CoordPlaneValidator::getPosition() {
 			return this->plane->getPosition();
 	}
+	
+	motor_rect_t CoordPlaneValidator::getSize() {
+		return this->plane->getSize();
+	}
 
 	void CoordPlaneValidator::dump(std::ostream &os) {
 		os << "validator(min=" << this->min.x << "x" << this->min.y

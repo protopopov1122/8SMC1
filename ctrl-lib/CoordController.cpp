@@ -30,6 +30,7 @@ namespace _8SMC1 {
 		this->yAxis = yaxis;
 		this->xAxis->getDevice()->setSyncInputMode(true);
 		this->yAxis->getDevice()->setOutputSyncEnabled(true);
+		this->size = {0, 0, 0, 0};
 	}
 
 	CoordController::~CoordController() {
@@ -234,5 +235,19 @@ namespace _8SMC1 {
 		center.x += relcenter.x;
 		center.y += relcenter.y;
 		return arc(dest, center, splitter, speed, div, clockwise, strict);
+	}
+	
+	motor_rect_t CoordController::getSize() {
+		return this->size;
+	}
+	
+	void CoordController::measure(TrailerId tid) {
+		TrailerId tid1 = (tid == TrailerId::Trailer1 ? TrailerId::Trailer2 : TrailerId::Trailer1);
+		TrailerId tid2 = tid;
+		this->calibrate(tid1);
+		motor_point_t min = getPosition();
+		this->calibrate(tid2);
+		motor_point_t max = getPosition();
+		this->size = {min.x, min.y, abs(max.x - min.x), abs(max.y - min.y)};
 	}
 }

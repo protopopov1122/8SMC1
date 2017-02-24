@@ -53,6 +53,10 @@ namespace _8SMC1 {
 	motor_point_t CoordPlaneLog::getPosition() {
 			return this->plane->getPosition();
 	}
+	
+	motor_rect_t CoordPlaneLog::getSize() {
+		return this->plane->getSize();
+	}
 
 	void CoordPlaneLog::dump(std::ostream &os) {
 		os << "log(prefix=\"" << this->prefix << "\"; log_actions="
