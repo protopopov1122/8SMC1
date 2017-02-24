@@ -571,7 +571,7 @@ namespace _8SMC1 {
 			long double maxy = std::stold(args.at(9));
 			long double step = std::stold(args.at(10));
 			float speed = std::stod(args.at(11));
-			LinearCoordTranslator trans(toffset, tsize);
+			BasicCoordTranslator trans(toffset, tsize);
 			coord_point_t min = {minx, miny};
 			coord_point_t max = {maxx, maxy};
 			GraphBuilder graph(node, min, max, step);
@@ -800,7 +800,7 @@ namespace _8SMC1 {
 			motor_size_t scale = {
 				std::stoi(args.at(3)), std::stoi(args.at(4))
 			};
-			LinearCoordTranslator trans(center, scale);
+			BasicCoordTranslator trans(center, scale);
 			std::string path = args.at(5);
 			std::ifstream is(path, std::ifstream::in);
 			GCodeLexer lex(&is);
@@ -824,7 +824,7 @@ namespace _8SMC1 {
 			long double maxy = std::stold(args.at(9));
 			long double step = std::stold(args.at(10));
 			float speed = std::stod(args.at(11));
-			CoordTranslator *trans = new LinearCoordTranslator(toffset, tsize);
+			CoordTranslator *trans = new BasicCoordTranslator(toffset, tsize);
 			coord_point_t min = {minx, miny};
 			coord_point_t max = {maxx, maxy};
 			GraphBuilder *graph = new GraphBuilder(node, min, max, step);

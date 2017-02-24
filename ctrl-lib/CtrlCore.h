@@ -40,6 +40,21 @@ namespace _8SMC1 {
 	enum TrailerId {
 		Trailer1 = 1, Trailer2 = 2
 	};
+	
+	struct coord_point_t {
+		long double x;
+		long double y;
+	};
+	
+	struct coord_size_t {
+		long double w;
+		long double h;
+	};
+	
+	struct coord_scale_t {
+		long double x;
+		long double y;
+	};
 }
 
 

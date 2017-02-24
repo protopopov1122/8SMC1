@@ -1,42 +1,36 @@
 #include "CoordTranslator.h"
-#include <math.h>
-#include <iostream>
 
 namespace _8SMC1 {
 
-	LinearCoordTranslator::LinearCoordTranslator(motor_point_t cen, motor_size_t sc) {
-		this->center = cen;
+	LinearCoordTranslator::LinearCoordTranslator(coord_point_t cen, coord_scale_t sc, CoordTranslator *base) {
+		this->base = base;
+		this->offset = cen;
 		this->scale = sc;
 	}
 
 	LinearCoordTranslator::~LinearCoordTranslator() {
 	}
 
-	motor_point_t LinearCoordTranslator::getCenter() {
-		return this->center;
+	coord_point_t LinearCoordTranslator::getOffset() {
+		return this->offset;
 	}
 
-	motor_size_t LinearCoordTranslator::getScale() {
+	coord_scale_t LinearCoordTranslator::getScale() {
 		return this->scale;
+	}
+	
+	CoordTranslator *LinearCoordTranslator::getBase() {
+		return this->base;
 	}
 
 	motor_point_t LinearCoordTranslator::get(long double x, long double y) {
-		int64_t xtr = x * this->scale.w;
-		int64_t ytr = y * this->scale.h;
-		motor_point_t pnt = {0, 0};
-		pnt.x = xtr;
-		pnt.y = ytr;
-		pnt.x += center.x;
-		pnt.y += center.y;
-		return pnt;
-	}
-	
-	motor_point_t LinearCoordTranslator::get(int64_t x, int64_t y) {
-		motor_point_t pnt = {x, y};
-		pnt.x /= this->scale.w;
-		pnt.y /= this->scale.h;
-		pnt.x += this->center.x;
-		pnt.y += this->center.y;
-		return pnt;
+		long double nx = x * this->scale.x + this->offset.x;
+		long double ny = y * this->scale.y + this->offset.y;
+		if (this->base == nullptr) {
+			motor_point_t pnt = {(int64_t) nx, (int64_t) ny};
+			return pnt;
+		} else {
+			return this->base->get(nx, ny);
+		}
 	}
 }
