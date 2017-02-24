@@ -33,14 +33,8 @@ Function plotter:
 * Integrate evaluator with other API and CLI.
 
 Integration:
-There are two ways of integration: write standalone apps for local computer(pros: faster development, do not require many technology use; cons: local computer is slow and obviously can't handle all used software), writing client-server app(pros: can use more powerful computer for integration; cons: require different teachnology integration and network connection).
-First way requires:
-* Integrate G-Code interpreter with AutoCAD.
-* Write extension for Inkscape to use G-Code interpreter with Inkscape G-Code extension.
-* Write standalone application for function plotter.
-Second way requires:
-* Write server for computer with controllers that will represent system API for network applications
-* Write client: it may be Web-application, local client app, many local scripts. It will use server network API to control devices.
+There are two ways of integration: write standalone apps for local computer(pros: faster development, do not require many technology use; cons: local computer is slow and obviously can't handle all used software), writing client-server app(pros: can use more powerful computer for integration; cons: require different teachnology integration and network connection). It is decided to write standalone local app.
+It requires writing standalone application that will use functional system core as a library and represent its functions.
 
 Other:
 * Current MicroSMC driver that is used by wrapper is available only for Windows 2000/XP/Vista. The simpliest solution is using old hardware or virtual machine, but then intergration with existing software may be hard. Another option is using different controller with same stepper motors. This will require a lot of work with writing new driver and C++ wrappers but benefits are significant(e.g. using with newer Windows versions and Linux, simplier integration). This is the main reason of separating low-level wrapper API and higher-level API and other tools(if we will change controller we will only rewrite wrappers, other project parts will be the same). By now development is continued on top of 8SMC1 controller using old Windows XP PC, but this problem should be solved anyway.

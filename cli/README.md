@@ -38,6 +38,8 @@ CLI used to test whole system while it has not GUI(however it can be included in
 	* coord rarc [id] [x] [y] [center_x] [center_y] [splitter] [speed] [div] - relative to current position clockwise move coordinate plane [id] to ([x] + current.x; [y] + current.y) with arc center ([center_x] + current.x; [center_x] + current.y), splitter [splitter], speed [speed] steps/sec and step divisor [div].
 	* coord rcarc [id] [x] [y] [center_x] [center_y] [splitter] [speed] [div] - relative to current position counter-clockwise move coordinate plane [id] to ([x] + current.x; [y] + current.y) with arc center ([center_x] + current.x; [center_x] + current.y), splitter [splitter], speed [speed] steps/sec and step divisor [div].
 	* coord cal [id] [tr] - calibrate coordinate plane [id] to trailer [tr](1 or 2).
+	* coord meas [id] [tr] - measure and calibrate coorinate plane [id] to trailer [tr](1 or 2). Recommended to use before any other operations with plane.
+	* coord graph [cid] [func] [offset_x] [offset_y] [scale_x] [scale_y] [x_min] [x_max] [y_min] [y_max] [step] [speed] - create function y=[func] graph on coordinate plane [cid](offset=[offset_x]x[offset_y]; scale=[scale_x]x[scale_y]) with x is from [x_min] to [x_max](or in negative direction), accepted y is from [y_min] to [y_max] with x step [step] and speed coef [speed].
 * refresh - refresh device list and reinitialise them.
 * task - operates with system tasks. Subcommands:
 	* task new - create new empty programmable task.
@@ -54,7 +56,7 @@ CLI used to test whole system while it has not GUI(however it can be included in
 		* task cal [id] [tr]
 	* task exec [id] [coordid] [speed] - execute task [id] on coordinate plane [coordid] and base speed [speed] steps/sec.
 	* task load [center_x] [center_y] [scale_x] [scale_y] [path] - load G-Code from path using ([scale_x]; [scale_y]) to get coordinates(used to get most precise coordinates, otherwise functional may not be stable).
-	* task graph [func] [offset_x] [offset_y] [scale_x] [scale_y] [x_min] [x_max] [y_min] [y_max] [step] [speed] - create function y=[func] graph task on coordinate plane(offset=[offset_x]x[offset_y]; scale=[scale_x]x[scale_y]) with x is from [x_min] to [x_max], accepted y is from [y_min] to [y_max] with x step [step] and speed coef [speed].
+	* task graph [func] [offset_x] [offset_y] [scale_x] [scale_y] [x_min] [x_max] [y_min] [y_max] [step] [speed] - create function y=[func] graph task on coordinate plane(offset=[offset_x]x[offset_y]; scale=[scale_x]x[scale_y]) with x is from [x_min] to [x_max](or in negative direction), accepted y is from [y_min] to [y_max] with x step [step] and speed coef [speed].
 	
 ## Notice
 Because of some bugs at the start of CLI you should execute some commands:

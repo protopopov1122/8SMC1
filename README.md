@@ -5,7 +5,7 @@ This project aims to create library to perform high-level control of 8SMC1 contr
 
 Project has few levels: low-level Device wrapper API(wraps actual 8SMC1 driver API), high-level library(used to more complex stuff: different movement, logging, error checking, g-code and tasks), command-line interface(for testing purposes), device driver stubs(to test without hardware).
 
-Currently project is in development stage, so API may be unstable and contain bugs. Function testing on real hardware takes place two times a week(Monday and Thursday) so functionality that is added between this days may not work(track NEWS.md to view current state). All bugfixes added during tests firstly will be uploaded to testing branch and then refractored, but development code pushed in master(during the week testing and master will not be synchronized).
+Currently project is in development stage, so API may be unstable and contain bugs. Althrough project functional core is almost finished UI is not written so not all functions are tested. Function testing on real hardware takes place two times a week(Monday and Thursday) so functionality that is added between this days may not work(track NEWS.md to view current state). All bugfixes added during tests firstly will be uploaded to testing branch and then refractored, but development code pushed in master(during the week testing and master will not be synchronized).
 
 For more info see READMEs in subdirectories.
 
@@ -30,12 +30,12 @@ Known issues
 
 Disclaimer
 ===================
-Code is not guaranted to work, project also may be discontinued. There are standart tools in SMCView package that allow using AutoCAD with 8SMC1 contorller, but they require additional licanses. We are just trying to implement same functionality.
+Project is on development stage so it may be unstable. There are standart tools in SMCView package that allow using AutoCAD with 8SMC1 contorller, but they require additional licanses, our controllers are discontinued as well. We are just trying to implement same functionality with some additions.
 
 Builing
 ===================
 Project is built using MinGW cross compiler(build tested on top of Linux and Windows Subsystem for Linux).
-Create 'res' directory in root of project and copy 'USMCDLL.h' and 'USMCDLL.dll' to it. You must install MiscoSMC driver.
+You must install MiscoSMC driver. Create 'res' directory in root of project and copy 'USMCDLL.h' and 'USMCDLL.dll' to it(it required to proper build, these files located in MicroSMC folder in Program files).
 Project has two build systems(simply two different Makefile). One is hand-written(old) and is convinient for development in terminal, other(new) is auto-generated and is useful for incremental build(used in IDEs). This repo contains new Makefile.
 You can generate them(NOTE: You should regenerate incremental Makefile if new file is added to project):
 ```bash
@@ -45,8 +45,8 @@ You can generate them(NOTE: You should regenerate incremental Makefile if new fi
 Build commands for both are the same:
 ```bash
 make clean	# Clean all
-make all	# Build command-line interface
 make stub	# Build stub to test CLI without controller
+make all	# Build command-line interface and stub
 ```
 
 Authors and Contributions
