@@ -33,4 +33,18 @@ namespace _8SMC1 {
 			return this->base->get(nx, ny);
 		}
 	}
+	
+	coord_point_t LinearCoordTranslator::get(motor_point_t pnt) {
+		coord_point_t out;
+		if (this->base == nullptr) {
+			out = {(long double) pnt.x, (long double) pnt.y};
+		} else {
+			out = this->base->get(pnt);
+		}
+		out.x -= this->offset.x;
+		out.y -= this->offset.y;
+		out.x /= this->scale.x;
+		out.y /= this->scale.y;
+		return out;
+	}
 }

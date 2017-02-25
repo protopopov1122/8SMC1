@@ -25,4 +25,17 @@ namespace _8SMC1 {
 			return this->base->get(nx, ny);
 		}
 	}
+	
+	coord_point_t PolarCoordTranslator::get(motor_point_t pnt) {
+		coord_point_t out;
+		if (this->base == nullptr) {
+			out = {(long double) pnt.x, (long double) pnt.y};
+		} else {
+			out = this->base->get(pnt);
+		}
+		long double p = sqrt(pow(out.x, 2) + pow(out.y, 2));
+		long double f = atan2(out.y, out.x);
+		out = {p, f};
+		return out;
+	}
 }

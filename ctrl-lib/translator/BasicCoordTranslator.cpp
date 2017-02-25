@@ -30,4 +30,13 @@ namespace _8SMC1 {
 		pnt.y += center.y;
 		return pnt;
 	}
+	
+	coord_point_t BasicCoordTranslator::get(motor_point_t pnt) {
+		pnt.x -= center.x;
+		pnt.y -= center.y;
+		coord_point_t out = {(long double) pnt.x, (long double) pnt.y};
+		out.x /= this->scale.w;
+		out.y /= this->scale.h;
+		return out;
+	}
 }

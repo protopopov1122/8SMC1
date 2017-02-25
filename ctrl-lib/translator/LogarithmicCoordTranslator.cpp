@@ -36,4 +36,16 @@ namespace _8SMC1 {
 		}
 	}
 	
+	coord_point_t LogarithmicCoordTranslator::get(motor_point_t pnt) {
+		coord_point_t out;
+		if (this->base == nullptr) {
+			out = {(long double) pnt.x, (long double) pnt.y};
+		} else {
+			out = this->base->get(pnt);
+		}
+		out.x = pow(this->scale.x, out.x);
+		out.y = pow(this->scale.x, out.y);
+		return out;
+	}
+	
 }

@@ -11,7 +11,9 @@ namespace _8SMC1 {
 	class CoordTranslator {
 		public:
 			virtual ~CoordTranslator() {};
+			virtual motor_point_t get(coord_point_t pnt) {return this->get(pnt.x, pnt.y);}
 			virtual motor_point_t get(long double, long double) = 0;
+			virtual coord_point_t get(motor_point_t) = 0;
 	};
 	
 	class BasicCoordTranslator : public CoordTranslator {
@@ -21,6 +23,7 @@ namespace _8SMC1 {
 			motor_point_t getCenter();
 			motor_size_t getScale();
 			virtual motor_point_t get(long double, long double);
+			virtual coord_point_t get(motor_point_t);
 		private:
 			motor_point_t center;
 			motor_size_t scale;
@@ -34,6 +37,7 @@ namespace _8SMC1 {
 			coord_point_t getOffset();
 			coord_scale_t getScale();
 			virtual motor_point_t get(long double, long double);
+			virtual coord_point_t get(motor_point_t);
 		private:
 			CoordTranslator *base;
 			coord_point_t offset;
@@ -47,6 +51,7 @@ namespace _8SMC1 {
 			CoordTranslator *getBaseCoord();
 			motor_scale_t getScale();
 			virtual motor_point_t get(long double, long double);
+			virtual coord_point_t get(motor_point_t);
 		private:
 			CoordTranslator *base;
 			motor_scale_t scale;
@@ -58,6 +63,7 @@ namespace _8SMC1 {
 			virtual ~PolarCoordTranslator();
 			CoordTranslator *getBaseCoord();
 			virtual motor_point_t get(long double, long double);
+			virtual coord_point_t get(motor_point_t);
 		private:
 			CoordTranslator *base;
 	};
