@@ -5,7 +5,10 @@
 #include <cinttypes>
 #include "ctrl-lib/DeviceController.h"
 
-/* This file contains Bresenham algorithm implementation for circles */
+/* This file contains Bresenham algorithm implementation for circles.
+   It is incremental, that means it stores current position and parameters
+   and can calculate next or previouse basing on these values.
+   This algorithm is used only by arc build so you won't use normally.*/
 
 namespace _8SMC1 {
 

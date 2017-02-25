@@ -4,9 +4,17 @@
 #include <cinttypes>
 #include "ctrl-lib/DeviceController.h"
 
-namespace _8SMC1 {
+/* Coordinate translator represents different type coornidate systems.
+   Each system is mapped to another or to real coordinates.
+   These systems are implemented:
+	* Decart - named linear
+	* Logarithmic
+	* Polar 
+   To use one of them you should pass BasicCoordTranslator to it.
+   NOTE: You can also stack them, however you are responsible
+   to free memory after them. */
 
-	
+namespace _8SMC1 {
 
 	class CoordTranslator {
 		public:

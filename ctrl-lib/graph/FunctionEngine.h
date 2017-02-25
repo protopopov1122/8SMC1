@@ -8,6 +8,10 @@
 #include "AST.h"
 #include "ctrl-lib/CtrlCore.h"
 
+/* This file contains definition of function evaluation engine and scope.
+   Scope stores variable values and defined mathematical functions.
+   It evaluate AST nodes and provide them values and functions.*/
+
 namespace _8SMC1 {
 		
 	class EngineFunction {

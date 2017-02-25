@@ -4,6 +4,11 @@
 #include "ctrl-lib/graph/FunctionEngine.h"
 #include "ctrl-lib/plane/CoordPlane.h"
 
+/* Graph builder contains routine functions to build mathematical
+   function graphs to coordinate planes. It stores function,
+   minimal and maximal x&y and x calculation step and takes plane,
+   coordinate translator and speed to build. */
+
 namespace _8SMC1 {
 	class SystemManager;
 	

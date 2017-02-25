@@ -3,7 +3,7 @@
 
 #include <cinttypes>
 
-/*This file contains basic structures, enums and constants that commonly used by other library parts. */
+/* This file contains basic structures, enums and constants that commonly used by other library parts. */
 
 namespace _8SMC1 {
 	typedef int64_t motor_coord_t;

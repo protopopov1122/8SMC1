@@ -7,6 +7,14 @@
 #include "ctrl-lib/misc/GraphBuilder.h"
 #include "ctrl-lib/graph/FunctionEngine.h"
 
+/* Coordinate task is abstraction that perform actions on coordiate plane
+   according to implemenation. These are few implemenations available:
+       * ProgrammedCoordTask - task sequention that stores list of tasks to execute.
+			(it also takes responsibility to free memory).
+	   * GraphCoordTask - task that uses saves graph builder and
+			parameters for it.
+	   * CoordTaskWrapper - wraps task and plane filter parameters. May be removed.*/
+
 namespace _8SMC1 {
 	
 	class SystemManager; // Forward referencing

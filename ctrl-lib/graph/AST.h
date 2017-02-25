@@ -5,6 +5,10 @@
 #include <string>
 #include <cinttypes>
 
+/* This file contains abstract syntax tree node definitions.
+   Each node stores information about math expression and
+   contains code to evaluate this expression using FunctionEngine and scope.*/
+
 namespace _8SMC1 {
 	
 	enum MathError {

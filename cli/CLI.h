@@ -7,6 +7,12 @@
 #include <map>
 #include <iostream>
 
+/* CLI is abstract command line implementation that store
+   command definitions and work with command line:
+   read command, split it in arguments and operation,
+   call operations.
+   Ceratin command implementations see in DevCLI.*/
+
 namespace _8SMC1 {
 		
 	class CLI; // Forward referencing
@@ -15,12 +21,6 @@ namespace _8SMC1 {
 		public:
 			virtual ~CLICommand() {};
 			virtual void execute(CLI*, std::vector<std::string>&) = 0;
-		protected:
-			std::string requireArgument(std::vector<std::string>&, size_t, std::string, std::string);
-			int requireArgument(std::vector<std::string>&, size_t, std::string,
-						int64_t);
-			float requireArgument(std::vector<std::string>&, size_t, std::string,
-						float);
 			
 	};
 	

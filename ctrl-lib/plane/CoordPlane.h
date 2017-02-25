@@ -6,7 +6,14 @@
 #include <string>
 #include "ctrl-lib/DeviceController.h"
 
-/* This header contains coordinate plane interface definitions and some implementations.*/
+/* Coordinate plane is abstraction that represents real motors.
+   However most of implementations are just filters that perform
+   some actions on coordinates. Only CoordController represents real
+   motor system. You should stack filters on top of this controller
+   and use top filter(there available virtual coordinate plane,
+   that is plane emulator but it is not tested). To simplify
+   stacking you may use CoordPlaneStack, it also takes responsibility
+   to free filter memory, otherwise you are responsible to free memroy. */
 
 namespace _8SMC1 {
 		

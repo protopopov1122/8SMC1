@@ -5,9 +5,12 @@
 #include "device/DeviceManager.h"
 #include "CtrlCore.h"
 
-/* This file contains definitions of high-level controller library.
+/* This file contains definitions of high-level device controller library.
    Library purpose is controlling device state, speed, complex
-   moves and synchronization. */
+   moves and synchronization.
+   This class was made at the start of project, but
+   now almost all its functional is migrated to CooordController.
+   It is used only by CLI.*/
 
 namespace _8SMC1 {
 

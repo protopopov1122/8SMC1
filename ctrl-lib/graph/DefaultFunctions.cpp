@@ -1,6 +1,9 @@
 #include "FunctionEngine.h"
 #include <math.h>
 
+/* This file contains implementation of some mathematical functions*
+   that can be used with math evaluator.*/
+
 namespace _8SMC1 {
 	
 #define DefFun1(id, fn)\

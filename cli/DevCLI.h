@@ -5,7 +5,11 @@
 #include "ctrl-lib/SystemManager.h"
 #include "ctrl-lib/misc/GCodeParser.h"
 
-/* Defines cli commands to control Devices API */
+/* Command line commands are used to test system functionality*
+   while GUI is not developed. Most commands are directly mapped
+   to system functions, most of them has huge amount of parameters,
+   see README.md for quick tutorial and DevCLI.cpp for implemetation.
+   This commands use abstract CLI interface.*/
 
 namespace _8SMC1 {
 	class DeviceCommand : public CLICommand {

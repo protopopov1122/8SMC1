@@ -4,6 +4,8 @@
 #include <string>
 #include <cinttypes>
 
+/* This file contains definitions used by lexer. */
+
 namespace _8SMC1 {
 
 	enum TokenType {

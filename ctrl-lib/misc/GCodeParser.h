@@ -11,9 +11,14 @@
 #include "ctrl-lib/task/CoordTask.h"
 #include "ctrl-lib/translator/CoordTranslator.h"
 
-/* This file contains simple G-Code parser. It allows parsing simple G-Code files
-   line-by-line skipping black lines and comments. Each parsed line is
-   allocated as GCodeCommand object. */
+/* GCode parser can parse unforammted gcode files.
+   Each gcode statement is represented as command object.
+   Parser and lexer are separated and use STL streams.
+   GCode is splitted in fields by lexer. Each
+   field contains command letter and parameter
+   (fractional or integer value). Parser can
+   recognise some command letters and join them
+   with next fields. */
 
 namespace _8SMC1 {
 		
