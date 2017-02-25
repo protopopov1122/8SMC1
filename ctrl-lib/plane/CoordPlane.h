@@ -142,6 +142,37 @@ namespace _8SMC1 {
 		private:
 			std::vector<CoordPlane*> stack;
 	};
+	
+	// Virtual device emulator
+	class VirtualDevice {
+		public:
+			virtual ~VirtualDevice() {};
+			virtual motor_coord_t getPosition() = 0;
+			virtual ErrorCode start(motor_coord_t, float, int) = 0;
+			virtual bool isTrailerPressed(TrailerId) = 0;
+	};
+	
+	// Virtual coordinate plane emulator
+	class VirtualCoordPlane : public CoordPlane {
+		public:
+			VirtualCoordPlane(VirtualDevice*, VirtualDevice*);
+			virtual ~VirtualCoordPlane();
+			VirtualDevice *getXAxis();
+			VirtualDevice *getYAxis();
+			virtual void measure(TrailerId);
+			
+			virtual ErrorCode move(motor_point_t, float, int, bool);
+			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
+			virtual ErrorCode calibrate(TrailerId);
+			virtual motor_point_t getPosition();
+			virtual motor_rect_t getSize();
+			virtual void dump(std::ostream&);
+			
+		private:
+			VirtualDevice *xDev;
+			VirtualDevice *yDev;
+			motor_rect_t size;
+	};
 }
 
 #endif

@@ -11,10 +11,6 @@
 
 namespace _8SMC1 {
 
-	void CoordController::dump(std::ostream &os) {
-		os << "coord(" << this->xAxis->getID() << "; " << this->yAxis->getID() << ")";
-	}
-
 	CoordController::CoordController(DeviceController *xaxis,
 			DeviceController *yaxis) {
 		this->xAxis = xaxis;
@@ -26,6 +22,10 @@ namespace _8SMC1 {
 
 	CoordController::~CoordController() {
 
+	}
+
+	void CoordController::dump(std::ostream &os) {
+		os << "coord(" << this->xAxis->getID() << "; " << this->yAxis->getID() << ")";
 	}
 
 	DeviceController *CoordController::getXAxis() {
