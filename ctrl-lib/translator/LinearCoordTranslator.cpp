@@ -22,6 +22,14 @@ namespace _8SMC1 {
 	CoordTranslator *LinearCoordTranslator::getBase() {
 		return this->base;
 	}
+	
+	void LinearCoordTranslator::setOffset(coord_point_t o) {
+		this->offset = o;
+	}
+	
+	void LinearCoordTranslator::setScale(coord_scale_t s) {
+		this->scale = s;
+	}
 
 	motor_point_t LinearCoordTranslator::get(long double x, long double y) {
 		long double nx = x * this->scale.x + this->offset.x;

@@ -22,6 +22,8 @@ namespace _8SMC1 {
 			virtual ~BasicCoordTranslator();
 			motor_point_t getCenter();
 			motor_size_t getScale();
+			void setCenter(motor_point_t);
+			void setScale(motor_size_t);
 			virtual motor_point_t get(long double, long double);
 			virtual coord_point_t get(motor_point_t);
 		private:
@@ -36,6 +38,8 @@ namespace _8SMC1 {
 			CoordTranslator *getBase();
 			coord_point_t getOffset();
 			coord_scale_t getScale();
+			void setOffset(coord_point_t);
+			void setScale(coord_scale_t);
 			virtual motor_point_t get(long double, long double);
 			virtual coord_point_t get(motor_point_t);
 		private:
@@ -46,15 +50,16 @@ namespace _8SMC1 {
 	
 	class LogarithmicCoordTranslator : public CoordTranslator {
 		public:
-			LogarithmicCoordTranslator(motor_scale_t, CoordTranslator* = nullptr);
+			LogarithmicCoordTranslator(coord_scale_t, CoordTranslator* = nullptr);
 			virtual ~LogarithmicCoordTranslator();
 			CoordTranslator *getBaseCoord();
-			motor_scale_t getScale();
+			coord_scale_t getScale();
+			void setScale(coord_scale_t);
 			virtual motor_point_t get(long double, long double);
 			virtual coord_point_t get(motor_point_t);
 		private:
 			CoordTranslator *base;
-			motor_scale_t scale;
+			coord_scale_t scale;
 	};
 	
 	class PolarCoordTranslator : public CoordTranslator {

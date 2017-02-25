@@ -19,6 +19,14 @@ namespace _8SMC1 {
 	motor_size_t BasicCoordTranslator::getScale() {
 		return this->scale;
 	}
+	
+	void BasicCoordTranslator::setCenter(motor_point_t c) {
+		this->center = c;
+	}
+	
+	void BasicCoordTranslator::setScale(motor_size_t s) {
+		this->scale = s;
+	}
 
 	motor_point_t BasicCoordTranslator::get(long double x, long double y) {
 		int64_t xtr = x * this->scale.w;

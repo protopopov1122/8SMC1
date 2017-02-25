@@ -5,7 +5,7 @@
 
 namespace _8SMC1 {
 	
-	LogarithmicCoordTranslator::LogarithmicCoordTranslator(motor_scale_t scale, CoordTranslator *base) {
+	LogarithmicCoordTranslator::LogarithmicCoordTranslator(coord_scale_t scale, CoordTranslator *base) {
 		this->base = base;
 		this->scale = scale;
 	}
@@ -17,8 +17,12 @@ namespace _8SMC1 {
 		return this->base;
 	}
 	
-	motor_scale_t LogarithmicCoordTranslator::getScale() {
+	coord_scale_t LogarithmicCoordTranslator::getScale() {
 		return this->scale;
+	}
+	
+	void LogarithmicCoordTranslator::setScale(coord_scale_t s) {
+		this->scale = s;
 	}
 	
 	motor_point_t LogarithmicCoordTranslator::get(long double x, long double y) {
