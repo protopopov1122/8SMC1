@@ -2,44 +2,44 @@
 
 if [ $1 == "stub" ]
 then
-	printf "@echo off\n"
-    printf "cl /W0 /EHsc /I res /LD /FeUSMCDLL.dll misc/Stub.cpp /link /MACHINE:X86\n"
+    printf "@echo off\n"
+    printf "cl /W0 /EHsc /I res /Gm /LD /FeUSMCDLL.dll misc/Stub.cpp /link /MACHINE:X86\n"
     exit
 fi
 
 if [ $1 == "native" ]
 then
-	printf "@echo off\n"
-    printf "cl /W0 /EHsc /I . /I res /Fe$2 "
+    printf "@echo off\n"
+    printf "cl /W0 /EHsc /Zi /Gm /I . /I res /Fe$2 "
     find device ctrl-lib cli -name "*.cpp" -or -name "*.cxx" | awk -F/ '{print $0}' | tr '\n' ' '
-	printf " /link /MACHINE:X86 USMCDLL.lib\n"
+    printf " /link /MACHINE:X86 USMCDLL.lib\n"
     exit
 fi
 
 if [ $1 == "native-lib" ]
 then
-	printf "@echo off\n"
-    printf "cl /W0 /EHsc /I . /I res /LD /Fe$2 "
+    printf "@echo off\n"
+    printf "cl /W0 /EHsc /Gm /I . /I res /LD /Fe$2 "
     find device ctrl-lib cli -name "*.cpp" -or -name "*.cxx" | awk -F/ '{print $0}' | tr '\n' ' '
-	printf " /link /MACHINE:X86 USMCDLL.lib\n"
+    printf " /link /MACHINE:X86 USMCDLL.lib\n"
     exit
 fi
 
 if [ $1 == "clr" ]
 then
-	printf "@echo off\n"
-    printf "cl /clr /W0 /I . /I res /Fe$2 "
+    printf "@echo off\n"
+    printf "cl /clr /Gm /W0 /I . /I res /Fe$2 "
     find device ctrl-lib cli -name "*.cpp" -or -name "*.cxx" | awk -F/ '{print $0}' | tr '\n' ' '
-	printf " /link /MACHINE:X86 USMCDLL.lib\n"
+    printf " /link USMCDLL.lib\n"
     exit
 fi
 
 if [ $1 == "clr-lib" ]
 then
-	printf "@echo off\n"
-    printf "cl /clr /W0 /I . /I res /LD /Fe$2 "
+    printf "@echo off\n"
+    printf "cl /clr /Gm /W0 /I . /I res /LD /Fe$2 "
     find device ctrl-lib cli -name "*.cpp" -or -name "*.cxx" | awk -F/ '{print $0}' | tr '\n' ' '
-	printf " /link /MACHINE:X86 USMCDLL.lib\n"
+    printf " /link USMCDLL.lib\n"
     exit
 fi
 

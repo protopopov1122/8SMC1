@@ -34,7 +34,7 @@ Project is on development stage so it may be unstable. There are standart tools 
 
 Builing
 ===================
-Project is built using MSVC(for release build) and MinGW cross compiler - for testing, because allows incremental build(MinGW build tested on top of Linux and Windows Subsystem for Linux).
+Project is built using MSVC and MinGW cross compiler(MinGW build tested on top of Linux and Windows Subsystem for Linux).
 You must install MiscoSMC driver. Create 'res' directory in root of project and copy 'USMCDLL.h', 'USMCDLL.lib' and 'USMCDLL.dll' to it(it required to proper build, these files located in MicroSMC folder in Program files). You should also copy 'USMCDLL.lib' to root of project, if you are building by MSVC without use of stub.
 
 For MSVC:
