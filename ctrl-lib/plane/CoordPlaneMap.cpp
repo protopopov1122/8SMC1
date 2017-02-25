@@ -12,6 +12,26 @@ namespace _8SMC1 {
 		
 	}
 	
+	CoordPlane *CoordPlaneMap::getBase() {
+		return this->plane;
+	}
+	
+	motor_point_t CoordPlaneMap::getOffset() {
+		return this->offset;
+	}
+	
+	motor_scale_t CoordPlaneMap::getScale() {
+		return this->scale;
+	}
+	
+	void CoordPlaneMap::setOffset(motor_point_t p) {
+		this->offset = p;
+	}
+	
+	void CoordPlaneMap::setScale(motor_scale_t s) {
+		this->scale = s;
+	}
+	
 	ErrorCode CoordPlaneMap::move(motor_point_t dest, float speed, int div, bool sync) {
 		dest.x *= this->scale.x;
 		dest.y *= this->scale.y;

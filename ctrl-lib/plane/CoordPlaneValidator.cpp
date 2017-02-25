@@ -13,6 +13,34 @@ namespace _8SMC1 {
 		
 	}
 	
+	CoordPlane *CoordPlaneValidator::getBase() {
+		return this->plane;
+	}
+	
+	motor_point_t CoordPlaneValidator::getMinimum() {
+		return this->min;
+	}
+	
+	motor_point_t CoordPlaneValidator::getMaximum() {
+		return this->max;
+	}
+	
+	float CoordPlaneValidator::getMaxSpeed() {
+		return this->max_speed;
+	}
+	
+	void CoordPlaneValidator::setMinimum(motor_point_t p) {
+		this->min = p;
+	}
+	
+	void CoordPlaneValidator::setMaximum(motor_point_t p) {
+		this->max = p;
+	}
+	
+	void CoordPlaneValidator::setMaxSpeed(float s) {
+		this->max_speed = s;
+	}
+	
 	ErrorCode CoordPlaneValidator::move(motor_point_t dest, float speed, int div, bool sync) {
 		if (speed < 0 || speed > this->max_speed) {
 			return ErrorCode::InvalidSpeed;

@@ -21,9 +21,7 @@ namespace _8SMC1 {
 			virtual ErrorCode calibrate(TrailerId) = 0;
 			virtual motor_point_t getPosition() = 0;
 			virtual motor_rect_t getSize() = 0;
-			virtual void dump(std::ostream&);
-		private:
-			friend std::ostream& operator<<(std::ostream&, CoordPlane&);
+			virtual void dump(std::ostream&) = 0;
 	};
 	
 	// Coordinate plane commuticating directly with hardware
@@ -33,13 +31,13 @@ namespace _8SMC1 {
 			virtual ~CoordController();
 			DeviceController *getXAxis();
 			DeviceController *getYAxis();
+			virtual void measure(TrailerId);
 			
 			virtual ErrorCode move(motor_point_t, float, int, bool);
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
 			virtual ErrorCode calibrate(TrailerId);
 			virtual motor_point_t getPosition();
 			virtual motor_rect_t getSize();
-			virtual void measure(TrailerId);
 			virtual void dump(std::ostream&);
 		private:
 			DeviceController *xAxis;
@@ -54,6 +52,14 @@ namespace _8SMC1 {
 		public:
 			CoordPlaneLog(CoordPlane*, std::ostream&, std::string, bool = true, bool = true);
 			virtual ~CoordPlaneLog();
+			CoordPlane *getBase();
+			std::string getPrefix();
+			bool isLoggingActions();
+			bool isLoggingErrors();
+			void setPrefix(std::string);
+			void setLoggingActions(bool);
+			void setLoggingErrors(bool);
+			
 			virtual ErrorCode move(motor_point_t, float, int, bool);
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
 			virtual ErrorCode calibrate(TrailerId);
@@ -73,6 +79,11 @@ namespace _8SMC1 {
 		public:
 			CoordPlaneMap(motor_point_t, motor_scale_t, CoordPlane*);
 			virtual ~CoordPlaneMap();
+			CoordPlane *getBase();
+			motor_point_t getOffset();
+			motor_scale_t getScale();
+			void setOffset(motor_point_t);
+			void setScale(motor_scale_t);
 						
 			virtual ErrorCode move(motor_point_t, float, int, bool);
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
@@ -91,6 +102,13 @@ namespace _8SMC1 {
 		public:
 			CoordPlaneValidator(motor_point_t, motor_point_t, float, CoordPlane*);
 			virtual ~CoordPlaneValidator();
+			CoordPlane *getBase();
+			motor_point_t getMinimum();
+			motor_point_t getMaximum();
+			float getMaxSpeed();
+			void setMinimum(motor_point_t);
+			void setMaximum(motor_point_t);
+			void setMaxSpeed(float);
 						
 			virtual ErrorCode move(motor_point_t, float, int, bool);
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);

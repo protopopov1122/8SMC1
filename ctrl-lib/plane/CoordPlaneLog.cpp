@@ -14,6 +14,34 @@ namespace _8SMC1 {
 		
 	}
 	
+	CoordPlane *CoordPlaneLog::getBase() {
+		return this->plane;
+	}
+	
+	std::string CoordPlaneLog::getPrefix() {
+		return this->prefix;
+	}
+	
+	bool CoordPlaneLog::isLoggingActions() {
+		return this->log_actions;
+	}
+	
+	bool CoordPlaneLog::isLoggingErrors() {
+		return this->log_errors;
+	}
+	
+	void CoordPlaneLog::setPrefix(std::string p) {
+		this->prefix = p;
+	}
+	
+	void CoordPlaneLog::setLoggingActions(bool l) {
+		this->log_actions = l;
+	}
+	
+	void CoordPlaneLog::setLoggingErrors(bool l) {
+		this->log_errors = l;
+	}
+	
 	ErrorCode CoordPlaneLog::move(motor_point_t dest, float speed, int div, bool sync) {
 		if (this->log_actions) {
 			*out << this->prefix << "Linear moving to " << dest.x << "x" << dest.y << " with base speed " << speed
