@@ -1,0 +1,51 @@
+#!/bin/bash
+
+if [ $1 == "stub" ]
+then
+	printf "@echo off\n"
+    printf "cl /W0 /EHsc /I res /LD /FeUSMCDLL.dll misc/Stub.cpp /link /MACHINE:X86\n"
+    exit
+fi
+
+if [ $1 == "native" ]
+then
+	printf "@echo off\n"
+    printf "cl /W0 /EHsc /I . /I res /Fe$2 "
+    find device ctrl-lib cli -name "*.cpp" -or -name "*.cxx" | awk -F/ '{print $0}' | tr '\n' ' '
+	printf " /link /MACHINE:X86 USMCDLL.lib\n"
+    exit
+fi
+
+if [ $1 == "native-lib" ]
+then
+	printf "@echo off\n"
+    printf "cl /W0 /EHsc /I . /I res /LD /Fe$2 "
+    find device ctrl-lib cli -name "*.cpp" -or -name "*.cxx" | awk -F/ '{print $0}' | tr '\n' ' '
+	printf " /link /MACHINE:X86 USMCDLL.lib\n"
+    exit
+fi
+
+if [ $1 == "clr" ]
+then
+	printf "@echo off\n"
+    printf "cl /clr /W0 /I . /I res /Fe$2 "
+    find device ctrl-lib cli -name "*.cpp" -or -name "*.cxx" | awk -F/ '{print $0}' | tr '\n' ' '
+	printf " /link /MACHINE:X86 USMCDLL.lib\n"
+    exit
+fi
+
+if [ $1 == "clr-lib" ]
+then
+	printf "@echo off\n"
+    printf "cl /clr /W0 /I . /I res /LD /Fe$2 "
+    find device ctrl-lib cli -name "*.cpp" -or -name "*.cxx" | awk -F/ '{print $0}' | tr '\n' ' '
+	printf " /link /MACHINE:X86 USMCDLL.lib\n"
+    exit
+fi
+
+mkdir -p winbuild
+./misc/gen-winbuild stub > winbuild/build-stub.bat
+./misc/gen-winbuild native 8smc1.exe > winbuild/build-exe.bat
+./misc/gen-winbuild native 8smc1.dll > winbuild/build-dll.bat
+./misc/gen-winbuild clr 8smc1.exe > winbuild/build-clr.bat
+./misc/gen-winbuild clr-lib 8smc1.dll > winbuild/build-clr-dll.bat

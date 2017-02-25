@@ -34,8 +34,17 @@ Project is on development stage so it may be unstable. There are standart tools 
 
 Builing
 ===================
-Project is built using MinGW cross compiler(build tested on top of Linux and Windows Subsystem for Linux).
-You must install MiscoSMC driver. Create 'res' directory in root of project and copy 'USMCDLL.h' and 'USMCDLL.dll' to it(it required to proper build, these files located in MicroSMC folder in Program files).
+Project is built using MSVC(for release build) and MinGW cross compiler - for testing, because allows incremental build(MinGW build tested on top of Linux and Windows Subsystem for Linux).
+You must install MiscoSMC driver. Create 'res' directory in root of project and copy 'USMCDLL.h', 'USMCDLL.lib' and 'USMCDLL.dll' to it(it required to proper build, these files located in MicroSMC folder in Program files). You should also copy 'USMCDLL.lib' to root of project, if you are building by MSVC without use of stub.
+
+For MSVC:
+See winbuild/README.md. You may execute one of winbuild/*.bat files from project root to build one of targets.
+You can regenerate build files by command:
+```bash
+misc/gen-winbuild
+```
+
+For MinGW:
 Project has two build systems(simply two different Makefile). One is hand-written(old) and is convinient for development in terminal, other(new) is auto-generated and is useful for incremental build(used in IDEs). This repo contains new Makefile.
 You can generate them(NOTE: You should regenerate incremental Makefile if new file is added to project):
 ```bash

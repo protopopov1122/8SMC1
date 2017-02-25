@@ -95,3 +95,6 @@ TODO:
 * Implement facade and GUI.
 
 Conclusion: project functional core is mostly implemented, however laser support must be integrated, so the next thing is GUI.
+
+##### 25/02/2017
+Added MSVC compiler support. TODO: test its executables on real controllers.

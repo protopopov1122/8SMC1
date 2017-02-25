@@ -2,3 +2,8 @@ clean:
 	@rm -f *.o
 	@rm -rf $(BUILD)
 	@mkdir -p $(BUILD)
+	@rm -f *.obj
+	@rm -f *.exe
+	@rm -f *.lib
+	@rm -f *.dll
+	@rm -f *.exp

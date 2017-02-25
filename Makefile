@@ -12,9 +12,7 @@ EXTRA=
 CFLAGS=$(LANG) $(DBG) -I$(HEADERS) $(INCLUDES) $(EXTRA)
 
 LFLAGS=-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread
-LIBS=-Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL
-
-all: $(OUTPUT) stub
+LIBS=-Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLLall: $(OUTPUT) stub
 
 
 CLI.o:
@@ -116,3 +114,8 @@ clean:
 	@rm -f *.o
 	@rm -rf $(BUILD)
 	@mkdir -p $(BUILD)
+	@rm -f *.obj
+	@rm -f *.exe
+	@rm -f *.lib
+	@rm -f *.dll
+	@rm -f *.exp
