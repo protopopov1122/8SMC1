@@ -13,3 +13,4 @@ CFLAGS=$(LANG) $(DBG) -I$(HEADERS) $(INCLUDES) $(EXTRA)
 
 LFLAGS=-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread
 LIBS=-Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL
+

@@ -12,8 +12,13 @@ EXTRA=
 CFLAGS=$(LANG) $(DBG) -I$(HEADERS) $(INCLUDES) $(EXTRA)
 
 LFLAGS=-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread
-LIBS=-Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLLall: $(OUTPUT) stub
+LIBS=-Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL
 
+all: $(OUTPUT) stub
+
+
+Stub.o:
+	$(CC) $(CFLAGS) -c misc/Stub.cpp
 
 Device.o:
 	$(CC) $(CFLAGS) -c device/Device.cpp
