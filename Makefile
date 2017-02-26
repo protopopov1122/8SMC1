@@ -15,92 +15,89 @@ LFLAGS=-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread
 LIBS=-Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLLall: $(OUTPUT) stub
 
 
-CLI.o:
-	$(CC) $(CFLAGS) -c ./cli/CLI.cpp
-
-DevCLI.o:
-	$(CC) $(CFLAGS) -c ./cli/DevCLI.cpp
-
-main.o:
-	$(CC) $(CFLAGS) -c ./cli/main.cpp
-
-CoordController.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/CoordController.cpp
-
-DeviceController.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/DeviceController.cpp
-
-AST.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/graph/AST.cpp
-
-DefaultFunctions.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/graph/DefaultFunctions.cpp
-
-FunctionEngine.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/graph/FunctionEngine.cpp
-
-FunctionLexer.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/graph/FunctionLexer.cpp
-
-FunctionParser.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/graph/FunctionParser.cpp
-
-CircleGenerator.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/misc/CircleGenerator.cpp
-
-GCodeParser.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/misc/GCodeParser.cpp
-
-GraphBuilder.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/misc/GraphBuilder.cpp
-
-CoordPlaneLog.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/plane/CoordPlaneLog.cpp
-
-CoordPlaneMap.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/plane/CoordPlaneMap.cpp
-
-CoordPlaneStack.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/plane/CoordPlaneStack.cpp
-
-CoordPlaneValidator.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/plane/CoordPlaneValidator.cpp
-
-VirtualCoordPlane.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/plane/VirtualCoordPlane.cpp
-
-SystemManager.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/SystemManager.cpp
-
-CoordTask.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/task/CoordTask.cpp
-
-CoordTaskWrapper.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/task/CoordTaskWrapper.cpp
-
-BasicCoordTranslator.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/translator/BasicCoordTranslator.cpp
-
-LinearCoordTranslator.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/translator/LinearCoordTranslator.cpp
-
-LogarithmicCoordTranslator.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/translator/LogarithmicCoordTranslator.cpp
-
-PolarCoordTranslator.o:
-	$(CC) $(CFLAGS) -c ./ctrl-lib/translator/PolarCoordTranslator.cpp
-
 Device.o:
-	$(CC) $(CFLAGS) -c ./device/Device.cpp
+	$(CC) $(CFLAGS) -c device/Device.cpp
 
 DeviceManager.o:
-	$(CC) $(CFLAGS) -c ./device/DeviceManager.cpp
+	$(CC) $(CFLAGS) -c device/DeviceManager.cpp
 
 MotorTask.o:
-	$(CC) $(CFLAGS) -c ./device/MotorTask.cpp
+	$(CC) $(CFLAGS) -c device/MotorTask.cpp
 
-Stub.o:
-	$(CC) $(CFLAGS) -c ./misc/Stub.cpp
+CoordController.o:
+	$(CC) $(CFLAGS) -c ctrl-lib/CoordController.cpp
+
+DeviceController.o:
+	$(CC) $(CFLAGS) -c ctrl-lib/DeviceController.cpp
+
+AST.o:
+	$(CC) $(CFLAGS) -c ctrl-lib/graph/AST.cpp
+
+DefaultFunctions.o:
+	$(CC) $(CFLAGS) -c ctrl-lib/graph/DefaultFunctions.cpp
+
+FunctionEngine.o:
+	$(CC) $(CFLAGS) -c ctrl-lib/graph/FunctionEngine.cpp
+
+FunctionLexer.o:
+	$(CC) $(CFLAGS) -c ctrl-lib/graph/FunctionLexer.cpp
+
+FunctionParser.o:
+	$(CC) $(CFLAGS) -c ctrl-lib/graph/FunctionParser.cpp
+
+CircleGenerator.o:
+	$(CC) $(CFLAGS) -c ctrl-lib/misc/CircleGenerator.cpp
+
+GCodeParser.o:
+	$(CC) $(CFLAGS) -c ctrl-lib/misc/GCodeParser.cpp
+
+GraphBuilder.o:
+	$(CC) $(CFLAGS) -c ctrl-lib/misc/GraphBuilder.cpp
+
+CoordPlaneLog.o:
+	$(CC) $(CFLAGS) -c ctrl-lib/plane/CoordPlaneLog.cpp
+
+CoordPlaneMap.o:
+	$(CC) $(CFLAGS) -c ctrl-lib/plane/CoordPlaneMap.cpp
+
+CoordPlaneStack.o:
+	$(CC) $(CFLAGS) -c ctrl-lib/plane/CoordPlaneStack.cpp
+
+CoordPlaneValidator.o:
+	$(CC) $(CFLAGS) -c ctrl-lib/plane/CoordPlaneValidator.cpp
+
+VirtualCoordPlane.o:
+	$(CC) $(CFLAGS) -c ctrl-lib/plane/VirtualCoordPlane.cpp
+
+SystemManager.o:
+	$(CC) $(CFLAGS) -c ctrl-lib/SystemManager.cpp
+
+CoordTask.o:
+	$(CC) $(CFLAGS) -c ctrl-lib/task/CoordTask.cpp
+
+CoordTaskWrapper.o:
+	$(CC) $(CFLAGS) -c ctrl-lib/task/CoordTaskWrapper.cpp
+
+BasicCoordTranslator.o:
+	$(CC) $(CFLAGS) -c ctrl-lib/translator/BasicCoordTranslator.cpp
+
+LinearCoordTranslator.o:
+	$(CC) $(CFLAGS) -c ctrl-lib/translator/LinearCoordTranslator.cpp
+
+LogarithmicCoordTranslator.o:
+	$(CC) $(CFLAGS) -c ctrl-lib/translator/LogarithmicCoordTranslator.cpp
+
+PolarCoordTranslator.o:
+	$(CC) $(CFLAGS) -c ctrl-lib/translator/PolarCoordTranslator.cpp
+
+CLI.o:
+	$(CC) $(CFLAGS) -c cli/CLI.cpp
+
+DevCLI.o:
+	$(CC) $(CFLAGS) -c cli/DevCLI.cpp
+
+main.o:
+	$(CC) $(CFLAGS) -c cli/main.cpp
 
 stub: Stub.o
 	$(CC) -shared -o $(BUILD)/USMCDLL.dll Stub.o -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread
@@ -119,3 +116,7 @@ clean:
 	@rm -f *.lib
 	@rm -f *.dll
 	@rm -f *.exp
+	@rm -f *.ilk
+	@rm -f *.pdb
+	@rm -f *.idb
+	@rm -f *.manifest

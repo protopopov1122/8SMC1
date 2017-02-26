@@ -98,3 +98,6 @@ Conclusion: project functional core is mostly implemented, however laser support
 
 ##### 25/02/2017
 Added MSVC compiler support. TODO: test its executables on real controllers.
+
+##### 26/02/2017
+Started implementing UI based on WxWidgets(require version 3.10), currently added only compilation support and stub. 

@@ -3,14 +3,14 @@
 if [ $1 == "stub" ]
 then
     printf "@echo off\n"
-    printf "cl /W0 /EHsc /I res /Gm /LD /FeUSMCDLL.dll misc/Stub.cpp /link /MACHINE:X86\n"
+    printf "cl /W0 /EHsc /I res /Zi /Gm /LD /FeUSMCDLL.dll misc/Stub.cpp /link /MACHINE:X86\n"
     exit
 fi
 
 if [ $1 == "native" ]
 then
     printf "@echo off\n"
-    printf "cl /W0 /EHsc /Zi /Gm /I . /I res /Fe$2 "
+    printf "cl /W0 /EHsc /Zi /Gm /I . /I res /Fe$2.exe "
     find device ctrl-lib cli -name "*.cpp" -or -name "*.cxx" | awk -F/ '{print $0}' | tr '\n' ' '
     printf " /link /MACHINE:X86 USMCDLL.lib\n"
     exit
@@ -19,16 +19,17 @@ fi
 if [ $1 == "native-lib" ]
 then
     printf "@echo off\n"
-    printf "cl /W0 /EHsc /Gm /I . /I res /LD /Fe$2 "
+    printf "cl /Zi /W0 /EHsc /Gm /I . /I res /LD /Fe$2.dll "
     find device ctrl-lib cli -name "*.cpp" -or -name "*.cxx" | awk -F/ '{print $0}' | tr '\n' ' '
     printf " /link /MACHINE:X86 USMCDLL.lib\n"
+	printf "lib /OUT:$2.lib *.obj\n"
     exit
 fi
 
 if [ $1 == "clr" ]
 then
     printf "@echo off\n"
-    printf "cl /clr /Gm /W0 /I . /I res /Fe$2 "
+    printf "cl /clr /Zi /Gm /W0 /I . /I res /Fe$2.exe "
     find device ctrl-lib cli -name "*.cpp" -or -name "*.cxx" | awk -F/ '{print $0}' | tr '\n' ' '
     printf " /link USMCDLL.lib\n"
     exit
@@ -37,15 +38,27 @@ fi
 if [ $1 == "clr-lib" ]
 then
     printf "@echo off\n"
-    printf "cl /clr /Gm /W0 /I . /I res /LD /Fe$2 "
+    printf "cl /clr /Zi /Gm /W0 /I . /I res /LD /Fe$2.dll "
     find device ctrl-lib cli -name "*.cpp" -or -name "*.cxx" | awk -F/ '{print $0}' | tr '\n' ' '
     printf " /link USMCDLL.lib\n"
+	printf "lib /OUT:$2.lib *.obj\n"
     exit
+fi
+
+if [ $1 == "ui" ]
+then
+	printf "@echo off\n"
+	printf "cl /EHsc /Zi /Gm /W0 /I. /I %%1\\include /I %%1\\lib\\\\vc_dll\\mswud /Fe$2.exe "
+    find ui -name "*.cpp" -or -name "*.cxx" | awk -F/ '{print $0}' | tr '\n' ' '
+	printf " /link %%1\\lib\\\\vc_dll\\wxmsw31ud.lib 8smc1.lib /MACHINE:x86\n"
+	printf "copy %%1\\\\lib\\\\vc_dll\wxmsw310ud_vc_custom.dll .\n"
+	exit
 fi
 
 mkdir -p winbuild
 ./misc/gen-winbuild stub > winbuild/build-stub.bat
-./misc/gen-winbuild native 8smc1.exe > winbuild/build-exe.bat
-./misc/gen-winbuild native 8smc1.dll > winbuild/build-dll.bat
-./misc/gen-winbuild clr 8smc1.exe > winbuild/build-clr.bat
-./misc/gen-winbuild clr-lib 8smc1.dll > winbuild/build-clr-dll.bat
+./misc/gen-winbuild native 8smc1 > winbuild/build-exe.bat
+./misc/gen-winbuild native-lib 8smc1 > winbuild/build-dll.bat
+./misc/gen-winbuild clr 8smc1 > winbuild/build-clr.bat
+./misc/gen-winbuild clr-lib 8smc1 > winbuild/build-clr-dll.bat
+./misc/gen-winbuild ui ui > winbuild/build-ui.bat

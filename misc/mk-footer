@@ -7,3 +7,7 @@ clean:
 	@rm -f *.lib
 	@rm -f *.dll
 	@rm -f *.exp
+	@rm -f *.ilk
+	@rm -f *.pdb
+	@rm -f *.idb
+	@rm -f *.manifest
