@@ -4,6 +4,8 @@ if [ $1 == "stub" ]
 then
     printf "@echo off\n"
     printf "cl /W0 /EHsc /I res /Zi /Gm /LD /FeUSMCDLL.dll misc/Stub.cpp /link /MACHINE:X86\n"
+    printf "move USMCDLL.dll build\n"
+    printf "move USMCDLL.lib build\n"
     exit
 fi
 
@@ -12,7 +14,8 @@ then
     printf "@echo off\n"
     printf "cl /W0 /EHsc /Zi /Gm /I . /I res /Fe$2.exe "
     find device ctrl-lib cli -name "*.cpp" -or -name "*.cxx" | awk -F/ '{print $0}' | tr '\n' ' '
-    printf " /link /MACHINE:X86 USMCDLL.lib\n"
+    printf " /link /MACHINE:X86 build\\\\USMCDLL.lib\n"
+    printf "move $2.exe build\n"
     exit
 fi
 
@@ -21,8 +24,10 @@ then
     printf "@echo off\n"
     printf "cl /Zi /W0 /EHsc /Gm /I . /I res /LD /Fe$2.dll "
     find device ctrl-lib cli -name "*.cpp" -or -name "*.cxx" | awk -F/ '{print $0}' | tr '\n' ' '
-    printf " /link /MACHINE:X86 USMCDLL.lib\n"
-	printf "lib /OUT:$2.lib *.obj\n"
+    printf " /link /MACHINE:X86 build\\\\USMCDLL.lib\n"
+    printf "lib /OUT:$2.lib *.obj\n"
+    printf "move $2.dll build\n"
+    printf "move $2.lib build\n"
     exit
 fi
 
@@ -41,7 +46,7 @@ then
     printf "cl /clr /Zi /Gm /W0 /I . /I res /LD /Fe$2.dll "
     find device ctrl-lib cli -name "*.cpp" -or -name "*.cxx" | awk -F/ '{print $0}' | tr '\n' ' '
     printf " /link USMCDLL.lib\n"
-	printf "lib /OUT:$2.lib *.obj\n"
+    printf "lib /OUT:$2.lib *.obj\n"
     exit
 fi
 
@@ -50,8 +55,9 @@ then
 	printf "@echo off\n"
 	printf "cl /EHsc /Zi /Gm /std:c++latest /W0 /I. /I res /I %%1\\include /I %%1\\lib\\\\vc_dll\\mswud /Fe$2.exe "
     find ui -name "*.cpp" -or -name "*.cxx" | awk -F/ '{print $0}' | tr '\n' ' '
-	printf " /link %%1\\lib\\\\vc_dll\\wxmsw31u.lib USMCDLL.lib 8smc1.lib /MACHINE:x86\n"
-	printf "copy %%1\\\\lib\\\\vc_dll\wxmsw310u_vc_custom.dll .\n"
+	printf " /link %%1\\lib\\\\vc_dll\\wxmsw31u.lib build\\\\USMCDLL.lib build\\\\8smc1.lib /MACHINE:x86\n"
+	printf "copy %%1\\\\lib\\\\vc_dll\wxmsw310u_vc_custom.dll build\n"
+	printf "move $2.exe build\n"
 	exit
 fi
 
