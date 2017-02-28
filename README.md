@@ -36,6 +36,7 @@ Builing
 ===================
 Project is built using MSVC and MinGW cross compiler(MinGW build tested on top of Linux and Windows Subsystem for Linux).
 You must install MiscoSMC driver. Create 'res' directory in root of project and copy 'USMCDLL.h', 'USMCDLL.lib' and 'USMCDLL.dll' to it(it required to proper build, these files located in MicroSMC folder in Program files). You should also copy 'USMCDLL.lib' to root of project, if you are building by MSVC without use of stub.
+If you build GUI using MinGW, wxWidgets(version 3.1.0) must be compiled with additional link flags "-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic" as monolithic unicode shared library.
 
 For MSVC:
 See winbuild/README.md. You may execute one of winbuild/*.bat files from project root to build one of targets.
@@ -55,7 +56,9 @@ Build commands for both are the same:
 ```bash
 make clean	# Clean all
 make stub	# Build stub to test CLI without controller
-make all	# Build command-line interface and stub
+make 8smc1.exe # Build CLI
+make 8smc1.dll # Build library; required for GUI
+make ui.exe WX=$(WX) # Build GUI(currently not implemented); $(WX) - wxWidgets-3.1.0 directory; requires 8smc1.dll build first.
 ```
 
 Authors and Contributions

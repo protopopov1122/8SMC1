@@ -1,9 +1,11 @@
 CC=i686-w64-mingw32-g++
 
-OUTPUT=prog.exe
+OUTPUT=8smc1
+UI=ui
 BUILD=./build
 HEADERS=./res
 LIB=./res
+WX=.
 
 LANG=-std=c++11 -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-attributes
 DBG=-O0
