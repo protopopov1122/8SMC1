@@ -1,5 +1,6 @@
-#ifndef _8SMC1_UI_BASE_H_
-#define _8SMC1_UI_BASE_H_
+#ifndef _8SMC1_UI_CALX_H_
+#define _8SMC1_UI_CALX_H_
+
 
 #define __WXMSW__
 #define WXUSINGDLL
@@ -8,5 +9,7 @@
 #ifndef WX_PRECOMP
     #include <wx/wx.h>
 #endif
+#include "ctrl-lib/SystemManager.h"
+
 
 #endif

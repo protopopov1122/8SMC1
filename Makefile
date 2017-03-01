@@ -107,14 +107,20 @@ main.o:
 	$(CC) $(CFLAGS) -c cli/main.cpp
 
 
-app.o:
-	$(CC) $(CFLAGS) -I $(WX)include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/app.cpp
+CalxApp.o:
+	$(CC) $(CFLAGS) -I $(WX)include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxApp.cpp
 
-ConsoleWidget.o:
-	$(CC) $(CFLAGS) -I $(WX)include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/ConsoleWidget.cpp
+CalxConsoleWidget.o:
+	$(CC) $(CFLAGS) -I $(WX)include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxConsoleWidget.cpp
 
-mainFrame.o:
-	$(CC) $(CFLAGS) -I $(WX)include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/mainFrame.cpp
+CalxDevicePanel.o:
+	$(CC) $(CFLAGS) -I $(WX)include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxDevicePanel.cpp
+
+CalxFrame.o:
+	$(CC) $(CFLAGS) -I $(WX)include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxFrame.cpp
+
+CalxPanel.o:
+	$(CC) $(CFLAGS) -I $(WX)include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxPanel.cpp
 
 stub: Stub.o
 	$(CC) -shared -o $(BUILD)/USMCDLL.dll Stub.o -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread
@@ -127,10 +133,10 @@ $(OUTPUT).dll: Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CoordC
 	mkdir -p $(BUILD)
 	$(CC) -shared -o $(BUILD)/$(OUTPUT).dll Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CoordController.o DeviceController.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o CircleGenerator.o GCodeParser.o GraphBuilder.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o VirtualCoordPlane.o SystemManager.o CoordTask.o CoordTaskWrapper.o BasicCoordTranslator.o LinearCoordTranslator.o LogarithmicCoordTranslator.o PolarCoordTranslator.o  -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL -Wl,--out-implib,$(BUILD)/$(OUTPUT).a
 
-$(UI).exe: app.o ConsoleWidget.o mainFrame.o
+$(UI).exe: CalxApp.o CalxConsoleWidget.o CalxDevicePanel.o CalxFrame.o CalxPanel.o
 	mkdir -p $(BUILD)
 	cp $(WX)/lib/wxmsw310u_gcc_custom.dll $(BUILD)
-	$(CC) -o $(BUILD)/$(UI).exe app.o ConsoleWidget.o mainFrame.o  -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=$(BUILD) -lUSMCDLL -l8smc1 -lwxmsw310u_gcc_custom
+	$(CC) -o $(BUILD)/$(UI).exe CalxApp.o CalxConsoleWidget.o CalxDevicePanel.o CalxFrame.o CalxPanel.o  -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=$(BUILD) -lUSMCDLL -l8smc1 -lwxmsw310u_gcc_custom
 
 
 clean:
