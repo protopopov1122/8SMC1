@@ -6,9 +6,6 @@
 #include <wx/textctrl.h>
 
 namespace CalX {
-	BEGIN_EVENT_TABLE(CalxFrame, wxFrame)
-	END_EVENT_TABLE()
-	
 	CalxFrame::CalxFrame(std::string title)
 		: wxFrame::wxFrame(nullptr, wxID_ANY, title) {
 		

@@ -12,9 +12,8 @@ namespace CalX {
 			CalxFrame(std::string);
 			std::ostream *getConsole();
 			
-			void OnClose(wxCloseEvent&);
 		private:
-			wxDECLARE_EVENT_TABLE();
+			void OnClose(wxCloseEvent&);
 			
 			std::ostream *console;
 	};

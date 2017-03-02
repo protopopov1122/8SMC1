@@ -2,11 +2,10 @@
 #define _8SMC1_UI_CALX_DEVICE_PANEL_H_
 
 #include "calx.h"
-#include <wx/listbook.h>
 
 namespace CalX {
 	
-	class CalxDevicePanel : public wxListbook {
+	class CalxDevicePanel : public wxPanel {
 		public:
 			CalxDevicePanel(wxWindow*, wxWindowID);
 	};
