@@ -2,8 +2,10 @@
 #define _8SMC1_CTRL_LIB_DEVICE_CONTROLLER_H_
 
 #include <cinttypes>
+#include <vector>
 #include "device/DeviceManager.h"
 #include "CtrlCore.h"
+#include "EventListener.h"
 
 /* This file contains definitions of high-level device controller library.
    Library purpose is controlling device state, speed, complex
@@ -20,7 +22,7 @@ namespace _8SMC1 {
 #define TRAILER_COMEBACK 800
 
 	class CoordController;	// Forward referencing
-
+	
 	class DeviceController {
 		public:
 			friend class CoordController;
@@ -30,18 +32,30 @@ namespace _8SMC1 {
 			Device *getDevice();
 			DWORD getID();
 
-			ErrorCode checkTrailers();
-			ErrorCode waitWhileRunning();
 			ErrorCode moveToTrailer(int, int);
-			ErrorCode resetPosition();
 			ErrorCode startMove(motor_coord_t, float, int, bool = false);
 			ErrorCode startRelativeMove(motor_coord_t, float, int, bool = false);
 			void stop();
 
 			motor_coord_t getPosition();
+			
+			void addEventListener(MotorEventListener*);
+			void removeEventListener(MotorEventListener*);
+		protected:
+			void sendMovingEvent(MotorMoveEvent&);
+			void sendMovedEvent(MotorMoveEvent&);
+			void sendStoppedEvent(MotorErrorEvent&);
+			void sendRollingEvent(MotorRollEvent&);
+			void sendRolledEvent(MotorRollEvent&);
 		private:
+			ErrorCode waitWhileRunning();
+			ErrorCode checkTrailers();
+			ErrorCode resetPosition();
+			
 			Device *dev;
 			MoveType dest;
+			
+			std::vector<MotorEventListener*> listeners;
 	};
 }
 

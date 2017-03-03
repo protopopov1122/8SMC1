@@ -10,6 +10,34 @@ using namespace _8SMC1;
 
 namespace CalX {
 
+	CalxMotorEventListener::CalxMotorEventListener(CalxDeviceCtrl *ctrl) {
+		this->dev = ctrl;
+	}
+	
+	CalxMotorEventListener::~CalxMotorEventListener() {
+		
+	}
+	
+	void CalxMotorEventListener::moving(MotorMoveEvent &evt) {
+		dev->Enable(false);
+	}
+	
+	void CalxMotorEventListener::moved(MotorMoveEvent &evt) {
+		dev->Enable(true);
+	}
+	
+	void CalxMotorEventListener::stopped(MotorErrorEvent &evt) {
+		dev->Enable(true);
+	}
+	
+	void CalxMotorEventListener::rolling(MotorRollEvent &evt) {
+		dev->Enable(false);
+	}
+	
+	void CalxMotorEventListener::rolled(MotorRollEvent &evt) {
+		dev->Enable(true);
+	}
+
 	class CalxDevMoveAction : public CalxAction {
 		public:
 			CalxDevMoveAction(DeviceController *dev, int dest, float speed, bool rel) {
@@ -60,7 +88,7 @@ namespace CalX {
 		: wxPanel::wxPanel(win, id) {
 		this->dev = dev;
 		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
-		this->queue->Run();
+		this->listener = new CalxMotorEventListener(this);
 		
 		wxStaticBox *box = new wxStaticBox(this, wxID_ANY, "Device #" + std::to_string(this->dev->getID()));
 		wxStaticBoxSizer *sizer = new wxStaticBoxSizer(box, wxHORIZONTAL);
@@ -89,8 +117,24 @@ namespace CalX {
 		wxPanel *movePanel = new wxPanel(box, wxID_ANY);
 		wxBoxSizer *moveSizer = new wxBoxSizer(wxVERTICAL);
 		
-		moveSpin = new wxSpinCtrl(movePanel, wxID_ANY, wxEmptyString, wxDefaultPosition,  wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
-		moveSizer->Add(moveSpin, 0, wxEXPAND);
+		wxPanel *moveDestPanel = new wxPanel(movePanel, wxID_ANY);
+		wxBoxSizer *moveDestSizer = new wxBoxSizer(wxHORIZONTAL);
+		wxStaticText *moveDestText = new wxStaticText(moveDestPanel, wxID_ANY, "Destination: ");
+		moveDestSizer->Add(moveDestText, 0, wxALIGN_CENTER);
+		moveSpin = new wxSpinCtrl(moveDestPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,  wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
+		moveDestSizer->Add(moveSpin, 1, wxEXPAND);
+		moveDestPanel->SetSizer(moveDestSizer);
+		moveSizer->Add(moveDestPanel, 1, wxEXPAND);
+		
+		wxPanel *moveSpeedPanel = new wxPanel(movePanel, wxID_ANY);
+		wxBoxSizer *moveSpeedSizer = new wxBoxSizer(wxHORIZONTAL);
+		wxStaticText *moveSpeedText = new wxStaticText(moveSpeedPanel, wxID_ANY, "Speed: ");
+		moveSpeedSizer->Add(moveSpeedText, 0, wxALIGN_CENTER);
+		this->moveSpeedSpin = new wxSpinCtrl(moveSpeedPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,  wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
+		moveSpeedSizer->Add(moveSpeedSpin, 1, wxEXPAND);
+		moveSpeedPanel->SetSizer(moveSpeedSizer);
+		moveSizer->Add(moveSpeedPanel, 1, wxEXPAND);
+		
 		
 		wxPanel *moveCtrlPanel = new wxPanel(movePanel, wxID_ANY);
 		wxBoxSizer *moveCtrlSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -104,7 +148,7 @@ namespace CalX {
 		moveCtrlSizer->Add(rmoveButton, 1, wxEXPAND);
 		
 		moveCtrlPanel->SetSizer(moveCtrlSizer);
-		moveSizer->Add(moveCtrlPanel, 0, wxALL);
+		moveSizer->Add(moveCtrlPanel, 0, wxALL | wxEXPAND);
 		
 		movePanel->SetSizer(moveSizer);
 		sizer->Add(movePanel, 0, wxALL, 10);
@@ -136,6 +180,8 @@ namespace CalX {
 		this->Bind(wxEVT_COMMAND_QUEUE_UPDATE, &CalxDeviceCtrl::threadUpdate, this);
 		Bind(wxEVT_CLOSE_WINDOW, &CalxDeviceCtrl::OnExit, this);
 		// Post init
+		this->dev->addEventListener(this->listener);
+		this->queue->Run();
 		updateUI();
 	}
 	
@@ -153,7 +199,6 @@ namespace CalX {
 		this->state->SetLabel(stat);
 		this->trailer1->SetLabel(tra1);
 		this->trailer2->SetLabel(tra2);
-		this->Enable(this->queue->isEmpty());
 	}
 	
 	void CalxDeviceCtrl::updateButtonClick(wxCommandEvent &evt) {
@@ -179,11 +224,13 @@ namespace CalX {
 	}
 	
 	void CalxDeviceCtrl::moveClick(wxCommandEvent &evt) {
-		this->queue->addAction(new CalxDevMoveAction(dev, this->moveSpin->GetValue(), 4000, false));
+		this->queue->addAction(new CalxDevMoveAction(dev, this->moveSpin->GetValue(),
+			this->moveSpeedSpin->GetValue(), false));
 	}
 	
 	void CalxDeviceCtrl::rmoveClick(wxCommandEvent &evt) {
-		this->queue->addAction(new CalxDevMoveAction(dev, this->moveSpin->GetValue(), 4000, true));
+		this->queue->addAction(new CalxDevMoveAction(dev, this->moveSpin->GetValue(),
+			this->moveSpeedSpin->GetValue(), true));
 	}
 	
 	void CalxDeviceCtrl::threadUpdate(wxThreadEvent &evt) {
@@ -191,6 +238,7 @@ namespace CalX {
 	}
 	
 	void CalxDeviceCtrl::OnExit(wxCloseEvent &evt) {
+		this->dev->removeEventListener(this->listener);
 		this->queue->stop();
 		this->queue->Kill();
 		this->dev->stop();

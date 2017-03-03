@@ -108,25 +108,25 @@ main.o:
 
 
 CalxActionQueue.o:
-	$(CC) $(CFLAGS) -I $(WX)include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxActionQueue.cpp
+	$(CC) $(CFLAGS) -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxActionQueue.cpp
 
 CalxApp.o:
-	$(CC) $(CFLAGS) -I $(WX)include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxApp.cpp
+	$(CC) $(CFLAGS) -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxApp.cpp
 
 CalxConsoleWidget.o:
-	$(CC) $(CFLAGS) -I $(WX)include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxConsoleWidget.cpp
+	$(CC) $(CFLAGS) -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxConsoleWidget.cpp
 
 CalxDeviceCtrl.o:
-	$(CC) $(CFLAGS) -I $(WX)include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxDeviceCtrl.cpp
+	$(CC) $(CFLAGS) -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxDeviceCtrl.cpp
 
 CalxDevicePanel.o:
-	$(CC) $(CFLAGS) -I $(WX)include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxDevicePanel.cpp
+	$(CC) $(CFLAGS) -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxDevicePanel.cpp
 
 CalxFrame.o:
-	$(CC) $(CFLAGS) -I $(WX)include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxFrame.cpp
+	$(CC) $(CFLAGS) -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxFrame.cpp
 
 CalxPanel.o:
-	$(CC) $(CFLAGS) -I $(WX)include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxPanel.cpp
+	$(CC) $(CFLAGS) -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxPanel.cpp
 
 stub: Stub.o
 	$(CC) -shared -o $(BUILD)/USMCDLL.dll Stub.o -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread

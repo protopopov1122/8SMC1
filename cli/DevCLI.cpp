@@ -254,19 +254,6 @@ namespace _8SMC1 {
 			#undef EPAR
 			#undef PAR
 			std::cout << "Parameter '" << name << "' set to " << (value ? "true" : "false") << std::endl;
-		} else if (com.compare("reset") == 0) {
-			if (args.empty()) {
-				std::cout << "Provide device id" << std::endl;
-			} else {
-				DeviceController *dev = sysman->getDeviceController(std::stoi(args.at(0)));
-				if (dev == nullptr) {
-					std::cout << "Device not found" << std::endl;
-					return;
-				}
-				if (dev->resetPosition() == ErrorCode::NoError) {
-					std::cout << "\tOk" << std::endl;
-				}
-			}
 		} else {
 			std::cout << "Wrong command '" << com << "'" << std::endl;
 		}
