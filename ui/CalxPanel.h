@@ -3,6 +3,7 @@
 
 #include "calx.h"
 #include "CalxDevicePanel.h"
+#include "CalxCoordPanel.h"
 #include <wx/notebook.h>
 
 namespace CalX {
@@ -12,6 +13,7 @@ namespace CalX {
 			CalxPanel(wxWindow*, wxWindowID);
 		private:
 			CalxDevicePanel *dev;
+			CalxCoordPanel *coord;
 	};
 }
 

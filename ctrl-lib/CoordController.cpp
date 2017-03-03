@@ -2,6 +2,7 @@
 #include "misc/CircleGenerator.h"
 #include <iostream>
 #include <stdio.h>
+#include <algorithm>
 #define _USE_MATH_DEFINES
 #include <math.h>
 
@@ -21,7 +22,9 @@ namespace _8SMC1 {
 	}
 
 	CoordController::~CoordController() {
-
+		for (const auto& l : this->listeners) {
+			delete l;
+		}
 	}
 
 	void CoordController::dump(std::ostream &os) {
@@ -72,17 +75,28 @@ namespace _8SMC1 {
 		}
 		xAxis->dest = point.x > xAxis->dev->getPosition() ? MoveType::MoveUp :
 				MoveType::MoveDown;
+		MotorMoveEvent xmevt = {point.x, x_speed, div};
 		xAxis->dev->start(point.x, x_speed, div, false);
+		xAxis->sendMovingEvent(xmevt);
 		
+		MotorMoveEvent ymevt = {point.y, y_speed, div};
 		yAxis->dest = point.y > yAxis->dev->getPosition() ? MoveType::MoveUp :
 				MoveType::MoveDown;
 		yAxis->dev->start(point.y, y_speed, div, false);
+		xAxis->sendMovingEvent(ymevt);
+		CoordMoveEvent evt = {point, speed, div, sync};
+		sendMovingEvent(evt);
 		while (xDev->isRunning() || yDev->isRunning()) {
 			if (xDev->isRunning()) {
 				ErrorCode code = xAxis->checkTrailers();
 				if (code != ErrorCode::NoError) {
 					xAxis->stop();
 					yAxis->stop();
+					MotorErrorEvent merrevt = {code};
+					xAxis->sendStoppedEvent(merrevt);
+					yAxis->sendStoppedEvent(merrevt);
+					CoordErrorEvent eevt = {code};
+					sendStoppedEvent(eevt);
 					return code;
 				}
 			}
@@ -91,10 +105,18 @@ namespace _8SMC1 {
 				if (code != ErrorCode::NoError) {
 					xAxis->stop();
 					yAxis->stop();
+					MotorErrorEvent merrevt = {code};
+					xAxis->sendStoppedEvent(merrevt);
+					yAxis->sendStoppedEvent(merrevt);
+					CoordErrorEvent eevt = {code};
+					sendStoppedEvent(eevt);
 					return code;
 				}
 			}
 		}
+		xAxis->sendMovedEvent(xmevt);
+		xAxis->sendMovedEvent(ymevt);
+		sendMovedEvent(evt);
 		return ErrorCode::NoError;
 	}
 
@@ -121,6 +143,11 @@ namespace _8SMC1 {
 		yAxis->dest = (tr == 1 ? MoveType::RollDown : MoveType::RollUp);
 		bool xpr = false;
 		bool ypr = false;
+		MotorRollEvent mevt = {tr};
+		xAxis->sendRollingEvent(mevt);
+		yAxis->sendRollingEvent(mevt);
+		CoordCalibrateEvent evt = {tr};
+		sendCalibratingEvent(evt);
 		while (!(xpr && ypr)) {
 			if (!xAxis->getDevice()->isTrailerPressed(tr)) {
 				if (!xpr && !xAxis->getDevice()->isRunning()) {
@@ -168,6 +195,9 @@ namespace _8SMC1 {
 
 		xAxis->resetPosition();
 		yAxis->resetPosition();
+		xAxis->sendRolledEvent(mevt);
+		yAxis->sendRolledEvent(mevt);
+		sendCalibratedEvent(evt);
 		return ErrorCode::NoError;
 	}
 
@@ -240,5 +270,46 @@ namespace _8SMC1 {
 		this->calibrate(tid2);
 		motor_point_t max = getPosition();
 		this->size = {min.x, min.y, abs(max.x - min.x), abs(max.y - min.y)};
+	}
+	
+	void CoordController::addEventListener(CoordEventListener *l) {
+		this->listeners.push_back(l);
+	}
+	
+	void CoordController::removeEventListener(CoordEventListener *l) {
+		this->listeners.erase(
+			std::remove(this->listeners.begin(), this->listeners.end(),
+				l), this->listeners.end());
+		delete l;	
+	}
+	
+	void CoordController::sendMovingEvent(CoordMoveEvent &evt) {
+		for (const auto& l : this->listeners) {
+			l->moving(evt);
+		}
+	}
+	
+	void CoordController::sendMovedEvent(CoordMoveEvent &evt) {
+		for (const auto& l : this->listeners) {
+			l->moved(evt);
+		}
+	}
+	
+	void CoordController::sendStoppedEvent(CoordErrorEvent &evt) {
+		for (const auto& l : this->listeners) {
+			l->stopped(evt);
+		}
+	}
+	
+	void CoordController::sendCalibratingEvent(CoordCalibrateEvent &evt) {
+		for (const auto& l : this->listeners) {
+			l->calibrating(evt);
+		}
+	}
+	
+	void CoordController::sendCalibratedEvent(CoordCalibrateEvent &evt) {
+		for (const auto& l : this->listeners) {
+			l->calibrated(evt);
+		}
 	}
 }

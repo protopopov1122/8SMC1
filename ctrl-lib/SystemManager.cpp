@@ -76,30 +76,29 @@ namespace _8SMC1 {
 		return this->coords.size();
 	}
 
-	CoordPlaneStack *SystemManager::getCoord(size_t c) {
+	CoordHandle *SystemManager::getCoord(size_t c) {
 		if (c >= this->coords.size()) {
 			return nullptr;
 		}
 		return this->coords.at(c);
 	}
 
-	CoordController *SystemManager::getCoordController(size_t c) {
-		if (c >= this->coordCtrl.size()) {
-			return nullptr;
-		}
-		return this->coordCtrl.at(c);
-	}
-
-	CoordPlaneStack *SystemManager::createCoord(DWORD d1, DWORD d2) {
+	CoordHandle *SystemManager::createCoord(DWORD d1, DWORD d2) {
 		if (d1 >= this->devman->getDeviceCount() || d2 >= this->devman->getDeviceCount()) {
 			return nullptr;
 		}
 
 		CoordController *ctrl = new CoordController(this->getDeviceController(d1),
 			this->getDeviceController(d2));
-		this->coordCtrl.push_back(ctrl);
-		CoordPlaneStack *stack = new CoordPlaneStack(ctrl);
-		this->coords.push_back(stack);
-		return stack;
+		CoordHandle *handle = new CoordHandle(this->coords.size(), ctrl);
+		this->coords.push_back(handle);
+		return handle;
+	}
+	
+	void SystemManager::removeCoord(size_t id) {
+		if (id < this->coords.size()) {
+			delete this->coords.at(id);
+			this->coords.erase(this->coords.begin() + id);
+		}
 	}
 }

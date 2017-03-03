@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include "ctrl-lib/EventListener.h"
 #include "ctrl-lib/DeviceController.h"
 
 /* Coordinate plane is abstraction that represents real motors.
@@ -46,11 +47,21 @@ namespace _8SMC1 {
 			virtual motor_point_t getPosition();
 			virtual motor_rect_t getSize();
 			virtual void dump(std::ostream&);
-		private:
+			
+			void addEventListener(CoordEventListener*);
+			void removeEventListener(CoordEventListener*);
+		private:		
 			DeviceController *xAxis;
 			DeviceController *yAxis;
 			
 			motor_rect_t size;
+			std::vector<CoordEventListener*> listeners;
+			
+			void sendMovingEvent(CoordMoveEvent&);
+			void sendMovedEvent(CoordMoveEvent&);
+			void sendStoppedEvent(CoordErrorEvent&);
+			void sendCalibratingEvent(CoordCalibrateEvent&);
+			void sendCalibratedEvent(CoordCalibrateEvent&);
 			
 	};
 	

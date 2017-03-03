@@ -34,6 +34,9 @@ MotorTask.o:
 CoordController.o:
 	$(CC) $(CFLAGS) -c ctrl-lib/CoordController.cpp
 
+CoordHandle.o:
+	$(CC) $(CFLAGS) -c ctrl-lib/CoordHandle.cpp
+
 DeviceController.o:
 	$(CC) $(CFLAGS) -c ctrl-lib/DeviceController.cpp
 
@@ -116,6 +119,15 @@ CalxApp.o:
 CalxConsoleWidget.o:
 	$(CC) $(CFLAGS) -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxConsoleWidget.cpp
 
+CalxCoordCtrl.o:
+	$(CC) $(CFLAGS) -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxCoordCtrl.cpp
+
+CalxCoordDialog.o:
+	$(CC) $(CFLAGS) -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxCoordDialog.cpp
+
+CalxCoordPanel.o:
+	$(CC) $(CFLAGS) -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxCoordPanel.cpp
+
 CalxDeviceCtrl.o:
 	$(CC) $(CFLAGS) -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxDeviceCtrl.cpp
 
@@ -131,18 +143,18 @@ CalxPanel.o:
 stub: Stub.o
 	$(CC) -shared -o $(BUILD)/USMCDLL.dll Stub.o -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread
 
-$(OUTPUT).exe: Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CoordController.o DeviceController.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o CircleGenerator.o GCodeParser.o GraphBuilder.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o VirtualCoordPlane.o SystemManager.o CoordTask.o CoordTaskWrapper.o BasicCoordTranslator.o LinearCoordTranslator.o LogarithmicCoordTranslator.o PolarCoordTranslator.o
+$(OUTPUT).exe: Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CoordController.o CoordHandle.o DeviceController.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o CircleGenerator.o GCodeParser.o GraphBuilder.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o VirtualCoordPlane.o SystemManager.o CoordTask.o CoordTaskWrapper.o BasicCoordTranslator.o LinearCoordTranslator.o LogarithmicCoordTranslator.o PolarCoordTranslator.o
 	mkdir -p $(BUILD)
-	$(CC) -o $(BUILD)/$(OUTPUT).exe Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CoordController.o DeviceController.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o CircleGenerator.o GCodeParser.o GraphBuilder.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o VirtualCoordPlane.o SystemManager.o CoordTask.o CoordTaskWrapper.o BasicCoordTranslator.o LinearCoordTranslator.o LogarithmicCoordTranslator.o PolarCoordTranslator.o  -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL
+	$(CC) -o $(BUILD)/$(OUTPUT).exe Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CoordController.o CoordHandle.o DeviceController.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o CircleGenerator.o GCodeParser.o GraphBuilder.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o VirtualCoordPlane.o SystemManager.o CoordTask.o CoordTaskWrapper.o BasicCoordTranslator.o LinearCoordTranslator.o LogarithmicCoordTranslator.o PolarCoordTranslator.o  -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL
 
-$(OUTPUT).dll: Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CoordController.o DeviceController.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o CircleGenerator.o GCodeParser.o GraphBuilder.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o VirtualCoordPlane.o SystemManager.o CoordTask.o CoordTaskWrapper.o BasicCoordTranslator.o LinearCoordTranslator.o LogarithmicCoordTranslator.o PolarCoordTranslator.o
+$(OUTPUT).dll: Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CoordController.o CoordHandle.o DeviceController.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o CircleGenerator.o GCodeParser.o GraphBuilder.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o VirtualCoordPlane.o SystemManager.o CoordTask.o CoordTaskWrapper.o BasicCoordTranslator.o LinearCoordTranslator.o LogarithmicCoordTranslator.o PolarCoordTranslator.o
 	mkdir -p $(BUILD)
-	$(CC) -shared -o $(BUILD)/$(OUTPUT).dll Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CoordController.o DeviceController.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o CircleGenerator.o GCodeParser.o GraphBuilder.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o VirtualCoordPlane.o SystemManager.o CoordTask.o CoordTaskWrapper.o BasicCoordTranslator.o LinearCoordTranslator.o LogarithmicCoordTranslator.o PolarCoordTranslator.o  -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL -Wl,--out-implib,$(BUILD)/$(OUTPUT).a
+	$(CC) -shared -o $(BUILD)/$(OUTPUT).dll Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CoordController.o CoordHandle.o DeviceController.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o CircleGenerator.o GCodeParser.o GraphBuilder.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o VirtualCoordPlane.o SystemManager.o CoordTask.o CoordTaskWrapper.o BasicCoordTranslator.o LinearCoordTranslator.o LogarithmicCoordTranslator.o PolarCoordTranslator.o  -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL -Wl,--out-implib,$(BUILD)/$(OUTPUT).a
 
-$(UI).exe: CalxActionQueue.o CalxApp.o CalxConsoleWidget.o CalxDeviceCtrl.o CalxDevicePanel.o CalxFrame.o CalxPanel.o
+$(UI).exe: CalxActionQueue.o CalxApp.o CalxConsoleWidget.o CalxCoordCtrl.o CalxCoordDialog.o CalxCoordPanel.o CalxDeviceCtrl.o CalxDevicePanel.o CalxFrame.o CalxPanel.o
 	mkdir -p $(BUILD)
 	cp $(WX)/lib/wxmsw310u_gcc_custom.dll $(BUILD)
-	$(CC) -o $(BUILD)/$(UI).exe CalxActionQueue.o CalxApp.o CalxConsoleWidget.o CalxDeviceCtrl.o CalxDevicePanel.o CalxFrame.o CalxPanel.o  -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=$(BUILD) -lUSMCDLL -l8smc1 -lwxmsw310u_gcc_custom
+	$(CC) -o $(BUILD)/$(UI).exe CalxActionQueue.o CalxApp.o CalxConsoleWidget.o CalxCoordCtrl.o CalxCoordDialog.o CalxCoordPanel.o CalxDeviceCtrl.o CalxDevicePanel.o CalxFrame.o CalxPanel.o  -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=$(BUILD) -lUSMCDLL -l8smc1 -lwxmsw310u_gcc_custom
 
 
 clean:

@@ -3,6 +3,7 @@
 
 #include "device/DeviceManager.h"
 #include "plane/CoordPlane.h"
+#include "CoordHandle.h"
 #include "task/CoordTask.h"
 #include "misc/GraphBuilder.h"
 #include "graph/FunctionEngine.h"
@@ -30,15 +31,14 @@ namespace _8SMC1 {
 			bool removeTask(size_t);
 			// Coordinate plane control
 			size_t getCoordCount();
-			CoordPlaneStack *getCoord(size_t);
-			CoordController *getCoordController(size_t);
-			CoordPlaneStack *createCoord(DWORD, DWORD);
+			CoordHandle *getCoord(size_t);
+			CoordHandle* createCoord(DWORD, DWORD);
+			void removeCoord(size_t);
 		private:
 			DeviceManager *devman;
 			std::vector<DeviceController*> dev;
 			std::vector<CoordTask*> tasks;
-			std::vector<CoordPlaneStack*> coords;
-			std::vector<CoordController*> coordCtrl;
+			std::vector<CoordHandle*> coords;
 			FunctionEngine engine;
 
 	};

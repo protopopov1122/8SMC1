@@ -6,7 +6,7 @@
 namespace _8SMC1 {
 	
 	struct MotorMoveEvent {
-		int destination;
+		motor_coord_t destination;
 		float speed;
 		int divisor;
 	};
@@ -27,6 +27,31 @@ namespace _8SMC1 {
 			virtual void stopped(MotorErrorEvent&) {}
 			virtual void rolling(MotorRollEvent&) {}
 			virtual void rolled(MotorRollEvent&) {}
+	};
+	
+	struct CoordMoveEvent {
+		motor_point_t destination;
+		float speed;
+		int divisor;
+		bool synchrone;
+	};
+	
+	struct CoordErrorEvent {
+		ErrorCode errcode;
+	};
+	
+	struct CoordCalibrateEvent {
+		TrailerId trailer;
+	};
+	
+	class CoordEventListener {
+		public:
+			virtual ~CoordEventListener() {}
+			virtual void moving(CoordMoveEvent&) {}
+			virtual void moved(CoordMoveEvent&) {}
+			virtual void stopped(CoordErrorEvent&) {}
+			virtual void calibrating(CoordCalibrateEvent&) {}
+			virtual void calibrated(CoordCalibrateEvent&) {}
 	};
 }
 

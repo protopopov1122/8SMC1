@@ -7,5 +7,7 @@ namespace CalX {
 		
 		this->dev = new CalxDevicePanel(this, wxID_ANY);
 		this->AddPage(this->dev, "Devices");
+		this->coord = new CalxCoordPanel(this, wxID_ANY);
+		this->AddPage(this->coord, "Coordinate planes");
 	}
 }

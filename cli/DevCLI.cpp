@@ -533,7 +533,7 @@ namespace _8SMC1 {
 			}
 			int coordNum = std::stoi(args.at(0));
 			int coordTrailer = std::stoi(args.at(1));
-			CoordController *coordController = sysman->getCoordController(coordNum);
+			CoordController *coordController = sysman->getCoord(coordNum)->getController();
 			if (coordController == nullptr) {
 				std::cout << "Wrong coord id" << std::endl;
 				return;

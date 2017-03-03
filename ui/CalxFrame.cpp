@@ -25,6 +25,8 @@ namespace CalX {
 		this->console = new std::ostream(console);
 		
 		Bind(wxEVT_CLOSE_WINDOW, &CalxFrame::OnClose, this);
+		Layout();
+		Fit();
 	}
 	
 	std::ostream *CalxFrame::getConsole() {
