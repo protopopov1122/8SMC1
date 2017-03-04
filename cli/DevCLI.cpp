@@ -305,7 +305,7 @@ namespace _8SMC1 {
 					prefix += " ";
 				}
 			}
-			ctrl->pushPlane(new CoordPlaneLog(ctrl->peekPlane(), std::cout, prefix));
+			ctrl->pushPlane(new CoordPlaneLog(ctrl->peekPlane(), &std::cout, prefix));
 		} else if (com.compare("map") == 0) {
 			if (args.size() < 5) {
 				std::cout << "Provide arguments" << std::endl;

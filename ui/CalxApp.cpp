@@ -21,6 +21,10 @@ namespace CalX {
 	SystemManager *CalxApp::getSystemManager() {
 		return this->sysman;
 	}
+	
+	CalxFrame *CalxApp::getMainFrame() {
+		return this->frame;
+	}
 }
 
 wxIMPLEMENT_APP(CalX::CalxApp);

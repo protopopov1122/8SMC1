@@ -68,7 +68,7 @@ namespace _8SMC1 {
 	// Logging coordinate plane
 	class CoordPlaneLog : public CoordPlane {
 		public:
-			CoordPlaneLog(CoordPlane*, std::ostream&, std::string, bool = true, bool = true);
+			CoordPlaneLog(CoordPlane*, std::ostream*, std::string, bool = true, bool = true);
 			virtual ~CoordPlaneLog();
 			CoordPlane *getBase();
 			std::string getPrefix();

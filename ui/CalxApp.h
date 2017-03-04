@@ -14,6 +14,7 @@ namespace CalX {
 			virtual bool OnInit();
 			virtual int OnExit();
 			SystemManager *getSystemManager();
+			CalxFrame *getMainFrame();
 		private:
 			CalxFrame *frame;
 			DeviceManager *devman;

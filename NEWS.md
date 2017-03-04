@@ -104,3 +104,6 @@ Started implementing UI based on WxWidgets(require version 3.10), currently adde
 
 ##### 03/03/2017
 Latest tests were performed on 02/03/2017, all CLI functions work, wxWidgets compiles and runs on WinXP properly. Next task is writing GUI. By now part of GUI to control separate devices is almost implemented.
+
+##### 04/03/2017
+UI is under heavy development, must be tested, however all implemented functions should work.

@@ -2,9 +2,9 @@
 
 namespace _8SMC1 {
 	
-	CoordPlaneLog::CoordPlaneLog(CoordPlane *cplane, std::ostream &os, std::string prefix, bool log_act, bool log_err) {
+	CoordPlaneLog::CoordPlaneLog(CoordPlane *cplane, std::ostream *os, std::string prefix, bool log_act, bool log_err) {
 		this->plane = cplane;
-		this->out = &os;
+		this->out = os;
 		this->prefix = prefix;
 		this->log_actions = log_act;
 		this->log_errors = log_err;

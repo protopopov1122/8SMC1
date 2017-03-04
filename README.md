@@ -58,7 +58,7 @@ make clean	# Clean all
 make stub	# Build stub to test CLI without controller
 make 8smc1.exe # Build CLI
 make 8smc1.dll # Build library; required for GUI
-make ui.exe WX=$(WX) # Build GUI(currently not implemented); $(WX) - wxWidgets-3.1.0 directory; requires 8smc1.dll build first.
+make ui.exe WX=$(WX) # Build GUI(currently under development); $(WX) - wxWidgets-3.1.0 directory; requires 8smc1.dll build first.
 ```
 
 Authors and Contributions

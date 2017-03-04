@@ -120,17 +120,66 @@ namespace CalX {
 			wxSpinCtrl *speed;
 	};
 	
+	class CalxCoordOtherCtrl : public wxPanel {
+		public:
+			CalxCoordOtherCtrl(CalxCoordCtrl *ctrl, wxWindow *win, wxWindowID id)
+				: wxPanel::wxPanel(win, id) {
+				this->ctrl = ctrl;
+				init();
+			}
+			TrailerId getTrailer() {return trailer->GetSelection()==0 ? TrailerId::Trailer1 : TrailerId::Trailer2;}
+			bool isLoggingActions() {return logActions->GetValue();}
+			bool isLoggingErrors() {return logActions->GetValue();}
+			int getXOffset() {return xOffset->GetValue();}
+			int getYOffset() {return yOffset->GetValue();}
+			double getXScale() {
+				double val;
+				xScale->GetValue().ToDouble(&val);
+				return val;
+			}
+			double getYScale() {
+				double val;
+				yScale->GetValue().ToDouble(&val);
+				return val;
+			}
+			int getMinX() {return minx->GetValue();}
+			int getMinY() {return miny->GetValue();}
+			int getMaxX() {return maxx->GetValue();}
+			int getMaxY() {return maxy->GetValue();}
+			int getSpeed() {return speed->GetValue();}
+		private:
+			void init();
+			CalxCoordCtrl *ctrl;
+			wxChoice *trailer;
+			wxCheckBox *logActions;
+			wxCheckBox *logErrors;
+			wxSpinCtrl *xOffset;
+			wxSpinCtrl *yOffset;
+			wxTextCtrl *xScale;
+			wxTextCtrl *yScale;
+			wxSpinCtrl *minx;
+			wxSpinCtrl *miny;
+			wxSpinCtrl *maxx;
+			wxSpinCtrl *maxy;
+			wxSpinCtrl *speed;
+	};
+	
 	class CalxCoordCtrl : public wxScrolledWindow {
 		public:
 			friend class CalxCoordEventListener;
 			CalxCoordCtrl(wxWindow*, wxWindowID, CoordHandle*);
 			
 			void updateUI();
+			CoordPlaneLog *getPlaneLog();
+			CoordPlaneMap *getPlaneMap();
+			CoordPlaneValidator *getPlaneValidator();
 			
 			void OnLinearMoveClick(wxCommandEvent&);
 			void OnLinearJumpClick(wxCommandEvent&);
 			void OnArcMoveClick(wxCommandEvent&);
 			void OnGraphBuildClick(wxCommandEvent&);
+			void OnCalibrateClick(wxCommandEvent&);
+			void OnUpdateFiltersClick(wxCommandEvent&);
 		private:
 			void OnExit(wxCloseEvent&);
 			void OnQueueUpdate(wxThreadEvent&);
@@ -144,6 +193,12 @@ namespace CalX {
 			CalxCoordLinearCtrl *linear;
 			CalxCoordArcCtrl *arc;
 			CalxCoordGraphCtrl *graphCtrl;
+			CalxCoordOtherCtrl *otherCtrl;
+			
+			// Filters
+			CoordPlaneLog *log;
+			CoordPlaneMap *map;
+			CoordPlaneValidator *validator;
 			
 	};
 }
