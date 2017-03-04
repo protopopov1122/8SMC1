@@ -5,7 +5,8 @@
 
 namespace _8SMC1 {
 	
-	LogarithmicCoordTranslator::LogarithmicCoordTranslator(coord_scale_t scale, CoordTranslator *base) {
+	LogarithmicCoordTranslator::LogarithmicCoordTranslator(coord_scale_t scale, CoordTranslator *base)
+		: CoordTranslator::CoordTranslator(CoordType::LogarithmicCoord) {
 		this->base = base;
 		this->scale = scale;
 	}
@@ -13,8 +14,12 @@ namespace _8SMC1 {
 	LogarithmicCoordTranslator::~LogarithmicCoordTranslator() {
 	}
 	
-	CoordTranslator *LogarithmicCoordTranslator::getBaseCoord() {
+	CoordTranslator *LogarithmicCoordTranslator::getBase() {
 		return this->base;
+	}
+	
+	void LogarithmicCoordTranslator::setBase(CoordTranslator *t) {
+		this->base = t;
 	}
 	
 	coord_scale_t LogarithmicCoordTranslator::getScale() {

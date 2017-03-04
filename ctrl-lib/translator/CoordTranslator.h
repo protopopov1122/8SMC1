@@ -2,6 +2,7 @@
 #define CTRL_LIB_COORDTRANSLATOR_H_
 
 #include <cinttypes>
+#include <vector>
 #include "ctrl-lib/DeviceController.h"
 
 /* Coordinate translator represents different type coornidate systems.
@@ -16,12 +17,22 @@
 
 namespace _8SMC1 {
 
+	enum CoordType {
+		BasicCoord, LinearCoord, LogarithmicCoord, PolarCoord, ComplexCoord
+	};
+
 	class CoordTranslator {
 		public:
+			CoordTranslator(CoordType t) {this->type = t;}
 			virtual ~CoordTranslator() {};
+			CoordType getType() {return this->type;}
 			virtual motor_point_t get(coord_point_t pnt) {return this->get(pnt.x, pnt.y);}
 			virtual motor_point_t get(long double, long double) = 0;
 			virtual coord_point_t get(motor_point_t) = 0;
+			virtual CoordTranslator *getBase() {return nullptr;}
+			virtual void setBase(CoordTranslator *b) {}
+		private:
+			CoordType type;
 	};
 	
 	class BasicCoordTranslator : public CoordTranslator {
@@ -43,7 +54,8 @@ namespace _8SMC1 {
 		public:
 			LinearCoordTranslator(coord_point_t, coord_scale_t, CoordTranslator* = nullptr);
 			virtual ~LinearCoordTranslator();
-			CoordTranslator *getBase();
+			virtual CoordTranslator *getBase();
+			virtual void setBase(CoordTranslator*);
 			coord_point_t getOffset();
 			coord_scale_t getScale();
 			void setOffset(coord_point_t);
@@ -60,7 +72,8 @@ namespace _8SMC1 {
 		public:
 			LogarithmicCoordTranslator(coord_scale_t, CoordTranslator* = nullptr);
 			virtual ~LogarithmicCoordTranslator();
-			CoordTranslator *getBaseCoord();
+			virtual CoordTranslator *getBase();
+			virtual void setBase(CoordTranslator*);
 			coord_scale_t getScale();
 			void setScale(coord_scale_t);
 			virtual motor_point_t get(long double, long double);
@@ -74,11 +87,29 @@ namespace _8SMC1 {
 		public:
 			PolarCoordTranslator(CoordTranslator* = nullptr);
 			virtual ~PolarCoordTranslator();
-			CoordTranslator *getBaseCoord();
+			virtual CoordTranslator *getBase();
+			virtual void setBase(CoordTranslator*);
 			virtual motor_point_t get(long double, long double);
 			virtual coord_point_t get(motor_point_t);
 		private:
 			CoordTranslator *base;
+	};
+	
+	class ComplexCoordTranslator : public CoordTranslator {
+		public:
+			ComplexCoordTranslator(CoordTranslator*);
+			virtual ~ComplexCoordTranslator();
+			virtual motor_point_t get(long double, long double);
+			virtual coord_point_t get(motor_point_t);
+			size_t getSize();
+			CoordTranslator* get(size_t);
+			void add(CoordTranslator*);
+			bool remove(size_t);
+			bool insert(size_t, CoordTranslator*);
+			virtual CoordTranslator *getBase();
+			virtual void setBase(CoordTranslator*);
+		private:
+			std::vector<CoordTranslator*> list;
 	};
 
 }

@@ -4,7 +4,8 @@
 
 namespace _8SMC1 {
 
-	BasicCoordTranslator::BasicCoordTranslator(motor_point_t cen, motor_size_t sc) {
+	BasicCoordTranslator::BasicCoordTranslator(motor_point_t cen, motor_size_t sc)
+		: CoordTranslator::CoordTranslator(CoordType::BasicCoord) {
 		this->center = cen;
 		this->scale = sc;
 	}

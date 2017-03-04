@@ -3,7 +3,8 @@
 
 namespace _8SMC1 {
 	
-	PolarCoordTranslator::PolarCoordTranslator(CoordTranslator *base) {
+	PolarCoordTranslator::PolarCoordTranslator(CoordTranslator *base)
+		: CoordTranslator::CoordTranslator(CoordType::PolarCoord) {
 		this->base = base;
 	}
 	
@@ -11,8 +12,12 @@ namespace _8SMC1 {
 		
 	}
 	
-	CoordTranslator *PolarCoordTranslator::getBaseCoord() {
+	CoordTranslator *PolarCoordTranslator::getBase() {
 		return this->base;
+	}
+	
+	void PolarCoordTranslator::setBase(CoordTranslator *t) {
+		this->base = t;
 	}
 	
 	motor_point_t PolarCoordTranslator::get(long double x, long double y) {

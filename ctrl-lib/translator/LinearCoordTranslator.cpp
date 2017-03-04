@@ -2,7 +2,8 @@
 
 namespace _8SMC1 {
 
-	LinearCoordTranslator::LinearCoordTranslator(coord_point_t cen, coord_scale_t sc, CoordTranslator *base) {
+	LinearCoordTranslator::LinearCoordTranslator(coord_point_t cen, coord_scale_t sc, CoordTranslator *base)
+		: CoordTranslator::CoordTranslator(CoordType::LinearCoord) {
 		this->base = base;
 		this->offset = cen;
 		this->scale = sc;
@@ -21,6 +22,10 @@ namespace _8SMC1 {
 	
 	CoordTranslator *LinearCoordTranslator::getBase() {
 		return this->base;
+	}
+	
+	void LinearCoordTranslator::setBase(CoordTranslator *t) {
+		this->base = t;
 	}
 	
 	void LinearCoordTranslator::setOffset(coord_point_t o) {
