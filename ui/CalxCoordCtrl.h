@@ -5,6 +5,9 @@
 #include "CalxActionQueue.h"
 #include "ctrl-lib/SystemManager.h"
 #include <wx/stattext.h>
+#include <wx/choice.h>
+#include <wx/checkbox.h>
+#include <wx/spinctrl.h>
 
 using namespace _8SMC1;
 
@@ -25,12 +28,70 @@ namespace CalX {
 			CalxCoordCtrl *ctrl;
 	};
 	
+	
+	
+	class CalxCoordLinearCtrl : public wxPanel {
+		public:
+			CalxCoordLinearCtrl(CalxCoordCtrl *ctrl, wxWindow *win, wxWindowID id)
+				: wxPanel::wxPanel(win, id) {
+				this->ctrl = ctrl;
+				init();
+			}
+			int getCoordX() {return xCoord->GetValue();}
+			int getCoordY() {return yCoord->GetValue();}
+			int getSpeed() {return speed->GetValue();}
+			int getDivisor() {return 1 << divisor->GetSelection();}
+			bool isRelative() {return relative->GetValue();}
+		private:
+			void init();
+			CalxCoordCtrl *ctrl;
+			wxSpinCtrl *xCoord;
+			wxSpinCtrl *yCoord;
+			wxSpinCtrl *speed;
+			wxChoice *divisor;
+			wxCheckBox *relative;
+	};
+	
+	class CalxCoordArcCtrl : public wxPanel {
+		public:
+			CalxCoordArcCtrl(CalxCoordCtrl *ctrl, wxWindow *win, wxWindowID id)
+				: wxPanel::wxPanel(win, id) {
+				this->ctrl = ctrl;
+				init();
+			}
+			int getCoordX() {return xCoord->GetValue();}
+			int getCoordY() {return yCoord->GetValue();}
+			int getCenterCoordX() {return cxCoord->GetValue();}
+			int getCenterCoordY() {return cyCoord->GetValue();}
+			int getSpeed() {return speed->GetValue();}
+			int getDivisor() {return 1 << divisor->GetSelection();}
+			int getSplitter() {return splitter->GetValue();}
+			bool isClockwise() {return clockwise->GetValue();}
+			bool isRelative() {return relative->GetValue();}
+		private:
+			void init();
+			CalxCoordCtrl *ctrl;
+			wxSpinCtrl *xCoord;
+			wxSpinCtrl *yCoord;
+			wxSpinCtrl *cxCoord;
+			wxSpinCtrl *cyCoord;
+			wxSpinCtrl *speed;
+			wxChoice *divisor;
+			wxSpinCtrl *splitter;
+			wxCheckBox *clockwise;
+			wxCheckBox *relative;
+	};
+	
 	class CalxCoordCtrl : public wxPanel {
 		public:
 			friend class CalxCoordEventListener;
 			CalxCoordCtrl(wxWindow*, wxWindowID, CoordHandle*);
 			
 			void updateUI();
+			
+			void OnLinearMoveClick(wxCommandEvent&);
+			void OnLinearJumpClick(wxCommandEvent&);
+			void OnArcMoveClick(wxCommandEvent&);
 		private:
 			void OnExit(wxCloseEvent&);
 			void OnQueueUpdate(wxThreadEvent&);
@@ -39,9 +100,10 @@ namespace CalX {
 			CoordEventListener *listener;
 			CalxActionQueue *queue;
 			
-			// Static text
+			// Components
 			wxStaticText *generalInfoText;
-			
+			CalxCoordLinearCtrl *linear;
+			CalxCoordArcCtrl *arc;
 			
 	};
 }

@@ -20,22 +20,27 @@ namespace CalX {
 	
 	void CalxMotorEventListener::moving(MotorMoveEvent &evt) {
 		dev->Enable(false);
+		dev->updateUI();
 	}
 	
 	void CalxMotorEventListener::moved(MotorMoveEvent &evt) {
 		dev->Enable(true);
+		dev->updateUI();
 	}
 	
 	void CalxMotorEventListener::stopped(MotorErrorEvent &evt) {
 		dev->Enable(true);
+		dev->updateUI();
 	}
 	
 	void CalxMotorEventListener::rolling(MotorRollEvent &evt) {
 		dev->Enable(false);
+		dev->updateUI();
 	}
 	
 	void CalxMotorEventListener::rolled(MotorRollEvent &evt) {
 		dev->Enable(true);
+		dev->updateUI();
 	}
 
 	class CalxDevMoveAction : public CalxAction {

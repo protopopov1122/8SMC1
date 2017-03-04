@@ -83,7 +83,7 @@ namespace _8SMC1 {
 		yAxis->dest = point.y > yAxis->dev->getPosition() ? MoveType::MoveUp :
 				MoveType::MoveDown;
 		yAxis->dev->start(point.y, y_speed, div, false);
-		xAxis->sendMovingEvent(ymevt);
+		yAxis->sendMovingEvent(ymevt);
 		CoordMoveEvent evt = {point, speed, div, sync};
 		sendMovingEvent(evt);
 		while (xDev->isRunning() || yDev->isRunning()) {
@@ -115,7 +115,7 @@ namespace _8SMC1 {
 			}
 		}
 		xAxis->sendMovedEvent(xmevt);
-		xAxis->sendMovedEvent(ymevt);
+		yAxis->sendMovedEvent(ymevt);
 		sendMovedEvent(evt);
 		return ErrorCode::NoError;
 	}

@@ -7,8 +7,8 @@ namespace CalX {
 		this->sysman = new SystemManager(this->devman);
 		this->frame = new CalxFrame("8SMC1 CalX");
 		this->frame->Show(true);
+		this->frame->Maximize(true);
 		
-		*this->frame->getConsole() << "Hello, world!\n";
 		return true;
 	}
 	

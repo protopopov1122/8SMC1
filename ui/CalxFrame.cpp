@@ -20,7 +20,7 @@ namespace CalX {
 		console->Show(true);
 		mainPanel->Initialize(panel);
 		mainPanel->SplitHorizontally(panel, console);
-		mainPanel->SetSashGravity(0.5f);	
+		mainPanel->SetSashGravity(1.0f);	
 		
 		this->console = new std::ostream(console);
 		
