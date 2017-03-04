@@ -50,7 +50,7 @@ namespace CalX {
 	
 	void CalxCoordPanel::addPlane(CoordHandle *handle) {
 		CalxCoordCtrl *ctrl = new CalxCoordCtrl(this->mainPanel, wxID_ANY, handle);
-		this->mainPanel->GetSizer()->Add(ctrl, 0, wxALL | wxEXPAND);
+		this->mainPanel->GetSizer()->Add(ctrl, 1, wxALL | wxEXPAND);
 		this->coords.push_back(ctrl);
 		this->coordList->Append("Plane #" + std::to_string(handle->getID()));
 		this->coordList->SetSelection(this->coordList->GetCount() - 1);

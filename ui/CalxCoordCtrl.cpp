@@ -1,5 +1,8 @@
 #include "CalxCoordCtrl.h"
 #include "CalxApp.h"
+#include "ctrl-lib/graph/FunctionParser.h"
+#include "ctrl-lib/graph/FunctionEngine.h"
+#include <sstream>
 #include <wx/stattext.h>
 #include <wx/sizer.h>
 
@@ -82,10 +85,69 @@ namespace CalX {
 		sizer->Add(splitter, 0, wxEXPAND);
 		sizer->Add(clockwise);
 		sizer->Add(relative);
-		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
 		sizer->Add(moveButton);
 		
 		
+	}
+	
+	void CalxCoordGraphCtrl::init() {
+		wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
+		SetSizer(sizer);
+		
+		
+		wxPanel *graphPanel = new wxPanel(this, wxID_ANY);
+		sizer->Add(graphPanel, 0, wxRIGHT, 10);
+		wxFlexGridSizer *graphSizer = new wxFlexGridSizer(2);
+		graphPanel->SetSizer(graphSizer);
+		
+		this->expr = new wxTextCtrl(graphPanel, wxID_ANY, "x");
+		this->xmin = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, -10);
+		this->xmax = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 10);
+		this->ymin = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, -10);
+		this->ymax = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 10);
+		this->step = new wxTextCtrl(graphPanel, wxID_ANY, "1");
+		wxButton *buildButton = new wxButton(graphPanel, wxID_ANY, "Build");
+		buildButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnGraphBuildClick, ctrl);
+		
+		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, "Function "), 0, wxALIGN_RIGHT | wxRIGHT, 10);
+		graphSizer->Add(expr, 0, wxEXPAND);
+		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, "X axis range:"));
+		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, ""));
+		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, "min"), 0, wxALIGN_RIGHT | wxRIGHT, 10);
+		graphSizer->Add(xmin, 0, wxEXPAND);
+		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, "max"), 0, wxALIGN_RIGHT | wxRIGHT, 10);
+		graphSizer->Add(xmax, 0, wxEXPAND);
+		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, "Y axis range:"));
+		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, ""));
+		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, "min"), 0, wxALIGN_RIGHT | wxRIGHT, 10);
+		graphSizer->Add(ymin, 0, wxEXPAND);
+		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, "max"), 0, wxALIGN_RIGHT | wxRIGHT, 10);
+		graphSizer->Add(ymax, 0, wxEXPAND);
+		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, "X axis step"), 0, wxALIGN_RIGHT | wxRIGHT, 10);
+		graphSizer->Add(step, 0, wxEXPAND);
+		graphSizer->Add(buildButton);
+		
+		wxPanel *coordPanel = new wxPanel(this, wxID_ANY);
+		sizer->Add(coordPanel, 0, wxLEFT, 10);
+		wxFlexGridSizer *coordSizer = new wxFlexGridSizer(2);
+		coordPanel->SetSizer(coordSizer);
+		
+		this->xoffset = new wxSpinCtrl(coordPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
+		this->yoffset = new wxSpinCtrl(coordPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
+		this->xscale = new wxSpinCtrl(coordPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 1);
+		this->yscale = new wxSpinCtrl(coordPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 1);
+		this->speed = new wxSpinCtrl(coordPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 4000, 4000, 4000);
+		
+		coordSizer->Add(new wxStaticText(coordPanel, wxID_ANY, "X axis offset"), 0, wxRIGHT, 10);
+		coordSizer->Add(xoffset, 0, wxEXPAND);
+		coordSizer->Add(new wxStaticText(coordPanel, wxID_ANY, "Y axis offset"), 0, wxRIGHT, 10);
+		coordSizer->Add(yoffset, 0, wxEXPAND);
+		coordSizer->Add(new wxStaticText(coordPanel, wxID_ANY, "X axis scale"), 0, wxRIGHT, 10);
+		coordSizer->Add(xscale, 0, wxEXPAND);
+		coordSizer->Add(new wxStaticText(coordPanel, wxID_ANY, "Y axis scale"), 0, wxRIGHT, 10);
+		coordSizer->Add(yscale, 0, wxEXPAND);
+		coordSizer->Add(new wxStaticText(coordPanel, wxID_ANY, "Build speed"), 0, wxRIGHT, 10);
+		coordSizer->Add(speed, 0, wxEXPAND);
 	}
 	
 	CalxCoordEventListener::CalxCoordEventListener(CalxCoordCtrl *ctrl) {
@@ -179,7 +241,7 @@ namespace CalX {
 	};
 	
 	CalxCoordCtrl::CalxCoordCtrl(wxWindow *win, wxWindowID id, CoordHandle *ctrl)
-		: wxPanel::wxPanel(win, id) {
+		: wxScrolledWindow::wxScrolledWindow(win, id) {
 		this->ctrl = ctrl;
 		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
 		this->queue->Run();
@@ -213,9 +275,21 @@ namespace CalX {
 		arcSizer->Add(arc, 0, wxALL | wxEXPAND);
 		sizer->Add(arcPanel, 0, wxALL | wxEXPAND, 10);
 		
+		wxPanel *graphPanel = new wxPanel(this, wxID_ANY);
+		wxStaticBox *graphBox = new wxStaticBox(graphPanel, wxID_ANY, "Function graph");
+		wxStaticBoxSizer *graphSizer = new wxStaticBoxSizer(graphBox, wxHORIZONTAL);	
+		graphPanel->SetSizer(graphSizer);
+		graphCtrl = new CalxCoordGraphCtrl(this, graphPanel, wxID_ANY);
+		graphSizer->Add(graphCtrl, 0, wxALL | wxEXPAND);
+		sizer->Add(graphPanel, 0, wxALL | wxEXPAND, 10);
+		
 		Bind(wxEVT_COMMAND_QUEUE_UPDATE, &CalxCoordCtrl::OnQueueUpdate, this);
 		Bind(wxEVT_CLOSE_WINDOW, &CalxCoordCtrl::OnExit, this);
 		updateUI();
+		
+		this->Layout();
+		this->FitInside();
+        this->SetScrollRate(5, 5);
 	}
 	
 	void CalxCoordCtrl::updateUI() {
@@ -244,6 +318,26 @@ namespace CalX {
 		motor_point_t dest = {arc->getCoordX(), arc->getCoordY()};
 		motor_point_t cen = {arc->getCenterCoordX(), arc->getCenterCoordY()};
 		this->queue->addAction(new CalxCoordArcAction(ctrl, arc->isRelative(), dest, cen, arc->getSplitter(), arc->getSpeed(), arc->getDivisor(), arc->isClockwise()));
+	}
+	
+	void CalxCoordCtrl::OnGraphBuildClick(wxCommandEvent &evt) {
+		std::stringstream ss(graphCtrl->getExpression());
+		FunctionLexer lexer(ss);
+		FunctionParser parser(&lexer);
+		Node *node = parser.parse();
+		motor_point_t toffset = {graphCtrl->getXOffset(), graphCtrl->getYOffset()};
+		motor_size_t tsize = {graphCtrl->getXScale(), graphCtrl->getYScale()};
+		long double minx = graphCtrl->getXMin();
+		long double maxx = graphCtrl->getXMax();
+		long double miny = graphCtrl->getYMin();
+		long double maxy = graphCtrl->getYMax();
+		long double step = graphCtrl->getStep();
+		float speed = graphCtrl->getSpeed();
+		BasicCoordTranslator trans(toffset, tsize);
+		coord_point_t min = {minx, miny};
+		coord_point_t max = {maxx, maxy};
+		GraphBuilder graph(node, min, max, step);
+		graph.build(wxGetApp().getSystemManager(), ctrl, &trans, speed);
 	}
 	
 	void CalxCoordCtrl::OnExit(wxCloseEvent &evt) {

@@ -82,7 +82,45 @@ namespace CalX {
 			wxCheckBox *relative;
 	};
 	
-	class CalxCoordCtrl : public wxPanel {
+	class CalxCoordGraphCtrl : public wxPanel {
+		public:
+			CalxCoordGraphCtrl(CalxCoordCtrl *ctrl, wxWindow *win, wxWindowID id)
+				: wxPanel::wxPanel(win, id) {
+				this->ctrl = ctrl;
+				init();
+			}
+			std::string getExpression() {return expr->GetValue().ToStdString();}
+			int getXMin() {return xmin->GetValue();}
+			int getXMax() {return xmax->GetValue();}
+			int getYMin() {return ymin->GetValue();}
+			int getYMax() {return ymax->GetValue();}
+			double getStep() {
+				double val;
+				step->GetValue().ToDouble(&val);
+				return val;
+			}
+			int getXOffset() {return xoffset->GetValue();}
+			int getYOffset() {return yoffset->GetValue();}
+			int getXScale() {return xscale->GetValue();}
+			int getYScale() {return yscale->GetValue();}
+			int getSpeed() {return speed->GetValue();}
+		private:
+			void init();
+			CalxCoordCtrl *ctrl;
+			wxTextCtrl *expr;
+			wxSpinCtrl *xmin;
+			wxSpinCtrl *xmax;
+			wxSpinCtrl *ymin;
+			wxSpinCtrl *ymax;
+			wxTextCtrl *step;
+			wxSpinCtrl *xoffset;
+			wxSpinCtrl *yoffset;
+			wxSpinCtrl *xscale;
+			wxSpinCtrl *yscale;
+			wxSpinCtrl *speed;
+	};
+	
+	class CalxCoordCtrl : public wxScrolledWindow {
 		public:
 			friend class CalxCoordEventListener;
 			CalxCoordCtrl(wxWindow*, wxWindowID, CoordHandle*);
@@ -92,6 +130,7 @@ namespace CalX {
 			void OnLinearMoveClick(wxCommandEvent&);
 			void OnLinearJumpClick(wxCommandEvent&);
 			void OnArcMoveClick(wxCommandEvent&);
+			void OnGraphBuildClick(wxCommandEvent&);
 		private:
 			void OnExit(wxCloseEvent&);
 			void OnQueueUpdate(wxThreadEvent&);
@@ -104,6 +143,7 @@ namespace CalX {
 			wxStaticText *generalInfoText;
 			CalxCoordLinearCtrl *linear;
 			CalxCoordArcCtrl *arc;
+			CalxCoordGraphCtrl *graphCtrl;
 			
 	};
 }
