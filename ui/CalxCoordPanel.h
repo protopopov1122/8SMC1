@@ -14,6 +14,8 @@ namespace CalX {
 		public:
 			CalxCoordPanel(wxWindow*, wxWindowID);
 			
+			size_t getCoordCount() {return coords.size();}
+			CoordHandle *getCoord(size_t sz) {return sz < coords.size() ? coords.at(sz)->getHandle() : nullptr;}
 			void updateUI();
 		private:
 			void addPlane(CoordHandle*);

@@ -3,6 +3,7 @@
 
 #include "calx.h"
 #include "CalxActionQueue.h"
+#include "CalxFrame.h"
 #include "ctrl-lib/SystemManager.h"
 #include <wx/stattext.h>
 #include <wx/choice.h>
@@ -170,6 +171,7 @@ namespace CalX {
 			CalxCoordCtrl(wxWindow*, wxWindowID, CoordHandle*);
 			
 			void updateUI();
+			CoordHandle *getHandle() {return this->ctrl;}
 			CoordPlaneLog *getPlaneLog();
 			CoordPlaneMap *getPlaneMap();
 			CoordPlaneValidator *getPlaneValidator();

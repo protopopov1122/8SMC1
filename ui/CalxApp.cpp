@@ -1,4 +1,5 @@
 #include "CalxApp.h"
+#include "CalxFrame.h"
 
 namespace CalX {
 	

@@ -7,15 +7,18 @@
 
 namespace CalX {
 	
+	class CalxPanel; // Forward referencing
+	
 	class CalxFrame : public wxFrame {
 		public:
 			CalxFrame(std::string);
 			std::ostream *getConsole();
-			
+			CalxPanel *getPanel();
 		private:
 			void OnClose(wxCloseEvent&);
 			
 			std::ostream *console;
+			CalxPanel *panel;
 	};
 }
 

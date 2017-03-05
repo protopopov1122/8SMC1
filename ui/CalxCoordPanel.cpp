@@ -1,5 +1,6 @@
 #include "CalxCoordPanel.h"
 #include "CalxCoordDialog.h"
+#include "CalxPanel.h"
 #include <wx/listbook.h>
 #include <wx/sizer.h>
 
@@ -54,14 +55,14 @@ namespace CalX {
 		this->coords.push_back(ctrl);
 		this->coordList->Append("Plane #" + std::to_string(handle->getID()));
 		this->coordList->SetSelection(this->coordList->GetCount() - 1);
-		updateUI();
+		wxGetApp().getMainFrame()->getPanel()->updateUI();
 	}
 	
 	void CalxCoordPanel::removePlane(size_t pl) {
 		this->coordList->Delete(pl);
 		this->coords.at(pl)->Destroy();
 		this->coords.erase(this->coords.begin() + pl);
-		updateUI();
+		wxGetApp().getMainFrame()->getPanel()->updateUI();
 	}
 	
 	void CalxCoordPanel::OnExit(wxCloseEvent &evt) {

@@ -14,7 +14,7 @@ namespace CalX {
 		
 		wxSplitterWindow *mainPanel = new wxSplitterWindow(this, wxID_ANY);
 		
-		CalxPanel *panel = new CalxPanel(mainPanel, wxID_ANY);
+		this->panel = new CalxPanel(mainPanel, wxID_ANY);
 		CalxConsoleWidget *console = new CalxConsoleWidget(mainPanel, wxID_ANY);
 		panel->Show(true);
 		console->Show(true);
@@ -27,6 +27,10 @@ namespace CalX {
 		Bind(wxEVT_CLOSE_WINDOW, &CalxFrame::OnClose, this);
 		Layout();
 		Fit();
+	}
+	
+	CalxPanel *CalxFrame::getPanel() {
+		return this->panel;
 	}
 	
 	std::ostream *CalxFrame::getConsole() {
