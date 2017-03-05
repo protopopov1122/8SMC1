@@ -2,6 +2,7 @@
 #include <wx/textctrl.h>
 #include "CalxFrame.h"
 #include "CalxPanel.h"
+#include "task/CalxTaskPanel.h"
 #include "CalxConsoleWidget.h"
 
 namespace CalX {
@@ -37,6 +38,7 @@ namespace CalX {
 	}
 
 	void CalxFrame::OnClose(wxCloseEvent &evt) {
+		this->panel->getTasks()->stop();
 		Destroy();
 	}
 }

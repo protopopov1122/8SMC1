@@ -76,6 +76,11 @@ namespace CalX {
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxTaskPanel::OnExit, this);	
 	}
 	
+	void CalxTaskPanel::stop() {
+		this->queue->stop();
+		this->queue->Kill();
+	}
+	
 	void CalxTaskPanel::updateUI() {
 		for (const auto& t : this->list) {
 			t->Show(false);
@@ -96,8 +101,6 @@ namespace CalX {
 	}
 	
 	void CalxTaskPanel::OnExit(wxCloseEvent &evt) {
-		this->queue->stop();
-		this->queue->Kill();
 	}
 	
 	void CalxTaskPanel::OnNewGcodeClick(wxCommandEvent &evt) {

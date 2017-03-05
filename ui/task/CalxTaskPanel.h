@@ -18,6 +18,7 @@ namespace CalX {
 			CalxTaskPanel(wxWindow*, wxWindowID);
 			
 			void updateUI();
+			void stop();
 		private:
 			void OnExit(wxCloseEvent&);
 			void OnNewGcodeClick(wxCommandEvent&);
