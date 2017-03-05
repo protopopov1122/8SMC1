@@ -337,7 +337,9 @@ namespace CalX {
 			}
 			
 			virtual void perform(SystemManager *sysman) {
+				handle->getController()->sendUse();
 				builder->build(sysman, handle, translator, speed);
+				handle->getController()->sendUnuse();
 			}
 			
 		private:
