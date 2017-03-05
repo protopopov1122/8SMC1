@@ -1,14 +1,13 @@
 #ifndef _8SMC1_UI_CALX_TASK_PANEL_H_
 #define _8SMC1_UI_CALX_TASK_PANEL_H_
 
-#include "calx.h"
-#include "CalxApp.h"
-#include "CalxTaskHandle.h"
-#include "CalxActionQueue.h"
 #include <vector>
 #include <wx/listbox.h>
 #include <wx/spinctrl.h>
 #include <wx/choice.h>
+#include "CalxApp.h"
+#include "CalxTaskHandle.h"
+#include "CalxActionQueue.h"
 
 namespace CalX {
 	

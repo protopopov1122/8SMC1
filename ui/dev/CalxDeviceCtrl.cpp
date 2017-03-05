@@ -9,38 +9,32 @@
 using namespace _8SMC1;
 
 namespace CalX {
+	
+	void CalxDeviceTimer::Notify() {
+		ctrl->updateUI();
+	}
 
 	CalxMotorEventListener::CalxMotorEventListener(CalxDeviceCtrl *ctrl) {
 		this->dev = ctrl;
+		this->used = 0;
 	}
 	
 	CalxMotorEventListener::~CalxMotorEventListener() {
 		
 	}
 	
-	void CalxMotorEventListener::moving(MotorMoveEvent &evt) {
-		dev->Enable(false);
-		dev->updateUI();
+	void CalxMotorEventListener::use() {
+		if (this->used == 0) {
+			dev->Enable(false);
+		}
+		this->used++;
 	}
 	
-	void CalxMotorEventListener::moved(MotorMoveEvent &evt) {
-		dev->Enable(true);
-		dev->updateUI();
-	}
-	
-	void CalxMotorEventListener::stopped(MotorErrorEvent &evt) {
-		dev->Enable(true);
-		dev->updateUI();
-	}
-	
-	void CalxMotorEventListener::rolling(MotorRollEvent &evt) {
-		dev->Enable(false);
-		dev->updateUI();
-	}
-	
-	void CalxMotorEventListener::rolled(MotorRollEvent &evt) {
-		dev->Enable(true);
-		dev->updateUI();
+	void CalxMotorEventListener::unuse() {
+		this->used--;
+		if (this->used == 0) {
+			dev->Enable(true);
+		}
 	}
 
 	class CalxDevMoveAction : public CalxAction {
@@ -188,6 +182,8 @@ namespace CalX {
 		this->dev->addEventListener(this->listener);
 		this->queue->Run();
 		updateUI();
+		this->timer.setCtrl(this);
+		this->timer.Start(100);
 	}
 	
 	void CalxDeviceCtrl::updateUI() {
@@ -239,10 +235,10 @@ namespace CalX {
 	}
 	
 	void CalxDeviceCtrl::threadUpdate(wxThreadEvent &evt) {
-		updateUI();
 	}
 	
 	void CalxDeviceCtrl::OnExit(wxCloseEvent &evt) {
+		this->timer.Stop();
 		this->dev->removeEventListener(this->listener);
 		this->queue->stop();
 		this->queue->Kill();

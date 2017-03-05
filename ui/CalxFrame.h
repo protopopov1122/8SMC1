@@ -1,13 +1,12 @@
 #ifndef _8SMC1_UI_CALX_FRAME_H_
 #define _8SMC1_UI_CALX_FRAME_H_
 
-#include "calx.h"
 #include <string>
 #include <iostream>
+#include "calx.h"
+#include "CalxPanel.h"
 
 namespace CalX {
-	
-	class CalxPanel; // Forward referencing
 	
 	class CalxFrame : public wxFrame {
 		public:

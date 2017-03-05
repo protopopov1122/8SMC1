@@ -1,12 +1,17 @@
-#include "CalxCoordCtrl.h"
-#include "CalxApp.h"
-#include "ctrl-lib/graph/FunctionParser.h"
-#include "ctrl-lib/graph/FunctionEngine.h"
 #include <sstream>
 #include <wx/stattext.h>
 #include <wx/sizer.h>
+#include <wx/timer.h>
+#include "ctrl-lib/graph/FunctionParser.h"
+#include "ctrl-lib/graph/FunctionEngine.h"
+#include "CalxApp.h"
+#include "CalxCoordCtrl.h"
 
 namespace CalX {
+	
+	void CalxCoordTimer::Notify() {
+		ctrl->updateUI();
+	}
 	
 	void CalxCoordLinearCtrl::init() {
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(2);
@@ -239,34 +244,24 @@ namespace CalX {
 	
 	CalxCoordEventListener::CalxCoordEventListener(CalxCoordCtrl *ctrl) {
 		this->ctrl = ctrl;
+		this->used = 0;
 	}
 	
 	CalxCoordEventListener::~CalxCoordEventListener() {
 	}
 	
-	void CalxCoordEventListener::moving(CoordMoveEvent &evt) {
-		this->ctrl->Enable(false);
-		this->ctrl->updateUI();
+	void CalxCoordEventListener::use() {
+		if (this->used == 0) {
+			ctrl->Enable(false);
+		}
+		this->used++;
 	}
 	
-	void CalxCoordEventListener::moved(CoordMoveEvent &evt) {
-		this->ctrl->Enable(true);
-		this->ctrl->updateUI();
-	}
-	
-	void CalxCoordEventListener::stopped(CoordErrorEvent &evt) {
-		this->ctrl->Enable(true);
-		this->ctrl->updateUI();
-	}
-	
-	void CalxCoordEventListener::calibrating(CoordCalibrateEvent &evt) {
-		this->ctrl->Enable(false);
-		this->ctrl->updateUI();
-	}
-	
-	void CalxCoordEventListener::calibrated(CoordCalibrateEvent &evt) {
-		this->ctrl->Enable(true);
-		this->ctrl->updateUI();
+	void CalxCoordEventListener::unuse() {
+		this->used--;
+		if (this->used == 0) {
+			ctrl->Enable(true);
+		}
 	}
 	
 	class CalxCoordMoveAction : public CalxAction {
@@ -371,16 +366,16 @@ namespace CalX {
 		: wxScrolledWindow::wxScrolledWindow(win, id) {
 		this->ctrl = ctrl;
 		
-		motor_point_t mapOffset = {0, 0};
-		motor_scale_t mapScale = {1.0f, 1.0f};
-		this->map = new CoordPlaneMap(mapOffset, mapScale, ctrl->peekPlane());
-		ctrl->pushPlane(this->map);
 		motor_point_t validateMin = {INT_MIN, INT_MIN};
 		motor_point_t validateMax = {INT_MAX, INT_MAX};
 		this->validator = new CoordPlaneValidator(validateMin, validateMax, 4000, ctrl->peekPlane());
 		ctrl->pushPlane(this->validator);
 		this->log = new CoordPlaneLog(ctrl->peekPlane(), wxGetApp().getMainFrame()->getConsole(), "Plane #" + std::to_string(ctrl->getID()) + ": ");
 		ctrl->pushPlane(this->log);
+		motor_point_t mapOffset = {0, 0};
+		motor_scale_t mapScale = {1.0f, 1.0f};
+		this->map = new CoordPlaneMap(mapOffset, mapScale, ctrl->peekPlane());
+		ctrl->pushPlane(this->map);
 		
 		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
 		this->queue->Run();
@@ -446,6 +441,9 @@ namespace CalX {
 		this->Layout();
 		this->FitInside();
         this->SetScrollRate(5, 5);
+		
+		this->timer.setCtrl(this);
+		timer.Start(100);
 	}
 	
 	void CalxCoordCtrl::updateUI() {
@@ -457,7 +455,6 @@ namespace CalX {
 								"\nSize: " + std::to_string(ctrl->getSize().w) +
 									+ "x" + std::to_string(ctrl->getSize().h);
 		this->generalInfoText->SetLabel(general);
-		Layout();
 	}
 	
 	CoordPlaneLog *CalxCoordCtrl::getPlaneLog() {
@@ -526,6 +523,7 @@ namespace CalX {
 	}
 	
 	void CalxCoordCtrl::OnExit(wxCloseEvent &evt) {
+		timer.Stop();
 		this->ctrl->removeEventListener(this->listener);
 		this->queue->stop();
 		this->queue->Kill();

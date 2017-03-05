@@ -2,7 +2,6 @@
 #define _8SMC1_UI_CALX_COORD_DIALOG_H_
 
 #include "calx.h"
-#include "ctrl-lib/SystemManager.h"
 #include <wx/choice.h>
 
 using namespace _8SMC1;

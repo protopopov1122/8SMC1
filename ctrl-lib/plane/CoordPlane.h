@@ -50,6 +50,8 @@ namespace _8SMC1 {
 			
 			void addEventListener(CoordEventListener*);
 			void removeEventListener(CoordEventListener*);
+			void sendUse();
+			void sendUnuse();
 		private:		
 			DeviceController *xAxis;
 			DeviceController *yAxis;

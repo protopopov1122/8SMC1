@@ -1,11 +1,10 @@
 #ifndef _8SMC1_UI_CALX_ACTION_QUEUE_H_
 #define _8SMC1_UI_CALX_ACTION_QUEUE_H_
 
-#include "calx.h"
+#include <vector>
 #include <wx/thread.h>
 #include <wx/event.h>
-#include <vector>
-#include "ctrl-lib/SystemManager.h"
+#include "calx.h"
 
 using namespace _8SMC1;
 
@@ -31,6 +30,8 @@ namespace CalX {
 			private:
 				wxEvtHandler *handle;
 				wxMutex *mutex;
+				wxCondition *cond;
+				wxMutex condMutex;
 				std::vector<CalxAction*> queue;
 				bool work;
 				SystemManager *sysman;

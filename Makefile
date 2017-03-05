@@ -7,8 +7,11 @@ HEADERS=./res
 LIB=./res
 WX=.
 
+TARGET=debug
 LANG=-std=c++11 -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-attributes
-DBG=-O0
+DBG_debug=-O0
+DBG_release=-O2
+DBG=$(DBG_$(TARGET))
 INCLUDES=-I.
 EXTRA=
 CFLAGS=$(LANG) $(DBG) -I$(HEADERS) $(INCLUDES) $(EXTRA)
@@ -114,46 +117,46 @@ main.o:
 
 
 CalxActionQueue.o:
-	$(CC) $(CFLAGS) -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxActionQueue.cpp
+	$(CC) $(CFLAGS) -I ui -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxActionQueue.cpp
 
 CalxApp.o:
-	$(CC) $(CFLAGS) -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxApp.cpp
+	$(CC) $(CFLAGS) -I ui -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxApp.cpp
 
 CalxConsoleWidget.o:
-	$(CC) $(CFLAGS) -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxConsoleWidget.cpp
-
-CalxCoordCtrl.o:
-	$(CC) $(CFLAGS) -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxCoordCtrl.cpp
-
-CalxCoordDialog.o:
-	$(CC) $(CFLAGS) -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxCoordDialog.cpp
-
-CalxCoordPanel.o:
-	$(CC) $(CFLAGS) -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxCoordPanel.cpp
-
-CalxCoordTranslator.o:
-	$(CC) $(CFLAGS) -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxCoordTranslator.cpp
-
-CalxDeviceCtrl.o:
-	$(CC) $(CFLAGS) -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxDeviceCtrl.cpp
-
-CalxDevicePanel.o:
-	$(CC) $(CFLAGS) -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxDevicePanel.cpp
+	$(CC) $(CFLAGS) -I ui -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxConsoleWidget.cpp
 
 CalxFrame.o:
-	$(CC) $(CFLAGS) -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxFrame.cpp
-
-CalxGcodeHandle.o:
-	$(CC) $(CFLAGS) -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxGcodeHandle.cpp
-
-CalxGcodeLoader.o:
-	$(CC) $(CFLAGS) -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxGcodeLoader.cpp
+	$(CC) $(CFLAGS) -I ui -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxFrame.cpp
 
 CalxPanel.o:
-	$(CC) $(CFLAGS) -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxPanel.cpp
+	$(CC) $(CFLAGS) -I ui -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxPanel.cpp
+
+CalxCoordCtrl.o:
+	$(CC) $(CFLAGS) -I ui -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/coord/CalxCoordCtrl.cpp
+
+CalxCoordDialog.o:
+	$(CC) $(CFLAGS) -I ui -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/coord/CalxCoordDialog.cpp
+
+CalxCoordPanel.o:
+	$(CC) $(CFLAGS) -I ui -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/coord/CalxCoordPanel.cpp
+
+CalxCoordTranslator.o:
+	$(CC) $(CFLAGS) -I ui -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/coord/CalxCoordTranslator.cpp
+
+CalxDeviceCtrl.o:
+	$(CC) $(CFLAGS) -I ui -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/dev/CalxDeviceCtrl.cpp
+
+CalxDevicePanel.o:
+	$(CC) $(CFLAGS) -I ui -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/dev/CalxDevicePanel.cpp
+
+CalxGcodeHandle.o:
+	$(CC) $(CFLAGS) -I ui -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/task/CalxGcodeHandle.cpp
+
+CalxGcodeLoader.o:
+	$(CC) $(CFLAGS) -I ui -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/task/CalxGcodeLoader.cpp
 
 CalxTaskPanel.o:
-	$(CC) $(CFLAGS) -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/CalxTaskPanel.cpp
+	$(CC) $(CFLAGS) -I ui -I $(WX)/include -I $(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c ui/task/CalxTaskPanel.cpp
 
 stub: Stub.o
 	$(CC) -shared -o $(BUILD)/USMCDLL.dll Stub.o -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread
@@ -166,10 +169,10 @@ $(OUTPUT).dll: Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CoordC
 	mkdir -p $(BUILD)
 	$(CC) -shared -o $(BUILD)/$(OUTPUT).dll Device.o DeviceManager.o MotorTask.o CLI.o DevCLI.o main.o CoordController.o CoordHandle.o DeviceController.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o CircleGenerator.o GCodeParser.o GraphBuilder.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o VirtualCoordPlane.o SystemManager.o CoordTask.o CoordTaskWrapper.o BasicCoordTranslator.o ComplexCoordTranslator.o LinearCoordTranslator.o LogarithmicCoordTranslator.o PolarCoordTranslator.o  -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL -Wl,--out-implib,$(BUILD)/$(OUTPUT).a
 
-$(UI).exe: CalxActionQueue.o CalxApp.o CalxConsoleWidget.o CalxCoordCtrl.o CalxCoordDialog.o CalxCoordPanel.o CalxCoordTranslator.o CalxDeviceCtrl.o CalxDevicePanel.o CalxFrame.o CalxGcodeHandle.o CalxGcodeLoader.o CalxPanel.o CalxTaskPanel.o
+$(UI).exe: CalxActionQueue.o CalxApp.o CalxConsoleWidget.o CalxFrame.o CalxPanel.o CalxCoordCtrl.o CalxCoordDialog.o CalxCoordPanel.o CalxCoordTranslator.o CalxDeviceCtrl.o CalxDevicePanel.o CalxGcodeHandle.o CalxGcodeLoader.o CalxTaskPanel.o
 	mkdir -p $(BUILD)
 	cp $(WX)/lib/wxmsw310u_gcc_custom.dll $(BUILD)
-	$(CC) -o $(BUILD)/$(UI).exe CalxActionQueue.o CalxApp.o CalxConsoleWidget.o CalxCoordCtrl.o CalxCoordDialog.o CalxCoordPanel.o CalxCoordTranslator.o CalxDeviceCtrl.o CalxDevicePanel.o CalxFrame.o CalxGcodeHandle.o CalxGcodeLoader.o CalxPanel.o CalxTaskPanel.o  -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=$(BUILD) -lUSMCDLL -l8smc1 -lwxmsw310u_gcc_custom
+	$(CC) -o $(BUILD)/$(UI).exe CalxActionQueue.o CalxApp.o CalxConsoleWidget.o CalxFrame.o CalxPanel.o CalxCoordCtrl.o CalxCoordDialog.o CalxCoordPanel.o CalxCoordTranslator.o CalxDeviceCtrl.o CalxDevicePanel.o CalxGcodeHandle.o CalxGcodeLoader.o CalxTaskPanel.o  -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=$(BUILD) -lUSMCDLL -l8smc1 -lwxmsw310u_gcc_custom
 
 
 clean:

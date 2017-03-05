@@ -1,12 +1,11 @@
 #ifndef _8SMC1_UI_CALX_COORD_PANEL_H_
 #define _8SMC1_UI_CALX_COORD_PANEL_H_
 
-#include "calx.h"
-#include "CalxApp.h"
-#include "CalxCoordCtrl.h"
 #include <cinttypes>
 #include <vector>
 #include <wx/listbox.h>
+#include "CalxApp.h"
+#include "CalxCoordCtrl.h"
 
 namespace CalX {
 	

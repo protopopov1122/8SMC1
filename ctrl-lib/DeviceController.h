@@ -41,6 +41,8 @@ namespace _8SMC1 {
 			
 			void addEventListener(MotorEventListener*);
 			void removeEventListener(MotorEventListener*);
+			void sendUse();
+			void sendUnuse();
 		protected:
 			void sendMovingEvent(MotorMoveEvent&);
 			void sendMovedEvent(MotorMoveEvent&);

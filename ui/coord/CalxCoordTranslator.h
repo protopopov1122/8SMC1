@@ -1,9 +1,8 @@
 #ifndef _8SMC1_UI_CALX_COORD_TRANSLATOR_H_
 #define _8SMC1_UI_CALX_COORD_TRANSLATOR_H_
 
-#include "CalxApp.h"
-#include "ctrl-lib/SystemManager.h"
 #include <wx/spinctrl.h>
+#include "CalxApp.h"
 
 namespace CalX {
 	

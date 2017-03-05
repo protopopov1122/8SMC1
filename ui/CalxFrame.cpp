@@ -1,9 +1,8 @@
+#include <wx/splitter.h>
+#include <wx/textctrl.h>
 #include "CalxFrame.h"
 #include "CalxPanel.h"
 #include "CalxConsoleWidget.h"
-
-#include <wx/splitter.h>
-#include <wx/textctrl.h>
 
 namespace CalX {
 	CalxFrame::CalxFrame(std::string title)

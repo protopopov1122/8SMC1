@@ -3,10 +3,6 @@
 
 #include <iostream>
 #include "CalxApp.h"
-#include "CalxFrame.h"
-#include "CalxPanel.h"
-#include "ctrl-lib/SystemManager.h"
-#include "ctrl-lib/task/CoordTask.h"
 
 using namespace _8SMC1;
 

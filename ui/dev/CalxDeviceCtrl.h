@@ -1,10 +1,11 @@
 #ifndef _8SMC1_UI_CALX_DEVICE_CTRL_H_
 #define _8SMC1_UI_CALX_DEVICE_CTRL_H_
 
-#include "calx.h"
-#include "CalxActionQueue.h"
 #include <wx/stattext.h>
 #include <wx/spinctrl.h>
+#include <wx/timer.h>
+#include "calx.h"
+#include "CalxActionQueue.h"
 
 namespace CalX {
 	
@@ -15,13 +16,23 @@ namespace CalX {
 			CalxMotorEventListener(CalxDeviceCtrl*);
 			virtual ~CalxMotorEventListener();
 			
-			virtual void moving(MotorMoveEvent&);
-			virtual void moved(MotorMoveEvent&);
-			virtual void stopped(MotorErrorEvent&);
-			virtual void rolling(MotorRollEvent&);
-			virtual void rolled(MotorRollEvent&);
+			virtual void use();
+			virtual void unuse();
 		private:
 			CalxDeviceCtrl *dev;
+			int used;
+	};
+	
+	
+	class CalxDeviceTimer : public wxTimer {
+		public:
+			CalxDeviceTimer() : wxTimer::wxTimer() {
+			}
+			~CalxDeviceTimer() {}
+			void setCtrl(CalxDeviceCtrl *d) {this->ctrl = d;}
+			virtual void Notify();
+		private:
+			CalxDeviceCtrl *ctrl;
 	};
 	
 	class CalxDeviceCtrl : public wxPanel {
@@ -44,6 +55,7 @@ namespace CalX {
 			_8SMC1::DeviceController *dev;
 			CalxActionQueue *queue;
 			MotorEventListener *listener;
+			CalxDeviceTimer timer;
 			
 			// Value windows
 			wxSpinCtrl *moveSpin;

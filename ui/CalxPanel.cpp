@@ -1,4 +1,7 @@
 #include "CalxPanel.h"
+#include "dev/CalxDevicePanel.h"
+#include "coord/CalxCoordPanel.h"
+#include "task/CalxTaskPanel.h"
 
 namespace CalX {
 	

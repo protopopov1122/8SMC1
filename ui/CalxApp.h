@@ -2,12 +2,11 @@
 #define _8SMC1_UI_CALX_APP_H_
 
 #include "calx.h"
+#include "CalxFrame.h"
 
 using namespace _8SMC1;
 
 namespace CalX {
-	
-	class CalxFrame; // Forward referencing
 	
 	class CalxApp : public wxApp {
 		public:

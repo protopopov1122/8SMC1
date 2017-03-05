@@ -17,7 +17,7 @@ printf "\n"
 find misc device ctrl-lib cli -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS) -c "$0"\n"}' 
 # Generate ui object file build targets
 printf "\n" 
-find ui -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS) -I \$(WX)/include -I \$(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c "$0"\n"}' 
+find ui -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS) -I ui -I \$(WX)/include -I \$(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c "$0"\n"}' 
 
 # Generate stub build target
 printf "stub: Stub.o\n\t\$(CC) -shared -o \$(BUILD)/USMCDLL.dll Stub.o -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread\n\n" 

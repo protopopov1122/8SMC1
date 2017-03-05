@@ -1,8 +1,8 @@
-#include "CalxTaskHandle.h"
-#include "ctrl-lib/misc/GCodeParser.h"
+#include <sstream>
 #include <wx/sizer.h>
 #include <wx/textctrl.h>
-#include <sstream>
+#include "CalxTaskHandle.h"
+#include "ctrl-lib/misc/GCodeParser.h"
 
 namespace CalX {
 	

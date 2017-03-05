@@ -22,6 +22,8 @@ namespace _8SMC1 {
 	class MotorEventListener {
 		public:
 			virtual ~MotorEventListener() {}
+			virtual void use() {}
+			virtual void unuse() {}
 			virtual void moving(MotorMoveEvent&) {}
 			virtual void moved(MotorMoveEvent&) {}
 			virtual void stopped(MotorErrorEvent&) {}
@@ -47,6 +49,8 @@ namespace _8SMC1 {
 	class CoordEventListener {
 		public:
 			virtual ~CoordEventListener() {}
+			virtual void use() {}
+			virtual void unuse() {}
 			virtual void moving(CoordMoveEvent&) {}
 			virtual void moved(CoordMoveEvent&) {}
 			virtual void stopped(CoordErrorEvent&) {}

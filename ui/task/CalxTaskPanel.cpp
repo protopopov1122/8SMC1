@@ -1,9 +1,10 @@
-#include "CalxTaskPanel.h"
-#include "CalxGcodeLoader.h"
-#include <wx/sizer.h>
-#include <wx/stattext.h>
 #include <iostream>
 #include <fstream>
+#include <wx/sizer.h>
+#include <wx/stattext.h>
+#include "coord/CalxCoordPanel.h"
+#include "CalxTaskPanel.h"
+#include "CalxGcodeLoader.h"
 
 namespace CalX {
 	
@@ -17,9 +18,11 @@ namespace CalX {
 			}
 			
 			virtual void perform(SystemManager *sysman) {
+				handle->getController()->sendUse();
 				panel->Enable(false);
 				task->perform(handle, prms, sysman);
 				panel->Enable(true);
+				handle->getController()->sendUnuse();
 			}
 		private:
 			CalxTaskPanel *panel;

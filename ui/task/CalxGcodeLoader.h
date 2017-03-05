@@ -2,7 +2,7 @@
 #define _8SMC1_UI_CALX_GCODE_LOADER_H_
 
 #include "CalxApp.h"
-#include "CalxCoordTranslator.h"
+#include "coord/CalxCoordTranslator.h"
 #include <string>
 #include <wx/textctrl.h>
 

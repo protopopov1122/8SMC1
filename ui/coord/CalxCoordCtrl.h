@@ -1,14 +1,13 @@
 #ifndef _8SMC1_UI_CALX_COORD_CTRL_H_
 #define _8SMC1_UI_CALX_COORD_CTRL_H_
 
-#include "calx.h"
-#include "CalxActionQueue.h"
-#include "CalxFrame.h"
-#include "ctrl-lib/SystemManager.h"
 #include <wx/stattext.h>
 #include <wx/choice.h>
 #include <wx/checkbox.h>
 #include <wx/spinctrl.h>
+#include "calx.h"
+#include "CalxActionQueue.h"
+#include "CalxFrame.h"
 
 using namespace _8SMC1;
 
@@ -20,13 +19,11 @@ namespace CalX {
 		public:
 			CalxCoordEventListener(CalxCoordCtrl*);
 			virtual ~CalxCoordEventListener();
-			virtual void moving(CoordMoveEvent&);
-			virtual void moved(CoordMoveEvent&);
-			virtual void stopped(CoordErrorEvent&);
-			virtual void calibrating(CoordCalibrateEvent&);
-			virtual void calibrated(CoordCalibrateEvent&);
+			virtual void use();
+			virtual void unuse();
 		private:
 			CalxCoordCtrl *ctrl;
+			int used;
 	};
 	
 	
@@ -165,6 +162,18 @@ namespace CalX {
 			wxSpinCtrl *speed;
 	};
 	
+	
+	class CalxCoordTimer : public wxTimer {
+		public:
+			CalxCoordTimer() : wxTimer::wxTimer() {
+			}
+			~CalxCoordTimer() {}
+			void setCtrl(CalxCoordCtrl *c) {this->ctrl = c;}
+			virtual void Notify();
+		private:
+			CalxCoordCtrl *ctrl;
+	};
+	
 	class CalxCoordCtrl : public wxScrolledWindow {
 		public:
 			friend class CalxCoordEventListener;
@@ -190,12 +199,14 @@ namespace CalX {
 			CoordEventListener *listener;
 			CalxActionQueue *queue;
 			
+			
 			// Components
 			wxStaticText *generalInfoText;
 			CalxCoordLinearCtrl *linear;
 			CalxCoordArcCtrl *arc;
 			CalxCoordGraphCtrl *graphCtrl;
 			CalxCoordOtherCtrl *otherCtrl;
+			CalxCoordTimer timer;
 			
 			// Filters
 			CoordPlaneLog *log;

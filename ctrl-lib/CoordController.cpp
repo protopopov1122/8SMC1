@@ -75,6 +75,8 @@ namespace _8SMC1 {
 		}
 		xAxis->dest = point.x > xAxis->dev->getPosition() ? MoveType::MoveUp :
 				MoveType::MoveDown;
+		xAxis->sendUse();
+		yAxis->sendUse();
 		MotorMoveEvent xmevt = {point.x, x_speed, div};
 		xAxis->dev->start(point.x, x_speed, div, false);
 		xAxis->sendMovingEvent(xmevt);
@@ -86,6 +88,7 @@ namespace _8SMC1 {
 		yAxis->sendMovingEvent(ymevt);
 		CoordMoveEvent evt = {point, speed, div, sync};
 		sendMovingEvent(evt);
+		sendUse();
 		while (xDev->isRunning() || yDev->isRunning()) {
 			if (xDev->isRunning()) {
 				ErrorCode code = xAxis->checkTrailers();
@@ -97,6 +100,9 @@ namespace _8SMC1 {
 					yAxis->sendStoppedEvent(merrevt);
 					CoordErrorEvent eevt = {code};
 					sendStoppedEvent(eevt);
+					xAxis->sendUnuse();
+					yAxis->sendUnuse();
+					sendUnuse();
 					return code;
 				}
 			}
@@ -110,6 +116,9 @@ namespace _8SMC1 {
 					yAxis->sendStoppedEvent(merrevt);
 					CoordErrorEvent eevt = {code};
 					sendStoppedEvent(eevt);
+					xAxis->sendUnuse();
+					yAxis->sendUnuse();
+					sendUnuse();
 					return code;
 				}
 			}
@@ -117,6 +126,9 @@ namespace _8SMC1 {
 		xAxis->sendMovedEvent(xmevt);
 		yAxis->sendMovedEvent(ymevt);
 		sendMovedEvent(evt);
+		xAxis->sendUnuse();
+		yAxis->sendUnuse();
+		sendUnuse();
 		return ErrorCode::NoError;
 	}
 
@@ -144,10 +156,13 @@ namespace _8SMC1 {
 		bool xpr = false;
 		bool ypr = false;
 		MotorRollEvent mevt = {tr};
+		xAxis->sendUse();
+		yAxis->sendUse();
 		xAxis->sendRollingEvent(mevt);
 		yAxis->sendRollingEvent(mevt);
 		CoordCalibrateEvent evt = {tr};
 		sendCalibratingEvent(evt);
+		sendUse();
 		while (!(xpr && ypr)) {
 			if (!xAxis->getDevice()->isTrailerPressed(tr)) {
 				if (!xpr && !xAxis->getDevice()->isRunning()) {
@@ -197,7 +212,10 @@ namespace _8SMC1 {
 		yAxis->resetPosition();
 		xAxis->sendRolledEvent(mevt);
 		yAxis->sendRolledEvent(mevt);
+		xAxis->sendUnuse();
+		yAxis->sendUnuse();
 		sendCalibratedEvent(evt);
+		sendUnuse();
 		return ErrorCode::NoError;
 	}
 
@@ -229,6 +247,9 @@ namespace _8SMC1 {
 		}
 		motor_point_t pnt;
 		size_t count = 0;
+		xAxis->sendUse();
+		yAxis->sendUse();
+		sendUse();
 		do {
 			if (clockwise) {
 				pnt = cir.getPrevElement();
@@ -238,12 +259,18 @@ namespace _8SMC1 {
 			if (count++ % splitter == 0) {
 				ErrorCode err = this->move(pnt, speed, div, true);
 				if (err != ErrorCode::NoError) {
+					xAxis->sendUnuse();
+					yAxis->sendUnuse();
+					sendUnuse();
 					return err;
 				}
 				pnt = getPosition();
 			}
 		} while (abs(dest.x - pnt.x) > COMPARISON_RADIUS ||
 			abs(dest.y - pnt.y) > COMPARISON_RADIUS);
+		xAxis->sendUnuse();
+		yAxis->sendUnuse();
+		sendUnuse();
 		return this->move(dest, speed, div, true);
 	}
 
@@ -311,5 +338,21 @@ namespace _8SMC1 {
 		for (const auto& l : this->listeners) {
 			l->calibrated(evt);
 		}
+	}
+	
+	void CoordController::sendUse() {
+		for (const auto& l : this->listeners) {
+			l->use();
+		}
+		xAxis->sendUse();
+		yAxis->sendUse();
+	}
+	
+	void CoordController::sendUnuse() {
+		for (const auto& l : this->listeners) {
+			l->unuse();
+		}
+		xAxis->sendUnuse();
+		yAxis->sendUnuse();
 	}
 }

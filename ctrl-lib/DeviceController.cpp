@@ -163,4 +163,16 @@ namespace _8SMC1 {
 			l->rolled(evt);
 		}
 	}
+	
+	void DeviceController::sendUse() {
+		for (const auto& l : this->listeners) {
+			l->use();
+		}
+	}
+	
+	void DeviceController::sendUnuse() {
+		for (const auto& l : this->listeners) {
+			l->unuse();
+		}
+	}
 }
