@@ -244,24 +244,32 @@ namespace CalX {
 	
 	CalxCoordEventListener::CalxCoordEventListener(CalxCoordCtrl *ctrl) {
 		this->ctrl = ctrl;
-		this->used = 0;
 	}
 	
 	CalxCoordEventListener::~CalxCoordEventListener() {
 	}
 	
 	void CalxCoordEventListener::use() {
-		if (this->used == 0) {
-			ctrl->Enable(false);
-		}
-		this->used++;
+		ctrl->use();
 	}
 	
 	void CalxCoordEventListener::unuse() {
-		this->used--;
-		if (this->used == 0) {
-			ctrl->Enable(true);
-		}
+		ctrl->unuse();
+	}
+	
+	CalxCoordDeviceListener::CalxCoordDeviceListener(CalxCoordCtrl *ctrl) {
+		this->ctrl = ctrl;
+	}
+	
+	CalxCoordDeviceListener::~CalxCoordDeviceListener() {
+	}
+	
+	void CalxCoordDeviceListener::use() {
+		ctrl->use();
+	}
+	
+	void CalxCoordDeviceListener::unuse() {
+		ctrl->unuse();
 	}
 	
 	class CalxCoordMoveAction : public CalxAction {
@@ -381,6 +389,7 @@ namespace CalX {
 	CalxCoordCtrl::CalxCoordCtrl(wxWindow *win, wxWindowID id, CoordHandle *ctrl)
 		: wxScrolledWindow::wxScrolledWindow(win, id) {
 		this->ctrl = ctrl;
+		this->used = 0;
 		
 		motor_point_t validateMin = {INT_MIN, INT_MIN};
 		motor_point_t validateMax = {INT_MAX, INT_MAX};
@@ -397,6 +406,10 @@ namespace CalX {
 		this->queue->Run();
 		this->listener = new CalxCoordEventListener(this);
 		this->ctrl->addEventListener(this->listener);
+		this->xListener = new CalxCoordDeviceListener(this);
+		this->yListener = new CalxCoordDeviceListener(this);
+		this->ctrl->getController()->getXAxis()->addEventListener(this->xListener);
+		this->ctrl->getController()->getYAxis()->addEventListener(this->yListener);
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		this->SetSizer(sizer);
 		
@@ -546,10 +559,26 @@ namespace CalX {
 	
 	void CalxCoordCtrl::OnExit(wxCloseEvent &evt) {
 		this->ctrl->removeEventListener(this->listener);
+		this->ctrl->getController()->getXAxis()->removeEventListener(this->xListener);
+		this->ctrl->getController()->getYAxis()->removeEventListener(this->yListener);
 		wxGetApp().getSystemManager()->removeCoord(ctrl->getID());
 	}
 	
 	void CalxCoordCtrl::OnQueueUpdate(wxThreadEvent &evt) {
 		
+	}
+	
+	void CalxCoordCtrl::use() {
+		if (this->used == 0) {
+			Enable(false);
+		}
+		this->used++;
+	}
+	
+	void CalxCoordCtrl::unuse() {
+		this->used--;
+		if (this->used == 0) {
+			Enable(true);
+		}
 	}
 }

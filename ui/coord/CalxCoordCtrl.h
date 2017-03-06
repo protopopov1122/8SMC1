@@ -23,10 +23,17 @@ namespace CalX {
 			virtual void unuse();
 		private:
 			CalxCoordCtrl *ctrl;
-			int used;
 	};
 	
-	
+	class CalxCoordDeviceListener : public MotorEventListener {
+		public:
+			CalxCoordDeviceListener(CalxCoordCtrl*);
+			virtual ~CalxCoordDeviceListener();
+			virtual void use();
+			virtual void unuse();
+		private:
+			CalxCoordCtrl *ctrl;
+	};
 	
 	class CalxCoordLinearCtrl : public wxPanel {
 		public:
@@ -192,13 +199,18 @@ namespace CalX {
 			void OnGraphBuildClick(wxCommandEvent&);
 			void OnCalibrateClick(wxCommandEvent&);
 			void OnUpdateFiltersClick(wxCommandEvent&);
+			void use();
+			void unuse();
 		private:
 			void OnExit(wxCloseEvent&);
 			void OnQueueUpdate(wxThreadEvent&);
 			
 			CoordHandle *ctrl;
 			CoordEventListener *listener;
+			CalxCoordDeviceListener *xListener;
+			CalxCoordDeviceListener *yListener;
 			CalxActionQueue *queue;
+			int used;
 			
 			
 			// Components
