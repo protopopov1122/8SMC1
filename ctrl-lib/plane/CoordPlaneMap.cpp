@@ -81,4 +81,12 @@ namespace _8SMC1 {
 		os << "map(offset=" << this->offset.x << "x" << this->offset.y
 			<< "; scale=" << this->scale.x << "x" << this->scale.y << ")";
 	}
+	
+	void CoordPlaneMap::use() {
+		this->plane->use();
+	}
+	
+	void CoordPlaneMap::unuse() {
+		this->plane->unuse();
+	}
 }

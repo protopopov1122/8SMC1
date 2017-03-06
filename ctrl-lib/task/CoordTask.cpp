@@ -20,12 +20,15 @@ namespace _8SMC1 {
 
 	ErrorCode ProgrammedCoordTask::perform(CoordPlane *ctrl, TaskParameters &prms, SystemManager *sysman) {
 		ErrorCode errcode;
+		ctrl->use();
 		for (size_t i = 0; i < this->list.size(); i++) {
 			errcode = this->list.at(i)->perform(ctrl, prms, sysman);
 			if (errcode != ErrorCode::NoError) {
+				ctrl->unuse();
 				return errcode;
 			}
 		}
+		ctrl->unuse();
 		return ErrorCode::NoError;
 	}
 
@@ -48,6 +51,7 @@ namespace _8SMC1 {
 	}
 
 	ErrorCode MoveTaskStep::perform(CoordPlane *ctrl, TaskParameters &prms, SystemManager *sysman) {
+		ErrorCode code;
 		if (this->rel) {
 			return ctrl->relativeMove(this->pos, this->speed_coef * prms.speed, 8, true);
 		} else {

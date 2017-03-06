@@ -90,4 +90,12 @@ namespace _8SMC1 {
 			<< "; max=" << this->max.x << "x" << this->max.y
 			<< "; speed=" << this->max_speed << ")";
 	}
+	
+	void CoordPlaneValidator::use() {
+		this->plane->use();
+	}
+	
+	void CoordPlaneValidator::unuse() {
+		this->plane->unuse();
+	}
 }

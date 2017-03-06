@@ -33,6 +33,7 @@ namespace _8SMC1 {
 	}
 	
 	ErrorCode GraphBuilder::build(SystemManager *sysman, CoordPlane *plane, CoordTranslator *trans, float speed) {
+		plane->use();
 		FunctionEngine *engine = sysman->getFunctionEngine();
 		long double nan = std::numeric_limits<long double>::quiet_NaN();
 		long double last = nan;
@@ -42,6 +43,7 @@ namespace _8SMC1 {
 			engine->getScope()->putVariable("x", x);
 			engine_value_t val = engine->eval(this->node);
 			if (val.err != MathError::MNoError) {
+				plane->unuse();
 				return ErrorCode::MathExprError;
 			}
 			long double y = val.value;
@@ -59,10 +61,12 @@ namespace _8SMC1 {
 				errcode = plane->move(pnt, speed, 8, true);
 			}
 			if (errcode != ErrorCode::NoError) {
+				plane->unuse();
 				return errcode;
 			}
 			last = y;
 		}
+		plane->unuse();
 		return ErrorCode::NoError;
 	}
 }

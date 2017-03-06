@@ -107,3 +107,6 @@ Latest tests were performed on 02/03/2017, all CLI functions work, wxWidgets com
 
 ##### 04/03/2017
 UI is under heavy development, must be tested, however all implemented functions should work.
+
+##### 06/03/2017
+UI test on real motors. All implemented functions work, however log into wxTextCtrl is quite slow and should be disabled/rewritten.

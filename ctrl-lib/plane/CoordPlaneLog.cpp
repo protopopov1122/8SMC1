@@ -90,4 +90,12 @@ namespace _8SMC1 {
 		os << "log(prefix=\"" << this->prefix << "\"; log_actions="
 			<< this->log_actions << "; log_errors=" << this->log_errors << ")";
 	}
+	
+	void CoordPlaneLog::use() {
+		this->plane->use();
+	}
+	
+	void CoordPlaneLog::unuse() {
+		this->plane->unuse();
+	}
 }

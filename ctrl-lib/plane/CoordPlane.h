@@ -29,6 +29,8 @@ namespace _8SMC1 {
 			virtual ErrorCode calibrate(TrailerId) = 0;
 			virtual motor_point_t getPosition() = 0;
 			virtual motor_rect_t getSize() = 0;
+			virtual void use() = 0;
+			virtual void unuse() = 0;
 			virtual void dump(std::ostream&) = 0;
 	};
 	
@@ -50,8 +52,8 @@ namespace _8SMC1 {
 			
 			void addEventListener(CoordEventListener*);
 			void removeEventListener(CoordEventListener*);
-			void sendUse();
-			void sendUnuse();
+			virtual void use();
+			virtual void unuse();
 		private:		
 			DeviceController *xAxis;
 			DeviceController *yAxis;
@@ -85,6 +87,8 @@ namespace _8SMC1 {
 			virtual ErrorCode calibrate(TrailerId);
 			virtual motor_point_t getPosition();
 			virtual motor_rect_t getSize();
+			virtual void use();
+			virtual void unuse();
 			virtual void dump(std::ostream&);
 		private:
 			CoordPlane *plane;
@@ -110,6 +114,8 @@ namespace _8SMC1 {
 			virtual ErrorCode calibrate(TrailerId);
 			virtual motor_point_t getPosition();
 			virtual motor_rect_t getSize();
+			virtual void use();
+			virtual void unuse();
 			virtual void dump(std::ostream&);
 		private:
 			CoordPlane* plane;
@@ -135,6 +141,8 @@ namespace _8SMC1 {
 			virtual ErrorCode calibrate(TrailerId);
 			virtual motor_point_t getPosition();
 			virtual motor_rect_t getSize();
+			virtual void use();
+			virtual void unuse();
 			virtual void dump(std::ostream&);
 		private:
 			CoordPlane *plane;
@@ -158,6 +166,8 @@ namespace _8SMC1 {
 			virtual ErrorCode calibrate(TrailerId);
 			virtual motor_point_t getPosition();
 			virtual motor_rect_t getSize();
+			virtual void use();
+			virtual void unuse();
 			virtual void dump(std::ostream&);
 		private:
 			std::vector<CoordPlane*> stack;
@@ -186,6 +196,8 @@ namespace _8SMC1 {
 			virtual ErrorCode calibrate(TrailerId);
 			virtual motor_point_t getPosition();
 			virtual motor_rect_t getSize();
+			virtual void use();
+			virtual void unuse();
 			virtual void dump(std::ostream&);
 			
 		private:

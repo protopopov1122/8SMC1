@@ -59,4 +59,12 @@ namespace _8SMC1 {
 			os << std::endl;
 		}
 	}
+	
+	void CoordPlaneStack::use() {
+		this->peekPlane()->use();
+	}
+	
+	void CoordPlaneStack::unuse() {
+		this->peekPlane()->unuse();
+	}
 }

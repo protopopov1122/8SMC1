@@ -168,4 +168,11 @@ namespace _8SMC1 {
 		motor_point_t max = getPosition();
 		this->size = {min.x, min.y, abs(max.x - min.x), abs(max.y - min.y)};
 	}
+	
+	
+	void VirtualCoordPlane::use() {
+	}
+	
+	void VirtualCoordPlane::unuse() {
+	}
 }
