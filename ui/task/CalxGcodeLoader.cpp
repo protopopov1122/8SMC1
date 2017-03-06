@@ -40,6 +40,9 @@ namespace CalX {
 		
 		Layout();
 		Fit();
+		
+		wxCommandEvent evt;
+		OnChooseClick(evt);
 	}
 	
 	bool CalxGcodeLoader::isLoaded() {

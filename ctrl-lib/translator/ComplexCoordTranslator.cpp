@@ -52,6 +52,8 @@ namespace _8SMC1 {
 		this->list.at(i + 1)->setBase(t);
 		if (i > 0) {
 			t->setBase(this->list.at(i - 1));
+		} else {
+			t->setBase(nullptr);
 		}
 		return true;
 	}
