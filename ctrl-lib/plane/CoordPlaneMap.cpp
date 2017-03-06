@@ -89,4 +89,8 @@ namespace _8SMC1 {
 	void CoordPlaneMap::unuse() {
 		this->plane->unuse();
 	}
+	
+	void CoordPlaneMap::stop() {
+		this->plane->stop();
+	}
 }

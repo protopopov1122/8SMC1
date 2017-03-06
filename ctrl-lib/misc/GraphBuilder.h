@@ -22,7 +22,7 @@ namespace _8SMC1 {
 			coord_point_t getMaximum();
 			long double getStep();
 			
-			ErrorCode build(SystemManager*, CoordPlane*, CoordTranslator*, float);
+			ErrorCode build(SystemManager*, CoordPlane*, CoordTranslator*, float, TaskState*);
 		private:
 			Node *node;
 			coord_point_t min;

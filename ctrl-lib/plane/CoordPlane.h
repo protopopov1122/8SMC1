@@ -31,7 +31,18 @@ namespace _8SMC1 {
 			virtual motor_rect_t getSize() = 0;
 			virtual void use() = 0;
 			virtual void unuse() = 0;
+			virtual void stop() = 0;
 			virtual void dump(std::ostream&) = 0;
+	};
+		
+	struct TaskState {
+		CoordPlane *plane;
+		bool work;
+		
+		void stop() {
+			plane->stop();
+			work = false;
+		}
 	};
 	
 	// Coordinate plane commuticating directly with hardware
@@ -48,6 +59,8 @@ namespace _8SMC1 {
 			virtual ErrorCode calibrate(TrailerId);
 			virtual motor_point_t getPosition();
 			virtual motor_rect_t getSize();
+			virtual void stop();
+			void kill();
 			virtual void dump(std::ostream&);
 			
 			void addEventListener(CoordEventListener*);
@@ -57,6 +70,8 @@ namespace _8SMC1 {
 		private:		
 			DeviceController *xAxis;
 			DeviceController *yAxis;
+			bool work;
+			bool defWork;
 			
 			motor_rect_t size;
 			std::vector<CoordEventListener*> listeners;
@@ -89,6 +104,7 @@ namespace _8SMC1 {
 			virtual motor_rect_t getSize();
 			virtual void use();
 			virtual void unuse();
+			virtual void stop();
 			virtual void dump(std::ostream&);
 		private:
 			CoordPlane *plane;
@@ -116,6 +132,7 @@ namespace _8SMC1 {
 			virtual motor_rect_t getSize();
 			virtual void use();
 			virtual void unuse();
+			virtual void stop();
 			virtual void dump(std::ostream&);
 		private:
 			CoordPlane* plane;
@@ -143,6 +160,7 @@ namespace _8SMC1 {
 			virtual motor_rect_t getSize();
 			virtual void use();
 			virtual void unuse();
+			virtual void stop();
 			virtual void dump(std::ostream&);
 		private:
 			CoordPlane *plane;
@@ -168,6 +186,7 @@ namespace _8SMC1 {
 			virtual motor_rect_t getSize();
 			virtual void use();
 			virtual void unuse();
+			virtual void stop();
 			virtual void dump(std::ostream&);
 		private:
 			std::vector<CoordPlane*> stack;
@@ -198,6 +217,7 @@ namespace _8SMC1 {
 			virtual motor_rect_t getSize();
 			virtual void use();
 			virtual void unuse();
+			virtual void stop();
 			virtual void dump(std::ostream&);
 			
 		private:

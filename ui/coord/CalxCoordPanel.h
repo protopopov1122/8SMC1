@@ -16,6 +16,7 @@ namespace CalX {
 			size_t getCoordCount() {return coords.size();}
 			CoordHandle *getCoord(size_t sz) {return sz < coords.size() ? coords.at(sz)->getHandle() : nullptr;}
 			void updateUI();
+			void stop();
 		private:
 			void addPlane(CoordHandle*);
 			void removePlane(size_t);

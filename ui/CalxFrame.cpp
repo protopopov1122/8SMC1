@@ -1,8 +1,11 @@
 #include <wx/splitter.h>
 #include <wx/textctrl.h>
+#include <wx/app.h>
 #include "CalxFrame.h"
 #include "CalxPanel.h"
 #include "task/CalxTaskPanel.h"
+#include "coord/CalxCoordPanel.h"
+#include "dev/CalxDevicePanel.h"
 #include "CalxConsoleWidget.h"
 
 namespace CalX {
@@ -38,7 +41,12 @@ namespace CalX {
 	}
 
 	void CalxFrame::OnClose(wxCloseEvent &evt) {
+		this->panel->getDevices()->stop();
+		this->panel->getCoords()->stop();
 		this->panel->getTasks()->stop();
 		Destroy();
+		//evt.Veto();
+		//wxExit();
+		
 	}
 }

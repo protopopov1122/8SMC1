@@ -57,6 +57,10 @@ namespace CalX {
 					dev->startMove(dest, speed, 8);
 				}
 			}
+			
+			virtual void stop() {
+				dev->stop();
+			}
 		private:
 			DeviceController *dev;
 			int dest;
@@ -77,6 +81,10 @@ namespace CalX {
 			
 			virtual void perform(SystemManager *sysman) {
 				dev->moveToTrailer(tr, TRAILER_COMEBACK);
+			}
+			
+			virtual void stop() {
+				dev->stop();
 			}
 		private:
 			DeviceController *dev;
@@ -202,6 +210,10 @@ namespace CalX {
 		this->trailer2->SetLabel(tra2);
 	}
 	
+	void CalxDeviceCtrl::stop() {
+		this->queue->stop();
+	}
+	
 	void CalxDeviceCtrl::updateButtonClick(wxCommandEvent &evt) {
 		this->updateUI();
 	}
@@ -240,8 +252,6 @@ namespace CalX {
 	void CalxDeviceCtrl::OnExit(wxCloseEvent &evt) {
 		this->timer.Stop();
 		this->dev->removeEventListener(this->listener);
-		this->queue->stop();
-		this->queue->Kill();
 		this->dev->stop();
 	}
 }

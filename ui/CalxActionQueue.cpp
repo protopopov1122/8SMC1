@@ -13,6 +13,7 @@ namespace CalX {
 		this->handle = handle;
 		this->work = true;
 		this->sysman = sysman;
+		this->current = nullptr;
 	}
 	
 	CalxActionQueue::~CalxActionQueue() {
@@ -38,14 +39,20 @@ namespace CalX {
 	}
 	
 	void CalxActionQueue::stop() {
+		if (this->current != nullptr) {
+			current->stop();
+		}
 		this->work = false;
+		cond->Broadcast();
 	}
 	
 	void *CalxActionQueue::Entry() {
 		while (work) {
-			while (!this->queue.empty()) {
+			while (!this->queue.empty() && work) {
 				CalxAction *action = this->queue.at(0);
+				this->current = action;
 				action->perform(sysman);
+				this->current = nullptr;
 				this->queue.erase(this->queue.begin());
 				delete action;
 				wxQueueEvent(handle, new wxThreadEvent(wxEVT_COMMAND_QUEUE_UPDATE));

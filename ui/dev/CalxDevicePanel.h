@@ -5,9 +5,14 @@
 
 namespace CalX {
 	
+	class CalxDeviceCtrl; // Forward referencing
+	
 	class CalxDevicePanel : public wxPanel {
 		public:
 			CalxDevicePanel(wxWindow*, wxWindowID);
+			void stop();
+		private:
+			std::vector<CalxDeviceCtrl*> devs;
 	};
 }
 

@@ -30,7 +30,7 @@ namespace _8SMC1 {
 		this->coord_scale = sc;
 	}
 	
-	ErrorCode CoordTaskWrapper::perform(CoordPlane *plane, TaskParameters &prms, SystemManager *sysman) {
+	ErrorCode CoordTaskWrapper::perform(CoordPlane *plane, TaskParameters &prms, SystemManager *sysman, TaskState *state) {
 		std::vector<CoordPlane*> vec;
 		vec.push_back(plane);
 		if (this->cal_tr) {
@@ -46,7 +46,7 @@ namespace _8SMC1 {
 				vec.at(vec.size() - 1));
 			vec.push_back(map);
 		}
-		ErrorCode ec = this->task->perform(vec.at(vec.size() - 1), prms, sysman);
+		ErrorCode ec = this->task->perform(vec.at(vec.size() - 1), prms, sysman, state);
 		while (vec.size() > 1) {
 			CoordPlane *pl = vec.at(vec.size() - 1);
 			vec.pop_back();

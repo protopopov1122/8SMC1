@@ -32,18 +32,21 @@ namespace _8SMC1 {
 		return this->step;
 	}
 	
-	ErrorCode GraphBuilder::build(SystemManager *sysman, CoordPlane *plane, CoordTranslator *trans, float speed) {
+	ErrorCode GraphBuilder::build(SystemManager *sysman, CoordPlane *plane, CoordTranslator *trans, float speed, TaskState *state) {
 		plane->use();
 		FunctionEngine *engine = sysman->getFunctionEngine();
 		long double nan = std::numeric_limits<long double>::quiet_NaN();
 		long double last = nan;
 		ErrorCode errcode;
+		state->work = true;
+		state->plane = plane;
 		long double step = fabs(this->step) * (this->max.x > this->min.x ? 1 : -1);
-		for (long double x = this->min.x; (step > 0 ? x <= this->max.x : x >= this->max.x); x += step) {
+		for (long double x = this->min.x; (step > 0 ? x <= this->max.x : x >= this->max.x) && state->work; x += step) {
 			engine->getScope()->putVariable("x", x);
 			engine_value_t val = engine->eval(this->node);
 			if (val.err != MathError::MNoError) {
 				plane->unuse();
+				state->work = false;
 				return ErrorCode::MathExprError;
 			}
 			long double y = val.value;
@@ -62,10 +65,12 @@ namespace _8SMC1 {
 			}
 			if (errcode != ErrorCode::NoError) {
 				plane->unuse();
+				state->work = false;
 				return errcode;
 			}
 			last = y;
 		}
+		state->work = false;
 		plane->unuse();
 		return ErrorCode::NoError;
 	}

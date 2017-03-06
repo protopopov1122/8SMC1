@@ -41,6 +41,7 @@ namespace CalX {
 			CalxDeviceCtrl(wxWindow*, wxWindowID, _8SMC1::DeviceController*);
 			
 			void updateUI();
+			void stop();
 		private:
 			void updateButtonClick(wxCommandEvent&);
 			void switchPowerClick(wxCommandEvent&);

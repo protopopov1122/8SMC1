@@ -180,6 +180,7 @@ namespace CalX {
 			CalxCoordCtrl(wxWindow*, wxWindowID, CoordHandle*);
 			
 			void updateUI();
+			void stop();
 			CoordHandle *getHandle() {return this->ctrl;}
 			CoordPlaneLog *getPlaneLog();
 			CoordPlaneMap *getPlaneMap();

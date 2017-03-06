@@ -67,4 +67,8 @@ namespace _8SMC1 {
 	void CoordPlaneStack::unuse() {
 		this->peekPlane()->unuse();
 	}
+	
+	void CoordPlaneStack::stop() {
+		this->peekPlane()->stop();
+	}
 }

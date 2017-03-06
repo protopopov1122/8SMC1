@@ -569,7 +569,8 @@ namespace _8SMC1 {
 			coord_point_t min = {minx, miny};
 			coord_point_t max = {maxx, maxy};
 			GraphBuilder graph(node, min, max, step);
-			ErrorCode errcode = graph.build(sysman, plane, &trans, speed);
+			TaskState state;
+			ErrorCode errcode = graph.build(sysman, plane, &trans, speed, &state);
 			if (errcode != ErrorCode::NoError) {
 				std::cout << "Graph build error(" << errcode << ")" << std::endl;
 			}
@@ -782,7 +783,8 @@ namespace _8SMC1 {
 				return;
 			}
 			TaskParameters prms = {speed};
-			task->perform(coord, prms, sysman);
+			TaskState state;
+			task->perform(coord, prms, sysman, &state);
 		} else if (args.at(0).compare("load") == 0) {
 			if (args.size() < 6) {
 				std::cout << "Wrong argument count" << std::endl;

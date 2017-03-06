@@ -98,4 +98,8 @@ namespace _8SMC1 {
 	void CoordPlaneValidator::unuse() {
 		this->plane->unuse();
 	}
+	
+	void CoordPlaneValidator::stop() {
+		this->plane->stop();
+	}
 }

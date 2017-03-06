@@ -282,6 +282,10 @@ namespace CalX {
 					handle->move(dest, speed, div, jump);
 				}
 			}
+			
+			virtual void stop() {
+				handle->stop();
+			}
 		private:
 			CoordHandle *handle;
 			bool jump;
@@ -311,6 +315,10 @@ namespace CalX {
 					handle->arc(dest, cen, splitter, speed, div, clockwise);
 				}
 			}
+			
+			virtual void stop() {
+				handle->stop();
+			}
 		private:
 			CoordHandle *handle;
 			bool relative;
@@ -337,14 +345,18 @@ namespace CalX {
 			}
 			
 			virtual void perform(SystemManager *sysman) {
-				builder->build(sysman, handle, translator, speed);
+				builder->build(sysman, handle, translator, speed, &state);
 			}
 			
+			virtual void stop() {
+				state.stop();
+			}
 		private:
 			CoordHandle *handle;
 			CoordTranslator *translator;
 			GraphBuilder *builder;
 			float speed;
+			TaskState state;
 	};
 	
 	class CalxCoordCalibrateAction : public CalxAction {
@@ -356,6 +368,10 @@ namespace CalX {
 			
 			virtual void perform(SystemManager *sysman) {
 				handle->calibrate(trailer);
+			}
+			
+			virtual void stop() {
+				handle->stop();
 			}
 		private:
 			CoordHandle *handle;
@@ -457,6 +473,12 @@ namespace CalX {
 		this->generalInfoText->SetLabel(general);
 	}
 	
+	void CalxCoordCtrl::stop() {
+		timer.Stop();
+		ctrl->getController()->kill();
+		this->queue->stop();
+	}
+	
 	CoordPlaneLog *CalxCoordCtrl::getPlaneLog() {
 		return this->log;
 	}
@@ -523,10 +545,7 @@ namespace CalX {
 	}
 	
 	void CalxCoordCtrl::OnExit(wxCloseEvent &evt) {
-		timer.Stop();
 		this->ctrl->removeEventListener(this->listener);
-		this->queue->stop();
-		this->queue->Kill();
 		wxGetApp().getSystemManager()->removeCoord(ctrl->getID());
 	}
 	

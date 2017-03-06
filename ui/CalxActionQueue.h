@@ -16,6 +16,7 @@ namespace CalX {
 			public:
 				virtual ~CalxAction() {};
 				virtual void perform(SystemManager*) = 0;
+				virtual void stop() = 0;
 		};
 		
 		class CalxActionQueue : public wxThread {
@@ -33,6 +34,7 @@ namespace CalX {
 				wxCondition *cond;
 				wxMutex condMutex;
 				std::vector<CalxAction*> queue;
+				CalxAction *current;
 				bool work;
 				SystemManager *sysman;
 		};

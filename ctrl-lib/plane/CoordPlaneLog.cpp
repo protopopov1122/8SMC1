@@ -98,4 +98,8 @@ namespace _8SMC1 {
 	void CoordPlaneLog::unuse() {
 		this->plane->unuse();
 	}
+	
+	void CoordPlaneLog::stop() {
+		this->plane->stop();
+	}
 }

@@ -49,6 +49,12 @@ namespace CalX {
 		Layout();
 	}
 	
+	void CalxCoordPanel::stop() {
+		for (const auto& ctrl : this->coords) {
+			ctrl->stop();
+		}
+	}
+	
 	void CalxCoordPanel::addPlane(CoordHandle *handle) {
 		CalxCoordCtrl *ctrl = new CalxCoordCtrl(this->mainPanel, wxID_ANY, handle);
 		this->mainPanel->GetSizer()->Add(ctrl, 1, wxALL | wxEXPAND, 0);

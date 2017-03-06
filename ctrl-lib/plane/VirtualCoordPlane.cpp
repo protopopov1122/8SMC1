@@ -175,4 +175,7 @@ namespace _8SMC1 {
 	
 	void VirtualCoordPlane::unuse() {
 	}
+	
+	void VirtualCoordPlane::stop() {
+	}
 }

@@ -19,14 +19,19 @@ namespace CalX {
 			
 			virtual void perform(SystemManager *sysman) {
 				panel->Enable(false);
-				task->perform(handle, prms, sysman);
+				task->perform(handle, prms, sysman, &state);
 				panel->Enable(true);
+			}
+			
+			virtual void stop() {
+				state.stop();
 			}
 		private:
 			CalxTaskPanel *panel;
 			CoordHandle *handle;
 			CoordTask *task;
 			TaskParameters prms;
+			TaskState state;
 	};
 	
 	CalxTaskPanel::CalxTaskPanel(wxWindow *win, wxWindowID id)
@@ -76,7 +81,6 @@ namespace CalX {
 	
 	void CalxTaskPanel::stop() {
 		this->queue->stop();
-		this->queue->Kill();
 	}
 	
 	void CalxTaskPanel::updateUI() {

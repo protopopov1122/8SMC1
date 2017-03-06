@@ -19,6 +19,7 @@ namespace _8SMC1 {
 		this->xAxis->getDevice()->setSyncInputMode(true);
 		this->yAxis->getDevice()->setOutputSyncEnabled(true);
 		this->size = {0, 0, 0, 0};
+		this->defWork = true;
 	}
 
 	CoordController::~CoordController() {
@@ -69,7 +70,11 @@ namespace _8SMC1 {
 			x_speed = sqrt(speed * speed / (1 + ncoef * ncoef));
 			y_speed = ncoef * x_speed;
 		}
-
+		work = defWork;
+		if (!work) {
+			return ErrorCode::NoError;
+		}
+		
 		if (xAxis->dev->isRunning() || yAxis->dev->isRunning()) {
 			return ErrorCode::DeviceRunning;
 		}
@@ -150,6 +155,10 @@ namespace _8SMC1 {
 		if (tr != 1 && tr != 2) {
 			return ErrorCode::WrongParameter;
 		}
+		work = defWork;
+		if (!work) {
+			return ErrorCode::NoError;
+		}
 		int dest = (tr == 1 ? -ROLL_STEP : ROLL_STEP);
 		xAxis->dest = (tr == 1 ? MoveType::RollDown : MoveType::RollUp);
 		yAxis->dest = (tr == 1 ? MoveType::RollDown : MoveType::RollUp);
@@ -163,7 +172,7 @@ namespace _8SMC1 {
 		CoordCalibrateEvent evt = {tr};
 		sendCalibratingEvent(evt);
 		use();
-		while (!(xpr && ypr)) {
+		while (!(xpr && ypr) && work) {
 			if (!xAxis->getDevice()->isTrailerPressed(tr)) {
 				if (!xpr && !xAxis->getDevice()->isRunning()) {
 					xAxis->getDevice()->start(
@@ -247,10 +256,17 @@ namespace _8SMC1 {
 		}
 		motor_point_t pnt;
 		size_t count = 0;
+		work = defWork;
+		if (!work) {
+			return ErrorCode::NoError;
+		}
 		xAxis->use();
 		yAxis->use();
 		use();
 		do {
+			if (!work) {
+				break;
+			}
 			if (clockwise) {
 				pnt = cir.getPrevElement();
 			} else {
@@ -354,5 +370,16 @@ namespace _8SMC1 {
 		}
 		xAxis->unuse();
 		yAxis->unuse();
+	}
+	
+	void CoordController::stop() {
+		xAxis->stop();
+		yAxis->stop();
+		work = false;
+	}
+	
+	void CoordController::kill() {
+		defWork = false;
+		stop();
 	}
 }
