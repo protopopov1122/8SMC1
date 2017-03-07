@@ -19,6 +19,7 @@ namespace CalX {
 			
 			void updateUI();
 			void stop();
+			void setEnabled(bool);
 		private:
 			void OnExit(wxCloseEvent&);
 			void OnNewGcodeClick(wxCommandEvent&);
@@ -26,11 +27,14 @@ namespace CalX {
 			void OnListClick(wxCommandEvent&);
 			void OnBuildClick(wxCommandEvent&);
 			void OnQueueUpdate(wxThreadEvent&);
+			void OnStopClick(wxCommandEvent&);
 			
 			wxListBox *taskList;
 			wxPanel *mainPanel;
+			wxPanel *taskPanel;
 			std::vector<CalxTaskHandle*> list;
 			wxPanel *execPanel;
+			wxButton *stopButton;
 			wxChoice *plane;
 			wxSpinCtrl *speed;
 			CalxActionQueue *queue;

@@ -46,6 +46,12 @@ namespace CalX {
 		cond->Broadcast();
 	}
 	
+	void CalxActionQueue::stopCurrent() {
+		if (this->current != nullptr) {
+			current->stop();
+		}
+	}
+	
 	void *CalxActionQueue::Entry() {
 		while (work) {
 			while (!this->queue.empty() && work) {

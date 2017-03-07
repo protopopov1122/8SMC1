@@ -36,9 +36,9 @@ DWORD USMC_SetCurrentPosition(DWORD dev, int pos) {
 }
 
 DWORD USMC_Start(DWORD dev, int DestPos, float &Speed, USMC_StartParameters &Str) {
-	std::cout << "Move #" << dev << " to " << DestPos
+/*	std::cout << "Move #" << dev << " to " << DestPos
 			<< " with speed " << Speed
-			<< "; sync: " << (Str.WSyncIN ? "enabled" : "disabled") << std::endl;
+			<< "; sync: " << (Str.WSyncIN ? "enabled" : "disabled") << std::endl;*/
 	POS[dev] = DestPos;
 	return FALSE;
 }

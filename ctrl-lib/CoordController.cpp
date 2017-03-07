@@ -287,7 +287,11 @@ namespace _8SMC1 {
 		xAxis->unuse();
 		yAxis->unuse();
 		unuse();
-		return this->move(dest, speed, div, true);
+		ErrorCode code = ErrorCode::NoError;
+		if (work) {
+			code = this->move(dest, speed, div, true);
+		}
+		return code;
 	}
 
 	ErrorCode CoordPlane::relativeArc(motor_point_t reldest, motor_point_t relcenter, int splitter,

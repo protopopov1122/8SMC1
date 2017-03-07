@@ -25,7 +25,7 @@ namespace CalX {
 	
 	void CalxMotorEventListener::use() {
 		if (this->used == 0) {
-			dev->Enable(false);
+			dev->setEnabled(false);
 		}
 		this->used++;
 	}
@@ -33,13 +33,14 @@ namespace CalX {
 	void CalxMotorEventListener::unuse() {
 		this->used--;
 		if (this->used == 0) {
-			dev->Enable(true);
+			dev->setEnabled(true);
 		}
 	}
 
 	class CalxDevMoveAction : public CalxAction {
 		public:
-			CalxDevMoveAction(DeviceController *dev, int dest, float speed, bool rel) {
+			CalxDevMoveAction(CalxDeviceCtrl *ctrl, DeviceController *dev, int dest, float speed, bool rel) {
+				this->ctrl = ctrl;
 				this->dev = dev;
 				this->dest = dest;
 				this->speed = speed;
@@ -51,17 +52,20 @@ namespace CalX {
 			}
 			
 			virtual void perform(SystemManager *sysman) {
+				ctrl->setMaster(true);
 				if (rel) {
 					dev->startRelativeMove(dest, speed, 8);
 				} else {
 					dev->startMove(dest, speed, 8);
 				}
+				ctrl->setMaster(false);
 			}
 			
 			virtual void stop() {
 				dev->stop();
 			}
 		private:
+			CalxDeviceCtrl *ctrl;
 			DeviceController *dev;
 			int dest;
 			float speed;
@@ -70,7 +74,8 @@ namespace CalX {
 
 	class CalxDevCalAction : public CalxAction {
 		public:
-			CalxDevCalAction(DeviceController *dev, int tr) {
+			CalxDevCalAction(CalxDeviceCtrl *ctrl, DeviceController *dev, int tr) {
+				this->ctrl = ctrl;
 				this->dev = dev;
 				this->tr = tr;
 			}
@@ -80,13 +85,16 @@ namespace CalX {
 			}
 			
 			virtual void perform(SystemManager *sysman) {
+				ctrl->setMaster(true);
 				dev->moveToTrailer(tr, TRAILER_COMEBACK);
+				ctrl->setMaster(false);
 			}
 			
 			virtual void stop() {
 				dev->stop();
 			}
 		private:
+			CalxDeviceCtrl *ctrl;
 			DeviceController *dev;
 			int tr;
 	};
@@ -96,13 +104,14 @@ namespace CalX {
 		this->dev = dev;
 		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
 		this->listener = new CalxMotorEventListener(this);
+		this->master = false;
 		
 		wxStaticBox *box = new wxStaticBox(this, wxID_ANY, "Device #" + std::to_string(this->dev->getID()));
 		wxStaticBoxSizer *sizer = new wxStaticBoxSizer(box, wxHORIZONTAL);
 		this->SetSizer(sizer);
 		
 		// Info panel elements
-		wxPanel *infoPanel = new wxPanel(box, wxID_ANY);
+		this->infoPanel = new wxPanel(box, wxID_ANY);
 		wxBoxSizer *infoSizer = new wxBoxSizer(wxVERTICAL);
 		this->position = new wxStaticText(infoPanel, wxID_ANY, "Position: ");
 		infoSizer->Add(position);
@@ -114,14 +123,11 @@ namespace CalX {
 		infoSizer->Add(trailer1);
 		this->trailer2 = new wxStaticText(infoPanel, wxID_ANY, "Trailer 2: ");
 		infoSizer->Add(trailer2);
-		wxButton *updateInfoButton = new wxButton(infoPanel, wxID_ANY, "Update");
-		updateInfoButton->Bind(wxEVT_BUTTON, &CalxDeviceCtrl::updateButtonClick, this);
-		infoSizer->Add(updateInfoButton, 1, wxEXPAND);
 		infoPanel->SetSizer(infoSizer);
 		sizer->Add(infoPanel, 0, wxALL, 10);
 		
 		// Move panel layout
-		wxPanel *movePanel = new wxPanel(box, wxID_ANY);
+		this->movePanel = new wxPanel(box, wxID_ANY);
 		wxBoxSizer *moveSizer = new wxBoxSizer(wxVERTICAL);
 		
 		wxPanel *moveDestPanel = new wxPanel(movePanel, wxID_ANY);
@@ -161,7 +167,7 @@ namespace CalX {
 		sizer->Add(movePanel, 0, wxALL, 10);
 		
 		// Action panel layout
-		wxPanel *actionPanel = new wxPanel(box, wxID_ANY);
+		this->actionPanel = new wxPanel(box, wxID_ANY);
 		wxBoxSizer *actionSizer = new wxBoxSizer(wxVERTICAL);
 		
 		wxButton *switchPowerButton = new wxButton(actionPanel, wxID_ANY, "Switch Power");
@@ -176,7 +182,7 @@ namespace CalX {
 		roll2Button->Bind(wxEVT_BUTTON, &CalxDeviceCtrl::rollToTrailer2, this);
 		actionSizer->Add(roll2Button, 1, wxEXPAND);
 		
-		wxButton *stopButton = new wxButton(actionPanel, wxID_ANY, "Stop");
+		this->stopButton = new wxButton(actionPanel, wxID_ANY, "Stop");
 		stopButton->Bind(wxEVT_BUTTON, &CalxDeviceCtrl::stopClick, this);
 		actionSizer->Add(stopButton, 1, wxEXPAND);
 		
@@ -190,9 +196,25 @@ namespace CalX {
 		this->dev->addEventListener(this->listener);
 		this->queue->Run();
 		updateUI();
+		setEnabled(true);
 		this->timer.setCtrl(this);
 		this->timer.Start(100);
 	}
+	
+	void CalxDeviceCtrl::setEnabled(bool e) {
+		movePanel->Enable(e);
+		for (auto i = actionPanel->GetChildren().begin(); i != actionPanel->GetChildren().end(); ++i) {
+			if (*i != this->stopButton) {
+				(*i)->Enable(e);
+			}
+		}
+		this->stopButton->Enable(!e && this->master);
+	}
+	
+	void CalxDeviceCtrl::setMaster(bool m) {
+		this->master = m;
+	}
+	
 	
 	void CalxDeviceCtrl::updateUI() {
 		std::string pos = "Position: " + std::to_string(this->dev->getPosition());
@@ -214,35 +236,29 @@ namespace CalX {
 		this->queue->stop();
 	}
 	
-	void CalxDeviceCtrl::updateButtonClick(wxCommandEvent &evt) {
-		this->updateUI();
-	}
-	
 	void CalxDeviceCtrl::switchPowerClick(wxCommandEvent &evt) {
 		dev->getDevice()->flipPower();
-		updateUI();
 	}
 	
 	void CalxDeviceCtrl::rollToTrailer1(wxCommandEvent &evt) {
-		this->queue->addAction(new CalxDevCalAction(dev, 1));
+		this->queue->addAction(new CalxDevCalAction(this, dev, 1));
 	}
 	
 	void CalxDeviceCtrl::rollToTrailer2(wxCommandEvent &evt) {
-		this->queue->addAction(new CalxDevCalAction(dev, 2));
+		this->queue->addAction(new CalxDevCalAction(this, dev, 2));
 	}
 	
 	void CalxDeviceCtrl::stopClick(wxCommandEvent &evt) {
-		dev->stop();
-		updateUI();
+		this->queue->stopCurrent();
 	}
 	
 	void CalxDeviceCtrl::moveClick(wxCommandEvent &evt) {
-		this->queue->addAction(new CalxDevMoveAction(dev, this->moveSpin->GetValue(),
+		this->queue->addAction(new CalxDevMoveAction(this, dev, this->moveSpin->GetValue(),
 			this->moveSpeedSpin->GetValue(), false));
 	}
 	
 	void CalxDeviceCtrl::rmoveClick(wxCommandEvent &evt) {
-		this->queue->addAction(new CalxDevMoveAction(dev, this->moveSpin->GetValue(),
+		this->queue->addAction(new CalxDevMoveAction(this, dev, this->moveSpin->GetValue(),
 			this->moveSpeedSpin->GetValue(), true));
 	}
 	

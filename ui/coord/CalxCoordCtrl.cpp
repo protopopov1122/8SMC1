@@ -9,387 +9,11 @@
 
 namespace CalX {
 	
-	void CalxCoordTimer::Notify() {
-		ctrl->updateUI();
-	}
-	
-	void CalxCoordLinearCtrl::init() {
-		wxFlexGridSizer *sizer = new wxFlexGridSizer(2);
-		SetSizer(sizer);
-		
-		this->xCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
-		this->yCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
-		this->speed = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 4000, 4000);
-		this->divisor = new wxChoice(this, wxID_ANY);
-		this->divisor->Append("1");
-		this->divisor->Append("2");
-		this->divisor->Append("4");
-		this->divisor->Append("8");
-		this->divisor->SetSelection(3);
-		this->relative = new wxCheckBox(this, wxID_ANY, "Relative");
-		wxButton *moveButton = new wxButton(this, wxID_ANY, "Move");
-		wxButton *jumpButton = new wxButton(this, wxID_ANY, "Jump");
-		moveButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnLinearMoveClick, ctrl);
-		jumpButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnLinearJumpClick, ctrl);
-		
-		sizer->Add(new wxStaticText(this, wxID_ANY, "Destination:"));
-		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
-		sizer->Add(new wxStaticText(this, wxID_ANY, "x:"), 0, wxALIGN_RIGHT | wxRIGHT, 10);
-		sizer->Add(xCoord, 0, wxALL | wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, "y:"), 0, wxALIGN_RIGHT | wxRIGHT, 10);
-		sizer->Add(yCoord, 0, wxALL | wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, "Speed:"));
-		sizer->Add(speed, 0, wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, "Divisor:"));
-		sizer->Add(divisor);
-		sizer->Add(relative, 0, wxALIGN_CENTER);
-		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
-		sizer->Add(moveButton);
-		sizer->Add(jumpButton);
-	}
-	
-	void CalxCoordArcCtrl::init() {
-		wxFlexGridSizer *sizer = new wxFlexGridSizer(2);
-		SetSizer(sizer);
-		
-		this->xCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
-		this->yCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
-		this->cxCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
-		this->cyCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
-		this->speed = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 4000, 4000);
-		this->divisor = new wxChoice(this, wxID_ANY);
-		this->divisor->Append("1");
-		this->divisor->Append("2");
-		this->divisor->Append("4");
-		this->divisor->Append("8");
-		this->divisor->SetSelection(3);
-		this->splitter = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1000, 200);
-		this->clockwise = new wxCheckBox(this, wxID_ANY, "Clockwise");
-		this->relative = new wxCheckBox(this, wxID_ANY, "Relative");
-		wxButton *moveButton = new wxButton(this, wxID_ANY, "Move");
-		moveButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnArcMoveClick, ctrl);
-		
-		
-		sizer->Add(new wxStaticText(this, wxID_ANY, "Destination:"));
-		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
-		sizer->Add(new wxStaticText(this, wxID_ANY, "x:"), 0, wxALIGN_RIGHT | wxRIGHT, 10);
-		sizer->Add(xCoord, 0, wxALL | wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, "y:"), 0, wxALIGN_RIGHT | wxRIGHT, 10);
-		sizer->Add(yCoord, 0, wxALL | wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, "Center:"));
-		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
-		sizer->Add(new wxStaticText(this, wxID_ANY, "x:"), 0, wxALIGN_RIGHT | wxRIGHT, 10);
-		sizer->Add(cxCoord, 0, wxALL | wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, "y:"), 0, wxALIGN_RIGHT | wxRIGHT, 10);
-		sizer->Add(cyCoord, 0, wxALL | wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, "Speed:"));
-		sizer->Add(speed, 0, wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, "Divisor:"));
-		sizer->Add(divisor);
-		sizer->Add(new wxStaticText(this, wxID_ANY, "Splitter:"));
-		sizer->Add(splitter, 0, wxEXPAND);
-		sizer->Add(clockwise);
-		sizer->Add(relative);
-		sizer->Add(moveButton);
-		
-		
-	}
-	
-	void CalxCoordGraphCtrl::init() {
-		wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
-		SetSizer(sizer);
-		
-		
-		wxPanel *graphPanel = new wxPanel(this, wxID_ANY);
-		sizer->Add(graphPanel, 0, wxRIGHT, 10);
-		wxFlexGridSizer *graphSizer = new wxFlexGridSizer(2);
-		graphPanel->SetSizer(graphSizer);
-		
-		this->expr = new wxTextCtrl(graphPanel, wxID_ANY, "x");
-		this->xmin = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, -10);
-		this->xmax = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 10);
-		this->ymin = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, -10);
-		this->ymax = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 10);
-		this->step = new wxTextCtrl(graphPanel, wxID_ANY, "1");
-		wxButton *buildButton = new wxButton(graphPanel, wxID_ANY, "Build");
-		buildButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnGraphBuildClick, ctrl);
-		
-		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, "Function "), 0, wxALIGN_RIGHT | wxRIGHT, 10);
-		graphSizer->Add(expr, 0, wxEXPAND);
-		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, "X axis range:"));
-		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, ""));
-		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, "min"), 0, wxALIGN_RIGHT | wxRIGHT, 10);
-		graphSizer->Add(xmin, 0, wxEXPAND);
-		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, "max"), 0, wxALIGN_RIGHT | wxRIGHT, 10);
-		graphSizer->Add(xmax, 0, wxEXPAND);
-		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, "Y axis range:"));
-		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, ""));
-		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, "min"), 0, wxALIGN_RIGHT | wxRIGHT, 10);
-		graphSizer->Add(ymin, 0, wxEXPAND);
-		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, "max"), 0, wxALIGN_RIGHT | wxRIGHT, 10);
-		graphSizer->Add(ymax, 0, wxEXPAND);
-		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, "X axis step"), 0, wxALIGN_RIGHT | wxRIGHT, 10);
-		graphSizer->Add(step, 0, wxEXPAND);
-		graphSizer->Add(buildButton);
-		
-		wxPanel *coordPanel = new wxPanel(this, wxID_ANY);
-		sizer->Add(coordPanel, 0, wxLEFT, 10);
-		wxFlexGridSizer *coordSizer = new wxFlexGridSizer(2);
-		coordPanel->SetSizer(coordSizer);
-		
-		this->xoffset = new wxSpinCtrl(coordPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
-		this->yoffset = new wxSpinCtrl(coordPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
-		this->xscale = new wxSpinCtrl(coordPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 1);
-		this->yscale = new wxSpinCtrl(coordPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 1);
-		this->speed = new wxSpinCtrl(coordPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 4000, 4000, 4000);
-		
-		coordSizer->Add(new wxStaticText(coordPanel, wxID_ANY, "X axis offset"), 0, wxRIGHT, 10);
-		coordSizer->Add(xoffset, 0, wxEXPAND);
-		coordSizer->Add(new wxStaticText(coordPanel, wxID_ANY, "Y axis offset"), 0, wxRIGHT, 10);
-		coordSizer->Add(yoffset, 0, wxEXPAND);
-		coordSizer->Add(new wxStaticText(coordPanel, wxID_ANY, "X axis scale"), 0, wxRIGHT, 10);
-		coordSizer->Add(xscale, 0, wxEXPAND);
-		coordSizer->Add(new wxStaticText(coordPanel, wxID_ANY, "Y axis scale"), 0, wxRIGHT, 10);
-		coordSizer->Add(yscale, 0, wxEXPAND);
-		coordSizer->Add(new wxStaticText(coordPanel, wxID_ANY, "Build speed"), 0, wxRIGHT, 10);
-		coordSizer->Add(speed, 0, wxEXPAND);
-	}
-	
-	void CalxCoordOtherCtrl::init() {
-		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
-		SetSizer(sizer);
-		
-		wxPanel *calibratePanel = new wxPanel(this, wxID_ANY);
-		sizer->Add(calibratePanel, 0, wxALL, 5);
-		wxBoxSizer *calibrateSizer = new wxBoxSizer(wxHORIZONTAL);
-		calibratePanel->SetSizer(calibrateSizer);
-		wxButton *calibrateButton = new wxButton(calibratePanel, wxID_ANY, "Calibrate");
-		calibrateButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnCalibrateClick, ctrl);
-		calibrateSizer->Add(calibrateButton);
-		calibrateSizer->Add(new wxStaticText(calibratePanel, wxID_ANY, " to "), wxALL | wxALIGN_CENTER, 5);
-		trailer = new wxChoice(calibratePanel, wxID_ANY);
-		trailer->Append("trailer 1");
-		trailer->Append("trailer 2");
-		trailer->SetSelection(0);
-		calibrateSizer->Add(trailer, 0, wxALL);
-		
-		wxPanel *logPanel = new wxPanel(this, wxID_ANY);
-		sizer->Add(logPanel, 0, wxALL | wxEXPAND, 5);
-		wxBoxSizer *logSizer = new wxBoxSizer(wxHORIZONTAL);
-		logPanel->SetSizer(logSizer);
-		this->logActions = new wxCheckBox(logPanel, wxID_ANY, "Log actions");		
-		this->logErrors = new wxCheckBox(logPanel, wxID_ANY, "Log errors");
-		logSizer->Add(logActions);
-		logSizer->Add(logErrors);
-		
-		wxPanel *mapPanel = new wxPanel(this, wxID_ANY);
-		sizer->Add(mapPanel, 0, wxALL | wxEXPAND, 5);
-		wxFlexGridSizer *mapSizer = new wxFlexGridSizer(2);
-		mapPanel->SetSizer(mapSizer);
-		this->xOffset = new wxSpinCtrl(mapPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
-		this->yOffset = new wxSpinCtrl(mapPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
-		this->xScale = new wxTextCtrl(mapPanel, wxID_ANY, "1");
-		this->yScale = new wxTextCtrl(mapPanel, wxID_ANY, "1");
-		mapSizer->Add(new wxStaticText(mapPanel, wxID_ANY, "Coordinate offset:"));
-		mapSizer->Add(new wxStaticText(mapPanel, wxID_ANY, ""));
-		mapSizer->Add(new wxStaticText(mapPanel, wxID_ANY, "x:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
-		mapSizer->Add(xOffset, 0, wxEXPAND);
-		mapSizer->Add(new wxStaticText(mapPanel, wxID_ANY, "y:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
-		mapSizer->Add(yOffset, 0, wxEXPAND);
-		mapSizer->Add(new wxStaticText(mapPanel, wxID_ANY, "Coordinate scale:"));
-		mapSizer->Add(new wxStaticText(mapPanel, wxID_ANY, ""));
-		mapSizer->Add(new wxStaticText(mapPanel, wxID_ANY, "x:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
-		mapSizer->Add(xScale, 0, wxEXPAND);
-		mapSizer->Add(new wxStaticText(mapPanel, wxID_ANY, "y:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
-		mapSizer->Add(yScale, 0, wxEXPAND);
-		
-		wxPanel *validatePanel = new wxPanel(this, wxID_ANY);
-		sizer->Add(validatePanel, 0, wxALL | wxEXPAND, 5);
-		wxFlexGridSizer *validateSizer = new wxFlexGridSizer(2);
-		validatePanel->SetSizer(validateSizer);
-		this->minx = new wxSpinCtrl(validatePanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
-		this->miny = new wxSpinCtrl(validatePanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
-		this->maxx = new wxSpinCtrl(validatePanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
-		this->maxy = new wxSpinCtrl(validatePanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
-		this->speed = new wxSpinCtrl(validatePanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 4000, 4000);
-		validateSizer->Add(new wxStaticText(validatePanel, wxID_ANY, "Coordinate validation:"));
-		validateSizer->Add(new wxStaticText(validatePanel, wxID_ANY, ""));
-		validateSizer->Add(new wxStaticText(validatePanel, wxID_ANY, "min x:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
-		validateSizer->Add(minx, 0, wxEXPAND);
-		validateSizer->Add(new wxStaticText(validatePanel, wxID_ANY, "min y:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
-		validateSizer->Add(miny, 0, wxEXPAND);
-		validateSizer->Add(new wxStaticText(validatePanel, wxID_ANY, "max x:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
-		validateSizer->Add(maxx, 0, wxEXPAND);
-		validateSizer->Add(new wxStaticText(validatePanel, wxID_ANY, "max y:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
-		validateSizer->Add(maxy, 0, wxEXPAND);
-		validateSizer->Add(new wxStaticText(validatePanel, wxID_ANY, "Maximum speed"));
-		validateSizer->Add(speed, 0, wxEXPAND);
-		
-		logActions->SetValue(ctrl->getPlaneLog()->isLoggingActions());
-		logErrors->SetValue(ctrl->getPlaneLog()->isLoggingErrors());
-		xOffset->SetValue(ctrl->getPlaneMap()->getOffset().x);
-		yOffset->SetValue(ctrl->getPlaneMap()->getOffset().y);
-		xScale->SetValue(std::to_string((float) ctrl->getPlaneMap()->getScale().x));
-		yScale->SetValue(std::to_string((float) ctrl->getPlaneMap()->getScale().y));
-		minx->SetValue(ctrl->getPlaneValidator()->getMinimum().x);
-		miny->SetValue(ctrl->getPlaneValidator()->getMinimum().y);
-		maxx->SetValue(ctrl->getPlaneValidator()->getMaximum().x);
-		maxy->SetValue(ctrl->getPlaneValidator()->getMaximum().y);
-		speed->SetValue(ctrl->getPlaneValidator()->getMaxSpeed());
-		
-		wxButton *updateButton = new wxButton(this, wxID_ANY, "Update filters");
-		sizer->Add(updateButton);
-		updateButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
-	}
-	
-	CalxCoordEventListener::CalxCoordEventListener(CalxCoordCtrl *ctrl) {
-		this->ctrl = ctrl;
-	}
-	
-	CalxCoordEventListener::~CalxCoordEventListener() {
-	}
-	
-	void CalxCoordEventListener::use() {
-		ctrl->use();
-	}
-	
-	void CalxCoordEventListener::unuse() {
-		ctrl->unuse();
-	}
-	
-	CalxCoordDeviceListener::CalxCoordDeviceListener(CalxCoordCtrl *ctrl) {
-		this->ctrl = ctrl;
-	}
-	
-	CalxCoordDeviceListener::~CalxCoordDeviceListener() {
-	}
-	
-	void CalxCoordDeviceListener::use() {
-		ctrl->use();
-	}
-	
-	void CalxCoordDeviceListener::unuse() {
-		ctrl->unuse();
-	}
-	
-	class CalxCoordMoveAction : public CalxAction {
-		public:
-			CalxCoordMoveAction(CoordHandle *handle, bool jump, bool relative, motor_point_t dest, float speed, int div) {
-				this->handle = handle;
-				this->jump = jump;
-				this->relative = relative;
-				this->dest = dest;
-				this->speed = speed;
-				this->div = div;
-			}
-			
-			virtual void perform(SystemManager *sysman) {
-				if (relative) {
-					handle->relativeMove(dest, speed, div, jump);
-				} else {
-					handle->move(dest, speed, div, jump);
-				}
-			}
-			
-			virtual void stop() {
-				handle->stop();
-			}
-		private:
-			CoordHandle *handle;
-			bool jump;
-			bool relative;
-			motor_point_t dest;
-			float speed;
-			int div;
-	};
-	
-	class CalxCoordArcAction : public CalxAction {
-		public:
-			CalxCoordArcAction(CoordHandle *handle, bool relative, motor_point_t dest, motor_point_t cen, int splitter, float speed, int div, bool clockwise) {
-				this->handle = handle;
-				this->relative = relative;
-				this->dest = dest;
-				this->cen = cen;
-				this->splitter = splitter;
-				this->speed = speed;
-				this->div = div;
-				this->clockwise = clockwise;
-			}
-			
-			virtual void perform(SystemManager *sysman) {
-				if (relative) {
-					handle->relativeArc(dest, cen, splitter, speed, div, clockwise);
-				} else {
-					handle->arc(dest, cen, splitter, speed, div, clockwise);
-				}
-			}
-			
-			virtual void stop() {
-				handle->stop();
-			}
-		private:
-			CoordHandle *handle;
-			bool relative;
-			motor_point_t dest;
-			motor_point_t cen;
-			int splitter;
-			float speed;
-			int div;
-			bool clockwise;
-	};
-	
-	class CalxCoordGraphAction : public CalxAction {
-		public:
-			CalxCoordGraphAction(CoordHandle *handle, CoordTranslator *trans, GraphBuilder *builder, float speed) {
-				this->handle = handle;
-				this->translator = trans;
-				this->builder = builder;
-				this->speed = speed;
-			}
-			
-			virtual ~CalxCoordGraphAction() {
-				delete this->translator;
-				delete this->builder;
-			}
-			
-			virtual void perform(SystemManager *sysman) {
-				builder->build(sysman, handle, translator, speed, &state);
-			}
-			
-			virtual void stop() {
-				state.stop();
-			}
-		private:
-			CoordHandle *handle;
-			CoordTranslator *translator;
-			GraphBuilder *builder;
-			float speed;
-			TaskState state;
-	};
-	
-	class CalxCoordCalibrateAction : public CalxAction {
-		public:
-			CalxCoordCalibrateAction(CoordHandle *handle, TrailerId tr) {
-				this->handle = handle;
-				this->trailer = tr;
-			}
-			
-			virtual void perform(SystemManager *sysman) {
-				handle->calibrate(trailer);
-			}
-			
-			virtual void stop() {
-				handle->stop();
-			}
-		private:
-			CoordHandle *handle;
-			TrailerId trailer;
-	};
-	
 	CalxCoordCtrl::CalxCoordCtrl(wxWindow *win, wxWindowID id, CoordHandle *ctrl)
 		: wxScrolledWindow::wxScrolledWindow(win, id) {
 		this->ctrl = ctrl;
 		this->used = 0;
+		this->master = false;
 		
 		motor_point_t validateMin = {INT_MIN, INT_MIN};
 		motor_point_t validateMax = {INT_MAX, INT_MAX};
@@ -413,15 +37,18 @@ namespace CalX {
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		this->SetSizer(sizer);
 		
-		wxPanel *generalPanel = new wxPanel(this, wxID_ANY);
+		this->generalPanel = new wxPanel(this, wxID_ANY);
 		wxStaticBox *generalBox = new wxStaticBox(generalPanel, wxID_ANY, "General info");
 		wxStaticBoxSizer *generalSizer = new wxStaticBoxSizer(generalBox, wxVERTICAL);
 		this->generalInfoText = new wxStaticText(generalPanel, wxID_ANY, "");
+		this->stopButton = new wxButton(generalPanel, wxID_ANY, "Stop");
 		generalSizer->Add(this->generalInfoText, 0, wxALL | wxEXPAND, 5);
+		generalSizer->Add(this->stopButton, 0, wxALL, 5);
+		this->stopButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnStopClick, this);
 		generalPanel->SetSizer(generalSizer);
 		sizer->Add(generalPanel, 0, wxALL | wxEXPAND, 0);
 		
-		wxPanel *actionPanel = new wxPanel(this, wxID_ANY);
+		this->actionPanel = new wxPanel(this, wxID_ANY);
 		wxBoxSizer *actionSizer = new wxBoxSizer(wxHORIZONTAL);
 		actionPanel->SetSizer(actionSizer);
 		
@@ -469,10 +96,34 @@ namespace CalX {
 		
 		this->Layout();
 		this->FitInside();
+		this->setEnabled(true);
         this->SetScrollRate(5, 5);
 		
 		this->timer.setCtrl(this);
 		timer.Start(100);
+	}
+	
+	void CalxCoordCtrl::use() {
+		if (this->used == 0) {
+			setEnabled(false);
+		}
+		this->used++;
+	}
+	
+	void CalxCoordCtrl::unuse() {
+		this->used--;
+		if (this->used == 0) {
+			setEnabled(true);
+		}
+	}
+	
+	void CalxCoordCtrl::setMaster(bool m) {
+		this->master = m;
+	}
+	
+	void CalxCoordCtrl::setEnabled(bool e) {
+		actionPanel->Enable(e);
+		stopButton->Enable(!e && this->master);
 	}
 	
 	void CalxCoordCtrl::updateUI() {
@@ -504,18 +155,18 @@ namespace CalX {
 	
 	void CalxCoordCtrl::OnLinearMoveClick(wxCommandEvent &evt) {
 		motor_point_t dest = {linear->getCoordX(), linear->getCoordY()};
-		this->queue->addAction(new CalxCoordMoveAction(ctrl, false, linear->isRelative(), dest, linear->getSpeed(), linear->getDivisor()));
+		this->queue->addAction(new CalxCoordMoveAction(this, ctrl, false, linear->isRelative(), dest, linear->getSpeed(), linear->getDivisor()));
 	}
 	
 	void CalxCoordCtrl::OnLinearJumpClick(wxCommandEvent &evt) {
 		motor_point_t dest = {linear->getCoordX(), linear->getCoordY()};
-		this->queue->addAction(new CalxCoordMoveAction(ctrl, false, linear->isRelative(), dest, linear->getSpeed(), linear->getDivisor()));
+		this->queue->addAction(new CalxCoordMoveAction(this, ctrl, false, linear->isRelative(), dest, linear->getSpeed(), linear->getDivisor()));
 	}
 	
 	void CalxCoordCtrl::OnArcMoveClick(wxCommandEvent &evt) {
 		motor_point_t dest = {arc->getCoordX(), arc->getCoordY()};
 		motor_point_t cen = {arc->getCenterCoordX(), arc->getCenterCoordY()};
-		this->queue->addAction(new CalxCoordArcAction(ctrl, arc->isRelative(), dest, cen, arc->getSplitter(), arc->getSpeed(), arc->getDivisor(), arc->isClockwise()));
+		this->queue->addAction(new CalxCoordArcAction(this, ctrl, arc->isRelative(), dest, cen, arc->getSplitter(), arc->getSpeed(), arc->getDivisor(), arc->isClockwise()));
 	}
 	
 	void CalxCoordCtrl::OnGraphBuildClick(wxCommandEvent &evt) {
@@ -535,12 +186,12 @@ namespace CalX {
 		coord_point_t min = {minx, miny};
 		coord_point_t max = {maxx, maxy};
 		GraphBuilder *graph = new GraphBuilder(node, min, max, step);
-		this->queue->addAction(new CalxCoordGraphAction(ctrl, trans, graph, speed));
+		this->queue->addAction(new CalxCoordGraphAction(this, ctrl, trans, graph, speed));
 	}
 	
 	void CalxCoordCtrl::OnCalibrateClick(wxCommandEvent &evt) {
 		TrailerId tr = otherCtrl->getTrailer();
-		this->queue->addAction(new CalxCoordCalibrateAction(ctrl, tr));
+		this->queue->addAction(new CalxCoordCalibrateAction(this, ctrl, tr));
 	}
 	
 	void CalxCoordCtrl::OnUpdateFiltersClick(wxCommandEvent &evt) {
@@ -568,17 +219,7 @@ namespace CalX {
 		
 	}
 	
-	void CalxCoordCtrl::use() {
-		if (this->used == 0) {
-			Enable(false);
-		}
-		this->used++;
-	}
-	
-	void CalxCoordCtrl::unuse() {
-		this->used--;
-		if (this->used == 0) {
-			Enable(true);
-		}
+	void CalxCoordCtrl::OnStopClick(wxCommandEvent &evt) {
+		this->queue->stopCurrent();
 	}
 }

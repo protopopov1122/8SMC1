@@ -26,6 +26,7 @@ namespace CalX {
 				void addAction(CalxAction*);
 				bool isEmpty();
 				void stop();
+				void stopCurrent();
 			protected:
 				virtual ExitCode Entry();
 			private:

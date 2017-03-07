@@ -50,6 +50,7 @@ namespace _8SMC1 {
 			void sendRollingEvent(MotorRollEvent&);
 			void sendRolledEvent(MotorRollEvent&);
 		private:
+			bool work;
 			ErrorCode waitWhileRunning();
 			ErrorCode checkTrailers();
 			ErrorCode resetPosition();

@@ -18,9 +18,9 @@ namespace CalX {
 			}
 			
 			virtual void perform(SystemManager *sysman) {
-				panel->Enable(false);
+				panel->setEnabled(false);
 				task->perform(handle, prms, sysman, &state);
-				panel->Enable(true);
+				panel->setEnabled(true);
 			}
 			
 			virtual void stop() {
@@ -40,7 +40,7 @@ namespace CalX {
 		this->queue->Run();
 		wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 		
-		wxPanel *taskPanel = new wxPanel(this, wxID_ANY);
+		this->taskPanel = new wxPanel(this, wxID_ANY);
 		wxBoxSizer *taskSizer = new wxBoxSizer(wxVERTICAL);
 		taskPanel->SetSizer(taskSizer);
 		sizer->Add(taskPanel, 0, wxALL | wxEXPAND, 5);
@@ -70,10 +70,14 @@ namespace CalX {
 		execSizer->Add(plane, 0, wxALL, 5);
 		execSizer->Add(new wxStaticText(execPanel, wxID_ANY, " with speed "), 0, wxALL | wxALIGN_CENTER);
 		execSizer->Add(speed, 0, wxALL, 5);
+		this->stopButton = new wxButton(execPanel, wxID_ANY, "Stop");
+		execSizer->Add(stopButton);
 		buildButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnBuildClick, this);
+		stopButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnStopClick, this);
 		
 		SetSizer(sizer);
 		Layout();
+		setEnabled(true);
 		
 		taskList->Bind(wxEVT_LISTBOX, &CalxTaskPanel::OnListClick, this);		
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxTaskPanel::OnExit, this);	
@@ -100,6 +104,19 @@ namespace CalX {
 			plane->SetSelection(0);
 		}
 		Layout();
+	}
+	
+	void CalxTaskPanel::setEnabled(bool e) {
+		for (const auto& h : list) {
+			h->Enable(e);
+		}
+		taskPanel->Enable(e);
+		for (auto i = execPanel->GetChildren().begin(); i != execPanel->GetChildren().end(); ++i) {
+			if (*i != this->stopButton) {
+				(*i)->Enable(e);
+			}
+		}
+		this->stopButton->Enable(!e);
 	}
 	
 	void CalxTaskPanel::OnExit(wxCloseEvent &evt) {
@@ -145,5 +162,9 @@ namespace CalX {
 			TaskParameters prms = {(float) this->speed->GetValue()};
 			queue->addAction(new CalxTaskAction(this, handle, task, prms));
 		}
+	}
+	
+	void CalxTaskPanel::OnStopClick(wxCommandEvent &evt) {
+		this->queue->stopCurrent();
 	}
 }

@@ -59,11 +59,13 @@ namespace _8SMC1 {
 		if (tr != 1 && tr != 2) {
 			return ErrorCode::WrongParameter;
 		}
+		this->work = true;
 		int dest = (tr == 1 ? -ROLL_STEP : ROLL_STEP);
 		this->dest = (tr == 1 ? MoveType::RollDown : MoveType::RollUp);
 		MotorRollEvent evt = {tr};
+		use();
 		this->sendRollingEvent(evt);
-		while (!dev->isTrailerPressed(tr)) {
+		while (!dev->isTrailerPressed(tr) && work) {
 			if (!this->dev->isRunning()) {
 				this->dev->start(this->dev->getPosition() + dest, ROLL_SPEED, ROLL_DIV);
 			}
@@ -75,8 +77,12 @@ namespace _8SMC1 {
 		if (tr == 2) {
 			comeback *= -1;
 		}
-		this->startMove(this->dev->getPosition() + comeback, ROLL_SPEED, ROLL_DIV);
+		if (work) {
+			this->startMove(this->dev->getPosition() + comeback, ROLL_SPEED, ROLL_DIV);
+		}
 		this->sendRolledEvent(evt);
+		this->unuse();
+		this->work = false;
 		
 		return ErrorCode::NoError;
 	}
@@ -86,9 +92,11 @@ namespace _8SMC1 {
 		if (this->dev->isRunning()) {
 			return ErrorCode::DeviceRunning;
 		}
+		this->work = true;
 		this->dest = dest > this->dev->getPosition() ? MoveType::MoveUp :
 				MoveType::MoveDown;
 		MotorMoveEvent evt = {dest, speed, div};
+		this->use();
 		this->sendMovingEvent(evt);
 		this->dev->start(dest, speed, div, syncIn);
 		ErrorCode errcode =  this->waitWhileRunning();
@@ -98,6 +106,8 @@ namespace _8SMC1 {
 		} else {
 			this->sendMovedEvent(evt);
 		}
+		this->unuse();
+		this->work = false;
 		return errcode;
 	}
 
@@ -110,8 +120,7 @@ namespace _8SMC1 {
 	void DeviceController::stop() {
 		this->dest = MoveType::Stop;
 		this->dev->stop();
-		MotorErrorEvent sevt = {ErrorCode::NoError};
-		this->sendStoppedEvent(sevt);
+		this->work = false;
 	}
 
 	ErrorCode DeviceController::resetPosition() {

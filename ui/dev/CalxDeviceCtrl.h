@@ -42,8 +42,9 @@ namespace CalX {
 			
 			void updateUI();
 			void stop();
+			void setEnabled(bool);
+			void setMaster(bool);
 		private:
-			void updateButtonClick(wxCommandEvent&);
 			void switchPowerClick(wxCommandEvent&);
 			void rollToTrailer1(wxCommandEvent&);
 			void rollToTrailer2(wxCommandEvent&);
@@ -57,6 +58,12 @@ namespace CalX {
 			CalxActionQueue *queue;
 			MotorEventListener *listener;
 			CalxDeviceTimer timer;
+			bool master;
+			
+			wxPanel *infoPanel;
+			wxPanel *movePanel;
+			wxPanel *actionPanel;
+			wxButton *stopButton;
 			
 			// Value windows
 			wxSpinCtrl *moveSpin;
