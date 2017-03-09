@@ -1,4 +1,5 @@
 This file contains detailed information about project goals.
+Currently(by 09/03/2017) most of the work is done, most of goals are reached, some of them become unactual, some transformed. Track the project strcture, READMEs and NEWS to get most recent info about goals and existing project state.
 ------------------------------------
 All work on the project may be splitted into few steps:
 * Write more tests for different parts of system.

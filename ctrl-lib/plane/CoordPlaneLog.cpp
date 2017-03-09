@@ -69,7 +69,7 @@ namespace _8SMC1 {
 	
 	ErrorCode CoordPlaneLog::calibrate(TrailerId tr) {
 		if (this->log_actions) {
-			*out << this->prefix << "Calibrating to trailer#" << tr << std::endl;
+			*out << this->prefix << "Calibrating to trailer #" << tr << std::endl;
 		}
 		ErrorCode err = this->plane->calibrate(tr);
 		if (this->log_errors && err != ErrorCode::NoError) {

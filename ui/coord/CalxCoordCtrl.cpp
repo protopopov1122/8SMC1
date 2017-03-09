@@ -6,6 +6,7 @@
 #include "ctrl-lib/graph/FunctionEngine.h"
 #include "CalxApp.h"
 #include "CalxCoordCtrl.h"
+#include "task/CalxTaskPanel.h"
 
 namespace CalX {
 	
@@ -82,12 +83,12 @@ namespace CalX {
 		actionSubSizer->Add(graphPanel, 0, wxALL | wxEXPAND);
 		
 		wxPanel *actionSub2Panel = new wxPanel(actionPanel, wxID_ANY);
-		actionSizer->Add(actionSub2Panel, 0, wxLEFT | wxEXPAND, 5);
+		actionSizer->Add(actionSub2Panel, 1, wxLEFT | wxEXPAND, 5);
 		wxStaticBox *otherBox = new wxStaticBox(actionSub2Panel, wxID_ANY, "Other");
 		wxStaticBoxSizer *otherSizer = new wxStaticBoxSizer(otherBox, wxVERTICAL);
 		actionSub2Panel->SetSizer(otherSizer);
 		this->otherCtrl = new CalxCoordOtherCtrl(this, actionSub2Panel, wxID_ANY);
-		otherSizer->Add(otherCtrl, 0, wxALL | wxEXPAND);
+		otherSizer->Add(otherCtrl, 1, wxALL | wxEXPAND);
 		
 		sizer->Add(actionPanel, 0, wxALL | wxEXPAND, 0);
 		Bind(wxEVT_COMMAND_QUEUE_UPDATE, &CalxCoordCtrl::OnQueueUpdate, this);
@@ -95,7 +96,6 @@ namespace CalX {
 		updateUI();
 		
 		this->Layout();
-		this->FitInside();
 		this->setEnabled(true);
         this->SetScrollRate(5, 5);
 		
@@ -104,17 +104,23 @@ namespace CalX {
 	}
 	
 	void CalxCoordCtrl::use() {
-		if (this->used == 0) {
-			setEnabled(false);
-		}
 		this->used++;
+		if (this->used == 1) {
+			setEnabled(false);
+			wxGetApp().getMainFrame()->getPanel()->getTasks()->updateUI();
+		}
 	}
 	
 	void CalxCoordCtrl::unuse() {
 		this->used--;
 		if (this->used == 0) {
 			setEnabled(true);
+			wxGetApp().getMainFrame()->getPanel()->getTasks()->updateUI();
 		}
+	}
+	
+	bool CalxCoordCtrl::isUsed() {
+		return this->used != 0;		
 	}
 	
 	void CalxCoordCtrl::setMaster(bool m) {
@@ -174,15 +180,13 @@ namespace CalX {
 		FunctionLexer lexer(ss);
 		FunctionParser parser(&lexer);
 		Node *node = parser.parse();
-		motor_point_t toffset = {graphCtrl->getXOffset(), graphCtrl->getYOffset()};
-		motor_size_t tsize = {graphCtrl->getXScale(), graphCtrl->getYScale()};
 		long double minx = graphCtrl->getXMin();
 		long double maxx = graphCtrl->getXMax();
 		long double miny = graphCtrl->getYMin();
 		long double maxy = graphCtrl->getYMax();
 		long double step = graphCtrl->getStep();
 		float speed = graphCtrl->getSpeed();
-		BasicCoordTranslator *trans = new BasicCoordTranslator(toffset, tsize);
+		CoordTranslator *trans = graphCtrl->getCoordTranslator();
 		coord_point_t min = {minx, miny};
 		coord_point_t max = {maxx, maxy};
 		GraphBuilder *graph = new GraphBuilder(node, min, max, step);

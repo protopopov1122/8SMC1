@@ -38,6 +38,7 @@ namespace CalX {
 			void OnUpdateFiltersClick(wxCommandEvent&);
 			void use();
 			void unuse();
+			bool isUsed();
 			void setMaster(bool);
 			void setEnabled(bool);
 		private:

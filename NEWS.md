@@ -110,3 +110,6 @@ UI is under heavy development, must be tested, however all implemented functions
 
 ##### 06/03/2017
 UI test on real motors. All implemented functions work, however log into wxTextCtrl is quite slow and should be disabled/rewritten.
+
+##### 09/03/2017
+UI tested on real motors. All covered functions work properly, program is slow at first start, however further work is fast enought. Memory leaks were not detected, but their existence must be checked more carefully, because application is supposed to work long period of time without restart(minimum 12 hours).

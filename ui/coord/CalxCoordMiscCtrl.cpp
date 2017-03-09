@@ -106,7 +106,6 @@ namespace CalX {
 	}
 	
 	CalxCoordGraphAction::~CalxCoordGraphAction() {
-		delete this->translator;
 		delete this->builder;	
 	}
 			

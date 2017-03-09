@@ -97,6 +97,9 @@ namespace CalX {
 		plane->Clear();
 		CalxPanel *calxPanel = wxGetApp().getMainFrame()->getPanel();
 		for (size_t i = 0; i < calxPanel->getCoords()->getCoordCount(); i++) {
+			if (calxPanel->getCoords()->getCoordCtrl(i)->isUsed()) {
+				continue;
+			}
 			CoordHandle *handle = calxPanel->getCoords()->getCoord(i);
 			plane->Append("Plane #" + std::to_string(handle->getID()));
 		}

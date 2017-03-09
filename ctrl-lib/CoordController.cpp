@@ -216,9 +216,7 @@ namespace _8SMC1 {
 		ROLL_SPEED, ROLL_DIV);
 		yAxis->startMove(yAxis->getDevice()->getPosition() + comeback,
 		ROLL_SPEED, ROLL_DIV);
-
-		xAxis->resetPosition();
-		yAxis->resetPosition();
+		
 		xAxis->sendRolledEvent(mevt);
 		yAxis->sendRolledEvent(mevt);
 		xAxis->unuse();

@@ -1,16 +1,18 @@
 8SMC1 API wrappers
 ===================
 
-This project aims to create library to perform high-level control of 8SMC1 controllers and UI to use it. Currently project contains library core(still in development but already has most useful functions, however not all are tested) and command-line interface to test it(SEE cli/README.md to view command-line manual).
+This project aims to create library to perform high-level control of 8SMC1 controllers and UI to use it.
+However the main controllers used are Standa 8SMC1, but low level Device API is separated from another code, so it can be easily reimplemented for almost any controller(it contains fewer than 1000 lines of code). Other system components are controller-independent, so can be used separately as light-cnc flexible library and UI for it.
 
-Project has few levels: low-level Device wrapper API(wraps actual 8SMC1 driver API), high-level library(used to more complex stuff: different movement, logging, error checking, g-code and tasks), command-line interface(for testing purposes), device driver stubs(to test without hardware).
+Project has few levels: low-level Device API(wraps actual 8SMC1 driver API, the only layer communicating with real controllers), high-level library named Ctrl-lib(used to do more complex stuff: different movement, logging, error checking, g-code and tasks), command-line interface(for testing purposes), graphical user interface(as final result, now is developed), device driver stubs(to test without hardware).
 
-Currently project is in development stage, so API may be unstable and contain bugs. Althrough project functional core is almost finished UI is not written so not all functions are tested. Function testing on real hardware takes place two times a week(Monday and Thursday) so functionality that is added between this days may not work(track NEWS.md to view current state). All bugfixes added during tests firstly will be uploaded to testing branch and then refractored, but development code pushed in master(during the week testing and master will not be synchronized).
+Currently project is in development stage, so API may be unstable and contain bugs. Althrough project functional core is almost finished, UI is being written and Ctrl-lib is changing to fit UI requirements most. Function testing on real hardware takes place two times a week(Monday and Thursday) so functionality that is added between this days may not work(track NEWS.md to view current state).
 
 For more info see READMEs in subdirectories.
 
 Current goals
 ===================
+Most of them are reached, but however:
 * cover all USMC API with C++ wrappers
 * write high-level API to use with this wrappers
 * make command-line inteface usable with reasonable command aliases, parameters etc.
@@ -26,7 +28,6 @@ Known issues
 ===================
 * Current MicroSMC driver works only on Windows 2000/XP/Vista - controller may be correctly used only on this platforms. Possible solution - reimplement all low level wrappers on top of another controller(like Arduino). Other project parts will depend only on these wrappers so will not be affected, but porting will be quite hard.
 * Project is on development stage and tests are performed two times a week, so new functions may be unstable or not work at all. See NEWS to track current project state.
-* There are a lot of synchronization options and other parameters for our controller - we have not figured how to use them yet. Probably not all controller options will be used.
 
 Disclaimer
 ===================
@@ -38,6 +39,7 @@ Project is built using MSVC and MinGW cross compiler(MinGW build tested on top o
 You must install MiscoSMC driver. Create 'res' directory in root of project and copy 'USMCDLL.h', 'USMCDLL.lib' and 'USMCDLL.dll' to it(it required to proper build, these files located in MicroSMC folder in Program files). You should also copy 'USMCDLL.lib' to root of project, if you are building by MSVC without use of stub.
 If you build GUI using MinGW, wxWidgets(version 3.1.0) must be compiled with additional link flags "-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic" as monolithic unicode shared library.
 
+Currently MSVC build for GUI is broken, but it will be fixed few days later.
 For MSVC:
 See winbuild/README.md. You may execute one of winbuild/*.bat files from project root to build one of targets.
 You can regenerate build files by command:

@@ -19,16 +19,16 @@ namespace CalX {
 		this->xscale = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 1);
 		this->yscale = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 1);
 		
-		sizer->Add(new wxStaticText(this, wxID_ANY, "Basic coordinate settings:"));
+		sizer->Add(new wxStaticText(this, wxID_ANY, "Coordinate plane:"));
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
-		sizer->Add(new wxStaticText(this, wxID_ANY, "X offset:"), wxRIGHT | wxALIGN_RIGHT, 5);
-		sizer->Add(xoffset);
-		sizer->Add(new wxStaticText(this, wxID_ANY, "Y offset:"), wxRIGHT | wxALIGN_RIGHT, 5);
-		sizer->Add(yoffset);
-		sizer->Add(new wxStaticText(this, wxID_ANY, "X scale:"), wxRIGHT | wxALIGN_RIGHT, 5);
-		sizer->Add(xscale);
-		sizer->Add(new wxStaticText(this, wxID_ANY, "Y scale:"), wxRIGHT | wxALIGN_RIGHT, 5);
-		sizer->Add(yscale);
+		sizer->Add(new wxStaticText(this, wxID_ANY, "X offset:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
+		sizer->Add(xoffset, 0, wxALL | wxEXPAND);
+		sizer->Add(new wxStaticText(this, wxID_ANY, "Y offset:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
+		sizer->Add(yoffset, 0, wxALL | wxEXPAND);
+		sizer->Add(new wxStaticText(this, wxID_ANY, "X scale:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
+		sizer->Add(xscale, 0, wxALL | wxEXPAND);
+		sizer->Add(new wxStaticText(this, wxID_ANY, "Y scale:"), 0,wxRIGHT |  wxALIGN_RIGHT, 5);
+		sizer->Add(yscale, 0, wxALL | wxEXPAND);
 				
 		Layout();
 	}

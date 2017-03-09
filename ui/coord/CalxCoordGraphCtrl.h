@@ -8,6 +8,7 @@
 #include "calx.h"
 #include "CalxActionQueue.h"
 #include "CalxFrame.h"
+#include "CalxCoordTranslator.h"
 
 using namespace _8SMC1;
 
@@ -32,10 +33,9 @@ namespace CalX {
 				step->GetValue().ToDouble(&val);
 				return val;
 			}
-			int getXOffset() {return xoffset->GetValue();}
-			int getYOffset() {return yoffset->GetValue();}
-			int getXScale() {return xscale->GetValue();}
-			int getYScale() {return yscale->GetValue();}
+			CoordTranslator *getCoordTranslator() {
+				return this->translator->getTranslator();
+			}
 			int getSpeed() {return speed->GetValue();}
 		private:
 			void init();
@@ -46,10 +46,7 @@ namespace CalX {
 			wxSpinCtrl *ymin;
 			wxSpinCtrl *ymax;
 			wxTextCtrl *step;
-			wxSpinCtrl *xoffset;
-			wxSpinCtrl *yoffset;
-			wxSpinCtrl *xscale;
-			wxSpinCtrl *yscale;
+			CalxCoordTranslator *translator;
 			wxSpinCtrl *speed;
 	};
 	

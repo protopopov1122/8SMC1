@@ -143,7 +143,7 @@ namespace CalX {
 		wxBoxSizer *moveSpeedSizer = new wxBoxSizer(wxHORIZONTAL);
 		wxStaticText *moveSpeedText = new wxStaticText(moveSpeedPanel, wxID_ANY, "Speed: ");
 		moveSpeedSizer->Add(moveSpeedText, 0, wxALIGN_CENTER);
-		this->moveSpeedSpin = new wxSpinCtrl(moveSpeedPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,  wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
+		this->moveSpeedSpin = new wxSpinCtrl(moveSpeedPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,  wxDefaultSize, wxSP_ARROW_KEYS, 0, 4000, 4000);
 		moveSpeedSizer->Add(moveSpeedSpin, 1, wxEXPAND);
 		moveSpeedPanel->SetSizer(moveSpeedSizer);
 		moveSizer->Add(moveSpeedPanel, 1, wxEXPAND);
@@ -221,8 +221,7 @@ namespace CalX {
 		std::string pwr = "Power: " + std::string(dev->getDevice()->getPowerState() == Power::FullPower ?
 								"full" : (dev->getDevice()->getPowerState() == Power::HalfPower ?
 								"half" : "no"));
-		std::string stat = "State: " + std::string(dev->getDevice()->isRunning() ? "Running" : "Not running") +
-										std::string(dev->getDevice()->isRunning() && dev->getDevice()->hasFullSpeed() ? " at full speed" : "");
+		std::string stat = "State: " + std::string(dev->getDevice()->isRunning() ? "Running" : "Not running");
 		std::string tra1 = "Trailer 1: " + std::string(dev->getDevice()->isTrailerPressed(1) ? "Pushed" : "Unpushed");
 		std::string tra2 = "Trailer 2: " + std::string(dev->getDevice()->isTrailerPressed(2) ? "Pushed" : "Unpushed");
 		this->position->SetLabel(pos);
