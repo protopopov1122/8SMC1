@@ -1,10 +1,10 @@
-#ifndef _8SMC1_UI_CALX_COORD_TRANSLATOR_H_
-#define _8SMC1_UI_CALX_COORD_TRANSLATOR_H_
+#ifndef CALX_UI_CALX_COORD_TRANSLATOR_H_
+#define CALX_UI_CALX_COORD_TRANSLATOR_H_
 
 #include <wx/spinctrl.h>
 #include "CalxApp.h"
 
-namespace CalX {
+namespace CalXUI {
 	
 	class CalxCoordTranslator : public wxPanel {
 		public:

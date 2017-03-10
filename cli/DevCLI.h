@@ -1,5 +1,5 @@
-#ifndef _8SMC1_DEVCLI_H_
-#define _8SMC1_DEVCLI_H_
+#ifndef CALX_DEVCLI_H_
+#define CALX_DEVCLI_H_
 
 #include "CLI.h"
 #include "ctrl-lib/SystemManager.h"
@@ -11,7 +11,7 @@
    see README.md for quick tutorial and DevCLI.cpp for implemetation.
    This commands use abstract CLI interface.*/
 
-namespace _8SMC1 {
+namespace CalX {
 	class DeviceCommand : public CLICommand {
 		public:
 			DeviceCommand(SystemManager *sysman) {

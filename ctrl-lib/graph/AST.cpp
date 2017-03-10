@@ -1,7 +1,7 @@
 #include <math.h>
 #include "FunctionEngine.h"
 
-namespace _8SMC1 {
+namespace CalX {
 	
 	engine_value_t VariableNode::eval(FunctionEngine *eng) {
 		return eng->getScope()->getVariable(id);

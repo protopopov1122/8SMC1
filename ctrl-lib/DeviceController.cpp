@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <iostream>
 
-namespace _8SMC1 {
+namespace CalX {
 
 	DeviceController::DeviceController(Device *dev) {
 		this->dev = dev;

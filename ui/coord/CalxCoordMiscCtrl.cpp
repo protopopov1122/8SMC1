@@ -1,6 +1,6 @@
 #include "CalxCoordCtrl.h"
 
-namespace CalX {
+namespace CalXUI {
 	
 	void CalxCoordTimer::Notify() {
 		ctrl->updateUI();

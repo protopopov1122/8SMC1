@@ -1,5 +1,5 @@
-#ifndef _8SMC1_CTRL_LIB_SYSTEM_MANAGER_H_
-#define _8SMC1_CTRL_LIB_SYSTEM_MANAGER_H_
+#ifndef CALX_CTRL_LIB_SYSTEM_MANAGER_H_
+#define CALX_CTRL_LIB_SYSTEM_MANAGER_H_
 
 #include "device/DeviceManager.h"
 #include "plane/CoordPlane.h"
@@ -13,7 +13,7 @@
    in GUI application may duplicate its functions if it's
    necessary. */
 
-namespace _8SMC1 {
+namespace CalX {
 
 	class SystemManager {
 		public:

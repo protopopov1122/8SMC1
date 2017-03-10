@@ -1,9 +1,9 @@
-#ifndef _8SMC1_CTRL_LIB_EVENT_LISTENER_H_
-#define _8SMC1_CTRL_LIB_EVENT_LISTENER_H_
+#ifndef CALX_CTRL_LIB_EVENT_LISTENER_H_
+#define CALX_CTRL_LIB_EVENT_LISTENER_H_
 
 #include "CtrlCore.h"
 
-namespace _8SMC1 {
+namespace CalX {
 	
 	struct MotorMoveEvent {
 		motor_coord_t destination;

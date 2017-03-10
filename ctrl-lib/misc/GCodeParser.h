@@ -1,5 +1,5 @@
-#ifndef _8SMC1_GCODE_PARSER_H_
-#define _8SMC1_GCODE_PARSER_H_
+#ifndef CALX_GCODE_PARSER_H_
+#define CALX_GCODE_PARSER_H_
 
 #include <stdio.h>
 #include <string>
@@ -20,7 +20,7 @@
    recognise some command letters and join them
    with next fields. */
 
-namespace _8SMC1 {
+namespace CalX {
 		
 	struct GCodeValue {
 		bool fract;

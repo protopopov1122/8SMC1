@@ -4,7 +4,7 @@
 /* This file contains implementation of some mathematical functions*
    that can be used with math evaluator.*/
 
-namespace _8SMC1 {
+namespace CalX {
 	
 #define DefFun1(id, fn)\
 	class id : public EngineFunction {\

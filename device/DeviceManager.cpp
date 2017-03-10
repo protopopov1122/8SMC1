@@ -3,7 +3,7 @@
 #include <iostream>
 
 
-namespace _8SMC1 {
+namespace CalX {
 	DeviceManager::~DeviceManager() {
 		
 	}

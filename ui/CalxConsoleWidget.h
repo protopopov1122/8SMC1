@@ -1,11 +1,11 @@
-#ifndef _8SMC1_UI_CALX_CONSOLE_WIDGET_H_
-#define _8SMC1_UI_CALX_CONSOLE_WIDGET_H_
+#ifndef CALX_UI_CALX_CONSOLE_WIDGET_H_
+#define CALX_UI_CALX_CONSOLE_WIDGET_H_
 
 #include <wx/textctrl.h>
 #include "calx.h"
 
 
-namespace CalX {
+namespace CalXUI {
 	
 	class CalxConsoleWidget : public wxTextCtrl {
 		public:

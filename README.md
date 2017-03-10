@@ -1,41 +1,40 @@
-8SMC1 API wrappers
+CalX Stepper motor library.
 ===================
 
-This project aims to create library to perform high-level control of 8SMC1 controllers and UI to use it.
-However the main controllers used are Standa 8SMC1, but low level Device API is separated from another code, so it can be easily reimplemented for almost any controller(it contains fewer than 1000 lines of code). Other system components are controller-independent, so can be used separately as light-cnc flexible library and UI for it.
+CalX is project of creating high level control application and library for stepper motors. Project codebase is device and platform independent, so may be adopted to any kind of motor controllers, only requirement is implementation of some interfaces for them(called Device API). During development and testing is used Standa 8SMC1 stepper motor controllers, so so CalX already contains Device API implementation for them.
 
-Project has few levels: low-level Device API(wraps actual 8SMC1 driver API, the only layer communicating with real controllers), high-level library named Ctrl-lib(used to do more complex stuff: different movement, logging, error checking, g-code and tasks), command-line interface(for testing purposes), graphical user interface(as final result, now is developed), device driver stubs(to test without hardware).
+Project consists of several parts:
+* Device API - the only code which directly interacts with motor controller/drivers and is platform dependent. Its components are stored in device subdirectory. Device API defines abstract intefaces so that other code uses only them and is device-independent. To add new device class support to system, you must implement these interfaces(they are tiny) and patch some files(two lines per cli/main.cpp and ui/CalxApp.cpp) to use them. Reference Device API implementation is wrappers for Standa 8SMC1 controllers(located in device/8smc1 directory), but they have a lot of extra code that isn't necessary.
+* Ctrl-lib - main and central component of project. Is offers different actions and abstractions that are used for complex stepper motor control. It uses only Device API created abstractions, so Ctrl-lib is platform-independent and may be used with any compatible controller/motor. Basically it is project functional core, on top of it works GUI and command line interface.
+* CLI(command line interface) - interface that was used during Ctrl-lib development and testing. It doesn't cover all Ctrl-lib possibilities(however most of them) and has complex commands and parameters, however it can be useful.
+* UI(graphical user interface) - wxWidgets based graphical application that uses Ctrl-lib to provide convinient device control and cover its functions. Ctrl-lib has big variety of features, so UI itself may be not very user-friendly. Ctrl-lib is extended to needs of UI, because UI is development target.
 
-Currently project is in development stage, so API may be unstable and contain bugs. Althrough project functional core is almost finished, UI is being written and Ctrl-lib is changing to fit UI requirements most. Function testing on real hardware takes place two times a week(Monday and Thursday) so functionality that is added between this days may not work(track NEWS.md to view current state).
+Track NEWS.md to view recent changes.
+For more info see READMEs in subdirectories(read this README before).
 
-For more info see READMEs in subdirectories.
-
-Current goals
-===================
-Most of them are reached, but however:
-* cover all USMC API with C++ wrappers
-* write high-level API to use with this wrappers
-* make command-line inteface usable with reasonable command aliases, parameters etc.
-* implement subset of G-Code and function graphs to execute on top of this API
-* integrate this project with useful tools like AutoCAD, Inkscape G-Code plugin
-For more detailed info see TODO.
 
 Motivation
 ===================
-This project started with goal to create two-axis moving laser using existing stepper motor and controller for physics lab. Basically we create simple cnc for educational purposes.
+This project started with goal to create two-axis moving laser using existing stepper motor and controller for physics lab for educational purposes. Currently it is more universal and has more features.
 
 Known issues
 ===================
-* Current MicroSMC driver works only on Windows 2000/XP/Vista - controller may be correctly used only on this platforms. Possible solution - reimplement all low level wrappers on top of another controller(like Arduino). Other project parts will depend only on these wrappers so will not be affected, but porting will be quite hard.
-* Project is on development stage and tests are performed two times a week, so new functions may be unstable or not work at all. See NEWS to track current project state.
+Project started as simple Standa 8SMC1 motor control interface, however during development it extended with features that wasn't necessary at start, so there is some consequences:
+* Not all text files that describe project is up-to-date. Development is quite fast and focused on new function implementation, so not all textual descriptions are actual.
+* Currently CalX has possibility to use any stepper motors, however the only hardware controller we have is Standa 8SMC1 - all functionality is tested with them.
+* Currently project should be able to build/run on different OS, however main platform is Windows XP.
 
 Disclaimer
 ===================
-Project is on development stage so it may be unstable. There are standart tools in SMCView package that allow using AutoCAD with 8SMC1 contorller, but they require additional licanses, our controllers are discontinued as well. We are just trying to implement same functionality with some additions.
+Project is on development stage so it may be unstable.
+
+The only Device API implementation is written for Standa controllers, other device support may be added later. 8SMC1 devices have own standart packages for similar purposes, but they require additional licenses and are discontinued by manufacter.
 
 Builing
 ===================
 Project is built using MSVC and MinGW cross compiler(MinGW build tested on top of Linux and Windows Subsystem for Linux).
+
+To use 8SMC1 controller:
 You must install MiscoSMC driver. Create 'res' directory in root of project and copy 'USMCDLL.h', 'USMCDLL.lib' and 'USMCDLL.dll' to it(it required to proper build, these files located in MicroSMC folder in Program files). You should also copy 'USMCDLL.lib' to root of project, if you are building by MSVC without use of stub.
 If you build GUI using MinGW, wxWidgets(version 3.1.0) must be compiled with additional link flags "-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic" as monolithic unicode shared library.
 

@@ -1,6 +1,6 @@
 #include "CoordPlane.h"
 
-namespace _8SMC1 {
+namespace CalX {
 	
 	CoordPlaneValidator::CoordPlaneValidator(motor_point_t min, motor_point_t max, float maxspeed, CoordPlane *cplane) {
 		this->plane = cplane;

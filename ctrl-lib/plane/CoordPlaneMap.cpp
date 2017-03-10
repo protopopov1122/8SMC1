@@ -1,6 +1,6 @@
 #include "CoordPlane.h"
 
-namespace _8SMC1 {
+namespace CalX {
 	
 	CoordPlaneMap::CoordPlaneMap(motor_point_t offset, motor_scale_t scale, CoordPlane *plane) {
 		this->offset = offset;

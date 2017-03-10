@@ -10,7 +10,7 @@
 
 /* Creates device manager and runs command line*/
 
-using namespace _8SMC1;
+using namespace CalX;
 
 class EchoCMD : public CLICommand  {
 	virtual ~EchoCMD() {
@@ -36,7 +36,7 @@ class HelpCMD : public CLICommand  {
 };
 
 int main(int argc, char **argv) {
-	_8SMC1DeviceManager devman;
+	CALXDeviceManager devman;
 	SystemManager sysman(&devman);
 	CLI cli(std::cout, std::cin);
 	cli.addCommand("echo", new EchoCMD());

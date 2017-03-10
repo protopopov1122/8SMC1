@@ -2,7 +2,7 @@
 #include <wx/stattext.h>
 #include "CalxCoordDialog.h"
 
-namespace CalX {
+namespace CalXUI {
 	
 	CalxCoordDialog::CalxCoordDialog(wxWindow* win, wxWindowID id, SystemManager *sysman)
 		: wxDialog::wxDialog(win, id, "New coordinate plane") {

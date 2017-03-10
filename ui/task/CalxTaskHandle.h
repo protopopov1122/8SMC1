@@ -1,12 +1,12 @@
-#ifndef _8SMC1_UI_CALX_TASK_HANDLE_H_
-#define _8SMC1_UI_CALX_TASK_HANDLE_H_
+#ifndef CALX_UI_CALX_TASK_HANDLE_H_
+#define CALX_UI_CALX_TASK_HANDLE_H_
 
 #include <iostream>
 #include "CalxApp.h"
 
-using namespace _8SMC1;
+using namespace CalX;
 
-namespace CalX {
+namespace CalXUI {
 	
 	enum CalxTaskType {
 		CalxGcode

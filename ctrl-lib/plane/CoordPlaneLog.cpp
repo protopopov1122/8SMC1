@@ -1,6 +1,6 @@
 #include "CoordPlane.h"
 
-namespace _8SMC1 {
+namespace CalX {
 	
 	CoordPlaneLog::CoordPlaneLog(CoordPlane *cplane, std::ostream *os, std::string prefix, bool log_act, bool log_err) {
 		this->plane = cplane;

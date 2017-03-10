@@ -1,6 +1,6 @@
 #include "CoordPlane.h"
 
-namespace _8SMC1 {
+namespace CalX {
 	
 	CoordPlaneStack::CoordPlaneStack(CoordPlane *root) {
 		this->stack.push_back(root);

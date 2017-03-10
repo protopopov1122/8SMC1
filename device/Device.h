@@ -1,12 +1,12 @@
-#ifndef _8SMC1_DEVICE_H_
-#define _8SMC1_DEVICE_H_
+#ifndef CALX_DEVICE_H_
+#define CALX_DEVICE_H_
 
 #include <cinttypes>
 #include <string>
 
 /* Device class contains interface to abstract Device. */
 
-namespace _8SMC1 {
+namespace CalX {
 
 	class DeviceManager;	// For forward referencing
 

@@ -1,5 +1,5 @@
-#ifndef _8SMC1_UI_CALX_TASK_PANEL_H_
-#define _8SMC1_UI_CALX_TASK_PANEL_H_
+#ifndef CALX_UI_CALX_TASK_PANEL_H_
+#define CALX_UI_CALX_TASK_PANEL_H_
 
 #include <vector>
 #include <wx/listbox.h>
@@ -9,7 +9,7 @@
 #include "CalxTaskHandle.h"
 #include "CalxActionQueue.h"
 
-namespace CalX {
+namespace CalXUI {
 	
 	class CalxTaskHandle; // Forward referencing
 	

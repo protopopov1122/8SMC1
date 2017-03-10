@@ -1,5 +1,5 @@
-#ifndef _8SMC1_UI_CALX_DEVICE_CTRL_H_
-#define _8SMC1_UI_CALX_DEVICE_CTRL_H_
+#ifndef CALX_UI_CALX_DEVICE_CTRL_H_
+#define CALX_UI_CALX_DEVICE_CTRL_H_
 
 #include <wx/stattext.h>
 #include <wx/spinctrl.h>
@@ -7,7 +7,7 @@
 #include "calx.h"
 #include "CalxActionQueue.h"
 
-namespace CalX {
+namespace CalXUI {
 	
 	class CalxDeviceCtrl; // Forward reference
 	
@@ -38,7 +38,7 @@ namespace CalX {
 	class CalxDeviceCtrl : public wxPanel {
 		public:
 			friend class CalxMotorEventListener;
-			CalxDeviceCtrl(wxWindow*, wxWindowID, _8SMC1::DeviceController*);
+			CalxDeviceCtrl(wxWindow*, wxWindowID, CalX::DeviceController*);
 			
 			void updateUI();
 			void stop();
@@ -54,7 +54,7 @@ namespace CalX {
 			void threadUpdate(wxThreadEvent&);
 			void OnExit(wxCloseEvent&);
 		
-			_8SMC1::DeviceController *dev;
+			CalX::DeviceController *dev;
 			CalxActionQueue *queue;
 			MotorEventListener *listener;
 			CalxDeviceTimer timer;

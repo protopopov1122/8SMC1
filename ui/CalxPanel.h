@@ -1,10 +1,10 @@
-#ifndef _8SMC1_UI_CALX_PANEL_H_
-#define _8SMC1_UI_CALX_PANEL_H_
+#ifndef CALX_UI_CALX_PANEL_H_
+#define CALX_UI_CALX_PANEL_H_
 
 #include "calx.h"
 #include <wx/notebook.h>
 
-namespace CalX {
+namespace CalXUI {
 	
 	class CalxDevicePanel; // Forward referencing
 	class CalxCoordPanel; // Forward referencing

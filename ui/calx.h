@@ -1,5 +1,5 @@
-#ifndef _8SMC1_UI_CALX_H_
-#define _8SMC1_UI_CALX_H_
+#ifndef CALX_UI_CALX_H_
+#define CALX_UI_CALX_H_
 
 
 #define __WXMSW__

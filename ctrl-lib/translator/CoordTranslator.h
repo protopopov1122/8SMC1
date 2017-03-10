@@ -15,7 +15,7 @@
    NOTE: You can also stack them, however you are responsible
    to free memory after them. */
 
-namespace _8SMC1 {
+namespace CalX {
 
 	enum CoordType {
 		BasicCoord, LinearCoord, LogarithmicCoord, PolarCoord, ComplexCoord

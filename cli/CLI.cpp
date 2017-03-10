@@ -5,7 +5,7 @@
 #include <vector>
 #include <iostream>
 
-namespace _8SMC1 {
+namespace CalX {
 	
 	CLI::CLI(std::ostream &os, std::istream &is) {
 		this->in = &is;

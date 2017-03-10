@@ -1,5 +1,5 @@
-#ifndef _8SMC1_CTRL_LIB_DEVICE_CONTROLLER_H_
-#define _8SMC1_CTRL_LIB_DEVICE_CONTROLLER_H_
+#ifndef CALX_CTRL_LIB_DEVICE_CONTROLLER_H_
+#define CALX_CTRL_LIB_DEVICE_CONTROLLER_H_
 
 #include <cinttypes>
 #include <vector>
@@ -14,7 +14,7 @@
    now almost all its functional is migrated to CooordController.
    It is used only by CLI.*/
 
-namespace _8SMC1 {
+namespace CalX {
 
 #define ROLL_STEP 30000
 #define ROLL_SPEED 4000.0f

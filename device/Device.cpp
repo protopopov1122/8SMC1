@@ -2,7 +2,7 @@
 
 /* Implementations of API wrappers */
 
-namespace _8SMC1 {
+namespace CalX {
 
 	Device::~Device() {
 		

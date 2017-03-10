@@ -1,5 +1,5 @@
-#ifndef _8SMC1_CTRL_LIB_GRAPH_AST_H_
-#define _8SMC1_CTRL_LIB_GRAPH_AST_H_
+#ifndef CALX_CTRL_LIB_GRAPH_AST_H_
+#define CALX_CTRL_LIB_GRAPH_AST_H_
 
 #include <vector>
 #include <string>
@@ -9,7 +9,7 @@
    Each node stores information about math expression and
    contains code to evaluate this expression using FunctionEngine and scope.*/
 
-namespace _8SMC1 {
+namespace CalX {
 	
 	enum MathError {
 		MNoError, MNoVariable, MNoFunction,

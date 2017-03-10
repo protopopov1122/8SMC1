@@ -7,7 +7,7 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-namespace _8SMC1 {
+namespace CalX {
 	
 	VirtualCoordPlane::VirtualCoordPlane(VirtualDevice *x, VirtualDevice *y) {
 		this->xDev = x;

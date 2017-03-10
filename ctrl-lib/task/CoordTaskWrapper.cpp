@@ -1,7 +1,7 @@
 #include <vector>
 #include "CoordTask.h"
 
-namespace _8SMC1 {
+namespace CalX {
 	
 	CoordTaskWrapper::CoordTaskWrapper(CoordTask *task)
 			: CoordTask::CoordTask(CoordTaskType::WrapperTask) {

@@ -1,5 +1,5 @@
-#ifndef _8SMC1_8SMC1_DEVICE_MANAGER_H_
-#define _8SMC1_8SMC1_DEVICE_MANAGER_H_
+#ifndef CALX_8SMC1_DEVICE_MANAGER_H_
+#define CALX_8SMC1_DEVICE_MANAGER_H_
 
 #include <stdlib.h>
 #include <string.h>
@@ -11,12 +11,12 @@
 
 /* Device manager initialise existing controllers and keep track of usable devices */
 
-namespace _8SMC1 {
+namespace CalX {
 
-	class _8SMC1DeviceManager : public DeviceManager {
+	class CALXDeviceManager : public DeviceManager {
 		public:
-			_8SMC1DeviceManager();
-			virtual ~_8SMC1DeviceManager();
+			CALXDeviceManager();
+			virtual ~CALXDeviceManager();
 			virtual void refresh();				// USMC_Init
 			virtual void saveError();			// USMC_GetLastErr
 			virtual std::string getDeviceSerial(device_id_t);

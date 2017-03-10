@@ -1,5 +1,5 @@
-#ifndef _8SMC1_CTRL_LIB_GRAPH_FUNCTION_ENGINE_H_
-#define _8SMC1_CTRL_LIB_GRAPH_FUNCTION_ENGINE_H_
+#ifndef CALX_CTRL_LIB_GRAPH_FUNCTION_ENGINE_H_
+#define CALX_CTRL_LIB_GRAPH_FUNCTION_ENGINE_H_
 
 #include <map>
 #include <vector>
@@ -12,7 +12,7 @@
    Scope stores variable values and defined mathematical functions.
    It evaluate AST nodes and provide them values and functions.*/
 
-namespace _8SMC1 {
+namespace CalX {
 		
 	class EngineFunction {
 		public:

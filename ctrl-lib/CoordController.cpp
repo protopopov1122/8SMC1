@@ -10,7 +10,7 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-namespace _8SMC1 {
+namespace CalX {
 
 	CoordController::CoordController(DeviceController *xaxis,
 			DeviceController *yaxis) {

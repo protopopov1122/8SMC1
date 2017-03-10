@@ -2,7 +2,7 @@
 #include <math.h>
 #include <iostream>
 
-namespace _8SMC1 {
+namespace CalX {
 
 	BasicCoordTranslator::BasicCoordTranslator(motor_point_t cen, motor_size_t sc)
 		: CoordTranslator::CoordTranslator(CoordType::BasicCoord) {

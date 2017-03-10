@@ -1,5 +1,5 @@
-#ifndef _8SMC1_CTRL_LIB_TASK_H_
-#define _8SMC1_CTRL_LIB_TASK_H_
+#ifndef CALX_CTRL_LIB_TASK_H_
+#define CALX_CTRL_LIB_TASK_H_
 
 #include <vector>
 #include "ctrl-lib/plane/CoordPlane.h"
@@ -15,7 +15,7 @@
 			parameters for it.
 	   * CoordTaskWrapper - wraps task and plane filter parameters. May be removed.*/
 
-namespace _8SMC1 {
+namespace CalX {
 	
 	class SystemManager; // Forward referencing
 

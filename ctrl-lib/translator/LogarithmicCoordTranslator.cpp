@@ -3,7 +3,7 @@
 #include <iomanip>
 #include "CoordTranslator.h"
 
-namespace _8SMC1 {
+namespace CalX {
 	
 	LogarithmicCoordTranslator::LogarithmicCoordTranslator(coord_scale_t scale, CoordTranslator *base)
 		: CoordTranslator::CoordTranslator(CoordType::LogarithmicCoord) {

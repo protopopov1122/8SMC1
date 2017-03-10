@@ -1,6 +1,6 @@
 #include "CoordTranslator.h"
 
-namespace _8SMC1 {
+namespace CalX {
 	
 	ComplexCoordTranslator::ComplexCoordTranslator(CoordTranslator *root)
 		: CoordTranslator::CoordTranslator(CoordType::ComplexCoord) {

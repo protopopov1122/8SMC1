@@ -6,7 +6,7 @@
 #include "CalxTaskPanel.h"
 #include "CalxGcodeLoader.h"
 
-namespace CalX {
+namespace CalXUI {
 	
 	class CalxTaskAction : public CalxAction {
 		public:

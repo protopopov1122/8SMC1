@@ -4,7 +4,7 @@
 
 wxDEFINE_EVENT(wxEVT_COMMAND_QUEUE_UPDATE, wxThreadEvent);
 
-namespace CalX {
+namespace CalXUI {
 	
 	CalxActionQueue::CalxActionQueue(SystemManager *sysman, wxEvtHandler *handle)
 		: wxThread::wxThread(wxTHREAD_DETACHED) {

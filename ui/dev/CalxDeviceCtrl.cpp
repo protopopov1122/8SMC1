@@ -6,9 +6,9 @@
 #include <limits.h>
 #include <iostream>
 
-using namespace _8SMC1;
+using namespace CalX;
 
-namespace CalX {
+namespace CalXUI {
 	
 	void CalxDeviceTimer::Notify() {
 		ctrl->updateUI();
@@ -99,7 +99,7 @@ namespace CalX {
 			int tr;
 	};
 	
-	CalxDeviceCtrl::CalxDeviceCtrl(wxWindow *win, wxWindowID id, _8SMC1::DeviceController *dev)
+	CalxDeviceCtrl::CalxDeviceCtrl(wxWindow *win, wxWindowID id, CalX::DeviceController *dev)
 		: wxPanel::wxPanel(win, id) {
 		this->dev = dev;
 		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);

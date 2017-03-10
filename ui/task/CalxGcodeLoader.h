@@ -1,12 +1,12 @@
-#ifndef _8SMC1_UI_CALX_GCODE_LOADER_H_
-#define _8SMC1_UI_CALX_GCODE_LOADER_H_
+#ifndef CALX_UI_CALX_GCODE_LOADER_H_
+#define CALX_UI_CALX_GCODE_LOADER_H_
 
 #include "CalxApp.h"
 #include "coord/CalxCoordTranslator.h"
 #include <string>
 #include <wx/textctrl.h>
 
-namespace CalX {
+namespace CalXUI {
 	
 	class CalxGcodeLoader : public wxDialog {
 		public:

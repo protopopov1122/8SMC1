@@ -1,6 +1,6 @@
 #include "FunctionEngine.h"
 
-namespace _8SMC1 {
+namespace CalX {
 	
 	EngineScope::EngineScope() {
 		

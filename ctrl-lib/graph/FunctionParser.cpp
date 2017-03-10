@@ -1,7 +1,7 @@
 #include "FunctionParser.h"
 #include <iostream>
 
-namespace _8SMC1 {
+namespace CalX {
 	
 	FunctionParser::FunctionParser(FunctionLexer *lexer) {
 		this->lexer = lexer;

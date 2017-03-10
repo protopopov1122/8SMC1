@@ -1,12 +1,12 @@
-#ifndef _8SMC1_UI_CALX_APP_H_
-#define _8SMC1_UI_CALX_APP_H_
+#ifndef CALX_UI_CALX_APP_H_
+#define CALX_UI_CALX_APP_H_
 
 #include "calx.h"
 #include "CalxFrame.h"
 
-using namespace _8SMC1;
+using namespace CalX;
 
-namespace CalX {
+namespace CalXUI {
 	
 	class CalxApp : public wxApp {
 		public:
@@ -21,7 +21,7 @@ namespace CalX {
 	};
 	
 }
-wxDECLARE_APP(CalX::CalxApp);
+wxDECLARE_APP(CalXUI::CalxApp);
 
 
 #endif

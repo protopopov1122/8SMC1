@@ -1,9 +1,9 @@
-#ifndef _8SMC1_UI_CALX_DEVICE_PANEL_H_
-#define _8SMC1_UI_CALX_DEVICE_PANEL_H_
+#ifndef CALX_UI_CALX_DEVICE_PANEL_H_
+#define CALX_UI_CALX_DEVICE_PANEL_H_
 
 #include "calx.h"
 
-namespace CalX {
+namespace CalXUI {
 	
 	class CalxDeviceCtrl; // Forward referencing
 	

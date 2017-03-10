@@ -1,5 +1,5 @@
-#ifndef _8SMC1_UI_CALX_COORD_PANEL_H_
-#define _8SMC1_UI_CALX_COORD_PANEL_H_
+#ifndef CALX_UI_CALX_COORD_PANEL_H_
+#define CALX_UI_CALX_COORD_PANEL_H_
 
 #include <cinttypes>
 #include <vector>
@@ -7,7 +7,7 @@
 #include "CalxApp.h"
 #include "CalxCoordCtrl.h"
 
-namespace CalX {
+namespace CalXUI {
 	
 	class CalxCoordPanel : public wxPanel {
 		public:

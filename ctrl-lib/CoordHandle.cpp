@@ -1,6 +1,6 @@
 #include "CoordHandle.h"
 
-namespace _8SMC1 {
+namespace CalX {
 	
 		CoordHandle::CoordHandle(size_t id, CoordController *root)
 			: CoordPlaneStack::CoordPlaneStack(root) {

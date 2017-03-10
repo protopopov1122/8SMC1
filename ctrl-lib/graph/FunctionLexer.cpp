@@ -3,7 +3,7 @@
 #include <cinttypes>
 #include <stdio.h>
 
-namespace _8SMC1 {
+namespace CalX {
 	
 	FunctionLexer::FunctionLexer(std::istream &is) {
 		this->in = &is;

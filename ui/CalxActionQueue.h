@@ -1,16 +1,16 @@
-#ifndef _8SMC1_UI_CALX_ACTION_QUEUE_H_
-#define _8SMC1_UI_CALX_ACTION_QUEUE_H_
+#ifndef CALX_UI_CALX_ACTION_QUEUE_H_
+#define CALX_UI_CALX_ACTION_QUEUE_H_
 
 #include <vector>
 #include <wx/thread.h>
 #include <wx/event.h>
 #include "calx.h"
 
-using namespace _8SMC1;
+using namespace CalX;
 
 wxDECLARE_EVENT(wxEVT_COMMAND_QUEUE_UPDATE, wxThreadEvent);
 
-namespace CalX {
+namespace CalXUI {
 	
 		class CalxAction {
 			public:

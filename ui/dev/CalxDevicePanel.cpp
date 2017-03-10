@@ -4,7 +4,7 @@
 #include "CalxDevicePanel.h"
 #include "CalxDeviceCtrl.h"
 
-namespace CalX {
+namespace CalXUI {
 	
 	CalxDevicePanel::CalxDevicePanel(wxWindow *win, wxWindowID id)
 		: wxPanel::wxPanel(win, id) {

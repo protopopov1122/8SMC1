@@ -8,12 +8,12 @@
 #include "dev/CalxDevicePanel.h"
 #include "CalxConsoleWidget.h"
 
-namespace CalX {
+namespace CalXUI {
 	CalxFrame::CalxFrame(std::string title)
 		: wxFrame::wxFrame(nullptr, wxID_ANY, title) {
 		
 		this->CreateStatusBar(1);
-		this->SetStatusText("8SMC1 CalX", 0);
+		this->SetStatusText("8SMC1 CalXUI", 0);
 		
 		wxSplitterWindow *mainPanel = new wxSplitterWindow(this, wxID_ANY);
 		

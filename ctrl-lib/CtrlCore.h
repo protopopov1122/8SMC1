@@ -1,11 +1,11 @@
-#ifndef _8SMC1_CTRL_LIB_CTRL_CORE_H_
-#define _8SMC1_CTRL_LIB_CTRL_CORE_H_
+#ifndef CALX_CTRL_LIB_CTRL_CORE_H_
+#define CALX_CTRL_LIB_CTRL_CORE_H_
 
 #include <cinttypes>
 
 /* This file contains basic structures, enums and constants that commonly used by other library parts. */
 
-namespace _8SMC1 {
+namespace CalX {
 	typedef int64_t motor_coord_t;
 	
 	enum ErrorCode {

@@ -1,12 +1,12 @@
-#ifndef _8SMC1_CTRL_LIB_GRAPH_LEXEM_H_
-#define _8SMC1_CTRL_LIB_GRAPH_LEXEM_H_
+#ifndef CALX_CTRL_LIB_GRAPH_LEXEM_H_
+#define CALX_CTRL_LIB_GRAPH_LEXEM_H_
 
 #include <string>
 #include <cinttypes>
 
 /* This file contains definitions used by lexer. */
 
-namespace _8SMC1 {
+namespace CalX {
 
 	enum TokenType {
 		Operator, Literal, Integer, Real

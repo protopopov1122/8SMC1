@@ -5,7 +5,7 @@
 #include <math.h>
 #include <limits>
 
-namespace _8SMC1 {
+namespace CalX {
 
 	ProgrammedCoordTask::ProgrammedCoordTask() :
 		CoordTask::CoordTask(CoordTaskType::ProgrammedTask){

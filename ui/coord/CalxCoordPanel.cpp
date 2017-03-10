@@ -4,7 +4,7 @@
 #include "CalxCoordPanel.h"
 #include "CalxCoordDialog.h"
 
-namespace CalX {
+namespace CalXUI {
 	
 	CalxCoordPanel::CalxCoordPanel(wxWindow *win, wxWindowID id)
 		: wxPanel::wxPanel(win, id) {

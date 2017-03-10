@@ -3,7 +3,7 @@
 #include "coord/CalxCoordPanel.h"
 #include "task/CalxTaskPanel.h"
 
-namespace CalX {
+namespace CalXUI {
 	
 	CalxPanel::CalxPanel(wxWindow *win, wxWindowID id)
 		: wxNotebook::wxNotebook(win, id) {

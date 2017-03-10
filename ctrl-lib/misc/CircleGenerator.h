@@ -1,5 +1,5 @@
-#ifndef _8SMC1_CTRL_LIB_CIRCLE_GENERATOR_H_
-#define _8SMC1_CTRL_LIB_CIRCLE_GENERATOR_H_
+#ifndef CALX_CTRL_LIB_CIRCLE_GENERATOR_H_
+#define CALX_CTRL_LIB_CIRCLE_GENERATOR_H_
 
 #include <vector>
 #include <cinttypes>
@@ -10,7 +10,7 @@
    and can calculate next or previouse basing on these values.
    This algorithm is used only by arc build so you won't use normally.*/
 
-namespace _8SMC1 {
+namespace CalX {
 
 #define	COMPARISON_RADIUS 10
 

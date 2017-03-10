@@ -1,6 +1,6 @@
 #include "CoordTranslator.h"
 
-namespace _8SMC1 {
+namespace CalX {
 
 	LinearCoordTranslator::LinearCoordTranslator(coord_point_t cen, coord_scale_t sc, CoordTranslator *base)
 		: CoordTranslator::CoordTranslator(CoordType::LinearCoord) {

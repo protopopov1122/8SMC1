@@ -1,5 +1,5 @@
-#ifndef _8SMC1_CLI_H_
-#define _8SMC1_CLI_H_
+#ifndef CALX_CLI_H_
+#define CALX_CLI_H_
 
 #include <string>
 #include <cinttypes>
@@ -13,7 +13,7 @@
    call operations.
    Ceratin command implementations see in DevCLI.*/
 
-namespace _8SMC1 {
+namespace CalX {
 		
 	class CLI; // Forward referencing
 		

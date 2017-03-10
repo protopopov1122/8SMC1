@@ -1,6 +1,6 @@
 #include "SystemManager.h"
 
-namespace _8SMC1 {
+namespace CalX {
 
 	SystemManager::SystemManager(DeviceManager *devman) {
 		this->devman = devman;

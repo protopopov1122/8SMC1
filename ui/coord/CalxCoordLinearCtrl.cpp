@@ -1,6 +1,6 @@
 #include "CalxCoordCtrl.h"
 
-namespace CalX {
+namespace CalXUI {
 	
 	void CalxCoordLinearCtrl::init() {
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(2);

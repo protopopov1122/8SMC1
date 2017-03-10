@@ -1,5 +1,5 @@
-#ifndef _8SMC1_CTRL_LIB_COORD_PLANE_H_
-#define _8SMC1_CTRL_LIB_COORD_PLANE_H_
+#ifndef CALX_CTRL_LIB_COORD_PLANE_H_
+#define CALX_CTRL_LIB_COORD_PLANE_H_
 
 #include <iostream>
 #include <vector>
@@ -16,7 +16,7 @@
    stacking you may use CoordPlaneStack, it also takes responsibility
    to free filter memory, otherwise you are responsible to free memroy. */
 
-namespace _8SMC1 {
+namespace CalX {
 		
 	// Main interface
 	class CoordPlane {

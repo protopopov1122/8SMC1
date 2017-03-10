@@ -8,7 +8,7 @@
 #include "CalxCoordCtrl.h"
 #include "task/CalxTaskPanel.h"
 
-namespace CalX {
+namespace CalXUI {
 	
 	CalxCoordCtrl::CalxCoordCtrl(wxWindow *win, wxWindowID id, CoordHandle *ctrl)
 		: wxScrolledWindow::wxScrolledWindow(win, id) {

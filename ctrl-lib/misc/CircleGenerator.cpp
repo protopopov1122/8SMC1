@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <math.h>
 
-namespace _8SMC1 {
+namespace CalX {
 
 	Circle::Circle(motor_point_t cen, int64_t rad, bool cw) {
 		this->center = cen;

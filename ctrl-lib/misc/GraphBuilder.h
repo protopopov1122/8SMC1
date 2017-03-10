@@ -1,5 +1,5 @@
-#ifndef _8SMC1_CTRL_LIB_GRAPH_BUILDER_H_
-#define _8SMC1_CTRL_LIB_GRAPH_BUILDER_H_
+#ifndef CALX_CTRL_LIB_GRAPH_BUILDER_H_
+#define CALX_CTRL_LIB_GRAPH_BUILDER_H_
 
 #include "ctrl-lib/graph/FunctionEngine.h"
 #include "ctrl-lib/plane/CoordPlane.h"
@@ -9,7 +9,7 @@
    minimal and maximal x&y and x calculation step and takes plane,
    coordinate translator and speed to build. */
 
-namespace _8SMC1 {
+namespace CalX {
 	class SystemManager;
 	
 	class GraphBuilder {

@@ -113,3 +113,6 @@ UI test on real motors. All implemented functions work, however log into wxTextC
 
 ##### 09/03/2017
 UI tested on real motors. All covered functions work properly, program is slow at first start, however further work is fast enought. Memory leaks were not detected, but their existence must be checked more carefully, because application is supposed to work long period of time without restart(minimum 12 hours).
+
+##### 10/03/2017
+Device API was refractored to offer abstract interfaces. Concrete implementations were moved to separate subdirectory. Now project may use any controllers, but some extra work on this should be done. Project was renamed to CalX.

@@ -2,7 +2,7 @@
 #include <wx/stattext.h>
 #include "CalxCoordTranslator.h"
 
-namespace CalX {
+namespace CalXUI {
 	
 	CalxCoordTranslator::CalxCoordTranslator(wxWindow *win, wxWindowID id)
 		: wxPanel::wxPanel(win, id) {

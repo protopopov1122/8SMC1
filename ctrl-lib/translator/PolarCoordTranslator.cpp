@@ -1,7 +1,7 @@
 #include <math.h>
 #include "CoordTranslator.h"
 
-namespace _8SMC1 {
+namespace CalX {
 	
 	PolarCoordTranslator::PolarCoordTranslator(CoordTranslator *base)
 		: CoordTranslator::CoordTranslator(CoordType::PolarCoord) {

@@ -1,6 +1,6 @@
 #include "CalxConsoleWidget.h"
 
-namespace CalX {
+namespace CalXUI {
 	
 	CalxConsoleWidget::CalxConsoleWidget(wxWindow *win, wxWindowID id) :
 		wxTextCtrl::wxTextCtrl(win, id, "", wxDefaultPosition, wxDefaultSize,

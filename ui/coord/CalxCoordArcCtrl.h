@@ -1,5 +1,5 @@
-#ifndef _8SMC1_UI_CALX_COORD_ARC_CTRL_H_
-#define _8SMC1_UI_CALX_COORD_ARC_CTRL_H_
+#ifndef CALX_UI_CALX_COORD_ARC_CTRL_H_
+#define CALX_UI_CALX_COORD_ARC_CTRL_H_
 
 #include <wx/stattext.h>
 #include <wx/choice.h>
@@ -9,9 +9,9 @@
 #include "CalxActionQueue.h"
 #include "CalxFrame.h"
 
-using namespace _8SMC1;
+using namespace CalX;
 
-namespace CalX {
+namespace CalXUI {
 	
 	class CalxCoordCtrl; // Forward reference
 	

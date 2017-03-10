@@ -3,7 +3,7 @@
 #include <cinttypes>
 #include "ctrl-lib/SystemManager.h"
 
-namespace _8SMC1 {
+namespace CalX {
 	
 	GraphBuilder::GraphBuilder(Node *nd, coord_point_t min, coord_point_t max, long double step) {
 		this->node = nd;

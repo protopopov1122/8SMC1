@@ -1,10 +1,10 @@
-#ifndef _8SMC1_CTRL_LIB_COORD_HANDLE_H_
-#define _8SMC1_CTRL_LIB_COORD_HANDLE_H_
+#ifndef CALX_CTRL_LIB_COORD_HANDLE_H_
+#define CALX_CTRL_LIB_COORD_HANDLE_H_
 
 #include <cinttypes>
 #include "plane/CoordPlane.h"
 
-namespace _8SMC1 {
+namespace CalX {
 
 	class CoordHandle : public CoordPlaneStack {
 		public:

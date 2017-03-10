@@ -1,5 +1,5 @@
-#ifndef _8SMC1_8SMC1_DEVICE_H_
-#define _8SMC1_8SMC1_DEVICE_H_
+#ifndef CALX_8SMC1_DEVICE_H_
+#define CALX_8SMC1_DEVICE_H_
 
 #include "device/Device.h"
 
@@ -9,12 +9,12 @@
 /* Standa 8SMC1 device implementation. It is excess and wraps most 8SMC1 API functions
    that are not used by other code. */
 
-namespace _8SMC1 {
+namespace CalX {
 	
-	class _8SMC1Device : public Device {
+	class CALXDevice : public Device {
 		public:
-			_8SMC1Device(device_id_t, DeviceManager*);
-			virtual ~_8SMC1Device();
+			CALXDevice(device_id_t, DeviceManager*);
+			virtual ~CALXDevice();
 			/* Methods that implement Device interface */
 			virtual int getPosition();		// CurPos
 			virtual Power getPowerState();		// Power & FullPower

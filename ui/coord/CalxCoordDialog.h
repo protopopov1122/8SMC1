@@ -1,12 +1,12 @@
-#ifndef _8SMC1_UI_CALX_COORD_DIALOG_H_
-#define _8SMC1_UI_CALX_COORD_DIALOG_H_
+#ifndef CALX_UI_CALX_COORD_DIALOG_H_
+#define CALX_UI_CALX_COORD_DIALOG_H_
 
 #include "calx.h"
 #include <wx/choice.h>
 
-using namespace _8SMC1;
+using namespace CalX;
 
-namespace CalX {
+namespace CalXUI {
 	
 	class CalxCoordDialog : public wxDialog {
 		public:

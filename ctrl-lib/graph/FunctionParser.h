@@ -1,5 +1,5 @@
-#ifndef _8SMC1_CTRL_LIB_GRAPH_FUNCTION_PARSER_H_
-#define _8SMC1_CTRL_LIB_GRAPH_FUNCTION_PARSER_H_
+#ifndef CALX_CTRL_LIB_GRAPH_FUNCTION_PARSER_H_
+#define CALX_CTRL_LIB_GRAPH_FUNCTION_PARSER_H_
 
 #include <iostream>
 #include <map>
@@ -8,7 +8,7 @@
 #include "Lexem.h"
 #include "AST.h"
 
-namespace _8SMC1 {
+namespace CalX {
 	
 	class FunctionLexer {
 		public:

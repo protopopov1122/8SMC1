@@ -8,7 +8,7 @@
 #include <map>
 #include "ctrl-lib/task/CoordTask.h"
 
-namespace _8SMC1 {
+namespace CalX {
 
 	GCodeCommand::GCodeCommand(char letter, int com) {
 		this->letter = letter;

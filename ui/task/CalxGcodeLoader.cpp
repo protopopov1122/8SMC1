@@ -3,7 +3,7 @@
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
 
-namespace CalX {
+namespace CalXUI {
 	
 	CalxGcodeLoader::CalxGcodeLoader(wxWindow *win, wxWindowID id)
 		: wxDialog::wxDialog(win, id, "Load GCode") {

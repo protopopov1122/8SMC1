@@ -1,5 +1,5 @@
-#ifndef _8SMC1_DEVICE_MANAGER_H_
-#define _8SMC1_DEVICE_MANAGER_H_
+#ifndef CALX_DEVICE_MANAGER_H_
+#define CALX_DEVICE_MANAGER_H_
 
 #include <stdlib.h>
 #include <string.h>
@@ -10,7 +10,7 @@
 
 /* Device manager initialise existing controllers and keep track of usable devices */
 
-namespace _8SMC1 {
+namespace CalX {
 
 	class DeviceManager {
 		public:

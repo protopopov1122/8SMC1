@@ -4,7 +4,7 @@
 #include "CalxTaskHandle.h"
 #include "ctrl-lib/misc/GCodeParser.h"
 
-namespace CalX {
+namespace CalXUI {
 	
 	CalxGcodeHandle::CalxGcodeHandle(wxWindow *win, wxWindowID id, std::string sid, std::istream *is, CoordTranslator *tr)
 		: CalxTaskHandle::CalxTaskHandle(win, id, CalxTaskType::CalxGcode) {
