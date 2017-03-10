@@ -13,7 +13,7 @@ namespace CalXUI {
 		: wxFrame::wxFrame(nullptr, wxID_ANY, title) {
 		
 		this->CreateStatusBar(1);
-		this->SetStatusText("8SMC1 CalXUI", 0);
+		this->SetStatusText("CalX UI", 0);
 		
 		wxSplitterWindow *mainPanel = new wxSplitterWindow(this, wxID_ANY);
 		
@@ -44,9 +44,6 @@ namespace CalXUI {
 		this->panel->getDevices()->stop();
 		this->panel->getCoords()->stop();
 		this->panel->getTasks()->stop();
-		Destroy();
-		//evt.Veto();
-		//wxExit();
-		
+		Destroy();		
 	}
 }

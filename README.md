@@ -64,8 +64,8 @@ make ui.exe WX=$(WX) # Build GUI(currently under development); $(WX) - wxWidgets
 
 Authors and Contributions
 ===================
-Code author: Eugene Protopopov <protopopov1122@yandex.ru>.
+Author: Jevgenijs Protopopovs <protopopov1122@yandex.ru>.
 
-Work with controllers is performed in command.
+Testing is performed in command.
 
 By now code have no license(most likely project will have some kind of GNU GPL in the end), but feel free to use project, contribute code and ideas.

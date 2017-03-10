@@ -6,7 +6,7 @@ namespace CalXUI {
 	bool CalxApp::OnInit() {
 		this->devman = new CALXDeviceManager();
 		this->sysman = new SystemManager(this->devman);
-		this->frame = new CalxFrame("8SMC1 CalXUI");
+		this->frame = new CalxFrame("CalX UI");
 		this->frame->Show(true);
 		this->frame->Maximize(true);
 		
