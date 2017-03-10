@@ -57,9 +57,9 @@ Build commands for both are the same:
 ```bash
 make clean	# Clean all
 make stub	# Build stub to test CLI without controller
-make 8smc1.exe # Build CLI
-make 8smc1.dll # Build library; required for GUI
-make ui.exe WX=$(WX) # Build GUI(currently under development); $(WX) - wxWidgets-3.1.0 directory; requires 8smc1.dll build first.
+make calx.exe # Build CLI
+make calx.dll # Build library; required for GUI
+make calxui.exe WX=$(WX) # Build GUI(currently under development); $(WX) - wxWidgets-3.1.0 directory; requires calx.dll build first.
 ```
 
 Authors and Contributions
@@ -68,4 +68,4 @@ Author: Jevgenijs Protopopovs <protopopov1122@yandex.ru>.
 
 Testing is performed in command.
 
-By now code have no license(most likely project will have some kind of GNU GPL in the end), but feel free to use project, contribute code and ideas.
+Project code is distributed under the terms of GNU LGPLv3. See COPYING and COPYING.LESSER
