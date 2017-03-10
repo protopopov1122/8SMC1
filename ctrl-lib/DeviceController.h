@@ -30,7 +30,7 @@ namespace _8SMC1 {
 			DeviceController(Device*);
 			virtual ~DeviceController();
 			Device *getDevice();
-			DWORD getID();
+			device_id_t getID();
 
 			ErrorCode moveToTrailer(int, int);
 			ErrorCode startMove(motor_coord_t, float, int, bool = false);
@@ -53,7 +53,6 @@ namespace _8SMC1 {
 			bool work;
 			ErrorCode waitWhileRunning();
 			ErrorCode checkTrailers();
-			ErrorCode resetPosition();
 			
 			Device *dev;
 			MoveType dest;

@@ -53,7 +53,7 @@ fi
 if [ $1 == "ui" ]
 then
 	printf "@echo off\n"
-	printf "cl /EHsc /Zi /Gm /std:c++latest /W0 /I. /I res /I ui /I %%1\\include /I %%1\\lib\\\\vc_dll\\mswud /Fe$2.exe "
+	printf "cl /EHsc /Zi /Gm /std:c++latest /W0 /I. /I res /I ui /I %%1\\include /I %%1\\lib\\\\vc_dll\\mswu /Fe$2.exe "
     find ui -name "*.cpp" -or -name "*.cxx" | awk -F/ '{print $0}' | tr '\n' ' '
 	printf " /link %%1\\lib\\\\vc_dll\\wxmsw31u.lib build\\\\USMCDLL.lib build\\\\8smc1.lib /MACHINE:x86\n"
 	printf "copy %%1\\\\lib\\\\vc_dll\wxmsw310u_vc_custom.dll build\n"

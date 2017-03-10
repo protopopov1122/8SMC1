@@ -19,7 +19,7 @@ namespace _8SMC1 {
 		return this->dev;
 	}
 	
-	DWORD DeviceController::getID() {
+	device_id_t DeviceController::getID() {
 		return this->dev->getID();
 	}
 
@@ -121,11 +121,6 @@ namespace _8SMC1 {
 		this->dest = MoveType::Stop;
 		this->dev->stop();
 		this->work = false;
-	}
-
-	ErrorCode DeviceController::resetPosition() {
-		this->dev->setCurrentPosition(0);
-		return ErrorCode::NoError;
 	}
 
 	motor_coord_t DeviceController::getPosition() {

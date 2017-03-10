@@ -20,7 +20,7 @@ namespace _8SMC1 {
 			SystemManager(DeviceManager*);
 			virtual ~SystemManager();
 			DeviceManager *getDeviceManager();
-			DeviceController *getDeviceController(DWORD);
+			DeviceController *getDeviceController(device_id_t);
 			size_t getDeviceCount();
 			FunctionEngine *getFunctionEngine();
 			// Tasks control
@@ -32,7 +32,7 @@ namespace _8SMC1 {
 			// Coordinate plane control
 			size_t getCoordCount();
 			CoordHandle *getCoord(size_t);
-			CoordHandle* createCoord(DWORD, DWORD);
+			CoordHandle* createCoord(device_id_t, device_id_t);
 			void removeCoord(size_t);
 		private:
 			DeviceManager *devman;

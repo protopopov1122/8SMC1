@@ -16,8 +16,6 @@ namespace _8SMC1 {
 			DeviceController *yaxis) {
 		this->xAxis = xaxis;
 		this->yAxis = yaxis;
-		this->xAxis->getDevice()->setSyncInputMode(true);
-		this->yAxis->getDevice()->setOutputSyncEnabled(true);
 		this->size = {0, 0, 0, 0};
 		this->defWork = true;
 	}

@@ -12,27 +12,20 @@
 
 namespace _8SMC1 {
 
-	class DeviceController;	// For forward referencing
-	class CoordController;
-	class CoordTask;
-
 	class DeviceManager {
 		public:
-			DeviceManager();
 			virtual ~DeviceManager();
-			void refresh();				// USMC_Init
-			void saveError();			// USMC_GetLastErr
-			Device *getDevice(DWORD);
-			unsigned int getDeviceCount();
-			std::string getDeviceSerial(DWORD);
-			std::string getDeviceVersion(DWORD);
-			// Error handling
-			bool hasError();
-			std::string pollError();
-		private:
-			USMC_Devices devs;
-			std::vector<Device*> dev;
+			virtual void refresh() = 0;
+			virtual void saveError() = 0;
+			virtual Device *getDevice(device_id_t);
+			virtual size_t getDeviceCount();
+			virtual std::string getDeviceSerial(device_id_t) = 0;
+			virtual std::string getDeviceVersion(device_id_t) = 0;
+			virtual bool hasError();
+			virtual std::string pollError();
+		protected:
 			std::vector<std::string> error_queue;
+			std::vector<Device*> dev;
 	};
 }
 

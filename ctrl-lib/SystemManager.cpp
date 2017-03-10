@@ -4,7 +4,7 @@ namespace _8SMC1 {
 
 	SystemManager::SystemManager(DeviceManager *devman) {
 		this->devman = devman;
-		for (DWORD d = 0; d < devman->getDeviceCount(); d++) {
+		for (device_id_t d = 0; d < devman->getDeviceCount(); d++) {
 			this->dev.push_back(new DeviceController(devman->getDevice(d)));
 		}
 		FunctionEngine_add_default_functions(&this->engine);
@@ -17,7 +17,7 @@ namespace _8SMC1 {
 		for (size_t i = 0; i < this->coords.size(); i++) {
 			delete this->coords.at(i);
 		}
-		for (DWORD d = 0; d < this->devman->getDeviceCount(); d++) {
+		for (device_id_t d = 0; d < this->devman->getDeviceCount(); d++) {
 			delete this->dev.at(d);
 		}
 	}
@@ -26,7 +26,7 @@ namespace _8SMC1 {
 		return this->devman;
 	}
 
-	DeviceController *SystemManager::getDeviceController(DWORD d) {
+	DeviceController *SystemManager::getDeviceController(device_id_t d) {
 		if (d >= this->devman->getDeviceCount()) {
 			return nullptr;
 		}
@@ -83,7 +83,7 @@ namespace _8SMC1 {
 		return this->coords.at(c);
 	}
 
-	CoordHandle *SystemManager::createCoord(DWORD d1, DWORD d2) {
+	CoordHandle *SystemManager::createCoord(device_id_t d1, device_id_t d2) {
 		if (d1 >= this->devman->getDeviceCount() || d2 >= this->devman->getDeviceCount()) {
 			return nullptr;
 		}

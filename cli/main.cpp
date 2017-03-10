@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <cinttypes>
+#include "device/8smc1/8SMC1DeviceManager.h"
 #include "ctrl-lib/SystemManager.h"
 #include "ctrl-lib/translator/CoordTranslator.h"
 #include "DevCLI.h"
@@ -35,7 +36,7 @@ class HelpCMD : public CLICommand  {
 };
 
 int main(int argc, char **argv) {
-	DeviceManager devman;
+	_8SMC1DeviceManager devman;
 	SystemManager sysman(&devman);
 	CLI cli(std::cout, std::cin);
 	cli.addCommand("echo", new EchoCMD());
