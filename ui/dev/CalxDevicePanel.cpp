@@ -49,4 +49,13 @@ namespace CalXUI {
 	void CalxDevicePanel::OnExit(wxCloseEvent &evt) {
 		
 	}
+	
+	bool CalxDevicePanel::isBusy()  {
+		for (const auto& d : devs) {
+			if (d->isBusy()) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

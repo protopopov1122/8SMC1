@@ -40,6 +40,9 @@ namespace CalXUI {
 			void updateUI();
 			void stop();
 			void setEnabled(bool);
+			bool isBusy() {
+				return !queue->isEmpty();
+			}
 		private:
 			void OnExit(wxCloseEvent&);
 			void OnNewGcodeClick(wxCommandEvent&);

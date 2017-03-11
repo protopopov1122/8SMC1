@@ -57,12 +57,10 @@ namespace CalXUI {
 		buttonSizer->Add(cancelButton, 0, wxALIGN_CENTER);
 		okButton->Bind(wxEVT_BUTTON, &CalxGcodeLoader::OnOkClick, this);
 		cancelButton->Bind(wxEVT_BUTTON, &CalxGcodeLoader::OnCancelClick, this);
+		Bind(wxEVT_SHOW, &CalxGcodeLoader::OnShow, this);
 		
 		Layout();
 		Fit();
-		
-		wxCommandEvent evt;
-		OnChooseClick(evt);
 	}
 	
 	bool CalxGcodeLoader::isLoaded() {
@@ -95,4 +93,15 @@ namespace CalXUI {
 		dialog->Destroy();
 	}
 	
+	void CalxGcodeLoader::OnShow(wxShowEvent &evt) {
+		if (evt.IsShown()) {
+			wxFileDialog *dialog = new wxFileDialog(this);
+			if (dialog->ShowModal() == wxID_OK) {
+				this->gcodePath->SetValue(dialog->GetPath());
+			} else {
+				Hide();
+			}
+			dialog->Destroy();
+		}
+	}
 }

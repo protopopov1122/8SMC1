@@ -62,6 +62,15 @@ namespace CalXUI {
 	}
 
 	void CalxFrame::OnClose(wxCloseEvent &evt) {
+		if (panel->getDevices()->isBusy() ||
+			panel->getCoords()->isBusy() ||
+			panel->getTasks()->isBusy()) {
+			if (wxMessageBox("Cancel current and actions and exit",
+				"Actions are performed", wxYES_NO | wxICON_QUESTION) == wxNO) {
+				evt.Veto();
+				return;
+			}
+		}
 		this->panel->Close(true);
 		Destroy();		
 	}

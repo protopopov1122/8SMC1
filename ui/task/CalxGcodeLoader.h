@@ -34,7 +34,9 @@ namespace CalXUI {
 			bool isLoaded();
 			std::string getPath();
 			CoordTranslator *getTranslator();
+			void ShowLoader();
 		private:
+			void OnShow(wxShowEvent&);
 			void OnOkClick(wxCommandEvent&);
 			void OnCancelClick(wxCommandEvent&);
 			void OnChooseClick(wxCommandEvent&);

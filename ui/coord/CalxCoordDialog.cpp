@@ -85,6 +85,10 @@ namespace CalXUI {
 		int y = yChoice->GetSelection();
 		if (x != wxNOT_FOUND &&
 			y != wxNOT_FOUND) {
+			if (x == y) {
+				wxMessageBox("Devices cannot be same", "Warning", wxOK | wxICON_WARNING);
+				return;
+			}
 			this->ctrl = sysman->createCoord(x, y);
 		}
 		Hide();

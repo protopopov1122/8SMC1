@@ -64,6 +64,9 @@ namespace CalXUI {
 			void stop();
 			void setEnabled(bool);
 			void setMaster(bool);
+			bool isBusy() {
+				return !queue->isEmpty();
+			}
 		private:
 			void switchPowerClick(wxCommandEvent&);
 			void rollToTrailer1(wxCommandEvent&);

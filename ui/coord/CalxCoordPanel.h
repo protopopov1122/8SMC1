@@ -38,6 +38,14 @@ namespace CalXUI {
 			CalxCoordCtrl *getCoordCtrl(size_t sz) {return sz < coords.size() ? coords.at(sz) : nullptr;}
 			void updateUI();
 			void stop();
+			bool isBusy() {
+				for (const auto& c : coords) {
+					if (c->isBusy()) {
+						return true;
+					}
+				}
+				return false;
+			}
 		private:
 			void addPlane(CoordHandle*);
 			void removePlane(size_t);

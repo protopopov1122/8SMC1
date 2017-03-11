@@ -110,6 +110,8 @@ namespace CalXUI {
 	void CalxCoordPanel::OnRemoveButtonClick(wxCommandEvent &evt) {
 		if (this->coordList->GetSelection() != wxNOT_FOUND) {
 			removePlane(this->coordList->GetSelection());
+		} else {
+			wxMessageBox("Select plane to remove", "Warning", wxOK | wxICON_WARNING);
 		}
 	}
 	

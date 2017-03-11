@@ -172,8 +172,13 @@ namespace CalXUI {
 			taskList->Delete(sel);
 			this->list.at(sel)->Close(true);
 			this->list.erase(this->list.begin() + sel);
+			updateUI();
+		} else {
+			std::string message = "Select task to remove";
+			wxMessageDialog *dialog = new wxMessageDialog(this, message, "Warning", wxOK | wxICON_WARNING);
+			dialog->ShowModal();
+			dialog->Destroy();
 		}
-		updateUI();
 	}
 	
 	void CalxTaskPanel::OnListClick(wxCommandEvent &evt) {
@@ -187,6 +192,14 @@ namespace CalXUI {
 			CoordHandle *handle = wxGetApp().getMainFrame()->getPanel()->getCoords()->getCoord(plane->GetSelection());
 			TaskParameters prms = {(float) this->speed->GetValue()};
 			queue->addAction(new CalxTaskAction(this, handle, task, prms));
+		} else {
+			std::string message = "Select coordinate plane";
+			if (taskList->GetSelection() == wxNOT_FOUND) {
+				message = "Select task to build";
+			}
+			wxMessageDialog *dialog = new wxMessageDialog(this, message, "Warning", wxOK | wxICON_WARNING);
+			dialog->ShowModal();
+			dialog->Destroy();
 		}
 	}
 	
