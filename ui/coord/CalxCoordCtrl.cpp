@@ -113,6 +113,7 @@ namespace CalXUI {
 		sizer->Add(actionPanel, 0, wxALL | wxEXPAND, 0);
 		Bind(wxEVT_COMMAND_QUEUE_UPDATE, &CalxCoordCtrl::OnQueueUpdate, this);
 		Bind(wxEVT_CLOSE_WINDOW, &CalxCoordCtrl::OnExit, this);
+		graphCtrl->Bind(wxEVT_CLOSE_WINDOW, &CalxCoordGraphCtrl::OnClose, graphCtrl);
 		updateUI();
 		
 		this->Layout();
@@ -237,6 +238,11 @@ namespace CalXUI {
 		this->ctrl->getController()->getXAxis()->removeEventListener(this->xListener);
 		this->ctrl->getController()->getYAxis()->removeEventListener(this->yListener);
 		wxGetApp().getSystemManager()->removeCoord(ctrl->getID());
+		
+		this->linear->Close(true);
+		this->arc->Close(true);
+		this->graphCtrl->Close(true);
+		this->otherCtrl->Close(true);
 	}
 	
 	void CalxCoordCtrl::OnQueueUpdate(wxThreadEvent &evt) {

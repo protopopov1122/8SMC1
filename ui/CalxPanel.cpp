@@ -34,10 +34,24 @@ namespace CalXUI {
 		this->AddPage(this->coord, "Coordinate planes");
 		this->task = new CalxTaskPanel(this, wxID_ANY);
 		this->AddPage(this->task, "Tasks");
+		
+		Bind(wxEVT_CLOSE_WINDOW, &CalxPanel::OnExit, this);
 	}
 	
 	void CalxPanel::updateUI() {
 		this->coord->updateUI();
 		this->task->updateUI();
+	}
+	
+	void CalxPanel::OnExit(wxCloseEvent &evt) {
+		getTasks()->stop();
+		getCoords()->stop();
+		getDevices()->stop();
+		
+		wxMilliSleep(100);
+		
+		getDevices()->Close(true);
+		getCoords()->Close(true);
+		getTasks()->Close(true);
 	}
 }

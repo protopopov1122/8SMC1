@@ -39,6 +39,8 @@ namespace CalXUI {
 			
 			void updateUI();
 		private:
+			void OnExit(wxCloseEvent&);
+		
 			CalxDevicePanel *dev;
 			CalxCoordPanel *coord;
 			CalxTaskPanel *task;

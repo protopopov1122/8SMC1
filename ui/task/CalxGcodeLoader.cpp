@@ -44,7 +44,7 @@ namespace CalXUI {
 		gcodeSizer->Add(chooseButton, 0, wxALL);
 		chooseButton->Bind(wxEVT_BUTTON, &CalxGcodeLoader::OnChooseClick, this);
 		
-		this->translator = new CalxCoordTranslator(this, wxID_ANY);
+		this->translator = new CalxCoordFilterCtrl(this, wxID_ANY);
 		sizer->Add(translator, 0, wxALL | wxEXPAND, 10);
 				
 		wxPanel *buttonPanel = new wxPanel(this, wxID_ANY);

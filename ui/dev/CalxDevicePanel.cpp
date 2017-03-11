@@ -45,4 +45,8 @@ namespace CalXUI {
 			dev->stop();
 		}
 	}
+	
+	void CalxDevicePanel::OnExit(wxCloseEvent &evt) {
+		
+	}
 }

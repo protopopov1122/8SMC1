@@ -52,6 +52,8 @@ namespace CalX {
 		if (i >= this->list.size()) {
 			return false;
 		}
+		CoordTranslator *trans = this->list.at(i);
+		delete trans;
 		this->list.erase(this->list.begin() + i);
 		if (i >= this->list.size()) {
 			return true;

@@ -143,6 +143,9 @@ namespace CalXUI {
 	}
 	
 	void CalxTaskPanel::OnExit(wxCloseEvent &evt) {
+		for (const auto& h : list) {
+			h->Close(true);
+		}
 	}
 	
 	void CalxTaskPanel::OnNewGcodeClick(wxCommandEvent &evt) {
@@ -167,7 +170,7 @@ namespace CalXUI {
 		if (taskList->GetSelection() != wxNOT_FOUND) {
 			size_t sel = taskList->GetSelection();
 			taskList->Delete(sel);
-			this->list.at(sel)->Destroy();
+			this->list.at(sel)->Close(true);
 			this->list.erase(this->list.begin() + sel);
 		}
 		updateUI();

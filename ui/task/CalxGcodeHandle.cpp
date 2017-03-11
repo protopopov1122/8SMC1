@@ -37,6 +37,7 @@ namespace CalXUI {
 			wxTE_MULTILINE | wxTE_READONLY);
 		sizer->Add(codeText, 1, wxALL | wxEXPAND, 0);
 		
+		
 		std::string code;
 		int chr;
 		while ((chr = is->get()) != EOF) {
@@ -59,5 +60,6 @@ namespace CalXUI {
 	
 	void CalxGcodeHandle::OnExit(wxCloseEvent &evt) {
 		delete this->translator;
+		Destroy();
 	}
 }

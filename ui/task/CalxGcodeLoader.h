@@ -22,7 +22,7 @@
 #define CALX_UI_CALX_GCODE_LOADER_H_
 
 #include "CalxApp.h"
-#include "coord/CalxCoordTranslator.h"
+#include "coord/CalxCoordFilter.h"
 #include <string>
 #include <wx/textctrl.h>
 
@@ -40,7 +40,7 @@ namespace CalXUI {
 			void OnChooseClick(wxCommandEvent&);
 			
 			wxTextCtrl *gcodePath;			
-			CalxCoordTranslator *translator;
+			CalxCoordFilter *translator;
 			bool state;
 	};
 }

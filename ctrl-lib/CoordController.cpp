@@ -234,7 +234,6 @@ namespace CalX {
 		ROLL_SPEED, ROLL_DIV);
 		yAxis->startMove(yAxis->getDevice()->getPosition() + comeback,
 		ROLL_SPEED, ROLL_DIV);
-		
 		xAxis->sendRolledEvent(mevt);
 		yAxis->sendRolledEvent(mevt);
 		xAxis->unuse();

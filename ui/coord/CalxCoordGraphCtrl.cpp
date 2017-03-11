@@ -63,7 +63,11 @@ namespace CalXUI {
 		graphSizer->Add(speed, 0, wxEXPAND);
 		graphSizer->Add(buildButton);
 		
-		this->translator = new CalxCoordTranslator(this, wxID_ANY);
+		this->translator = new CalxCoordFilterCtrl(this, wxID_ANY);
 		sizer->Add(this->translator, 1, wxALL | wxEXPAND, 5);
+	}
+	
+	void CalxCoordGraphCtrl::OnClose(wxCloseEvent &evt) {
+		delete this->translator->getTranslator();
 	}
 }

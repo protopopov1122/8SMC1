@@ -43,8 +43,11 @@ namespace CalX {
 
 	class CoordTranslator {
 		public:
-			CoordTranslator(CoordType t) {this->type = t;}
-			virtual ~CoordTranslator() {};
+			CoordTranslator(CoordType t) {
+				this->type = t;
+			}
+			virtual ~CoordTranslator() {
+			}
 			CoordType getType() {return this->type;}
 			virtual motor_point_t get(coord_point_t pnt) {return this->get(pnt.x, pnt.y);}
 			virtual motor_point_t get(long double, long double) = 0;

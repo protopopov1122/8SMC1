@@ -50,6 +50,7 @@ namespace CalXUI {
 			protected:
 				virtual ExitCode Entry();
 			private:
+				bool finished;
 				wxEvtHandler *handle;
 				wxMutex *mutex;
 				wxCondition *cond;

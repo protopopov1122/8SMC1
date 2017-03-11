@@ -18,6 +18,7 @@
 */
 
 
+#include <iostream>
 #include <wx/splitter.h>
 #include <wx/textctrl.h>
 #include <wx/app.h>
@@ -61,9 +62,7 @@ namespace CalXUI {
 	}
 
 	void CalxFrame::OnClose(wxCloseEvent &evt) {
-		this->panel->getDevices()->stop();
-		this->panel->getCoords()->stop();
-		this->panel->getTasks()->stop();
+		this->panel->Close(true);
 		Destroy();		
 	}
 }

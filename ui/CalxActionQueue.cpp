@@ -59,6 +59,7 @@ namespace CalXUI {
 	}
 	
 	void CalxActionQueue::stop() {
+		finished = false;
 		if (this->current != nullptr) {
 			current->stop();
 		}
@@ -87,6 +88,7 @@ namespace CalXUI {
 				cond->Wait();
 			}
 		}
+		finished = true;
 		return nullptr;
 	}
 }

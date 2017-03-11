@@ -92,7 +92,9 @@ namespace CalXUI {
 	}
 	
 	void CalxCoordPanel::OnExit(wxCloseEvent &evt) {
-		
+		for (const auto& ctrl : this->coords) {
+			ctrl->Close(true);
+		}
 	}
 	
 	void CalxCoordPanel::OnAddButtonClick(wxCommandEvent &evt) {

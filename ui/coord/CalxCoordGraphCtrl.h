@@ -28,7 +28,7 @@
 #include "calx.h"
 #include "CalxActionQueue.h"
 #include "CalxFrame.h"
-#include "CalxCoordTranslator.h"
+#include "CalxCoordFilter.h"
 
 using namespace CalX;
 
@@ -57,7 +57,9 @@ namespace CalXUI {
 				return this->translator->getTranslator();
 			}
 			int getSpeed() {return speed->GetValue();}
+			void OnClose(wxCloseEvent&);
 		private:
+		
 			void init();
 			CalxCoordCtrl *ctrl;
 			wxTextCtrl *expr;
@@ -66,7 +68,7 @@ namespace CalXUI {
 			wxSpinCtrl *ymin;
 			wxSpinCtrl *ymax;
 			wxTextCtrl *step;
-			CalxCoordTranslator *translator;
+			CalxCoordFilter *translator;
 			wxSpinCtrl *speed;
 	};
 	

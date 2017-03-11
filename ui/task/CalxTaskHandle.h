@@ -56,6 +56,7 @@ namespace CalXUI {
 		
 			std::string id;
 			CoordTranslator *translator;
+			
 			CoordTask *task;
 	};
 }
