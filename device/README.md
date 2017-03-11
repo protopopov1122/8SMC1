@@ -1,9 +1,7 @@
 ## Device API wrappers
-This directory contains 8smc1 controller API C++ low-level bindings.
-They are split into several classes:
-* DeviceManager - initialize all available controllers, create Device objects, hold pointers to them and destroy resources on exit.
-* Device - main wrapper class. Contains methods that directly operate with USMC API structures and functions. Each method in class header file is marked by USMC strcutre field or function it operates.
-* MotorTask - helper class to control motor movement.
+This directory contains Device API controller-specific C++ bindings. Other project code use these bindings as proxy to controllers, so only this API is platform-dependent. Device API offers couple of interfaces that device wrappers should implement:
+* Device - represent single stepper motor, contains minimal functions that it should implement(moreover few of them are purely informative and may return any random/fake value). 
+* DeviceManager - holds list of connected Devices of some class. At one run system may use devices on one class, so it use device manager to access them. Device manager defines couple of initialization, low level error management and informative methods(they also may return fake values).
 
 ## NOTE
-Only this classes should directly operate with real USMC controller API functions. All other code should use this wrappers to access controllers. This creates an abstract layer between other code and real controllers.
+Device API was designed to make other project parts controller-independent, however the only implentation of this interfaces project contains is Standa 8SMC1 controller API wrappers, so Device API interfaces are influenced by 8SMC1 API. Device API implentation for Standa controllers also contains lot of extra methods that are required by API.

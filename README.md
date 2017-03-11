@@ -1,4 +1,4 @@
-CalX Stepper motor library.
+CalX Stepper motor tools.
 ===================
 
 CalX is project of creating high level control application and library for stepper motors. Project codebase is device and platform independent, so may be adopted to any kind of motor controllers, only requirement is implementation of some interfaces for them(called Device API). During development and testing is used Standa 8SMC1 stepper motor controllers, so so CalX already contains Device API implementation for them.

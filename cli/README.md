@@ -1,8 +1,8 @@
 ## Command Line Interface(CLI)
-This directory contains implementation of CLI. It is used to control system core, test it and link all API functions together. CLI implementation consists of:
+This directory contains implementation of CLI. It is used to control system core, test it and link all API functions together. It was used during testing, now it is replaced with GUI(however it also be updated, bu it is not in the focus now). CLI implementation consists of:
 * CLI class - hold list of available commands, read line from console, parse and try to execute. 
 * DevCLI.cpp - contains definitons of commands that operate with system API.
-* main.cpp - using Device wrapper API initialize DeviceManager, create CLI and add all defined in DevCLI.cpp commands.
+* main.cpp - contains main function for CLI app version.
 
 
 ## CLI manual
@@ -22,8 +22,6 @@ CLI used to test whole system while it has not GUI(however it can be included in
 	* dev rmove [id] [x] [y] [speed] [div] - relative to current position move device to (x + current.x; y + current.y) with speed [speed] steps/sec and step divisor [div].
 	* dev stop [id] - stop device movement.
 	* dev power [id]+ - turn on/off(switch) power on devices [id1], [id2]...
-	* dev mode [id] [name] [value] - set device [id] mode parameter [name] to value [value](true/false).
-	* dev reset [id] - reset device [id].
 * coord - operate with coordinate plane. Represents high-level API. Subcommands:
 	* coord new [xid] [yid] - create coordinate plane with devices ([xid]; [yid]). Prints coordinate plane id.
 	* coord log [id] [prefix]? - add logger to coordinate plane [id].
