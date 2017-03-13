@@ -21,10 +21,10 @@
 #ifndef CALX_UI_CALX_DEVICE_CTRL_H_
 #define CALX_UI_CALX_DEVICE_CTRL_H_
 
+#include "calx.h"
 #include <wx/stattext.h>
 #include <wx/spinctrl.h>
 #include <wx/timer.h>
-#include "calx.h"
 #include "CalxActionQueue.h"
 
 namespace CalXUI {

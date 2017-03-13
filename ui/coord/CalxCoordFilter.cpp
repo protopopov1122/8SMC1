@@ -18,8 +18,8 @@
 */
 
 
-#include "CalxCoordFilter.h"
 #include "CalxApp.h"
+#include "CalxCoordFilter.h"
 #include "CalxFrame.h"
 #include "CalxPanel.h"
 

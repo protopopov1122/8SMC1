@@ -18,9 +18,9 @@
 */
 
 
+#include "CalxPanel.h"
 #include <wx/listbook.h>
 #include <wx/sizer.h>
-#include "CalxPanel.h"
 #include "CalxCoordPanel.h"
 #include "CalxCoordDialog.h"
 

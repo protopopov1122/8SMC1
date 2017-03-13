@@ -18,13 +18,14 @@
 */
 
 
+
 #ifndef CALX_UI_CALX_H_
 #define CALX_UI_CALX_H_
 
 
 #define __WXMSW__
 #define WXUSINGDLL
-
+#define wxUSE_UNICODE 1
 
 #include <wx/wxprec.h>
 #ifndef WX_PRECOMP

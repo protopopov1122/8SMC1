@@ -22,9 +22,9 @@
 #define CALX_UI_CALX_COORD_TRANSLATOR_H_
 
 #include <vector>
+#include "CalxApp.h"
 #include <wx/spinctrl.h>
 #include <wx/listbox.h>
-#include "CalxApp.h"
 
 namespace CalXUI {
 	

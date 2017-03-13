@@ -19,8 +19,8 @@
 
 
 #include <iostream>
-#include <wx/event.h>
 #include "CalxActionQueue.h"
+#include <wx/event.h>
 
 wxDEFINE_EVENT(wxEVT_COMMAND_QUEUE_UPDATE, wxThreadEvent);
 

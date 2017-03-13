@@ -21,8 +21,8 @@
 #ifndef CALX_UI_CALX_CONSOLE_WIDGET_H_
 #define CALX_UI_CALX_CONSOLE_WIDGET_H_
 
-#include <wx/textctrl.h>
 #include "calx.h"
+#include <wx/textctrl.h>
 
 
 namespace CalXUI {

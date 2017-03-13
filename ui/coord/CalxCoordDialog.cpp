@@ -18,9 +18,9 @@
 */
 
 
+#include "CalxCoordDialog.h"
 #include <wx/sizer.h>
 #include <wx/stattext.h>
-#include "CalxCoordDialog.h"
 
 namespace CalXUI {
 	

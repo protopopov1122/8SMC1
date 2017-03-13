@@ -21,11 +21,11 @@
 #ifndef CALX_UI_CALX_COORD_MISC_CTRL_H_
 #define CALX_UI_CALX_COORD_MISC_CTRL_H_
 
+#include "calx.h"
 #include <wx/stattext.h>
 #include <wx/choice.h>
 #include <wx/checkbox.h>
 #include <wx/spinctrl.h>
-#include "calx.h"
 #include "CalxActionQueue.h"
 #include "CalxFrame.h"
 #include "CalxCoordLinearCtrl.h"

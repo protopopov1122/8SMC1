@@ -18,8 +18,8 @@
 */
 
 
-#include "CalxDeviceCtrl.h"
 #include "CalxApp.h"
+#include "CalxDeviceCtrl.h"
 #include "ctrl-lib/SystemManager.h"
 #include "device/DeviceManager.h"
 #include <wx/statbox.h>

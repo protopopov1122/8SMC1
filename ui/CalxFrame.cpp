@@ -19,10 +19,10 @@
 
 
 #include <iostream>
+#include "CalxFrame.h"
 #include <wx/splitter.h>
 #include <wx/textctrl.h>
 #include <wx/app.h>
-#include "CalxFrame.h"
 #include "CalxPanel.h"
 #include "task/CalxTaskPanel.h"
 #include "coord/CalxCoordPanel.h"

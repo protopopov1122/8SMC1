@@ -23,8 +23,8 @@
 
 #include <cinttypes>
 #include <vector>
-#include <wx/listbox.h>
 #include "CalxApp.h"
+#include <wx/listbox.h>
 #include "CalxCoordCtrl.h"
 
 namespace CalXUI {

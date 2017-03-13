@@ -20,10 +20,10 @@
 
 #include <iostream>
 #include <fstream>
+#include "CalxTaskPanel.h"
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include "coord/CalxCoordPanel.h"
-#include "CalxTaskPanel.h"
 #include "CalxGcodeLoader.h"
 
 namespace CalXUI {

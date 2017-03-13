@@ -19,9 +19,9 @@
 
 
 #include <sstream>
+#include "CalxTaskHandle.h"
 #include <wx/sizer.h>
 #include <wx/textctrl.h>
-#include "CalxTaskHandle.h"
 #include "ctrl-lib/misc/GCodeParser.h"
 
 namespace CalXUI {

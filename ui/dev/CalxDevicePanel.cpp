@@ -18,9 +18,9 @@
 */
 
 
+#include "CalxApp.h"
 #include <wx/listctrl.h>
 #include <wx/sizer.h>
-#include "CalxApp.h"
 #include "CalxDevicePanel.h"
 #include "CalxDeviceCtrl.h"
 

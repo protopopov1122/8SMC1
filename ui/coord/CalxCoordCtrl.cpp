@@ -19,12 +19,12 @@
 
 
 #include <sstream>
+#include "CalxApp.h"
 #include <wx/stattext.h>
 #include <wx/sizer.h>
 #include <wx/timer.h>
 #include "ctrl-lib/graph/FunctionParser.h"
 #include "ctrl-lib/graph/FunctionEngine.h"
-#include "CalxApp.h"
 #include "CalxCoordCtrl.h"
 #include "task/CalxTaskPanel.h"
 

@@ -22,7 +22,7 @@ fi
 
 if [ $1 == "native-lib" ]
 then
-    printf "cl /Zi /W0 /EHsc /Gm /I . /I res /LD /Fe$2.dll "
+    printf "cl /Zi /W0 /EHsc /Gm /I . /I res /MD /LD /Fe$2.dll "
     find device ctrl-lib cli -name "*.cpp" -or -name "*.cxx" | awk -F/ '{print $0}' | tr '\n' ' '
     printf " /link /MACHINE:X86 build\\\\USMCDLL.lib\n"
     printf "lib /OUT:$2.lib *.obj\n"
@@ -33,9 +33,9 @@ fi
 
 if [ $1 == "ui" ]
 then
-	printf "cl /EHsc /Zi /Gm /std:c++latest /W0 /I. /I res /I ui /I %%1\\include /I %%1\\lib\\\\vc_dll\\mswu /Fe$2.exe "
+	printf "cl /EHsc /Zi /Gm /std:c++latest /W0 /MD /I. /I res /I ui /I %%1\\include /I %%1\\lib\\\\vc_dll\\mswu /Fe$2.exe "
     find ui -name "*.cpp" -or -name "*.cxx" | awk -F/ '{print $0}' | tr '\n' ' '
-	printf " /link %%1\\lib\\\\vc_dll\\wxmsw31u.lib build\\\\USMCDLL.lib build\\\\8smc1.lib /MACHINE:x86\n"
+	printf " /link %%1\\lib\\\\vc_dll\\wxmsw31u.lib build\\\\USMCDLL.lib build\\\\calx.lib /MACHINE:x86\n"
 	printf "copy %%1\\\\lib\\\\vc_dll\wxmsw310u_vc_custom.dll build\n"
 	printf "move $2.exe build\n"
 	exit

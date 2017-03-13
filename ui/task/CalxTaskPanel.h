@@ -22,10 +22,10 @@
 #define CALX_UI_CALX_TASK_PANEL_H_
 
 #include <vector>
+#include "CalxApp.h"
 #include <wx/listbox.h>
 #include <wx/spinctrl.h>
 #include <wx/choice.h>
-#include "CalxApp.h"
 #include "CalxTaskHandle.h"
 #include "CalxActionQueue.h"
 
