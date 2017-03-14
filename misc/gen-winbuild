@@ -11,6 +11,19 @@ then
     exit
 fi
 
+if [ $1 == "device" ]
+then
+    printf "cl /Zi /W0 /EHsc /Gm /I . /MD /LD /Fedev_$2.dll $3 "
+	find device/$2 -name "*.cpp" |  awk -F/ '{print $0}' | tr '\n' ' '
+    printf " /link /MACHINE:X86 build\\\\calx.lib $4\n"
+	printf "lib /OUT:dev_$2.lib $4 "
+	find device/$2 -name "*.cpp" |  awk -F/ '{split($NF, arr, "\\."); print arr[1]".obj"}' | tr '\n' ' '
+	echo ""
+    printf "move dev_$2.dll build\n"
+    printf "move dev_$2.lib build\n"
+    exit
+fi
+
 if [ $1 == "native" ]
 then
     printf "cl /W0 /EHsc /Zi /Gm /I . /I res /Fe$2.exe "
@@ -22,10 +35,16 @@ fi
 
 if [ $1 == "native-lib" ]
 then
-    printf "cl /Zi /W0 /EHsc /Gm /I . /I res /MD /LD /Fe$2.dll "
-    find device ctrl-lib cli -name "*.cpp" -or -name "*.cxx" | awk -F/ '{print $0}' | tr '\n' ' '
-    printf " /link /MACHINE:X86 build\\\\USMCDLL.lib\n"
-    printf "lib /OUT:$2.lib *.obj\n"
+    printf "cl /Zi /W0 /EHsc /Gm /I . /MD /LD /Fe$2.dll "
+    find device -maxdepth 1 -name "*.cpp" -or -name "*.cxx" | awk -F/ '{print $0}' | tr '\n' ' '
+    find cli -maxdepth 0 -name "CLI.*"  | awk -F/ '{print $0}' | tr '\n' ' '
+    find ctrl-lib -name "*.cpp" -or -name "*.cxx" | awk -F/ '{print $0}' | tr '\n' ' '
+    printf " /link /MACHINE:X86\n"
+    printf "lib /OUT:$2.lib "
+    find device -maxdepth 1 -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".obj"}' | tr '\n' ' '
+    find cli -maxdepth 0 -name "CLI.*"  | awk -F/ '{split($NF, arr, "\\."); print arr[1]".obj"}' | tr '\n' ' '
+    find ctrl-lib -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".obj"}' | tr '\n' ' '
+	echo ""
     printf "move $2.dll build\n"
     printf "move $2.lib build\n"
     exit
@@ -33,9 +52,9 @@ fi
 
 if [ $1 == "ui" ]
 then
-	printf "cl /EHsc /Zi /Gm /std:c++latest /W0 /MD /I. /I res /I ui /I %%1\\include /I %%1\\lib\\\\vc_dll\\mswu /Fe$2.exe "
+	printf "cl /EHsc /Zi /Gm /std:c++latest /W0 /MD /I. /I ui /I %%1\\include /I %%1\\lib\\\\vc_dll\\mswu /Fe$2.exe "
     find ui -name "*.cpp" -or -name "*.cxx" | awk -F/ '{print $0}' | tr '\n' ' '
-	printf " /link %%1\\lib\\\\vc_dll\\wxmsw31u.lib build\\\\USMCDLL.lib build\\\\calx.lib /MACHINE:x86\n"
+	printf " /link %%1\\lib\\\\vc_dll\\wxmsw31u.lib build\\\\calx.lib build\\\dev_8smc1.lib /MACHINE:x86\n"
 	printf "copy %%1\\\\lib\\\\vc_dll\wxmsw310u_vc_custom.dll build\n"
 	printf "move $2.exe build\n"
 	exit
@@ -43,6 +62,7 @@ fi
 
 mkdir -p winbuild
 ./misc/gen-winbuild stub > winbuild/build-stub.bat
+./misc/gen-winbuild device 8smc1 "/I res" "build\\\USMCDLL.lib" > winbuild/build-8smc1.bat
 ./misc/gen-winbuild native calx > winbuild/build-exe.bat
 ./misc/gen-winbuild native-lib calx > winbuild/build-dll.bat
 ./misc/gen-winbuild ui calxui > winbuild/build-ui.bat

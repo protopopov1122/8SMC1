@@ -47,6 +47,10 @@ namespace CalX {
 			std::vector<std::string> error_queue;
 			std::vector<Device*> dev;
 	};
+	
+	
+	DeviceManager *getDeviceManager();
+	typedef DeviceManager* (*DeviceManager_getter)();
 }
 
 #endif

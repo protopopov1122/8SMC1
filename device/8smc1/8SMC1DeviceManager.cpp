@@ -69,4 +69,8 @@ namespace CalX {
 		}
 		return std::string(this->devs.Version[id]);
 	}
+	
+	DeviceManager *getDeviceManager() {
+		return new CALXDeviceManager();
+	}
 }

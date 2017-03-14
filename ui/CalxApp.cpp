@@ -19,12 +19,12 @@
 
 
 #include "CalxApp.h"
-#include "device/8smc1/8SMC1DeviceManager.h"
+#include "device/DeviceManager.h"
 
 namespace CalXUI {
 	
 	bool CalxApp::OnInit() {
-		this->devman = new CALXDeviceManager();
+		this->devman = getDeviceManager();
 		this->sysman = new SystemManager(this->devman);
 		this->frame = new CalxFrame("CalX UI");
 		this->frame->Show(true);
