@@ -22,6 +22,7 @@
 #define CALX_UI_CALX_APP_H_
 
 #include "calx.h"
+#include <wx/dynlib.h>
 #include "CalxFrame.h"
 
 using namespace CalX;
@@ -36,6 +37,7 @@ namespace CalXUI {
 			CalxFrame *getMainFrame();
 		private:
 			CalxFrame *frame;
+			wxDynamicLibrary *dynlib;
 			DeviceManager *devman;
 			SystemManager *sysman;
 	};

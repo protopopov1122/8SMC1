@@ -48,8 +48,13 @@ namespace CalX {
 			std::vector<Device*> dev;
 	};
 	
+	#if defined (__WIN32) | defined(_WIN32) | defined (__WIN32__)
+		#define EXPORT  __declspec(dllexport)
+	#else
+		#define EXPORT
+	#endif
 	
-	DeviceManager *getDeviceManager();
+	extern "C" EXPORT DeviceManager *getDeviceManager();
 	typedef DeviceManager* (*DeviceManager_getter)();
 }
 

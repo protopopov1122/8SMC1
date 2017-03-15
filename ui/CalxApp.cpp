@@ -24,7 +24,19 @@
 namespace CalXUI {
 	
 	bool CalxApp::OnInit() {
-		this->devman = getDeviceManager();
+		this->dynlib = new wxDynamicLibrary(wxDynamicLibrary::CanonicalizeName("dev_8smc1"));
+		if (!dynlib->IsLoaded()) {
+			wxMessageBox("Dynamic library not found", "Error", wxOK | wxICON_ERROR);
+			return false;
+		}
+		bool suc;
+		void *raw_getter = dynlib->GetSymbol("getDeviceManager", &suc);
+		DeviceManager_getter getter = *((DeviceManager_getter*) &raw_getter);
+		if (!suc) {
+			wxMessageBox("Dynamic library is corrupt", "Error", wxOK | wxICON_ERROR);
+			return false;
+		}
+		this->devman = getter();
 		this->sysman = new SystemManager(this->devman);
 		this->frame = new CalxFrame("CalX UI");
 		this->frame->Show(true);
@@ -36,6 +48,7 @@ namespace CalXUI {
 	int CalxApp::OnExit() {
 		delete this->sysman;
 		delete this->devman;
+		delete this->dynlib;
 		return 0;
 	}
 	

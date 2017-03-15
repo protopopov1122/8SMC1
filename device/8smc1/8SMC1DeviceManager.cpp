@@ -70,7 +70,7 @@ namespace CalX {
 		return std::string(this->devs.Version[id]);
 	}
 	
-	DeviceManager *getDeviceManager() {
+	extern "C" EXPORT DeviceManager *getDeviceManager() {
 		return new CALXDeviceManager();
 	}
 }
