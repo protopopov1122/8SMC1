@@ -9,12 +9,23 @@ fi
 # Append header to Makefile
 cat misc/mk-header 
 
-# Generate all rule
-printf "all: \$(OUTPUT) stub\n\n" 
+
+# Generate device library
+
+function GenDevAPI {
+	find device/$1 -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS) '$2' -c "$0"\n"}'
+	OBJS=`find device/$1 -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
+	printf "dev_$1.dll: $OBJS \$(OUTPUT).dll\n\t\$(CC) \$(CFLAGS) -shared -o \$(BUILD)/dev_$1.dll $OBJS $3 -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=\$(LIB) -lcalx -Wl,--out-implib,\$(BUILD)/\dev_$1.a\n"
+}
+
+GenDevAPI "8smc1" "-Ires" "-Wl,-Bdynamic,--library-path=\$(BUILD) -lUSMCDLL"
 
 # Generate object file build targets
 printf "\n" 
-find misc device ctrl-lib cli -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS) -c "$0"\n"}' 
+find device -maxdepth 1 -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS) -c "$0"\n"}'
+find misc -name "Stub.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS) -Ires -c "$0"\n"}'
+find ctrl-lib cli -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS) -c "$0"\n"}'
+ 
 # Generate ui object file build targets
 printf "\n" 
 find ui -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS) -I ui -I \$(WX)/include -I \$(WX)/lib/wx/include/i586-mingw32msvc-msw-unicode-3.1 -c "$0"\n"}' 
@@ -23,32 +34,35 @@ find ui -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); prin
 printf "stub: Stub.o\n\t\$(CC) -shared -o \$(BUILD)/USMCDLL.dll Stub.o -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread\n\n" 
 
 # Generate program build target
-printf "\$(OUTPUT).exe: " 
-OBJS=`find device cli ctrl-lib -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
+printf "\$(OUTPUT).exe: \$(OUTPUT).dll dev_8smc1.dll " 
+OBJS=`find cli -not -name "CLI.cpp" -and -name "*.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
 echo $OBJS 
 printf "\tmkdir -p \$(BUILD)\n"
 printf "\t\$(CC) -o \$(BUILD)/\$(OUTPUT).exe " 
 printf "$OBJS" 
-printf " -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=\$(LIB) -lUSMCDLL\n\n" 
+printf " -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=\$(BUILD) -ldev_8smc1 -l\$(OUTPUT)\n\n" 
 
 #Generate library build target
 printf "\$(OUTPUT).dll: "
-OBJS=`find device cli ctrl-lib -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
+OBJS1=`find ctrl-lib -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
+OBJS2=`find cli -name "CLI.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
+OBJS3=`find device -maxdepth 1 -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
+OBJS=$OBJS1$OBJS2$OBJS3
 echo $OBJS 
 printf "\tmkdir -p \$(BUILD)\n"
 printf "\t\$(CC) -shared -o \$(BUILD)/\$(OUTPUT).dll " 
 printf "$OBJS" 
-printf " -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=\$(LIB) -lUSMCDLL -Wl,--out-implib,\$(BUILD)/\$(OUTPUT).a\n\n" 
+printf " -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic -Wl,--out-implib,\$(BUILD)/\$(OUTPUT).a\n\n" 
 
 #Generate UI build target
-printf "\$(UI).exe: "
+printf "\$(UI).exe: dev_8smc1.dll"
 OBJS=`find ui -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
 echo $OBJS
 printf "\tmkdir -p \$(BUILD)\n"
 printf "\tcp \$(WX)/lib/wxmsw310u_gcc_custom.dll \$(BUILD)\n"
 printf "\t\$(CC) -o \$(BUILD)/\$(UI).exe " 
 printf "$OBJS" 
-printf " -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=\$(BUILD) -lUSMCDLL -lcalx -lwxmsw310u_gcc_custom\n\n" 
+printf " -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic,--library-path=\$(BUILD) -ldev_8smc1 -lcalx -lwxmsw310u_gcc_custom\n\n" 
 
 
 # Append footer to Makefile

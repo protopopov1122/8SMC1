@@ -26,9 +26,9 @@ fi
 
 if [ $1 == "native" ]
 then
-    printf "cl /W0 /EHsc /Zi /Gm /I . /I res /Fe$2.exe "
-    find device ctrl-lib cli -name "*.cpp" -or -name "*.cxx" | awk -F/ '{print $0}' | tr '\n' ' '
-    printf " /link /MACHINE:X86 build\\\\USMCDLL.lib\n"
+    printf "cl /W0 /EHsc /Zi /Gm /I. /MD /Fe$2.exe "
+    find cli -not -name "CLI.cpp" -and -name "*.cpp" -or -name "*.cxx" | awk -F/ '{print $0}' | tr '\n' ' '
+    printf " /link /MACHINE:X86 build\\\\calx.lib build\\\\dev_8smc1.lib\n"
     printf "move $2.exe build\n"
     exit
 fi
@@ -37,12 +37,12 @@ if [ $1 == "native-lib" ]
 then
     printf "cl /Zi /W0 /EHsc /Gm /I . /MD /LD /Fe$2.dll "
     find device -maxdepth 1 -name "*.cpp" -or -name "*.cxx" | awk -F/ '{print $0}' | tr '\n' ' '
-    find cli -maxdepth 0 -name "CLI.*"  | awk -F/ '{print $0}' | tr '\n' ' '
+    find cli -maxdepth 1 -name "CLI.cpp"  | awk -F/ '{print $0}' | tr '\n' ' '
     find ctrl-lib -name "*.cpp" -or -name "*.cxx" | awk -F/ '{print $0}' | tr '\n' ' '
     printf " /link /MACHINE:X86\n"
     printf "lib /OUT:$2.lib "
     find device -maxdepth 1 -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".obj"}' | tr '\n' ' '
-    find cli -maxdepth 0 -name "CLI.*"  | awk -F/ '{split($NF, arr, "\\."); print arr[1]".obj"}' | tr '\n' ' '
+    find cli -maxdepth 1 -name "CLI.cpp"  | awk -F/ '{split($NF, arr, "\\."); print arr[1]".obj"}' | tr '\n' ' '
     find ctrl-lib -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".obj"}' | tr '\n' ' '
 	echo ""
     printf "move $2.dll build\n"

@@ -5,8 +5,7 @@ CC=i686-w64-mingw32-g++
 OUTPUT=calx
 UI=calxui
 BUILD=./build
-HEADERS=./res
-LIB=./res
+HEADERS=
 WX=.
 
 TARGET=debug
@@ -16,8 +15,8 @@ DBG_release=-O2
 DBG=$(DBG_$(TARGET))
 INCLUDES=-I.
 EXTRA=
-CFLAGS=$(LANG) $(DBG) -I$(HEADERS) $(INCLUDES) $(EXTRA)
+CFLAGS=$(LANG) $(DBG) $(INCLUDES) $(EXTRA)
 
 LFLAGS=-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread
-LIBS=-Wl,-Bdynamic,--library-path=$(LIB) -lUSMCDLL
+LIBS=-Wl,-Bdynamic,--library-path=$(LIB)
 
