@@ -157,6 +157,9 @@ namespace CalXUI {
 		std::string general = "Name: Coordinate plane #" + std::to_string(ctrl->getID()) +
 								"\nDevices: #" + std::to_string(ctrl->getController()->getXAxis()->getID()) +
 									" #" + std::to_string(ctrl->getController()->getYAxis()->getID()) +
+								"\nInstrument: " + (ctrl->getController()->getInstrument() != nullptr ?
+									"#" + std::to_string(ctrl->getController()->getInstrument()->getID())
+										: "No") + 
 								"\nPosition: " + std::to_string(ctrl->getPosition().x) +
 									+ "x" + std::to_string(ctrl->getPosition().y); +
 								"\nSize: " + std::to_string(ctrl->getSize().w) +
@@ -166,8 +169,8 @@ namespace CalXUI {
 	
 	void CalxCoordCtrl::stop() {
 		timer.Stop();
-		ctrl->getController()->kill();
 		this->queue->stop();
+		ctrl->getController()->stop();
 	}
 	
 	CoordPlaneLog *CalxCoordCtrl::getPlaneLog() {
@@ -182,7 +185,7 @@ namespace CalXUI {
 	
 	void CalxCoordCtrl::OnLinearMoveClick(wxCommandEvent &evt) {
 		motor_point_t dest = {linear->getCoordX(), linear->getCoordY()};
-		this->queue->addAction(new CalxCoordMoveAction(this, ctrl, false, linear->isRelative(), dest, linear->getSpeed(), linear->getDivisor()));
+		this->queue->addAction(new CalxCoordMoveAction(this, ctrl, true, linear->isRelative(), dest, linear->getSpeed(), linear->getDivisor()));
 	}
 	
 	void CalxCoordCtrl::OnLinearJumpClick(wxCommandEvent &evt) {
@@ -234,6 +237,8 @@ namespace CalXUI {
 	}
 	
 	void CalxCoordCtrl::OnExit(wxCloseEvent &evt) {
+		stop();
+		
 		this->ctrl->removeEventListener(this->listener);
 		this->ctrl->getController()->getXAxis()->removeEventListener(this->xListener);
 		this->ctrl->getController()->getYAxis()->removeEventListener(this->yListener);
@@ -243,6 +248,10 @@ namespace CalXUI {
 		this->arc->Close(true);
 		this->graphCtrl->Close(true);
 		this->otherCtrl->Close(true);
+		
+		delete this->queue;
+		
+		Destroy();
 	}
 	
 	void CalxCoordCtrl::OnQueueUpdate(wxThreadEvent &evt) {

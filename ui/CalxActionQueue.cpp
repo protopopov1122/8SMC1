@@ -60,11 +60,11 @@ namespace CalXUI {
 	
 	void CalxActionQueue::stop() {
 		finished = false;
+		this->work = false;
 		if (this->current != nullptr) {
 			current->stop();
+			cond->Broadcast();
 		}
-		this->work = false;
-		cond->Broadcast();
 	}
 	
 	void CalxActionQueue::stopCurrent() {

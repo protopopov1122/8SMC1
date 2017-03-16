@@ -38,6 +38,7 @@ namespace CalXUI {
 		
 			wxChoice *xChoice;
 			wxChoice *yChoice;
+			wxChoice *instrChoice;
 		
 			SystemManager *sysman;
 			CoordHandle *ctrl;

@@ -114,7 +114,7 @@ namespace CalX {
 		yAxis->dev->start(point.y, y_speed, div, false);
 		yAxis->sendMovingEvent(ymevt);
 		
-		if (this->instr != nullptr) {
+		if (this->instr != nullptr && sync) {
 			this->instr->enable(true);
 		}
 		
@@ -128,7 +128,7 @@ namespace CalX {
 					xAxis->stop();
 					yAxis->stop();
 		
-					if (this->instr != nullptr) {
+					if (this->instr != nullptr && sync) {
 						this->instr->enable(false);
 					}
 					
@@ -149,7 +149,7 @@ namespace CalX {
 					xAxis->stop();
 					yAxis->stop();
 		
-					if (this->instr != nullptr) {
+					if (this->instr != nullptr && sync) {
 						this->instr->enable(false);
 					}
 					
@@ -166,7 +166,7 @@ namespace CalX {
 			}
 		}
 		
-		if (this->instr != nullptr) {
+		if (this->instr != nullptr && sync) {
 			this->instr->enable(false);
 		}
 		xAxis->sendMovedEvent(xmevt);

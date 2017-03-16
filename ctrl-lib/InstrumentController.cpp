@@ -34,6 +34,10 @@ namespace CalX {
 		return this->instr;
 	}
 	
+	device_id_t InstrumentController::getID() {
+		return this->instr->getID();
+	}
+	
 	bool InstrumentController::isEnabled() {
 		return this->instr->enabled();
 	}

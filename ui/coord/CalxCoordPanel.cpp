@@ -86,15 +86,21 @@ namespace CalXUI {
 	
 	void CalxCoordPanel::removePlane(size_t pl) {
 		this->coordList->Delete(pl);
-		this->coords.at(pl)->Destroy();
+		this->mainPanel->GetSizer()->Detach(coords.at(pl));
+		this->coords.at(pl)->Close(true);
 		this->coords.erase(this->coords.begin() + pl);
 		wxGetApp().getMainFrame()->getPanel()->updateUI();
 	}
 	
 	void CalxCoordPanel::OnExit(wxCloseEvent &evt) {
-		for (const auto& ctrl : this->coords) {
-			ctrl->Close(true);
+		while (!this->coords.empty()) {
+			size_t pl = 0;
+			this->mainPanel->GetSizer()->Detach(coords.at(pl));
+			this->coordList->Delete(pl);
+			coords.at(pl)->Close(true);
+			this->coords.erase(this->coords.begin() + pl);
 		}
+		Destroy();
 	}
 	
 	void CalxCoordPanel::OnAddButtonClick(wxCommandEvent &evt) {

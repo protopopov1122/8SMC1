@@ -31,6 +31,7 @@ namespace CalX {
 			InstrumentController(Instrument*);
 			virtual ~InstrumentController();
 			Instrument *getInstrument();
+			device_id_t getID();
 			bool isEnabled();
 			void enable(bool);
 			void flipState();

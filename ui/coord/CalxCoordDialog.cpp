@@ -49,6 +49,15 @@ namespace CalXUI {
 		yPanel->SetSizer(ySizer);
 		sizer->Add(yPanel, 0, wxALL | wxEXPAND);
 		
+		wxPanel *instrPanel = new wxPanel(this, wxID_ANY);
+		wxBoxSizer *instrSizer = new wxBoxSizer(wxHORIZONTAL);
+		wxStaticText *instrText = new wxStaticText(instrPanel, wxID_ANY, "Instrument: ");
+		this->instrChoice = new wxChoice(instrPanel, wxID_ANY);
+		instrSizer->Add(instrText, 0, wxALL | wxALIGN_CENTER, 5);
+		instrSizer->Add(instrChoice, 0, wxALL | wxEXPAND);
+		instrPanel->SetSizer(instrSizer);
+		sizer->Add(instrPanel, 0, wxALL | wxEXPAND);
+		
 		wxPanel *ctrlPanel = new wxPanel(this, wxID_ANY);
 		wxBoxSizer *ctrlSizer = new wxBoxSizer(wxHORIZONTAL);
 		wxButton *okButton = new wxButton(ctrlPanel, wxID_ANY, "OK");
@@ -67,9 +76,22 @@ namespace CalXUI {
 			yChoice->Append(id);
 		}
 		
+		instrChoice->Append("No instrument");
+		
+		for (size_t i = 0; i < sysman->getInstrumentCount(); i++) {
+			std::string id = "Instrument #" + std::to_string(i);
+			instrChoice->Append(id);
+		}
+		
 		if (sysman->getDeviceCount() >= 2) {
 			xChoice->SetSelection(0);
 			yChoice->SetSelection(1);
+		}
+		
+		if (sysman->getInstrumentCount() > 0) {
+			instrChoice->SetSelection(1);
+		} else {
+			instrChoice->SetSelection(0);
 		}
 		
 		SetSizer(sizer);
@@ -83,13 +105,14 @@ namespace CalXUI {
 	void CalxCoordDialog::OnOkButtonClick(wxCommandEvent &evt) {
 		int x = xChoice->GetSelection();
 		int y = yChoice->GetSelection();
+		int i = instrChoice->GetSelection();
 		if (x != wxNOT_FOUND &&
 			y != wxNOT_FOUND) {
 			if (x == y) {
 				wxMessageBox("Devices cannot be same", "Warning", wxOK | wxICON_WARNING);
 				return;
 			}
-			this->ctrl = sysman->createCoord(x, y, 0);
+			this->ctrl = sysman->createCoord(x, y, i == wxNOT_FOUND || i == 0 ? -1 : (i - 1));
 		}
 		Hide();
 	}

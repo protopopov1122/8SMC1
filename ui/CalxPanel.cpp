@@ -50,8 +50,8 @@ namespace CalXUI {
 		
 		wxMilliSleep(100);
 		
-		getDevices()->Close(true);
 		getCoords()->Close(true);
+		getDevices()->Close(true);
 		getTasks()->Close(true);
 	}
 }
