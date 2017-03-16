@@ -58,6 +58,17 @@ namespace CalX {
 			DeviceManager *devman;
 	};
 
+	class Instrument {
+		public:
+			virtual ~Instrument();
+			virtual device_id_t getID();
+			virtual DeviceManager *getDeviceManager();
+			virtual bool enable(bool) = 0;
+			virtual bool enabled() = 0;
+		protected:
+			device_id_t dev;
+			DeviceManager *devman;
+	};
 }
 
 #endif

@@ -41,11 +41,14 @@ namespace CalX {
 			virtual size_t getDeviceCount();
 			virtual std::string getDeviceSerial(device_id_t) = 0;
 			virtual std::string getDeviceVersion(device_id_t) = 0;
+			virtual size_t getInstrumentCount();
+			virtual Instrument *getInstrument(device_id_t);
 			virtual bool hasError();
 			virtual std::string pollError();
 		protected:
 			std::vector<std::string> error_queue;
 			std::vector<Device*> dev;
+			std::vector<Instrument*> instr;
 	};
 	
 	#if defined (__WIN32) | defined(_WIN32) | defined (__WIN32__)

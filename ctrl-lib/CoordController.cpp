@@ -33,9 +33,10 @@
 namespace CalX {
 
 	CoordController::CoordController(DeviceController *xaxis,
-			DeviceController *yaxis) {
+			DeviceController *yaxis, InstrumentController *instr) {
 		this->xAxis = xaxis;
 		this->yAxis = yaxis;
+		this->instr = instr;
 		this->size = {0, 0, 0, 0};
 		this->defWork = true;
 	}
@@ -57,11 +58,14 @@ namespace CalX {
 	DeviceController *CoordController::getYAxis() {
 		return this->yAxis;
 	}
+	
+	InstrumentController *CoordController::getInstrument() {
+		return this->instr;
+	}
 
 	ErrorCode CoordController::move(motor_point_t point, float speed, int div,
 			bool sync) {
-		//point.x /= this->scale.w;
-		//point.y /= this->scale.h;
+
 		// TODO Enable proper motor syncing
 		Device *xDev = this->xAxis->getDevice();
 		Device *yDev = this->yAxis->getDevice();
@@ -109,6 +113,11 @@ namespace CalX {
 				MoveType::MoveDown;
 		yAxis->dev->start(point.y, y_speed, div, false);
 		yAxis->sendMovingEvent(ymevt);
+		
+		if (this->instr != nullptr) {
+			this->instr->enable(true);
+		}
+		
 		CoordMoveEvent evt = {point, speed, div, sync};
 		sendMovingEvent(evt);
 		use();
@@ -118,6 +127,11 @@ namespace CalX {
 				if (code != ErrorCode::NoError) {
 					xAxis->stop();
 					yAxis->stop();
+		
+					if (this->instr != nullptr) {
+						this->instr->enable(false);
+					}
+					
 					MotorErrorEvent merrevt = {code};
 					xAxis->sendStoppedEvent(merrevt);
 					yAxis->sendStoppedEvent(merrevt);
@@ -134,6 +148,11 @@ namespace CalX {
 				if (code != ErrorCode::NoError) {
 					xAxis->stop();
 					yAxis->stop();
+		
+					if (this->instr != nullptr) {
+						this->instr->enable(false);
+					}
+					
 					MotorErrorEvent merrevt = {code};
 					xAxis->sendStoppedEvent(merrevt);
 					yAxis->sendStoppedEvent(merrevt);
@@ -145,6 +164,10 @@ namespace CalX {
 					return code;
 				}
 			}
+		}
+		
+		if (this->instr != nullptr) {
+			this->instr->enable(false);
 		}
 		xAxis->sendMovedEvent(xmevt);
 		yAxis->sendMovedEvent(ymevt);
@@ -245,8 +268,8 @@ namespace CalX {
 
 	motor_point_t CoordController::getPosition() {
 		motor_point_t pos;
-		pos.x = xAxis->getPosition();// * this->scale.w;
-		pos.y = yAxis->getPosition();// * this->scale.h;
+		pos.x = xAxis->getPosition();
+		pos.y = yAxis->getPosition();
 		return pos;
 	}
 

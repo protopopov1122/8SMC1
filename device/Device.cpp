@@ -43,5 +43,17 @@ namespace CalX {
 	std::string Device::getVersion() {
 		return this->devman->getDeviceVersion(this->dev);
 	}
+	
+	Instrument::~Instrument() {
+		
+	}
+	
+	device_id_t Instrument::getID() {
+		return this->dev;
+	}
+	
+	DeviceManager *Instrument::getDeviceManager() {
+		return this->devman;
+	}
 
 }

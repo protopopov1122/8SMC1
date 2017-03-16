@@ -27,6 +27,9 @@ namespace CalX {
 		for (device_id_t d = 0; d < devman->getDeviceCount(); d++) {
 			this->dev.push_back(new DeviceController(devman->getDevice(d)));
 		}
+		for (device_id_t i = 0; i < devman->getInstrumentCount(); i++) {
+			this->instr.push_back(new InstrumentController(devman->getInstrument(i)));
+		}
 		FunctionEngine_add_default_functions(&this->engine);
 	}
 
@@ -36,6 +39,9 @@ namespace CalX {
 		}
 		for (size_t i = 0; i < this->coords.size(); i++) {
 			delete this->coords.at(i);
+		}
+		for (device_id_t i = 0; i < this->devman->getInstrumentCount(); i++) {
+			delete this->instr.at(i);
 		}
 		for (device_id_t d = 0; d < this->devman->getDeviceCount(); d++) {
 			delete this->dev.at(d);
@@ -47,7 +53,7 @@ namespace CalX {
 	}
 
 	DeviceController *SystemManager::getDeviceController(device_id_t d) {
-		if (d >= this->devman->getDeviceCount()) {
+		if (d >= this->devman->getDeviceCount() || d < 0) {
 			return nullptr;
 		}
 		return this->dev.at(d);
@@ -103,13 +109,13 @@ namespace CalX {
 		return this->coords.at(c);
 	}
 
-	CoordHandle *SystemManager::createCoord(device_id_t d1, device_id_t d2) {
+	CoordHandle *SystemManager::createCoord(device_id_t d1, device_id_t d2, device_id_t instr) {
 		if (d1 >= this->devman->getDeviceCount() || d2 >= this->devman->getDeviceCount()) {
 			return nullptr;
 		}
 
 		CoordController *ctrl = new CoordController(this->getDeviceController(d1),
-			this->getDeviceController(d2));
+			this->getDeviceController(d2), this->getInstrumentController(instr));
 		CoordHandle *handle = new CoordHandle(this->coords.size(), ctrl);
 		this->coords.push_back(handle);
 		return handle;
@@ -121,4 +127,16 @@ namespace CalX {
 			this->coords.erase(this->coords.begin() + id);
 		}
 	}
+	
+	size_t SystemManager::getInstrumentCount() {
+		return this->devman->getInstrumentCount();
+	}
+	
+	InstrumentController *SystemManager::getInstrumentController(device_id_t i) {
+		if (i >= this->devman->getInstrumentCount() || i < 0) {
+			return nullptr;
+		}
+		return this->instr.at(i);
+	}
+	
 }

@@ -22,6 +22,7 @@
 #define CALX_CTRL_LIB_SYSTEM_MANAGER_H_
 
 #include "device/DeviceManager.h"
+#include "InstrumentController.h"
 #include "plane/CoordPlane.h"
 #include "CoordHandle.h"
 #include "task/CoordTask.h"
@@ -42,6 +43,8 @@ namespace CalX {
 			DeviceManager *getDeviceManager();
 			DeviceController *getDeviceController(device_id_t);
 			size_t getDeviceCount();
+			InstrumentController *getInstrumentController(device_id_t);
+			size_t getInstrumentCount();
 			FunctionEngine *getFunctionEngine();
 			// Tasks control
 			size_t getTaskCount();
@@ -52,11 +55,12 @@ namespace CalX {
 			// Coordinate plane control
 			size_t getCoordCount();
 			CoordHandle *getCoord(size_t);
-			CoordHandle* createCoord(device_id_t, device_id_t);
+			CoordHandle* createCoord(device_id_t, device_id_t, device_id_t = -1);
 			void removeCoord(size_t);
 		private:
 			DeviceManager *devman;
 			std::vector<DeviceController*> dev;
+			std::vector<InstrumentController*> instr;
 			std::vector<CoordTask*> tasks;
 			std::vector<CoordHandle*> coords;
 			FunctionEngine engine;

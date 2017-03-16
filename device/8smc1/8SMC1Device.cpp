@@ -18,10 +18,30 @@
 */
 
 
+#include <iostream>
 #include "8SMC1DeviceManager.h"
 
 namespace CalX {
 	
+	CALXInstrument::CALXInstrument(device_id_t id, DeviceManager *devman) {
+		this->dev = id;
+		this->devman = devman;
+		this->state = false;
+	}
+	
+	CALXInstrument::~CALXInstrument() {
+		
+	}
+	
+	bool CALXInstrument::enable(bool en) {
+		std::cout << "Instrument #" << dev << " " << (en ? "enabled" : "disabled") << std::endl;
+		state = en;
+		return true;
+	}
+	
+	bool CALXInstrument::enabled() {
+		return state;
+	}
 	
 	CALXDevice::CALXDevice(device_id_t dev, DeviceManager *devman) {
 		this->dev = dev;

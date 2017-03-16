@@ -11,6 +11,18 @@
 
 namespace CalX {
 	
+	// Temporary stub implementation of instrument
+	
+	class CALXInstrument : public Instrument {
+		public:
+			CALXInstrument(device_id_t, DeviceManager*);
+			virtual ~CALXInstrument();
+			virtual bool enable(bool);
+			virtual bool enabled();
+		private:
+			bool state;
+	};
+	
 	class CALXDevice : public Device {
 		public:
 			CALXDevice(device_id_t, DeviceManager*);

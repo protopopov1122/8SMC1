@@ -26,6 +26,7 @@
 #include <string>
 #include "ctrl-lib/EventListener.h"
 #include "ctrl-lib/DeviceController.h"
+#include "ctrl-lib/InstrumentController.h"
 
 /* Coordinate plane is abstraction that represents real motors.
    However most of implementations are just filters that perform
@@ -68,10 +69,11 @@ namespace CalX {
 	// Coordinate plane commuticating directly with hardware
 	class CoordController : public CoordPlane {
 		public:
-			CoordController(DeviceController*, DeviceController*);
+			CoordController(DeviceController*, DeviceController*, InstrumentController* = nullptr);
 			virtual ~CoordController();
 			DeviceController *getXAxis();
 			DeviceController *getYAxis();
+			InstrumentController *getInstrument();
 			virtual void measure(TrailerId);
 			
 			virtual ErrorCode move(motor_point_t, float, int, bool);
@@ -90,6 +92,7 @@ namespace CalX {
 		private:		
 			DeviceController *xAxis;
 			DeviceController *yAxis;
+			InstrumentController *instr;
 			bool work;
 			bool defWork;
 			

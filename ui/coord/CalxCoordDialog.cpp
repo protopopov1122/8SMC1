@@ -89,7 +89,7 @@ namespace CalXUI {
 				wxMessageBox("Devices cannot be same", "Warning", wxOK | wxICON_WARNING);
 				return;
 			}
-			this->ctrl = sysman->createCoord(x, y);
+			this->ctrl = sysman->createCoord(x, y, 0);
 		}
 		Hide();
 	}

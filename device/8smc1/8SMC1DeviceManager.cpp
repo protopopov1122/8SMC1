@@ -31,11 +31,16 @@ namespace CalX {
 		for (size_t i = 0; i < devs.NOD; i++) {
 			this->dev.push_back(new CALXDevice((device_id_t) i, this));
 		}
+		
+		this->instr.push_back(new CALXInstrument(0, this));
 	}
 
 	CALXDeviceManager::~CALXDeviceManager() {
 		for (size_t i = 0; i < this->dev.size(); i++) {
 			delete this->dev.at(i);
+		}
+		for (size_t i = 0; i < this->instr.size(); i++) {
+			delete this->instr.at(i);
 		}
 		this->dev.clear();
 		if (USMC_Close()) {

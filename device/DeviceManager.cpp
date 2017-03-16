@@ -42,7 +42,7 @@ namespace CalX {
 	}
 	
 	Device *DeviceManager::getDevice(device_id_t d) {
-		if (d >= this->dev.size()) {
+		if (d >= this->dev.size() || d < 0) {
 			return nullptr;
 		}
 		return this->dev.at(d);
@@ -50,6 +50,17 @@ namespace CalX {
 
 	size_t DeviceManager::getDeviceCount() {
 		return this->dev.size();
+	}
+	
+	size_t DeviceManager::getInstrumentCount() {
+		return this->instr.size();
+	}
+	
+	Instrument *DeviceManager::getInstrument(device_id_t id) {
+		if (id >= this->instr.size() || id < 0) {
+			return nullptr;
+		}
+		return this->instr.at(id);
 	}
 	
 }
