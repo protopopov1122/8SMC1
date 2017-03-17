@@ -22,12 +22,15 @@
 #define CALX_CTRL_LIB_CTRL_CORE_H_
 
 #include <cinttypes>
+#include "platform.h"
 
 /* This file contains basic structures, enums and constants that commonly used by other library parts. */
 
 namespace CalX {
 	typedef int64_t motor_coord_t;
 	
+	
+	/* Ctrl-lib possible errors. It doesn't include all Device API low-level errors.*/
 	enum ErrorCode {
 		NoError = 0, WrongParameter = 1,
 		Trailer1Pressed = 2, Trailer2Pressed = 3,
@@ -37,11 +40,14 @@ namespace CalX {
 		MathExprError = 9
 	};
 
+	/* Used in device controller. Describes current move type and state.*/
 	enum MoveType {
 		Stop = 0, MoveDown = -1, MoveUp = 1,
 		RollDown = -2, RollUp = 2
 	};
 
+	
+	/* Different structures that describe motor positions, position changes and state.*/
 	struct motor_point_t {
 		motor_coord_t x;
 		motor_coord_t y;
@@ -68,6 +74,7 @@ namespace CalX {
 		Trailer1 = 1, Trailer2 = 2
 	};
 	
+	/* Different structures that describe coordinate plane points and scales.*/
 	struct coord_point_t {
 		long double x;
 		long double y;

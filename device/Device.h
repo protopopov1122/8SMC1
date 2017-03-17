@@ -24,7 +24,9 @@
 #include <cinttypes>
 #include <string>
 
-/* Device class contains interface to abstract Device. */
+/* This file contains definitions of Device and Instrument classes.
+   They are main Device API abstractions that represent different
+   types of motors and cutting instruments. */
 
 namespace CalX {
 
@@ -32,36 +34,44 @@ namespace CalX {
 
 	typedef int64_t device_id_t;
 
+	// Device power indicator
 	enum Power {
 		NoPower, HalfPower, FullPower
 	};
 	
+	/* Abstract device.
+	   It contains two method types:
+	       * methods that are actually performing some actions or return useful information - Functional.
+		   * methods that are optional and may return fake values - Optional.
+	*/
 	class Device {
 		public:
 			virtual ~Device();
 			virtual DeviceManager *getDeviceManager();
-			virtual device_id_t getID();
-			virtual std::string getSerial();
-			virtual std::string getVersion();
-			virtual int getPosition() = 0;
-			virtual bool isTrailerPressed(int) = 0;
-			virtual bool isRunning() = 0;
-			virtual Power getPowerState() = 0;
+			virtual device_id_t getID();		// Defined by device manager.
+			virtual std::string getSerial();	// Optional. Depends on device manager.
+			virtual std::string getVersion();	// Optional. Depends on device manager.
+			virtual int getPosition() = 0;		// Functional. Returns motor position in motor steps.
+			virtual bool isTrailerPressed(int) = 0;	// Functional. Provides info about device trailers.
+			virtual bool isRunning() = 0;		// Functional. Provides info about device state.
+			virtual Power getPowerState() = 0;	// Functional. Provides info about device power state.
 			virtual bool start(int, float,
-					unsigned char, bool  = false) = 0;
-			virtual bool stop() = 0;
-			virtual bool flipPower() = 0;
-			virtual float getTemperature() = 0;
-			virtual float getVoltage() = 0;
+					unsigned char, bool  = false) = 0;	// Functional. Controls device movement.
+			virtual bool stop() = 0;			// Functional. Controls device movement.
+			virtual bool flipPower() = 0;		// Functional. Controls device power.
+			virtual float getTemperature() = 0;	// Optional. Provides info about motor temperature.
+			virtual float getVoltage() = 0;		// Optional. Provides info about motor voltage.
 		protected:
 			device_id_t dev;
 			DeviceManager *devman;
 	};
 
+	/* Abstract instrument.
+	   Has few methods to enable/disable and check state. They all are functional. */
 	class Instrument {
 		public:
 			virtual ~Instrument();
-			virtual device_id_t getID();
+			virtual device_id_t getID();	// Defined by device manager
 			virtual DeviceManager *getDeviceManager();
 			virtual bool enable(bool) = 0;
 			virtual bool enabled() = 0;

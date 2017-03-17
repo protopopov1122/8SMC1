@@ -26,38 +26,35 @@
 #include <vector>
 #include <string>
 #include <cinttypes>
+#include "platform.h"
 #include "Device.h"
 
-/* Device manager initialise existing controllers and keep track of usable devices */
+/* Device manager initialise existing controllers and keep track of usable devices and instruments.
+   Some of device manager functionality are common for all possible managers(however it can be overrided), some is specific.*/
 
 namespace CalX {
 
 	class DeviceManager {
 		public:
 			virtual ~DeviceManager();
-			virtual void refresh() = 0;
-			virtual void saveError() = 0;
-			virtual Device *getDevice(device_id_t);
-			virtual size_t getDeviceCount();
-			virtual std::string getDeviceSerial(device_id_t) = 0;
-			virtual std::string getDeviceVersion(device_id_t) = 0;
-			virtual size_t getInstrumentCount();
-			virtual Instrument *getInstrument(device_id_t);
-			virtual bool hasError();
-			virtual std::string pollError();
+			virtual void refresh() = 0;				// Refresh device list, reinitialise them.
+			virtual void saveError() = 0;			// Poll all device generated errors and save them into queue
+			virtual Device *getDevice(device_id_t);	// Return device by id
+			virtual size_t getDeviceCount();		// Get device count
+			virtual std::string getDeviceSerial(device_id_t) = 0;	// Optional. Return device serial number
+			virtual std::string getDeviceVersion(device_id_t) = 0;	// Optional. Return device version.
+			virtual size_t getInstrumentCount();	// Get instrument count
+			virtual Instrument *getInstrument(device_id_t);	// Get instrument by id
+			virtual bool hasError();				// Check errors
+			virtual std::string pollError();		// Return error from queue
 		protected:
 			std::vector<std::string> error_queue;
 			std::vector<Device*> dev;
 			std::vector<Instrument*> instr;
 	};
 	
-	#if defined (__WIN32) | defined(_WIN32) | defined (__WIN32__)
-		#define EXPORT  __declspec(dllexport)
-	#else
-		#define EXPORT
-	#endif
-	
-	extern "C" EXPORT DeviceManager *getDeviceManager();
+	/* Used as exported function in Device API implementations.*/
+	extern "C" LIBEXPORT DeviceManager *getDeviceManager();
 	typedef DeviceManager* (*DeviceManager_getter)();
 }
 

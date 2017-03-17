@@ -22,13 +22,17 @@
 #ifndef CALX_UI_CALX_H_
 #define CALX_UI_CALX_H_
 
+#include "platform.h"
 
-#ifndef __WXMSW__
-#define __WXMSW__
+#ifdef OS_WIN
+	#ifndef __WXMSW__
+		#define __WXMSW__
+	#endif
+	#ifndef WXUSINGDLL
+		#define WXUSINGDLL
+	#endif
 #endif
-#ifndef WXUSINGDLL
-#define WXUSINGDLL
-#endif
+
 #define wxUSE_UNICODE 1
 
 #include <wx/wxprec.h>

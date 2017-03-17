@@ -27,6 +27,10 @@
 
 using namespace CalX;
 
+#ifndef DEVICES_LIB
+#define DEVICES_LIB dev_8smc1
+#endif
+
 namespace CalXUI {
 	
 	class CalxApp : public wxApp {
@@ -36,6 +40,8 @@ namespace CalXUI {
 			SystemManager *getSystemManager();
 			CalxFrame *getMainFrame();
 		private:
+			void loadDevicesPlugin();
+		
 			CalxFrame *frame;
 			wxDynamicLibrary *dynlib;
 			DeviceManager *devman;

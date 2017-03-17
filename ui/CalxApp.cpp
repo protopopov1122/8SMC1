@@ -19,12 +19,17 @@
 
 
 #include "CalxApp.h"
+#include <wx/filedlg.h>
 #include "device/DeviceManager.h"
 
 namespace CalXUI {
 	
 	bool CalxApp::OnInit() {
-		this->dynlib = new wxDynamicLibrary(wxDynamicLibrary::CanonicalizeName("dev_8smc1"));
+		this->dynlib = new wxDynamicLibrary(wxDynamicLibrary::CanonicalizeName(STRINGIZE(DEVICES_LIB)), wxDL_DEFAULT | wxDL_QUIET);
+		if (!dynlib->IsLoaded()) {
+			wxMessageBox("Device API plugin not found\nSpecify library location", "Warning", wxOK | wxICON_WARNING);
+			loadDevicesPlugin();
+		}
 		if (!dynlib->IsLoaded()) {
 			wxMessageBox("Dynamic library not found", "Error", wxOK | wxICON_ERROR);
 			return false;
@@ -58,6 +63,14 @@ namespace CalXUI {
 	
 	CalxFrame *CalxApp::getMainFrame() {
 		return this->frame;
+	}
+	
+	void CalxApp::loadDevicesPlugin() {
+		wxFileDialog openDialog(nullptr, "Load devices plugin");
+		if (openDialog.ShowModal() == wxID_CANCEL) {
+			return;
+		}
+		dynlib->Load(openDialog.GetPath(), wxDL_DEFAULT | wxDL_QUIET);
 	}
 }
 
