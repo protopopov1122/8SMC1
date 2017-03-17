@@ -1,10 +1,16 @@
 ## Winbuild
 
-This directory contains *.bat files that compile project using MSVC compiler. They must be called from project root and require MSVC compiler and linker to be in path and allow building both exe and dll for Native C++. List of files:
+This directory contains *.bat files that compile project using MSVC compiler. They must be called from project root and require MSVC compiler and linker to be in path and allow building both exe and dll for Native C++.
+
+Microsoft compiler is not main build/testing compiler, so not all build features are included in these build files(e.g. they need WxWidgets 3.1.0, but MinGW build is version independent). However it is possible to build project only by MSVC.
+
+List of files(build scripts should be called from project root directory):
+* build.bat [path] - build all components in correct order. Recomended to use. [path] - path to WxWidgets 3.1.0 directory.
 * build-stub.bat - build stub library to test software.
 * build-exe.bat - build native executable.
 * build-dll.bat - build native dynamic library.
-* build-ui.bat [path] - build native WxWidgets UI(not implemented, just stub); [path] - path to WxWidgets 3.10 directory.
+* build-8smc1.bat - build Standa 8SMC1 device handlers.
+* build-ui.bat [path] - build native WxWidgets UI([path] - path to WxWidgets 3.1.0 directory).
 
 Result may require MSVC runtime dll's. Build tested on Visual Studio Build Tools 2017.
 

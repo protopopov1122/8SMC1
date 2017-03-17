@@ -23,8 +23,12 @@
 #define CALX_UI_CALX_H_
 
 
+#ifndef __WXMSW__
 #define __WXMSW__
+#endif
+#ifndef WXUSINGDLL
 #define WXUSINGDLL
+#endif
 #define wxUSE_UNICODE 1
 
 #include <wx/wxprec.h>

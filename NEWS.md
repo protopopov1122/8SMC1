@@ -116,3 +116,6 @@ UI tested on real motors. All covered functions work properly, program is slow a
 
 ##### 10/03/2017
 Device API was refractored to offer abstract interfaces. Concrete implementations were moved to separate subdirectory. Now project may use any controllers, but some extra work on this should be done. Project was renamed to CalX.
+
+##### 17/03/2017
+Most of project is finished. GUI is almost functional for many purposes(however it does not represent all API functions). Device API fully separated from other project components and used as a plugin(so many Device API handlers may be supported). Added Instrument support to Ctrl-lib and UI(however 8SMC1 Device API implementation can't handle them now and use stubs).
