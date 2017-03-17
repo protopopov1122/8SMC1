@@ -19,12 +19,19 @@
 
 
 #include "CalxApp.h"
+#ifdef OS_WIN
+	#include <windows.h>
+#endif
 #include <wx/filedlg.h>
+#include "CalxDebugConsole.h"
 #include "device/DeviceManager.h"
 
 namespace CalXUI {
 	
 	bool CalxApp::OnInit() {
+		this->debug_mode = true;
+		
+		
 		this->dynlib = new wxDynamicLibrary(wxDynamicLibrary::CanonicalizeName(STRINGIZE(DEVICES_LIB)), wxDL_DEFAULT | wxDL_QUIET);
 		if (!dynlib->IsLoaded()) {
 			wxMessageBox("Device API plugin not found\nSpecify library location", "Warning", wxOK | wxICON_WARNING);
@@ -43,6 +50,19 @@ namespace CalXUI {
 		}
 		this->devman = getter();
 		this->sysman = new SystemManager(this->devman);
+		
+		if (this->debug_mode) {
+			#ifdef OS_WIN
+			AllocConsole();
+			AttachConsole(GetCurrentProcessId());
+			freopen("CONIN$", "r", stdin);
+			freopen("CONOUT$", "w", stdout);
+			freopen("CONOUT$", "w", stderr);
+			#endif
+			this->debug_console = new CalxDebugConsole(this->sysman);
+			this->debug_console->Run();
+		}
+		
 		this->frame = new CalxFrame("CalX UI");
 		this->frame->Show(true);
 		this->frame->Maximize(true);
@@ -51,9 +71,19 @@ namespace CalXUI {
 	}
 	
 	int CalxApp::OnExit() {
+		if (this->debug_mode) {
+			this->debug_console->Kill();
+		}
+		
 		delete this->sysman;
 		delete this->devman;
 		delete this->dynlib;
+		
+		#ifdef OS_WIN
+		if (this->debug_mode) {
+			FreeConsole();
+		}
+		#endif
 		return 0;
 	}
 	

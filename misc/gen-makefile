@@ -33,7 +33,7 @@ printf "stub: Stub.o\n\t\$(CC) -shared -o \$(BUILD)/USMCDLL.dll Stub.o \$(LDFLAG
 
 # Generate console program link target
 printf "\$(OUTPUT).exe: \$(OUTPUT).dll dev_8smc1.dll " 
-OBJS=`find cli -not -name "CLI.cpp" -and -name "*.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
+OBJS=`find cli -name "main.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
 echo $OBJS 
 printf "\t@mkdir -p \$(BUILD)\n"
 printf "\t\$(CC) -o \$(BUILD)/\$(OUTPUT).exe " 
@@ -43,7 +43,7 @@ printf " \$(LDFLAGS) -Wl,--library-path=\$(BUILD) -ldev_8smc1 -l\$(OUTPUT)\n\n"
 #Generate Ctrl-lib link target
 printf "\$(OUTPUT).dll: "
 OBJS1=`find ctrl-lib -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
-OBJS2=`find cli -name "CLI.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
+OBJS2=`find cli -not -name "main.cpp" -and -name "*.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
 OBJS3=`find device -maxdepth 1 -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
 OBJS=$OBJS1$OBJS2$OBJS3
 echo $OBJS 
