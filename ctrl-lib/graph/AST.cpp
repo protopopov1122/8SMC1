@@ -51,8 +51,8 @@ namespace CalX {
 			res.err = rightv.err;
 			return res;
 		}
-		long double left = leftv.value;
-		long double right = rightv.value;
+		double left = leftv.value;
+		double right = rightv.value;
 		switch (this->oper) {
 			case BinaryOperation::Add:
 				res.value = left + right;
@@ -102,7 +102,7 @@ namespace CalX {
 	}
 	
 	engine_value_t FunctionNode::eval(FunctionEngine *eng) {
-		std::vector<long double> vec;
+		std::vector<double> vec;
 		for (size_t i = 0; i < this->args->size(); i++) {
 			engine_value_t val = eng->eval(this->args->at(i));
 			if (val.err != MathError::MNoError) {

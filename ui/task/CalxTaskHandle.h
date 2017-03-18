@@ -23,6 +23,7 @@
 
 #include <iostream>
 #include "CalxApp.h"
+#include "coord/CalxCoordFilter.h"
 
 using namespace CalX;
 
@@ -40,14 +41,16 @@ namespace CalXUI {
 			}
 			CalxTaskType getType() {return this->type;}
 			virtual CoordTask *getTask() = 0;
+			virtual void update() = 0;
 		private:
 			CalxTaskType type;
 	};
 	
 	class CalxGcodeHandle : public CalxTaskHandle {
 		public:
-			CalxGcodeHandle(wxWindow*, wxWindowID, std::string, std::istream*, CoordTranslator*);
+			CalxGcodeHandle(wxWindow*, wxWindowID, std::string, std::istream*, ComplexCoordTranslator*);
 			virtual CoordTask *getTask();
+			virtual void update();
 			std::string getId() {
 				return this->id;
 			}
@@ -55,7 +58,9 @@ namespace CalXUI {
 			void OnExit(wxCloseEvent&);
 		
 			std::string id;
-			CoordTranslator *translator;
+			CalxCoordFilterCtrl *filter;
+			ComplexCoordTranslator *translator;
+			
 			
 			CoordTask *task;
 	};

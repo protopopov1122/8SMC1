@@ -37,7 +37,7 @@ namespace CalXUI {
 	
 	class CalxCoordBasicFilter : public CalxCoordFilter {
 		public:
-			CalxCoordBasicFilter(wxWindow*, wxWindowID);
+			CalxCoordBasicFilter(wxWindow*, wxWindowID, BasicCoordTranslator*);
 			virtual CoordTranslator *getTranslator();
 		private:
 			void updateData();
@@ -51,7 +51,7 @@ namespace CalXUI {
 	
 	class CalxCoordLinearFilter : public CalxCoordFilter {
 		public:
-			CalxCoordLinearFilter(wxWindow*, wxWindowID, CoordTranslator*);
+			CalxCoordLinearFilter(wxWindow*, wxWindowID, LinearCoordTranslator*);
 			virtual CoordTranslator *getTranslator();
 		private:
 			void updateData();
@@ -65,7 +65,7 @@ namespace CalXUI {
 	
 	class CalxCoordLogarithmicFilter : public CalxCoordFilter {
 		public:
-			CalxCoordLogarithmicFilter(wxWindow*, wxWindowID, CoordTranslator*);
+			CalxCoordLogarithmicFilter(wxWindow*, wxWindowID, LogarithmicCoordTranslator*);
 			virtual CoordTranslator *getTranslator();
 		private:
 			void updateData();
@@ -76,7 +76,7 @@ namespace CalXUI {
 	
 	class CalxCoordPolarFilter : public CalxCoordFilter {
 		public:
-			CalxCoordPolarFilter(wxWindow*, wxWindowID, CoordTranslator*);
+			CalxCoordPolarFilter(wxWindow*, wxWindowID, PolarCoordTranslator*);
 			virtual CoordTranslator *getTranslator();
 		private:
 			PolarCoordTranslator *translator;
@@ -84,8 +84,8 @@ namespace CalXUI {
 	
 	class CalxCoordFilterCtrl : public CalxCoordFilter {
 		public:
-			CalxCoordFilterCtrl(wxWindow*, wxWindowID);
-			virtual CoordTranslator *getTranslator();
+			CalxCoordFilterCtrl(wxWindow*, wxWindowID, ComplexCoordTranslator* = nullptr);
+			virtual ComplexCoordTranslator *getTranslator();
 			void updateUI();
 		private:
 		
@@ -94,6 +94,8 @@ namespace CalXUI {
 			void OnAddLogarithmicClick(wxCommandEvent&);
 			void OnAddPolarClick(wxCommandEvent&);
 			void OnRemoveClick(wxCommandEvent&);
+			
+			void addFilter(CoordTranslator*);
 		
 			wxPanel *mainPanel;
 			wxListBox *filterList;

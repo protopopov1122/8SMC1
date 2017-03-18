@@ -26,9 +26,11 @@ namespace CalX {
 	GCodeCoordTask::GCodeCoordTask(std::istream *input, CoordTranslator *trans)
 		: CoordTask::CoordTask(CoordTaskType::GCodeTask) {
 		int ch;
+		std::stringstream ss;
 		while ((ch = input->get()) != EOF) {
-			code << (char) ch;
+			ss << (char) ch;
 		}
+		this->code = ss.str();
 		this->translator = trans;
 	}
 	
@@ -37,8 +39,8 @@ namespace CalX {
 	}
 	
 	ErrorCode GCodeCoordTask::perform(CoordPlane *plane, TaskParameters &prms, SystemManager *sysman, TaskState *state) {
-		this->code.seekg(0, this->code.beg);
-		GCodeLexer lexer(&this->code);
+		std::stringstream ss(this->code);
+		GCodeLexer lexer(&ss);
 		GCodeParser parser(&lexer);
 		ProgrammedCoordTask task;
 		coord_point_t last = {0, 0};
@@ -47,8 +49,8 @@ namespace CalX {
 		while ((cmd = parser.nextCommand()) != nullptr) {
 			
 			if (cmd->getLetter() == 'G') {
-				long double x = cmd->hasArg('X') ? cmd->getArg('X').fractValue() : last.x;
-				long double y = cmd->hasArg('Y') ? cmd->getArg('Y').fractValue() : last.y;
+				double x = cmd->hasArg('X') ? cmd->getArg('X').fractValue() : last.x;
+				double y = cmd->hasArg('Y') ? cmd->getArg('Y').fractValue() : last.y;
 				motor_point_t real = translator->get(x, y);
 				switch (cmd->getCommand()) {
 					case GCodeOpcode::GCode_Jump:
@@ -58,16 +60,16 @@ namespace CalX {
 						task.addStep(new MoveTaskStep(real, 1.0f));
 					break;
 					case GCodeOpcode::GCode_Clockwise_Arc: {
-						long double i = cmd->getArg('I').fractValue();
-						long double j = cmd->getArg('J').fractValue();
+						double i = cmd->getArg('I').fractValue();
+						double j = cmd->getArg('J').fractValue();
 						motor_point_t center = translator->get(i, j);
 						RelArcTaskStep *step = new RelArcTaskStep(real, center, CHORD_COUNT, 1.0f);
 						step->setClockwise(true);
 						task.addStep(step);
 					} break;
 					case GCodeOpcode::GCode_CounterClockwise_Arc: {
-						long double i = cmd->getArg('I').fractValue();
-						long double j = cmd->getArg('J').fractValue();
+						double i = cmd->getArg('I').fractValue();
+						double j = cmd->getArg('J').fractValue();
 						motor_point_t center = translator->get(i, j);
 						RelArcTaskStep *step = new RelArcTaskStep(real, center, CHORD_COUNT, 1.0f);
 						step->setClockwise(false);
@@ -84,7 +86,7 @@ namespace CalX {
 	}
 	
 	std::string GCodeCoordTask::getGCode() {
-		return this->code.str();
+		return this->code;
 	}
 	
 	CoordTranslator *GCodeCoordTask::getTranslator() {

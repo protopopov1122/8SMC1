@@ -80,7 +80,7 @@ namespace CalX {
 		return true;
 	}
 	
-	motor_point_t ComplexCoordTranslator::get(long double x, long double y) {
+	motor_point_t ComplexCoordTranslator::get(double x, double y) {
 		return this->list.at(this->list.size() - 1)->get(x, y);
 	}
 	

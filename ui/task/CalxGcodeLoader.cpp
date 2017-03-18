@@ -71,7 +71,7 @@ namespace CalXUI {
 		return this->gcodePath->GetValue().ToStdString();
 	}
 	
-	CoordTranslator *CalxGcodeLoader::getTranslator() {
+	ComplexCoordTranslator *CalxGcodeLoader::getTranslator() {
 		return this->translator->getTranslator();
 	}
 	

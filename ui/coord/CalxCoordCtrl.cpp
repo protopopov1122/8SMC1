@@ -204,11 +204,11 @@ namespace CalXUI {
 		FunctionLexer lexer(ss);
 		FunctionParser parser(&lexer);
 		Node *node = parser.parse();
-		long double minx = graphCtrl->getXMin();
-		long double maxx = graphCtrl->getXMax();
-		long double miny = graphCtrl->getYMin();
-		long double maxy = graphCtrl->getYMax();
-		long double step = graphCtrl->getStep();
+		double minx = graphCtrl->getXMin();
+		double maxx = graphCtrl->getXMax();
+		double miny = graphCtrl->getYMin();
+		double maxy = graphCtrl->getYMax();
+		double step = graphCtrl->getStep();
 		float speed = graphCtrl->getSpeed();
 		CoordTranslator *trans = graphCtrl->getCoordTranslator();
 		coord_point_t min = {minx, miny};

@@ -50,7 +50,7 @@ namespace CalX {
 		this->scale = s;
 	}
 	
-	motor_point_t LogarithmicCoordTranslator::get(long double x, long double y) {
+	motor_point_t LogarithmicCoordTranslator::get(double x, double y) {
 		if (this->scale.x > 0) {
 			x = log(x) / log(this->scale.x);
 		}
@@ -68,7 +68,7 @@ namespace CalX {
 	coord_point_t LogarithmicCoordTranslator::get(motor_point_t pnt) {
 		coord_point_t out;
 		if (this->base == nullptr) {
-			out = {(long double) pnt.x, (long double) pnt.y};
+			out = {(double) pnt.x, (double) pnt.y};
 		} else {
 			out = this->base->get(pnt);
 		}

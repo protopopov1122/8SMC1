@@ -37,7 +37,7 @@ namespace CalX {
 	class EngineFunction {
 		public:
 			virtual ~EngineFunction() {}
-			virtual engine_value_t eval(std::vector<long double>&) = 0;
+			virtual engine_value_t eval(std::vector<double>&) = 0;
 	};
 	
 	class EngineScope {
@@ -46,12 +46,12 @@ namespace CalX {
 			virtual ~EngineScope();
 			engine_value_t getVariable(std::string);
 			bool hasVariable(std::string);
-			void putVariable(std::string, long double);
+			void putVariable(std::string, double);
 			bool hasFunction(std::string);
-			engine_value_t evalFunction(std::string, std::vector<long double>&);
+			engine_value_t evalFunction(std::string, std::vector<double>&);
 			bool addFunction(std::string, EngineFunction*);
 		private:
-			std::map<std::string, long double> vars;
+			std::map<std::string, double> vars;
 			std::map<std::string, EngineFunction*> func;
 	};
 	

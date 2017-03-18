@@ -188,6 +188,7 @@ namespace CalXUI {
 	void CalxTaskPanel::OnBuildClick(wxCommandEvent &evt) {
 		if (taskList->GetSelection() != wxNOT_FOUND
 			&& plane->GetSelection() != wxNOT_FOUND) {
+			list.at(taskList->GetSelection())->update();
 			CoordTask *task = list.at(taskList->GetSelection())->getTask();
 			CoordHandle *handle = wxGetApp().getMainFrame()->getPanel()->getCoords()->getCoord(plane->GetSelection());
 			TaskParameters prms = {(float) this->speed->GetValue()};

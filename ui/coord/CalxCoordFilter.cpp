@@ -18,6 +18,7 @@
 */
 
 
+#include <string>
 #include "CalxApp.h"
 #include "CalxCoordFilter.h"
 #include "CalxFrame.h"
@@ -30,12 +31,9 @@ namespace CalXUI {
 			
 	}
 	
-	CalxCoordBasicFilter::CalxCoordBasicFilter(wxWindow *win, wxWindowID id)
+	CalxCoordBasicFilter::CalxCoordBasicFilter(wxWindow *win, wxWindowID id, BasicCoordTranslator *tr)
 		: CalxCoordFilter::CalxCoordFilter(win, id) {
-		
-		motor_point_t cen = {0, 0};
-		motor_size_t size = {1, 1};
-		this->translator = new BasicCoordTranslator(cen, size);
+		this->translator = tr;
 		
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(2);
 		SetSizer(sizer);
@@ -69,20 +67,20 @@ namespace CalXUI {
 		this->translator->setScale(scale);
 	}
 	
-	CalxCoordLinearFilter::CalxCoordLinearFilter(wxWindow *win, wxWindowID id, CoordTranslator *base)
+	CalxCoordLinearFilter::CalxCoordLinearFilter(wxWindow *win, wxWindowID id, LinearCoordTranslator *ctrl)
 		: CalxCoordFilter::CalxCoordFilter(win, id) {
 		
-		coord_point_t cen = {0, 0};
-		coord_scale_t size = {1, 1};
-		this->translator = new LinearCoordTranslator(cen, size, base);
+		this->translator = ctrl;
 		
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(2);
 		SetSizer(sizer);
 		
-		this->xoffset = new wxTextCtrl(this, wxID_ANY, "0");
-		this->yoffset = new wxTextCtrl(this, wxID_ANY, "0");
-		this->xscale = new wxTextCtrl(this, wxID_ANY, "1");
-		this->yscale = new wxTextCtrl(this, wxID_ANY, "1");
+		std::cout << ctrl->getScale().x << " " << ctrl->getScale().y << std::endl;
+		
+		this->xoffset = new wxTextCtrl(this, wxID_ANY, std::to_string(ctrl->getOffset().x));
+		this->yoffset = new wxTextCtrl(this, wxID_ANY, std::to_string(ctrl->getOffset().y));
+		this->xscale = new wxTextCtrl(this, wxID_ANY, std::to_string(ctrl->getScale().x));
+		this->yscale = new wxTextCtrl(this, wxID_ANY, std::to_string(ctrl->getScale().y));
 		
 		sizer->Add(new wxStaticText(this, wxID_ANY, "X offset:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		sizer->Add(xoffset, 0, wxALL | wxEXPAND);
@@ -113,17 +111,16 @@ namespace CalXUI {
 		this->translator->setScale(scale);
 	}
 	
-	CalxCoordLogarithmicFilter::CalxCoordLogarithmicFilter(wxWindow *win, wxWindowID id, CoordTranslator *base)
+	CalxCoordLogarithmicFilter::CalxCoordLogarithmicFilter(wxWindow *win, wxWindowID id, LogarithmicCoordTranslator *trans)
 		: CalxCoordFilter::CalxCoordFilter(win, id) {
 		
-		coord_scale_t size = {0, 0};
-		this->translator = new LogarithmicCoordTranslator(size, base);
+		this->translator = trans;
 		
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(2);
 		SetSizer(sizer);
 		
-		this->xscale = new wxTextCtrl(this, wxID_ANY, "0");
-		this->yscale = new wxTextCtrl(this, wxID_ANY, "0");
+		this->xscale = new wxTextCtrl(this, wxID_ANY, std::to_string(trans->getScale().x));
+		this->yscale = new wxTextCtrl(this, wxID_ANY, std::to_string(trans->getScale().y));
 		
 		sizer->Add(new wxStaticText(this, wxID_ANY, "X scale:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		sizer->Add(xscale, 0, wxALL | wxEXPAND);
@@ -146,10 +143,10 @@ namespace CalXUI {
 		this->translator->setScale(scale);
 	}
 	
-	CalxCoordPolarFilter::CalxCoordPolarFilter(wxWindow *win, wxWindowID id, CoordTranslator *base)
+	CalxCoordPolarFilter::CalxCoordPolarFilter(wxWindow *win, wxWindowID id, PolarCoordTranslator *polar)
 		: CalxCoordFilter::CalxCoordFilter(win, id) {
 		
-		this->translator = new PolarCoordTranslator(base);
+		this->translator = polar;
 		
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(sizer);
@@ -160,7 +157,7 @@ namespace CalXUI {
 		return this->translator;		
 	}
 	
-	CalxCoordFilterCtrl::CalxCoordFilterCtrl(wxWindow *win, wxWindowID id)
+	CalxCoordFilterCtrl::CalxCoordFilterCtrl(wxWindow *win, wxWindowID id, ComplexCoordTranslator *tr)
 		: CalxCoordFilter::CalxCoordFilter(win, id) {
 		
 		wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
@@ -190,19 +187,26 @@ namespace CalXUI {
 		sizer->Add(mainPanel, 1, wxALL | wxEXPAND);
 		wxBoxSizer *mainSizer = new wxBoxSizer(wxVERTICAL);
 		mainPanel->SetSizer(mainSizer);
-			
 		
-		this->filter.push_back(new CalxCoordBasicFilter(mainPanel, wxID_ANY));
-		mainSizer->Add(this->filter.at(0), 1, wxALL | wxEXPAND);
-		this->trans = new ComplexCoordTranslator(this->filter.at(0)->getTranslator());
-		filterList->Append("Basic");
-		filterList->SetSelection(filter.size() > 0 ? filter.size() - 1 : wxNOT_FOUND);
+		this->trans = tr;
+		
+		if (this->trans == nullptr) {
+			motor_point_t cen = {0, 0};
+			motor_size_t scl = {1, 1};
+			BasicCoordTranslator *basic = new BasicCoordTranslator(cen, scl);
+			this->trans = new ComplexCoordTranslator(basic);
+			addFilter(basic);
+		} else {
+			for (size_t i = 0; i < trans->getSize(); i++) {
+				addFilter(trans->get(i));
+			}
+		}
 		
 		updateUI();
 		Fit();
 	}
 	
-	CoordTranslator *CalxCoordFilterCtrl::getTranslator() {
+	ComplexCoordTranslator *CalxCoordFilterCtrl::getTranslator() {
 		for (const auto& f : this->filter) {
 			f->getTranslator();
 		}
@@ -225,37 +229,28 @@ namespace CalXUI {
 		updateUI();
 	}
 	
-	void CalxCoordFilterCtrl::OnAddLinearClick(wxCommandEvent &evt) {		
-		CalxCoordLinearFilter *fil = new CalxCoordLinearFilter(mainPanel, wxID_ANY,
-		this->trans->get(this->trans->getSize() - 1));
-		this->filter.push_back(fil);
-		mainPanel->GetSizer()->Add(fil, 1, wxALL | wxEXPAND);
-		this->trans->add(fil->getTranslator());
-		filterList->Append("Linear");
-		filterList->SetSelection(filter.size() - 1);
-		updateUI();
+	void CalxCoordFilterCtrl::OnAddLinearClick(wxCommandEvent &evt) {
+		CoordTranslator *base = this->trans->get(this->trans->getSize() - 1);
+		coord_point_t offset = {0, 0};
+		coord_scale_t scale = {1, 1};
+		LinearCoordTranslator *linear = new LinearCoordTranslator(offset, scale, base);
+		this->trans->add(linear);
+		addFilter(linear);
 	}
 	
 	void CalxCoordFilterCtrl::OnAddLogarithmicClick(wxCommandEvent &evt) {		
-		CalxCoordLogarithmicFilter *fil = new CalxCoordLogarithmicFilter(mainPanel, wxID_ANY,
-		this->trans->get(this->trans->getSize() - 1));
-		this->filter.push_back(fil);
-		mainPanel->GetSizer()->Add(fil, 1, wxALL | wxEXPAND);
-		this->trans->add(fil->getTranslator());
-		filterList->Append("Logarithmic");
-		filterList->SetSelection(filter.size() - 1);
-		updateUI();
+		CoordTranslator *base = this->trans->get(this->trans->getSize() - 1);
+		coord_scale_t sc = {0, 0};
+		LogarithmicCoordTranslator *logt = new LogarithmicCoordTranslator(sc, base);
+		this->trans->add(logt);
+		addFilter(logt);
 	}
 	
 	void CalxCoordFilterCtrl::OnAddPolarClick(wxCommandEvent &evt) {
-		CalxCoordPolarFilter *fil = new CalxCoordPolarFilter(mainPanel, wxID_ANY,
-		this->trans->get(this->trans->getSize() - 1));
-		this->filter.push_back(fil);
-		mainPanel->GetSizer()->Add(fil, 1, wxALL | wxEXPAND);
-		this->trans->add(fil->getTranslator());
-		filterList->Append("Polar");
-		filterList->SetSelection(filter.size() - 1);
-		updateUI();
+		CoordTranslator *base = this->trans->get(this->trans->getSize() - 1);
+		PolarCoordTranslator *polar = new PolarCoordTranslator(base);
+		this->trans->add(polar);
+		addFilter(polar);
 	}
 	
 	void CalxCoordFilterCtrl::OnRemoveClick(wxCommandEvent &evt) {
@@ -268,5 +263,37 @@ namespace CalXUI {
 			trans->remove(i);
 		}
 		updateUI();
+	}
+	
+	void CalxCoordFilterCtrl::addFilter(CoordTranslator *tr) {
+		CalxCoordFilter *fil = nullptr;
+		switch (tr->getType()) {
+			case CoordType::BasicCoord:
+				fil = new CalxCoordBasicFilter(mainPanel, wxID_ANY, (BasicCoordTranslator*) tr);
+				filterList->Append("Basic");
+				break;
+			case CoordType::LinearCoord:
+				fil = new CalxCoordLinearFilter(mainPanel, wxID_ANY, (LinearCoordTranslator*) tr);
+				filterList->Append("Linear");
+				break;
+			case CoordType::LogarithmicCoord:
+				fil = new CalxCoordLogarithmicFilter(mainPanel, wxID_ANY, (LogarithmicCoordTranslator*) tr);
+				filterList->Append("Logarithmic");
+				break;
+			case CoordType::PolarCoord:
+				fil = new CalxCoordPolarFilter(mainPanel, wxID_ANY, (PolarCoordTranslator*) tr);
+				filterList->Append("Polar");
+				break;
+			default:
+				break;
+		}
+		if (fil == nullptr) {
+			return;
+		}
+		this->filter.push_back(fil);
+		mainPanel->GetSizer()->Add(fil, 1, wxALL | wxEXPAND);
+		filterList->SetSelection(filter.size() - 1);
+		updateUI();
+		
 	}
 }

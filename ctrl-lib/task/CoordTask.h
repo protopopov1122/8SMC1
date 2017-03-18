@@ -184,7 +184,7 @@ namespace CalX {
 			std::string getGCode();
 			CoordTranslator *getTranslator();
 		private:
-			std::stringstream code;
+			std::string code;
 			CoordTranslator *translator;
 	};
 }

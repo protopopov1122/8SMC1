@@ -59,8 +59,8 @@ namespace CalX {
 	};
 	
 	struct motor_scale_t {
-		long double x;
-		long double y;
+		double x;
+		double y;
 	};
 	
 	struct motor_rect_t {
@@ -76,18 +76,18 @@ namespace CalX {
 	
 	/* Different structures that describe coordinate plane points and scales.*/
 	struct coord_point_t {
-		long double x;
-		long double y;
+		double x;
+		double y;
 	};
 	
 	struct coord_size_t {
-		long double w;
-		long double h;
+		double w;
+		double h;
 	};
 	
 	struct coord_scale_t {
-		long double x;
-		long double y;
+		double x;
+		double y;
 	};
 }
 

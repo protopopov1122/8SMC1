@@ -196,8 +196,8 @@ namespace CalX {
 		while ((cmd = parser->nextCommand()) != nullptr) {
 			
 			if (cmd->getLetter() == 'G') {
-				long double x = cmd->hasArg('X') ? cmd->getArg('X').fractValue() : last.x;
-				long double y = cmd->hasArg('Y') ? cmd->getArg('Y').fractValue() : last.y;
+				double x = cmd->hasArg('X') ? cmd->getArg('X').fractValue() : last.x;
+				double y = cmd->hasArg('Y') ? cmd->getArg('Y').fractValue() : last.y;
 				motor_point_t real = translator->get(x, y);
 				switch (cmd->getCommand()) {
 					case 0:
@@ -207,16 +207,16 @@ namespace CalX {
 						task->addStep(new MoveTaskStep(real, 1.0f));
 					break;
 					case 2: {
-						long double i = cmd->getArg('I').fractValue();
-						long double j = cmd->getArg('J').fractValue();
+						double i = cmd->getArg('I').fractValue();
+						double j = cmd->getArg('J').fractValue();
 						motor_point_t center = translator->get(i, j);
 						RelArcTaskStep *step = new RelArcTaskStep(real, center, CHORD_COUNT, 1.0f);
 						step->setClockwise(true);
 						task->addStep(step);
 					} break;
 					case 3: {
-						long double i = cmd->getArg('I').fractValue();
-						long double j = cmd->getArg('J').fractValue();
+						double i = cmd->getArg('I').fractValue();
+						double j = cmd->getArg('J').fractValue();
 						motor_point_t center = translator->get(i, j);
 						RelArcTaskStep *step = new RelArcTaskStep(real, center, CHORD_COUNT, 1.0f);
 						step->setClockwise(false);

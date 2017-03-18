@@ -31,7 +31,7 @@ namespace CalX {
 		public:\
 			id() {}\
 			virtual ~id() {}\
-			virtual engine_value_t eval(std::vector<long double> &args) {\
+			virtual engine_value_t eval(std::vector<double> &args) {\
 				engine_value_t res = {0, MathError::MNoError};\
 				if (args.size() != 1){\
 					res.err = MathError::MWrongParameters;\

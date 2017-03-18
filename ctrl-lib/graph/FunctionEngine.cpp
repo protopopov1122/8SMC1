@@ -46,7 +46,7 @@ namespace CalX {
 		return this->vars.count(id) != 0;
 	}
 	
-	void EngineScope::putVariable(std::string id, long double val) {
+	void EngineScope::putVariable(std::string id, double val) {
 		this->vars[id] = val;
 	}
 	
@@ -62,7 +62,7 @@ namespace CalX {
 		return true;
 	}
 	
-	engine_value_t EngineScope::evalFunction(std::string id, std::vector<long double> &args) {
+	engine_value_t EngineScope::evalFunction(std::string id, std::vector<double> &args) {
 		if (this->func.count(id) == 0) {
 			engine_value_t val = {0, MathError::MNoFunction};
 			return val;

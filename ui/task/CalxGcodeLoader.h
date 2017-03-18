@@ -33,7 +33,7 @@ namespace CalXUI {
 			CalxGcodeLoader(wxWindow*, wxWindowID);
 			bool isLoaded();
 			std::string getPath();
-			CoordTranslator *getTranslator();
+			ComplexCoordTranslator *getTranslator();
 			void ShowLoader();
 		private:
 			void OnShow(wxShowEvent&);
@@ -42,7 +42,7 @@ namespace CalXUI {
 			void OnChooseClick(wxCommandEvent&);
 			
 			wxTextCtrl *gcodePath;			
-			CalxCoordFilter *translator;
+			CalxCoordFilterCtrl *translator;
 			bool state;
 	};
 }

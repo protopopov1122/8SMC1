@@ -49,7 +49,7 @@ namespace CalX {
 		this->scale = s;
 	}
 
-	motor_point_t BasicCoordTranslator::get(long double x, long double y) {
+	motor_point_t BasicCoordTranslator::get(double x, double y) {
 		int64_t xtr = x * this->scale.w;
 		int64_t ytr = y * this->scale.h;
 		motor_point_t pnt = {0, 0};
@@ -63,7 +63,7 @@ namespace CalX {
 	coord_point_t BasicCoordTranslator::get(motor_point_t pnt) {
 		pnt.x -= center.x;
 		pnt.y -= center.y;
-		coord_point_t out = {(long double) pnt.x, (long double) pnt.y};
+		coord_point_t out = {(double) pnt.x, (double) pnt.y};
 		out.x /= this->scale.w;
 		out.y /= this->scale.h;
 		return out;

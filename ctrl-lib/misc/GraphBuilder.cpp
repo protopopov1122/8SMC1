@@ -25,7 +25,7 @@
 
 namespace CalX {
 	
-	GraphBuilder::GraphBuilder(Node *nd, coord_point_t min, coord_point_t max, long double step) {
+	GraphBuilder::GraphBuilder(Node *nd, coord_point_t min, coord_point_t max, double step) {
 		this->node = nd;
 		this->min = min;
 		this->max = max;
@@ -48,20 +48,20 @@ namespace CalX {
 		return this->max;
 	}
 	
-	long double GraphBuilder::getStep() {
+	double GraphBuilder::getStep() {
 		return this->step;
 	}
 	
 	ErrorCode GraphBuilder::build(SystemManager *sysman, CoordPlane *plane, CoordTranslator *trans, float speed, TaskState *state) {
 		plane->use();
 		FunctionEngine *engine = sysman->getFunctionEngine();
-		long double nan = std::numeric_limits<long double>::quiet_NaN();
-		long double last = nan;
+		double nan = std::numeric_limits<double>::quiet_NaN();
+		double last = nan;
 		ErrorCode errcode;
 		state->work = true;
 		state->plane = plane;
-		long double step = fabs(this->step) * (this->max.x > this->min.x ? 1 : -1);
-		for (long double x = this->min.x; (step > 0 ? x <= this->max.x : x >= this->max.x) && state->work; x += step) {
+		double step = fabs(this->step) * (this->max.x > this->min.x ? 1 : -1);
+		for (double x = this->min.x; (step > 0 ? x <= this->max.x : x >= this->max.x) && state->work; x += step) {
 			engine->getScope()->putVariable("x", x);
 			engine_value_t val = engine->eval(this->node);
 			if (val.err != MathError::MNoError) {
@@ -69,7 +69,7 @@ namespace CalX {
 				state->work = false;
 				return ErrorCode::MathExprError;
 			}
-			long double y = val.value;
+			double y = val.value;
 			if (y > this->max.y || y < this->min.y) {
 				y = nan;
 			}

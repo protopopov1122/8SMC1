@@ -56,9 +56,9 @@ namespace CalX {
 		this->scale = s;
 	}
 
-	motor_point_t LinearCoordTranslator::get(long double x, long double y) {
-		long double nx = x * this->scale.x + this->offset.x;
-		long double ny = y * this->scale.y + this->offset.y;
+	motor_point_t LinearCoordTranslator::get(double x, double y) {
+		double nx = x * this->scale.x + this->offset.x;
+		double ny = y * this->scale.y + this->offset.y;
 		if (this->base == nullptr) {
 			motor_point_t pnt = {(int64_t) nx, (int64_t) ny};
 			return pnt;
@@ -70,7 +70,7 @@ namespace CalX {
 	coord_point_t LinearCoordTranslator::get(motor_point_t pnt) {
 		coord_point_t out;
 		if (this->base == nullptr) {
-			out = {(long double) pnt.x, (long double) pnt.y};
+			out = {(double) pnt.x, (double) pnt.y};
 		} else {
 			out = this->base->get(pnt);
 		}

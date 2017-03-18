@@ -50,12 +50,12 @@ namespace CalX {
 	struct GCodeValue {
 		bool fract;
 		union {
-			long double fraction;
+			double fraction;
 			int64_t integer;
 		} value;
 		
 		int64_t intValue() {return fract ? (int64_t) value.fraction : value.integer;}
-		long double fractValue() {return fract ? value.fraction : (long double) value.integer;}
+		double fractValue() {return fract ? value.fraction : (double) value.integer;}
 	};
 	
 	class GCodeCommand {

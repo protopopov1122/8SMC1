@@ -41,7 +41,7 @@ namespace CalX {
 		TokenType type;
 		OperatorType oper;
 		int64_t integer;
-		long double real;
+		double real;
 		std::string literal;
 	};
 }

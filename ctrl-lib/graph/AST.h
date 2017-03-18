@@ -37,7 +37,7 @@ namespace CalX {
 	};
 	
 	struct engine_value_t {
-		long double value;
+		double value;
 		MathError err;
 	};
 	class FunctionEngine; // Forward referencing
@@ -63,19 +63,19 @@ namespace CalX {
 			IntegerConstantNode(int64_t v) : Node::Node(NodeType::IntegerConstant) {this->value = v;}
 			virtual ~IntegerConstantNode() {}
 			int64_t getValue() {return this->value;}
-			virtual engine_value_t eval(FunctionEngine *eng) {return {(long double) this->value, MathError::MNoError};}
+			virtual engine_value_t eval(FunctionEngine *eng) {return {(double) this->value, MathError::MNoError};}
 		private:
 			int64_t value;
 	};
 	
 	class RealConstantNode : public Node {
 		public:
-			RealConstantNode(long double v) : Node::Node(NodeType::RealConstant) {this->value = v;}
+			RealConstantNode(double v) : Node::Node(NodeType::RealConstant) {this->value = v;}
 			virtual ~RealConstantNode() {}
-			long double getValue() {return this->value;}
+			double getValue() {return this->value;}
 			virtual engine_value_t eval(FunctionEngine *eng) {return {this->value, MathError::MNoError};}
 		private:
-			long double value;
+			double value;
 	};
 	
 	class VariableNode : public Node {

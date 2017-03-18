@@ -50,7 +50,7 @@ namespace CalX {
 			}
 			CoordType getType() {return this->type;}
 			virtual motor_point_t get(coord_point_t pnt) {return this->get(pnt.x, pnt.y);}
-			virtual motor_point_t get(long double, long double) = 0;
+			virtual motor_point_t get(double, double) = 0;
 			virtual coord_point_t get(motor_point_t) = 0;
 			virtual CoordTranslator *getBase() {return nullptr;}
 			virtual void setBase(CoordTranslator *b) {}
@@ -66,7 +66,7 @@ namespace CalX {
 			motor_size_t getScale();
 			void setCenter(motor_point_t);
 			void setScale(motor_size_t);
-			virtual motor_point_t get(long double, long double);
+			virtual motor_point_t get(double, double);
 			virtual coord_point_t get(motor_point_t);
 		private:
 			motor_point_t center;
@@ -83,7 +83,7 @@ namespace CalX {
 			coord_scale_t getScale();
 			void setOffset(coord_point_t);
 			void setScale(coord_scale_t);
-			virtual motor_point_t get(long double, long double);
+			virtual motor_point_t get(double, double);
 			virtual coord_point_t get(motor_point_t);
 		private:
 			CoordTranslator *base;
@@ -99,7 +99,7 @@ namespace CalX {
 			virtual void setBase(CoordTranslator*);
 			coord_scale_t getScale();
 			void setScale(coord_scale_t);
-			virtual motor_point_t get(long double, long double);
+			virtual motor_point_t get(double, double);
 			virtual coord_point_t get(motor_point_t);
 		private:
 			CoordTranslator *base;
@@ -112,7 +112,7 @@ namespace CalX {
 			virtual ~PolarCoordTranslator();
 			virtual CoordTranslator *getBase();
 			virtual void setBase(CoordTranslator*);
-			virtual motor_point_t get(long double, long double);
+			virtual motor_point_t get(double, double);
 			virtual coord_point_t get(motor_point_t);
 		private:
 			CoordTranslator *base;
@@ -122,7 +122,7 @@ namespace CalX {
 		public:
 			ComplexCoordTranslator(CoordTranslator*);
 			virtual ~ComplexCoordTranslator();
-			virtual motor_point_t get(long double, long double);
+			virtual motor_point_t get(double, double);
 			virtual coord_point_t get(motor_point_t);
 			size_t getSize();
 			CoordTranslator* get(size_t);

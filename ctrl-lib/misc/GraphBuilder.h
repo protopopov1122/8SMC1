@@ -34,20 +34,20 @@ namespace CalX {
 	
 	class GraphBuilder {
 		public:
-			GraphBuilder(Node*, coord_point_t, coord_point_t, long double);
+			GraphBuilder(Node*, coord_point_t, coord_point_t, double);
 			virtual ~GraphBuilder();
 			
 			Node *getFunction();
 			coord_point_t getMinimum();
 			coord_point_t getMaximum();
-			long double getStep();
+			double getStep();
 			
 			ErrorCode build(SystemManager*, CoordPlane*, CoordTranslator*, float, TaskState*);
 		private:
 			Node *node;
 			coord_point_t min;
 			coord_point_t max;
-			long double step;
+			double step;
 	};
 }
 
