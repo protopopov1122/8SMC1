@@ -42,6 +42,11 @@
 
 namespace CalX {
 		
+	enum GCodeOpcode {
+		GCode_Jump = 0, GCode_Move = 1,
+		GCode_Clockwise_Arc = 2, GCode_CounterClockwise_Arc = 3
+	};	
+		
 	struct GCodeValue {
 		bool fract;
 		union {

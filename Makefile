@@ -94,6 +94,9 @@ CoordTask.o:
 CoordTaskWrapper.o:
 	$(CC) $(CFLAGS) -c ctrl-lib/task/CoordTaskWrapper.cpp
 
+GCodeCoordTask.o:
+	$(CC) $(CFLAGS) -c ctrl-lib/task/GCodeCoordTask.cpp
+
 BasicCoordTranslator.o:
 	$(CC) $(CFLAGS) -c ctrl-lib/translator/BasicCoordTranslator.cpp
 
@@ -186,9 +189,9 @@ $(OUTPUT).exe: $(OUTPUT).dll dev_8smc1.dll main.o
 	@mkdir -p $(BUILD)
 	$(CC) -o $(BUILD)/$(OUTPUT).exe main.o  $(LDFLAGS) -Wl,--library-path=$(BUILD) -ldev_8smc1 -l$(OUTPUT)
 
-$(OUTPUT).dll: CoordController.o CoordHandle.o DeviceController.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o InstrumentController.o CircleGenerator.o GCodeParser.o GraphBuilder.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o VirtualCoordPlane.o SystemManager.o CoordTask.o CoordTaskWrapper.o BasicCoordTranslator.o ComplexCoordTranslator.o LinearCoordTranslator.o LogarithmicCoordTranslator.o PolarCoordTranslator.o CLI.o DevCLI.o Device.o DeviceManager.o
+$(OUTPUT).dll: CoordController.o CoordHandle.o DeviceController.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o InstrumentController.o CircleGenerator.o GCodeParser.o GraphBuilder.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o VirtualCoordPlane.o SystemManager.o CoordTask.o CoordTaskWrapper.o GCodeCoordTask.o BasicCoordTranslator.o ComplexCoordTranslator.o LinearCoordTranslator.o LogarithmicCoordTranslator.o PolarCoordTranslator.o CLI.o DevCLI.o Device.o DeviceManager.o
 	@mkdir -p $(BUILD)
-	$(CC) -shared -o $(BUILD)/$(OUTPUT).dll CoordController.o CoordHandle.o DeviceController.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o InstrumentController.o CircleGenerator.o GCodeParser.o GraphBuilder.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o VirtualCoordPlane.o SystemManager.o CoordTask.o CoordTaskWrapper.o BasicCoordTranslator.o ComplexCoordTranslator.o LinearCoordTranslator.o LogarithmicCoordTranslator.o PolarCoordTranslator.o CLI.o DevCLI.o Device.o DeviceManager.o  $(LDFLAGS) -Wl,--out-implib,$(BUILD)/$(OUTPUT).a
+	$(CC) -shared -o $(BUILD)/$(OUTPUT).dll CoordController.o CoordHandle.o DeviceController.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o InstrumentController.o CircleGenerator.o GCodeParser.o GraphBuilder.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o VirtualCoordPlane.o SystemManager.o CoordTask.o CoordTaskWrapper.o GCodeCoordTask.o BasicCoordTranslator.o ComplexCoordTranslator.o LinearCoordTranslator.o LogarithmicCoordTranslator.o PolarCoordTranslator.o CLI.o DevCLI.o Device.o DeviceManager.o  $(LDFLAGS) -Wl,--out-implib,$(BUILD)/$(OUTPUT).a
 
 $(UI).exe: CalxActionQueue.o CalxApp.o CalxConsoleWidget.o CalxDebugConsole.o CalxFrame.o CalxPanel.o CalxCoordArcCtrl.o CalxCoordCtrl.o CalxCoordDialog.o CalxCoordFilter.o CalxCoordGraphCtrl.o CalxCoordLinearCtrl.o CalxCoordMiscCtrl.o CalxCoordOtherCtrl.o CalxCoordPanel.o CalxDeviceCtrl.o CalxDevicePanel.o CalxGcodeHandle.o CalxGcodeLoader.o CalxTaskPanel.o
 	@mkdir -p $(BUILD)

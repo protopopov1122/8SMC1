@@ -22,6 +22,8 @@
 #define CALX_CTRL_LIB_TASK_H_
 
 #include <vector>
+#include <iostream>
+#include <sstream>
 #include "ctrl-lib/plane/CoordPlane.h"
 #include "ctrl-lib/translator/CoordTranslator.h"
 #include "ctrl-lib/misc/GraphBuilder.h"
@@ -112,7 +114,7 @@ namespace CalX {
 	};
 
 	enum CoordTaskType {
-		ProgrammedTask, GraphTask, WrapperTask
+		ProgrammedTask, GraphTask, WrapperTask, GCodeTask
 	};
 	
 	class CoordTask : public TaskStep {
@@ -171,6 +173,19 @@ namespace CalX {
 			motor_point_t val_min;
 			motor_point_t val_max;
 			float val_speed;
+	};
+	
+	class GCodeCoordTask : public CoordTask {
+		public:
+			GCodeCoordTask(std::istream*, CoordTranslator*);
+			virtual ~GCodeCoordTask();
+			virtual ErrorCode perform(CoordPlane*, TaskParameters&, SystemManager*, TaskState*);
+			
+			std::string getGCode();
+			CoordTranslator *getTranslator();
+		private:
+			std::stringstream code;
+			CoordTranslator *translator;
 	};
 }
 

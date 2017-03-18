@@ -35,8 +35,12 @@ namespace CalX {
 			bool isEnabled();
 			void enable(bool);
 			void flipState();
+			
+			bool isRunnable();
+			void setRunnable(bool);
 		private:
 			Instrument *instr;
+			bool state;
 	};
 }
 

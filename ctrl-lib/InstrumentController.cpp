@@ -24,6 +24,7 @@ namespace CalX {
 	
 	InstrumentController::InstrumentController(Instrument *instr) {
 		this->instr = instr;
+		this->state = true;
 	}
 	
 	InstrumentController::~InstrumentController() {
@@ -43,10 +44,18 @@ namespace CalX {
 	}
 	
 	void InstrumentController::enable(bool e) {
-		this->instr->enable(e);
+		this->instr->enable(e && this->state);
 	}
 	
 	void InstrumentController::flipState() {
 		enable(!isEnabled());
+	}
+	
+	bool InstrumentController::isRunnable() {
+		return this->state;
+	}
+	
+	void InstrumentController::setRunnable(bool r) {
+		this->state = r;
 	}
 }
