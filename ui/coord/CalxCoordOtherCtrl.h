@@ -42,6 +42,7 @@ namespace CalXUI {
 				this->ctrl = ctrl;
 				init();
 			}
+			bool isInstrumentEnabled() {return enableInstrument->GetValue();}
 			TrailerId getTrailer() {return trailer->GetSelection()==0 ? TrailerId::Trailer1 : TrailerId::Trailer2;}
 			bool isLoggingActions() {return logActions->GetValue();}
 			bool isLoggingErrors() {return logActions->GetValue();}
@@ -65,6 +66,7 @@ namespace CalXUI {
 		private:
 			void init();
 			CalxCoordCtrl *ctrl;
+			wxCheckBox *enableInstrument;
 			wxChoice *trailer;
 			wxCheckBox *logActions;
 			wxCheckBox *logErrors;

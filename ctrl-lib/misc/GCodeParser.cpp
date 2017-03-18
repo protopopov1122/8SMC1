@@ -188,8 +188,7 @@ namespace CalX {
 		return com;
 	}
 	
-	CoordTask *gcode_translate(GCodeParser *parser, CoordTranslator *translator, SystemManager *sysman) {
-		ProgrammedCoordTask *task = sysman->createProgrammedTask();
+	CoordTask *gcode_translate(GCodeParser *parser, CoordTranslator *translator, ProgrammedCoordTask *task) {
 		coord_point_t last = {0, 0};
 		GCodeCommand *cmd = nullptr;
 		const int CHORD_COUNT = 100;
@@ -200,13 +199,13 @@ namespace CalX {
 				double y = cmd->hasArg('Y') ? cmd->getArg('Y').fractValue() : last.y;
 				motor_point_t real = translator->get(x, y);
 				switch (cmd->getCommand()) {
-					case 0:
+					case GCodeOpcode::GCode_Jump:
 						task->addStep(new JumpTaskStep(real, 1.0f));
 					break;
-					case 1:
+					case GCodeOpcode::GCode_Move:
 						task->addStep(new MoveTaskStep(real, 1.0f));
 					break;
-					case 2: {
+					case GCodeOpcode::GCode_Clockwise_Arc: {
 						double i = cmd->getArg('I').fractValue();
 						double j = cmd->getArg('J').fractValue();
 						motor_point_t center = translator->get(i, j);
@@ -214,7 +213,7 @@ namespace CalX {
 						step->setClockwise(true);
 						task->addStep(step);
 					} break;
-					case 3: {
+					case GCodeOpcode::GCode_CounterClockwise_Arc: {
 						double i = cmd->getArg('I').fractValue();
 						double j = cmd->getArg('J').fractValue();
 						motor_point_t center = translator->get(i, j);

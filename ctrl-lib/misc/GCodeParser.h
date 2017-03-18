@@ -102,7 +102,7 @@ namespace CalX {
 			std::set<char> PARAMETERS;
 	};
 	
-	CoordTask *gcode_translate(GCodeParser*, CoordTranslator*, SystemManager*);
+	CoordTask *gcode_translate(GCodeParser*, CoordTranslator*, ProgrammedCoordTask*);
 }
 
 #endif

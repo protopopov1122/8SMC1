@@ -43,44 +43,7 @@ namespace CalX {
 		GCodeLexer lexer(&ss);
 		GCodeParser parser(&lexer);
 		ProgrammedCoordTask task;
-		coord_point_t last = {0, 0};
-		GCodeCommand *cmd = nullptr;
-		const int CHORD_COUNT = 100;
-		while ((cmd = parser.nextCommand()) != nullptr) {
-			
-			if (cmd->getLetter() == 'G') {
-				double x = cmd->hasArg('X') ? cmd->getArg('X').fractValue() : last.x;
-				double y = cmd->hasArg('Y') ? cmd->getArg('Y').fractValue() : last.y;
-				motor_point_t real = translator->get(x, y);
-				switch (cmd->getCommand()) {
-					case GCodeOpcode::GCode_Jump:
-						task.addStep(new JumpTaskStep(real, 1.0f));
-					break;
-					case GCodeOpcode::GCode_Move:
-						task.addStep(new MoveTaskStep(real, 1.0f));
-					break;
-					case GCodeOpcode::GCode_Clockwise_Arc: {
-						double i = cmd->getArg('I').fractValue();
-						double j = cmd->getArg('J').fractValue();
-						motor_point_t center = translator->get(i, j);
-						RelArcTaskStep *step = new RelArcTaskStep(real, center, CHORD_COUNT, 1.0f);
-						step->setClockwise(true);
-						task.addStep(step);
-					} break;
-					case GCodeOpcode::GCode_CounterClockwise_Arc: {
-						double i = cmd->getArg('I').fractValue();
-						double j = cmd->getArg('J').fractValue();
-						motor_point_t center = translator->get(i, j);
-						RelArcTaskStep *step = new RelArcTaskStep(real, center, CHORD_COUNT, 1.0f);
-						step->setClockwise(false);
-						task.addStep(step);
-					} break;
-				}
-				last = {x, y};
-			}
-			
-			delete cmd;
-		}
+		gcode_translate(&parser, this->translator, &task);
 		
 		return task.perform(plane, prms, sysman, state);
 	}

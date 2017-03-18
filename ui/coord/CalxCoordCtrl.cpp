@@ -261,4 +261,8 @@ namespace CalXUI {
 	void CalxCoordCtrl::OnStopClick(wxCommandEvent &evt) {
 		this->queue->stopCurrent();
 	}
+	
+	void CalxCoordCtrl::OnInstrumentEnableClick(wxCommandEvent &evt) {
+		this->ctrl->getController()->getInstrument()->setRunnable(this->otherCtrl->isInstrumentEnabled());
+	}
 }

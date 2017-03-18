@@ -27,6 +27,11 @@ namespace CalXUI {
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(sizer);
 		
+		this->enableInstrument = new wxCheckBox(this, wxID_ANY, "Enable instrument");
+		sizer->Add(enableInstrument, 0, wxALL, 5);
+		enableInstrument->Bind(wxEVT_CHECKBOX, &CalxCoordCtrl::OnInstrumentEnableClick, ctrl);
+		this->enableInstrument->SetValue(ctrl->getHandle()->getController()->getInstrument()->isRunnable());
+		
 		wxPanel *calibratePanel = new wxPanel(this, wxID_ANY);
 		sizer->Add(calibratePanel, 0, wxALL, 5);
 		wxBoxSizer *calibrateSizer = new wxBoxSizer(wxHORIZONTAL);
