@@ -21,12 +21,15 @@
 #ifndef CALX_UI_CALX_COORD_DIALOG_H_
 #define CALX_UI_CALX_COORD_DIALOG_H_
 
+#include <string>
 #include "calx.h"
 #include <wx/choice.h>
 
 using namespace CalX;
 
 namespace CalXUI {
+	
+	extern std::string ABOUT_TEXT;
 	
 	class CalxCoordDialog : public wxDialog {
 		public:

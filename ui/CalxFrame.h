@@ -24,6 +24,7 @@
 #include <string>
 #include <iostream>
 #include "calx.h"
+#include <wx/menu.h>
 #include "CalxPanel.h"
 
 namespace CalXUI {
@@ -35,6 +36,10 @@ namespace CalXUI {
 			CalxPanel *getPanel();
 		private:
 			void OnClose(wxCloseEvent&);
+			void OnAboutMenuClick(wxCommandEvent&);
+			
+			wxMenuBar *menuBar;
+			wxMenu *aboutMenu;
 			
 			std::ostream *console;
 			CalxPanel *panel;

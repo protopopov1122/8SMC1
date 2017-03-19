@@ -28,6 +28,7 @@
 #include "coord/CalxCoordPanel.h"
 #include "dev/CalxDevicePanel.h"
 #include "CalxConsoleWidget.h"
+#include "CalxAboutDialog.h"
 
 namespace CalXUI {
 	CalxFrame::CalxFrame(std::string title)
@@ -49,6 +50,16 @@ namespace CalXUI {
 		this->console = new std::ostream(console);
 		
 		Bind(wxEVT_CLOSE_WINDOW, &CalxFrame::OnClose, this);
+		
+		this->menuBar = new wxMenuBar();
+		this->aboutMenu = new wxMenu();
+		wxMenuItem *aboutItem = new wxMenuItem(this->aboutMenu, wxID_ABOUT, "About");
+		this->aboutMenu->Append(aboutItem);
+		Bind( wxEVT_COMMAND_MENU_SELECTED, &CalxFrame::OnAboutMenuClick, this, 
+            wxID_ABOUT);
+		this->menuBar->Append(this->aboutMenu, "About");
+		SetMenuBar(this->menuBar);
+		
 		Layout();
 		Fit();
 	}
@@ -73,5 +84,11 @@ namespace CalXUI {
 		}
 		this->panel->Close(true);
 		Destroy();		
+	}
+	
+	void CalxFrame::OnAboutMenuClick(wxCommandEvent &evt) {
+			CalxAboutDialog *dialog = new CalxAboutDialog(this, wxID_ANY);
+			dialog->ShowModal();
+			dialog->Destroy();
 	}
 }
