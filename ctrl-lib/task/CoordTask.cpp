@@ -64,6 +64,15 @@ namespace CalX {
 	size_t ProgrammedCoordTask::getSubCount() {
 		return this->list.size();
 	}
+	
+	bool ProgrammedCoordTask::removeStep(size_t i) {
+		if (i >= this->list.size()) {
+			return false;
+		}
+		delete this->list.at(i);
+		this->list.erase(this->list.begin() + i);
+		return true;
+	}
 
 	MoveTaskStep::MoveTaskStep(motor_point_t pos, float spc, bool rel) : TaskStep::TaskStep() {
 		this->pos = pos;
@@ -86,6 +95,30 @@ namespace CalX {
 		}
 		state->work = false;
 		return code;
+	}
+	
+	motor_point_t MoveTaskStep::getPosition() {
+		return this->pos;
+	}
+	
+	float MoveTaskStep::getSpeed() {
+		return this->speed_coef;
+	}
+	
+	bool MoveTaskStep::isRelative() {
+		return this->rel;
+	}
+	
+	void MoveTaskStep::setPosition(motor_point_t dest) {
+		this->pos = dest;
+	}
+	
+	void MoveTaskStep::setSpeed(float sp) {
+		this->speed_coef = sp;
+	}
+	
+	void MoveTaskStep::setRelative(bool r) {
+		this->rel = r;
 	}
 
 	JumpTaskStep::JumpTaskStep(motor_point_t pos, float spc, bool rel) : TaskStep::TaskStep() {

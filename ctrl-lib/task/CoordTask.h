@@ -56,6 +56,14 @@ namespace CalX {
 			MoveTaskStep(motor_point_t, float, bool = false);
 			virtual ~MoveTaskStep();
 			virtual ErrorCode perform(CoordPlane*, TaskParameters&, SystemManager*, TaskState*);
+			
+			motor_point_t getPosition();
+			float getSpeed();
+			bool isRelative();
+			
+			void setPosition(motor_point_t);
+			void setSpeed(float);
+			void setRelative(bool);
 		private:
 			motor_point_t pos;
 			float speed_coef;
@@ -134,6 +142,7 @@ namespace CalX {
 			virtual ErrorCode perform(CoordPlane*, TaskParameters&, SystemManager*, TaskState*);
 			void addStep(TaskStep*);
 			size_t getSubCount();
+			bool removeStep(size_t);
 		private:
 			std::vector<TaskStep*> list;
 	};

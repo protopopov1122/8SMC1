@@ -22,7 +22,12 @@
 #define CALX_UI_CALX_TASK_HANDLE_H_
 
 #include <iostream>
+#include <vector>
 #include "CalxApp.h"
+#include <wx/listbox.h>
+#include <wx/checkbox.h>
+#include <wx/spinctrl.h>
+#include <wx/textctrl.h>
 #include "coord/CalxCoordFilter.h"
 
 using namespace CalX;
@@ -30,7 +35,7 @@ using namespace CalX;
 namespace CalXUI {
 	
 	enum CalxTaskType {
-		CalxGcode
+		CalxGcode, CalxProgrammed
 	};
 	
 	class CalxTaskHandle : public wxPanel {
@@ -63,6 +68,44 @@ namespace CalXUI {
 			
 			
 			CoordTask *task;
+	};
+	
+	class CalxTaskStepHandle : public wxPanel {
+		public:
+			CalxTaskStepHandle(wxWindow *win, wxWindowID id)
+				: wxPanel::wxPanel(win, id) {}
+			virtual void update() = 0;
+	};
+	
+	class CalxTaskLinearStepHandle : public CalxTaskStepHandle {
+		public:
+			CalxTaskLinearStepHandle(wxWindow*, wxWindowID);
+			MoveTaskStep *getTaskStep();
+			virtual void update();
+		private:
+			MoveTaskStep *step;
+			
+			wxSpinCtrl *xCoord;
+			wxSpinCtrl *yCoord;
+			wxTextCtrl *speed;
+			wxCheckBox *relative;
+	};
+	
+	class CalxProgrammedTaskHandle : public CalxTaskHandle {
+		public:
+			CalxProgrammedTaskHandle(wxWindow*, wxWindowID);
+			virtual CoordTask *getTask();
+			virtual void update();
+			void updateUI();
+		private:
+			void OnListClick(wxCommandEvent&);
+			void OnMoveAddClick(wxCommandEvent&);
+			void OnRemoveClick(wxCommandEvent&);
+			void OnExit(wxCloseEvent&);
+			ProgrammedCoordTask *task;
+			std::vector<CalxTaskStepHandle*> steps;
+			wxPanel *mainPanel;
+			wxListBox *stepList;
 	};
 }
 
