@@ -36,10 +36,8 @@ namespace CalXUI {
 		this->divisor->Append("8");
 		this->divisor->SetSelection(3);
 		this->relative = new wxCheckBox(this, wxID_ANY, "Relative");
-		wxButton *moveButton = new wxButton(this, wxID_ANY, "Move");
-		wxButton *jumpButton = new wxButton(this, wxID_ANY, "Jump");
-		moveButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnLinearMoveClick, ctrl);
-		jumpButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnLinearJumpClick, ctrl);
+		this->moveButton = new wxButton(this, wxID_ANY, "Move");
+		this->jumpButton = new wxButton(this, wxID_ANY, "Jump");
 		
 		sizer->Add(new wxStaticText(this, wxID_ANY, "Destination:"));
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""));

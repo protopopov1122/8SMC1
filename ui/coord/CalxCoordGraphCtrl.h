@@ -38,9 +38,8 @@ namespace CalXUI {
 	
 	class CalxCoordGraphCtrl : public wxPanel {
 		public:
-			CalxCoordGraphCtrl(CalxCoordCtrl *ctrl, wxWindow *win, wxWindowID id)
+			CalxCoordGraphCtrl(wxWindow *win, wxWindowID id)
 				: wxPanel::wxPanel(win, id) {
-				this->ctrl = ctrl;
 				init();
 			}
 			std::string getExpression() {return expr->GetValue().ToStdString();}
@@ -57,11 +56,11 @@ namespace CalXUI {
 				return this->translator->getTranslator();
 			}
 			int getSpeed() {return speed->GetValue();}
+			wxButton *getBuildButton() {return this->buildButton;}
 			void OnClose(wxCloseEvent&);
 		private:
 		
 			void init();
-			CalxCoordCtrl *ctrl;
 			wxTextCtrl *expr;
 			wxSpinCtrl *xmin;
 			wxSpinCtrl *xmax;
@@ -70,6 +69,7 @@ namespace CalXUI {
 			wxTextCtrl *step;
 			CalxCoordFilter *translator;
 			wxSpinCtrl *speed;
+			wxButton *buildButton;
 	};
 	
 }

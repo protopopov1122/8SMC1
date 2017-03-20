@@ -41,8 +41,7 @@ namespace CalXUI {
 		this->splitter = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1000, 200);
 		this->clockwise = new wxCheckBox(this, wxID_ANY, "Clockwise");
 		this->relative = new wxCheckBox(this, wxID_ANY, "Relative");
-		wxButton *moveButton = new wxButton(this, wxID_ANY, "Move");
-		moveButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnArcMoveClick, ctrl);
+		this->moveButton = new wxButton(this, wxID_ANY, "Move");
 		
 		
 		sizer->Add(new wxStaticText(this, wxID_ANY, "Destination:"));

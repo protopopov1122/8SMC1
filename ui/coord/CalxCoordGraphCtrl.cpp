@@ -40,8 +40,7 @@ namespace CalXUI {
 		this->ymax = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 10);
 		this->step = new wxTextCtrl(graphPanel, wxID_ANY, "1");
 		this->speed = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 4000, 4000);
-		wxButton *buildButton = new wxButton(graphPanel, wxID_ANY, "Build");
-		buildButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnGraphBuildClick, ctrl);
+		this->buildButton = new wxButton(graphPanel, wxID_ANY, "Build");
 		
 		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, "Function "), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		graphSizer->Add(expr, 0, wxEXPAND);

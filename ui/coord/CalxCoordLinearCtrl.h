@@ -37,9 +37,8 @@ namespace CalXUI {
 	
 	class CalxCoordLinearCtrl : public wxPanel {
 		public:
-			CalxCoordLinearCtrl(CalxCoordCtrl *ctrl, wxWindow *win, wxWindowID id)
+			CalxCoordLinearCtrl(wxWindow *win, wxWindowID id)
 				: wxPanel::wxPanel(win, id) {
-				this->ctrl = ctrl;
 				init();
 			}
 			int getCoordX() {return xCoord->GetValue();}
@@ -47,9 +46,12 @@ namespace CalXUI {
 			int getSpeed() {return speed->GetValue();}
 			int getDivisor() {return 1 << divisor->GetSelection();}
 			bool isRelative() {return relative->GetValue();}
+			wxButton *getMoveButton() {return this->moveButton;}
+			wxButton *getJumpButton() {return this->jumpButton;}
 		private:
 			void init();
-			CalxCoordCtrl *ctrl;
+			wxButton *moveButton;
+			wxButton *jumpButton;
 			wxSpinCtrl *xCoord;
 			wxSpinCtrl *yCoord;
 			wxSpinCtrl *speed;

@@ -82,15 +82,18 @@ namespace CalXUI {
 		wxStaticBox *linearBox = new wxStaticBox(linearPanel, wxID_ANY, "Linear movement");
 		wxStaticBoxSizer *linearSizer = new wxStaticBoxSizer(linearBox, wxHORIZONTAL);	
 		linearPanel->SetSizer(linearSizer);
-		this->linear = new CalxCoordLinearCtrl(this, linearPanel, wxID_ANY);
+		this->linear = new CalxCoordLinearCtrl(linearPanel, wxID_ANY);
 		linearSizer->Add(linear, 0, wxALL);
+		linear->getMoveButton()->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnLinearMoveClick, this);
+		linear->getJumpButton()->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnLinearJumpClick, this);
 		actionSubSizer->Add(linearPanel, 0, wxALL | wxEXPAND);
 		
 		wxPanel *arcPanel = new wxPanel(actionSubPanel, wxID_ANY);
 		wxStaticBox *arcBox = new wxStaticBox(arcPanel, wxID_ANY, "Arc movement");
 		wxStaticBoxSizer *arcSizer = new wxStaticBoxSizer(arcBox, wxHORIZONTAL);	
 		arcPanel->SetSizer(arcSizer);
-		this->arc = new CalxCoordArcCtrl(this, arcPanel, wxID_ANY);
+		this->arc = new CalxCoordArcCtrl(arcPanel, wxID_ANY);
+		arc->getMoveButton()->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnArcMoveClick, this);
 		arcSizer->Add(arc, 0, wxALL);
 		actionSubSizer->Add(arcPanel, 0, wxALL | wxEXPAND);
 		
@@ -98,8 +101,9 @@ namespace CalXUI {
 		wxStaticBox *graphBox = new wxStaticBox(graphPanel, wxID_ANY, "Function graph");
 		wxStaticBoxSizer *graphSizer = new wxStaticBoxSizer(graphBox, wxHORIZONTAL);	
 		graphPanel->SetSizer(graphSizer);
-		graphCtrl = new CalxCoordGraphCtrl(this, graphPanel, wxID_ANY);
+		graphCtrl = new CalxCoordGraphCtrl(graphPanel, wxID_ANY);
 		graphSizer->Add(graphCtrl, 0, wxALL);
+		graphCtrl->getBuildButton()->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnGraphBuildClick, this);
 		actionSubSizer->Add(graphPanel, 0, wxALL | wxEXPAND);
 		
 		wxPanel *actionSub2Panel = new wxPanel(actionPanel, wxID_ANY);
