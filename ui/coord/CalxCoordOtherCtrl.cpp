@@ -110,8 +110,16 @@ namespace CalXUI {
 		maxy->SetValue(ctrl->getPlaneValidator()->getMaximum().y);
 		speed->SetValue(ctrl->getPlaneValidator()->getMaxSpeed());
 		
-		wxButton *updateButton = new wxButton(this, wxID_ANY, "Update filters");
-		sizer->Add(updateButton);
-		updateButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
+		logActions->Bind(wxEVT_CHECKBOX, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
+		logErrors->Bind(wxEVT_CHECKBOX, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
+		xOffset->Bind(wxEVT_SPINCTRL, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
+		yOffset->Bind(wxEVT_SPINCTRL, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
+		xScale->Bind(wxEVT_TEXT, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
+		yScale->Bind(wxEVT_TEXT, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
+		minx->Bind(wxEVT_SPINCTRL, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
+		miny->Bind(wxEVT_SPINCTRL, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
+		maxx->Bind(wxEVT_SPINCTRL, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
+		maxy->Bind(wxEVT_SPINCTRL, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
+		speed->Bind(wxEVT_SPINCTRL, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
 	}
 }
