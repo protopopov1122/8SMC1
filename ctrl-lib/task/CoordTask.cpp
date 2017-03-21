@@ -73,6 +73,27 @@ namespace CalX {
 		this->list.erase(this->list.begin() + i);
 		return true;
 	}
+	
+	TaskStep *ProgrammedCoordTask::pollStep(size_t i) {
+		if (i >= this->list.size()) {
+			return nullptr;
+		}
+		TaskStep *step = this->list.at(i);
+		this->list.erase(this->list.begin() + i);
+		return step;
+	}
+	
+	bool ProgrammedCoordTask::insertStep(size_t i, TaskStep *step) {
+		if (i > this->list.size()) {
+			return false;
+		}
+		if (i == this->list.size()) {
+			this->list.push_back(step);
+		} else {
+			this->list.insert(this->list.begin() + i, step);
+		}
+		return true;
+	}
 
 	MoveTaskStep::MoveTaskStep(motor_point_t pos, float spc, bool rel) : TaskStep::TaskStep() {
 		this->pos = pos;
@@ -143,6 +164,30 @@ namespace CalX {
 		state->work = false;
 		return code;
 	}
+	
+	motor_point_t JumpTaskStep::getPosition() {
+		return this->pos;
+	}
+	
+	float JumpTaskStep::getSpeed() {
+		return this->speed_coef;
+	}
+	
+	bool JumpTaskStep::isRelative() {
+		return this->rel;
+	}
+	
+	void JumpTaskStep::setPosition(motor_point_t dest) {
+		this->pos = dest;
+	}
+	
+	void JumpTaskStep::setSpeed(float sp) {
+		this->speed_coef = sp;
+	}
+	
+	void JumpTaskStep::setRelative(bool r) {
+		this->rel = r;
+	}
 
 	CalibrateTaskStep::CalibrateTaskStep(TrailerId side) : TaskStep::TaskStep() {
 		this->side = side;
@@ -185,9 +230,53 @@ namespace CalX {
 		state->work = false;
 		return code;
 	}
+	
+	motor_point_t ArcTaskStep::getDestination() {
+		return this->dest;
+	}
+	
+	motor_point_t ArcTaskStep::getCenter() {
+		return this->center;
+	}
+	
+	int ArcTaskStep::getSplitter() {
+		return this->splitter;
+	}
+	
+	float ArcTaskStep::getSpeed() {
+		return this->speed;
+	}
+	
+	bool ArcTaskStep::isClockwise() {
+		return this->clockwise;
+	}
+
+	bool ArcTaskStep::isRelative() {
+		return this->rel;
+	}
+	
+	void ArcTaskStep::setDestination(motor_point_t p) {
+		this->dest = p;
+	}
+	
+	void ArcTaskStep::setCenter(motor_point_t p) {
+		this->center = p;
+	}
+	
+	void ArcTaskStep::setSplitter(int s) {
+		this->splitter = s;
+	}
+	
+	void ArcTaskStep::setSpeed(float s) {
+		this->speed = s;
+	}
 
 	void ArcTaskStep::setClockwise(bool c) {
 		this->clockwise = c;
+	}
+	
+	void ArcTaskStep::setRelative(bool r) {
+		this->rel = r;
 	}
 
 	RelArcTaskStep::RelArcTaskStep(motor_point_t dest, motor_point_t center, int sp, float speed, bool rel)

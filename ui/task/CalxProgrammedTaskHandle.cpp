@@ -39,6 +39,18 @@ namespace CalXUI {
 		wxButton *moveButton = new wxButton(listPanel, wxID_ANY, "Add move step");
 		listSizer->Add(moveButton, 0, wxALL | wxEXPAND);
 		moveButton->Bind(wxEVT_BUTTON, &CalxProgrammedTaskHandle::OnMoveAddClick, this);
+		wxButton *jumpButton = new wxButton(listPanel, wxID_ANY, "Add jump step");
+		listSizer->Add(jumpButton, 0, wxALL | wxEXPAND);
+		jumpButton->Bind(wxEVT_BUTTON, &CalxProgrammedTaskHandle::OnJumpAddClick, this);
+		wxButton *arcButton = new wxButton(listPanel, wxID_ANY, "Add arc step");
+		listSizer->Add(arcButton, 0, wxALL | wxEXPAND);
+		arcButton->Bind(wxEVT_BUTTON, &CalxProgrammedTaskHandle::OnArcAddClick, this);
+		moveUpButton = new wxButton(listPanel, wxID_ANY, "Move Up");
+		listSizer->Add(moveUpButton, 0, wxALL | wxEXPAND);
+		moveUpButton->Bind(wxEVT_BUTTON, &CalxProgrammedTaskHandle::OnMoveUpClick, this);
+		moveDownButton = new wxButton(listPanel, wxID_ANY, "Move Down");
+		listSizer->Add(moveDownButton, 0, wxALL | wxEXPAND);
+		moveDownButton->Bind(wxEVT_BUTTON, &CalxProgrammedTaskHandle::OnMoveDownClick, this);
 		wxButton *removeButton = new wxButton(listPanel, wxID_ANY, "Remove step");
 		listSizer->Add(removeButton, 0, wxALL | wxEXPAND);
 		removeButton->Bind(wxEVT_BUTTON, &CalxProgrammedTaskHandle::OnRemoveClick, this);
@@ -64,11 +76,15 @@ namespace CalXUI {
 	}
 	
 	void CalxProgrammedTaskHandle::updateUI() {
+		this->moveUpButton->Enable(false);
+		this->moveDownButton->Enable(false);
 		for (const auto& s : this->steps) {
 			s->Hide();
 		}
 		if (stepList->GetSelection() != wxNOT_FOUND) {
 			this->steps.at(stepList->GetSelection())->Show(true);
+			this->moveUpButton->Enable(stepList->GetSelection() > 0);
+			this->moveDownButton->Enable(stepList->GetSelection() < (int) (task->getSubCount() - 1));
 		}
 		mainPanel->Layout();
 		Layout();
@@ -85,6 +101,66 @@ namespace CalXUI {
 		stepList->Append("#" + std::to_string(steps.size()) + " Move");
 		stepList->SetSelection(steps.size() - 1);
 		task->addStep(handle->getTaskStep());
+		updateUI();
+	}
+	
+	void CalxProgrammedTaskHandle::OnJumpAddClick(wxCommandEvent &evt) {
+		CalxTaskLinearJumpStepHandle *handle = new CalxTaskLinearJumpStepHandle(this->mainPanel, wxID_ANY);
+		this->mainPanel->GetSizer()->Add(handle, 0, wxALL | wxEXPAND, 5);
+		steps.push_back(handle);
+		stepList->Append("#" + std::to_string(steps.size()) + " Jump");
+		stepList->SetSelection(steps.size() - 1);
+		task->addStep(handle->getTaskStep());
+		updateUI();
+	}
+	
+	void CalxProgrammedTaskHandle::OnArcAddClick(wxCommandEvent &evt) {
+		CalxTaskArcStepHandle *handle = new CalxTaskArcStepHandle(this->mainPanel, wxID_ANY);
+		this->mainPanel->GetSizer()->Add(handle, 0, wxALL | wxEXPAND, 5);
+		steps.push_back(handle);
+		stepList->Append("#" + std::to_string(steps.size()) + " Arc");
+		stepList->SetSelection(steps.size() - 1);
+		task->addStep(handle->getTaskStep());
+		updateUI();
+	}
+	
+	void CalxProgrammedTaskHandle::OnMoveUpClick(wxCommandEvent &evt) {
+		int sel = stepList->GetSelection();
+		if (sel == wxNOT_FOUND || sel == 0) {
+			return;
+		}
+		
+		TaskStep *step = task->pollStep(sel);
+		task->insertStep(sel - 1, step);
+		
+		CalxTaskStepHandle *handle = steps.at(sel);
+		steps.erase(steps.begin() + sel);
+		steps.insert(steps.begin() + sel - 1, handle);
+		
+		wxString lbl = stepList->GetString(sel);
+		stepList->Delete(sel);
+		stepList->Insert(lbl, sel - 1);
+		stepList->SetSelection(sel - 1);
+		updateUI();
+	}
+	
+	void CalxProgrammedTaskHandle::OnMoveDownClick(wxCommandEvent &evt) {
+		int sel = stepList->GetSelection();
+		if (sel == wxNOT_FOUND || sel == (int) (task->getSubCount() - 1)) {
+			return;
+		}
+		
+		TaskStep *step = task->pollStep(sel);
+		task->insertStep(sel + 1, step);
+		
+		CalxTaskStepHandle *handle = steps.at(sel);
+		steps.erase(steps.begin() + sel);
+		steps.insert(steps.begin() + sel + 1, handle);
+		
+		wxString lbl = stepList->GetString(sel);
+		stepList->Delete(sel);
+		stepList->Insert(lbl, sel + 1);
+		stepList->SetSelection(sel + 1);
 		updateUI();
 	}
 	

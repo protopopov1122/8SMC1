@@ -83,11 +83,49 @@ namespace CalXUI {
 			MoveTaskStep *getTaskStep();
 			virtual void update();
 		private:
+			void OnFieldChange(wxCommandEvent&);
+		
 			MoveTaskStep *step;
 			
 			wxSpinCtrl *xCoord;
 			wxSpinCtrl *yCoord;
-			wxTextCtrl *speed;
+			wxSpinCtrlDouble *speed;
+			wxCheckBox *relative;
+	};
+	
+	class CalxTaskLinearJumpStepHandle : public CalxTaskStepHandle {
+		public:
+			CalxTaskLinearJumpStepHandle(wxWindow*, wxWindowID);
+			JumpTaskStep *getTaskStep();
+			virtual void update();
+		private:
+			void OnFieldChange(wxCommandEvent&);
+		
+			JumpTaskStep *step;
+			
+			wxSpinCtrl *xCoord;
+			wxSpinCtrl *yCoord;
+			wxSpinCtrlDouble *speed;
+			wxCheckBox *relative;
+	};
+	
+	class CalxTaskArcStepHandle : public CalxTaskStepHandle {
+		public:
+			CalxTaskArcStepHandle(wxWindow*, wxWindowID);
+			ArcTaskStep *getTaskStep();
+			virtual void update();
+		private:
+			void OnFieldChange(wxCommandEvent&);	
+			
+			ArcTaskStep *step;
+			
+			wxSpinCtrl *destXCoord;
+			wxSpinCtrl *destYCoord;
+			wxSpinCtrl *cenXCoord;
+			wxSpinCtrl *cenYCoord;
+			wxSpinCtrlDouble *speed;
+			wxSpinCtrl *splitter;
+			wxCheckBox *clockwise;
 			wxCheckBox *relative;
 	};
 	
@@ -100,12 +138,19 @@ namespace CalXUI {
 		private:
 			void OnListClick(wxCommandEvent&);
 			void OnMoveAddClick(wxCommandEvent&);
+			void OnJumpAddClick(wxCommandEvent&);
+			void OnArcAddClick(wxCommandEvent&);
+			void OnMoveUpClick(wxCommandEvent&);
+			void OnMoveDownClick(wxCommandEvent&);
 			void OnRemoveClick(wxCommandEvent&);
 			void OnExit(wxCloseEvent&);
+			
 			ProgrammedCoordTask *task;
 			std::vector<CalxTaskStepHandle*> steps;
 			wxPanel *mainPanel;
 			wxListBox *stepList;
+			wxButton *moveUpButton;
+			wxButton *moveDownButton;
 	};
 }
 

@@ -75,6 +75,14 @@ namespace CalX {
 			JumpTaskStep(motor_point_t, float, bool = false);
 			virtual ~JumpTaskStep();
 			virtual ErrorCode perform(CoordPlane*, TaskParameters&, SystemManager*, TaskState*);
+			
+			motor_point_t getPosition();
+			float getSpeed();
+			bool isRelative();
+			
+			void setPosition(motor_point_t);
+			void setSpeed(float);
+			void setRelative(bool);
 		private:
 			motor_point_t pos;
 			float speed_coef;
@@ -95,7 +103,20 @@ namespace CalX {
 			ArcTaskStep(motor_point_t, motor_point_t, int, float, bool = false);
 			virtual ~ArcTaskStep();
 			virtual ErrorCode perform(CoordPlane*, TaskParameters&, SystemManager*, TaskState*);
+			
+			motor_point_t getDestination();
+			motor_point_t getCenter();
+			int getSplitter();
+			float getSpeed();
+			bool isClockwise();
+			bool isRelative();
+			
+			void setDestination(motor_point_t);
+			void setCenter(motor_point_t);
+			void setSplitter(int);
+			void setSpeed(float);
 			void setClockwise(bool);
+			void setRelative(bool);
 		private:
 			motor_point_t dest;
 			motor_point_t center;
@@ -143,6 +164,8 @@ namespace CalX {
 			void addStep(TaskStep*);
 			size_t getSubCount();
 			bool removeStep(size_t);
+			TaskStep *pollStep(size_t);
+			bool insertStep(size_t, TaskStep*);
 		private:
 			std::vector<TaskStep*> list;
 	};
