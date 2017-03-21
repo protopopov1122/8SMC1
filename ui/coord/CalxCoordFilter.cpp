@@ -90,6 +90,11 @@ namespace CalXUI {
 		sizer->Add(xscale, 0, wxALL | wxEXPAND);
 		sizer->Add(new wxStaticText(this, wxID_ANY, "Y scale:"), 0,wxRIGHT |  wxALIGN_RIGHT, 5);
 		sizer->Add(yscale, 0, wxALL | wxEXPAND);
+		
+		xoffset->Bind(wxEVT_TEXT, &CalxCoordLinearFilter::OnFieldChange, this);
+		yoffset->Bind(wxEVT_TEXT, &CalxCoordLinearFilter::OnFieldChange, this);
+		xscale->Bind(wxEVT_TEXT, &CalxCoordLinearFilter::OnFieldChange, this);
+		yscale->Bind(wxEVT_TEXT, &CalxCoordLinearFilter::OnFieldChange, this);
 				
 		Layout();
 	}
@@ -101,14 +106,36 @@ namespace CalXUI {
 	
 	void CalxCoordLinearFilter::updateData() {
 		double ox, oy, sx, sy;
-		this->xoffset->GetValue().ToDouble(&ox);
-		this->yoffset->GetValue().ToDouble(&oy);
-		this->xscale->GetValue().ToDouble(&sx);
-		this->yscale->GetValue().ToDouble(&sy);
+		if (!this->xoffset->GetValue().ToDouble(&ox)) {
+			wxMessageBox("Enter valid real value", "Error", wxICON_ERROR);
+			this->xoffset->SetValue(std::to_string(translator->getOffset().x));
+			return;
+		}
+		
+		if (!this->yoffset->GetValue().ToDouble(&oy)) {
+			wxMessageBox("Enter valid real value", "Error", wxICON_ERROR);
+			this->yoffset->SetValue(std::to_string(translator->getOffset().y));
+			return;
+		}
+		
+		if (!this->xscale->GetValue().ToDouble(&sx)) {
+			wxMessageBox("Enter valid real value", "Error", wxICON_ERROR);
+			this->xscale->SetValue(std::to_string(translator->getScale().x));
+			return;
+		}
+		if (!this->yscale->GetValue().ToDouble(&sy)) {
+			wxMessageBox("Enter valid real value", "Error", wxICON_ERROR);
+			this->yscale->SetValue(std::to_string(translator->getScale().y));
+			return;
+		}
 		coord_point_t offset = {ox, oy};
 		coord_scale_t scale = {sx, sy};
 		this->translator->setOffset(offset);
 		this->translator->setScale(scale);
+	}
+	
+	void CalxCoordLinearFilter::OnFieldChange(wxCommandEvent &evt) {
+		updateData();
 	}
 	
 	CalxCoordLogarithmicFilter::CalxCoordLogarithmicFilter(wxWindow *win, wxWindowID id, LogarithmicCoordTranslator *trans)
@@ -126,6 +153,9 @@ namespace CalXUI {
 		sizer->Add(xscale, 0, wxALL | wxEXPAND);
 		sizer->Add(new wxStaticText(this, wxID_ANY, "Y scale:"), 0,wxRIGHT |  wxALIGN_RIGHT, 5);
 		sizer->Add(yscale, 0, wxALL | wxEXPAND);
+		
+		xscale->Bind(wxEVT_TEXT, &CalxCoordLogarithmicFilter::OnFieldChange, this);
+		yscale->Bind(wxEVT_TEXT, &CalxCoordLogarithmicFilter::OnFieldChange, this);
 				
 		Layout();
 	}
@@ -137,10 +167,22 @@ namespace CalXUI {
 	
 	void CalxCoordLogarithmicFilter::updateData() {
 		double sx, sy;
-		this->xscale->GetValue().ToDouble(&sx);
-		this->yscale->GetValue().ToDouble(&sy);
+		if (!this->xscale->GetValue().ToDouble(&sx)) {
+			wxMessageBox("Enter valid real value", "Error", wxICON_ERROR);
+			this->xscale->SetValue(std::to_string(translator->getScale().x));
+			return;
+		}
+		if (!this->yscale->GetValue().ToDouble(&sy)) {
+			wxMessageBox("Enter valid real value", "Error", wxICON_ERROR);
+			this->yscale->SetValue(std::to_string(translator->getScale().y));
+			return;
+		}
 		coord_scale_t scale = {sx, sy};
 		this->translator->setScale(scale);
+	}
+	
+	void CalxCoordLogarithmicFilter::OnFieldChange(wxCommandEvent &evt) {
+		updateData();
 	}
 	
 	CalxCoordPolarFilter::CalxCoordPolarFilter(wxWindow *win, wxWindowID id, PolarCoordTranslator *polar)

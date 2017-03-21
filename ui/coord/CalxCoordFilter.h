@@ -55,6 +55,8 @@ namespace CalXUI {
 			virtual CoordTranslator *getTranslator();
 		private:
 			void updateData();
+			void OnFieldChange(wxCommandEvent&);
+			
 			LinearCoordTranslator *translator;
 			wxTextCtrl *xoffset;
 			wxTextCtrl *yoffset;
@@ -69,6 +71,8 @@ namespace CalXUI {
 			virtual CoordTranslator *getTranslator();
 		private:
 			void updateData();
+			void OnFieldChange(wxCommandEvent&);
+			
 			LogarithmicCoordTranslator *translator;
 			wxTextCtrl *xscale;
 			wxTextCtrl *yscale;
