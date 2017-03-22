@@ -32,8 +32,11 @@ namespace CalXUI {
 			CalxDevicePanel(wxWindow*, wxWindowID);
 			void stop();
 			bool isBusy();
+			void updateUI();
 		private:
 			void OnExit(wxCloseEvent&);
+			void OnCOMConnectDevice(wxCommandEvent&);
+			void OnCOMConnectInstrument(wxCommandEvent&);
 			std::vector<CalxDeviceCtrl*> devs;
 	};
 }

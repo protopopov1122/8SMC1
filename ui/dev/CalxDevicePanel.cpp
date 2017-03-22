@@ -18,11 +18,13 @@
 */
 
 
+#include <vector>
 #include "CalxApp.h"
 #include <wx/listctrl.h>
 #include <wx/sizer.h>
 #include "CalxDevicePanel.h"
 #include "CalxDeviceCtrl.h"
+#include "CalxCOMSelectDialog.h"
 
 namespace CalXUI {
 	
@@ -31,13 +33,37 @@ namespace CalXUI {
 			
 		CalxApp &app = wxGetApp();
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
-		for (size_t i = 0; i < app.getSystemManager()->getDeviceCount(); i++) {
-			CalxDeviceCtrl *ctrl = new CalxDeviceCtrl(this, wxID_ANY,
-				app.getSystemManager()->getDeviceController(i));
-			devs.push_back(ctrl);
-			sizer->Add(ctrl, 0, wxEXPAND | wxALL, 10);
+		
+		wxPanel *connectPanel = new wxPanel(this, wxID_ANY);
+		sizer->Add(connectPanel, 0, wxALL | wxEXPAND);
+		wxBoxSizer *connectSizer = new wxBoxSizer(wxHORIZONTAL);
+		connectPanel->SetSizer(connectSizer);
+		std::vector<DeviceConnectType> devConType;
+		std::vector<DeviceConnectType> instrConType;
+		app.getSystemManager()->getDeviceManager()->getConnectionTypes(devConType, instrConType);
+		for (const auto& devCon : devConType) {
+			switch (devCon) {
+				case DeviceConnectType::DeviceConnectCOM: {
+					wxButton *comButton = new wxButton(connectPanel, wxID_ANY, "Connect COM motor");
+					connectSizer->Add(comButton, 0, wxALL, 5);
+					comButton->Bind(wxEVT_BUTTON, &CalxDevicePanel::OnCOMConnectDevice, this);
+				} break;
+			}
 		}
+		for (const auto& instrCon : instrConType) {
+			switch (instrCon) {
+				case DeviceConnectType::DeviceConnectCOM: {
+					wxButton *comButton = new wxButton(connectPanel, wxID_ANY, "Connect COM instrument");
+					connectSizer->Add(comButton, 0, wxALL, 5);
+					comButton->Bind(wxEVT_BUTTON, &CalxDevicePanel::OnCOMConnectInstrument, this);
+				} break;
+			}
+		}
+		
 		this->SetSizer(sizer);
+		
+		updateUI();
+		Layout();
 	}
 	
 	void CalxDevicePanel::stop() {
@@ -57,5 +83,42 @@ namespace CalXUI {
 			}
 		}
 		return false;
+	}
+	
+	void CalxDevicePanel::updateUI() {
+		for (const auto& dev : devs) {
+			dev->stop();
+			dev->Close(true);
+		}
+		devs.clear();
+
+		CalxApp &app = wxGetApp();		
+		
+		for (size_t i = 0; i < app.getSystemManager()->getDeviceCount(); i++) {
+			CalxDeviceCtrl *ctrl = new CalxDeviceCtrl(this, wxID_ANY,
+				app.getSystemManager()->getDeviceController(i));
+			devs.push_back(ctrl);
+			GetSizer()->Add(ctrl, 0, wxEXPAND | wxALL, 10);
+		}
+	}
+	
+	void CalxDevicePanel::OnCOMConnectDevice(wxCommandEvent &evt) {
+		CalxApp &app = wxGetApp();		
+		CalxCOMSelectDialog *dialog = new CalxCOMSelectDialog(this, wxID_ANY);
+		dialog->ShowModal();
+		if (dialog->getPort() != -1) {
+			app.getSystemManager()->connectDevice(DeviceConnectType::DeviceConnectCOM, std::to_string(dialog->getPort()));
+		}
+		dialog->Destroy();
+	}
+	
+	void CalxDevicePanel::OnCOMConnectInstrument(wxCommandEvent &evt) {
+		CalxApp &app = wxGetApp();		
+		CalxCOMSelectDialog *dialog = new CalxCOMSelectDialog(this, wxID_ANY);
+		dialog->ShowModal();
+		if (dialog->getPort() != -1) {
+			app.getSystemManager()->connectInstrument(DeviceConnectType::DeviceConnectCOM, std::to_string(dialog->getPort()));
+		}
+		dialog->Destroy();
 	}
 }

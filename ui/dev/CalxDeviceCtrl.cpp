@@ -288,5 +288,6 @@ namespace CalXUI {
 		this->timer.Stop();
 		this->dev->removeEventListener(this->listener);
 		this->dev->stop();
+		Destroy();
 	}
 }

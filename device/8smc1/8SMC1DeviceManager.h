@@ -21,6 +21,8 @@ namespace CalX {
 			virtual void saveError();			// USMC_GetLastErr
 			virtual std::string getDeviceSerial(device_id_t);
 			virtual std::string getDeviceVersion(device_id_t);
+			virtual Device *connectDevice(DeviceConnectType, std::string);
+			virtual Instrument *connectInstrument(DeviceConnectType, std::string);
 		private:
 			USMC_Devices devs;
 	};

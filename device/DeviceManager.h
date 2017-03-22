@@ -34,6 +34,10 @@
 
 namespace CalX {
 
+	enum DeviceConnectType {
+		DeviceConnectCOM
+	};
+
 	class DeviceManager {
 		public:
 			virtual ~DeviceManager();
@@ -47,10 +51,19 @@ namespace CalX {
 			virtual Instrument *getInstrument(device_id_t);	// Get instrument by id
 			virtual bool hasError();				// Check errors
 			virtual std::string pollError();		// Return error from queue
+			
+			virtual Device *connectDevice(DeviceConnectType, std::string) = 0;
+			virtual Instrument *connectInstrument(DeviceConnectType, std::string) = 0;
+			virtual void getConnectionTypes(std::vector<DeviceConnectType>&, std::vector<DeviceConnectType>&);
+			virtual bool canDeviceConnect(DeviceConnectType);
+			virtual bool canInstrumentConnect(DeviceConnectType);
 		protected:
 			std::vector<std::string> error_queue;
 			std::vector<Device*> dev;
 			std::vector<Instrument*> instr;
+			
+			std::vector<DeviceConnectType> devConType;
+			std::vector<DeviceConnectType> instrConType;
 	};
 	
 	/* Used as exported function in Device API implementations.*/

@@ -32,7 +32,7 @@ namespace CalX {
 			this->dev.push_back(new CALXDevice((device_id_t) i, this));
 		}
 		
-		this->instr.push_back(new CALXInstrument(0, this));
+		this->instrConType.push_back(DeviceConnectType::DeviceConnectCOM);
 	}
 
 	CALXDeviceManager::~CALXDeviceManager() {
@@ -73,6 +73,19 @@ namespace CalX {
 			return "";
 		}
 		return std::string(this->devs.Version[id]);
+	}
+	
+	Device *CALXDeviceManager::connectDevice(DeviceConnectType type, std::string prms) {
+		return nullptr;
+	}
+	
+	Instrument *CALXDeviceManager::connectInstrument(DeviceConnectType type, std::string prms) {
+		if (type != DeviceConnectType::DeviceConnectCOM) {
+			return nullptr;
+		}
+		CALXInstrument *instr = new CALXInstrument((device_id_t) this->instr.size(), prms, this);
+		this->instr.push_back(instr);
+		return instr;
 	}
 	
 	extern "C" LIBEXPORT DeviceManager *getDeviceManager() {

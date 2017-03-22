@@ -139,4 +139,25 @@ namespace CalX {
 		return this->instr.at(i);
 	}
 	
+	DeviceController *SystemManager::connectDevice(DeviceConnectType type, std::string prms) {
+		Device *d = devman->connectDevice(type, prms);
+		if (d == nullptr) {
+			return nullptr;
+		}
+		devman->refresh();
+		DeviceController *ctrl = new DeviceController(d);
+		this->dev.push_back(ctrl);
+		return ctrl;
+	}
+	
+	InstrumentController *SystemManager::connectInstrument(DeviceConnectType type, std::string prms) {
+		Instrument *i = devman->connectInstrument(type, prms);
+		if (i == nullptr) {
+			return nullptr;
+		}
+		devman->refresh();
+		InstrumentController *ctrl = new InstrumentController(i);
+		this->instr.push_back(ctrl);
+		return ctrl;
+	}
 }

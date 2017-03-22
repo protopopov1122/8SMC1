@@ -23,7 +23,7 @@
 
 namespace CalX {
 	
-	CALXInstrument::CALXInstrument(device_id_t id, DeviceManager *devman) {
+	CALXInstrument::CALXInstrument(device_id_t id, std::string port, DeviceManager *devman) {
 		this->dev = id;
 		this->devman = devman;
 		this->state = false;

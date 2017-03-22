@@ -15,7 +15,7 @@ namespace CalX {
 	
 	class CALXInstrument : public Instrument {
 		public:
-			CALXInstrument(device_id_t, DeviceManager*);
+			CALXInstrument(device_id_t, std::string, DeviceManager*);
 			virtual ~CALXInstrument();
 			virtual bool enable(bool);
 			virtual bool enabled();

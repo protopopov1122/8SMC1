@@ -21,6 +21,7 @@
 #include "DeviceManager.h"
 #include <stdio.h>
 #include <iostream>
+#include <algorithm>
 
 
 namespace CalX {
@@ -61,6 +62,23 @@ namespace CalX {
 			return nullptr;
 		}
 		return this->instr.at(id);
+	}
+	
+	void DeviceManager::getConnectionTypes(std::vector<DeviceConnectType> &dev, std::vector<DeviceConnectType> &instr) {
+		for (const auto& d : this->devConType) {
+			dev.push_back(d);
+		}
+		for (const auto& i : this->instrConType) {
+			instr.push_back(i);
+		}
+	}
+	
+	bool DeviceManager::canDeviceConnect(DeviceConnectType d) {
+		return std::find(devConType.begin(), devConType.end(), d) != devConType.end();
+	}
+	
+	bool DeviceManager::canInstrumentConnect(DeviceConnectType d) {
+		return std::find(instrConType.begin(), instrConType.end(), d) != instrConType.end();
 	}
 	
 }
