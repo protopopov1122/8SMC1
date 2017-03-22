@@ -12,3 +12,9 @@ clean:
 	@rm -f *.pdb
 	@rm -f *.idb
 	@rm -f *.manifest
+	
+copy:
+	zip -r $(BUILD)/src.zip *.md Makefile device ctrl-lib ui winbuild misc cli tests COPYING COPYING.LESSER NOTICE
+	cp COPYING $(BUILD)
+	cp COPYING.LESSER $(BUILD)
+	cp NOTICE $(BUILD)

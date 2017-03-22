@@ -212,7 +212,7 @@ ifneq ($(WXLIB),)
 endif
 	$(CC) -o $(BUILD)/$(UI).exe CalxAboutDialog.o CalxActionQueue.o CalxApp.o CalxConsoleWidget.o CalxDebugConsole.o CalxFrame.o CalxPanel.o CalxCoordArcCtrl.o CalxCoordCtrl.o CalxCoordDialog.o CalxCoordFilter.o CalxCoordGraphCtrl.o CalxCoordLinearCtrl.o CalxCoordMiscCtrl.o CalxCoordOtherCtrl.o CalxCoordPanel.o CalxCOMSelectDialog.o CalxDeviceCtrl.o CalxDevicePanel.o CalxGcodeHandle.o CalxGcodeLoader.o CalxProgrammedTaskHandle.o CalxTaskPanel.o CalxTaskStepHandle.o  $(LDFLAGS) -Wl,--library-path=\$(BUILD) -lcalx `$(WX)/wx-config --libs`
 
-all: stub $(OUTPUT).dll dev_8smc1.dll $(OUTPUT).exe $(UI).exe
+all: $(OUTPUT).dll dev_8smc1.dll $(OUTPUT).exe $(UI).exe copy
 
 
 clean:
@@ -228,3 +228,9 @@ clean:
 	@rm -f *.pdb
 	@rm -f *.idb
 	@rm -f *.manifest
+	
+copy:
+	zip -r $(BUILD)/src.zip *.md Makefile device ctrl-lib ui winbuild misc cli tests COPYING COPYING.LESSER NOTICE
+	cp COPYING $(BUILD)
+	cp COPYING.LESSER $(BUILD)
+	cp NOTICE $(BUILD)

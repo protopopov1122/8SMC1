@@ -3,7 +3,7 @@
 # Append header to Makefile
 cat misc/mk-header 
 
-ALL='stub $(OUTPUT).dll '
+ALL='$(OUTPUT).dll '
 
 # Generate Device API handlers
 
@@ -64,7 +64,7 @@ printf "\t\$(CC) -o \$(BUILD)/\$(UI).exe "
 printf "$OBJS" 
 printf ' $(LDFLAGS) -Wl,--library-path=\$(BUILD) -lcalx `$(WX)/wx-config --libs`\n\n'
 
-printf "all: $ALL\n\n"
+printf "all: $ALL copy\n\n"
 
 # Append footer to Makefile
 cat misc/mk-footer 
