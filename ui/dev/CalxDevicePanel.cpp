@@ -65,6 +65,7 @@ namespace CalXUI {
 		
 		updateUI();
 		Layout();
+		Bind(wxEVT_CLOSE_WINDOW, &CalxDevicePanel::OnExit, this);
 	}
 	
 	void CalxDevicePanel::stop() {
@@ -78,7 +79,10 @@ namespace CalXUI {
 	}
 	
 	void CalxDevicePanel::OnExit(wxCloseEvent &evt) {
-		
+		for (const auto& instr : instrs) {
+			instr->Close(true);
+		}
+		Destroy();
 	}
 	
 	bool CalxDevicePanel::isBusy()  {
@@ -128,17 +132,25 @@ namespace CalXUI {
 	}
 	
 	void CalxDevicePanel::OnCOMConnectDevice(wxCommandEvent &evt) {
+		if (isBusy()) {
+			wxMessageBox("Devices are busy", "Error", wxICON_ERROR);
+			return;
+		}
 		CalxApp &app = wxGetApp();		
 		CalxCOMSelectDialog *dialog = new CalxCOMSelectDialog(this, wxID_ANY);
 		dialog->ShowModal();
 		if (dialog->getPort() != -1) {
 			app.getSystemManager()->connectDevice(DeviceConnectType::DeviceConnectCOM, std::to_string(dialog->getPort()));
+			updateUI();
 		}
 		dialog->Destroy();
-		updateUI();
 	}
 	
 	void CalxDevicePanel::OnCOMConnectInstrument(wxCommandEvent &evt) {
+		if (isBusy()) {
+			wxMessageBox("Devices are busy", "Error", wxICON_ERROR);
+			return;
+		}
 		CalxApp &app = wxGetApp();		
 		CalxCOMSelectDialog *dialog = new CalxCOMSelectDialog(this, wxID_ANY);
 		dialog->ShowModal();

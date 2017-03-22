@@ -55,6 +55,10 @@ namespace CalXUI {
 		this->yListener = new CalxCoordDeviceListener(this);
 		this->ctrl->getController()->getXAxis()->addEventListener(this->xListener);
 		this->ctrl->getController()->getYAxis()->addEventListener(this->yListener);
+		if (this->ctrl->getController()->getInstrument() != nullptr) {
+			this->instrListener = new CalxCoordInstrumentListener(this);
+			this->ctrl->getController()->getInstrument()->addEventListener(this->instrListener);
+		}
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		this->SetSizer(sizer);
 		
@@ -246,6 +250,9 @@ namespace CalXUI {
 		this->ctrl->removeEventListener(this->listener);
 		this->ctrl->getController()->getXAxis()->removeEventListener(this->xListener);
 		this->ctrl->getController()->getYAxis()->removeEventListener(this->yListener);
+		if (this->ctrl->getController()->getInstrument() != nullptr) {
+			this->ctrl->getController()->getInstrument()->removeEventListener(this->instrListener);
+		}
 		wxGetApp().getSystemManager()->removeCoord(ctrl->getID());
 		
 		this->linear->Close(true);

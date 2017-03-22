@@ -51,6 +51,14 @@ namespace CalX {
 			virtual void rolled(MotorRollEvent&) {}
 	};
 	
+	class InstrumentEventListener {
+		public:
+			virtual ~InstrumentEventListener() {}
+			virtual void use() {}
+			virtual void unuse() {}
+			virtual void stateChanged(bool state, bool enabled) {}
+	};
+	
 	struct CoordMoveEvent {
 		motor_point_t destination;
 		float speed;

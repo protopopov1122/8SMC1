@@ -48,7 +48,7 @@ namespace CalXUI {
 		getCoords()->stop();
 		getDevices()->stop();
 		
-		wxMilliSleep(100);
+		wxMilliSleep(400);
 		
 		getCoords()->Close(true);
 		getDevices()->Close(true);

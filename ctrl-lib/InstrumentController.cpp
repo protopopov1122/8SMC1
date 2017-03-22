@@ -18,6 +18,7 @@
 */
 
 
+#include <algorithm>
 #include "InstrumentController.h"
 
 namespace CalX {
@@ -45,6 +46,7 @@ namespace CalX {
 	
 	void InstrumentController::enable(bool e) {
 		this->instr->enable(e && this->state);
+		sendStateChanged();
 	}
 	
 	void InstrumentController::flipState() {
@@ -59,6 +61,36 @@ namespace CalX {
 		this->state = r;
 		if (!this->state) {
 			enable(false);
+		}
+		sendStateChanged();
+	}
+	
+	void InstrumentController::addEventListener(InstrumentEventListener *l) {
+		this->listeners.push_back(l);
+	}
+	
+	void InstrumentController::removeEventListener(InstrumentEventListener *l) {
+		this->listeners.erase(
+			std::remove(this->listeners.begin(), this->listeners.end(),
+				l), this->listeners.end());
+		delete l;
+	}
+	
+	void InstrumentController::use() {
+		for (const auto& l : this->listeners) {
+			l->use();
+		}
+	}
+	
+	void InstrumentController::unuse() {
+		for (const auto& l : this->listeners) {
+			l->unuse();
+		}
+	}
+	
+	void InstrumentController::sendStateChanged() {
+		for (const auto& l : this->listeners) {
+			l->stateChanged(this->isRunnable(), this->isEnabled());
 		}
 	}
 }

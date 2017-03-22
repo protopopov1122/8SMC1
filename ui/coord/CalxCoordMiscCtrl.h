@@ -60,6 +60,16 @@ namespace CalXUI {
 			CalxCoordCtrl *ctrl;
 	};
 	
+	class CalxCoordInstrumentListener : public InstrumentEventListener {
+		public:
+			CalxCoordInstrumentListener(CalxCoordCtrl*);
+			virtual ~CalxCoordInstrumentListener();
+			virtual void use();
+			virtual void unuse();
+		private:
+			CalxCoordCtrl *ctrl;
+	};
+	
 	
 	class CalxCoordTimer : public wxTimer {
 		public:

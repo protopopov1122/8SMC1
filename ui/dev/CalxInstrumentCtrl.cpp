@@ -23,11 +23,84 @@
 
 namespace CalXUI {
 	
+	class CalxInstrumentEventListener : public InstrumentEventListener  {
+		public:
+			CalxInstrumentEventListener(CalxInstrumentCtrl *ctrl) {
+				this->ctrl = ctrl;
+				this->used = 0;
+			}
+			
+			virtual void use() {
+				if (used == 0) {
+					ctrl->Enable(false);
+				}
+				used++;
+			}
+			
+			virtual void unuse() {
+				used--;
+				if (used == 0) {
+					ctrl->Enable(true);
+				}
+			}
+		private:
+			CalxInstrumentCtrl *ctrl;
+			int used;
+	};
+	
+	class CalxInstrumentTimer : public wxTimer {
+		public:
+			CalxInstrumentTimer(CalxInstrumentCtrl *ctrl) {
+				this->ctrl = ctrl;
+			}
+			
+			virtual void Notify() {
+				ctrl->updateUI();
+			}
+		private:
+			CalxInstrumentCtrl *ctrl;
+	};
+	
+	class CalxInstrumentEnableAction : public CalxAction {
+		public:
+			CalxInstrumentEnableAction(InstrumentController *ctrl) {
+				this->ctrl = ctrl;
+			}
+			
+			virtual void perform(SystemManager *sysman) {
+				ctrl->flipState();
+			}
+			
+			virtual void stop() {
+				
+			}
+		private:
+			InstrumentController *ctrl;
+	};
+	
+	class CalxInstrumentStateAction : public CalxAction {
+		public:
+			CalxInstrumentStateAction(InstrumentController *ctrl) {
+				this->ctrl = ctrl;
+			}
+			
+			virtual void perform(SystemManager *sysman) {
+				ctrl->setRunnable(!ctrl->isRunnable());
+			}
+			
+			virtual void stop() {
+				
+			}
+		private:
+			InstrumentController *ctrl;
+	};
+	
 	CalxInstrumentCtrl::CalxInstrumentCtrl(wxWindow *win, wxWindowID id, InstrumentController *ctrl)
 		: wxPanel::wxPanel(win, id) {
 			
 		this->ctrl = ctrl;
 		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
+		this->listener = new CalxInstrumentEventListener(this);
 		
 		wxStaticBox *box = new wxStaticBox(this, wxID_ANY, "Instrument #" + std::to_string(ctrl->getID()));
 		wxStaticBoxSizer *sizer = new wxStaticBoxSizer(box, wxHORIZONTAL);
@@ -54,7 +127,10 @@ namespace CalXUI {
 		updateUI();
 		Layout();
 		
+		ctrl->addEventListener(listener);
 		this->queue->Run();
+		this->timer = new CalxInstrumentTimer(this);
+		timer->Start(100);
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxInstrumentCtrl::OnExit, this);
 	}
 	
@@ -70,16 +146,18 @@ namespace CalXUI {
 	}
 	
 	void CalxInstrumentCtrl::OnExit(wxCloseEvent &evt) {
+		timer->Stop();
+		delete timer;
+		ctrl->removeEventListener(listener);
+		delete this->queue;
 		Destroy();
 	}
 	
 	void CalxInstrumentCtrl::OnEnableButton(wxCommandEvent &evt) {
-		ctrl->flipState();
-		updateUI();
+		queue->addAction(new CalxInstrumentEnableAction(this->ctrl));
 	}
 	
 	void CalxInstrumentCtrl::OnStateButton(wxCommandEvent &evt) {
-		ctrl->setRunnable(!ctrl->isRunnable());
-		updateUI();
+		queue->addAction(new CalxInstrumentStateAction(this->ctrl));
 	}
 }

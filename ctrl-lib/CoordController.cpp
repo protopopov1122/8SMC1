@@ -116,6 +116,7 @@ namespace CalX {
 		
 		if (this->instr != nullptr && sync) {
 			this->instr->enable(true);
+			this->instr->use();
 		}
 		
 		CoordMoveEvent evt = {point, speed, div, sync};
@@ -130,6 +131,7 @@ namespace CalX {
 		
 					if (this->instr != nullptr && sync) {
 						this->instr->enable(false);
+						this->instr->unuse();
 					}
 					
 					MotorErrorEvent merrevt = {code};
@@ -151,6 +153,7 @@ namespace CalX {
 		
 					if (this->instr != nullptr && sync) {
 						this->instr->enable(false);
+						this->instr->unuse();
 					}
 					
 					MotorErrorEvent merrevt = {code};
@@ -168,6 +171,7 @@ namespace CalX {
 		
 		if (this->instr != nullptr && sync) {
 			this->instr->enable(false);
+			this->instr->unuse();
 		}
 		xAxis->sendMovedEvent(xmevt);
 		yAxis->sendMovedEvent(ymevt);
@@ -206,6 +210,9 @@ namespace CalX {
 		bool xpr = false;
 		bool ypr = false;
 		MotorRollEvent mevt = {tr};
+		if (this->instr != nullptr) {
+			this->instr->use();
+		}
 		xAxis->use();
 		yAxis->use();
 		xAxis->sendRollingEvent(mevt);
@@ -259,6 +266,9 @@ namespace CalX {
 		ROLL_SPEED, ROLL_DIV);
 		xAxis->sendRolledEvent(mevt);
 		yAxis->sendRolledEvent(mevt);
+		if (this->instr != nullptr) {
+			this->instr->unuse();
+		}
 		xAxis->unuse();
 		yAxis->unuse();
 		sendCalibratedEvent(evt);
@@ -298,6 +308,9 @@ namespace CalX {
 		if (!work) {
 			return ErrorCode::NoError;
 		}
+		if (this->instr != nullptr) {
+			this->instr->use();
+		}
 		xAxis->use();
 		yAxis->use();
 		use();
@@ -313,6 +326,9 @@ namespace CalX {
 			if (count++ % splitter == 0) {
 				ErrorCode err = this->move(pnt, speed, div, true);
 				if (err != ErrorCode::NoError) {
+					if (this->instr != nullptr) {
+						this->instr->unuse();
+					}
 					xAxis->unuse();
 					yAxis->unuse();
 					unuse();
@@ -322,6 +338,9 @@ namespace CalX {
 			}
 		} while (abs(dest.x - pnt.x) > COMPARISON_RADIUS ||
 			abs(dest.y - pnt.y) > COMPARISON_RADIUS);
+		if (this->instr != nullptr) {
+			this->instr->unuse();
+		}
 		xAxis->unuse();
 		yAxis->unuse();
 		unuse();
@@ -404,6 +423,9 @@ namespace CalX {
 		}
 		xAxis->use();
 		yAxis->use();
+		if (this->instr != nullptr) {
+			this->instr->use();
+		}
 	}
 	
 	void CoordController::unuse() {
@@ -412,6 +434,9 @@ namespace CalX {
 		}
 		xAxis->unuse();
 		yAxis->unuse();
+		if (this->instr != nullptr) {
+			this->instr->unuse();
+		}
 	}
 	
 	void CoordController::stop() {

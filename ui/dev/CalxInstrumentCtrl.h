@@ -23,7 +23,9 @@
 
 #include "CalxApp.h"
 #include <wx/stattext.h>
+#include <wx/timer.h>
 #include "CalxActionQueue.h"
+#include <iostream>
 
 namespace CalXUI {
 	
@@ -33,7 +35,7 @@ namespace CalXUI {
 			void stop();
 			void updateUI();
 			bool isBusy() {
-				return !queue->isEmpty();
+				return !queue->isEmpty() || !IsEnabled();
 			}
 		private:
 			void OnExit(wxCloseEvent&);
@@ -44,7 +46,9 @@ namespace CalXUI {
 			wxButton *enabledButton;
 		
 			CalxActionQueue *queue;
-			InstrumentController *ctrl;			
+			InstrumentController *ctrl;
+			InstrumentEventListener *listener;
+			wxTimer *timer;
 	};
 }
 

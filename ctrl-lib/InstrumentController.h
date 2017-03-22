@@ -21,8 +21,10 @@
 #ifndef CALX_CTRL_LIB_INSTRUMENT_CONTROLLER_H_
 #define CALX_CTRL_LIB_INSTRUMENT_CONTROLLER_H_
 
+#include <vector>
 #include "device/DeviceManager.h"
 #include "CtrlCore.h"
+#include "EventListener.h"
 
 namespace CalX {
 	
@@ -38,9 +40,17 @@ namespace CalX {
 			
 			bool isRunnable();
 			void setRunnable(bool);
+			
+			void addEventListener(InstrumentEventListener*);
+			void removeEventListener(InstrumentEventListener*);
+			void use();
+			void unuse();
+		protected:
+			void sendStateChanged();
 		private:
 			Instrument *instr;
 			bool state;
+			std::vector<InstrumentEventListener*> listeners;
 	};
 }
 

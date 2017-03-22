@@ -55,6 +55,22 @@ namespace CalXUI {
 	void CalxCoordDeviceListener::unuse() {
 		ctrl->unuse();
 	}
+	
+	CalxCoordInstrumentListener::CalxCoordInstrumentListener(CalxCoordCtrl *ctrl) {
+		this->ctrl = ctrl;
+	}
+	
+	CalxCoordInstrumentListener::~CalxCoordInstrumentListener() {
+		
+	}
+	
+	void CalxCoordInstrumentListener::use() {
+		ctrl->use();
+	}
+	
+	void CalxCoordInstrumentListener::unuse() {
+		ctrl->unuse();
+	}
 		
 	
 	CalxCoordMoveAction::CalxCoordMoveAction(CalxCoordCtrl *ctrl, CoordHandle *handle, bool jump, bool relative, motor_point_t dest, float speed, int div) {
