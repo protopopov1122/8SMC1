@@ -24,6 +24,7 @@
 #include <wx/sizer.h>
 #include "CalxDevicePanel.h"
 #include "CalxDeviceCtrl.h"
+#include "CalxInstrumentCtrl.h"
 #include "CalxCOMSelectDialog.h"
 
 namespace CalXUI {
@@ -70,6 +71,10 @@ namespace CalXUI {
 		for (const auto& dev : this->devs) {
 			dev->stop();
 		}
+		
+		for (const auto& instr : this->instrs) {
+			instr->stop();
+		}
 	}
 	
 	void CalxDevicePanel::OnExit(wxCloseEvent &evt) {
@@ -82,6 +87,11 @@ namespace CalXUI {
 				return true;
 			}
 		}
+		for (const auto& i : instrs) {
+			if (i->isBusy()) {
+				return true;
+			}
+		}
 		return false;
 	}
 	
@@ -91,6 +101,12 @@ namespace CalXUI {
 			dev->Close(true);
 		}
 		devs.clear();
+		
+		for (const auto& instr : instrs) {
+			instr->stop();
+			instr->Close(true);
+		}
+		instrs.clear();
 
 		CalxApp &app = wxGetApp();		
 		
@@ -99,7 +115,16 @@ namespace CalXUI {
 				app.getSystemManager()->getDeviceController(i));
 			devs.push_back(ctrl);
 			GetSizer()->Add(ctrl, 0, wxEXPAND | wxALL, 10);
+		}	
+		
+		for (size_t i = 0; i < app.getSystemManager()->getInstrumentCount(); i++) {
+			CalxInstrumentCtrl *ctrl = new CalxInstrumentCtrl(this, wxID_ANY,
+				app.getSystemManager()->getInstrumentController(i));
+			instrs.push_back(ctrl);
+			GetSizer()->Add(ctrl, 0, wxEXPAND | wxALL, 10);
 		}
+
+		Layout();
 	}
 	
 	void CalxDevicePanel::OnCOMConnectDevice(wxCommandEvent &evt) {
@@ -110,6 +135,7 @@ namespace CalXUI {
 			app.getSystemManager()->connectDevice(DeviceConnectType::DeviceConnectCOM, std::to_string(dialog->getPort()));
 		}
 		dialog->Destroy();
+		updateUI();
 	}
 	
 	void CalxDevicePanel::OnCOMConnectInstrument(wxCommandEvent &evt) {
@@ -120,5 +146,6 @@ namespace CalXUI {
 			app.getSystemManager()->connectInstrument(DeviceConnectType::DeviceConnectCOM, std::to_string(dialog->getPort()));
 		}
 		dialog->Destroy();
+		updateUI();
 	}
 }

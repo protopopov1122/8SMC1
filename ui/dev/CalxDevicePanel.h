@@ -26,6 +26,7 @@
 namespace CalXUI {
 	
 	class CalxDeviceCtrl; // Forward referencing
+	class CalxInstrumentCtrl; // Forward referencing
 	
 	class CalxDevicePanel : public wxPanel {
 		public:
@@ -38,6 +39,7 @@ namespace CalXUI {
 			void OnCOMConnectDevice(wxCommandEvent&);
 			void OnCOMConnectInstrument(wxCommandEvent&);
 			std::vector<CalxDeviceCtrl*> devs;
+			std::vector<CalxInstrumentCtrl*> instrs;
 	};
 }
 

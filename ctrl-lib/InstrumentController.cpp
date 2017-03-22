@@ -57,5 +57,8 @@ namespace CalX {
 	
 	void InstrumentController::setRunnable(bool r) {
 		this->state = r;
+		if (!this->state) {
+			enable(false);
+		}
 	}
 }
