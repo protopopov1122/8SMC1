@@ -13,20 +13,20 @@ namespace CalX {
 	
 	// Temporary stub implementation of instrument
 	
-	class CALXInstrument : public Instrument {
+	class _8SMC1Instrument : public Instrument {
 		public:
-			CALXInstrument(device_id_t, std::string, DeviceManager*);
-			virtual ~CALXInstrument();
+			_8SMC1Instrument(device_id_t, std::string, DeviceManager*);
+			virtual ~_8SMC1Instrument();
 			virtual bool enable(bool);
 			virtual bool enabled();
 		private:
 			bool state;
 	};
 	
-	class CALXDevice : public Device {
+	class _8SMC1Device : public Device {
 		public:
-			CALXDevice(device_id_t, DeviceManager*);
-			virtual ~CALXDevice();
+			_8SMC1Device(device_id_t, DeviceManager*);
+			virtual ~_8SMC1Device();
 			/* Methods that implement Device interface */
 			virtual int getPosition();		// CurPos
 			virtual Power getPowerState();		// Power & FullPower

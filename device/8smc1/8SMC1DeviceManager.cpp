@@ -25,17 +25,17 @@
 
 namespace CalX {
 	
-	CALXDeviceManager::CALXDeviceManager()
+	_8SMC1DeviceManager::_8SMC1DeviceManager()
 		: DeviceManager::DeviceManager() {
 		this->refresh();
 		for (size_t i = 0; i < devs.NOD; i++) {
-			this->dev.push_back(new CALXDevice((device_id_t) i, this));
+			this->dev.push_back(new _8SMC1Device((device_id_t) i, this));
 		}
 		
 		this->instrConType.push_back(DeviceConnectType::DeviceConnectCOM);
 	}
 
-	CALXDeviceManager::~CALXDeviceManager() {
+	_8SMC1DeviceManager::~_8SMC1DeviceManager() {
 		for (size_t i = 0; i < this->dev.size(); i++) {
 			delete this->dev.at(i);
 		}
@@ -48,47 +48,47 @@ namespace CalX {
 		}
 	}
 
-	void CALXDeviceManager::refresh() {
+	void _8SMC1DeviceManager::refresh() {
 		if (USMC_Init(this->devs)) {
 			saveError();
 		}
 	}
 
-	void CALXDeviceManager::saveError() {
+	void _8SMC1DeviceManager::saveError() {
 		char er[101];
 		USMC_GetLastErr(er,100);
 		er[100] = '\0';
 		this->error_queue.push_back(std::string(er));
 	}
 
-	std::string CALXDeviceManager::getDeviceSerial(device_id_t id) {
+	std::string _8SMC1DeviceManager::getDeviceSerial(device_id_t id) {
 		if (id >= this->devs.NOD) {
 			return "";
 		}
 		return std::string(this->devs.Serial[id]);
 	}
 
-	std::string CALXDeviceManager::getDeviceVersion(device_id_t id) {
+	std::string _8SMC1DeviceManager::getDeviceVersion(device_id_t id) {
 		if (id >= this->devs.NOD) {
 			return "";
 		}
 		return std::string(this->devs.Version[id]);
 	}
 	
-	Device *CALXDeviceManager::connectDevice(DeviceConnectType type, std::string prms) {
+	Device *_8SMC1DeviceManager::connectDevice(DeviceConnectType type, std::string prms) {
 		return nullptr;
 	}
 	
-	Instrument *CALXDeviceManager::connectInstrument(DeviceConnectType type, std::string prms) {
+	Instrument *_8SMC1DeviceManager::connectInstrument(DeviceConnectType type, std::string prms) {
 		if (type != DeviceConnectType::DeviceConnectCOM) {
 			return nullptr;
 		}
-		CALXInstrument *instr = new CALXInstrument((device_id_t) this->instr.size(), prms, this);
+		_8SMC1Instrument *instr = new _8SMC1Instrument((device_id_t) this->instr.size(), prms, this);
 		this->instr.push_back(instr);
 		return instr;
 	}
 	
 	extern "C" LIBEXPORT DeviceManager *getDeviceManager() {
-		return new CALXDeviceManager();
+		return new _8SMC1DeviceManager();
 	}
 }

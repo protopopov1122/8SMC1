@@ -23,27 +23,27 @@
 
 namespace CalX {
 	
-	CALXInstrument::CALXInstrument(device_id_t id, std::string port, DeviceManager *devman) {
+	_8SMC1Instrument::_8SMC1Instrument(device_id_t id, std::string port, DeviceManager *devman) {
 		this->dev = id;
 		this->devman = devman;
 		this->state = false;
 	}
 	
-	CALXInstrument::~CALXInstrument() {
+	_8SMC1Instrument::~_8SMC1Instrument() {
 		
 	}
 	
-	bool CALXInstrument::enable(bool en) {
+	bool _8SMC1Instrument::enable(bool en) {
 		std::cout << "Instrument #" << dev << " " << (en ? "enabled" : "disabled") << std::endl;
 		state = en;
 		return true;
 	}
 	
-	bool CALXInstrument::enabled() {
+	bool _8SMC1Instrument::enabled() {
 		return state;
 	}
 	
-	CALXDevice::CALXDevice(device_id_t dev, DeviceManager *devman) {
+	_8SMC1Device::_8SMC1Device(device_id_t dev, DeviceManager *devman) {
 		this->dev = dev;
 		this->devman = devman;
 		this->speed = 1500;
@@ -56,19 +56,19 @@ namespace CalX {
 		this->updateParameters();
 	}
 
-	CALXDevice::~CALXDevice() {
+	_8SMC1Device::~_8SMC1Device() {
 
 	}
 
-	bool CALXDevice::isAutoSaving() {
+	bool _8SMC1Device::isAutoSaving() {
 		return this->autoSaveConfig;
 	}
 
-	void CALXDevice::setAutoSave(bool as) {
+	void _8SMC1Device::setAutoSave(bool as) {
 		this->autoSaveConfig = as;
 	}
 
-	bool CALXDevice::flush() {
+	bool _8SMC1Device::flush() {
 		if (USMC_SetMode(dev, mode)) {
 			devman->saveError();
 			return false;
@@ -80,7 +80,7 @@ namespace CalX {
 		return true;
 	}
 
-	bool CALXDevice::setCurrentPosition(int pos) {
+	bool _8SMC1Device::setCurrentPosition(int pos) {
 		if (USMC_SetCurrentPosition(dev, pos)) {
 			devman->saveError();
 			return false;
@@ -88,7 +88,7 @@ namespace CalX {
 		return true;
 	}
 
-	bool CALXDevice::updateMode() {
+	bool _8SMC1Device::updateMode() {
 		if (USMC_GetMode(dev, mode)) {
 			devman->saveError();
 			return false;
@@ -96,33 +96,33 @@ namespace CalX {
 		return true;
 	}
 
-	void CALXDevice::updateState() {
+	void _8SMC1Device::updateState() {
 		if (USMC_GetState(dev, state)) {
 			devman->saveError();
 		}
 	}
 
-	int CALXDevice::getPosition() {
+	int _8SMC1Device::getPosition() {
 		this->updateState();
 		return this->state.CurPos;
 	}
 
-	float CALXDevice::getTemperature() {
+	float _8SMC1Device::getTemperature() {
 		this->updateState();
 		return this->state.Temp;
 	}
 
-	float CALXDevice::getVoltage() {
+	float _8SMC1Device::getVoltage() {
 		this->updateState();
 		return this->state.Voltage;
 	}
 
-	unsigned char CALXDevice::getStepDivisor() {
+	unsigned char _8SMC1Device::getStepDivisor() {
 		this->updateState();
 		return this->state.SDivisor;
 	}
 
-	bool CALXDevice::isTrailerPressed(int t) {	// Accepts trailer id, if unknown returns false
+	bool _8SMC1Device::isTrailerPressed(int t) {	// Accepts trailer id, if unknown returns false
 		this->updateState();
 		if (t == 1) {
 			return this->state.Trailer1;
@@ -133,12 +133,12 @@ namespace CalX {
 		return false;
 	}
 
-	bool CALXDevice::getLoftState() {
+	bool _8SMC1Device::getLoftState() {
 		this->updateState();
 		return this->state.Loft;
 	}
 
-	Power CALXDevice::getPowerState() {		// Translate power state into enum
+	Power _8SMC1Device::getPowerState() {		// Translate power state into enum
 		this->updateState();
 		if (this->state.Power && this->state.FullPower) {
 			return Power::FullPower;
@@ -149,22 +149,22 @@ namespace CalX {
 		}
 	}
 	
-	bool CALXDevice::isRunning() {
+	bool _8SMC1Device::isRunning() {
 		this->updateState();
 		return this->state.RUN;
 	}
 
-	bool CALXDevice::hasFullSpeed() {
+	bool _8SMC1Device::hasFullSpeed() {
 		this->updateState();
 		return this->state.FullSpeed;
 	}
 
-	bool CALXDevice::isAfterReset() {
+	bool _8SMC1Device::isAfterReset() {
 		this->updateState();
 		return this->state.AReset;
 	}
 
-	bool CALXDevice::flipPower() {
+	bool _8SMC1Device::flipPower() {
 		bool current = this->getPowerState() != Power::NoPower;
 		if (USMC_GetMode(dev, mode)) {
 			this->devman->saveError();
@@ -178,7 +178,7 @@ namespace CalX {
 		return true;
 	}
 
-	bool CALXDevice::revertStart() {
+	bool _8SMC1Device::revertStart() {
 		if(USMC_GetParameters(dev, prms)) {
 			devman->saveError();
 			return false;
@@ -191,7 +191,7 @@ namespace CalX {
 		return true;
 	}
 
-	bool CALXDevice::saveToFlash() {
+	bool _8SMC1Device::saveToFlash() {
 		if (USMC_SaveParametersToFlash(dev)) {
 			devman->saveError();
 			return false;
@@ -199,7 +199,7 @@ namespace CalX {
 		return true;
 	}
 
-	bool CALXDevice::start(int dest, float speed,
+	bool _8SMC1Device::start(int dest, float speed,
 			unsigned char divisor, bool syncIn) {
 		if (USMC_GetStartParameters(dev, startPrms)) {
 			devman->saveError();
@@ -215,7 +215,7 @@ namespace CalX {
 		return true;
 	}
 
-	bool CALXDevice::start(int dest, float speed) {
+	bool _8SMC1Device::start(int dest, float speed) {
 		if (USMC_GetStartParameters(dev, startPrms)) {
 			devman->saveError();
 			return false;
@@ -228,11 +228,11 @@ namespace CalX {
 		return true;
 	}
 
-	bool CALXDevice::start(int dest) {
+	bool _8SMC1Device::start(int dest) {
 		return this->start(dest, this->speed);
 	}
 
-	bool CALXDevice::stop() {
+	bool _8SMC1Device::stop() {
 		if (USMC_Stop(dev)) {
 			devman->saveError();
 			return false;
@@ -240,67 +240,67 @@ namespace CalX {
 		return true;
 	}
 
-	float CALXDevice::getSpeed() {
+	float _8SMC1Device::getSpeed() {
 		return this->speed;
 	}
 
-	void CALXDevice::setSpeed(float s) {
+	void _8SMC1Device::setSpeed(float s) {
 		this->speed = s;
 	}
 
-	bool CALXDevice::hasSlowStart() {
+	bool _8SMC1Device::hasSlowStart() {
 		return this->slow_start;
 	}
 
-	void CALXDevice::setSlowStart(bool s) {
+	void _8SMC1Device::setSlowStart(bool s) {
 		this->slow_start = s;
 	}
 
-	void CALXDevice::updateParameters() {
+	void _8SMC1Device::updateParameters() {
 		if(USMC_GetParameters(dev, prms)) {
 			devman->saveError();
 		}
 	}
 
-	float CALXDevice::getAccelerationTime() {
+	float _8SMC1Device::getAccelerationTime() {
 		this->updateParameters();
 		return this->prms.AccelT;
 	}
 
-	float CALXDevice::getDecelerationTime() {
+	float _8SMC1Device::getDecelerationTime() {
 		this->updateParameters();
 		return this->prms.DecelT;
 	}
 
-	float CALXDevice::getMaxTemperature() {
+	float _8SMC1Device::getMaxTemperature() {
 		this->updateParameters();
 		return this->prms.MaxTemp;
 	}
 
-	bool CALXDevice::waitsForSync() {
+	bool _8SMC1Device::waitsForSync() {
 		return this->waitSync;
 	}
 
-	void CALXDevice::waitForSync(bool ws) {
+	void _8SMC1Device::waitForSync(bool ws) {
 		this->waitSync = ws;
 	
 	}
 
-	int CALXDevice::getEncoderPosition() {
+	int _8SMC1Device::getEncoderPosition() {
 		if (USMC_GetEncoderState(dev, encState)) {
 			devman->saveError();
 		}
 		return encState.EncoderPos;
 	}
 
-	int CALXDevice::getEncoderSyncPosition() {
+	int _8SMC1Device::getEncoderSyncPosition() {
 		if (USMC_GetEncoderState(dev, encState)) {
 			devman->saveError();
 		}
 		return encState.ECurPos;
 	}
 
-	void CALXDevice::resetSyncCounter() {
+	void _8SMC1Device::resetSyncCounter() {
 		if (USMC_GetMode(dev, mode)) {
 			devman->saveError();
 			return;\
@@ -312,14 +312,14 @@ namespace CalX {
 	}
 
 	#define MODE_ACCESS(n1, n2, prop)\
-	bool CALXDevice::n1() {\
+	bool _8SMC1Device::n1() {\
 		if (this->autoSaveConfig && USMC_GetMode(dev, mode)) {\
 			devman->saveError();\
 		}\
 		return this->mode.prop;\
 	}\
 \
-	void CALXDevice::n2(bool sync) {\
+	void _8SMC1Device::n2(bool sync) {\
 		if (this->autoSaveConfig && USMC_GetMode(dev, mode)) {\
 			devman->saveError();\
 			return;\
@@ -340,12 +340,12 @@ namespace CalX {
 	MODE_ACCESS(getTrailer2TrueState, setTrailer2TrueState, Tr2T)
 	#undef MODE_ACCESS
 
-	bool CALXDevice::getOutputSync() {
+	bool _8SMC1Device::getOutputSync() {
 		this->updateState();
 		return this->state.SyncOUT;
 	}
 
-	bool CALXDevice::getInputSync() {
+	bool _8SMC1Device::getInputSync() {
 		this->updateState();
 		return this->state.SyncIN;
 	}
