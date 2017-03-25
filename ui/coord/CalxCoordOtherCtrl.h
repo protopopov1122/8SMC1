@@ -21,6 +21,7 @@
 #ifndef CALX_UI_CALX_COORD_OTHER_CTRL_H_
 #define CALX_UI_CALX_COORD_OTHER_CTRL_H_
 
+#include <math.h>
 #include "calx.h"
 #include <wx/stattext.h>
 #include <wx/choice.h>
@@ -50,13 +51,23 @@ namespace CalXUI {
 			int getYOffset() {return yOffset->GetValue();}
 			double getXScale() {
 				double val;
-				xScale->GetValue().ToDouble(&val);
+				if (!xScale->GetValue().ToDouble(&val)) {
+					return nan("");
+				}
 				return val;
 			}
 			double getYScale() {
 				double val;
-				yScale->GetValue().ToDouble(&val);
+				if (!yScale->GetValue().ToDouble(&val)) {
+					return nan("");
+				}
 				return val;
+			}
+			void setXScale(double xs) {
+				xScale->SetValue(std::to_string(xs));
+			}
+			void setYScale(double xs) {
+				yScale->SetValue(std::to_string(xs));
 			}
 			int getMinX() {return minx->GetValue();}
 			int getMinY() {return miny->GetValue();}

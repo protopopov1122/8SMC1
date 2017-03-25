@@ -18,6 +18,7 @@
 */
 
 
+#include <math.h>
 #include <sstream>
 #include "CalxApp.h"
 #include <wx/stattext.h>
@@ -235,6 +236,16 @@ namespace CalXUI {
 		log->setLoggingErrors(otherCtrl->isLoggingErrors());
 		motor_point_t moffset = {otherCtrl->getXOffset(), otherCtrl->getYOffset()};
 		motor_scale_t mscale = {otherCtrl->getXScale(), otherCtrl->getYScale()};
+		if (std::isnan(mscale.x)) {
+			wxMessageBox("Enter valid real value", "Error", wxICON_ERROR);
+			otherCtrl->setXScale(map->getScale().x);
+			return;
+		}
+		if (std::isnan(mscale.y)) {
+			wxMessageBox("Enter valid real value", "Error", wxICON_ERROR);
+			otherCtrl->setYScale(map->getScale().y);
+			return;
+		}
 		map->setOffset(moffset);
 		map->setScale(mscale);
 		motor_point_t min = {otherCtrl->getMinX(), otherCtrl->getMinY()};

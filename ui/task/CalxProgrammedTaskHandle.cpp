@@ -19,6 +19,7 @@
 
 
 #include "CalxTaskHandle.h"
+#include <wx/stattext.h>
 #include <wx/sizer.h>
 
 namespace CalXUI {
@@ -33,6 +34,7 @@ namespace CalXUI {
 		sizer->Add(listPanel, 0, wxALL | wxEXPAND, 5);
 		wxBoxSizer *listSizer = new wxBoxSizer(wxVERTICAL);
 		listPanel->SetSizer(listSizer);
+		listSizer->Add(new wxStaticText(listPanel, wxID_ANY, "Step list:"));
 		this->stepList = new wxListBox(listPanel, wxID_ANY);
 		listSizer->Add(this->stepList, 1, wxALL | wxEXPAND, 0);
 		stepList->Bind(wxEVT_LISTBOX, &CalxProgrammedTaskHandle::OnListClick, this);
