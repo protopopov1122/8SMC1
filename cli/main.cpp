@@ -22,6 +22,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <fstream>
 #include <cinttypes>
 #include "device/DeviceManager.h"
 #include "ctrl-lib/SystemManager.h"
@@ -57,7 +58,10 @@ class HelpCMD : public CLICommand  {
 
 int main(int argc, char **argv) {
 	DeviceManager *devman = getDeviceManager();
-	SystemManager *sysman = new SystemManager(devman);
+	std::ifstream cnf("config.ini");
+	ConfigManager *conf = ConfigManager::load(&cnf);
+	cnf.close();
+	SystemManager *sysman = new SystemManager(devman, conf);
 	CLI cli(std::cout, std::cin);
 	cli.addCommand("echo", new EchoCMD());
 	cli.addCommand("ls", new LsCommand(sysman));

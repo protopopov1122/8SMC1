@@ -23,6 +23,7 @@
 
 #include "device/DeviceManager.h"
 #include "InstrumentController.h"
+#include "ConfigManager.h"
 #include "plane/CoordPlane.h"
 #include "CoordHandle.h"
 #include "task/CoordTask.h"
@@ -38,9 +39,10 @@ namespace CalX {
 
 	class SystemManager {
 		public:
-			SystemManager(DeviceManager*);
+			SystemManager(DeviceManager*, ConfigManager*);
 			virtual ~SystemManager();
 			DeviceManager *getDeviceManager();
+			ConfigManager *getConfiguration();
 			DeviceController *getDeviceController(device_id_t);
 			size_t getDeviceCount();
 			InstrumentController *getInstrumentController(device_id_t);
@@ -62,6 +64,7 @@ namespace CalX {
 			InstrumentController *connectInstrument(DeviceConnectType, std::string);
 		private:
 			DeviceManager *devman;
+			ConfigManager *conf;
 			std::vector<DeviceController*> dev;
 			std::vector<InstrumentController*> instr;
 			std::vector<CoordTask*> tasks;

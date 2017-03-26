@@ -22,14 +22,17 @@
 
 namespace CalX {
 
-	SystemManager::SystemManager(DeviceManager *devman) {
+	SystemManager::SystemManager(DeviceManager *devman, ConfigManager *conf) {
 		this->devman = devman;
+		this->conf = conf;
 		for (device_id_t d = 0; d < devman->getDeviceCount(); d++) {
 			this->dev.push_back(new DeviceController(devman->getDevice(d)));
 		}
 		for (device_id_t i = 0; i < devman->getInstrumentCount(); i++) {
 			this->instr.push_back(new InstrumentController(devman->getInstrument(i)));
 		}
+		// Prepare core entry
+		conf->getEntry("core");
 		FunctionEngine_add_default_functions(&this->engine);
 	}
 
@@ -46,10 +49,15 @@ namespace CalX {
 		for (device_id_t d = 0; d < this->devman->getDeviceCount(); d++) {
 			delete this->dev.at(d);
 		}
+		delete this->conf;
 	}
 
 	DeviceManager *SystemManager::getDeviceManager() {
 		return this->devman;
+	}
+	
+	ConfigManager *SystemManager::getConfiguration() {
+		return this->conf;
 	}
 
 	DeviceController *SystemManager::getDeviceController(device_id_t d) {

@@ -26,11 +26,13 @@
 #include "CalxDebugConsole.h"
 #include "device/DeviceManager.h"
 
+#include <fstream>
+#include "ctrl-lib/ConfigManager.h"
+
 namespace CalXUI {
 	
 	bool CalxApp::OnInit() {
 		this->debug_mode = true;
-		
 		
 		this->dynlib = new wxDynamicLibrary(wxDynamicLibrary::CanonicalizeName(STRINGIZE(DEVICES_LIB)), wxDL_DEFAULT | wxDL_QUIET);
 		if (!dynlib->IsLoaded()) {
@@ -41,6 +43,7 @@ namespace CalXUI {
 			wxMessageBox("Dynamic library not found", "Error", wxOK | wxICON_ERROR);
 			return false;
 		}
+		
 		bool suc;
 		void *raw_getter = dynlib->GetSymbol("getDeviceManager", &suc);
 		DeviceManager_getter getter = *((DeviceManager_getter*) &raw_getter);
@@ -48,8 +51,6 @@ namespace CalXUI {
 			wxMessageBox("Dynamic library is corrupt", "Error", wxOK | wxICON_ERROR);
 			return false;
 		}
-		this->devman = getter();
-		this->sysman = new SystemManager(this->devman);
 		
 		if (this->debug_mode) {
 			#ifdef OS_WIN
@@ -59,6 +60,15 @@ namespace CalXUI {
 			freopen("CONOUT$", "w", stdout);
 			freopen("CONOUT$", "w", stderr);
 			#endif
+		}
+		
+		std::ifstream cnf("config.ini");
+		ConfigManager *conf = ConfigManager::load(&cnf);
+		cnf.close();
+		this->devman = getter();
+		this->sysman = new SystemManager(this->devman, conf);
+		
+		if (this->debug_mode) {
 			this->debug_console = new CalxDebugConsole(this->sysman);
 			this->debug_console->Run();
 		}
