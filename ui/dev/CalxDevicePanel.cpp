@@ -140,7 +140,11 @@ namespace CalXUI {
 		CalxCOMSelectDialog *dialog = new CalxCOMSelectDialog(this, wxID_ANY);
 		dialog->ShowModal();
 		if (dialog->getPort() != -1) {
-			app.getSystemManager()->connectDevice(DeviceConnectType::DeviceConnectCOM, std::to_string(dialog->getPort()));
+			DeviceController *ctrl = app.getSystemManager()->connectDevice(DeviceConnectType::DeviceConnectCOM, std::to_string(dialog->getPort()));
+			if (ctrl == nullptr) {
+				wxMessageBox("Device can't be connected on COM" + std::to_string(dialog->getPort()),
+					"Connection error", wxICON_WARNING);
+			}
 			updateUI();
 		}
 		dialog->Destroy();
@@ -155,7 +159,11 @@ namespace CalXUI {
 		CalxCOMSelectDialog *dialog = new CalxCOMSelectDialog(this, wxID_ANY);
 		dialog->ShowModal();
 		if (dialog->getPort() != -1) {
-			app.getSystemManager()->connectInstrument(DeviceConnectType::DeviceConnectCOM, std::to_string(dialog->getPort()));
+			InstrumentController *ctrl = app.getSystemManager()->connectInstrument(DeviceConnectType::DeviceConnectCOM, std::to_string(dialog->getPort()));
+			if (ctrl == nullptr) {
+				wxMessageBox("Instrument can't be connected on COM" + std::to_string(dialog->getPort()),
+					"Connection error", wxICON_WARNING);
+			}
 		}
 		dialog->Destroy();
 		updateUI();

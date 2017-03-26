@@ -19,22 +19,77 @@
 
 
 #include <iostream>
+#include <string.h>
 #include "8SMC1DeviceManager.h"
 
 namespace CalX {
 	
-	_8SMC1Instrument::_8SMC1Instrument(device_id_t id, std::string port, DeviceManager *devman) {
+	_8SMC1Instrument::_8SMC1Instrument(device_id_t id, std::string port, DeviceManager *devman)
+		: Instrument::Instrument() {
 		this->dev = id;
 		this->devman = devman;
 		this->state = false;
+		
+		// Testing stub values
+		int baudrate = 9600;
+		int TIMEOUT = 1000;
+		
+		this->handle = CreateFile(("COM" + port).c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL,
+			OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+		if (this->handle == INVALID_HANDLE_VALUE) {
+			this->error = true;
+			return;
+		}
+		
+		SetCommMask(handle, EV_RXCHAR);
+		SetupComm(handle, 1500, 1500);
+
+		COMMTIMEOUTS CommTimeOuts;
+		CommTimeOuts.ReadIntervalTimeout = 0xFFFFFFFF;
+		CommTimeOuts.ReadTotalTimeoutMultiplier = 0;
+		CommTimeOuts.ReadTotalTimeoutConstant = TIMEOUT;
+		CommTimeOuts.WriteTotalTimeoutMultiplier = 0;
+		CommTimeOuts.WriteTotalTimeoutConstant = TIMEOUT;
+
+		if(!SetCommTimeouts(handle, &CommTimeOuts)) {
+			CloseHandle(handle);
+			this->error = true;
+			return;
+		}
+	
+		DCB ComDCM;
+	
+		memset(&ComDCM,0,sizeof(ComDCM));
+		ComDCM.DCBlength = sizeof(DCB);
+		GetCommState(handle, &ComDCM);
+		ComDCM.BaudRate = DWORD(baudrate);
+
+		if(!SetCommState(handle, &ComDCM)) {
+			CloseHandle(handle);
+			this->error = true;
+		}
 	}
 	
 	_8SMC1Instrument::~_8SMC1Instrument() {
-		
+		if (!error) {
+			CloseHandle(handle);
+		}
 	}
 	
 	bool _8SMC1Instrument::enable(bool en) {
-		std::cout << "Instrument #" << dev << " " << (en ? "enabled" : "disabled") << std::endl;
+		if (en == enabled()) {
+			return true;
+		}
+		
+		// Testing stub command
+		const char *data = std::string("Laser: " + std::string(en ? "enable\r\n" : "disable\r\n")).c_str();
+		DWORD feedback;
+		if(!WriteFile(handle, data, (DWORD) strlen(data), &feedback, 0) || feedback != (DWORD) strlen(data)) {
+			CloseHandle(handle);
+			handle = INVALID_HANDLE_VALUE;
+			this->error = true;
+			return false;
+		}
 		state = en;
 		return true;
 	}

@@ -44,12 +44,20 @@ namespace CalX {
 		return this->devman->getDeviceVersion(this->dev);
 	}
 	
+	Instrument::Instrument() {
+		this->error = false;
+	}
+	
 	Instrument::~Instrument() {
 		
 	}
 	
 	device_id_t Instrument::getID() {
 		return this->dev;
+	}
+	
+	bool Instrument::hasError() {
+		return this->error;
 	}
 	
 	DeviceManager *Instrument::getDeviceManager() {

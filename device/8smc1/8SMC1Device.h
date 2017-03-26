@@ -4,6 +4,7 @@
 #include "device/Device.h"
 
 #define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 #include "USMCDLL.h"
 
 /* Standa 8SMC1 device implementation. It is excess and wraps most 8SMC1 API functions
@@ -21,6 +22,7 @@ namespace CalX {
 			virtual bool enabled();
 		private:
 			bool state;
+			HANDLE handle;
 	};
 	
 	class _8SMC1Device : public Device {

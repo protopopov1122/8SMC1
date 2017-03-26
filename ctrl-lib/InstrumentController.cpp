@@ -45,8 +45,10 @@ namespace CalX {
 	}
 	
 	void InstrumentController::enable(bool e) {
-		this->instr->enable(e && this->state);
-		sendStateChanged();
+		if ((e && this->state) != isEnabled()) {
+			this->instr->enable(e && this->state);
+			sendStateChanged();
+		}
 	}
 	
 	void InstrumentController::flipState() {

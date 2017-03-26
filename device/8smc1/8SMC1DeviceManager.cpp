@@ -84,6 +84,10 @@ namespace CalX {
 			return nullptr;
 		}
 		_8SMC1Instrument *instr = new _8SMC1Instrument((device_id_t) this->instr.size(), prms, this);
+		if (instr->hasError()) {
+			delete instr;
+			return nullptr;
+		}
 		this->instr.push_back(instr);
 		return instr;
 	}

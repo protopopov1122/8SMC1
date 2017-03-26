@@ -70,14 +70,17 @@ namespace CalX {
 	   Has few methods to enable/disable and check state. They all are functional. */
 	class Instrument {
 		public:
+			Instrument();
 			virtual ~Instrument();
 			virtual device_id_t getID();	// Defined by device manager
+			virtual bool hasError();
 			virtual DeviceManager *getDeviceManager();
 			virtual bool enable(bool) = 0;
 			virtual bool enabled() = 0;
 		protected:
 			device_id_t dev;
 			DeviceManager *devman;
+			bool error;
 	};
 }
 
