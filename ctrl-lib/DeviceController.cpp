@@ -44,20 +44,27 @@ namespace CalX {
 	}
 
 	ErrorCode DeviceController::checkTrailers() {
+		ErrorCode errcode = ErrorCode::NoError;
 		if (!this->dev->isRunning()) {
-			return ErrorCode::NoError;
+			return errcode;
 		}
 		if (this->dest == MoveType::MoveUp &&
 				this->dev->isTrailerPressed(2)) {
-			this->dev->stop();
+			errcode = ErrorCode::Trailer2Pressed;
+			if (!this->dev->stop()) {
+				errcode = ErrorCode::LowLevelError;
+			}
 			this->dest = MoveType::Stop;
-			return ErrorCode::Trailer2Pressed;
+			return errcode;
 		}
 		if (this->dest == MoveType::MoveDown &&
 				this->dev->isTrailerPressed(1)) {
-			this->dev->stop();
+			errcode = ErrorCode::Trailer1Pressed;
+			if (!this->dev->stop()) {
+				errcode = ErrorCode::LowLevelError;
+			}
 			this->dest = MoveType::Stop;
-			return ErrorCode::Trailer1Pressed;
+			return errcode;
 		}
 		return ErrorCode::NoError;
 	}
@@ -87,24 +94,37 @@ namespace CalX {
 		this->sendRollingEvent(evt);
 		while (!dev->isTrailerPressed(tr) && work) {
 			if (!this->dev->isRunning()) {
-				this->dev->start(this->dev->getPosition() + dest, ROLL_SPEED, ROLL_DIV);
+				if (!this->dev->start(this->dev->getPosition() + dest, ROLL_SPEED, ROLL_DIV)) {
+					this->sendRolledEvent(evt);
+					this->unuse();
+					this->dest = MoveType::Stop;
+					this->work = false;
+					return ErrorCode::LowLevelError;
+				}
 			}
 		}
 		if (this->dev->isRunning()) {
-			this->dev->stop();
+			if (!this->dev->stop()) {
+				this->sendRolledEvent(evt);
+				this->unuse();
+				this->dest = MoveType::Stop;
+				this->work = false;
+				return ErrorCode::LowLevelError;
+			}
 		}
 		this->dest = MoveType::Stop;
 		if (tr == 2) {
 			comeback *= -1;
 		}
+		ErrorCode errcode = ErrorCode::NoError;
 		if (work) {
-			this->startMove(this->dev->getPosition() + comeback, ROLL_SPEED, ROLL_DIV);
+			errcode = this->startMove(this->dev->getPosition() + comeback, ROLL_SPEED, ROLL_DIV);
 		}
 		this->sendRolledEvent(evt);
 		this->unuse();
 		this->work = false;
 		
-		return ErrorCode::NoError;
+		return errcode;
 	}
 
 	ErrorCode DeviceController::startMove(motor_coord_t dest,
@@ -118,8 +138,11 @@ namespace CalX {
 		MotorMoveEvent evt = {dest, speed, div};
 		this->use();
 		this->sendMovingEvent(evt);
-		this->dev->start(dest, speed, div, syncIn);
-		ErrorCode errcode =  this->waitWhileRunning();
+		ErrorCode errcode = ErrorCode::NoError;
+		if (!this->dev->start(dest, speed, div, syncIn)) {
+			errcode = ErrorCode::LowLevelError;
+		}
+		errcode = this->waitWhileRunning();
 		if (errcode != ErrorCode::NoError) {
 			MotorErrorEvent sevt = {errcode};
 			this->sendStoppedEvent(sevt);

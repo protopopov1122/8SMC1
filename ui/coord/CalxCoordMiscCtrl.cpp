@@ -18,6 +18,8 @@
 */
 
 
+#include "CalxApp.h"
+#include "CalxErrorHandler.h"
 #include "CalxCoordCtrl.h"
 
 namespace CalXUI {
@@ -90,9 +92,9 @@ namespace CalXUI {
 	void CalxCoordMoveAction::perform(SystemManager *sysman) {
 		this->ctrl->setMaster(true);
 		if (relative) {
-			handle->relativeMove(dest, speed, div, jump);
+			wxGetApp().getErrorHandler()->handle(handle->relativeMove(dest, speed, div, jump));
 		} else {
-			handle->move(dest, speed, div, jump);
+			wxGetApp().getErrorHandler()->handle(handle->move(dest, speed, div, jump));
 		}
 		this->ctrl->setMaster(false);
 	}
@@ -122,9 +124,9 @@ namespace CalXUI {
 	void CalxCoordArcAction::perform(SystemManager *sysman) {
 		ctrl->setMaster(true);
 		if (relative) {
-			handle->relativeArc(dest, cen, splitter, speed, div, clockwise);
+			wxGetApp().getErrorHandler()->handle(handle->relativeArc(dest, cen, splitter, speed, div, clockwise));
 		} else {
-			handle->arc(dest, cen, splitter, speed, div, clockwise);
+			wxGetApp().getErrorHandler()->handle(handle->arc(dest, cen, splitter, speed, div, clockwise));
 		}
 		ctrl->setMaster(false);
 	}
@@ -147,7 +149,7 @@ namespace CalXUI {
 			
 	void CalxCoordGraphAction::perform(SystemManager *sysman) {
 		ctrl->setMaster(true);
-		builder->build(sysman, handle, translator, speed, &state);
+		wxGetApp().getErrorHandler()->handle(builder->build(sysman, handle, translator, speed, &state));
 		ctrl->setMaster(false);
 	}
 			
@@ -167,7 +169,7 @@ namespace CalXUI {
 			
 	void CalxCoordCalibrateAction::perform(SystemManager *sysman) {
 		this->ctrl->setMaster(true);
-		handle->calibrate(trailer);
+		wxGetApp().getErrorHandler()->handle(handle->calibrate(trailer));
 		this->ctrl->setMaster(false);
 	}
 			

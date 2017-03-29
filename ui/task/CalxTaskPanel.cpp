@@ -20,6 +20,8 @@
 
 #include <iostream>
 #include <fstream>
+#include "CalxApp.h"
+#include "CalxErrorHandler.h"
 #include "CalxTaskPanel.h"
 #include <wx/sizer.h>
 #include <wx/stattext.h>
@@ -39,7 +41,7 @@ namespace CalXUI {
 			
 			virtual void perform(SystemManager *sysman) {
 				panel->setEnabled(false);
-				task->perform(handle, prms, sysman, &state);
+				wxGetApp().getErrorHandler()->handle(task->perform(handle, prms, sysman, &state));
 				panel->setEnabled(true);
 			}
 			

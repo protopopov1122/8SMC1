@@ -24,6 +24,7 @@
 #endif
 #include <wx/filedlg.h>
 #include "CalxDebugConsole.h"
+#include "CalxErrorHandler.h"
 #include "device/DeviceManager.h"
 
 #include <fstream>
@@ -67,6 +68,7 @@ namespace CalXUI {
 		cnf.close();
 		this->devman = getter();
 		this->sysman = new SystemManager(this->devman, conf);
+		this->error_handler = new CalxErrorHandler(this->sysman);
 		
 		if (this->debug_mode) {
 			this->debug_console = new CalxDebugConsole(this->sysman);
@@ -85,6 +87,7 @@ namespace CalXUI {
 			this->debug_console->Kill();
 		}
 		
+		delete this->error_handler;
 		delete this->sysman;
 		delete this->devman;
 		delete this->dynlib;
@@ -99,6 +102,10 @@ namespace CalXUI {
 	
 	SystemManager *CalxApp::getSystemManager() {
 		return this->sysman;
+	}
+	
+	CalxErrorHandler *CalxApp::getErrorHandler() {
+		return this->error_handler;
 	}
 	
 	CalxFrame *CalxApp::getMainFrame() {

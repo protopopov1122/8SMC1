@@ -19,6 +19,7 @@
 
 
 #include "CalxApp.h"
+#include "CalxErrorHandler.h"
 #include "CalxDeviceCtrl.h"
 #include "ctrl-lib/SystemManager.h"
 #include "device/DeviceManager.h"
@@ -74,9 +75,9 @@ namespace CalXUI {
 			virtual void perform(SystemManager *sysman) {
 				ctrl->setMaster(true);
 				if (rel) {
-					dev->startRelativeMove(dest, speed, 8);
+					wxGetApp().getErrorHandler()->handle(dev->startRelativeMove(dest, speed, 8));
 				} else {
-					dev->startMove(dest, speed, 8);
+					wxGetApp().getErrorHandler()->handle(dev->startMove(dest, speed, 8));
 				}
 				ctrl->setMaster(false);
 			}
@@ -106,7 +107,7 @@ namespace CalXUI {
 			
 			virtual void perform(SystemManager *sysman) {
 				ctrl->setMaster(true);
-				dev->moveToTrailer(tr, TRAILER_COMEBACK);
+				wxGetApp().getErrorHandler()->handle(dev->moveToTrailer(tr, TRAILER_COMEBACK));
 				ctrl->setMaster(false);
 			}
 			

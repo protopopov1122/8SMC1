@@ -34,12 +34,14 @@ using namespace CalX;
 namespace CalXUI {
 	
 	class CalxDebugConsole; // Forward referencing
+	class CalxErrorHandler; // Forward referencing
 	
 	class CalxApp : public wxApp {
 		public:
 			virtual bool OnInit();
 			virtual int OnExit();
 			SystemManager *getSystemManager();
+			CalxErrorHandler *getErrorHandler();
 			CalxFrame *getMainFrame();
 		private:
 			void loadDevicesPlugin();
@@ -51,6 +53,7 @@ namespace CalXUI {
 			
 			bool debug_mode;
 			CalxDebugConsole *debug_console;
+			CalxErrorHandler *error_handler;
 	};
 	
 }

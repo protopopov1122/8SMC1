@@ -32,8 +32,8 @@
 namespace CalX {
 	
 	enum MathError {
-		MNoError, MNoVariable, MNoFunction,
-		MWrongParameters
+		MNoError = 0, MNoVariable = 1, MNoFunction = 2,
+		MWrongParameters = 3
 	};
 	
 	struct engine_value_t {

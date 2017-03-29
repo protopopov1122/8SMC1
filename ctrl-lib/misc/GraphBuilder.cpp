@@ -67,7 +67,16 @@ namespace CalX {
 			if (val.err != MathError::MNoError) {
 				plane->unuse();
 				state->work = false;
-				return ErrorCode::MathExprError;
+				switch (val.err) {
+					case MathError::MNoVariable:
+						return ErrorCode::MathRuntimeNoVar;
+					case MathError::MNoFunction:
+						return ErrorCode::MathRuntimeNoFunction;
+					case MathError::MWrongParameters:
+						return ErrorCode::MathRuntimeWrongPrms;
+					default:
+						return ErrorCode::MathExprError;
+				}
 			}
 			double y = val.value;
 			if (y > this->max.y || y < this->min.y) {

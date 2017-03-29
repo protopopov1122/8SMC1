@@ -21,6 +21,7 @@
 #include <math.h>
 #include <sstream>
 #include "CalxApp.h"
+#include "CalxErrorHandler.h"
 #include <wx/stattext.h>
 #include <wx/sizer.h>
 #include <wx/timer.h>
@@ -213,6 +214,9 @@ namespace CalXUI {
 		FunctionLexer lexer(ss);
 		FunctionParser parser(&lexer);
 		Node *node = parser.parse();
+		if (node == nullptr) {
+			wxGetApp().getErrorHandler()->handle(ErrorCode::MathExprError);
+		}
 		double minx = graphCtrl->getXMin();
 		double maxx = graphCtrl->getXMax();
 		double miny = graphCtrl->getYMin();
