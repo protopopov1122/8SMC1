@@ -107,7 +107,7 @@ namespace CalXUI {
 			
 			virtual void perform(SystemManager *sysman) {
 				ctrl->setMaster(true);
-				wxGetApp().getErrorHandler()->handle(dev->moveToTrailer(tr, TRAILER_COMEBACK));
+				wxGetApp().getErrorHandler()->handle(dev->moveToTrailer(tr));
 				ctrl->setMaster(false);
 			}
 			

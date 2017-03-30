@@ -24,8 +24,9 @@
 
 namespace CalX {
 
-	DeviceController::DeviceController(Device *dev) {
+	DeviceController::DeviceController(Device *dev, ConfigManager *config) {
 		this->dev = dev;
+		this->config = config;
 		this->dest = MoveType::Stop;
 	}
 
@@ -79,7 +80,7 @@ namespace CalX {
 		return ErrorCode::NoError;
 	}
 
-	ErrorCode DeviceController::moveToTrailer(int tr, int comeback) {
+	ErrorCode DeviceController::moveToTrailer(int tr) {
 		if (this->dev->isRunning()) {
 			return ErrorCode::DeviceRunning;
 		}
@@ -87,14 +88,19 @@ namespace CalX {
 			return ErrorCode::WrongParameter;
 		}
 		this->work = true;
-		int dest = (tr == 1 ? -ROLL_STEP : ROLL_STEP);
+		int roll_step = config->getEntry("core")->getInt("roll_step", ROLL_STEP);
+		int roll_speed = config->getEntry("core")->getInt("roll_speed", ROLL_SPEED);
+		int roll_div = config->getEntry("core")->getInt("roll_div", ROLL_DIV);
+		int comeback = config->getEntry("core")->getInt("trailer_comeback", TRAILER_COMEBACK);
+		
+		int dest = (tr == 1 ? -roll_step : roll_step);
 		this->dest = (tr == 1 ? MoveType::RollDown : MoveType::RollUp);
 		MotorRollEvent evt = {tr};
 		use();
 		this->sendRollingEvent(evt);
 		while (!dev->isTrailerPressed(tr) && work) {
 			if (!this->dev->isRunning()) {
-				if (!this->dev->start(this->dev->getPosition() + dest, ROLL_SPEED, ROLL_DIV)) {
+				if (!this->dev->start(this->dev->getPosition() + dest, roll_speed, roll_div)) {
 					this->sendRolledEvent(evt);
 					this->unuse();
 					this->dest = MoveType::Stop;
@@ -118,7 +124,7 @@ namespace CalX {
 		}
 		ErrorCode errcode = ErrorCode::NoError;
 		if (work) {
-			errcode = this->startMove(this->dev->getPosition() + comeback, ROLL_SPEED, ROLL_DIV);
+			errcode = this->startMove(this->dev->getPosition() + comeback, roll_speed, roll_div);
 		}
 		this->sendRolledEvent(evt);
 		this->unuse();

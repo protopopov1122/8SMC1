@@ -35,9 +35,10 @@
 namespace CalX {
 
 	typedef int64_t int_conf_t;
+	typedef double real_conf_t;
 
 	enum class ConfigValueType {
-		Integer
+		Integer, Real, String, Boolean
 	};
 
 	class ConfigValue {
@@ -60,6 +61,43 @@ namespace CalX {
 		private:
 			int_conf_t value;
 	};
+	
+	class RealConfigValue : public ConfigValue {
+		public:
+			RealConfigValue(real_conf_t v)
+				: ConfigValue::ConfigValue(ConfigValueType::Real) {
+				this->value = v;
+			}
+
+			real_conf_t getValue() {return this->value;}
+		private:
+			real_conf_t value;
+	};
+
+	class BoolConfigValue : public ConfigValue {
+		public:
+			BoolConfigValue(bool v)
+				: ConfigValue::ConfigValue(ConfigValueType::Boolean) {
+				this->value = v;
+			}
+
+			bool getValue() {return this->value;}
+		private:
+			bool value;
+	};
+
+	class StringConfigValue : public ConfigValue {
+		public:
+			StringConfigValue(std::string v)
+				: ConfigValue::ConfigValue(ConfigValueType::String) {
+				this->value = v;
+			}
+
+			std::string getValue() {return this->value;}
+		private:
+			std::string value;
+	};
+	
 
 	class ConfigEntry {
 		public:
@@ -72,6 +110,12 @@ namespace CalX {
 			bool put(std::string, ConfigValue*);
 			bool remove(std::string);
 			bool is(std::string, ConfigValueType);
+			void store(std::ostream*);
+			
+			int_conf_t getInt(std::string, int_conf_t = 0);
+			real_conf_t getReal(std::string, real_conf_t = 0);
+			bool getBool(std::string, bool = false);
+			std::string getString(std::string, std::string = "");
 		private:
 			std::string name;
 			std::map<std::string, ConfigValue*> content;
@@ -84,8 +128,9 @@ namespace CalX {
 		
 			ConfigEntry *getEntry(std::string, bool = true);
 			bool hasEntry(std::string);
+			void store(std::ostream*);
 			
-			static ConfigManager *load(std::istream*);
+			static ConfigManager *load(std::istream*, std::ostream*);
 		private:
 			std::map<std::string, ConfigEntry*> entries;
 	};

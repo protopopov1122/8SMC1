@@ -33,9 +33,13 @@
 namespace CalXUI {
 	
 	bool CalxApp::OnInit() {
-		this->debug_mode = true;
+		std::ifstream cnf("config.ini");
+		ConfigManager *conf = ConfigManager::load(&cnf, &std::cout);
+		cnf.close();
+		this->debug_mode = conf->getEntry("ui")->getBool("debug", false);
+		std::string lib_addr = conf->getEntry("ui")->getString("devicelib", STRINGIZE(DEVICES_LIB));
 		
-		this->dynlib = new wxDynamicLibrary(wxDynamicLibrary::CanonicalizeName(STRINGIZE(DEVICES_LIB)), wxDL_DEFAULT | wxDL_QUIET);
+		this->dynlib = new wxDynamicLibrary(wxDynamicLibrary::CanonicalizeName(lib_addr), wxDL_DEFAULT | wxDL_QUIET);
 		if (!dynlib->IsLoaded()) {
 			wxMessageBox("Device API plugin not found\nSpecify library location", "Warning", wxOK | wxICON_WARNING);
 			loadDevicesPlugin();
@@ -63,9 +67,6 @@ namespace CalXUI {
 			#endif
 		}
 		
-		std::ifstream cnf("config.ini");
-		ConfigManager *conf = ConfigManager::load(&cnf);
-		cnf.close();
 		this->devman = getter();
 		this->sysman = new SystemManager(this->devman, conf);
 		this->error_handler = new CalxErrorHandler(this->sysman);

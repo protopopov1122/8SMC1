@@ -120,7 +120,7 @@ namespace CalX {
 					return;
 				}
 				int dest = std::stoi(args.at(1));
-				dev->moveToTrailer(dest, 800);
+				dev->moveToTrailer(dest);
 			}
 		} else if (com.compare("move") == 0) {	
 			if (args.empty()) {

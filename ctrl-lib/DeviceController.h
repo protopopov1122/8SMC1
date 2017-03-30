@@ -24,6 +24,7 @@
 #include <cinttypes>
 #include <vector>
 #include "device/DeviceManager.h"
+#include "ConfigManager.h"
 #include "CtrlCore.h"
 #include "EventListener.h"
 
@@ -41,18 +42,17 @@ namespace CalX {
 #define ROLL_DIV 8
 #define TRAILER_COMEBACK 800
 
-	class CoordController;	// Forward referencing
 	
 	class DeviceController {
 		public:
 			friend class CoordController;
 
-			DeviceController(Device*);
+			DeviceController(Device*, ConfigManager*);
 			virtual ~DeviceController();
 			Device *getDevice();
 			device_id_t getID();
 
-			ErrorCode moveToTrailer(int, int);
+			ErrorCode moveToTrailer(int);
 			ErrorCode startMove(motor_coord_t, float, int, bool = false);
 			ErrorCode startRelativeMove(motor_coord_t, float, int, bool = false);
 			void stop();
@@ -76,6 +76,7 @@ namespace CalX {
 			
 			Device *dev;
 			MoveType dest;
+			ConfigManager *config;
 			
 			std::vector<MotorEventListener*> listeners;
 	};

@@ -1,10 +1,10 @@
 CalX Stepper motor tools.
 ===================
 
-CalX is project of creating high level control application and library for stepper motors. Project codebase is device and platform independent, so may be adopted to any kind of motor controllers, only requirement is implementation of some interfaces for them(called Device API). During development and testing is used Standa 8SMC1 stepper motor controllers, so so CalX already contains Device API implementation for them.
+CalX is project of creating high level control application and library for stepper motors and instruments for them. Project codebase is device and platform independent, so may be adopted to any kind of motor controllers, only requirement is implementation of some interfaces for them(called Device API). During development and testing is used Standa 8SMC1 stepper motor controllers, so so CalX already contains Device API implementation for them.
 
 Project consists of several parts:
-* Device API - the only code which directly interacts with motor controller/drivers and is platform dependent. Its components are stored in device subdirectory. Device API defines abstract intefaces so that other code uses only them and is device-independent. To add new device class support to system, you must implement these interfaces(they are tiny) and patch some files(two lines per cli/main.cpp and ui/CalxApp.cpp) to use them. Reference Device API implementation is wrappers for Standa 8SMC1 controllers(located in device/8smc1 directory), but they have a lot of extra code that isn't necessary.
+* Device API - the only code which directly interacts with motor controller/drivers and instruments, it is platform dependent. Its components are stored in device subdirectory. Device API defines abstract intefaces so that other code uses only them and is device-independent. To add new device class support to system, you must implement these interfaces(they are tiny) and patch some files(two lines per cli/main.cpp and ui/CalxApp.cpp) to use them. Reference Device API implementation is wrappers for Standa 8SMC1 controllers(located in device/8smc1 directory), but they have a lot of extra code that isn't necessary.
 * Ctrl-lib - main and central component of project. Is offers different actions and abstractions that are used for complex stepper motor control. It uses only Device API created abstractions, so Ctrl-lib is platform-independent and may be used with any compatible controller/motor. Basically it is project functional core, on top of it works GUI and command line interface.
 * CLI(command line interface) - interface that was used during Ctrl-lib development and testing. It doesn't cover all Ctrl-lib possibilities(however most of them) and has complex commands and parameters, however it can be useful.
 * UI(graphical user interface) - wxWidgets based graphical application that uses Ctrl-lib to provide convinient device control and cover its functions. Ctrl-lib has big variety of features, so UI itself may be not very user-friendly. Ctrl-lib is extended to needs of UI, because UI is development target.
@@ -52,6 +52,7 @@ make calx.exe # Build CLI
 make calx.dll # Build library; required for GUI
 make calxui.exe WX=$(WX) [WXLIB=...] # Build GUI(currently under development); $(WX) - wxWidgets directory; requires calx.dll build first. WXLIB - target library to copy(something like 'lib/wxmsw310u_gcc_custom.dll'), not necessary during build(however useful to run from build directory).
 ```
+Build all command also performs some other steps, prepares build directory, so after that build directory contains fully functional and complete system. Program requires 'config.ini' in working directory, it contains some system settings.
 
 For MSVC:
 Build by MSVC is possible, however it's not main compiler for development.

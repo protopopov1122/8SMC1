@@ -17,6 +17,8 @@
     along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <iostream>
+#include "CalxApp.h"
 #include "CalxCOMSelectDialog.h"
 #include <wx/sizer.h>
 #include <wx/stattext.h>
@@ -36,7 +38,7 @@ namespace CalXUI {
 		wxBoxSizer *mainSizer = new wxBoxSizer(wxHORIZONTAL);
 		mainPanel->SetSizer(mainSizer);
 		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, "COM Port(1-255): "), 0, wxRIGHT, 5);
-		this->portSpin = new wxSpinCtrl(mainPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 255, 1);
+		this->portSpin = new wxSpinCtrl(mainPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 255, wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getInt("default_com", 1));
 		mainSizer->Add(this->portSpin);
 		
 		wxPanel *buttonPanel = new wxPanel(this, wxID_ANY);

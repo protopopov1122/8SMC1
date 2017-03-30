@@ -78,6 +78,60 @@ namespace CalX {
 		return val->getType() == type;
 	}
 	
+	int_conf_t ConfigEntry::getInt(std::string key, int_conf_t def) {
+		if (this->is(key, ConfigValueType::Integer)) {
+			return ((IntegerConfigValue*) this->get(key))->getValue();
+		} else {
+			return def;
+		}
+	}
+	
+	real_conf_t ConfigEntry::getReal(std::string key, real_conf_t def) {
+		if (this->is(key, ConfigValueType::Real)) {
+			return ((RealConfigValue*) this->get(key))->getValue();
+		} else {
+			return def;
+		}
+	}
+	
+	bool ConfigEntry::getBool(std::string key, bool def) {
+		if (this->is(key, ConfigValueType::Boolean)) {
+			return ((BoolConfigValue*) this->get(key))->getValue();
+		} else {
+			return def;
+		}
+	}
+	
+	std::string ConfigEntry::getString(std::string key, std::string def) {
+		if (this->is(key, ConfigValueType::String)) {
+			return ((StringConfigValue*) this->get(key))->getValue();
+		} else {
+			return def;
+		}
+	}
+	
+	void ConfigEntry::store(std::ostream *os) {
+		for (const auto& kv : this->content) {
+			*os << kv.first << '=';
+			ConfigValue *value = kv.second;
+			switch (value->getType()) {
+				case ConfigValueType::Integer:
+					*os << ((IntegerConfigValue*) value)->getValue();
+				break;
+				case ConfigValueType::Real:
+					*os << ((RealConfigValue*) value)->getValue();
+				break;
+				case ConfigValueType::Boolean:
+					*os << (((BoolConfigValue*) value)->getValue() ? "true" : "false");
+				break;
+				case ConfigValueType::String:
+					*os << '\"' << ((StringConfigValue*) value)->getValue() << '\"';
+				break;
+			}
+			*os << std::endl;
+		}
+	}
+	
 	ConfigManager::ConfigManager() {
 		
 	}
@@ -105,9 +159,138 @@ namespace CalX {
 		return this->entries.count(id) != 0;
 	}
 	
-	ConfigManager *ConfigManager::load(std::istream *is) {
+	void ConfigManager::store(std::ostream *os) {
+		for (const auto& kv : this->entries) {
+			*os << '[' << kv.first << ']' << std::endl;
+			kv.second->store(os);
+			*os << std::endl;
+		}
+	}
+	
+	size_t skipWhitespaces(char *line, size_t start) {
+		while (start < strlen(line) &&
+			iswspace(line[start])) {
+			start++;	
+		}
+		return start;
+	}
+	
+	ConfigManager *ConfigManager::load(std::istream *is, std::ostream *err) {
 		ConfigManager *man = new ConfigManager();
-		// TODO Write file parser
+		ConfigEntry *entry = nullptr;
+		const int LINE_LEN = 256;
+		char rawline[LINE_LEN];
+		int line_num = 0;
+		while (!is->eof()) {
+			is->getline(rawline, LINE_LEN);
+			line_num++;
+			// Remove comments
+			for (size_t i = 0; i < strlen(rawline); i++) {
+				if (rawline[i] == '#') {
+					rawline[i] = '\0';
+					break;
+				}
+			}
+			// Trim input line
+			size_t start = 0, end = strlen(rawline) - 1;
+			while (start < strlen(rawline) &&
+				iswspace(rawline[start])) {
+				start++;	
+			}
+			while (end < strlen(rawline) &&
+				end >= start &&
+				iswspace(rawline[end])) {
+				end--;	
+			}
+			rawline[end + 1] = '\0';
+			char *line = &rawline[start];
+			if (strlen(line) == 0) {
+				continue;
+			}
+			
+			// Parse line
+			if (line[0] == '[') {	// Line is entry start
+				if (strlen(line) == 1 ||
+					line[strlen(line) - 1] != ']') {
+					*err << "Error at line " << line_num << ": expected ']' at the end of line" << std::endl;
+					continue;
+				}
+				line[strlen(line) - 1] = '\0';
+				std::string entryId(&line[1]);
+				entry = man->getEntry(entryId);
+			} else {	// Line is a key/value pair
+				if (entry == nullptr) {
+					*err << "Error at line " << line_num << ": entry not defined" << std::endl;
+				}
+				std::string key;
+				size_t pos = 0;
+				while (pos < strlen(line) &&
+					(isalpha(line[pos]) ||
+						isdigit(line[pos]) ||
+						line[pos] == '_')) {
+					key.push_back(line[pos++]);	
+				}
+				pos = skipWhitespaces(line, pos);
+				if (pos >= strlen(line) ||
+					line[pos] != '=') {
+					*err << "Error at line " << line_num << ": expected '=' in the line" << std::endl;
+					continue;
+				}
+				pos = skipWhitespaces(line, ++pos);
+				if (pos >= strlen(line)) {
+					*err << "Error at line " << line_num <<  ": expected value in the line" << std::endl;
+					continue;
+				}
+				
+				char *val = &line[pos];
+				if (val[0] == '\"') {
+					if (strlen(val) == 1 ||
+						val[strlen(val) - 1] != '\"') {
+						*err << "Error at line " << line_num <<  ": expected '\"' in the line" << std::endl;
+						continue;
+					}
+					val[strlen(val) - 1] = '\0';
+					std::string strval(&val[1]);
+					ConfigValue *confval = new StringConfigValue(strval);
+					entry->put(key, confval);
+				} else if (strcmp(val, "true") == 0 ||
+					strcmp(val, "false") == 0) {
+					bool boolval = strcmp(val, "true") == 0;
+					ConfigValue *confval = new BoolConfigValue(boolval);
+					entry->put(key, confval);
+				} else {
+					bool integer = true, real = false;
+					for (size_t i = 0; i < strlen(val); i++) {
+						if (val[i] == '.') {
+							if (!real) {
+								real = true;
+							} else {
+								integer = false;
+								break;
+							}
+						} else if (!isdigit(val[i])) {
+							integer = false;
+							break;
+						}
+					}
+					if (integer) {
+						if (real) {
+							real_conf_t realval = std::stod(val);
+							ConfigValue *confval = new RealConfigValue(realval);
+							entry->put(key, confval);
+						} else {
+							int_conf_t intval = std::stoll(val);
+							ConfigValue *confval = new IntegerConfigValue(intval);
+							entry->put(key, confval);
+						}
+					} else {
+						std::string strval(val);
+						ConfigValue *confval = new StringConfigValue(strval);
+						entry->put(key, confval);
+					}
+				}
+			}
+		}
 		return man;
 	}
 }

@@ -59,7 +59,7 @@ class HelpCMD : public CLICommand  {
 int main(int argc, char **argv) {
 	DeviceManager *devman = getDeviceManager();
 	std::ifstream cnf("config.ini");
-	ConfigManager *conf = ConfigManager::load(&cnf);
+	ConfigManager *conf = ConfigManager::load(&cnf, &std::cout);
 	cnf.close();
 	SystemManager *sysman = new SystemManager(devman, conf);
 	CLI cli(std::cout, std::cin);

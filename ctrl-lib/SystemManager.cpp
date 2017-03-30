@@ -26,7 +26,7 @@ namespace CalX {
 		this->devman = devman;
 		this->conf = conf;
 		for (device_id_t d = 0; d < devman->getDeviceCount(); d++) {
-			this->dev.push_back(new DeviceController(devman->getDevice(d)));
+			this->dev.push_back(new DeviceController(devman->getDevice(d), this->conf));
 		}
 		for (device_id_t i = 0; i < devman->getInstrumentCount(); i++) {
 			this->instr.push_back(new InstrumentController(devman->getInstrument(i)));
@@ -123,7 +123,7 @@ namespace CalX {
 		}
 
 		CoordController *ctrl = new CoordController(this->getDeviceController(d1),
-			this->getDeviceController(d2), this->getInstrumentController(instr));
+			this->getDeviceController(d2), this->conf, this->getInstrumentController(instr));
 		CoordHandle *handle = new CoordHandle(this->coords.size(), ctrl);
 		this->coords.push_back(handle);
 		return handle;
@@ -153,7 +153,7 @@ namespace CalX {
 			return nullptr;
 		}
 		devman->refresh();
-		DeviceController *ctrl = new DeviceController(d);
+		DeviceController *ctrl = new DeviceController(d, this->conf);
 		this->dev.push_back(ctrl);
 		return ctrl;
 	}

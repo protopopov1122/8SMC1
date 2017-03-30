@@ -19,6 +19,7 @@
 
 #include <iostream>
 #include <fstream>
+#include "CalxApp.h"
 #include "CalxAboutDialog.h"
 #include <wx/sizer.h>
 
@@ -31,7 +32,7 @@ namespace CalXUI {
 		SetSizer(sizer);
 		
 		std::string about;
-		std::ifstream is("ABOUT");
+		std::ifstream is(wxGetApp().getSystemManager()->getConfiguration()->getEntry("path")->getString("about", "ABOUT"));
 		int chr;
 		while ((chr = is.get()) != EOF) {
 			about.push_back((char) chr);

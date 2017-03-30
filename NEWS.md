@@ -119,3 +119,6 @@ Device API was refractored to offer abstract interfaces. Concrete implementation
 
 ##### 17/03/2017
 Most of project is finished. GUI is almost functional for many purposes(however it does not represent all API functions). Device API fully separated from other project components and used as a plugin(so many Device API handlers may be supported). Added Instrument support to Ctrl-lib and UI(however 8SMC1 Device API implementation can't handle them now and use stubs).
+
+##### 30/03/2017
+GUI and system itself is almost fully functional. Most of the functions were implemented and added. The last part is connection to laser commands for out laser(Eksma NL300) and some small improvements.

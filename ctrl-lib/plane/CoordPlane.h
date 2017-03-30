@@ -24,6 +24,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include "ctrl-lib/ConfigManager.h"
 #include "ctrl-lib/EventListener.h"
 #include "ctrl-lib/DeviceController.h"
 #include "ctrl-lib/InstrumentController.h"
@@ -69,7 +70,7 @@ namespace CalX {
 	// Coordinate plane commuticating directly with hardware
 	class CoordController : public CoordPlane {
 		public:
-			CoordController(DeviceController*, DeviceController*, InstrumentController* = nullptr);
+			CoordController(DeviceController*, DeviceController*, ConfigManager*, InstrumentController* = nullptr);
 			virtual ~CoordController();
 			DeviceController *getXAxis();
 			DeviceController *getYAxis();
@@ -93,6 +94,7 @@ namespace CalX {
 			DeviceController *xAxis;
 			DeviceController *yAxis;
 			InstrumentController *instr;
+			ConfigManager *config;
 			bool work;
 			bool defWork;
 			
