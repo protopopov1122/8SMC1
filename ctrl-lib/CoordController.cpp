@@ -106,13 +106,26 @@ namespace CalX {
 		xAxis->use();
 		yAxis->use();
 		MotorMoveEvent xmevt = {point.x, x_speed, div};
-		xAxis->dev->start(point.x, x_speed, div, false);
+		if (!xAxis->dev->start(point.x, x_speed, div, false)) {
+			xAxis->unuse();
+			yAxis->unuse();
+			xAxis->dest = MoveType::Stop;
+			return ErrorCode::LowLevelError;
+		}
 		xAxis->sendMovingEvent(xmevt);
 		
 		MotorMoveEvent ymevt = {point.y, y_speed, div};
 		yAxis->dest = point.y > yAxis->dev->getPosition() ? MoveType::MoveUp :
 				MoveType::MoveDown;
-		yAxis->dev->start(point.y, y_speed, div, false);
+		if (!yAxis->dev->start(point.y, y_speed, div, false)) {
+			xAxis->unuse();
+			yAxis->unuse();
+			yAxis->dest = MoveType::Stop;
+			xAxis->stop();
+			xAxis->dest = MoveType::Stop;
+			xAxis->sendMovedEvent(xmevt);
+			return ErrorCode::LowLevelError;
+		}
 		yAxis->sendMovingEvent(ymevt);
 		
 		if (this->instr != nullptr && sync) {
@@ -227,9 +240,22 @@ namespace CalX {
 		while (!(xpr && ypr) && work) {
 			if (!xAxis->getDevice()->isTrailerPressed(tr)) {
 				if (!xpr && !xAxis->getDevice()->isRunning()) {
-					xAxis->getDevice()->start(
+					if (!xAxis->getDevice()->start(
 							xAxis->getDevice()->getPosition() + dest,
-							roll_speed, roll_div);
+							roll_speed, roll_div)) {
+						xAxis->stop();
+						yAxis->stop();
+						xAxis->sendRolledEvent(mevt);
+						yAxis->sendRolledEvent(mevt);
+						if (this->instr != nullptr) {
+							this->instr->unuse();
+						}
+						xAxis->unuse();
+						yAxis->unuse();
+						sendCalibratedEvent(evt);
+						unuse();
+						return ErrorCode::LowLevelError;
+					}
 				}
 			} else  {
 				xpr = true;
@@ -241,9 +267,22 @@ namespace CalX {
 
 			if (!yAxis->getDevice()->isTrailerPressed(tr)) {
 				if (!ypr && !yAxis->getDevice()->isRunning()) {
-					yAxis->getDevice()->start(
+					if (!yAxis->getDevice()->start(
 							yAxis->getDevice()->getPosition() + dest,
-							roll_speed, roll_div);
+							roll_speed, roll_div)){
+						xAxis->stop();
+						yAxis->stop();
+						xAxis->sendRolledEvent(mevt);
+						yAxis->sendRolledEvent(mevt);
+						if (this->instr != nullptr) {
+							this->instr->unuse();
+						}
+						xAxis->unuse();
+						yAxis->unuse();
+						sendCalibratedEvent(evt);
+						unuse();
+						return ErrorCode::LowLevelError;
+					}
 				}
 			} else {
 				ypr = true;
