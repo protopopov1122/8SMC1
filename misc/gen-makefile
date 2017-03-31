@@ -60,8 +60,9 @@ printf "\t@mkdir -p \$(BUILD)\n"
 printf "ifneq (\$(WXLIB),)\n"
 printf "\tcp \$(WX)/\$(WXLIB) \$(BUILD)\n"
 printf "endif\n"
+printf "\t\$(MAKE) icon\n"
 printf "\t\$(CC) -o \$(BUILD)/\$(UI).exe " 
-printf "$OBJS" 
+printf "$OBJS \$(ICON)"
 printf ' $(LDFLAGS) -Wl,--library-path=\$(BUILD) -lcalx `$(WX)/wx-config --libs`\n\n'
 
 printf "all:\n$ALL\t\$(MAKE) copy\n\n"

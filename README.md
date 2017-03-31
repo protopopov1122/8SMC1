@@ -52,7 +52,7 @@ make calx.exe # Build CLI
 make calx.dll # Build library; required for GUI
 make calxui.exe WX=$(WX) [WXLIB=...] # Build GUI(currently under development); $(WX) - wxWidgets directory; requires calx.dll build first. WXLIB - target library to copy(something like 'lib/wxmsw310u_gcc_custom.dll'), not necessary during build(however useful to run from build directory).
 ```
-Build all command also performs some other steps, prepares build directory, so after that build directory contains fully functional and complete system. Program requires 'config.ini' in working directory, it contains some system settings.
+Build all command also performs some other steps, prepares build directory, so after that build directory contains fully functional and complete system. Program requires 'config.ini' in working directory, it contains some system settings. If ImageMagick is installed Makefile builds .ico(from misc/icon.svg) file and result executable will have icon.
 
 For MSVC:
 Build by MSVC is possible, however it's not main compiler for development.

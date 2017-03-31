@@ -1,4 +1,12 @@
 CC=i686-w64-mingw32-g++
+WINDRES=i686-w64-mingw32-windres
+
+CONVERT := $(shell command -v convert 2> /dev/null)
+ifdef CONVERT
+ifdef WINDRES
+ICON=calxui.res
+endif
+endif
 
 OUTPUT=calx
 UI=calxui
@@ -219,7 +227,8 @@ $(UI).exe: CalxAboutDialog.o CalxActionQueue.o CalxApp.o CalxConsoleWidget.o Cal
 ifneq ($(WXLIB),)
 	cp $(WX)/$(WXLIB) $(BUILD)
 endif
-	$(CC) -o $(BUILD)/$(UI).exe CalxAboutDialog.o CalxActionQueue.o CalxApp.o CalxConsoleWidget.o CalxDebugConsole.o CalxErrorHandler.o CalxFrame.o CalxPanel.o CalxCoordArcCtrl.o CalxCoordCtrl.o CalxCoordDialog.o CalxCoordFilter.o CalxCoordGraphCtrl.o CalxCoordLinearCtrl.o CalxCoordMiscCtrl.o CalxCoordOtherCtrl.o CalxCoordPanel.o CalxCOMSelectDialog.o CalxDeviceCtrl.o CalxDevicePanel.o CalxInstrumentCtrl.o CalxGcodeHandle.o CalxGcodeLoader.o CalxProgrammedTaskHandle.o CalxTaskPanel.o CalxTaskStepHandle.o  $(LDFLAGS) -Wl,--library-path=\$(BUILD) -lcalx `$(WX)/wx-config --libs`
+	$(MAKE) icon
+	$(CC) -o $(BUILD)/$(UI).exe CalxAboutDialog.o CalxActionQueue.o CalxApp.o CalxConsoleWidget.o CalxDebugConsole.o CalxErrorHandler.o CalxFrame.o CalxPanel.o CalxCoordArcCtrl.o CalxCoordCtrl.o CalxCoordDialog.o CalxCoordFilter.o CalxCoordGraphCtrl.o CalxCoordLinearCtrl.o CalxCoordMiscCtrl.o CalxCoordOtherCtrl.o CalxCoordPanel.o CalxCOMSelectDialog.o CalxDeviceCtrl.o CalxDevicePanel.o CalxInstrumentCtrl.o CalxGcodeHandle.o CalxGcodeLoader.o CalxProgrammedTaskHandle.o CalxTaskPanel.o CalxTaskStepHandle.o  $(ICON) $(LDFLAGS) -Wl,--library-path=\$(BUILD) -lcalx `$(WX)/wx-config --libs`
 
 all:
 	$(MAKE) $(OUTPUT).dll
@@ -228,6 +237,18 @@ all:
 	$(MAKE) $(UI).exe
 	$(MAKE) copy
 
+
+
+icon:
+ifdef ICON
+	convert misc/icon.svg icon256.png
+	convert icon256.png -resize 128x128 -quality 100 icon128.png
+	convert icon256.png -resize 64x64 -quality 100 icon64.png
+	convert icon256.png -resize 48x48 -quality 100 icon48.png
+	convert icon256.png -resize 32x32 -quality 100 icon32.png
+	convert *.png $(BUILD)/icon.ico
+	$(WINDRES) winbuild/calxui.rc -O coff -o $(ICON)
+endif
 
 clean:
 	@rm -f *.o
@@ -242,9 +263,11 @@ clean:
 	@rm -f *.pdb
 	@rm -f *.idb
 	@rm -f *.manifest
+	@rm -f *.png
+	@rm -f *.res
 	
 copy:
-	zip -r $(BUILD)/src.zip *.md Makefile platform.h config.ini device ctrl-lib ui winbuild misc cli tests COPYING COPYING.LESSER NOTICE ABOUT
+	zip -r $(BUILD)/src.zip *.md Makefile icon.svg platform.h config.ini device ctrl-lib ui winbuild misc cli tests COPYING COPYING.LESSER NOTICE ABOUT
 	cp config.ini $(BUILD)
 	cp COPYING $(BUILD)
 	cp COPYING.LESSER $(BUILD)

@@ -1,4 +1,16 @@
 
+
+icon:
+ifdef ICON
+	convert misc/icon.svg icon256.png
+	convert icon256.png -resize 128x128 -quality 100 icon128.png
+	convert icon256.png -resize 64x64 -quality 100 icon64.png
+	convert icon256.png -resize 48x48 -quality 100 icon48.png
+	convert icon256.png -resize 32x32 -quality 100 icon32.png
+	convert *.png $(BUILD)/icon.ico
+	$(WINDRES) winbuild/calxui.rc -O coff -o $(ICON)
+endif
+
 clean:
 	@rm -f *.o
 	@rm -rf $(BUILD)
@@ -12,6 +24,8 @@ clean:
 	@rm -f *.pdb
 	@rm -f *.idb
 	@rm -f *.manifest
+	@rm -f *.png
+	@rm -f *.res
 	
 copy:
 	zip -r $(BUILD)/src.zip *.md Makefile platform.h config.ini device ctrl-lib ui winbuild misc cli tests COPYING COPYING.LESSER NOTICE ABOUT
