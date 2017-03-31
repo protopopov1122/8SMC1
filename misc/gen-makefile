@@ -3,7 +3,7 @@
 # Append header to Makefile
 cat misc/mk-header 
 
-ALL='$(OUTPUT).dll '
+ALL='\t$(MAKE) $(OUTPUT).dll\n'
 
 # Generate Device API handlers
 
@@ -11,12 +11,12 @@ function GenDevAPI {
 	find device/$1 -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS) '$2' -c "$0"\n"}'
 	OBJS=`find device/$1 -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
 	printf "dev_$1.dll: $OBJS \$(OUTPUT).dll\n\t\$(CC) \$(CFLAGS) -shared -o \$(BUILD)/dev_$1.dll $OBJS $3 \$(LDFLAGS) -Wl,--library-path=\$(LIB) -lcalx -Wl,--out-implib,\$(BUILD)/\dev_$1.a\n"
-	ALL=$ALL"dev_$1.dll "
+	ALL=$ALL"\t\$(MAKE) dev_$1.dll\n"
 }
 
 GenDevAPI "8smc1" "-Ires" "-Wl,-Bdynamic,--library-path=\$(BUILD) -lUSMCDLL"
 
-ALL=$ALL'$(OUTPUT).exe $(UI).exe'
+ALL=$ALL'\t$(MAKE) $(OUTPUT).exe\n\t$(MAKE) $(UI).exe\n'
 
 # Generate library, stub and cli object file build targets
 printf "\n" 
@@ -64,7 +64,7 @@ printf "\t\$(CC) -o \$(BUILD)/\$(UI).exe "
 printf "$OBJS" 
 printf ' $(LDFLAGS) -Wl,--library-path=\$(BUILD) -lcalx `$(WX)/wx-config --libs`\n\n'
 
-printf "all: $ALL copy\n\n"
+printf "all:\n$ALL\t\$(MAKE) copy\n\n"
 
 # Append footer to Makefile
 cat misc/mk-footer 

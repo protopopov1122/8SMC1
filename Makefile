@@ -221,7 +221,12 @@ ifneq ($(WXLIB),)
 endif
 	$(CC) -o $(BUILD)/$(UI).exe CalxAboutDialog.o CalxActionQueue.o CalxApp.o CalxConsoleWidget.o CalxDebugConsole.o CalxErrorHandler.o CalxFrame.o CalxPanel.o CalxCoordArcCtrl.o CalxCoordCtrl.o CalxCoordDialog.o CalxCoordFilter.o CalxCoordGraphCtrl.o CalxCoordLinearCtrl.o CalxCoordMiscCtrl.o CalxCoordOtherCtrl.o CalxCoordPanel.o CalxCOMSelectDialog.o CalxDeviceCtrl.o CalxDevicePanel.o CalxInstrumentCtrl.o CalxGcodeHandle.o CalxGcodeLoader.o CalxProgrammedTaskHandle.o CalxTaskPanel.o CalxTaskStepHandle.o  $(LDFLAGS) -Wl,--library-path=\$(BUILD) -lcalx `$(WX)/wx-config --libs`
 
-all: $(OUTPUT).dll dev_8smc1.dll $(OUTPUT).exe $(UI).exe copy
+all:
+	$(MAKE) $(OUTPUT).dll
+	$(MAKE) dev_8smc1.dll
+	$(MAKE) $(OUTPUT).exe
+	$(MAKE) $(UI).exe
+	$(MAKE) copy
 
 
 clean:
