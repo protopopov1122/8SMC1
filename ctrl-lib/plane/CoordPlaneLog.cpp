@@ -89,7 +89,7 @@ namespace CalX {
 	
 	ErrorCode CoordPlaneLog::calibrate(TrailerId tr) {
 		if (this->log_actions) {
-			*out << this->prefix << "Calibrating to trailer #" << tr << std::endl;
+			*out << this->prefix << "Calibrating to trailer #" << static_cast<int>(tr) << std::endl;
 		}
 		ErrorCode err = this->plane->calibrate(tr);
 		if (this->log_errors && err != ErrorCode::NoError) {

@@ -31,8 +31,6 @@ namespace CalX {
 		for (device_id_t i = 0; i < devman->getInstrumentCount(); i++) {
 			this->instr.push_back(new InstrumentController(devman->getInstrument(i)));
 		}
-		// Prepare core entry
-		conf->getEntry("core");
 		FunctionEngine_add_default_functions(&this->engine);
 	}
 

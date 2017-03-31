@@ -24,6 +24,8 @@
 #include <stdio.h>
 #include <iostream>
 
+const int MIN_POS = -150000;
+const int MAX_POS = 150000;
 int POS[] = {0, 0};
 
 char SER01[] = "01";
@@ -48,6 +50,8 @@ DWORD USMC_Close() {
 
 DWORD USMC_GetState(DWORD dev, USMC_State &state) {
 	state.CurPos = POS[dev];
+	state.Trailer1 = POS[dev] < MIN_POS;
+	state.Trailer2 = POS[dev] > MAX_POS;
 	return FALSE;
 }
 

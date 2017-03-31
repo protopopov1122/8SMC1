@@ -91,12 +91,12 @@ namespace CalX {
 
 	ErrorCode VirtualCoordPlane::calibrate(TrailerId tr) {
 		int comeback = TRAILER_COMEBACK;
-		if (tr != 1 && tr != 2) {
+		if (tr != TrailerId::Trailer1 && tr != TrailerId::Trailer2) {
 			return ErrorCode::WrongParameter;
 		}
 		bool xpr = false;
 		bool ypr = false;
-		int dest = (tr == 1 ? -ROLL_STEP : ROLL_STEP);
+		int dest = (tr == TrailerId::Trailer1 ? -ROLL_STEP : ROLL_STEP);
 		while (!(xpr && ypr)) {
 			if (!xDev->isTrailerPressed(tr)) {
 				if (!xpr) {
@@ -118,7 +118,7 @@ namespace CalX {
 			}
 		}
 
-		if (tr == 2) {
+		if (tr == TrailerId::Trailer2) {
 			comeback *= -1;
 		}
 		xDev->start(xDev->getPosition() + comeback,

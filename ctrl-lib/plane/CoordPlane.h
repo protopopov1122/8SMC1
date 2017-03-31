@@ -75,7 +75,7 @@ namespace CalX {
 			DeviceController *getXAxis();
 			DeviceController *getYAxis();
 			InstrumentController *getInstrument();
-			virtual void measure(TrailerId);
+			virtual ErrorCode measure(TrailerId);
 			
 			virtual ErrorCode move(motor_point_t, float, int, bool);
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);

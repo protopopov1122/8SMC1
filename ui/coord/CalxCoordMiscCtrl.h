@@ -147,6 +147,19 @@ namespace CalXUI {
 			CoordHandle *handle;
 			TrailerId trailer;
 	};
+			
+	class CalxCoordMeasureAction : public CalxAction {
+		public:
+			CalxCoordMeasureAction(CalxCoordCtrl*, CoordHandle*, TrailerId);
+			virtual ~CalxCoordMeasureAction();
+			
+			virtual void perform(SystemManager*);
+			virtual void stop();
+		private:
+			CalxCoordCtrl *ctrl;
+			CoordHandle *handle;
+			TrailerId trailer;
+	};
 }
 
 #endif

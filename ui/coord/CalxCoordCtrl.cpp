@@ -171,7 +171,9 @@ namespace CalXUI {
 									"#" + std::to_string(ctrl->getController()->getInstrument()->getID())
 										: "No") + 
 								"\nPosition: " + std::to_string(ctrl->getPosition().x) +
-									+ "x" + std::to_string(ctrl->getPosition().y); +
+									+ "x" + std::to_string(ctrl->getPosition().y) +
+								"\nStart: " + std::to_string(ctrl->getSize().x) +
+									+ "x" + std::to_string(ctrl->getSize().y) +
 								"\nSize: " + std::to_string(ctrl->getSize().w) +
 									+ "x" + std::to_string(ctrl->getSize().h);
 		this->generalInfoText->SetLabel(general);
@@ -233,6 +235,11 @@ namespace CalXUI {
 	void CalxCoordCtrl::OnCalibrateClick(wxCommandEvent &evt) {
 		TrailerId tr = otherCtrl->getTrailer();
 		this->queue->addAction(new CalxCoordCalibrateAction(this, ctrl, tr));
+	}
+	
+	void CalxCoordCtrl::OnMeasureClick(wxCommandEvent &evt) {
+		TrailerId tr = otherCtrl->getMeasureTrailer();
+		this->queue->addAction(new CalxCoordMeasureAction(this, ctrl, tr));
 	}
 	
 	void CalxCoordCtrl::OnUpdateFiltersClick(wxCommandEvent &evt) {

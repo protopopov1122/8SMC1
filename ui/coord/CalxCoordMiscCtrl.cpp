@@ -176,4 +176,24 @@ namespace CalXUI {
 	void CalxCoordCalibrateAction::stop() {
 		handle->stop();
 	}
+	
+	CalxCoordMeasureAction::CalxCoordMeasureAction(CalxCoordCtrl *ctrl, CoordHandle *handle, TrailerId tr) {
+		this->ctrl = ctrl;
+		this->handle = handle;
+		this->trailer = tr;
+	}
+	
+	CalxCoordMeasureAction::~CalxCoordMeasureAction() {
+		
+	}
+			
+	void CalxCoordMeasureAction::perform(SystemManager *sysman) {
+		this->ctrl->setMaster(true);
+		wxGetApp().getErrorHandler()->handle(handle->getController()->measure(trailer));
+		this->ctrl->setMaster(false);
+	}
+			
+	void CalxCoordMeasureAction::stop() {
+		handle->stop();
+	}
 }

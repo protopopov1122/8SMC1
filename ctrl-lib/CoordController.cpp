@@ -221,12 +221,12 @@ namespace CalX {
 		int roll_speed = config->getEntry("core")->getInt("roll_speed", ROLL_SPEED);
 		int roll_div = config->getEntry("core")->getInt("roll_div", ROLL_DIV);
 		int comeback = config->getEntry("core")->getInt("trailer_comeback", TRAILER_COMEBACK);
-		int dest = (tr == 1 ? -roll_step : roll_step);
-		xAxis->dest = (tr == 1 ? MoveType::RollDown : MoveType::RollUp);
-		yAxis->dest = (tr == 1 ? MoveType::RollDown : MoveType::RollUp);
+		int dest = (tr == TrailerId::Trailer1 ? -roll_step : roll_step);
+		xAxis->dest = (tr == TrailerId::Trailer1 ? MoveType::RollDown : MoveType::RollUp);
+		yAxis->dest = (tr == TrailerId::Trailer1 ? MoveType::RollDown : MoveType::RollUp);
 		bool xpr = false;
 		bool ypr = false;
-		MotorRollEvent mevt = {tr};
+		MotorRollEvent mevt = {static_cast<int>(tr)};
 		if (this->instr != nullptr) {
 			this->instr->use();
 		}
@@ -238,7 +238,7 @@ namespace CalX {
 		sendCalibratingEvent(evt);
 		use();
 		while (!(xpr && ypr) && work) {
-			if (!xAxis->getDevice()->isTrailerPressed(tr)) {
+			if (!xAxis->getDevice()->isTrailerPressed(static_cast<int>(tr))) {
 				if (!xpr && !xAxis->getDevice()->isRunning()) {
 					if (!xAxis->getDevice()->start(
 							xAxis->getDevice()->getPosition() + dest,
@@ -265,7 +265,7 @@ namespace CalX {
 			}
 				
 
-			if (!yAxis->getDevice()->isTrailerPressed(tr)) {
+			if (!yAxis->getDevice()->isTrailerPressed(static_cast<int>(tr))) {
 				if (!ypr && !yAxis->getDevice()->isRunning()) {
 					if (!yAxis->getDevice()->start(
 							yAxis->getDevice()->getPosition() + dest,
@@ -300,7 +300,7 @@ namespace CalX {
 
 		xAxis->dest = MoveType::Stop;
 		yAxis->dest = MoveType::Stop;
-		if (tr == 2) {
+		if (tr == TrailerId::Trailer2) {
 			comeback *= -1;
 		}
 		if (work) {
@@ -409,14 +409,22 @@ namespace CalX {
 		return this->size;
 	}
 	
-	void CoordController::measure(TrailerId tid) {
+	ErrorCode CoordController::measure(TrailerId tid) {
+		work = defWork;
 		TrailerId tid1 = (tid == TrailerId::Trailer1 ? TrailerId::Trailer2 : TrailerId::Trailer1);
 		TrailerId tid2 = tid;
-		this->calibrate(tid1);
-		motor_point_t min = getPosition();
-		this->calibrate(tid2);
+		if (!work) {
+			return ErrorCode::NoError;
+		}
+		ErrorCode errcode = this->calibrate(tid1);
 		motor_point_t max = getPosition();
-		this->size = {min.x, min.y, abs(max.x - min.x), abs(max.y - min.y)};
+		if (!work || errcode != ErrorCode::NoError) {
+			return errcode;
+		}
+		errcode = this->calibrate(tid2);
+		motor_point_t min = getPosition();
+		this->size = {min.x < max.x ? min.x : max.x, min.y < max.y ? min.y : max.y, abs(max.x - min.x), abs(max.y - min.y)};
+		return errcode;
 	}
 	
 	void CoordController::addEventListener(CoordEventListener *l) {

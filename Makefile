@@ -239,8 +239,9 @@ clean:
 	@rm -f *.manifest
 	
 copy:
-	zip -r $(BUILD)/src.zip *.md Makefile platform.h config.ini device ctrl-lib ui winbuild misc cli tests COPYING COPYING.LESSER NOTICE
+	zip -r $(BUILD)/src.zip *.md Makefile platform.h config.ini device ctrl-lib ui winbuild misc cli tests COPYING COPYING.LESSER NOTICE ABOUT
 	cp config.ini $(BUILD)
 	cp COPYING $(BUILD)
 	cp COPYING.LESSER $(BUILD)
 	cp NOTICE $(BUILD)
+	cp ABOUT $(BUILD)

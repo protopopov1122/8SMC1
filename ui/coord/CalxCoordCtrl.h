@@ -55,6 +55,7 @@ namespace CalXUI {
 			void OnArcMoveClick(wxCommandEvent&);
 			void OnGraphBuildClick(wxCommandEvent&);
 			void OnCalibrateClick(wxCommandEvent&);
+			void OnMeasureClick(wxCommandEvent&);
 			void OnUpdateFiltersClick(wxCommandEvent&);
 			void OnInstrumentEnableClick(wxCommandEvent&);
 			void use();

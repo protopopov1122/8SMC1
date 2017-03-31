@@ -44,7 +44,7 @@ namespace CalX {
 	};
 
 	/* Used in device controller. Describes current move type and state.*/
-	enum MoveType {
+	enum class MoveType {
 		Stop = 0, MoveDown = -1, MoveUp = 1,
 		RollDown = -2, RollUp = 2
 	};
@@ -73,7 +73,7 @@ namespace CalX {
 		motor_coord_t h;
 	};
 	
-	enum TrailerId {
+	enum class TrailerId {
 		Trailer1 = 1, Trailer2 = 2
 	};
 	

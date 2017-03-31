@@ -48,6 +48,20 @@ namespace CalXUI {
 		trailer->SetSelection(0);
 		calibrateSizer->Add(trailer, 0, wxALL);
 		
+		wxPanel *measurePanel = new wxPanel(this, wxID_ANY);
+		sizer->Add(measurePanel, 0, wxBOTTOM | wxLEFT, 5);
+		wxBoxSizer *measureSizer = new wxBoxSizer(wxHORIZONTAL);
+		measurePanel->SetSizer(measureSizer);
+		wxButton *measureButton = new wxButton(measurePanel, wxID_ANY, "Measure");
+		measureButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnMeasureClick, ctrl);
+		measureSizer->Add(measureButton);
+		measureSizer->Add(new wxStaticText(measurePanel, wxID_ANY, " to "), wxALL | wxALIGN_CENTER, 5);
+		measureTrailer = new wxChoice(measurePanel, wxID_ANY);
+		measureTrailer->Append("trailer 1");
+		measureTrailer->Append("trailer 2");
+		measureTrailer->SetSelection(0);
+		measureSizer->Add(measureTrailer, 0, wxALL);
+		
 		wxPanel *logPanel = new wxPanel(this, wxID_ANY);
 		sizer->Add(logPanel, 0, wxALL | wxEXPAND, 5);
 		wxBoxSizer *logSizer = new wxBoxSizer(wxHORIZONTAL);

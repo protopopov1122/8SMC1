@@ -45,6 +45,7 @@ namespace CalXUI {
 			}
 			bool isInstrumentEnabled() {return enableInstrument->GetValue();}
 			TrailerId getTrailer() {return trailer->GetSelection()==0 ? TrailerId::Trailer1 : TrailerId::Trailer2;}
+			TrailerId getMeasureTrailer() {return measureTrailer->GetSelection()==0 ? TrailerId::Trailer1 : TrailerId::Trailer2;}
 			bool isLoggingActions() {return logActions->GetValue();}
 			bool isLoggingErrors() {return logActions->GetValue();}
 			int getXOffset() {return xOffset->GetValue();}
@@ -79,6 +80,7 @@ namespace CalXUI {
 			CalxCoordCtrl *ctrl;
 			wxCheckBox *enableInstrument;
 			wxChoice *trailer;
+			wxChoice *measureTrailer;
 			wxCheckBox *logActions;
 			wxCheckBox *logErrors;
 			wxSpinCtrl *xOffset;
