@@ -40,6 +40,7 @@ namespace CalX {
 			
 			bool isRunnable();
 			void setRunnable(bool);
+			std::string getInfo();
 			
 			void addEventListener(InstrumentEventListener*);
 			void removeEventListener(InstrumentEventListener*);

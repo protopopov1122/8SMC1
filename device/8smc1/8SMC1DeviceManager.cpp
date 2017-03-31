@@ -32,7 +32,7 @@ namespace CalX {
 			this->dev.push_back(new _8SMC1Device((device_id_t) i, this));
 		}
 		
-		this->instrConType.push_back(DeviceConnectType::DeviceConnectCOM);
+		this->instrConType.push_back(DeviceConnectionType::SerialPort);
 	}
 
 	_8SMC1DeviceManager::~_8SMC1DeviceManager() {
@@ -75,14 +75,15 @@ namespace CalX {
 		return std::string(this->devs.Version[id]);
 	}
 	
-	Device *_8SMC1DeviceManager::connectDevice(DeviceConnectType type, std::string prms) {
+	Device *_8SMC1DeviceManager::connectDevice(DeviceConnectionPrms *prms) {
 		return nullptr;
 	}
 	
-	Instrument *_8SMC1DeviceManager::connectInstrument(DeviceConnectType type, std::string prms) {
-		if (type != DeviceConnectType::DeviceConnectCOM) {
+	Instrument *_8SMC1DeviceManager::connectInstrument(DeviceConnectionPrms *_prms) {
+		if (_prms->type != DeviceConnectionType::SerialPort) {
 			return nullptr;
 		}
+		DeviceSerialPortConnectionPrms *prms = (DeviceSerialPortConnectionPrms*) _prms;
 		_8SMC1Instrument *instr = new _8SMC1Instrument((device_id_t) this->instr.size(), prms, this);
 		if (instr->hasError()) {
 			delete instr;

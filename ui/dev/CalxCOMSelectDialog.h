@@ -23,19 +23,26 @@
 
 #include "CalxApp.h"
 #include <wx/spinctrl.h>
+#include <wx/choice.h>
 
 namespace CalXUI {
 
 	class CalxCOMSelectDialog : public wxDialog {
 		public:
 			CalxCOMSelectDialog(wxWindow*, wxWindowID);
-			int getPort();
+			int16_t getPort();
+			int32_t getSpeed();
+			SerialPortParity getParity();
 		private:
 			void OnOkClick(wxCommandEvent&);
 			void OnCancelClick(wxCommandEvent&);
 		
 			wxSpinCtrl *portSpin;
-			int port;
+			wxSpinCtrl *speedSpin;
+			wxChoice *parityCh;
+			int16_t port;
+			int32_t speed;
+			SerialPortParity parity;
 	};
 }
 

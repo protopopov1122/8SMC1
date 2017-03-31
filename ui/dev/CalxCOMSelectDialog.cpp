@@ -29,23 +29,36 @@ namespace CalXUI {
 		: wxDialog::wxDialog(win, id, "Select COM Port") {
 		
 		this->port = -1;
+		this->speed = -1;
 		
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(sizer);
 		
 		wxPanel *mainPanel = new wxPanel(this, wxID_ANY);
 		sizer->Add(mainPanel, 0, wxALL, 10);
-		wxBoxSizer *mainSizer = new wxBoxSizer(wxHORIZONTAL);
+		wxFlexGridSizer *mainSizer = new wxFlexGridSizer(2);
 		mainPanel->SetSizer(mainSizer);
-		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, "COM Port(1-255): "), 0, wxRIGHT, 5);
-		this->portSpin = new wxSpinCtrl(mainPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 255, wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getInt("default_com", 1));
+		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, "Port: "), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		this->portSpin = new wxSpinCtrl(mainPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 255, wxGetApp().getSystemManager()->getConfiguration()->getEntry("serial")->getInt("port", 1));
 		mainSizer->Add(this->portSpin);
+		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, "Baud rate: "), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		this->speedSpin = new wxSpinCtrl(mainPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, INT_MAX, wxGetApp().getSystemManager()->getConfiguration()->getEntry("serial")->getInt("speed", 9600));
+		mainSizer->Add(this->speedSpin);
+		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, "Parity: "), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		this->parityCh = new wxChoice(mainPanel, wxID_ANY);
+		this->parityCh->Append("No");
+		this->parityCh->Append("Odd");
+		this->parityCh->Append("Even");
+		this->parityCh->Append("Mark");
+		this->parityCh->Append("Space");
+		this->parityCh->SetSelection(wxGetApp().getSystemManager()->getConfiguration()->getEntry("serial")->getInt("parity", 0));
+		mainSizer->Add(this->parityCh);
 		
 		wxPanel *buttonPanel = new wxPanel(this, wxID_ANY);
 		sizer->Add(buttonPanel, 0, wxALL | wxALIGN_CENTER, 5);
 		wxBoxSizer *buttonSizer = new wxBoxSizer(wxHORIZONTAL);
 		buttonPanel->SetSizer(buttonSizer);
-		wxButton *okButton = new wxButton(buttonPanel, wxID_ANY, "Ok");
+		wxButton *okButton = new wxButton(buttonPanel, wxID_ANY, "OK");
 		wxButton *cancelButton = new wxButton(buttonPanel, wxID_ANY, "Cancel");
 		buttonSizer->Add(okButton);
 		buttonSizer->Add(cancelButton);
@@ -56,12 +69,39 @@ namespace CalXUI {
 		Fit();
 	}
 	
-	int CalxCOMSelectDialog::getPort() {
+	int16_t CalxCOMSelectDialog::getPort() {
 		return this->port;
+	}
+	
+	int32_t CalxCOMSelectDialog::getSpeed() {
+		return this->speed;
+	}
+	
+	SerialPortParity CalxCOMSelectDialog::getParity() {
+		return this->parity;
 	}
 	
 	void CalxCOMSelectDialog::OnOkClick(wxCommandEvent &evt) {
 		this->port = this->portSpin->GetValue();
+		this->speed = this->speedSpin->GetValue();
+		this->parity = SerialPortParity::No;
+		switch (this->parityCh->GetSelection()) {
+			case 0:
+				this->parity = SerialPortParity::No;			
+			break;
+			case 1:
+				this->parity = SerialPortParity::Odd;			
+			break;
+			case 2:
+				this->parity = SerialPortParity::Even;			
+			break;
+			case 3:
+				this->parity = SerialPortParity::Mark;			
+			break;
+			case 4:
+				this->parity = SerialPortParity::Space;			
+			break;
+		}
 		Hide();
 	}
 	

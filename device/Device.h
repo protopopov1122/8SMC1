@@ -32,10 +32,37 @@ namespace CalX {
 
 	class DeviceManager;	// For forward referencing
 
+	enum class DeviceConnectionType {
+		SerialPort
+	};
+	
+	struct DeviceConnectionPrms {
+		public:
+			DeviceConnectionPrms(DeviceConnectionType t) {this->type = t;}
+			
+			DeviceConnectionType type;
+	};
+	
+	enum class SerialPortParity {
+		No = 0, Odd = 1,
+		Even = 2, Mark = 3,
+		Space = 4
+	};
+	
+	struct DeviceSerialPortConnectionPrms : public DeviceConnectionPrms {
+		public:
+			DeviceSerialPortConnectionPrms() :
+				DeviceConnectionPrms::DeviceConnectionPrms(DeviceConnectionType::SerialPort) {}
+				
+			uint8_t port;
+			uint32_t speed;
+			SerialPortParity parity;
+	};
+	
 	typedef int64_t device_id_t;
 
 	// Device power indicator
-	enum Power {
+	enum class Power {
 		NoPower, HalfPower, FullPower
 	};
 	
@@ -77,6 +104,7 @@ namespace CalX {
 			virtual DeviceManager *getDeviceManager();
 			virtual bool enable(bool) = 0;
 			virtual bool enabled() = 0;
+			virtual std::string getInfo() = 0;
 		protected:
 			device_id_t dev;
 			DeviceManager *devman;

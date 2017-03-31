@@ -103,18 +103,26 @@ namespace CalXUI {
 		this->listener = new CalxInstrumentEventListener(this);
 		
 		wxStaticBox *box = new wxStaticBox(this, wxID_ANY, "Instrument #" + std::to_string(ctrl->getID()));
-		wxStaticBoxSizer *sizer = new wxStaticBoxSizer(box, wxHORIZONTAL);
+		wxStaticBoxSizer *sizer = new wxStaticBoxSizer(box, wxVERTICAL);
 		SetSizer(sizer);
 		
-		wxPanel *infoPanel = new wxPanel(box, wxID_ANY);
-		sizer->Add(infoPanel, 0, wxALL, 10);
+		this->instrInfoText = new wxStaticText(box, wxID_ANY, ctrl->getInfo());
+		sizer->Add(instrInfoText, 0, wxLEFT | wxTOP, 5);
+		
+		wxPanel *mainPanel = new wxPanel(box, wxID_ANY);
+		wxBoxSizer *mainSizer = new wxBoxSizer(wxHORIZONTAL);
+		mainPanel->SetSizer(mainSizer);
+		sizer->Add(mainPanel);
+		
+		wxPanel *infoPanel = new wxPanel(mainPanel, wxID_ANY);
+		mainSizer->Add(infoPanel, 0, wxALL, 10);
 		wxBoxSizer *infoSizer = new wxBoxSizer(wxVERTICAL);
 		infoPanel->SetSizer(infoSizer);
 		this->infoText = new wxStaticText(infoPanel, wxID_ANY, "");
 		infoSizer->Add(infoText);
 		
-		wxPanel *ctrlPanel = new wxPanel(box, wxID_ANY);
-		sizer->Add(ctrlPanel, 0, wxALL, 10);
+		wxPanel *ctrlPanel = new wxPanel(mainPanel, wxID_ANY);
+		mainSizer->Add(ctrlPanel, 0, wxALL, 10);
 		wxBoxSizer *ctrlSizer = new wxBoxSizer(wxVERTICAL);
 		ctrlPanel->SetSizer(ctrlSizer);
 		wxButton *stateButton = new wxButton(ctrlPanel, wxID_ANY, "Switch state");

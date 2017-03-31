@@ -24,17 +24,18 @@
 
 namespace CalX {
 	
-	_8SMC1Instrument::_8SMC1Instrument(device_id_t id, std::string port, DeviceManager *devman)
+	_8SMC1Instrument::_8SMC1Instrument(device_id_t id, DeviceSerialPortConnectionPrms *prms, DeviceManager *devman)
 		: Instrument::Instrument() {
 		this->dev = id;
 		this->devman = devman;
 		this->state = false;
+		memcpy(&this->prms, prms, sizeof(DeviceSerialPortConnectionPrms));
 		
 		// Testing stub values
-		int baudrate = 9600;
+		int baudrate = prms->speed;
 		int TIMEOUT = 1000;
 		
-		this->handle = CreateFile(("COM" + port).c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL,
+		this->handle = CreateFile(("COM" + std::to_string(prms->port)).c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL,
 			OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 		if (this->handle == INVALID_HANDLE_VALUE) {
 			this->error = true;
@@ -63,6 +64,7 @@ namespace CalX {
 		ComDCM.DCBlength = sizeof(DCB);
 		GetCommState(handle, &ComDCM);
 		ComDCM.BaudRate = DWORD(baudrate);
+		ComDCM.Parity = static_cast<BYTE>(prms->parity);
 
 		if(!SetCommState(handle, &ComDCM)) {
 			CloseHandle(handle);
@@ -96,6 +98,30 @@ namespace CalX {
 	
 	bool _8SMC1Instrument::enabled() {
 		return state;
+	}
+	
+	std::string _8SMC1Instrument::getInfo() {
+		std::string out = "Connected via serial: COM" +
+			std::to_string(prms.port) + "; speed: " +
+			std::to_string(prms.speed) + "; parity: ";
+		switch (prms.parity) {
+			case SerialPortParity::No:
+				out += "No";
+			break;
+			case SerialPortParity::Odd:
+				out += "Odd";
+			break;
+			case SerialPortParity::Even:
+				out += "Even";
+			break;
+			case SerialPortParity::Mark:
+				out += "Mark";
+			break;
+			case SerialPortParity::Space:
+				out += "Space";
+			break;
+		}
+		return out;
 	}
 	
 	_8SMC1Device::_8SMC1Device(device_id_t dev, DeviceManager *devman) {

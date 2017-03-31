@@ -268,6 +268,9 @@ namespace CalX {
 								integer = false;
 								break;
 							}
+						} else if ((val[i] == '+'
+							|| val[i] == '-') &&
+							i == 0) {
 						} else if (!isdigit(val[i])) {
 							integer = false;
 							break;

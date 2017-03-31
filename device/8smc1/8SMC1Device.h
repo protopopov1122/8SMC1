@@ -16,13 +16,15 @@ namespace CalX {
 	
 	class _8SMC1Instrument : public Instrument {
 		public:
-			_8SMC1Instrument(device_id_t, std::string, DeviceManager*);
+			_8SMC1Instrument(device_id_t, DeviceSerialPortConnectionPrms*, DeviceManager*);
 			virtual ~_8SMC1Instrument();
 			virtual bool enable(bool);
 			virtual bool enabled();
+			virtual std::string getInfo();
 		private:
 			bool state;
 			HANDLE handle;
+			DeviceSerialPortConnectionPrms prms;
 	};
 	
 	class _8SMC1Device : public Device {

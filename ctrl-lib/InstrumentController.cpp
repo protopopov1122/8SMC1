@@ -67,6 +67,10 @@ namespace CalX {
 		sendStateChanged();
 	}
 	
+	std::string InstrumentController::getInfo() {
+		return this->instr->getInfo();
+	}
+	
 	void InstrumentController::addEventListener(InstrumentEventListener *l) {
 		this->listeners.push_back(l);
 	}

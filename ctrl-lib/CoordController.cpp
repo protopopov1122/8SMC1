@@ -303,10 +303,10 @@ namespace CalX {
 		if (tr == 2) {
 			comeback *= -1;
 		}
-		xAxis->startMove(xAxis->getDevice()->getPosition() + comeback,
-		roll_speed, roll_div);
-		yAxis->startMove(yAxis->getDevice()->getPosition() + comeback,
-		roll_speed, roll_div);
+		if (work) {
+			xAxis->startMove(xAxis->getDevice()->getPosition() + comeback, roll_speed, roll_div);
+			yAxis->startMove(yAxis->getDevice()->getPosition() + comeback, roll_speed, roll_div);
+		}
 		xAxis->sendRolledEvent(mevt);
 		yAxis->sendRolledEvent(mevt);
 		if (this->instr != nullptr) {

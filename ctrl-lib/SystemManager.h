@@ -60,8 +60,8 @@ namespace CalX {
 			CoordHandle* createCoord(device_id_t, device_id_t, device_id_t = -1);
 			void removeCoord(size_t);
 			// Device connection
-			DeviceController *connectDevice(DeviceConnectType, std::string);
-			InstrumentController *connectInstrument(DeviceConnectType, std::string);
+			DeviceController *connectDevice(DeviceConnectionPrms*);
+			InstrumentController *connectInstrument(DeviceConnectionPrms*);
 		private:
 			DeviceManager *devman;
 			ConfigManager *conf;

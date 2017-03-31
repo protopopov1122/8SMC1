@@ -147,8 +147,8 @@ namespace CalX {
 		return this->instr.at(i);
 	}
 	
-	DeviceController *SystemManager::connectDevice(DeviceConnectType type, std::string prms) {
-		Device *d = devman->connectDevice(type, prms);
+	DeviceController *SystemManager::connectDevice(DeviceConnectionPrms *prms) {
+		Device *d = devman->connectDevice(prms);
 		if (d == nullptr) {
 			return nullptr;
 		}
@@ -158,8 +158,8 @@ namespace CalX {
 		return ctrl;
 	}
 	
-	InstrumentController *SystemManager::connectInstrument(DeviceConnectType type, std::string prms) {
-		Instrument *i = devman->connectInstrument(type, prms);
+	InstrumentController *SystemManager::connectInstrument(DeviceConnectionPrms *prms) {
+		Instrument *i = devman->connectInstrument(prms);
 		if (i == nullptr) {
 			return nullptr;
 		}

@@ -64,7 +64,7 @@ namespace CalX {
 		return this->instr.at(id);
 	}
 	
-	void DeviceManager::getConnectionTypes(std::vector<DeviceConnectType> &dev, std::vector<DeviceConnectType> &instr) {
+	void DeviceManager::getConnectionTypes(std::vector<DeviceConnectionType> &dev, std::vector<DeviceConnectionType> &instr) {
 		for (const auto& d : this->devConType) {
 			dev.push_back(d);
 		}
@@ -73,11 +73,11 @@ namespace CalX {
 		}
 	}
 	
-	bool DeviceManager::canDeviceConnect(DeviceConnectType d) {
+	bool DeviceManager::canDeviceConnect(DeviceConnectionType d) {
 		return std::find(devConType.begin(), devConType.end(), d) != devConType.end();
 	}
 	
-	bool DeviceManager::canInstrumentConnect(DeviceConnectType d) {
+	bool DeviceManager::canInstrumentConnect(DeviceConnectionType d) {
 		return std::find(instrConType.begin(), instrConType.end(), d) != instrConType.end();
 	}
 	

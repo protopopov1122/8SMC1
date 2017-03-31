@@ -39,12 +39,12 @@ namespace CalXUI {
 		sizer->Add(connectPanel, 0, wxALL | wxEXPAND);
 		wxBoxSizer *connectSizer = new wxBoxSizer(wxHORIZONTAL);
 		connectPanel->SetSizer(connectSizer);
-		std::vector<DeviceConnectType> devConType;
-		std::vector<DeviceConnectType> instrConType;
+		std::vector<DeviceConnectionType> devConType;
+		std::vector<DeviceConnectionType> instrConType;
 		app.getSystemManager()->getDeviceManager()->getConnectionTypes(devConType, instrConType);
 		for (const auto& devCon : devConType) {
 			switch (devCon) {
-				case DeviceConnectType::DeviceConnectCOM: {
+				case DeviceConnectionType::SerialPort: {
 					wxButton *comButton = new wxButton(connectPanel, wxID_ANY, "Connect COM motor");
 					connectSizer->Add(comButton, 0, wxALL, 5);
 					comButton->Bind(wxEVT_BUTTON, &CalxDevicePanel::OnCOMConnectDevice, this);
@@ -53,7 +53,7 @@ namespace CalXUI {
 		}
 		for (const auto& instrCon : instrConType) {
 			switch (instrCon) {
-				case DeviceConnectType::DeviceConnectCOM: {
+				case DeviceConnectionType::SerialPort: {
 					wxButton *comButton = new wxButton(connectPanel, wxID_ANY, "Connect COM instrument");
 					connectSizer->Add(comButton, 0, wxALL, 5);
 					comButton->Bind(wxEVT_BUTTON, &CalxDevicePanel::OnCOMConnectInstrument, this);
@@ -140,7 +140,11 @@ namespace CalXUI {
 		CalxCOMSelectDialog *dialog = new CalxCOMSelectDialog(this, wxID_ANY);
 		dialog->ShowModal();
 		if (dialog->getPort() != -1) {
-			DeviceController *ctrl = app.getSystemManager()->connectDevice(DeviceConnectType::DeviceConnectCOM, std::to_string(dialog->getPort()));
+			DeviceSerialPortConnectionPrms prms;
+			prms.port = dialog->getPort();
+			prms.speed = 9600;
+			prms.parity = SerialPortParity::No;
+			DeviceController *ctrl = app.getSystemManager()->connectDevice(&prms);
 			if (ctrl == nullptr) {
 				wxMessageBox("Device can't be connected on COM" + std::to_string(dialog->getPort()),
 					"Connection error", wxICON_WARNING);
@@ -159,7 +163,11 @@ namespace CalXUI {
 		CalxCOMSelectDialog *dialog = new CalxCOMSelectDialog(this, wxID_ANY);
 		dialog->ShowModal();
 		if (dialog->getPort() != -1) {
-			InstrumentController *ctrl = app.getSystemManager()->connectInstrument(DeviceConnectType::DeviceConnectCOM, std::to_string(dialog->getPort()));
+			DeviceSerialPortConnectionPrms prms;
+			prms.port = dialog->getPort();
+			prms.speed = dialog->getSpeed();
+			prms.parity = dialog->getParity();
+			InstrumentController *ctrl = app.getSystemManager()->connectInstrument(&prms);
 			if (ctrl == nullptr) {
 				wxMessageBox("Instrument can't be connected on COM" + std::to_string(dialog->getPort()),
 					"Connection error", wxICON_WARNING);
