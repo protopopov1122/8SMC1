@@ -63,6 +63,10 @@ namespace CalX {
 		return this->peekPlane()->calibrate(tr);
 	}
 	
+	ErrorCode CoordPlaneStack::measure(TrailerId tr) {
+		return this->peekPlane()->measure(tr);
+	}
+	
 	motor_point_t CoordPlaneStack::getPosition() {
 			return this->peekPlane()->getPosition();
 	}

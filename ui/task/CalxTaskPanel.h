@@ -50,6 +50,7 @@ namespace CalXUI {
 			void OnRemoveClick(wxCommandEvent&);
 			void OnListClick(wxCommandEvent&);
 			void OnBuildClick(wxCommandEvent&);
+			void OnPreviewClick(wxCommandEvent&);
 			void OnQueueUpdate(wxThreadEvent&);
 			void OnStopClick(wxCommandEvent&);
 			

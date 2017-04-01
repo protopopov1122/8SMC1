@@ -29,23 +29,12 @@
 
 namespace CalX {
 	
-	VirtualCoordPlane::VirtualCoordPlane(VirtualDevice *x, VirtualDevice *y) {
-		this->xDev = x;
-		this->yDev = y;
-		this->size = {0, 0, 0, 0};
+	VirtualCoordPlane::VirtualCoordPlane(motor_point_t pos, motor_rect_t size) {
+		this->position = pos;
+		this->size = size;
 	}
 	
 	VirtualCoordPlane::~VirtualCoordPlane() {
-		delete this->xDev;
-		delete this->yDev;
-	}
-	
-	VirtualDevice *VirtualCoordPlane::getXAxis() {
-		return this->xDev;
-	}
-	
-	VirtualDevice *VirtualCoordPlane::getYAxis() {
-		return this->yDev;
 	}
 
 	void VirtualCoordPlane::dump(std::ostream &os) {
@@ -54,86 +43,23 @@ namespace CalX {
 	
 	ErrorCode VirtualCoordPlane::move(motor_point_t point, float speed, int div,
 			bool sync) {
-		motor_coord_t dx = point.x - xDev->getPosition();
-		motor_coord_t dy = point.y - yDev->getPosition();
-
-		float x_speed;
-		float y_speed;
-		if (!sync || dx == dy) {
-			x_speed = speed;
-			y_speed = speed;
-		} else if (dx == 0) {
-			x_speed = 0;
-			y_speed = speed;
-		} else if (dy == 0) {
-			x_speed = speed;
-			y_speed = 0;
-		} else {
-			float ddx = (float) dx;
-			float ddy = (float) dy;
-			float ncoef = fabs(ddy / ddx);
-			x_speed = sqrt(speed * speed / (1 + ncoef * ncoef));
-			y_speed = ncoef * x_speed;
-		}
-	
-		xDev->start(point.x, x_speed, div);
-		yDev->start(point.y, y_speed, div);
-		if (xDev->isTrailerPressed(TrailerId::Trailer1) ||
-			yDev->isTrailerPressed(TrailerId::Trailer1)) {
-			return ErrorCode::Trailer1Pressed;	
-		}
-		if (xDev->isTrailerPressed(TrailerId::Trailer2) ||
-			yDev->isTrailerPressed(TrailerId::Trailer2)) {
-			return ErrorCode::Trailer2Pressed;	
-		}
+		this->position = point;
+		this->jump(point, sync);
 		return ErrorCode::NoError;
 	}
 
 	ErrorCode VirtualCoordPlane::calibrate(TrailerId tr) {
-		int comeback = TRAILER_COMEBACK;
-		if (tr != TrailerId::Trailer1 && tr != TrailerId::Trailer2) {
-			return ErrorCode::WrongParameter;
+		if (tr == TrailerId::Trailer1) {
+			this->position = {this->size.x, this->size.y};
+		} else {
+			this->position = {this->size.x + this->size.w, this->size.y + this->size.h};
 		}
-		bool xpr = false;
-		bool ypr = false;
-		int dest = (tr == TrailerId::Trailer1 ? -ROLL_STEP : ROLL_STEP);
-		while (!(xpr && ypr)) {
-			if (!xDev->isTrailerPressed(tr)) {
-				if (!xpr) {
-					xDev->start(xDev->getPosition() + dest,
-							ROLL_SPEED, ROLL_DIV);
-				}
-			} else  {
-				xpr = true;
-			}
-				
-
-			if (!yDev->isTrailerPressed(tr)) {
-				if (!ypr) {
-					yDev->start(yDev->getPosition() + dest,
-							ROLL_SPEED, ROLL_DIV);
-				}
-			} else {
-				ypr = true;
-			}
-		}
-
-		if (tr == TrailerId::Trailer2) {
-			comeback *= -1;
-		}
-		xDev->start(xDev->getPosition() + comeback,
-			ROLL_SPEED, ROLL_DIV);
-		yDev->start(yDev->getPosition() + comeback,
-			ROLL_SPEED, ROLL_DIV);
-			
+		this->jump(this->position, false);
 		return ErrorCode::NoError;
 	}
 
 	motor_point_t VirtualCoordPlane::getPosition() {
-		motor_point_t pos;
-		pos.x = xDev->getPosition();
-		pos.y = yDev->getPosition();
-		return pos;
+		return this->position;
 	}
 
 	ErrorCode VirtualCoordPlane::arc(motor_point_t dest, motor_point_t center, int spl,
@@ -143,6 +69,8 @@ namespace CalX {
 			     pow(src.y - center.y, 2);
 		double r2 = pow(dest.x - center.x, 2) +
 			     pow(dest.y - center.y, 2);
+		std::cout << dest.x << " " << dest.y << " " << center.x << " " << center.y << 
+				" " << fabs(sqrt(r1) - sqrt(r2)) / ((double) sqrt(r1))  << std::endl;
 		if (fabs(sqrt(r1) - sqrt(r2)) >= COMPARISON_RADIUS) {
 				return ErrorCode::ArcError;
 		}
@@ -179,14 +107,8 @@ namespace CalX {
 		return this->size;
 	}
 	
-	void VirtualCoordPlane::measure(TrailerId tid) {
-		TrailerId tid1 = (tid == TrailerId::Trailer1 ? TrailerId::Trailer2 : TrailerId::Trailer1);
-		TrailerId tid2 = tid;
-		this->calibrate(tid1);
-		motor_point_t min = getPosition();
-		this->calibrate(tid2);
-		motor_point_t max = getPosition();
-		this->size = {min.x, min.y, abs(max.x - min.x), abs(max.y - min.y)};
+	ErrorCode VirtualCoordPlane::measure(TrailerId tid) {
+		return ErrorCode::NoError;
 	}
 	
 	

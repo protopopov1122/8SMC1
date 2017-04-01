@@ -189,7 +189,15 @@ namespace CalX {
 	}
 	
 	CoordTask *gcode_translate(GCodeParser *parser, CoordTranslator *translator, ProgrammedCoordTask *task) {
+		motor_point_t offset = translator->get(0, 0);
 		coord_point_t last = {0, 0};
+		int invert = 1;
+		if (translator->get(1, 0).x < offset.x) {
+			invert *= -1;
+		}
+		if (translator->get(0, 1).y < offset.y) {
+			invert *= -1;
+		}
 		GCodeCommand *cmd = nullptr;
 		const int CHORD_COUNT = 100;
 		while ((cmd = parser->nextCommand()) != nullptr) {
@@ -209,16 +217,20 @@ namespace CalX {
 						double i = cmd->getArg('I').fractValue();
 						double j = cmd->getArg('J').fractValue();
 						motor_point_t center = translator->get(i, j);
+						center.x -= offset.x;
+						center.y -= offset.y;
 						RelArcTaskStep *step = new RelArcTaskStep(real, center, CHORD_COUNT, 1.0f);
-						step->setClockwise(true);
+						step->setClockwise(invert == 1);
 						task->addStep(step);
 					} break;
 					case GCodeOpcode::GCode_CounterClockwise_Arc: {
 						double i = cmd->getArg('I').fractValue();
 						double j = cmd->getArg('J').fractValue();
 						motor_point_t center = translator->get(i, j);
+						center.x -= offset.x;
+						center.y -= offset.y;
 						RelArcTaskStep *step = new RelArcTaskStep(real, center, CHORD_COUNT, 1.0f);
-						step->setClockwise(false);
+						step->setClockwise(invert != 1);
 						task->addStep(step);
 					} break;
 				}

@@ -49,6 +49,7 @@ namespace CalX {
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false) = 0;
 			virtual ErrorCode relativeArc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
 			virtual ErrorCode calibrate(TrailerId) = 0;
+			virtual ErrorCode measure(TrailerId) = 0;
 			virtual motor_point_t getPosition() = 0;
 			virtual motor_rect_t getSize() = 0;
 			virtual void use() = 0;
@@ -75,11 +76,11 @@ namespace CalX {
 			DeviceController *getXAxis();
 			DeviceController *getYAxis();
 			InstrumentController *getInstrument();
-			virtual ErrorCode measure(TrailerId);
 			
 			virtual ErrorCode move(motor_point_t, float, int, bool);
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
 			virtual ErrorCode calibrate(TrailerId);
+			virtual ErrorCode measure(TrailerId);
 			virtual motor_point_t getPosition();
 			virtual motor_rect_t getSize();
 			virtual void stop();
@@ -125,6 +126,7 @@ namespace CalX {
 			virtual ErrorCode move(motor_point_t, float, int, bool);
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
 			virtual ErrorCode calibrate(TrailerId);
+			virtual ErrorCode measure(TrailerId);
 			virtual motor_point_t getPosition();
 			virtual motor_rect_t getSize();
 			virtual void use();
@@ -153,6 +155,7 @@ namespace CalX {
 			virtual ErrorCode move(motor_point_t, float, int, bool);
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
 			virtual ErrorCode calibrate(TrailerId);
+			virtual ErrorCode measure(TrailerId);
 			virtual motor_point_t getPosition();
 			virtual motor_rect_t getSize();
 			virtual void use();
@@ -181,6 +184,7 @@ namespace CalX {
 			virtual ErrorCode move(motor_point_t, float, int, bool);
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
 			virtual ErrorCode calibrate(TrailerId);
+			virtual ErrorCode measure(TrailerId);
 			virtual motor_point_t getPosition();
 			virtual motor_rect_t getSize();
 			virtual void use();
@@ -207,6 +211,7 @@ namespace CalX {
 			virtual ErrorCode move(motor_point_t, float, int, bool);
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
 			virtual ErrorCode calibrate(TrailerId);
+			virtual ErrorCode measure(TrailerId);
 			virtual motor_point_t getPosition();
 			virtual motor_rect_t getSize();
 			virtual void use();
@@ -217,37 +222,27 @@ namespace CalX {
 			std::vector<CoordPlane*> stack;
 	};
 	
-	// Virtual device emulator
-	class VirtualDevice {
-		public:
-			virtual ~VirtualDevice() {};
-			virtual motor_coord_t getPosition() = 0;
-			virtual ErrorCode start(motor_coord_t, float, int) = 0;
-			virtual bool isTrailerPressed(TrailerId) = 0;
-	};
-	
 	// Virtual coordinate plane emulator
 	class VirtualCoordPlane : public CoordPlane {
 		public:
-			VirtualCoordPlane(VirtualDevice*, VirtualDevice*);
+			VirtualCoordPlane(motor_point_t, motor_rect_t);
 			virtual ~VirtualCoordPlane();
-			VirtualDevice *getXAxis();
-			VirtualDevice *getYAxis();
-			virtual void measure(TrailerId);
 			
 			virtual ErrorCode move(motor_point_t, float, int, bool);
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
 			virtual ErrorCode calibrate(TrailerId);
+			virtual ErrorCode measure(TrailerId);
 			virtual motor_point_t getPosition();
 			virtual motor_rect_t getSize();
+			
 			virtual void use();
 			virtual void unuse();
 			virtual void stop();
 			virtual void dump(std::ostream&);
-			
+		protected:
+			virtual void jump(motor_point_t, bool) = 0;
 		private:
-			VirtualDevice *xDev;
-			VirtualDevice *yDev;
+			motor_point_t position;
 			motor_rect_t size;
 	};
 }

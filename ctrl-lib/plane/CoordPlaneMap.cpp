@@ -77,6 +77,10 @@ namespace CalX {
 		return this->plane->calibrate(tr);
 	}
 	
+	ErrorCode CoordPlaneMap::measure(TrailerId tr) {
+		return this->plane->measure(tr);
+	}
+	
 	motor_point_t CoordPlaneMap::getPosition() {
 		motor_point_t pnt = this->plane->getPosition();
 		pnt.x -= this->offset.x;

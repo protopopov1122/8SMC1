@@ -98,6 +98,17 @@ namespace CalX {
 		return err;
 	}
 	
+	ErrorCode CoordPlaneLog::measure(TrailerId tr) {
+		if (this->log_actions) {
+			*out << this->prefix << "Measuring to trailer #" << static_cast<int>(tr) << std::endl;
+		}
+		ErrorCode err = this->plane->measure(tr);
+		if (this->log_errors && err != ErrorCode::NoError) {
+			*out << this->prefix << "Error occured(" << err << ")" << std::endl;
+		}
+		return err;
+	}
+	
 	motor_point_t CoordPlaneLog::getPosition() {
 			return this->plane->getPosition();
 	}

@@ -184,6 +184,9 @@ CalxCoordOtherCtrl.o:
 CalxCoordPanel.o:
 	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/coord/CalxCoordPanel.cpp
 
+CalxVirtualPlane.o:
+	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/coord/CalxVirtualPlane.cpp
+
 CalxCOMSelectDialog.o:
 	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/dev/CalxCOMSelectDialog.cpp
 
@@ -222,13 +225,13 @@ $(OUTPUT).dll: ConfigManager.o CoordController.o CoordHandle.o DeviceController.
 	@mkdir -p $(BUILD)
 	$(CC) -shared -o $(BUILD)/$(OUTPUT).dll ConfigManager.o CoordController.o CoordHandle.o DeviceController.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o InstrumentController.o CircleGenerator.o GCodeParser.o GraphBuilder.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o VirtualCoordPlane.o SystemManager.o CoordTask.o CoordTaskWrapper.o GCodeCoordTask.o BasicCoordTranslator.o ComplexCoordTranslator.o LinearCoordTranslator.o LogarithmicCoordTranslator.o PolarCoordTranslator.o CLI.o DevCLI.o Device.o DeviceManager.o  $(LDFLAGS) -Wl,--out-implib,$(BUILD)/$(OUTPUT).a
 
-$(UI).exe: CalxAboutDialog.o CalxActionQueue.o CalxApp.o CalxConsoleWidget.o CalxDebugConsole.o CalxErrorHandler.o CalxFrame.o CalxPanel.o CalxCoordArcCtrl.o CalxCoordCtrl.o CalxCoordDialog.o CalxCoordFilter.o CalxCoordGraphCtrl.o CalxCoordLinearCtrl.o CalxCoordMiscCtrl.o CalxCoordOtherCtrl.o CalxCoordPanel.o CalxCOMSelectDialog.o CalxDeviceCtrl.o CalxDevicePanel.o CalxInstrumentCtrl.o CalxGcodeHandle.o CalxGcodeLoader.o CalxProgrammedTaskHandle.o CalxTaskPanel.o CalxTaskStepHandle.o
+$(UI).exe: CalxAboutDialog.o CalxActionQueue.o CalxApp.o CalxConsoleWidget.o CalxDebugConsole.o CalxErrorHandler.o CalxFrame.o CalxPanel.o CalxCoordArcCtrl.o CalxCoordCtrl.o CalxCoordDialog.o CalxCoordFilter.o CalxCoordGraphCtrl.o CalxCoordLinearCtrl.o CalxCoordMiscCtrl.o CalxCoordOtherCtrl.o CalxCoordPanel.o CalxVirtualPlane.o CalxCOMSelectDialog.o CalxDeviceCtrl.o CalxDevicePanel.o CalxInstrumentCtrl.o CalxGcodeHandle.o CalxGcodeLoader.o CalxProgrammedTaskHandle.o CalxTaskPanel.o CalxTaskStepHandle.o
 	@mkdir -p $(BUILD)
 ifneq ($(WXLIB),)
 	cp $(WX)/$(WXLIB) $(BUILD)
 endif
 	$(MAKE) icon
-	$(CC) -o $(BUILD)/$(UI).exe CalxAboutDialog.o CalxActionQueue.o CalxApp.o CalxConsoleWidget.o CalxDebugConsole.o CalxErrorHandler.o CalxFrame.o CalxPanel.o CalxCoordArcCtrl.o CalxCoordCtrl.o CalxCoordDialog.o CalxCoordFilter.o CalxCoordGraphCtrl.o CalxCoordLinearCtrl.o CalxCoordMiscCtrl.o CalxCoordOtherCtrl.o CalxCoordPanel.o CalxCOMSelectDialog.o CalxDeviceCtrl.o CalxDevicePanel.o CalxInstrumentCtrl.o CalxGcodeHandle.o CalxGcodeLoader.o CalxProgrammedTaskHandle.o CalxTaskPanel.o CalxTaskStepHandle.o  $(ICON) $(LDFLAGS) -Wl,--library-path=\$(BUILD) -lcalx `$(WX)/wx-config --libs`
+	$(CC) -o $(BUILD)/$(UI).exe CalxAboutDialog.o CalxActionQueue.o CalxApp.o CalxConsoleWidget.o CalxDebugConsole.o CalxErrorHandler.o CalxFrame.o CalxPanel.o CalxCoordArcCtrl.o CalxCoordCtrl.o CalxCoordDialog.o CalxCoordFilter.o CalxCoordGraphCtrl.o CalxCoordLinearCtrl.o CalxCoordMiscCtrl.o CalxCoordOtherCtrl.o CalxCoordPanel.o CalxVirtualPlane.o CalxCOMSelectDialog.o CalxDeviceCtrl.o CalxDevicePanel.o CalxInstrumentCtrl.o CalxGcodeHandle.o CalxGcodeLoader.o CalxProgrammedTaskHandle.o CalxTaskPanel.o CalxTaskStepHandle.o  $(ICON) $(LDFLAGS) -Wl,--library-path=\$(BUILD) -lcalx `$(WX)/wx-config --libs`
 
 all:
 	$(MAKE) $(OUTPUT).dll

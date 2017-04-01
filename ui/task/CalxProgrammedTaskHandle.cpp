@@ -178,5 +178,6 @@ namespace CalXUI {
 	
 	void CalxProgrammedTaskHandle::OnExit(wxCloseEvent &evt) {
 		delete this->task;
+		Destroy();
 	}
 }

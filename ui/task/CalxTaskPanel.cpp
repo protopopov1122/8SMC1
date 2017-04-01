@@ -26,13 +26,14 @@
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include "coord/CalxCoordPanel.h"
+#include "coord/CalxVirtualPlane.h"
 #include "CalxGcodeLoader.h"
 
 namespace CalXUI {
 	
 	class CalxTaskAction : public CalxAction {
 		public:
-			CalxTaskAction(CalxTaskPanel *panel, CoordHandle *handle, CoordTask *task, TaskParameters prms) {
+			CalxTaskAction(CalxTaskPanel *panel, CoordPlane *handle, CoordTask *task, TaskParameters prms) {
 				this->panel = panel;
 				this->handle = handle;
 				this->task = task;
@@ -50,7 +51,34 @@ namespace CalXUI {
 			}
 		private:
 			CalxTaskPanel *panel;
-			CoordHandle *handle;
+			CoordPlane *handle;
+			CoordTask *task;
+			TaskParameters prms;
+			TaskState state;
+	};
+	
+	class CalxPreviewAction : public CalxAction {
+		public:
+			CalxPreviewAction(CalxTaskPanel *panel, CalxVirtualPlaneDialog *dialog, CoordTask *task, TaskParameters prms) {
+				this->panel = panel;
+				this->dialog = dialog;
+				this->task = task;
+				this->prms = prms;
+			}
+			
+			virtual void perform(SystemManager *sysman) {
+				panel->setEnabled(false);
+				wxGetApp().getErrorHandler()->handle(task->perform(dialog->getPlane(), prms, sysman, &state));
+				dialog->Refresh();
+				panel->setEnabled(true);
+			}
+			
+			virtual void stop() {
+				state.stop();
+			}
+		private:
+			CalxTaskPanel *panel;
+			CalxVirtualPlaneDialog *dialog;
 			CoordTask *task;
 			TaskParameters prms;
 			TaskState state;
@@ -97,8 +125,11 @@ namespace CalXUI {
 		execSizer->Add(speed, 0, wxALL, 5);
 		this->stopButton = new wxButton(execPanel, wxID_ANY, "Stop");
 		execSizer->Add(stopButton);
+		wxButton *previewButton = new wxButton(execPanel, wxID_ANY, "Preview");
+		execSizer->Add(previewButton);
 		buildButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnBuildClick, this);
 		stopButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnStopClick, this);
+		previewButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnPreviewClick, this);
 		
 		SetSizer(sizer);
 		Layout();
@@ -208,6 +239,28 @@ namespace CalXUI {
 			CoordHandle *handle = wxGetApp().getMainFrame()->getPanel()->getCoords()->getCoord(plane->GetSelection());
 			TaskParameters prms = {(float) this->speed->GetValue()};
 			queue->addAction(new CalxTaskAction(this, handle, task, prms));
+		} else {
+			std::string message = "Select coordinate plane";
+			if (taskList->GetSelection() == wxNOT_FOUND) {
+				message = "Select task to build";
+			}
+			wxMessageDialog *dialog = new wxMessageDialog(this, message, "Warning", wxOK | wxICON_WARNING);
+			dialog->ShowModal();
+			dialog->Destroy();
+		}
+	}
+	
+	void CalxTaskPanel::OnPreviewClick(wxCommandEvent &evt) {
+		if (taskList->GetSelection() != wxNOT_FOUND
+			&& plane->GetSelection() != wxNOT_FOUND) {
+			list.at(taskList->GetSelection())->update();
+			CoordTask *task = list.at(taskList->GetSelection())->getTask();
+			CoordHandle *handle = wxGetApp().getMainFrame()->getPanel()->getCoords()->getCoord(plane->GetSelection());
+			TaskParameters prms = {(float) this->speed->GetValue()};
+			CalxVirtualPlaneDialog *dialog = new CalxVirtualPlaneDialog(this, wxID_ANY, handle, wxSize(500, 500));
+			queue->addAction(new CalxPreviewAction(this, dialog, task, prms));
+			dialog->ShowModal();
+			delete dialog;
 		} else {
 			std::string message = "Select coordinate plane";
 			if (taskList->GetSelection() == wxNOT_FOUND) {

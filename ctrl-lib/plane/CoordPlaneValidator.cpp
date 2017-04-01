@@ -97,6 +97,10 @@ namespace CalX {
 		return this->plane->calibrate(tr);
 	}
 	
+	ErrorCode CoordPlaneValidator::measure(TrailerId tr) {
+		return this->plane->measure(tr);
+	}
+	
 	motor_point_t CoordPlaneValidator::getPosition() {
 			return this->plane->getPosition();
 	}
