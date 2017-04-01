@@ -25,7 +25,7 @@ namespace CalXUI {
 	
 	CalxPlaneTracker::CalxPlaneTracker(motor_point_t pos, motor_rect_t sz)
 		: VirtualCoordPlane::VirtualCoordPlane(pos, sz) {
-			
+		
 	}
 	
 	CalxPlaneTracker::~CalxPlaneTracker() {
@@ -44,12 +44,17 @@ namespace CalXUI {
 		this->path.clear();
 	}
 	
+	CoordPlane *CalxPlaneTracker::clone(CoordPlane *plane) {
+		return new CalxPlaneTracker(this->getPosition(), this->getSize());
+	}
+	
 	CalxVirtualPlane::CalxVirtualPlane(wxWindow *win, wxWindowID id,
-		CoordPlane *base, wxSize min) 
+		CoordHandle *base, wxSize min) 
 		: wxWindow::wxWindow(win, id) {
 		
-		this->tracker = new CalxPlaneTracker(base->getPosition(), base->getSize());
-		this->stack = new CoordPlaneStack(this->tracker);
+		this->tracker = new CalxPlaneTracker(base->getBase()->getPosition(), base->getBase()->getSize());
+		this->stack = new CoordPlaneStack(base->clone(this->tracker));
+		std::cout << this->stack->getSize().w << " " << this->stack->getSize().h << std::endl;
 		SetMinSize(min);
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxVirtualPlane::OnExit, this);
 		this->Bind(wxEVT_PAINT, &CalxVirtualPlane::OnPaintEvent, this);
@@ -61,6 +66,7 @@ namespace CalXUI {
 	
 	void CalxVirtualPlane::OnExit(wxCloseEvent &evt) {
 		delete this->stack;
+		delete this->tracker;
 	}
 	
 	void CalxVirtualPlane::OnPaintEvent(wxPaintEvent &evt) {
@@ -93,7 +99,7 @@ namespace CalXUI {
 	}
 	
 	CalxVirtualPlaneDialog::CalxVirtualPlaneDialog(wxWindow *win, wxWindowID id,
-		CoordPlane *base, wxSize min)
+		CoordHandle *base, wxSize min)
 		: wxDialog::wxDialog(win , id, "Preview") {
 		
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);

@@ -126,4 +126,8 @@ namespace CalX {
 	void CoordPlaneValidator::stop() {
 		this->plane->stop();
 	}
+	
+	CoordPlane *CoordPlaneValidator::clone(CoordPlane *base) {
+		return new CoordPlaneValidator(this->min, this->max, this->max_speed, base);
+	}
 }

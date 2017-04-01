@@ -117,4 +117,8 @@ namespace CalX {
 	void CoordPlaneMap::stop() {
 		this->plane->stop();
 	}
+	
+	CoordPlane *CoordPlaneMap::clone(CoordPlane *base) {
+		return new CoordPlaneMap(this->offset, this->scale, base);
+	}
 }

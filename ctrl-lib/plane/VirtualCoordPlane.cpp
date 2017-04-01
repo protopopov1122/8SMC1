@@ -69,8 +69,6 @@ namespace CalX {
 			     pow(src.y - center.y, 2);
 		double r2 = pow(dest.x - center.x, 2) +
 			     pow(dest.y - center.y, 2);
-		std::cout << dest.x << " " << dest.y << " " << center.x << " " << center.y << 
-				" " << fabs(sqrt(r1) - sqrt(r2)) / ((double) sqrt(r1))  << std::endl;
 		if (fabs(sqrt(r1) - sqrt(r2)) >= COMPARISON_RADIUS) {
 				return ErrorCode::ArcError;
 		}

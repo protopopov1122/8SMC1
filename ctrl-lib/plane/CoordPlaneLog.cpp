@@ -133,4 +133,9 @@ namespace CalX {
 	void CoordPlaneLog::stop() {
 		this->plane->stop();
 	}
+	
+	CoordPlane *CoordPlaneLog::clone(CoordPlane *base) {
+		CoordPlaneLog *log = new CoordPlaneLog(base, this->out, this->prefix, this->log_actions, this->log_errors);
+		return log;
+	}
 }

@@ -56,6 +56,7 @@ namespace CalX {
 			virtual void unuse() = 0;
 			virtual void stop() = 0;
 			virtual void dump(std::ostream&) = 0;
+			virtual CoordPlane *clone(CoordPlane*) = 0;
 	};
 		
 	struct TaskState {
@@ -85,6 +86,7 @@ namespace CalX {
 			virtual void unuse();
 			virtual void stop();
 			virtual void dump(std::ostream&);
+			virtual CoordPlane *clone(CoordPlane*);
 		private:
 			CoordPlane *base;
 			bool work;
@@ -109,6 +111,7 @@ namespace CalX {
 			virtual void stop();
 			void kill();
 			virtual void dump(std::ostream&);
+			virtual CoordPlane *clone(CoordPlane*);
 			
 			void addEventListener(CoordEventListener*);
 			void removeEventListener(CoordEventListener*);
@@ -156,6 +159,7 @@ namespace CalX {
 			virtual void unuse();
 			virtual void stop();
 			virtual void dump(std::ostream&);
+			virtual CoordPlane *clone(CoordPlane*);
 		private:
 			CoordPlane *plane;
 			std::ostream *out;
@@ -185,6 +189,7 @@ namespace CalX {
 			virtual void unuse();
 			virtual void stop();
 			virtual void dump(std::ostream&);
+			virtual CoordPlane *clone(CoordPlane*);
 		private:
 			CoordPlane* plane;
 			motor_point_t offset;
@@ -214,6 +219,7 @@ namespace CalX {
 			virtual void unuse();
 			virtual void stop();
 			virtual void dump(std::ostream&);
+			virtual CoordPlane *clone(CoordPlane*);
 		private:
 			CoordPlane *plane;
 			motor_point_t min;
@@ -230,6 +236,7 @@ namespace CalX {
 			CoordPlane *peekPlane();
 			bool popPlane();
 			void pushPlane(CoordPlane*);
+			CoordPlane *getBase();
 			
 			virtual ErrorCode move(motor_point_t, float, int, bool);
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
@@ -241,6 +248,7 @@ namespace CalX {
 			virtual void unuse();
 			virtual void stop();
 			virtual void dump(std::ostream&);
+			virtual CoordPlaneStack *clone(CoordPlane*);
 		private:
 			std::vector<CoordPlane*> stack;
 	};
@@ -257,6 +265,7 @@ namespace CalX {
 			virtual ErrorCode measure(TrailerId);
 			virtual motor_point_t getPosition();
 			virtual motor_rect_t getSize();
+			virtual CoordPlane *clone(CoordPlane*) = 0;
 			
 			virtual void use();
 			virtual void unuse();

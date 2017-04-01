@@ -500,4 +500,8 @@ namespace CalX {
 		defWork = false;
 		stop();
 	}
+	
+	CoordPlane *CoordController::clone(CoordPlane *base) {
+		return new CoordController(this->xAxis, this->yAxis, this->config, this->instr);
+	}	
 }

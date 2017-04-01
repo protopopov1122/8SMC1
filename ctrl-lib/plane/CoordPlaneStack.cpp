@@ -27,9 +27,10 @@ namespace CalX {
 	}
 	
 	CoordPlaneStack::~CoordPlaneStack() {
-		for (const auto& plane : this->stack) {
-			delete plane;
+		for (size_t i = 1; i < this->stack.size(); i++) {
+			delete this->stack.at(i);
 		}
+		this->stack.clear();
 	}
 	
 	bool CoordPlaneStack::popPlane() {
@@ -49,6 +50,10 @@ namespace CalX {
 	
 	CoordPlane *CoordPlaneStack::peekPlane() {
 		return this->stack.at(this->stack.size() - 1);
+	}
+	
+	CoordPlane *CoordPlaneStack::getBase() {
+		return this->stack.at(0);
 	}
 	
 	ErrorCode CoordPlaneStack::move(motor_point_t dest, float speed, int div, bool sync) {
@@ -94,5 +99,13 @@ namespace CalX {
 	
 	void CoordPlaneStack::stop() {
 		this->peekPlane()->stop();
+	}
+	
+	CoordPlaneStack *CoordPlaneStack::clone(CoordPlane *plane) {
+		CoordPlaneStack *stack = new CoordPlaneStack(plane);
+		for (size_t i = 1; i < this->stack.size(); i++) {
+			stack->pushPlane(this->stack.at(i)->clone(stack->peekPlane()));
+		}
+		return stack;
 	}
 }

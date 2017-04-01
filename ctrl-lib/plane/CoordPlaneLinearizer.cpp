@@ -133,4 +133,8 @@ namespace CalX {
 	void CoordPlaneLinearizer::stop() {
 		this->base->stop();
 	}
+	
+	CoordPlane *CoordPlaneLinearizer::clone(CoordPlane *base) {
+		return new CoordPlaneLinearizer(base);
+	}
 }

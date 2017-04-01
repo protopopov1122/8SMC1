@@ -31,16 +31,18 @@ namespace CalXUI {
 			CalxPlaneTracker(motor_point_t, motor_rect_t);
 			virtual ~CalxPlaneTracker();
 			
-			virtual void jump(motor_point_t, bool);
+			virtual CoordPlane *clone(CoordPlane*);
 			std::vector<motor_point_t>* getPath();
 			void reset();
+		protected:
+			virtual void jump(motor_point_t, bool);
 		private:
 			std::vector<motor_point_t> path;
 	};
 	
 	class CalxVirtualPlane : public wxWindow {
 		public:
-			CalxVirtualPlane(wxWindow*, wxWindowID, CoordPlane*, wxSize);
+			CalxVirtualPlane(wxWindow*, wxWindowID, CoordHandle*, wxSize);
 			
 			CoordPlaneStack *getPlane();
 			void repaint();
@@ -55,7 +57,7 @@ namespace CalXUI {
 	
 	class CalxVirtualPlaneDialog : public wxDialog {
 		public:
-			CalxVirtualPlaneDialog(wxWindow*, wxWindowID, CoordPlane*, wxSize);
+			CalxVirtualPlaneDialog(wxWindow*, wxWindowID, CoordHandle*, wxSize);
 			
 			CoordPlaneStack *getPlane();
 		private:
