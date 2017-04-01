@@ -68,6 +68,29 @@ namespace CalX {
 		}
 	};
 	
+	// Arc movement linearizator
+	class CoordPlaneLinearizer : public CoordPlane {
+		public:
+			CoordPlaneLinearizer(CoordPlane*);
+			virtual ~CoordPlaneLinearizer();
+			CoordPlane *getBase();
+			
+			virtual ErrorCode move(motor_point_t, float, int, bool);
+			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
+			virtual ErrorCode calibrate(TrailerId);
+			virtual ErrorCode measure(TrailerId);
+			virtual motor_point_t getPosition();
+			virtual motor_rect_t getSize();
+			virtual void use();
+			virtual void unuse();
+			virtual void stop();
+			virtual void dump(std::ostream&);
+		private:
+			CoordPlane *base;
+			bool work;
+			bool defWork;
+	};
+	
 	// Coordinate plane commuticating directly with hardware
 	class CoordController : public CoordPlane {
 		public:
