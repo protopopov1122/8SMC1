@@ -74,8 +74,12 @@ namespace CalX {
 		} else {
 			out = this->base->get(pnt);
 		}
-		out.x = pow(this->scale.x, out.x);
-		out.y = pow(this->scale.x, out.y);
+		if (this->scale.x != 0) {
+			out.x = pow(this->scale.x, out.x);
+		}
+		if (this->scale.y != 0) {
+			out.y = pow(this->scale.x, out.y);
+		}
 		return out;
 	}
 
