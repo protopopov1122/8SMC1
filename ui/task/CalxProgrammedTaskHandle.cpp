@@ -27,6 +27,10 @@ namespace CalXUI {
 		: CalxTaskHandle::CalxTaskHandle(win, id, CalxTaskType::CalxProgrammed) {
 		this->task = new ProgrammedCoordTask();	
 		
+		motor_point_t offset = {0, 0};
+		motor_size_t size = {1, 1};
+		this->trans = new BasicCoordTranslator(offset, size);
+		
 		wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 		SetSizer(sizer);
 		
@@ -69,6 +73,10 @@ namespace CalXUI {
 	
 	CoordTask *CalxProgrammedTaskHandle::getTask() {
 		return this->task;
+	}
+
+	CoordTranslator *CalxProgrammedTaskHandle::getTranslator() {
+		return this->trans;
 	}
 	
 	void CalxProgrammedTaskHandle::update() {
@@ -178,6 +186,7 @@ namespace CalXUI {
 	
 	void CalxProgrammedTaskHandle::OnExit(wxCloseEvent &evt) {
 		delete this->task;
+		delete this->trans;
 		Destroy();
 	}
 }

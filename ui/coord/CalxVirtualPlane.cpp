@@ -54,7 +54,6 @@ namespace CalXUI {
 		
 		this->tracker = new CalxPlaneTracker(base->getBase()->getPosition(), base->getBase()->getSize());
 		this->stack = new CoordPlaneStack(base->clone(this->tracker));
-		std::cout << this->stack->getSize().w << " " << this->stack->getSize().h << std::endl;
 		SetMinSize(min);
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxVirtualPlane::OnExit, this);
 		this->Bind(wxEVT_PAINT, &CalxVirtualPlane::OnPaintEvent, this);
@@ -85,7 +84,7 @@ namespace CalXUI {
 		dc.SetPen(*wxBLACK_PEN);
 		dc.SetBrush(*wxBLACK_BRUSH);
 		std::vector<motor_point_t> *path = this->tracker->getPath();
-		motor_rect_t plane_size = this->getPlane()->getSize();
+		motor_rect_t plane_size = this->tracker->getSize();
 		wxSize real_size = GetSize();
 		double scaleX, scaleY;
 		scaleX = ((double) real_size.x) / plane_size.w;

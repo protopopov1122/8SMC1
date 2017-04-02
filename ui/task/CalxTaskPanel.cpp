@@ -18,6 +18,7 @@
 */
 
 
+#include <sstream>
 #include <iostream>
 #include <fstream>
 #include "CalxApp.h"
@@ -27,6 +28,7 @@
 #include <wx/stattext.h>
 #include "coord/CalxCoordPanel.h"
 #include "coord/CalxVirtualPlane.h"
+#include "ctrl-lib/misc/GCodeWriter.h"
 #include "CalxGcodeLoader.h"
 
 namespace CalXUI {
@@ -127,9 +129,12 @@ namespace CalXUI {
 		execSizer->Add(stopButton);
 		wxButton *previewButton = new wxButton(execPanel, wxID_ANY, "Preview");
 		execSizer->Add(previewButton);
+		wxButton *linearizeButton = new wxButton(execPanel, wxID_ANY, "Linearize to GCode");
+		execSizer->Add(linearizeButton);
 		buildButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnBuildClick, this);
 		stopButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnStopClick, this);
 		previewButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnPreviewClick, this);
+		linearizeButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnLinearizeClick, this);
 		
 		SetSizer(sizer);
 		Layout();
@@ -261,6 +266,47 @@ namespace CalXUI {
 			queue->addAction(new CalxPreviewAction(this, dialog, task, prms));
 			dialog->ShowModal();
 			delete dialog;
+		} else {
+			std::string message = "Select coordinate plane";
+			if (taskList->GetSelection() == wxNOT_FOUND) {
+				message = "Select task to build";
+			}
+			wxMessageDialog *dialog = new wxMessageDialog(this, message, "Warning", wxOK | wxICON_WARNING);
+			dialog->ShowModal();
+			dialog->Destroy();
+		}
+	}
+
+	void CalxTaskPanel::OnLinearizeClick(wxCommandEvent &evt) {
+		if (taskList->GetSelection() != wxNOT_FOUND
+			&& plane->GetSelection() != wxNOT_FOUND) {
+			list.at(taskList->GetSelection())->update();
+			CoordTask *task = list.at(taskList->GetSelection())->getTask();
+			CoordHandle *handle = wxGetApp().getMainFrame()->getPanel()->getCoords()->getCoord(plane->GetSelection());
+			TaskParameters prms = {(float) this->speed->GetValue()};
+
+			std::stringstream ss;
+			TaskState state;
+			GCodeWriter *writer = new GCodeWriter(handle->getBase()->getPosition(), handle->getBase()->getSize(), list.at(taskList->GetSelection())->getTranslator(), &ss);
+			CoordPlane *plane = handle->clone(writer);
+			this->setEnabled(false);
+			wxGetApp().getErrorHandler()->handle(task->perform(plane, prms, wxGetApp().getSystemManager(), &state));
+			this->setEnabled(true);
+			delete plane;
+			delete writer;
+
+			motor_point_t offset = {0, 0};
+			motor_size_t size = {1, 1};
+			BasicCoordTranslator *trans = new BasicCoordTranslator(offset, size);
+			ComplexCoordTranslator *trans2 = new ComplexCoordTranslator(trans);
+			CalxGcodeHandle *gcodeHandle = new CalxGcodeHandle(mainPanel, wxID_ANY, "Linear " + taskList->GetStringSelection().ToStdString(), &ss, trans2);
+			
+			list.push_back(gcodeHandle);
+			taskList->Append(gcodeHandle->getId());
+			mainPanel->GetSizer()->Add(gcodeHandle, 1, wxALL | wxEXPAND, 5);
+			taskList->SetSelection(list.size() - 1);
+			Layout();
+			updateUI();
 		} else {
 			std::string message = "Select coordinate plane";
 			if (taskList->GetSelection() == wxNOT_FOUND) {
