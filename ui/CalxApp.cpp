@@ -66,16 +66,24 @@ namespace CalXUI {
 			freopen("CONOUT$", "w", stderr);
 			#endif
 		}
-		
-		this->resources_log = nullptr;
-		std::string resource_logger = conf->getEntry("log")->getString("resources", "");
-		if (resource_logger.compare("stdout") == 0) {
-			SET_LOGGER(RESOURCES, &std::cout);
-		} else if (resource_logger.length() > 0) {
-			this->resources_log = new std::ofstream(resource_logger);
-			SET_LOGGER(RESOURCES, this->resources_log);
-		}
-		
+		#define SETUP_LOG(name, id, dest) {\
+		this->name = nullptr;\
+		std::string logger = conf->getEntry("log")->getString(id, "");\
+		if (logger.compare("stdout") == 0) {\
+			SET_LOGGER(dest, &std::cout);\
+		} else if (logger.length() > 0) {\
+			this->name = new std::ofstream(logger);\
+			SET_LOGGER(dest, this->name);\
+		}}
+	
+		SETUP_LOG(errors_log, "errors", ERRORS)
+		SETUP_LOG(warnings_log, "warnings", WARNINGS)
+		SETUP_LOG(debug_log, "debug", DEBUG)
+		SETUP_LOG(info_log, "info", INFO)
+		SETUP_LOG(resources_log, "resources", RESOURCES)
+
+		#undef SETUP_LOG
+	
 		this->devman = getter();
 		this->sysman = new SystemManager(this->devman, conf);
 		this->error_handler = new CalxErrorHandler(this->sysman);

@@ -15,7 +15,7 @@ WXLIB=
 
 TARGET=debug
 LANG=-std=c++11 -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-attributes
-DBG_debug=-O0 -DDEBUGGING_LOG
+DBG_debug=-O0 -DLOGGING
 DBG_release=-O2
 DBG=$(DBG_$(TARGET))
 INCLUDES=-I.

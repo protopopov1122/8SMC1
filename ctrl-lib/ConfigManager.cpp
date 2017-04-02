@@ -25,7 +25,6 @@ namespace CalX {
 	
 	ConfigEntry::ConfigEntry(std::string name) {
 		this->name = name;
-		INIT_LOG("ConfigEntry");
 	}
 	
 	ConfigEntry::~ConfigEntry() {
@@ -33,7 +32,6 @@ namespace CalX {
 			delete kv.second;
 		}
 		this->content.clear();
-		DESTROY_LOG("ConfigEntry");
 	}
 	
 	std::string ConfigEntry::getEntryName() {
@@ -135,7 +133,6 @@ namespace CalX {
 	}
 	
 	ConfigManager::ConfigManager() {
-		INIT_LOG("ConfigManager");
 	}
 	
 	ConfigManager::~ConfigManager() {
@@ -143,7 +140,6 @@ namespace CalX {
 			delete kv.second;
 		}
 		this->entries.clear();
-		DESTROY_LOG("ConfigManager");
 	}
 	
 	ConfigEntry *ConfigManager::getEntry(std::string id, bool createNew) {

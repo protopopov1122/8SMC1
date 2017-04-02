@@ -57,6 +57,10 @@ namespace CalXUI {
 			CalxDebugConsole *debug_console;
 			CalxErrorHandler *error_handler;
 
+			std::ofstream *errors_log;
+			std::ofstream *warnings_log;
+			std::ofstream *debug_log;
+			std::ofstream *info_log;
 			std::ofstream *resources_log;
 	};
 	

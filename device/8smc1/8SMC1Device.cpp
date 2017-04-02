@@ -138,7 +138,6 @@ namespace CalX {
 	}
 
 	_8SMC1Device::~_8SMC1Device() {
-
 	}
 
 	bool _8SMC1Device::isAutoSaving() {

@@ -23,36 +23,39 @@
 /* This file contains simple logging system used by project.
    All logger output controller by few macros:
 	* SET_LOGGER(ptr) - set log output
-	* DEBUG_LOG(tag, message) - log some debug info with tag
+	* WRITE_LOG(output, tag, message) - log some debug info with tag
 	* INIT_LOG & DESTROY_LOG - track resource allocation and destroy with tag "resource"
 	
-	To enable debug logging define DEBUGGING_LOG and to track resources define TRACK_RESOURCES */
+	To enable loggins define LOGGING macro */
 
 #include <iostream>
 
+extern std::ostream *ERRORS;
+extern std::ostream *WARNINGS;
+extern std::ostream *DEBUG;
+extern std::ostream *INFO;
 extern std::ostream *RESOURCES;
 
 #define SET_LOGGER(name, val) name = val;
 
-#ifdef DEBUGGING_LOG
-#define TRACK_RESOURCES
-#define DEBUG_LOG(output, tag, msg) do {\
+#ifdef LOGGING
+#define WRITE_LOG(output, tag, msg) do { const char *__file = __FILE__; int __line = __LINE__;\
                                 if ((output) != nullptr) {\
-                                    *(output) << __FILE__ << ':' << __LINE__\
+                                    *(output) << __file << ':' << __line\
                                                    << '(' << __DATE__ << ' ' << __TIME__ << ')'\
 								                   << ' ' << (tag) << ": " << (msg) << std::endl;\
                                 }\
-                            } while (false);
+                            } while (false)
 #else
-#define DEBUG_LOG(output, tag, msg)
+#define WRITE_LOG(output, tag, msg)
 #endif
 
-#ifdef TRACK_RESOURCES
-#define INIT_LOG(name) DEBUG_LOG(RESOURCES, "resource", std::string(name) + " initialized")
-#define DESTROY_LOG(name) DEBUG_LOG(RESOURCES, "resource", std::string(name) + " destroyed")
-#else
-#define INIT_LOG(name)
-#define DESTROY_LOG(name)
-#endif
+#define LOG_ERROR(tag, msg) WRITE_LOG(ERRORS, tag, msg)
+#define LOG_WARNING(tag, msg) WRITE_LOG(WARNINGS, tag, msg)
+#define LOG_DEBUG(tag, msg) WRITE_LOG(DEBUG, tag, msg)
+#define LOG(tag, msg) WRITE_LOG(INFO, tag, msg)
+
+#define INIT_LOG(name) WRITE_LOG(RESOURCES, "resource", std::string(name) + " initialized")
+#define DESTROY_LOG(name) WRITE_LOG(RESOURCES, "resource", std::string(name) + " destroyed")
 
 #endif

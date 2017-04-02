@@ -30,6 +30,7 @@ namespace CalX {
 		}
 		
 		CoordHandle::~CoordHandle() {
+			delete this->root;
 			DESTROY_LOG("CoordHandle");
 		}
 		

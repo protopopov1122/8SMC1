@@ -32,6 +32,8 @@
 
 namespace CalX {
 
+	const char *COORD_CTRL_TAG = "CoordCtrl";
+
 	CoordController::CoordController(DeviceController *xaxis,
 			DeviceController *yaxis, ConfigManager *config, InstrumentController *instr) {
 		this->xAxis = xaxis;
@@ -40,6 +42,7 @@ namespace CalX {
 		this->config = config;
 		this->size = {0, 0, 0, 0};
 		this->defWork = true;
+		LOG(COORD_CTRL_TAG, "New coordinate controller. X Axis: #" + std::to_string(this->xAxis->getID()) + "; Y Axis: #" + std::to_string(this->yAxis->getID()) + "; instrument: " + std::string(instr != nullptr ? std::to_string(instr->getID()) : "no"));
 		INIT_LOG("CoordController");
 	}
 
