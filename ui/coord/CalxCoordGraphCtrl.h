@@ -57,6 +57,7 @@ namespace CalXUI {
 			}
 			int getSpeed() {return speed->GetValue();}
 			wxButton *getBuildButton() {return this->buildButton;}
+			wxButton *getPreviewButton() {return this->previewButton;}
 			void OnClose(wxCloseEvent&);
 		private:
 		
@@ -70,6 +71,7 @@ namespace CalXUI {
 			CalxCoordFilter *translator;
 			wxSpinCtrl *speed;
 			wxButton *buildButton;
+			wxButton *previewButton;
 	};
 	
 }

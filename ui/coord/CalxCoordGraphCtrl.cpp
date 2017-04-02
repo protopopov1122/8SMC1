@@ -41,6 +41,7 @@ namespace CalXUI {
 		this->step = new wxTextCtrl(graphPanel, wxID_ANY, "1");
 		this->speed = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 4000, 4000);
 		this->buildButton = new wxButton(graphPanel, wxID_ANY, "Build");
+		this->previewButton = new wxButton(graphPanel, wxID_ANY, "Preview");
 		
 		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, "Function "), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		graphSizer->Add(expr, 0, wxEXPAND);
@@ -61,6 +62,7 @@ namespace CalXUI {
 		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, "Build speed"), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		graphSizer->Add(speed, 0, wxEXPAND);
 		graphSizer->Add(buildButton);
+		graphSizer->Add(previewButton);
 		
 		this->translator = new CalxCoordFilterCtrl(this, wxID_ANY);
 		sizer->Add(this->translator, 1, wxALL | wxEXPAND, 5);

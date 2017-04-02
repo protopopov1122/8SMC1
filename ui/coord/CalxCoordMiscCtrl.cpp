@@ -157,6 +157,29 @@ namespace CalXUI {
 		state.stop();
 	}
 	
+	CalxCoordPreviewAction::CalxCoordPreviewAction(CalxCoordCtrl *ctrl, CalxVirtualPlaneDialog *dialog, CoordTranslator *trans, GraphBuilder *builder, float speed) {
+		this->ctrl = ctrl;
+		this->dialog = dialog;
+		this->translator = trans;
+		this->builder = builder;
+		this->speed = speed;
+	}
+	
+	CalxCoordPreviewAction::~CalxCoordPreviewAction() {
+		delete this->builder;	
+	}
+			
+	void CalxCoordPreviewAction::perform(SystemManager *sysman) {
+		ctrl->setMaster(true);
+		wxGetApp().getErrorHandler()->handle(builder->build(sysman, dialog->getPlane(), translator, speed, &state));
+		dialog->Refresh();
+		ctrl->setMaster(false);
+	}
+			
+	void CalxCoordPreviewAction::stop() {
+		state.stop();
+	}
+	
 	CalxCoordCalibrateAction::CalxCoordCalibrateAction(CalxCoordCtrl *ctrl, CoordHandle *handle, TrailerId tr) {
 		this->ctrl = ctrl;
 		this->handle = handle;

@@ -32,6 +32,7 @@
 #include "CalxCoordArcCtrl.h"
 #include "CalxCoordGraphCtrl.h"
 #include "CalxCoordOtherCtrl.h"
+#include "CalxVirtualPlane.h"
 
 using namespace CalX;
 
@@ -129,6 +130,22 @@ namespace CalXUI {
 		private:
 			CalxCoordCtrl *ctrl;
 			CoordHandle *handle;
+			CoordTranslator *translator;
+			GraphBuilder *builder;
+			float speed;
+			TaskState state;
+	};
+			
+	class CalxCoordPreviewAction : public CalxAction {
+		public:
+			CalxCoordPreviewAction(CalxCoordCtrl*, CalxVirtualPlaneDialog*, CoordTranslator*, GraphBuilder*, float);
+			virtual ~CalxCoordPreviewAction();
+			
+			virtual void perform(SystemManager*);
+			virtual void stop();
+		private:
+			CalxCoordCtrl *ctrl;
+			CalxVirtualPlaneDialog *dialog;
 			CoordTranslator *translator;
 			GraphBuilder *builder;
 			float speed;

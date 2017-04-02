@@ -110,6 +110,7 @@ namespace CalXUI {
 		graphCtrl = new CalxCoordGraphCtrl(graphPanel, wxID_ANY);
 		graphSizer->Add(graphCtrl, 0, wxALL);
 		graphCtrl->getBuildButton()->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnGraphBuildClick, this);
+		graphCtrl->getPreviewButton()->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnGraphPreviewClick, this);
 		actionSubSizer->Add(graphPanel, 0, wxALL | wxEXPAND);
 		
 		wxPanel *actionSub2Panel = new wxPanel(actionPanel, wxID_ANY);
@@ -230,6 +231,30 @@ namespace CalXUI {
 		coord_point_t max = {maxx, maxy};
 		GraphBuilder *graph = new GraphBuilder(node, min, max, step);
 		this->queue->addAction(new CalxCoordGraphAction(this, ctrl, trans, graph, speed));
+	}
+	
+	void CalxCoordCtrl::OnGraphPreviewClick(wxCommandEvent &evt) {
+		std::stringstream ss(graphCtrl->getExpression());
+		FunctionLexer lexer(ss);
+		FunctionParser parser(&lexer);
+		Node *node = parser.parse();
+		if (node == nullptr) {
+			wxGetApp().getErrorHandler()->handle(ErrorCode::MathExprError);
+		}
+		double minx = graphCtrl->getXMin();
+		double maxx = graphCtrl->getXMax();
+		double miny = graphCtrl->getYMin();
+		double maxy = graphCtrl->getYMax();
+		double step = graphCtrl->getStep();
+		float speed = graphCtrl->getSpeed();
+		CoordTranslator *trans = graphCtrl->getCoordTranslator();
+		coord_point_t min = {minx, miny};
+		coord_point_t max = {maxx, maxy};
+		GraphBuilder *graph = new GraphBuilder(node, min, max, step);
+		CalxVirtualPlaneDialog *dialog = new CalxVirtualPlaneDialog(this, wxID_ANY, ctrl, wxSize(500, 500));
+		this->queue->addAction(new CalxCoordPreviewAction(this, dialog, trans, graph, speed));
+		dialog->ShowModal();
+		delete dialog;
 	}
 	
 	void CalxCoordCtrl::OnCalibrateClick(wxCommandEvent &evt) {
