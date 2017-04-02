@@ -23,6 +23,7 @@
 
 #include <vector>
 #include "CalxApp.h"
+#include <wx/stattext.h>
 
 namespace CalXUI {
 	
@@ -45,6 +46,7 @@ namespace CalXUI {
 			CalxVirtualPlane(wxWindow*, wxWindowID, CoordHandle*, wxSize);
 			
 			CoordPlaneStack *getPlane();
+			CalxPlaneTracker *getTracker();
 			void repaint();
 		private:
 			void OnExit(wxCloseEvent&);
@@ -62,7 +64,9 @@ namespace CalXUI {
 			CoordPlaneStack *getPlane();
 		private:
 			void OnOkClick(wxCommandEvent&);
+			void OnMouseMove(wxMouseEvent&);
 			CalxVirtualPlane *plane;
+			wxStaticText *mouseCoords;
 	};
 }
 

@@ -20,6 +20,7 @@
 
 #include "CalxVirtualPlane.h"
 #include <wx/sizer.h>
+#include <wx/utils.h>
 
 namespace CalXUI {
 	
@@ -62,6 +63,10 @@ namespace CalXUI {
 	CoordPlaneStack *CalxVirtualPlane::getPlane() {
 		return this->stack;
 	}
+
+	CalxPlaneTracker *CalxVirtualPlane::getTracker() {
+		return this->tracker;
+	}
 	
 	void CalxVirtualPlane::OnExit(wxCloseEvent &evt) {
 		delete this->stack;
@@ -81,11 +86,16 @@ namespace CalXUI {
 	void CalxVirtualPlane::render(wxDC &dc) {
 		dc.SetBackground(*wxWHITE_BRUSH);
 		dc.Clear();
+		
+		wxSize real_size = GetSize();
+		dc.SetPen(*wxBLUE_PEN);
+		dc.DrawLine(0, real_size.y / 2, real_size.x, real_size.y / 2);
+		dc.DrawLine(real_size.x / 2, 0, real_size.x / 2, real_size.y);
+		
 		dc.SetPen(*wxBLACK_PEN);
 		dc.SetBrush(*wxBLACK_BRUSH);
 		std::vector<motor_point_t> *path = this->tracker->getPath();
 		motor_rect_t plane_size = this->tracker->getSize();
-		wxSize real_size = GetSize();
 		double scaleX, scaleY;
 		scaleX = ((double) real_size.x) / plane_size.w;
 		scaleY = ((double) real_size.y) / plane_size.h;
@@ -95,8 +105,19 @@ namespace CalXUI {
 			double y = real_size.y - ((double) (point.y - plane_size.y)) * scaleY;
 			dc.DrawRectangle((int) x, (int) y, 2, 2);
 		}
+		
+		dc.SetPen(*wxBLACK_PEN);
+		wxCoord x, y;
+		dc.DrawText(std::to_string(plane_size.x), 0, real_size.y / 2);
+		dc.GetMultiLineTextExtent(std::to_string(plane_size.x + plane_size.w), &x, &y);
+		dc.DrawText(std::to_string(plane_size.x + plane_size.w), real_size.x - x, real_size.y / 2);
+		dc.GetMultiLineTextExtent(std::to_string(plane_size.y), &x, &y);
+		dc.DrawText(std::to_string(plane_size.y + plane_size.h), real_size.x / 2 - x / 2, 0);
+		dc.GetMultiLineTextExtent(std::to_string(plane_size.y), &x, &y);
+		dc.DrawText(std::to_string(plane_size.y), real_size.x / 2 - x / 2, real_size.y - y);
+		
 	}
-	
+
 	CalxVirtualPlaneDialog::CalxVirtualPlaneDialog(wxWindow *win, wxWindowID id,
 		CoordHandle *base, wxSize min)
 		: wxDialog::wxDialog(win , id, "Preview") {
@@ -104,12 +125,15 @@ namespace CalXUI {
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(sizer);
 		
+		this->mouseCoords = new wxStaticText(this, wxID_ANY, "");
+		sizer->Add(this->mouseCoords);
 		this->plane = new CalxVirtualPlane(this, wxID_ANY, base, min);
 		sizer->Add(this->plane, 0, wxALL, 5);
 		
 		wxButton *okButton = new wxButton(this, wxID_ANY, "OK");
 		sizer->Add(okButton, 0, wxALL | wxALIGN_CENTER);
 		okButton->Bind(wxEVT_BUTTON, &CalxVirtualPlaneDialog::OnOkClick, this);
+		this->plane->Bind(wxEVT_MOTION, &CalxVirtualPlaneDialog::OnMouseMove, this);
 		
 		Layout();
 		Fit();
@@ -122,4 +146,23 @@ namespace CalXUI {
 	void CalxVirtualPlaneDialog::OnOkClick(wxCommandEvent &evt) {
 		Hide();
 	}
+	
+	void CalxVirtualPlaneDialog::OnMouseMove(wxMouseEvent &evt) {
+		if (evt.Leaving()) {
+			this->mouseCoords->SetLabel("");
+		}
+		wxSize real_size = this->plane->GetSize();
+		motor_rect_t plane_size = this->plane->getTracker()->getSize();
+		wxPoint mouse = this->plane->ScreenToClient(wxGetMousePosition());
+		if (mouse.x >= 0 &&
+			mouse.y >= 0 &&
+			mouse.x < real_size.x &&
+			mouse.y < real_size.y) {
+			motor_coord_t rx = (motor_coord_t) mouse.x * plane_size.w / real_size.x + plane_size.x;
+			motor_coord_t ry = (motor_coord_t) plane_size.h - mouse.y * plane_size.h / real_size.y + plane_size.y;
+			std::string res = "x: " + std::to_string(rx) + "; y: " + std::to_string(ry);
+			this->mouseCoords->SetLabel(res);
+		}
+	}
+	
 }
