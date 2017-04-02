@@ -295,6 +295,19 @@ namespace CalXUI {
 			delete plane;
 			delete writer;
 
+
+
+			
+			wxFileDialog *dialog = new wxFileDialog(this, "Export linearized GCode", "", "",
+                       "", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+			if (dialog->ShowModal() == wxID_OK) {
+				std::string path = dialog->GetPath().ToStdString();
+				std::ofstream out(path);
+				out << ss.str();
+				out.close();
+			}
+			ss.seekg(0);
+
 			motor_point_t offset = {0, 0};
 			motor_size_t size = {1, 1};
 			BasicCoordTranslator *trans = new BasicCoordTranslator(offset, size);
@@ -307,6 +320,7 @@ namespace CalXUI {
 			taskList->SetSelection(list.size() - 1);
 			Layout();
 			updateUI();
+			dialog->Destroy();
 		} else {
 			std::string message = "Select coordinate plane";
 			if (taskList->GetSelection() == wxNOT_FOUND) {
