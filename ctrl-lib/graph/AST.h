@@ -24,6 +24,7 @@
 #include <vector>
 #include <string>
 #include <cinttypes>
+#include "ctrl-lib/CtrlCore.h"
 
 /* This file contains abstract syntax tree node definitions.
    Each node stores information about math expression and
@@ -50,8 +51,11 @@ namespace CalX {
 	
 	class Node {
 		public:
-			Node(NodeType tp) {this->type = tp;}
-			virtual ~Node() {}
+			Node(NodeType tp) {
+				this->type = tp;
+				INIT_LOG("Node" + tp);
+			}
+			virtual ~Node() {DESTROY_LOG("Node" + type);}
 			NodeType getType() {return this->type;}
 			virtual engine_value_t eval(FunctionEngine*) = 0;
 		private:

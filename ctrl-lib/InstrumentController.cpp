@@ -26,10 +26,11 @@ namespace CalX {
 	InstrumentController::InstrumentController(Instrument *instr) {
 		this->instr = instr;
 		this->state = true;
+		INIT_LOG("InstrumentController");
 	}
 	
 	InstrumentController::~InstrumentController() {
-		
+		DESTROY_LOG("InstrumentController");
 	}
 	
 	Instrument *InstrumentController::getInstrument() {

@@ -26,10 +26,12 @@ namespace CalX {
 	CoordTaskWrapper::CoordTaskWrapper(CoordTask *task)
 			: CoordTask::CoordTask(CoordTaskType::WrapperTask) {
 		this->task = task;
+		INIT_LOG("CoordTaskWrapper");
 	}
 	
 	CoordTaskWrapper::~CoordTaskWrapper() {
 		delete this->task;
+		DESTROY_LOG("CoordTaskWrapper");
 	}
 	
 	void CoordTaskWrapper::setCalibration(TrailerId id) {

@@ -29,9 +29,11 @@ namespace CalX {
 		: CoordTranslator::CoordTranslator(CoordType::LogarithmicCoord) {
 		this->base = base;
 		this->scale = scale;
+		INIT_LOG("LogarithmicCoordTranslator");
 	}
 	
 	LogarithmicCoordTranslator::~LogarithmicCoordTranslator() {
+		DESTROY_LOG("LogarithmicCoordTranslator");
 	}
 	
 	CoordTranslator *LogarithmicCoordTranslator::getBase() {

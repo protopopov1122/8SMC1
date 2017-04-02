@@ -28,12 +28,14 @@ namespace CalX {
 		this->dev = dev;
 		this->config = config;
 		this->dest = MoveType::Stop;
+		INIT_LOG("DeviceController");
 	}
 
 	DeviceController::~DeviceController() {
 		for (const auto& l : this->listeners) {
 			delete l;
 		}
+		DESTROY_LOG("DeviceController");
 	}
 
 	Device *DeviceController::getDevice() {

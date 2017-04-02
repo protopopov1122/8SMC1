@@ -29,13 +29,14 @@ namespace CalX {
 
 	ProgrammedCoordTask::ProgrammedCoordTask() :
 		CoordTask::CoordTask(CoordTaskType::ProgrammedTask){
-
+		INIT_LOG("ProgrammedCoordTask");
 	}
 
 	ProgrammedCoordTask::~ProgrammedCoordTask() {
 		for (size_t i = 0; i < this->list.size(); i++) {
 			delete this->list.at(i);
 		}
+		DESTROY_LOG("ProgrammedCoordTask");
 	}
 
 	ErrorCode ProgrammedCoordTask::perform(CoordPlane *ctrl, TaskParameters &prms, SystemManager *sysman, TaskState *state) {
@@ -99,10 +100,11 @@ namespace CalX {
 		this->pos = pos;
 		this->speed_coef = spc;
 		this->rel = rel;
+		INIT_LOG("MoveTaskStep");
 	}
 
 	MoveTaskStep::~MoveTaskStep() {
-
+		DESTROY_LOG("MoveTaskStep");
 	}
 
 	ErrorCode MoveTaskStep::perform(CoordPlane *ctrl, TaskParameters &prms, SystemManager *sysman, TaskState *state) {
@@ -146,10 +148,11 @@ namespace CalX {
 		this->pos = pos;
 		this->speed_coef = spc;
 		this->rel = rel;
+		INIT_LOG("JumpTaskStep");
 	}
 
 	JumpTaskStep::~JumpTaskStep() {
-
+		DESTROY_LOG("JumpTaskStep");
 	}
 
 	ErrorCode JumpTaskStep::perform(CoordPlane *ctrl, TaskParameters &prms, SystemManager *sysman, TaskState *state) {
@@ -191,10 +194,11 @@ namespace CalX {
 
 	CalibrateTaskStep::CalibrateTaskStep(TrailerId side) : TaskStep::TaskStep() {
 		this->side = side;
+		INIT_LOG("CalibrateTaskStep");
 	}
 
 	CalibrateTaskStep::~CalibrateTaskStep() {
-
+		DESTROY_LOG("CalibrateTaskStep");
 	}
 
 	ErrorCode CalibrateTaskStep::perform(CoordPlane *ctrl, TaskParameters &prms, SystemManager *sysman, TaskState *state) {
@@ -212,10 +216,11 @@ namespace CalX {
 		this->splitter = sp;
 		this->speed = speed;
 		this->rel = rel;
+		INIT_LOG("ArcTaskStep");
 	}
 
 	ArcTaskStep::~ArcTaskStep() {
-
+		DESTROY_LOG("ArcTaskStep");
 	}
 
 	ErrorCode ArcTaskStep::perform(CoordPlane *ctrl, TaskParameters &prms, SystemManager *sysman, TaskState *state) {		
@@ -286,11 +291,11 @@ namespace CalX {
 		this->splitter = sp;
 		this->speed = speed;
 		this->rel = rel;
-		
+		INIT_LOG("RelArcTaskStep");
 	}
 
 	RelArcTaskStep::~RelArcTaskStep() {
-
+		DESTROY_LOG("RelArcTaskStep");
 	}
 
 	ErrorCode RelArcTaskStep::perform(CoordPlane *ctrl, TaskParameters &prms, SystemManager *sysman, TaskState *state) {	
@@ -318,11 +323,13 @@ namespace CalX {
 		this->graph = graph;
 		this->trans = trans;
 		this->scale = scale;
+		INIT_LOG("GraphCoordTask");
 	}
 	
 	GraphCoordTask::~GraphCoordTask() {
 		delete this->graph;
 		delete this->trans;
+		DESTROY_LOG("GraphCoordTask");
 	}
 	
 	ErrorCode GraphCoordTask::perform(CoordPlane *plane, TaskParameters &prms, SystemManager *sysman, TaskState *state) {

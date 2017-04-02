@@ -57,6 +57,8 @@ class HelpCMD : public CLICommand  {
 };
 
 int main(int argc, char **argv) {
+	SET_LOGGER(RESOURCES, &std::cout);
+	
 	DeviceManager *devman = getDeviceManager();
 	std::ifstream cnf("config.ini");
 	ConfigManager *conf = ConfigManager::load(&cnf, &std::cout);

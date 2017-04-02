@@ -33,10 +33,11 @@ namespace CalX {
 	GCodeCommand::GCodeCommand(char letter, int com) {
 		this->letter = letter;
 		this->command = com;
+		INIT_LOG("GCodeCommand");
 	}
 
 	GCodeCommand::~GCodeCommand() {
-
+		DESTROY_LOG("GCodeCommand");
 	}
 
 	char GCodeCommand::getLetter() {
@@ -73,10 +74,11 @@ namespace CalX {
 	
 	GCodeLexer::GCodeLexer(std::istream *is) {
 		this->is = is;
+		INIT_LOG("GCodeLexer");
 	}
 	
 	GCodeLexer::~GCodeLexer() {
-		
+		DESTROY_LOG("GCodeLexer");
 	}
 	
 	int GCodeLexer::readChar() {
@@ -153,6 +155,8 @@ namespace CalX {
 		this->PARAMETERS.insert('H');
 		this->PARAMETERS.insert('R');
 		this->PARAMETERS.insert('Q');
+
+		INIT_LOG("GCodeParser");
 	}
 	
 	GCodeParser::~GCodeParser() {
@@ -161,6 +165,7 @@ namespace CalX {
 				delete this->queue[i];
 			}
 		}
+		DESTROY_LOG("GCodeParser");
 	}
 	
 	void GCodeParser::nextField() {

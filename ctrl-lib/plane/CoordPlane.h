@@ -43,7 +43,7 @@ namespace CalX {
 	// Main interface
 	class CoordPlane {
 		public:
-			virtual ~CoordPlane() {};
+			virtual ~CoordPlane() {}
 			virtual ErrorCode move(motor_point_t, float, int, bool) = 0;
 			virtual ErrorCode relativeMove(motor_point_t, float, int, bool);
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false) = 0;

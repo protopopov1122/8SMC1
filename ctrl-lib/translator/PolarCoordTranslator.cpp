@@ -26,10 +26,11 @@ namespace CalX {
 	PolarCoordTranslator::PolarCoordTranslator(CoordTranslator *base)
 		: CoordTranslator::CoordTranslator(CoordType::PolarCoord) {
 		this->base = base;
+		INIT_LOG("PolarCoordTranslator");
 	}
 	
 	PolarCoordTranslator::~PolarCoordTranslator() {
-		
+		DESTROY_LOG("PolarCoordTranslator");
 	}
 	
 	CoordTranslator *PolarCoordTranslator::getBase() {

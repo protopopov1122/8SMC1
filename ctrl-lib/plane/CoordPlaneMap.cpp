@@ -26,10 +26,11 @@ namespace CalX {
 		this->offset = offset;
 		this->scale = scale;
 		this->plane = plane;
+		INIT_LOG("CoordPlaneMap");
 	}
 	
 	CoordPlaneMap::~CoordPlaneMap() {
-		
+		DESTROY_LOG("CoordPlaneMap");
 	}
 	
 	CoordPlane *CoordPlaneMap::getBase() {

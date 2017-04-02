@@ -23,13 +23,14 @@
 namespace CalX {
 	
 	EngineScope::EngineScope() {
-		
+		INIT_LOG("EngineScope");
 	}
 	
 	EngineScope::~EngineScope() {
 		for (const auto& kv : this->func) {
 			delete kv.second;
 		}
+		DESTROY_LOG("EngineScope");
 	}
 	
 	engine_value_t EngineScope::getVariable(std::string id) {
@@ -72,11 +73,11 @@ namespace CalX {
 	}
 	
 	FunctionEngine::FunctionEngine() {
-		
+		INIT_LOG("FuntionEngine");
 	}
 	
 	FunctionEngine::~FunctionEngine() {
-		
+		DESTROY_LOG("FunctionEngine");
 	}
 	
 	EngineScope *FunctionEngine::getScope() {

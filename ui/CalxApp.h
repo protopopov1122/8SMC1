@@ -21,6 +21,8 @@
 #ifndef CALX_UI_CALX_APP_H_
 #define CALX_UI_CALX_APP_H_
 
+#include <iostream>
+#include <fstream>
 #include "calx.h"
 #include <wx/dynlib.h>
 #include "CalxFrame.h"
@@ -54,6 +56,8 @@ namespace CalXUI {
 			bool debug_mode;
 			CalxDebugConsole *debug_console;
 			CalxErrorHandler *error_handler;
+
+			std::ofstream *resources_log;
 	};
 	
 }

@@ -27,9 +27,11 @@ namespace CalX {
 		this->base = base;
 		this->offset = cen;
 		this->scale = sc;
+		INIT_LOG("LinearCoordTranslator");
 	}
 
 	LinearCoordTranslator::~LinearCoordTranslator() {
+		DESTROY_LOG("LinearCoordTranslator");
 	}
 
 	coord_point_t LinearCoordTranslator::getOffset() {

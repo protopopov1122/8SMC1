@@ -32,7 +32,7 @@
 
 namespace CalXUI {
 	
-	bool CalxApp::OnInit() {
+	bool CalxApp::OnInit() {		
 		std::ifstream cnf("config.ini");
 		ConfigManager *conf = ConfigManager::load(&cnf, &std::cout);
 		cnf.close();
@@ -67,6 +67,15 @@ namespace CalXUI {
 			#endif
 		}
 		
+		this->resources_log = nullptr;
+		std::string resource_logger = conf->getEntry("log")->getString("resources", "");
+		if (resource_logger.compare("stdout") == 0) {
+			SET_LOGGER(RESOURCES, &std::cout);
+		} else if (resource_logger.length() > 0) {
+			this->resources_log = new std::ofstream(resource_logger);
+			SET_LOGGER(RESOURCES, this->resources_log);
+		}
+		
 		this->devman = getter();
 		this->sysman = new SystemManager(this->devman, conf);
 		this->error_handler = new CalxErrorHandler(this->sysman);
@@ -93,11 +102,17 @@ namespace CalXUI {
 		delete this->devman;
 		delete this->dynlib;
 		
+		
 		#ifdef OS_WIN
 		if (this->debug_mode) {
 			FreeConsole();
 		}
 		#endif
+
+		if (this->resources_log != nullptr) {
+			this->resources_log->close();
+			delete this->resources_log;
+		}
 		return 0;
 	}
 	

@@ -33,10 +33,11 @@ namespace CalX {
 		this->curerr = 0;
 		this->stage = 0;
 		this->cw = cw;
+		INIT_LOG("CircleGenerator");
 	}
 
 	Circle::~Circle() {
-
+		DESTROY_LOG("CircleGenerator");
 	}
 
 	motor_point_t Circle::getCenter() {

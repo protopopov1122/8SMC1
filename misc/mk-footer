@@ -26,6 +26,7 @@ clean:
 	@rm -f *.manifest
 	@rm -f *.png
 	@rm -f *.res
+	@rm -f *.log
 	
 copy:
 	zip -r $(BUILD)/src.zip *.md Makefile platform.h config.ini device ctrl-lib ui winbuild misc cli tests COPYING COPYING.LESSER NOTICE ABOUT

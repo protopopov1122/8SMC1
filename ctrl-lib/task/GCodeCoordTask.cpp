@@ -32,10 +32,12 @@ namespace CalX {
 		}
 		this->code = ss.str();
 		this->translator = trans;
+		INIT_LOG("GCodeCoordTask");
 	}
 	
 	GCodeCoordTask::~GCodeCoordTask() {
 		delete this->translator;
+		DESTROY_LOG("GCodeCoordTask");
 	}
 	
 	ErrorCode GCodeCoordTask::perform(CoordPlane *plane, TaskParameters &prms, SystemManager *sysman, TaskState *state) {

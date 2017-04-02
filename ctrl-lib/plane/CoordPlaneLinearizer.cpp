@@ -36,10 +36,11 @@ namespace CalX {
 		this->base = base;
 		this->work = false;
 		this->defWork = true;
+		INIT_LOG("CoordPlaneLinearizer");
 	}
 	
 	CoordPlaneLinearizer::~CoordPlaneLinearizer() {
-		
+		DESTROY_LOG("CoordPlaneLinearizer");
 	}
 	
 	CoordPlane *CoordPlaneLinearizer::getBase() {

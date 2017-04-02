@@ -25,12 +25,14 @@ namespace CalX {
 	ComplexCoordTranslator::ComplexCoordTranslator(CoordTranslator *root)
 		: CoordTranslator::CoordTranslator(CoordType::ComplexCoord) {
 		this->list.push_back(root);	
+		INIT_LOG("ComplexCoordTranslator");
 	}
 	
 	ComplexCoordTranslator::~ComplexCoordTranslator() {
 		for (const auto& t : this->list) {
 			delete t;
 		}
+		DESTROY_LOG("ComplexCoordTranslator");
 	}
 	
 	size_t ComplexCoordTranslator::getSize() {

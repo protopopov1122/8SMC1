@@ -28,6 +28,7 @@ namespace CalX {
 		this->tokens[0] = this->lexer->lex();
 		this->tokens[1] = this->lexer->lex();
 		this->tokens[2] = this->lexer->lex();
+		INIT_LOG("FunctionParser");
 	}
 	
 	FunctionParser::~FunctionParser() {
@@ -36,6 +37,7 @@ namespace CalX {
 				delete this->tokens[i];
 			}
 		}
+		DESTROY_LOG("FunctionParser");
 	}
 	
 	Node *FunctionParser::parse() {

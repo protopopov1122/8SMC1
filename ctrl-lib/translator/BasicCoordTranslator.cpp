@@ -28,9 +28,11 @@ namespace CalX {
 		: CoordTranslator::CoordTranslator(CoordType::BasicCoord) {
 		this->center = cen;
 		this->scale = sc;
+		INIT_LOG("BasicCoordTranslator");
 	}
 
 	BasicCoordTranslator::~BasicCoordTranslator() {
+		DESTROY_LOG("BasicCoordTranslator");
 	}
 
 	motor_point_t BasicCoordTranslator::getCenter() {

@@ -40,12 +40,14 @@ namespace CalX {
 		this->config = config;
 		this->size = {0, 0, 0, 0};
 		this->defWork = true;
+		INIT_LOG("CoordController");
 	}
 
 	CoordController::~CoordController() {
 		for (const auto& l : this->listeners) {
 			delete l;
 		}
+		DESTROY_LOG("CoordController");
 	}
 
 	void CoordController::dump(std::ostream &os) {

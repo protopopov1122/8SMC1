@@ -32,6 +32,7 @@ namespace CalX {
 			this->instr.push_back(new InstrumentController(devman->getInstrument(i)));
 		}
 		FunctionEngine_add_default_functions(&this->engine);
+		INIT_LOG("SystemManager");
 	}
 
 	SystemManager::~SystemManager() {
@@ -48,6 +49,7 @@ namespace CalX {
 			delete this->dev.at(d);
 		}
 		delete this->conf;
+		DESTROY_LOG("SystemManager");
 	}
 
 	DeviceManager *SystemManager::getDeviceManager() {

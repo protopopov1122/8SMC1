@@ -24,6 +24,7 @@ namespace CalX {
 	
 	CoordPlaneStack::CoordPlaneStack(CoordPlane *root) {
 		this->stack.push_back(root);
+		INIT_LOG("CoordPlaneStack");
 	}
 	
 	CoordPlaneStack::~CoordPlaneStack() {
@@ -31,6 +32,7 @@ namespace CalX {
 			delete this->stack.at(i);
 		}
 		this->stack.clear();
+		DESTROY_LOG("CoordPlaneStack");
 	}
 	
 	bool CoordPlaneStack::popPlane() {

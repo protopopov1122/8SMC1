@@ -30,10 +30,12 @@ namespace CalX {
 		this->min = min;
 		this->max = max;
 		this->step = step;
+		INIT_LOG("GraphBuilder");
 	}
 	
 	GraphBuilder::~GraphBuilder() {
 		delete this->node;
+		DESTROY_LOG("GraphBuilder");
 	}
 	
 	Node *GraphBuilder::getFunction() {

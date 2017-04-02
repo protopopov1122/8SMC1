@@ -27,9 +27,11 @@ namespace CalX {
 	
 	FunctionLexer::FunctionLexer(std::istream &is) {
 		this->in = &is;
+		INIT_LOG("FunctionLexer");
 	}
 	
 	FunctionLexer::~FunctionLexer() {
+		DESTROY_LOG("FunctionLexer");
 	}
 	
 	Token *FunctionLexer::lex() {

@@ -62,3 +62,4 @@ build
 *.png
 *.ico
 *.res
+*.log

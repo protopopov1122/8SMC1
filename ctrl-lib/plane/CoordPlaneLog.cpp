@@ -28,10 +28,11 @@ namespace CalX {
 		this->prefix = prefix;
 		this->log_actions = log_act;
 		this->log_errors = log_err;
+		INIT_LOG("CoordPlaneLog");
 	}
 	
 	CoordPlaneLog::~CoordPlaneLog() {
-		
+		DESTROY_LOG("CoordPlaneLog");
 	}
 	
 	CoordPlane *CoordPlaneLog::getBase() {

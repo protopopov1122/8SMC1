@@ -27,10 +27,11 @@ namespace CalX {
 		this->min = min;
 		this->max = max;
 		this->max_speed = maxspeed;
+		INIT_LOG("CoordPlaneValidator");
 	}
 	
 	CoordPlaneValidator::~CoordPlaneValidator() {
-		
+		DESTROY_LOG("CoordPlaneValidator");
 	}
 	
 	CoordPlane *CoordPlaneValidator::getBase() {

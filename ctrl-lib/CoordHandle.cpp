@@ -26,10 +26,11 @@ namespace CalX {
 			: CoordPlaneStack::CoordPlaneStack(root) {
 			this->id = id;
 			this->root = root;
+			INIT_LOG("CoordHandle");
 		}
 		
 		CoordHandle::~CoordHandle() {
-			
+			DESTROY_LOG("CoordHandle");
 		}
 		
 		size_t CoordHandle::getID() {

@@ -41,7 +41,8 @@ namespace CalX {
 	
 	class MotorEventListener {
 		public:
-			virtual ~MotorEventListener() {}
+			MotorEventListener() {INIT_LOG("MotorEventListener");}
+			virtual ~MotorEventListener() {DESTROY_LOG("MotorEventListener");}
 			virtual void use() {}
 			virtual void unuse() {}
 			virtual void moving(MotorMoveEvent&) {}
@@ -53,7 +54,8 @@ namespace CalX {
 	
 	class InstrumentEventListener {
 		public:
-			virtual ~InstrumentEventListener() {}
+			InstrumentEventListener() {INIT_LOG("InstrumentEventListener");}
+			virtual ~InstrumentEventListener() {DESTROY_LOG("InstrumentEventListener");}
 			virtual void use() {}
 			virtual void unuse() {}
 			virtual void stateChanged(bool state, bool enabled) {}
@@ -76,7 +78,8 @@ namespace CalX {
 	
 	class CoordEventListener {
 		public:
-			virtual ~CoordEventListener() {}
+			CoordEventListener() {INIT_LOG("CoordEventListener");}
+			virtual ~CoordEventListener() {DESTROY_LOG("CoordEventListener");}
 			virtual void use() {}
 			virtual void unuse() {}
 			virtual void moving(CoordMoveEvent&) {}
