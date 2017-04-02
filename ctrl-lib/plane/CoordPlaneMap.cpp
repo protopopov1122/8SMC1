@@ -102,6 +102,10 @@ namespace CalX {
 		return sz;
 	}
 
+	bool CoordPlaneMap::isMeasured() {
+		return this->plane->isMeasured();
+	}
+
 	void CoordPlaneMap::dump(std::ostream &os) {
 		os << "map(offset=" << this->offset.x << "x" << this->offset.y
 			<< "; scale=" << this->scale.x << "x" << this->scale.y << ")";

@@ -52,6 +52,7 @@ namespace CalX {
 			virtual ErrorCode measure(TrailerId) = 0;
 			virtual motor_point_t getPosition() = 0;
 			virtual motor_rect_t getSize() = 0;
+			virtual bool isMeasured() = 0;
 			virtual void use() = 0;
 			virtual void unuse() = 0;
 			virtual void stop() = 0;
@@ -82,6 +83,7 @@ namespace CalX {
 			virtual ErrorCode measure(TrailerId);
 			virtual motor_point_t getPosition();
 			virtual motor_rect_t getSize();
+			virtual bool isMeasured();
 			virtual void use();
 			virtual void unuse();
 			virtual void stop();
@@ -108,6 +110,7 @@ namespace CalX {
 			virtual ErrorCode measure(TrailerId);
 			virtual motor_point_t getPosition();
 			virtual motor_rect_t getSize();
+			virtual bool isMeasured();
 			virtual void stop();
 			void kill();
 			virtual void dump(std::ostream&);
@@ -126,6 +129,7 @@ namespace CalX {
 			bool defWork;
 			
 			motor_rect_t size;
+			bool measured;
 			std::vector<CoordEventListener*> listeners;
 			
 			void sendMovingEvent(CoordMoveEvent&);
@@ -155,6 +159,7 @@ namespace CalX {
 			virtual ErrorCode measure(TrailerId);
 			virtual motor_point_t getPosition();
 			virtual motor_rect_t getSize();
+			virtual bool isMeasured();
 			virtual void use();
 			virtual void unuse();
 			virtual void stop();
@@ -185,6 +190,7 @@ namespace CalX {
 			virtual ErrorCode measure(TrailerId);
 			virtual motor_point_t getPosition();
 			virtual motor_rect_t getSize();
+			virtual bool isMeasured();
 			virtual void use();
 			virtual void unuse();
 			virtual void stop();
@@ -215,6 +221,7 @@ namespace CalX {
 			virtual ErrorCode measure(TrailerId);
 			virtual motor_point_t getPosition();
 			virtual motor_rect_t getSize();
+			virtual bool isMeasured();
 			virtual void use();
 			virtual void unuse();
 			virtual void stop();
@@ -244,6 +251,7 @@ namespace CalX {
 			virtual ErrorCode measure(TrailerId);
 			virtual motor_point_t getPosition();
 			virtual motor_rect_t getSize();
+			virtual bool isMeasured();
 			virtual void use();
 			virtual void unuse();
 			virtual void stop();
@@ -265,6 +273,7 @@ namespace CalX {
 			virtual ErrorCode measure(TrailerId);
 			virtual motor_point_t getPosition();
 			virtual motor_rect_t getSize();
+			virtual bool isMeasured();
 			virtual CoordPlane *clone(CoordPlane*) = 0;
 			
 			virtual void use();

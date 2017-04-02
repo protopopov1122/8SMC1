@@ -106,6 +106,10 @@ namespace CalX {
 	motor_rect_t VirtualCoordPlane::getSize() {
 		return this->size;
 	}
+
+	bool VirtualCoordPlane::isMeasured() {
+		return true;
+	}
 	
 	ErrorCode VirtualCoordPlane::measure(TrailerId tid) {
 		return ErrorCode::NoError;

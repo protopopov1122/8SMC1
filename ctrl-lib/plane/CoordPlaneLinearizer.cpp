@@ -119,6 +119,10 @@ namespace CalX {
 		return this->base->getSize();
 	}
 
+	bool CoordPlaneLinearizer::isMeasured() {
+		return this->base->isMeasured();
+	}
+
 	void CoordPlaneLinearizer::dump(std::ostream &os) {
 		os << "linearizer";
 	}

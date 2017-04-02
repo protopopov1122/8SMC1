@@ -27,8 +27,11 @@ namespace CalXUI {
 		: CalxTaskHandle::CalxTaskHandle(win, id, CalxTaskType::CalxProgrammed) {
 		this->task = new ProgrammedCoordTask();	
 		
-		motor_point_t offset = {0, 0};
-		motor_size_t size = {1, 1};
+		ConfigManager *conf = wxGetApp().getSystemManager()->getConfiguration();
+		motor_point_t offset = {conf->getEntry("coords")->getInt("offset_x", 0),
+			conf->getEntry("coords")->getInt("offset_y", 0)};
+		motor_size_t size = {conf->getEntry("coords")->getInt("scale_x", 1),
+			conf->getEntry("coords")->getInt("scale_y", 1)};
 		this->trans = new BasicCoordTranslator(offset, size);
 		
 		wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);

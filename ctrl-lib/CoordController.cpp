@@ -42,6 +42,7 @@ namespace CalX {
 		this->config = config;
 		this->size = {0, 0, 0, 0};
 		this->defWork = true;
+		this->measured = false;
 		LOG(COORD_CTRL_TAG, "New coordinate controller. X Axis: #" + std::to_string(this->xAxis->getID()) + "; Y Axis: #" + std::to_string(this->yAxis->getID()) + "; instrument: " + std::string(instr != nullptr ? std::to_string(instr->getID()) : "no"));
 		INIT_LOG("CoordController");
 	}
@@ -200,7 +201,6 @@ namespace CalX {
 		unuse();
 		return ErrorCode::NoError;
 	}
-
 
 	ErrorCode CoordPlane::relativeMove(motor_point_t relpoint, float speed, int div,
 			bool sync) {
@@ -413,6 +413,10 @@ namespace CalX {
 	motor_rect_t CoordController::getSize() {
 		return this->size;
 	}
+
+	bool CoordController::isMeasured() {
+		return this->measured;
+	}
 	
 	ErrorCode CoordController::measure(TrailerId tid) {
 		work = defWork;
@@ -429,6 +433,7 @@ namespace CalX {
 		errcode = this->calibrate(tid2);
 		motor_point_t min = getPosition();
 		this->size = {min.x < max.x ? min.x : max.x, min.y < max.y ? min.y : max.y, abs(max.x - min.x), abs(max.y - min.y)};
+		this->measured = true;
 		return errcode;
 	}
 	

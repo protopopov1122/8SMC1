@@ -233,8 +233,11 @@ namespace CalXUI {
 		this->trans = tr;
 		
 		if (this->trans == nullptr) {
-			motor_point_t cen = {0, 0};
-			motor_size_t scl = {1, 1};
+			ConfigManager *conf = wxGetApp().getSystemManager()->getConfiguration();
+			motor_point_t cen = {conf->getEntry("coords")->getInt("offset_x", 0),
+				conf->getEntry("coords")->getInt("offset_y", 0)};
+			motor_size_t scl = {conf->getEntry("coords")->getInt("scale_x", 1),
+				conf->getEntry("coords")->getInt("scale_y", 1)};
 			BasicCoordTranslator *basic = new BasicCoordTranslator(cen, scl);
 			this->trans = new ComplexCoordTranslator(basic);
 			addFilter(basic);

@@ -81,6 +81,10 @@ namespace CalX {
 	motor_rect_t CoordPlaneStack::getSize() {
 		return this->peekPlane()->getSize();
 	}
+
+	bool CoordPlaneStack::isMeasured() {
+		return this->peekPlane()->isMeasured();
+	}
 	
 	void CoordPlaneStack::dump(std::ostream &os) {
 		for (size_t i = this->stack.size() - 1; i < this->stack.size(); i--) {

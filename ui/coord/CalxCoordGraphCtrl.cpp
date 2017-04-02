@@ -39,7 +39,7 @@ namespace CalXUI {
 		this->ymin = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, -10);
 		this->ymax = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 10);
 		this->step = new wxTextCtrl(graphPanel, wxID_ANY, "1");
-		this->speed = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 4000, 4000);
+		this->speed = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, wxGetApp().getSystemManager()->getConfiguration()->getEntry("core")->getInt("maxspeed", 4000), wxGetApp().getSystemManager()->getConfiguration()->getEntry("core")->getInt("maxspeed", 4000));
 		this->buildButton = new wxButton(graphPanel, wxID_ANY, "Build");
 		this->previewButton = new wxButton(graphPanel, wxID_ANY, "Preview");
 		

@@ -40,7 +40,7 @@ namespace CalXUI {
 		
 		motor_point_t validateMin = {INT_MIN, INT_MIN};
 		motor_point_t validateMax = {INT_MAX, INT_MAX};
-		this->validator = new CoordPlaneValidator(validateMin, validateMax, 4000, ctrl->peekPlane());
+		this->validator = new CoordPlaneValidator(validateMin, validateMax, wxGetApp().getSystemManager()->getConfiguration()->getEntry("core")->getInt("maxspeed", 4000), ctrl->peekPlane());
 		ctrl->pushPlane(this->validator);
 		this->log = new CoordPlaneLog(ctrl->peekPlane(), &std::cout, "Plane #" + std::to_string(ctrl->getID()) + ": ");
 		ctrl->pushPlane(this->log);
@@ -173,10 +173,10 @@ namespace CalXUI {
 										: "No") + 
 								"\nPosition: " + std::to_string(ctrl->getPosition().x) +
 									+ "x" + std::to_string(ctrl->getPosition().y) +
-								"\nStart: " + std::to_string(ctrl->getSize().x) +
-									+ "x" + std::to_string(ctrl->getSize().y) +
-								"\nSize: " + std::to_string(ctrl->getSize().w) +
-									+ "x" + std::to_string(ctrl->getSize().h);
+								"\nStart: " + (ctrl->isMeasured() ? (std::to_string(ctrl->getSize().x) +
+									+ "x" + std::to_string(ctrl->getSize().y)) : "Not measured") +
+								"\nSize: " + (ctrl->isMeasured() ? (std::to_string(ctrl->getSize().w) +
+									+ "x" + std::to_string(ctrl->getSize().h)) : "Not measured");
 		this->generalInfoText->SetLabel(general);
 	}
 	
@@ -234,6 +234,10 @@ namespace CalXUI {
 	}
 	
 	void CalxCoordCtrl::OnGraphPreviewClick(wxCommandEvent &evt) {
+		if (!this->ctrl->isMeasured()) {
+			wxMessageBox("Plane need to be measured before preview", "Warning", wxICON_WARNING);
+			return;
+		}
 		std::stringstream ss(graphCtrl->getExpression());
 		FunctionLexer lexer(ss);
 		FunctionParser parser(&lexer);

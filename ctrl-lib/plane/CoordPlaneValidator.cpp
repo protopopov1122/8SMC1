@@ -110,6 +110,10 @@ namespace CalX {
 		return this->plane->getSize();
 	}
 
+	bool CoordPlaneValidator::isMeasured() {
+		return this->plane->isMeasured();
+	}
+
 	void CoordPlaneValidator::dump(std::ostream &os) {
 		os << "validator(min=" << this->min.x << "x" << this->min.y
 			<< "; max=" << this->max.x << "x" << this->max.y

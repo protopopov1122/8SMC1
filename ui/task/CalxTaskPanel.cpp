@@ -120,7 +120,7 @@ namespace CalXUI {
 		wxButton *buildButton = new wxButton(execPanel, wxID_ANY, "Build");
 		execSizer->Add(buildButton);
 		this->plane = new wxChoice(execPanel, wxID_ANY);
-		this->speed = new wxSpinCtrl(execPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 4000, 4000);
+		this->speed = new wxSpinCtrl(execPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, wxGetApp().getSystemManager()->getConfiguration()->getEntry("core")->getInt("maxspeed", 4000), wxGetApp().getSystemManager()->getConfiguration()->getEntry("core")->getInt("maxspeed", 4000));
 		execSizer->Add(new wxStaticText(execPanel, wxID_ANY, " on "), 0, wxALL | wxALIGN_CENTER);
 		execSizer->Add(plane, 0, wxALL, 5);
 		execSizer->Add(new wxStaticText(execPanel, wxID_ANY, " with speed "), 0, wxALL | wxALIGN_CENTER);
@@ -261,6 +261,10 @@ namespace CalXUI {
 			list.at(taskList->GetSelection())->update();
 			CoordTask *task = list.at(taskList->GetSelection())->getTask();
 			CoordHandle *handle = wxGetApp().getMainFrame()->getPanel()->getCoords()->getCoord(plane->GetSelection());
+			if (!handle->isMeasured()) {
+				wxMessageBox("Plane need to be measured before preview", "Warning", wxICON_WARNING);
+				return;
+			}
 			TaskParameters prms = {(float) this->speed->GetValue()};
 			CalxVirtualPlaneDialog *dialog = new CalxVirtualPlaneDialog(this, wxID_ANY, handle, wxSize(500, 500));
 			queue->addAction(new CalxPreviewAction(this, dialog, task, prms));
@@ -283,6 +287,10 @@ namespace CalXUI {
 			list.at(taskList->GetSelection())->update();
 			CoordTask *task = list.at(taskList->GetSelection())->getTask();
 			CoordHandle *handle = wxGetApp().getMainFrame()->getPanel()->getCoords()->getCoord(plane->GetSelection());
+			if (!handle->isMeasured()) {
+				wxMessageBox("Plane need to be measured to linearize", "Warning", wxICON_WARNING);
+				return;
+			}
 			TaskParameters prms = {(float) this->speed->GetValue()};
 
 			std::stringstream ss;
@@ -308,8 +316,11 @@ namespace CalXUI {
 			}
 			ss.seekg(0);
 
-			motor_point_t offset = {0, 0};
-			motor_size_t size = {1, 1};
+			ConfigManager *conf = wxGetApp().getSystemManager()->getConfiguration();
+			motor_point_t offset = {conf->getEntry("coords")->getInt("offset_x", 0),
+				conf->getEntry("coords")->getInt("offset_y", 0)};
+			motor_size_t size = {conf->getEntry("coords")->getInt("scale_x", 1),
+				conf->getEntry("coords")->getInt("scale_y", 1)};
 			BasicCoordTranslator *trans = new BasicCoordTranslator(offset, size);
 			ComplexCoordTranslator *trans2 = new ComplexCoordTranslator(trans);
 			CalxGcodeHandle *gcodeHandle = new CalxGcodeHandle(mainPanel, wxID_ANY, "Linear " + taskList->GetStringSelection().ToStdString(), &ss, trans2);

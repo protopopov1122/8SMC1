@@ -100,7 +100,7 @@ namespace CalXUI {
 		this->miny = new wxSpinCtrl(validatePanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
 		this->maxx = new wxSpinCtrl(validatePanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
 		this->maxy = new wxSpinCtrl(validatePanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
-		this->speed = new wxSpinCtrl(validatePanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 4000, 4000);
+		this->speed = new wxSpinCtrl(validatePanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, wxGetApp().getSystemManager()->getConfiguration()->getEntry("core")->getInt("maxspeed", 4000), wxGetApp().getSystemManager()->getConfiguration()->getEntry("core")->getInt("maxspeed", 4000));
 		validateSizer->Add(new wxStaticText(validatePanel, wxID_ANY, "Coordinate validation:"));
 		validateSizer->Add(new wxStaticText(validatePanel, wxID_ANY, ""));
 		validateSizer->Add(new wxStaticText(validatePanel, wxID_ANY, "min x:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
