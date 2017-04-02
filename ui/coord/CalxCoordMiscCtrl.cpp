@@ -173,6 +173,7 @@ namespace CalXUI {
 		ctrl->setMaster(true);
 		wxGetApp().getErrorHandler()->handle(builder->build(sysman, dialog->getPlane(), translator, speed, &state));
 		dialog->Refresh();
+		dialog->Enable(true);
 		ctrl->setMaster(false);
 	}
 			

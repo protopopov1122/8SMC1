@@ -70,4 +70,8 @@ namespace CalX {
 		out.y /= this->scale.h;
 		return out;
 	}
+
+	CoordTranslator *BasicCoordTranslator::clone(CoordTranslator *base) {
+		return new BasicCoordTranslator(this->center, this->scale);
+	}
 }

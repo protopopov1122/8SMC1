@@ -101,4 +101,16 @@ namespace CalX {
 		remove(0);
 		insert(0, t);
 	}
+
+	ComplexCoordTranslator *ComplexCoordTranslator::clone(CoordTranslator *base) {
+		if (base == nullptr) {
+			base = this->list.at(0)->clone(nullptr);
+		}
+		ComplexCoordTranslator *trans = new ComplexCoordTranslator(base);
+		for (size_t i = 1; i < this->list.size(); i++) {
+			trans->add(this->get(i)->clone(trans->get(i - 1)));
+		}
+		return trans;
+	}
+
 }

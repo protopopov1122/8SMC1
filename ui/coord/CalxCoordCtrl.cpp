@@ -257,6 +257,7 @@ namespace CalXUI {
 		GraphBuilder *graph = new GraphBuilder(node, min, max, step);
 		CalxVirtualPlaneDialog *dialog = new CalxVirtualPlaneDialog(this, wxID_ANY, ctrl, wxSize(500, 500));
 		this->queue->addAction(new CalxCoordPreviewAction(this, dialog, trans, graph, speed));
+		dialog->Enable(false);
 		dialog->ShowModal();
 		delete dialog;
 	}

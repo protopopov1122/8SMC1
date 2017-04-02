@@ -54,6 +54,7 @@ namespace CalX {
 			virtual coord_point_t get(motor_point_t) = 0;
 			virtual CoordTranslator *getBase() {return nullptr;}
 			virtual void setBase(CoordTranslator *b) {}
+			virtual CoordTranslator *clone(CoordTranslator*) = 0;
 		private:
 			CoordType type;
 	};
@@ -68,6 +69,7 @@ namespace CalX {
 			void setScale(motor_size_t);
 			virtual motor_point_t get(double, double);
 			virtual coord_point_t get(motor_point_t);
+			virtual CoordTranslator *clone(CoordTranslator*);
 		private:
 			motor_point_t center;
 			motor_size_t scale;
@@ -85,6 +87,7 @@ namespace CalX {
 			void setScale(coord_scale_t);
 			virtual motor_point_t get(double, double);
 			virtual coord_point_t get(motor_point_t);
+			virtual CoordTranslator *clone(CoordTranslator*);
 		private:
 			CoordTranslator *base;
 			coord_point_t offset;
@@ -101,6 +104,7 @@ namespace CalX {
 			void setScale(coord_scale_t);
 			virtual motor_point_t get(double, double);
 			virtual coord_point_t get(motor_point_t);
+			virtual CoordTranslator *clone(CoordTranslator*);
 		private:
 			CoordTranslator *base;
 			coord_scale_t scale;
@@ -114,6 +118,7 @@ namespace CalX {
 			virtual void setBase(CoordTranslator*);
 			virtual motor_point_t get(double, double);
 			virtual coord_point_t get(motor_point_t);
+			virtual CoordTranslator *clone(CoordTranslator*);
 		private:
 			CoordTranslator *base;
 	};
@@ -131,6 +136,7 @@ namespace CalX {
 			bool insert(size_t, CoordTranslator*);
 			virtual CoordTranslator *getBase();
 			virtual void setBase(CoordTranslator*);
+			virtual ComplexCoordTranslator *clone(CoordTranslator*);
 		private:
 			std::vector<CoordTranslator*> list;
 	};

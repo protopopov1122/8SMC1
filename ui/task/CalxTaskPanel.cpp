@@ -72,6 +72,7 @@ namespace CalXUI {
 				panel->setEnabled(false);
 				wxGetApp().getErrorHandler()->handle(task->perform(dialog->getPlane(), prms, sysman, &state));
 				dialog->Refresh();
+				dialog->Enable(true);
 				panel->setEnabled(true);
 			}
 			
@@ -268,6 +269,7 @@ namespace CalXUI {
 			TaskParameters prms = {(float) this->speed->GetValue()};
 			CalxVirtualPlaneDialog *dialog = new CalxVirtualPlaneDialog(this, wxID_ANY, handle, wxSize(500, 500));
 			queue->addAction(new CalxPreviewAction(this, dialog, task, prms));
+			dialog->Enable(false);
 			dialog->ShowModal();
 			delete dialog;
 		} else {
@@ -316,14 +318,7 @@ namespace CalXUI {
 			}
 			ss.seekg(0);
 
-			ConfigManager *conf = wxGetApp().getSystemManager()->getConfiguration();
-			motor_point_t offset = {conf->getEntry("coords")->getInt("offset_x", 0),
-				conf->getEntry("coords")->getInt("offset_y", 0)};
-			motor_size_t size = {conf->getEntry("coords")->getInt("scale_x", 1),
-				conf->getEntry("coords")->getInt("scale_y", 1)};
-			BasicCoordTranslator *trans = new BasicCoordTranslator(offset, size);
-			ComplexCoordTranslator *trans2 = new ComplexCoordTranslator(trans);
-			CalxGcodeHandle *gcodeHandle = new CalxGcodeHandle(mainPanel, wxID_ANY, "Linear " + taskList->GetStringSelection().ToStdString(), &ss, trans2);
+			CalxGcodeHandle *gcodeHandle = new CalxGcodeHandle(mainPanel, wxID_ANY, "Linear " + taskList->GetStringSelection().ToStdString(), &ss, list.at(taskList->GetSelection())->getTranslator()->clone(nullptr));
 			
 			list.push_back(gcodeHandle);
 			taskList->Append(gcodeHandle->getId());

@@ -82,4 +82,11 @@ namespace CalX {
 		out.y /= this->scale.y;
 		return out;
 	}
+
+	CoordTranslator *LinearCoordTranslator::clone(CoordTranslator *base) {
+		if (base == nullptr) {
+			base = this->base->clone(nullptr);
+		}
+		return new LinearCoordTranslator(this->offset, this->scale, base);
+	}
 }

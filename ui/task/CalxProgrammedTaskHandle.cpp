@@ -32,7 +32,7 @@ namespace CalXUI {
 			conf->getEntry("coords")->getInt("offset_y", 0)};
 		motor_size_t size = {conf->getEntry("coords")->getInt("scale_x", 1),
 			conf->getEntry("coords")->getInt("scale_y", 1)};
-		this->trans = new BasicCoordTranslator(offset, size);
+		this->trans = new ComplexCoordTranslator(new BasicCoordTranslator(offset, size));
 		
 		wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 		SetSizer(sizer);
@@ -78,7 +78,7 @@ namespace CalXUI {
 		return this->task;
 	}
 
-	CoordTranslator *CalxProgrammedTaskHandle::getTranslator() {
+	ComplexCoordTranslator *CalxProgrammedTaskHandle::getTranslator() {
 		return this->trans;
 	}
 	

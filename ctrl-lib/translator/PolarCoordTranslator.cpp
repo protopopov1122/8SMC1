@@ -64,4 +64,11 @@ namespace CalX {
 		out = {p, f};
 		return out;
 	}
+
+	CoordTranslator *PolarCoordTranslator::clone(CoordTranslator *base) {
+		if (base == nullptr) {
+			base = this->base->clone(nullptr);
+		}
+		return new PolarCoordTranslator(base);
+	}
 }

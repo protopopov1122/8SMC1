@@ -46,7 +46,7 @@ namespace CalXUI {
 			}
 			CalxTaskType getType() {return this->type;}
 			virtual CoordTask *getTask() = 0;
-			virtual CoordTranslator *getTranslator() = 0;
+			virtual ComplexCoordTranslator *getTranslator() = 0;
 			virtual void update() = 0;
 		private:
 			CalxTaskType type;
@@ -60,7 +60,7 @@ namespace CalXUI {
 			std::string getId() {
 				return this->id;
 			}
-			virtual CoordTranslator *getTranslator() {
+			virtual ComplexCoordTranslator *getTranslator() {
 				return this->translator;
 			}
 		private:
@@ -137,7 +137,7 @@ namespace CalXUI {
 		public:
 			CalxProgrammedTaskHandle(wxWindow*, wxWindowID);
 			virtual CoordTask *getTask();
-			virtual CoordTranslator *getTranslator();
+			virtual ComplexCoordTranslator *getTranslator();
 			virtual void update();
 			void updateUI();
 		private:
@@ -156,7 +156,7 @@ namespace CalXUI {
 			wxListBox *stepList;
 			wxButton *moveUpButton;
 			wxButton *moveDownButton;
-			BasicCoordTranslator *trans;
+			ComplexCoordTranslator *trans;
 	};
 }
 

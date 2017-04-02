@@ -78,5 +78,12 @@ namespace CalX {
 		out.y = pow(this->scale.x, out.y);
 		return out;
 	}
+
+	CoordTranslator *LogarithmicCoordTranslator::clone(CoordTranslator *base) {
+		if (base == nullptr) {
+			base = this->base->clone(nullptr);
+		}
+		return new LogarithmicCoordTranslator(this->scale, base);
+	}
 	
 }

@@ -125,7 +125,7 @@ namespace CalXUI {
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(sizer);
 		
-		this->mouseCoords = new wxStaticText(this, wxID_ANY, "");
+		this->mouseCoords = new wxStaticText(this, wxID_ANY, "Preview building may take some time.");
 		sizer->Add(this->mouseCoords);
 		this->plane = new CalxVirtualPlane(this, wxID_ANY, base, min);
 		sizer->Add(this->plane, 0, wxALL, 5);
