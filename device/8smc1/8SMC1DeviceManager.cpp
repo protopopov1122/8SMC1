@@ -20,6 +20,7 @@
 
 #include "8SMC1DeviceManager.h"
 #include <stdio.h>
+#include <string.h>
 #include <iostream>
 
 
@@ -56,9 +57,20 @@ namespace CalX {
 
 	void _8SMC1DeviceManager::saveError() {
 		char er[101];
-		USMC_GetLastErr(er,100);
-		er[100] = '\0';
-		this->error_queue.push_back(std::string(er));
+		do {
+			USMC_GetLastErr(er,100);
+			er[100] = '\0';
+			if (strlen(er) > 0) {
+				this->error_queue.push_back(std::string(er));
+			}
+		} while (strlen(er) > 0);
+		
+		for (size_t i = 0; i < this->instr.size(); i++) {
+			Instrument *in = this->instr.at(i);
+			while (in->hasErrors()) {
+				this->error_queue.push_back(in->pollError());
+			}
+		}
 	}
 
 	std::string _8SMC1DeviceManager::getDeviceSerial(device_id_t id) {
@@ -85,7 +97,8 @@ namespace CalX {
 		}
 		DeviceSerialPortConnectionPrms *prms = (DeviceSerialPortConnectionPrms*) _prms;
 		_8SMC1Instrument *instr = new _8SMC1Instrument((device_id_t) this->instr.size(), prms, this);
-		if (instr->hasError()) {
+		if (instr->hasErrors()) {
+			this->saveError();
 			delete instr;
 			return nullptr;
 		}

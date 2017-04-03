@@ -35,8 +35,8 @@ namespace CalX {
 			Instrument *getInstrument();
 			device_id_t getID();
 			bool isEnabled();
-			void enable(bool);
-			void flipState();
+			ErrorCode enable(bool);
+			ErrorCode flipState();
 			
 			bool isRunnable();
 			void setRunnable(bool);

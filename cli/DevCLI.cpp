@@ -738,7 +738,7 @@ namespace CalX {
 			std::ifstream is(path, std::ifstream::in);
 			GCodeLexer lex(&is);
 			GCodeParser parser(&lex);
-			gcode_translate(&parser, &trans, this->sysman->createProgrammedTask());
+			gcode_translate(&parser, &trans, this->sysman->createProgrammedTask(), this->sysman->getConfiguration());
 			is.close();
 		} else if (args.at(0).compare("graph") == 0) {
 			if (args.size() < 12) {

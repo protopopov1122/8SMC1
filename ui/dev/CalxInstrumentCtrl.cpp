@@ -19,6 +19,7 @@
 
 
 #include "CalxInstrumentCtrl.h"
+#include "CalxErrorHandler.h"
 #include <wx/sizer.h>
 
 namespace CalXUI {
@@ -68,7 +69,7 @@ namespace CalXUI {
 			}
 			
 			virtual void perform(SystemManager *sysman) {
-				ctrl->flipState();
+				wxGetApp().getErrorHandler()->handle(ctrl->flipState());
 			}
 			
 			virtual void stop() {

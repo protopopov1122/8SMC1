@@ -45,7 +45,7 @@ namespace CalX {
 		GCodeLexer lexer(&ss);
 		GCodeParser parser(&lexer);
 		ProgrammedCoordTask task;
-		gcode_translate(&parser, this->translator, &task);
+		gcode_translate(&parser, this->translator, &task, sysman->getConfiguration());
 		
 		return task.perform(plane, prms, sysman, state);
 	}

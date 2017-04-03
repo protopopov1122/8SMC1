@@ -1,6 +1,7 @@
 #ifndef CALX_8SMC1_DEVICE_H_
 #define CALX_8SMC1_DEVICE_H_
 
+#include <vector>
 #include "device/Device.h"
 
 #define WIN32_LEAN_AND_MEAN

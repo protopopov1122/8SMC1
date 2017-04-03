@@ -28,6 +28,7 @@
 #include <set>
 #include <iostream>
 #include "ctrl-lib/SystemManager.h"
+#include "ctrl-lib/ConfigManager.h"
 #include "ctrl-lib/task/CoordTask.h"
 #include "ctrl-lib/translator/CoordTranslator.h"
 
@@ -102,7 +103,7 @@ namespace CalX {
 			std::set<char> PARAMETERS;
 	};
 	
-	CoordTask *gcode_translate(GCodeParser*, CoordTranslator*, ProgrammedCoordTask*);
+	CoordTask *gcode_translate(GCodeParser*, CoordTranslator*, ProgrammedCoordTask*, ConfigManager*);
 }
 
 #endif

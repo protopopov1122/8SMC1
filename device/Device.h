@@ -100,15 +100,16 @@ namespace CalX {
 			Instrument();
 			virtual ~Instrument();
 			virtual device_id_t getID();	// Defined by device manager
-			virtual bool hasError();
 			virtual DeviceManager *getDeviceManager();
 			virtual bool enable(bool) = 0;
 			virtual bool enabled() = 0;
 			virtual std::string getInfo() = 0;
+			virtual bool hasErrors();
+			virtual std::string pollError();
 		protected:
 			device_id_t dev;
 			DeviceManager *devman;
-			bool error;
+			std::vector<std::string> errors;
 	};
 }
 

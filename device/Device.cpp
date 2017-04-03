@@ -45,7 +45,6 @@ namespace CalX {
 	}
 	
 	Instrument::Instrument() {
-		this->error = false;
 	}
 	
 	Instrument::~Instrument() {
@@ -56,12 +55,21 @@ namespace CalX {
 		return this->dev;
 	}
 	
-	bool Instrument::hasError() {
-		return this->error;
-	}
-	
 	DeviceManager *Instrument::getDeviceManager() {
 		return this->devman;
+	}
+	
+	bool Instrument::hasErrors() {
+		return this->errors.size() != 0;
+	}
+	
+	std::string Instrument::pollError() {
+		if (this->errors.size() == 0) {
+			return "";
+		}
+		std::string err = this->errors.at(0);
+		this->errors.erase(this->errors.begin());
+		return err;
 	}
 
 }

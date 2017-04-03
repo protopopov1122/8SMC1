@@ -38,7 +38,8 @@ namespace CalX {
 		this->handle = CreateFile(("COM" + std::to_string(prms->port)).c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL,
 			OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 		if (this->handle == INVALID_HANDLE_VALUE) {
-			this->error = true;
+			this->errors.push_back("Error opening COM" + std::to_string(prms->port));
+			this->handle = INVALID_HANDLE_VALUE;
 			return;
 		}
 		
@@ -54,7 +55,7 @@ namespace CalX {
 
 		if(!SetCommTimeouts(handle, &CommTimeOuts)) {
 			CloseHandle(handle);
-			this->error = true;
+			this->errors.push_back("Error configuring COM" + std::to_string(prms->port));
 			return;
 		}
 	
@@ -68,12 +69,12 @@ namespace CalX {
 
 		if(!SetCommState(handle, &ComDCM)) {
 			CloseHandle(handle);
-			this->error = true;
+			this->errors.push_back("Error configuring COM" + std::to_string(prms->port));
 		}
 	}
 	
 	_8SMC1Instrument::~_8SMC1Instrument() {
-		if (!error) {
+		if (this->handle != INVALID_HANDLE_VALUE) {
 			CloseHandle(handle);
 		}
 	}
@@ -89,7 +90,8 @@ namespace CalX {
 		if(!WriteFile(handle, data, (DWORD) strlen(data), &feedback, 0) || feedback != (DWORD) strlen(data)) {
 			CloseHandle(handle);
 			handle = INVALID_HANDLE_VALUE;
-			this->error = true;
+			this->errors.push_back("Error writing to COM" + std::to_string(prms.port));
+			getDeviceManager()->saveError();
 			return false;
 		}
 		state = en;

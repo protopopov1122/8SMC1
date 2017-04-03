@@ -193,7 +193,7 @@ namespace CalX {
 		return com;
 	}
 	
-	CoordTask *gcode_translate(GCodeParser *parser, CoordTranslator *translator, ProgrammedCoordTask *task) {
+	CoordTask *gcode_translate(GCodeParser *parser, CoordTranslator *translator, ProgrammedCoordTask *task, ConfigManager *conf) {
 		motor_point_t offset = translator->get(0, 0);
 		coord_point_t last = {0, 0};
 		int invert = 1;
@@ -204,7 +204,7 @@ namespace CalX {
 			invert *= -1;
 		}
 		GCodeCommand *cmd = nullptr;
-		const int CHORD_COUNT = 100;
+		const int CHORD_COUNT = conf->getEntry("core")->getInt("chord_count", 100);
 		while ((cmd = parser->nextCommand()) != nullptr) {
 			
 			if (cmd->getLetter() == 'G') {
