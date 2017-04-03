@@ -58,8 +58,8 @@ namespace CalXUI {
 		sizer->Add(buttonPanel, 0, wxALL | wxALIGN_CENTER, 5);
 		wxBoxSizer *buttonSizer = new wxBoxSizer(wxHORIZONTAL);
 		buttonPanel->SetSizer(buttonSizer);
-		wxButton *okButton = new wxButton(buttonPanel, wxID_ANY, "OK");
-		wxButton *cancelButton = new wxButton(buttonPanel, wxID_ANY, "Cancel");
+		wxButton *okButton = new wxButton(buttonPanel, wxID_OK, "OK");
+		wxButton *cancelButton = new wxButton(buttonPanel, wxID_CANCEL, "Cancel");
 		buttonSizer->Add(okButton);
 		buttonSizer->Add(cancelButton);
 		okButton->Bind(wxEVT_BUTTON, &CalxCOMSelectDialog::OnOkClick, this);

@@ -130,7 +130,7 @@ namespace CalXUI {
 		this->plane = new CalxVirtualPlane(this, wxID_ANY, base, min);
 		sizer->Add(this->plane, 0, wxALL, 5);
 		
-		wxButton *okButton = new wxButton(this, wxID_ANY, "OK");
+		wxButton *okButton = new wxButton(this, wxID_OK, "OK");
 		sizer->Add(okButton, 0, wxALL | wxALIGN_CENTER);
 		okButton->Bind(wxEVT_BUTTON, &CalxVirtualPlaneDialog::OnOkClick, this);
 		this->plane->Bind(wxEVT_MOTION, &CalxVirtualPlaneDialog::OnMouseMove, this);

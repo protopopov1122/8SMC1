@@ -60,10 +60,10 @@ namespace CalXUI {
 		
 		wxPanel *ctrlPanel = new wxPanel(this, wxID_ANY);
 		wxBoxSizer *ctrlSizer = new wxBoxSizer(wxHORIZONTAL);
-		wxButton *okButton = new wxButton(ctrlPanel, wxID_ANY, "OK");
+		wxButton *okButton = new wxButton(ctrlPanel, wxID_OK, "OK");
 		ctrlSizer->Add(okButton, 0, wxALIGN_CENTER);
 		okButton->Bind(wxEVT_BUTTON, &CalxCoordDialog::OnOkButtonClick, this);
-		wxButton *cancelButton = new wxButton(ctrlPanel, wxID_ANY, "Cancel");
+		wxButton *cancelButton = new wxButton(ctrlPanel, wxID_CANCEL, "Cancel");
 		ctrlSizer->Add(cancelButton, 0, wxALIGN_CENTER);
 		cancelButton->Bind(wxEVT_BUTTON, &CalxCoordDialog::OnCancelButtonClick, this);
 		ctrlPanel->SetSizer(ctrlSizer);

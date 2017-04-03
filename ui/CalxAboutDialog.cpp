@@ -41,7 +41,7 @@ namespace CalXUI {
 		wxTextCtrl *aboutText = new wxTextCtrl(this, wxID_ANY, about, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY);
 		sizer->Add(aboutText, 1, wxALL | wxEXPAND, 5);
 		
-		wxButton *okButton = new wxButton(this, wxID_ANY, "Ok");
+		wxButton *okButton = new wxButton(this, wxID_OK, "OK");
 		sizer->Add(okButton, 0, wxALL | wxALIGN_CENTER, 5);
 		okButton->Bind(wxEVT_BUTTON, &CalxAboutDialog::OnOkClick, this);
 	}
