@@ -26,7 +26,6 @@ namespace CalXUI {
 	
 	CalxPlaneTracker::CalxPlaneTracker(motor_point_t pos, motor_rect_t sz)
 		: VirtualCoordPlane::VirtualCoordPlane(pos, sz) {
-		
 	}
 	
 	CalxPlaneTracker::~CalxPlaneTracker() {
@@ -34,10 +33,10 @@ namespace CalXUI {
 	}
 	
 	void CalxPlaneTracker::jump(motor_point_t point, bool move) {
-		this->path.push_back(point);
+		this->path.push_back(std::pair<motor_point_t, bool>(point, move));
 	}
 	
-	std::vector<motor_point_t>* CalxPlaneTracker::getPath() {
+	std::vector<std::pair<motor_point_t, bool>>* CalxPlaneTracker::getPath() {
 		return &this->path;
 	}
 	
@@ -94,16 +93,23 @@ namespace CalXUI {
 		
 		dc.SetPen(*wxBLACK_PEN);
 		dc.SetBrush(*wxBLACK_BRUSH);
-		std::vector<motor_point_t> *path = this->tracker->getPath();
+		double lastX = 0, lastY = 0;
+		std::vector<std::pair<motor_point_t, bool>> *path = this->tracker->getPath();
 		motor_rect_t plane_size = this->tracker->getSize();
 		double scaleX, scaleY;
 		scaleX = ((double) real_size.x) / plane_size.w;
 		scaleY = ((double) real_size.y) / plane_size.h;
 		for (size_t i = 0; i < path->size(); i++) {
-			motor_point_t point = path->at(i);
+			motor_point_t point = path->at(i).first;
+			bool move = path->at(i).second;
 			double x = ((double) (point.x - plane_size.x)) * scaleX;
 			double y = real_size.y - ((double) (point.y - plane_size.y)) * scaleY;
-			dc.DrawRectangle((int) x, (int) y, 2, 2);
+			dc.DrawRectangle((int) x - 1, (int) y - 1, 2, 2);
+			if (move) {
+				dc.DrawLine(lastX, lastY, x, y);
+			}
+			lastX = x;
+			lastY = y;
 		}
 		
 		dc.SetPen(*wxBLACK_PEN);

@@ -22,6 +22,7 @@
 #define CALX_UI_CALX_VIRTUAL_PLANE_H_
 
 #include <vector>
+#include <utility>
 #include "CalxApp.h"
 #include <wx/stattext.h>
 
@@ -33,12 +34,12 @@ namespace CalXUI {
 			virtual ~CalxPlaneTracker();
 			
 			virtual CoordPlane *clone(CoordPlane*);
-			std::vector<motor_point_t>* getPath();
+			std::vector<std::pair<motor_point_t, bool>>* getPath();
 			void reset();
 		protected:
 			virtual void jump(motor_point_t, bool);
 		private:
-			std::vector<motor_point_t> path;
+			std::vector<std::pair<motor_point_t, bool>> path;
 	};
 	
 	class CalxVirtualPlane : public wxWindow {
