@@ -48,10 +48,10 @@ namespace CalX {
 
 		COMMTIMEOUTS CommTimeOuts;
 		CommTimeOuts.ReadIntervalTimeout = 0xFFFFFFFF;
-		CommTimeOuts.ReadTotalTimeoutMultiplier = 0;
-		CommTimeOuts.ReadTotalTimeoutConstant = TIMEOUT;
-		CommTimeOuts.WriteTotalTimeoutMultiplier = 0;
-		CommTimeOuts.WriteTotalTimeoutConstant = TIMEOUT;
+		CommTimeOuts.ReadTotalTimeoutMultiplier = 1;
+		CommTimeOuts.ReadTotalTimeoutConstant = 1;
+		CommTimeOuts.WriteTotalTimeoutMultiplier = 1;
+		CommTimeOuts.WriteTotalTimeoutConstant = 1;
 
 		if(!SetCommTimeouts(handle, &CommTimeOuts)) {
 			CloseHandle(handle);
@@ -80,6 +80,9 @@ namespace CalX {
 	}
 	
 	bool _8SMC1Instrument::enable(bool en) {
+		if (handle == INVALID_HANDLE_VALUE) {
+			return false;
+		}
 		if (en == enabled()) {
 			return true;
 		}
@@ -88,11 +91,13 @@ namespace CalX {
 		const char *data = std::string("Laser: " + std::string(en ? "enable\r\n" : "disable\r\n")).c_str();
 		DWORD feedback;
 		if(!WriteFile(handle, data, (DWORD) strlen(data), &feedback, 0) || feedback != (DWORD) strlen(data)) {
+			// TODO Add proper IO error handle
+			/*std::cout << feedback << std::endl;
 			CloseHandle(handle);
 			handle = INVALID_HANDLE_VALUE;
 			this->errors.push_back("Error writing to COM" + std::to_string(prms.port));
 			getDeviceManager()->saveError();
-			return false;
+			return false;*/
 		}
 		state = en;
 		return true;
