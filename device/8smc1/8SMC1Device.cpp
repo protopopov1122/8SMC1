@@ -33,7 +33,6 @@ namespace CalX {
 		
 		// Testing stub values
 		int baudrate = prms->speed;
-		int TIMEOUT = 1000;
 		
 		this->handle = CreateFile(("COM" + std::to_string(prms->port)).c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL,
 			OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -71,6 +70,14 @@ namespace CalX {
 			CloseHandle(handle);
 			this->errors.push_back("Error configuring COM" + std::to_string(prms->port));
 		}
+		
+		if (!writeSerial(ADJUSTMENT_CMD)) {
+			this->errors.push_back("Error configuring COM" + std::to_string(prms->port));
+		}
+		
+		this->mode = static_cast<size_t>(_8SMC1InstrumentMode::Adjustment);
+		this->modes.push_back("Adjustment");
+		this->modes.push_back("Full Power");
 	}
 	
 	_8SMC1Instrument::~_8SMC1Instrument() {
@@ -87,8 +94,43 @@ namespace CalX {
 			return true;
 		}
 		
-		// Testing stub command
-		const char *data = std::string("Laser: " + std::string(en ? "enable\r\n" : "disable\r\n")).c_str();
+		std::string data = std::string(en ? ENABLE_CMD : DISABLE_CMD);
+		if (!writeSerial(data)) {
+			return false;
+		}
+		
+		state = en;
+		return true;
+	}
+	
+	size_t _8SMC1Instrument::getMode() {
+		return this->mode;
+	}
+	
+	bool _8SMC1Instrument::setMode(size_t mode) {
+		if (handle == INVALID_HANDLE_VALUE) {
+			return false;
+		}
+		
+		if (mode != static_cast<size_t>(_8SMC1InstrumentMode::Adjustment) &&
+			mode != static_cast<size_t>(_8SMC1InstrumentMode::FullPower)) {
+			return false;
+		}
+		
+		std::string data = std::string(mode == static_cast<size_t>(_8SMC1InstrumentMode::Adjustment) ? ADJUSTMENT_CMD : FULL_POWER_CMD);
+		if (!writeSerial(data)) {
+			return false;
+		}
+		
+		this->mode = mode;
+		return true;
+	}
+	
+	bool _8SMC1Instrument::writeSerial(std::string stdStr) {
+		if (this->handle == INVALID_HANDLE_VALUE) {
+			return false;
+		}
+		const char *data = stdStr.c_str();
 		DWORD feedback;
 		if(!WriteFile(handle, data, (DWORD) strlen(data), &feedback, 0) || feedback != (DWORD) strlen(data)) {
 			// TODO Add proper IO error handle
@@ -99,7 +141,6 @@ namespace CalX {
 			getDeviceManager()->saveError();
 			return false;*/
 		}
-		state = en;
 		return true;
 	}
 	

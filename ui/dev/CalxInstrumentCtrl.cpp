@@ -96,6 +96,25 @@ namespace CalXUI {
 			InstrumentController *ctrl;
 	};
 	
+	class CalxInstrumentModeAction : public CalxAction {
+		public:
+			CalxInstrumentModeAction(InstrumentController *ctrl, size_t m) {
+				this->ctrl = ctrl;
+				this->mode = m;
+			}
+			
+			virtual void perform(SystemManager *sysman) {
+				this->ctrl->setMode(this->mode);
+			}
+			
+			virtual void stop() {
+				
+			}
+		private:
+			InstrumentController *ctrl;
+			size_t mode;
+	};
+	
 	CalxInstrumentCtrl::CalxInstrumentCtrl(wxWindow *win, wxWindowID id, InstrumentController *ctrl)
 		: wxPanel::wxPanel(win, id) {
 			
@@ -133,6 +152,20 @@ namespace CalXUI {
 		stateButton->Bind(wxEVT_BUTTON, &CalxInstrumentCtrl::OnStateButton, this);
 		enabledButton->Bind(wxEVT_BUTTON, &CalxInstrumentCtrl::OnEnableButton, this);
 		
+		wxPanel *modePanel = new wxPanel(mainPanel, wxID_ANY);
+		mainSizer->Add(modePanel, 0, wxALL, 10);
+		wxBoxSizer *modeSizer = new wxBoxSizer(wxHORIZONTAL);
+		modePanel->SetSizer(modeSizer);
+		modeSizer->Add(new wxStaticText(modePanel, wxID_ANY, "Mode:"), 0, wxRIGHT | wxALIGN_CENTER, 5);
+		this->modeChoice = new wxChoice(modePanel, wxID_ANY);
+		modeSizer->Add(this->modeChoice, 0, wxALIGN_CENTER);
+		this->ctrl->getModes(modes);
+		for (const auto& mode : modes) {
+			this->modeChoice->Append(mode);
+		}
+		this->modeChoice->SetSelection(this->ctrl->getMode());
+		this->modeChoice->Bind(wxEVT_CHOICE, &CalxInstrumentCtrl::OnModeClick, this);
+		
 		updateUI();
 		Layout();
 		
@@ -168,5 +201,11 @@ namespace CalXUI {
 	
 	void CalxInstrumentCtrl::OnStateButton(wxCommandEvent &evt) {
 		queue->addAction(new CalxInstrumentStateAction(this->ctrl));
+	}
+	
+	void CalxInstrumentCtrl::OnModeClick(wxCommandEvent &evt) {
+		if (this->modeChoice->GetSelection() != wxNOT_FOUND) {
+			queue->addAction(new CalxInstrumentModeAction(this->ctrl, this->modeChoice->GetSelection()));
+		}
 	}
 }

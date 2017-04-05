@@ -72,4 +72,9 @@ namespace CalX {
 		return err;
 	}
 
+	void Instrument::getModes(std::vector<std::string> &vec) {
+		for (const auto& mode : this->modes) {
+			vec.push_back(mode);
+		}
+	}
 }

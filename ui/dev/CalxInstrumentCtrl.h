@@ -24,6 +24,7 @@
 #include "CalxApp.h"
 #include <wx/stattext.h>
 #include <wx/timer.h>
+#include <wx/choice.h>
 #include "CalxActionQueue.h"
 #include <iostream>
 
@@ -41,15 +42,18 @@ namespace CalXUI {
 			void OnExit(wxCloseEvent&);
 			void OnStateButton(wxCommandEvent&);
 			void OnEnableButton(wxCommandEvent&);
+			void OnModeClick(wxCommandEvent&);
 			
 			wxStaticText *infoText;
 			wxStaticText *instrInfoText;
 			wxButton *enabledButton;
+			wxChoice *modeChoice;
 		
 			CalxActionQueue *queue;
 			InstrumentController *ctrl;
 			InstrumentEventListener *listener;
 			wxTimer *timer;
+			std::vector<std::string> modes;
 	};
 }
 

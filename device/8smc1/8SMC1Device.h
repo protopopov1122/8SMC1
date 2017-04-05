@@ -15,6 +15,16 @@ namespace CalX {
 	
 	// Temporary stub implementation of instrument
 	
+	enum class _8SMC1InstrumentMode {
+		Adjustment = 0, FullPower = 1
+	};
+	
+	// Stub commands
+	#define ENABLE_CMD "Laser: enable\r\n"
+	#define DISABLE_CMD "Laser: disable\r\n"
+	#define ADJUSTMENT_CMD "Laser: adjustment\r\n"
+	#define FULL_POWER_CMD "Laser: full power\r\n"
+	
 	class _8SMC1Instrument : public Instrument {
 		public:
 			_8SMC1Instrument(device_id_t, DeviceSerialPortConnectionPrms*, DeviceManager*);
@@ -22,8 +32,13 @@ namespace CalX {
 			virtual bool enable(bool);
 			virtual bool enabled();
 			virtual std::string getInfo();
+			virtual bool setMode(size_t);
+			virtual size_t getMode();
 		private:
+			bool writeSerial(std::string);
+		
 			bool state;
+			size_t mode;
 			HANDLE handle;
 			DeviceSerialPortConnectionPrms prms;
 	};

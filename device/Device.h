@@ -106,10 +106,14 @@ namespace CalX {
 			virtual std::string getInfo() = 0;
 			virtual bool hasErrors();
 			virtual std::string pollError();
+			virtual void getModes(std::vector<std::string>&);
+			virtual bool setMode(size_t) = 0;
+			virtual size_t getMode() = 0;
 		protected:
 			device_id_t dev;
 			DeviceManager *devman;
 			std::vector<std::string> errors;
+			std::vector<std::string> modes;
 	};
 }
 
