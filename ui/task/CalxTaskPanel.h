@@ -33,7 +33,7 @@ namespace CalXUI {
 	
 	class CalxTaskHandle; // Forward referencing
 	
-	class CalxTaskPanel : public wxPanel {
+	class CalxTaskPanel : public wxScrolledWindow {
 		public:
 			CalxTaskPanel(wxWindow*, wxWindowID);
 			

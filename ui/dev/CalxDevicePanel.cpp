@@ -30,7 +30,7 @@
 namespace CalXUI {
 	
 	CalxDevicePanel::CalxDevicePanel(wxWindow *win, wxWindowID id)
-		: wxPanel::wxPanel(win, id) {
+		: wxScrolledWindow::wxScrolledWindow(win, id) {
 			
 		CalxApp &app = wxGetApp();
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
@@ -65,6 +65,7 @@ namespace CalXUI {
 		
 		updateUI();
 		Layout();
+        this->SetScrollRate(5, 5);
 		Bind(wxEVT_CLOSE_WINDOW, &CalxDevicePanel::OnExit, this);
 	}
 	

@@ -28,7 +28,7 @@ namespace CalXUI {
 	class CalxDeviceCtrl; // Forward referencing
 	class CalxInstrumentCtrl; // Forward referencing
 	
-	class CalxDevicePanel : public wxPanel {
+	class CalxDevicePanel : public wxScrolledWindow {
 		public:
 			CalxDevicePanel(wxWindow*, wxWindowID);
 			void stop();

@@ -88,7 +88,7 @@ namespace CalXUI {
 	};
 	
 	CalxTaskPanel::CalxTaskPanel(wxWindow *win, wxWindowID id)
-		: wxPanel::wxPanel(win, id) {
+		: wxScrolledWindow::wxScrolledWindow(win, id) {
 		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
 		this->queue->Run();
 		wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
@@ -140,6 +140,7 @@ namespace CalXUI {
 		SetSizer(sizer);
 		Layout();
 		setEnabled(true);
+        this->SetScrollRate(5, 5);
 		
 		taskList->Bind(wxEVT_LISTBOX, &CalxTaskPanel::OnListClick, this);		
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxTaskPanel::OnExit, this);	
