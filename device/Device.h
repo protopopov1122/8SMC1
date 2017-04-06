@@ -72,9 +72,9 @@ namespace CalX {
 	       * methods that are actually performing some actions or return useful information - Functional.
 		   * methods that are optional and may return fake values - Optional.
 	*/
-	class Device {
+	class Motor {
 		public:
-			virtual ~Device();
+			virtual ~Motor();
 			virtual DeviceManager *getDeviceManager();
 			virtual device_id_t getID();		// Defined by device manager.
 			virtual std::string getSerial();	// Optional. Depends on device manager.

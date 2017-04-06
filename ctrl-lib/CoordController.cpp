@@ -34,8 +34,8 @@ namespace CalX {
 
 	const char *COORD_CTRL_TAG = "CoordCtrl";
 
-	CoordController::CoordController(DeviceController *xaxis,
-			DeviceController *yaxis, ConfigManager *config, InstrumentController *instr) {
+	CoordController::CoordController(MotorController *xaxis,
+			MotorController *yaxis, ConfigManager *config, InstrumentController *instr) {
 		this->xAxis = xaxis;
 		this->yAxis = yaxis;
 		this->instr = instr;
@@ -58,11 +58,11 @@ namespace CalX {
 		os << "coord(" << this->xAxis->getID() << "; " << this->yAxis->getID() << ")";
 	}
 
-	DeviceController *CoordController::getXAxis() {
+	MotorController *CoordController::getXAxis() {
 		return this->xAxis;
 	}
 
-	DeviceController *CoordController::getYAxis() {
+	MotorController *CoordController::getYAxis() {
 		return this->yAxis;
 	}
 	
@@ -74,8 +74,8 @@ namespace CalX {
 			bool sync) {
 
 		// TODO Enable proper motor syncing
-		Device *xDev = this->xAxis->getDevice();
-		Device *yDev = this->yAxis->getDevice();
+		Motor *xDev = this->xAxis->getMotor();
+		Motor *yDev = this->yAxis->getMotor();
 		motor_coord_t dx = point.x - xDev->getPosition();
 		motor_coord_t dy = point.y - yDev->getPosition();
 
@@ -105,7 +105,7 @@ namespace CalX {
 		}
 		
 		if (xAxis->dev->isRunning() || yAxis->dev->isRunning()) {
-			return ErrorCode::DeviceRunning;
+			return ErrorCode::MotorRunning;
 		}
 		xAxis->dest = point.x > xAxis->dev->getPosition() ? MoveType::MoveUp :
 				MoveType::MoveDown;
@@ -211,9 +211,9 @@ namespace CalX {
 	}
 
 	ErrorCode CoordController::calibrate(TrailerId tr) {
-		if (this->xAxis->getDevice()->isRunning()
-				|| this->yAxis->getDevice()->isRunning()) {
-			return ErrorCode::DeviceRunning;
+		if (this->xAxis->getMotor()->isRunning()
+				|| this->yAxis->getMotor()->isRunning()) {
+			return ErrorCode::MotorRunning;
 		}
 		if (tr != TrailerId::Trailer1 && tr != TrailerId::Trailer2) {
 			return ErrorCode::WrongParameter;
@@ -243,10 +243,10 @@ namespace CalX {
 		sendCalibratingEvent(evt);
 		use();
 		while (!(xpr && ypr) && work) {
-			if (!xAxis->getDevice()->isTrailerPressed(static_cast<int>(tr))) {
-				if (!xpr && !xAxis->getDevice()->isRunning()) {
-					if (!xAxis->getDevice()->start(
-							xAxis->getDevice()->getPosition() + dest,
+			if (!xAxis->getMotor()->isTrailerPressed(static_cast<int>(tr))) {
+				if (!xpr && !xAxis->getMotor()->isRunning()) {
+					if (!xAxis->getMotor()->start(
+							xAxis->getMotor()->getPosition() + dest,
 							roll_speed, roll_div)) {
 						xAxis->stop();
 						yAxis->stop();
@@ -264,16 +264,16 @@ namespace CalX {
 				}
 			} else  {
 				xpr = true;
-				if (xAxis->getDevice()->isRunning()) {
-					xAxis->getDevice()->stop();
+				if (xAxis->getMotor()->isRunning()) {
+					xAxis->getMotor()->stop();
 				}
 			}
 				
 
-			if (!yAxis->getDevice()->isTrailerPressed(static_cast<int>(tr))) {
-				if (!ypr && !yAxis->getDevice()->isRunning()) {
-					if (!yAxis->getDevice()->start(
-							yAxis->getDevice()->getPosition() + dest,
+			if (!yAxis->getMotor()->isTrailerPressed(static_cast<int>(tr))) {
+				if (!ypr && !yAxis->getMotor()->isRunning()) {
+					if (!yAxis->getMotor()->start(
+							yAxis->getMotor()->getPosition() + dest,
 							roll_speed, roll_div)){
 						xAxis->stop();
 						yAxis->stop();
@@ -291,16 +291,16 @@ namespace CalX {
 				}
 			} else {
 				ypr = true;
-				if (yAxis->getDevice()->isRunning()) {
-					yAxis->getDevice()->stop();
+				if (yAxis->getMotor()->isRunning()) {
+					yAxis->getMotor()->stop();
 				}
 			}
 		}
-		if (xAxis->getDevice()->isRunning()) {
-			xAxis->getDevice()->stop();
+		if (xAxis->getMotor()->isRunning()) {
+			xAxis->getMotor()->stop();
 		}
-		if (yAxis->getDevice()->isRunning()) {
-			yAxis->getDevice()->stop();
+		if (yAxis->getMotor()->isRunning()) {
+			yAxis->getMotor()->stop();
 		}
 
 		xAxis->dest = MoveType::Stop;
@@ -309,8 +309,8 @@ namespace CalX {
 			comeback *= -1;
 		}
 		if (work) {
-			xAxis->startMove(xAxis->getDevice()->getPosition() + comeback, roll_speed, roll_div);
-			yAxis->startMove(yAxis->getDevice()->getPosition() + comeback, roll_speed, roll_div);
+			xAxis->startMove(xAxis->getMotor()->getPosition() + comeback, roll_speed, roll_div);
+			yAxis->startMove(yAxis->getMotor()->getPosition() + comeback, roll_speed, roll_div);
 		}
 		xAxis->sendRolledEvent(mevt);
 		yAxis->sendRolledEvent(mevt);

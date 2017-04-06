@@ -27,13 +27,13 @@ namespace CalX {
 	SystemManager::SystemManager(DeviceManager *devman, ConfigManager *conf) {
 		this->devman = devman;
 		this->conf = conf;
-		for (device_id_t d = 0; d < devman->getDeviceCount(); d++) {
-			this->dev.push_back(new DeviceController(devman->getDevice(d), this->conf));
+		for (device_id_t d = 0; d < devman->getMotorCount(); d++) {
+			this->dev.push_back(new MotorController(devman->getMotor(d), this->conf));
 		}
 		for (device_id_t i = 0; i < devman->getInstrumentCount(); i++) {
 			this->instr.push_back(new InstrumentController(devman->getInstrument(i)));
 		}
-		LOG(SYSMAN_TAG, "System startup. Found " + std::to_string(devman->getDeviceCount()) + " motors and " + std::to_string(devman->getInstrumentCount()) + " instruments.");
+		LOG(SYSMAN_TAG, "System startup. Found " + std::to_string(devman->getMotorCount()) + " motors and " + std::to_string(devman->getInstrumentCount()) + " instruments.");
 		FunctionEngine_add_default_functions(&this->engine);
 		INIT_LOG("SystemManager");
 	}
@@ -49,7 +49,7 @@ namespace CalX {
 		for (device_id_t i = 0; i < this->devman->getInstrumentCount(); i++) {
 			delete this->instr.at(i);
 		}
-		for (device_id_t d = 0; d < this->devman->getDeviceCount(); d++) {
+		for (device_id_t d = 0; d < this->devman->getMotorCount(); d++) {
 			delete this->dev.at(d);
 		}
 		delete this->conf;
@@ -64,8 +64,8 @@ namespace CalX {
 		return this->conf;
 	}
 
-	DeviceController *SystemManager::getDeviceController(device_id_t d) {
-		if (d >= this->devman->getDeviceCount() || d < 0) {
+	MotorController *SystemManager::getMotorController(device_id_t d) {
+		if (d >= this->devman->getMotorCount() || d < 0) {
 			return nullptr;
 		}
 		return this->dev.at(d);
@@ -75,8 +75,8 @@ namespace CalX {
 		return &this->engine;
 	}
 
-	size_t SystemManager::getDeviceCount() {
-		return this->devman->getDeviceCount();
+	size_t SystemManager::getMotorCount() {
+		return this->devman->getMotorCount();
 	}
 
 	size_t SystemManager::getTaskCount() {
@@ -125,12 +125,12 @@ namespace CalX {
 	}
 
 	CoordHandle *SystemManager::createCoord(device_id_t d1, device_id_t d2, device_id_t instr) {
-		if (d1 >= this->devman->getDeviceCount() || d2 >= this->devman->getDeviceCount()) {
+		if (d1 >= this->devman->getMotorCount() || d2 >= this->devman->getMotorCount()) {
 			return nullptr;
 		}
 
-		CoordController *ctrl = new CoordController(this->getDeviceController(d1),
-			this->getDeviceController(d2), this->conf, this->getInstrumentController(instr));
+		CoordController *ctrl = new CoordController(this->getMotorController(d1),
+			this->getMotorController(d2), this->conf, this->getInstrumentController(instr));
 		CoordHandle *handle = new CoordHandle(this->coords.size(), ctrl);
 		this->coords.push_back(handle);
 		LOG(SYSMAN_TAG, "New coordinate plane #" + std::to_string(this->coords.size() - 1) + ". Devices: #" + std::to_string(d1) + ", #" + std::to_string(d2) + "; instrument: " + std::string(getInstrumentController(instr) != nullptr ? "#" + std::to_string(instr) : "no") + ".");
@@ -156,13 +156,13 @@ namespace CalX {
 		return this->instr.at(i);
 	}
 	
-	DeviceController *SystemManager::connectDevice(DeviceConnectionPrms *prms) {
-		Device *d = devman->connectDevice(prms);
+	MotorController *SystemManager::connectMotor(DeviceConnectionPrms *prms) {
+		Motor *d = devman->connectMotor(prms);
 		if (d == nullptr) {
 			return nullptr;
 		}
 		devman->refresh();
-		DeviceController *ctrl = new DeviceController(d, this->conf);
+		MotorController *ctrl = new MotorController(d, this->conf);
 		this->dev.push_back(ctrl);
 		LOG(SYSMAN_TAG, "Connected new device #" + std::to_string(this->dev.size() - 1));
 		return ctrl;

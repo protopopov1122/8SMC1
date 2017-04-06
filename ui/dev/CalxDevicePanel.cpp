@@ -23,7 +23,7 @@
 #include <wx/listctrl.h>
 #include <wx/sizer.h>
 #include "CalxDevicePanel.h"
-#include "CalxDeviceCtrl.h"
+#include "CalxMotorCtrl.h"
 #include "CalxInstrumentCtrl.h"
 #include "CalxCOMSelectDialog.h"
 
@@ -115,9 +115,9 @@ namespace CalXUI {
 
 		CalxApp &app = wxGetApp();		
 		
-		for (size_t i = 0; i < app.getSystemManager()->getDeviceCount(); i++) {
-			CalxDeviceCtrl *ctrl = new CalxDeviceCtrl(this, wxID_ANY,
-				app.getSystemManager()->getDeviceController(i));
+		for (size_t i = 0; i < app.getSystemManager()->getMotorCount(); i++) {
+			CalxMotorCtrl *ctrl = new CalxMotorCtrl(this, wxID_ANY,
+				app.getSystemManager()->getMotorController(i));
 			devs.push_back(ctrl);
 			GetSizer()->Add(ctrl, 0, wxEXPAND | wxALL, 10);
 		}	
@@ -145,7 +145,7 @@ namespace CalXUI {
 			prms.port = dialog->getPort();
 			prms.speed = 9600;
 			prms.parity = SerialPortParity::No;
-			DeviceController *ctrl = app.getSystemManager()->connectDevice(&prms);
+			MotorController *ctrl = app.getSystemManager()->connectMotor(&prms);
 			if (ctrl == nullptr) {
 				wxMessageBox("Device can't be connected on COM" + std::to_string(dialog->getPort()),
 					"Connection error", wxICON_WARNING);

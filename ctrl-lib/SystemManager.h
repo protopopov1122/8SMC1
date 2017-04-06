@@ -43,8 +43,8 @@ namespace CalX {
 			virtual ~SystemManager();
 			DeviceManager *getDeviceManager();
 			ConfigManager *getConfiguration();
-			DeviceController *getDeviceController(device_id_t);
-			size_t getDeviceCount();
+			MotorController *getMotorController(device_id_t);
+			size_t getMotorCount();
 			InstrumentController *getInstrumentController(device_id_t);
 			size_t getInstrumentCount();
 			FunctionEngine *getFunctionEngine();
@@ -60,12 +60,12 @@ namespace CalX {
 			CoordHandle* createCoord(device_id_t, device_id_t, device_id_t = -1);
 			void removeCoord(size_t);
 			// Device connection
-			DeviceController *connectDevice(DeviceConnectionPrms*);
+			MotorController *connectMotor(DeviceConnectionPrms*);
 			InstrumentController *connectInstrument(DeviceConnectionPrms*);
 		private:
 			DeviceManager *devman;
 			ConfigManager *conf;
-			std::vector<DeviceController*> dev;
+			std::vector<MotorController*> dev;
 			std::vector<InstrumentController*> instr;
 			std::vector<CoordTask*> tasks;
 			std::vector<CoordHandle*> coords;

@@ -23,7 +23,7 @@
 
 #include <cinttypes>
 #include <vector>
-#include "ctrl-lib/DeviceController.h"
+#include "ctrl-lib/MotorController.h"
 
 /* Coordinate translator represents different type coornidate systems.
    Each system is mapped to another or to real coordinates.

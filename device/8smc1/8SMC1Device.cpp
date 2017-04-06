@@ -195,7 +195,7 @@ namespace CalX {
 		return out;
 	}
 	
-	_8SMC1Device::_8SMC1Device(device_id_t dev, DeviceManager *devman) {
+	_8SMC1Motor::_8SMC1Motor(device_id_t dev, DeviceManager *devman) {
 		this->dev = dev;
 		this->devman = devman;
 		this->speed = 1500;
@@ -208,18 +208,18 @@ namespace CalX {
 		this->updateParameters();
 	}
 
-	_8SMC1Device::~_8SMC1Device() {
+	_8SMC1Motor::~_8SMC1Motor() {
 	}
 
-	bool _8SMC1Device::isAutoSaving() {
+	bool _8SMC1Motor::isAutoSaving() {
 		return this->autoSaveConfig;
 	}
 
-	void _8SMC1Device::setAutoSave(bool as) {
+	void _8SMC1Motor::setAutoSave(bool as) {
 		this->autoSaveConfig = as;
 	}
 
-	bool _8SMC1Device::flush() {
+	bool _8SMC1Motor::flush() {
 		if (USMC_SetMode(dev, mode)) {
 			devman->saveError();
 			return false;
@@ -231,7 +231,7 @@ namespace CalX {
 		return true;
 	}
 
-	bool _8SMC1Device::setCurrentPosition(int pos) {
+	bool _8SMC1Motor::setCurrentPosition(int pos) {
 		if (USMC_SetCurrentPosition(dev, pos)) {
 			devman->saveError();
 			return false;
@@ -239,7 +239,7 @@ namespace CalX {
 		return true;
 	}
 
-	bool _8SMC1Device::updateMode() {
+	bool _8SMC1Motor::updateMode() {
 		if (USMC_GetMode(dev, mode)) {
 			devman->saveError();
 			return false;
@@ -247,33 +247,33 @@ namespace CalX {
 		return true;
 	}
 
-	void _8SMC1Device::updateState() {
+	void _8SMC1Motor::updateState() {
 		if (USMC_GetState(dev, state)) {
 			devman->saveError();
 		}
 	}
 
-	int _8SMC1Device::getPosition() {
+	int _8SMC1Motor::getPosition() {
 		this->updateState();
 		return this->state.CurPos;
 	}
 
-	float _8SMC1Device::getTemperature() {
+	float _8SMC1Motor::getTemperature() {
 		this->updateState();
 		return this->state.Temp;
 	}
 
-	float _8SMC1Device::getVoltage() {
+	float _8SMC1Motor::getVoltage() {
 		this->updateState();
 		return this->state.Voltage;
 	}
 
-	unsigned char _8SMC1Device::getStepDivisor() {
+	unsigned char _8SMC1Motor::getStepDivisor() {
 		this->updateState();
 		return this->state.SDivisor;
 	}
 
-	bool _8SMC1Device::isTrailerPressed(int t) {	// Accepts trailer id, if unknown returns false
+	bool _8SMC1Motor::isTrailerPressed(int t) {	// Accepts trailer id, if unknown returns false
 		this->updateState();
 		if (t == 1) {
 			return this->state.Trailer1;
@@ -284,12 +284,12 @@ namespace CalX {
 		return false;
 	}
 
-	bool _8SMC1Device::getLoftState() {
+	bool _8SMC1Motor::getLoftState() {
 		this->updateState();
 		return this->state.Loft;
 	}
 
-	Power _8SMC1Device::getPowerState() {		// Translate power state into enum
+	Power _8SMC1Motor::getPowerState() {		// Translate power state into enum
 		this->updateState();
 		if (this->state.Power && this->state.FullPower) {
 			return Power::FullPower;
@@ -300,22 +300,22 @@ namespace CalX {
 		}
 	}
 	
-	bool _8SMC1Device::isRunning() {
+	bool _8SMC1Motor::isRunning() {
 		this->updateState();
 		return this->state.RUN;
 	}
 
-	bool _8SMC1Device::hasFullSpeed() {
+	bool _8SMC1Motor::hasFullSpeed() {
 		this->updateState();
 		return this->state.FullSpeed;
 	}
 
-	bool _8SMC1Device::isAfterReset() {
+	bool _8SMC1Motor::isAfterReset() {
 		this->updateState();
 		return this->state.AReset;
 	}
 
-	bool _8SMC1Device::flipPower() {
+	bool _8SMC1Motor::flipPower() {
 		bool current = this->getPowerState() != Power::NoPower;
 		if (USMC_GetMode(dev, mode)) {
 			this->devman->saveError();
@@ -329,7 +329,7 @@ namespace CalX {
 		return true;
 	}
 
-	bool _8SMC1Device::revertStart() {
+	bool _8SMC1Motor::revertStart() {
 		if(USMC_GetParameters(dev, prms)) {
 			devman->saveError();
 			return false;
@@ -342,7 +342,7 @@ namespace CalX {
 		return true;
 	}
 
-	bool _8SMC1Device::saveToFlash() {
+	bool _8SMC1Motor::saveToFlash() {
 		if (USMC_SaveParametersToFlash(dev)) {
 			devman->saveError();
 			return false;
@@ -350,7 +350,7 @@ namespace CalX {
 		return true;
 	}
 
-	bool _8SMC1Device::start(int dest, float speed,
+	bool _8SMC1Motor::start(int dest, float speed,
 			unsigned char divisor, bool syncIn) {
 		if (USMC_GetStartParameters(dev, startPrms)) {
 			devman->saveError();
@@ -366,7 +366,7 @@ namespace CalX {
 		return true;
 	}
 
-	bool _8SMC1Device::start(int dest, float speed) {
+	bool _8SMC1Motor::start(int dest, float speed) {
 		if (USMC_GetStartParameters(dev, startPrms)) {
 			devman->saveError();
 			return false;
@@ -379,11 +379,11 @@ namespace CalX {
 		return true;
 	}
 
-	bool _8SMC1Device::start(int dest) {
+	bool _8SMC1Motor::start(int dest) {
 		return this->start(dest, this->speed);
 	}
 
-	bool _8SMC1Device::stop() {
+	bool _8SMC1Motor::stop() {
 		if (USMC_Stop(dev)) {
 			devman->saveError();
 			return false;
@@ -391,67 +391,67 @@ namespace CalX {
 		return true;
 	}
 
-	float _8SMC1Device::getSpeed() {
+	float _8SMC1Motor::getSpeed() {
 		return this->speed;
 	}
 
-	void _8SMC1Device::setSpeed(float s) {
+	void _8SMC1Motor::setSpeed(float s) {
 		this->speed = s;
 	}
 
-	bool _8SMC1Device::hasSlowStart() {
+	bool _8SMC1Motor::hasSlowStart() {
 		return this->slow_start;
 	}
 
-	void _8SMC1Device::setSlowStart(bool s) {
+	void _8SMC1Motor::setSlowStart(bool s) {
 		this->slow_start = s;
 	}
 
-	void _8SMC1Device::updateParameters() {
+	void _8SMC1Motor::updateParameters() {
 		if(USMC_GetParameters(dev, prms)) {
 			devman->saveError();
 		}
 	}
 
-	float _8SMC1Device::getAccelerationTime() {
+	float _8SMC1Motor::getAccelerationTime() {
 		this->updateParameters();
 		return this->prms.AccelT;
 	}
 
-	float _8SMC1Device::getDecelerationTime() {
+	float _8SMC1Motor::getDecelerationTime() {
 		this->updateParameters();
 		return this->prms.DecelT;
 	}
 
-	float _8SMC1Device::getMaxTemperature() {
+	float _8SMC1Motor::getMaxTemperature() {
 		this->updateParameters();
 		return this->prms.MaxTemp;
 	}
 
-	bool _8SMC1Device::waitsForSync() {
+	bool _8SMC1Motor::waitsForSync() {
 		return this->waitSync;
 	}
 
-	void _8SMC1Device::waitForSync(bool ws) {
+	void _8SMC1Motor::waitForSync(bool ws) {
 		this->waitSync = ws;
 	
 	}
 
-	int _8SMC1Device::getEncoderPosition() {
+	int _8SMC1Motor::getEncoderPosition() {
 		if (USMC_GetEncoderState(dev, encState)) {
 			devman->saveError();
 		}
 		return encState.EncoderPos;
 	}
 
-	int _8SMC1Device::getEncoderSyncPosition() {
+	int _8SMC1Motor::getEncoderSyncPosition() {
 		if (USMC_GetEncoderState(dev, encState)) {
 			devman->saveError();
 		}
 		return encState.ECurPos;
 	}
 
-	void _8SMC1Device::resetSyncCounter() {
+	void _8SMC1Motor::resetSyncCounter() {
 		if (USMC_GetMode(dev, mode)) {
 			devman->saveError();
 			return;\
@@ -463,14 +463,14 @@ namespace CalX {
 	}
 
 	#define MODE_ACCESS(n1, n2, prop)\
-	bool _8SMC1Device::n1() {\
+	bool _8SMC1Motor::n1() {\
 		if (this->autoSaveConfig && USMC_GetMode(dev, mode)) {\
 			devman->saveError();\
 		}\
 		return this->mode.prop;\
 	}\
 \
-	void _8SMC1Device::n2(bool sync) {\
+	void _8SMC1Motor::n2(bool sync) {\
 		if (this->autoSaveConfig && USMC_GetMode(dev, mode)) {\
 			devman->saveError();\
 			return;\
@@ -491,12 +491,12 @@ namespace CalX {
 	MODE_ACCESS(getTrailer2TrueState, setTrailer2TrueState, Tr2T)
 	#undef MODE_ACCESS
 
-	bool _8SMC1Device::getOutputSync() {
+	bool _8SMC1Motor::getOutputSync() {
 		this->updateState();
 		return this->state.SyncOUT;
 	}
 
-	bool _8SMC1Device::getInputSync() {
+	bool _8SMC1Motor::getInputSync() {
 		this->updateState();
 		return this->state.SyncIN;
 	}

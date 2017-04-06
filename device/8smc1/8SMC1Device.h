@@ -43,10 +43,10 @@ namespace CalX {
 			DeviceSerialPortConnectionPrms prms;
 	};
 	
-	class _8SMC1Device : public Device {
+	class _8SMC1Motor : public Motor {
 		public:
-			_8SMC1Device(device_id_t, DeviceManager*);
-			virtual ~_8SMC1Device();
+			_8SMC1Motor(device_id_t, DeviceManager*);
+			virtual ~_8SMC1Motor();
 			/* Methods that implement Device interface */
 			virtual int getPosition();		// CurPos
 			virtual Power getPowerState();		// Power & FullPower

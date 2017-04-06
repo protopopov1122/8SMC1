@@ -29,17 +29,17 @@
 
 namespace CalXUI {
 	
-	class CalxDeviceCtrl; // Forward reference
+	class CalxMotorCtrl; // Forward reference
 	
 	class CalxMotorEventListener : public MotorEventListener {
 		public:
-			CalxMotorEventListener(CalxDeviceCtrl*);
+			CalxMotorEventListener(CalxMotorCtrl*);
 			virtual ~CalxMotorEventListener();
 			
 			virtual void use();
 			virtual void unuse();
 		private:
-			CalxDeviceCtrl *dev;
+			CalxMotorCtrl *dev;
 			int used;
 	};
 	
@@ -49,16 +49,16 @@ namespace CalXUI {
 			CalxDeviceTimer() : wxTimer::wxTimer() {
 			}
 			~CalxDeviceTimer() {}
-			void setCtrl(CalxDeviceCtrl *d) {this->ctrl = d;}
+			void setCtrl(CalxMotorCtrl *d) {this->ctrl = d;}
 			virtual void Notify();
 		private:
-			CalxDeviceCtrl *ctrl;
+			CalxMotorCtrl *ctrl;
 	};
 	
-	class CalxDeviceCtrl : public wxPanel {
+	class CalxMotorCtrl : public wxPanel {
 		public:
 			friend class CalxMotorEventListener;
-			CalxDeviceCtrl(wxWindow*, wxWindowID, CalX::DeviceController*);
+			CalxMotorCtrl(wxWindow*, wxWindowID, CalX::MotorController*);
 			
 			void updateUI();
 			void stop();
@@ -77,7 +77,7 @@ namespace CalXUI {
 			void threadUpdate(wxThreadEvent&);
 			void OnExit(wxCloseEvent&);
 		
-			CalX::DeviceController *dev;
+			CalX::MotorController *dev;
 			CalxActionQueue *queue;
 			MotorEventListener *listener;
 			CalxDeviceTimer timer;

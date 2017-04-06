@@ -30,7 +30,7 @@ namespace CalX {
 		: DeviceManager::DeviceManager() {
 		this->refresh();
 		for (size_t i = 0; i < devs.NOD; i++) {
-			this->dev.push_back(new _8SMC1Device((device_id_t) i, this));
+			this->dev.push_back(new _8SMC1Motor((device_id_t) i, this));
 		}
 		
 		this->instrConType.push_back(DeviceConnectionType::SerialPort);
@@ -73,21 +73,21 @@ namespace CalX {
 		}
 	}
 
-	std::string _8SMC1DeviceManager::getDeviceSerial(device_id_t id) {
+	std::string _8SMC1DeviceManager::getMotorSerial(device_id_t id) {
 		if (id >= this->devs.NOD) {
 			return "";
 		}
 		return std::string(this->devs.Serial[id]);
 	}
 
-	std::string _8SMC1DeviceManager::getDeviceVersion(device_id_t id) {
+	std::string _8SMC1DeviceManager::getMotorVersion(device_id_t id) {
 		if (id >= this->devs.NOD) {
 			return "";
 		}
 		return std::string(this->devs.Version[id]);
 	}
 	
-	Device *_8SMC1DeviceManager::connectDevice(DeviceConnectionPrms *prms) {
+	Motor *_8SMC1DeviceManager::connectMotor(DeviceConnectionPrms *prms) {
 		return nullptr;
 	}
 	

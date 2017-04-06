@@ -36,7 +36,7 @@ namespace CalX {
 		NoError = 0,
 		LowLevelError = 1, WrongParameter = 2,
 		Trailer1Pressed = 3, Trailer2Pressed = 4,
-		DeviceRunning = 5, DeviceStopped = 6,
+		MotorRunning = 5, MotorStopped = 6,
 		ArcError = 7,
 		InvalidCoordinates = 8, InvalidSpeed = 9,
 		MathExprError = 10,

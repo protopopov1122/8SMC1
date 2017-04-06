@@ -32,8 +32,8 @@
 namespace CalX {
 	void LsCommand::execute(CLI *cli, std::vector<std::string> &args) {
 		if (args.empty()) {	// For empty args list all devices
-			for (unsigned int i = 0; i < sysman->getDeviceManager()->getDeviceCount(); i++) {
-				Device *dev = sysman->getDeviceManager()->getDevice(i);
+			for (unsigned int i = 0; i < sysman->getDeviceManager()->getMotorCount(); i++) {
+				Motor *dev = sysman->getDeviceManager()->getMotor(i);
 				std::cout << "Device - " << dev->getID() << "; "
 					<< "Serial Number - " << dev->getSerial() << "; "
 					<< "Version - " << dev->getVersion() << std::endl;
@@ -49,7 +49,7 @@ namespace CalX {
 					std::cout << "Provide device id" << std::endl;
 					return;
 				}
-				Device *dev = sysman->getDeviceManager()->getDevice(std::stoi(args.at(1)));
+				Motor *dev = sysman->getDeviceManager()->getMotor(std::stoi(args.at(1)));
 				if (dev == nullptr) {
 					std::cout << "Device not found" << std::endl;
 					return;
@@ -93,8 +93,8 @@ namespace CalX {
 
 	void HaltCommand::execute(CLI *cli, std::vector<std::string> &args) {
 		DeviceManager *devman = sysman->getDeviceManager();
-		for (size_t i = 0; i < devman->getDeviceCount(); i++) {
-			Device *dev = devman->getDevice(i);
+		for (size_t i = 0; i < devman->getMotorCount(); i++) {
+			Motor *dev = devman->getMotor(i);
 			dev->stop();
 		}
 	}
@@ -114,7 +114,7 @@ namespace CalX {
 					std::cout << "Provide trailer id" << std::endl;
 					return;
 				}
-				DeviceController *dev = sysman->getDeviceController(std::stoi(args.at(0)));
+				MotorController *dev = sysman->getMotorController(std::stoi(args.at(0)));
 				if (dev == nullptr) {
 					std::cout << "Device not found" << std::endl;
 					return;
@@ -130,7 +130,7 @@ namespace CalX {
 					std::cout << "Provide arguments" << std::endl;
 					return;
 				}
-				DeviceController *dev = sysman->getDeviceController(std::stoi(args.at(0)));
+				MotorController *dev = sysman->getMotorController(std::stoi(args.at(0)));
 				if (dev == nullptr) {
 					std::cout << "Device not found" << std::endl;
 					return;
@@ -138,7 +138,7 @@ namespace CalX {
 				int dest = std::stoi(args.at(1));
 				float speed = std::stod(args.at(2));
 				int div = std::stoi(args.at(3));
-				std::cout << "\tStarted device #" << dev->getDevice()->getID() << " to " << dest
+				std::cout << "\tStarted device #" << dev->getMotor()->getID() << " to " << dest
 					<< " with speed " << speed << " steps/sec and " << div << " step divisor"
 					<< std::endl;
 				dev->startMove(dest, speed, div);
@@ -151,7 +151,7 @@ namespace CalX {
 					std::cout << "Provide arguments" << std::endl;
 					return;
 				}
-				DeviceController *dev = sysman->getDeviceController(std::stoi(args.at(0)));
+				MotorController *dev = sysman->getMotorController(std::stoi(args.at(0)));
 				if (dev == nullptr) {
 					std::cout << "Device not found" << std::endl;
 					return;
@@ -159,7 +159,7 @@ namespace CalX {
 				int dest = std::stoi(args.at(1));
 				float speed = std::stod(args.at(2));
 				int div = std::stoi(args.at(3));
-				std::cout << "\tStarted device #" << dev->getDevice()->getID() << " to " << dest
+				std::cout << "\tStarted device #" << dev->getMotor()->getID() << " to " << dest
 					<< " with speed " << speed << " steps/sec and " << div << " step divisor"
 					<< std::endl;
 				dev->startRelativeMove(dest, speed, div);
@@ -168,19 +168,19 @@ namespace CalX {
 			if (args.empty()) {
 				std::cout << "Provide device id" << std::endl;
 			} else {
-				DeviceController *dev = sysman->getDeviceController(std::stoi(args.at(0)));
+				MotorController *dev = sysman->getMotorController(std::stoi(args.at(0)));
 				if (dev == nullptr) {
 					std::cout << "Device not found" << std::endl;
 					return;
 				}
 				dev->stop();
-				std::cout << "\tStopped device #" << dev->getDevice()->getID() << std::endl;
+				std::cout << "\tStopped device #" << dev->getMotor()->getID() << std::endl;
 			}
 		} else if (com.compare("power") == 0) {
 			if (args.empty()) {
 				std::cout << "Provide device id" << std::endl;
 			} else for (size_t i = 0; i < args.size(); i++) {
-				Device *dev = sysman->getDeviceManager()->getDevice(std::stoi(args.at(i)));
+				Motor *dev = sysman->getDeviceManager()->getMotor(std::stoi(args.at(i)));
 				if (dev == nullptr) {
 					std::cout << "Device #" << i << " not found" << std::endl;
 					return;

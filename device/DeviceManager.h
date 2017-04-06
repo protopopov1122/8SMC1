@@ -39,23 +39,23 @@ namespace CalX {
 			virtual ~DeviceManager();
 			virtual void refresh() = 0;				// Refresh device list, reinitialise them.
 			virtual void saveError() = 0;			// Poll all device generated errors and save them into queue
-			virtual Device *getDevice(device_id_t);	// Return device by id
-			virtual size_t getDeviceCount();		// Get device count
-			virtual std::string getDeviceSerial(device_id_t) = 0;	// Optional. Return device serial number
-			virtual std::string getDeviceVersion(device_id_t) = 0;	// Optional. Return device version.
+			virtual Motor *getMotor(device_id_t);	// Return device by id
+			virtual size_t getMotorCount();		// Get device count
+			virtual std::string getMotorSerial(device_id_t) = 0;	// Optional. Return device serial number
+			virtual std::string getMotorVersion(device_id_t) = 0;	// Optional. Return device version.
 			virtual size_t getInstrumentCount();	// Get instrument count
 			virtual Instrument *getInstrument(device_id_t);	// Get instrument by id
 			virtual bool hasError();				// Check errors
 			virtual std::string pollError();		// Return error from queue
 			
-			virtual Device *connectDevice(DeviceConnectionPrms*) = 0;
+			virtual Motor *connectMotor(DeviceConnectionPrms*) = 0;
 			virtual Instrument *connectInstrument(DeviceConnectionPrms*) = 0;
 			virtual void getConnectionTypes(std::vector<DeviceConnectionType>&, std::vector<DeviceConnectionType>&);
-			virtual bool canDeviceConnect(DeviceConnectionType);
+			virtual bool canMotorConnect(DeviceConnectionType);
 			virtual bool canInstrumentConnect(DeviceConnectionType);
 		protected:
 			std::vector<std::string> error_queue;
-			std::vector<Device*> dev;
+			std::vector<Motor*> dev;
 			std::vector<Instrument*> instr;
 			
 			std::vector<DeviceConnectionType> devConType;

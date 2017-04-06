@@ -19,9 +19,9 @@ namespace CalX {
 			virtual ~_8SMC1DeviceManager();
 			virtual void refresh();				// USMC_Init
 			virtual void saveError();			// USMC_GetLastErr
-			virtual std::string getDeviceSerial(device_id_t);
-			virtual std::string getDeviceVersion(device_id_t);
-			virtual Device *connectDevice(DeviceConnectionPrms*);
+			virtual std::string getMotorSerial(device_id_t);
+			virtual std::string getMotorVersion(device_id_t);
+			virtual Motor *connectMotor(DeviceConnectionPrms*);
 			virtual Instrument *connectInstrument(DeviceConnectionPrms*);
 		private:
 			USMC_Devices devs;

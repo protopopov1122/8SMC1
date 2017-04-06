@@ -25,7 +25,7 @@
 
 namespace CalXUI {
 	
-	class CalxDeviceCtrl; // Forward referencing
+	class CalxMotorCtrl; // Forward referencing
 	class CalxInstrumentCtrl; // Forward referencing
 	
 	class CalxDevicePanel : public wxScrolledWindow {
@@ -38,7 +38,7 @@ namespace CalXUI {
 			void OnExit(wxCloseEvent&);
 			void OnCOMConnectDevice(wxCommandEvent&);
 			void OnCOMConnectInstrument(wxCommandEvent&);
-			std::vector<CalxDeviceCtrl*> devs;
+			std::vector<CalxMotorCtrl*> devs;
 			std::vector<CalxInstrumentCtrl*> instrs;
 	};
 }

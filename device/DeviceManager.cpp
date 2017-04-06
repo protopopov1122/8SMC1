@@ -42,14 +42,14 @@ namespace CalX {
 		return err;
 	}
 	
-	Device *DeviceManager::getDevice(device_id_t d) {
+	Motor *DeviceManager::getMotor(device_id_t d) {
 		if (d >= this->dev.size() || d < 0) {
 			return nullptr;
 		}
 		return this->dev.at(d);
 	}
 
-	size_t DeviceManager::getDeviceCount() {
+	size_t DeviceManager::getMotorCount() {
 		return this->dev.size();
 	}
 	
@@ -73,7 +73,7 @@ namespace CalX {
 		}
 	}
 	
-	bool DeviceManager::canDeviceConnect(DeviceConnectionType d) {
+	bool DeviceManager::canMotorConnect(DeviceConnectionType d) {
 		return std::find(devConType.begin(), devConType.end(), d) != devConType.end();
 	}
 	

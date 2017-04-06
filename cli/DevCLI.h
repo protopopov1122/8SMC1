@@ -32,21 +32,21 @@
    This commands use abstract CLI interface.*/
 
 namespace CalX {
-	class DeviceCommand : public CLICommand {
+	class CLISystemCommand : public CLICommand {
 		public:
-			DeviceCommand(SystemManager *sysman) {
+			CLISystemCommand(SystemManager *sysman) {
 				this->sysman = sysman;
 			}
-			virtual ~DeviceCommand() {}
+			virtual ~CLISystemCommand() {}
 			virtual void execute(CLI *cli, std::vector<std::string> &args) = 0;
 		protected:
 			SystemManager *sysman;
 	};
 	
-	#define CMD(name) class name : public DeviceCommand {\
+	#define CMD(name) class name : public CLISystemCommand {\
 		public:\
 			name(SystemManager *sysman) :\
-				DeviceCommand::DeviceCommand(sysman) {};\
+				CLISystemCommand::CLISystemCommand(sysman) {};\
 			virtual ~name() {};\
 			virtual void execute(CLI *cli, std::vector<std::string> &args);\
 	};

@@ -18,35 +18,35 @@
 */
 
 
-#include "DeviceController.h"
+#include "MotorController.h"
 #include <algorithm>
 #include <iostream>
 
 namespace CalX {
 
-	DeviceController::DeviceController(Device *dev, ConfigManager *config) {
+	MotorController::MotorController(Motor *dev, ConfigManager *config) {
 		this->dev = dev;
 		this->config = config;
 		this->dest = MoveType::Stop;
-		INIT_LOG("DeviceController");
+		INIT_LOG("MotorController");
 	}
 
-	DeviceController::~DeviceController() {
+	MotorController::~MotorController() {
 		for (const auto& l : this->listeners) {
 			delete l;
 		}
-		DESTROY_LOG("DeviceController");
+		DESTROY_LOG("MotorController");
 	}
 
-	Device *DeviceController::getDevice() {
+	Motor *MotorController::getMotor() {
 		return this->dev;
 	}
 	
-	device_id_t DeviceController::getID() {
+	device_id_t MotorController::getID() {
 		return this->dev->getID();
 	}
 
-	ErrorCode DeviceController::checkTrailers() {
+	ErrorCode MotorController::checkTrailers() {
 		ErrorCode errcode = ErrorCode::NoError;
 		if (!this->dev->isRunning()) {
 			return errcode;
@@ -72,7 +72,7 @@ namespace CalX {
 		return ErrorCode::NoError;
 	}
 
-	ErrorCode DeviceController::waitWhileRunning() {
+	ErrorCode MotorController::waitWhileRunning() {
 		while (this->dev->isRunning()) {
 			ErrorCode code = this->checkTrailers();
 			if (code != ErrorCode::NoError) {
@@ -82,9 +82,9 @@ namespace CalX {
 		return ErrorCode::NoError;
 	}
 
-	ErrorCode DeviceController::moveToTrailer(int tr) {
+	ErrorCode MotorController::moveToTrailer(int tr) {
 		if (this->dev->isRunning()) {
-			return ErrorCode::DeviceRunning;
+			return ErrorCode::MotorRunning;
 		}
 		if (tr != 1 && tr != 2) {
 			return ErrorCode::WrongParameter;
@@ -135,10 +135,10 @@ namespace CalX {
 		return errcode;
 	}
 
-	ErrorCode DeviceController::startMove(motor_coord_t dest,
+	ErrorCode MotorController::startMove(motor_coord_t dest,
 			float speed, int div, bool syncIn) {
 		if (this->dev->isRunning()) {
-			return ErrorCode::DeviceRunning;
+			return ErrorCode::MotorRunning;
 		}
 		this->work = true;
 		this->dest = dest > this->dev->getPosition() ? MoveType::MoveUp :
@@ -162,70 +162,70 @@ namespace CalX {
 		return errcode;
 	}
 
-	ErrorCode DeviceController::startRelativeMove(motor_coord_t reldest,
+	ErrorCode MotorController::startRelativeMove(motor_coord_t reldest,
 			float speed, int div, bool syncIn) {
 		motor_coord_t dest = getPosition() + reldest;
 		return startMove(dest, speed, div, syncIn);
 	}
 
-	void DeviceController::stop() {
+	void MotorController::stop() {
 		this->dest = MoveType::Stop;
 		this->dev->stop();
 		this->work = false;
 	}
 
-	motor_coord_t DeviceController::getPosition() {
+	motor_coord_t MotorController::getPosition() {
 		return this->dev->getPosition();
 	}
 	
-	void DeviceController::addEventListener(MotorEventListener *l) {
+	void MotorController::addEventListener(MotorEventListener *l) {
 		this->listeners.push_back(l);
 	}
 	
-	void DeviceController::removeEventListener(MotorEventListener *l) {
+	void MotorController::removeEventListener(MotorEventListener *l) {
 		this->listeners.erase(
 			std::remove(this->listeners.begin(), this->listeners.end(),
 				l), this->listeners.end());
 		delete l;
 	}
 	
-	void DeviceController::sendMovingEvent(MotorMoveEvent &evt) {
+	void MotorController::sendMovingEvent(MotorMoveEvent &evt) {
 		for (const auto& l : this->listeners) {
 			l->moving(evt);
 		}
 	}
 	
-	void DeviceController::sendMovedEvent(MotorMoveEvent &evt) {
+	void MotorController::sendMovedEvent(MotorMoveEvent &evt) {
 		for (const auto& l : this->listeners) {
 			l->moved(evt);
 		}
 	}
 	
-	void DeviceController::sendStoppedEvent(MotorErrorEvent &evt) {
+	void MotorController::sendStoppedEvent(MotorErrorEvent &evt) {
 		for (const auto& l : this->listeners) {
 			l->stopped(evt);
 		}
 	}
 	
-	void DeviceController::sendRollingEvent(MotorRollEvent &evt) {
+	void MotorController::sendRollingEvent(MotorRollEvent &evt) {
 		for (const auto& l : this->listeners) {
 			l->rolling(evt);
 		}
 	}
 	
-	void DeviceController::sendRolledEvent(MotorRollEvent &evt) {
+	void MotorController::sendRolledEvent(MotorRollEvent &evt) {
 		for (const auto& l : this->listeners) {
 			l->rolled(evt);
 		}
 	}
 	
-	void DeviceController::use() {
+	void MotorController::use() {
 		for (const auto& l : this->listeners) {
 			l->use();
 		}
 	}
 	
-	void DeviceController::unuse() {
+	void MotorController::unuse() {
 		for (const auto& l : this->listeners) {
 			l->unuse();
 		}

@@ -23,7 +23,7 @@
 
 #include <vector>
 #include <cinttypes>
-#include "ctrl-lib/DeviceController.h"
+#include "ctrl-lib/MotorController.h"
 
 /* This file contains Bresenham algorithm implementation for circles.
    It is incremental, that means it stores current position and parameters

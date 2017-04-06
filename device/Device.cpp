@@ -24,24 +24,24 @@
 
 namespace CalX {
 
-	Device::~Device() {
+	Motor::~Motor() {
 		
 	}
 
-	DeviceManager *Device::getDeviceManager() {
+	DeviceManager *Motor::getDeviceManager() {
 		return this->devman;
 	}
 
-	device_id_t Device::getID() {
+	device_id_t Motor::getID() {
 		return this->dev;
 	}
 
-	std::string Device::getSerial() {
-		return this->devman->getDeviceSerial(this->dev);
+	std::string Motor::getSerial() {
+		return this->devman->getMotorSerial(this->dev);
 	}
 
-	std::string Device::getVersion() {
-		return this->devman->getDeviceVersion(this->dev);
+	std::string Motor::getVersion() {
+		return this->devman->getMotorVersion(this->dev);
 	}
 	
 	Instrument::Instrument() {

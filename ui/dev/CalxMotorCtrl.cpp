@@ -20,7 +20,7 @@
 
 #include "CalxApp.h"
 #include "CalxErrorHandler.h"
-#include "CalxDeviceCtrl.h"
+#include "CalxMotorCtrl.h"
 #include "ctrl-lib/SystemManager.h"
 #include "device/DeviceManager.h"
 #include <wx/statbox.h>
@@ -35,7 +35,7 @@ namespace CalXUI {
 		ctrl->updateUI();
 	}
 
-	CalxMotorEventListener::CalxMotorEventListener(CalxDeviceCtrl *ctrl) {
+	CalxMotorEventListener::CalxMotorEventListener(CalxMotorCtrl *ctrl) {
 		this->dev = ctrl;
 		this->used = 0;
 	}
@@ -60,7 +60,7 @@ namespace CalXUI {
 
 	class CalxDevMoveAction : public CalxAction {
 		public:
-			CalxDevMoveAction(CalxDeviceCtrl *ctrl, DeviceController *dev, int dest, float speed, bool rel) {
+			CalxDevMoveAction(CalxMotorCtrl *ctrl, MotorController *dev, int dest, float speed, bool rel) {
 				this->ctrl = ctrl;
 				this->dev = dev;
 				this->dest = dest;
@@ -86,8 +86,8 @@ namespace CalXUI {
 				dev->stop();
 			}
 		private:
-			CalxDeviceCtrl *ctrl;
-			DeviceController *dev;
+			CalxMotorCtrl *ctrl;
+			MotorController *dev;
 			int dest;
 			float speed;
 			bool rel;
@@ -95,7 +95,7 @@ namespace CalXUI {
 
 	class CalxDevCalAction : public CalxAction {
 		public:
-			CalxDevCalAction(CalxDeviceCtrl *ctrl, DeviceController *dev, int tr) {
+			CalxDevCalAction(CalxMotorCtrl *ctrl, MotorController *dev, int tr) {
 				this->ctrl = ctrl;
 				this->dev = dev;
 				this->tr = tr;
@@ -115,12 +115,12 @@ namespace CalXUI {
 				dev->stop();
 			}
 		private:
-			CalxDeviceCtrl *ctrl;
-			DeviceController *dev;
+			CalxMotorCtrl *ctrl;
+			MotorController *dev;
 			int tr;
 	};
 	
-	CalxDeviceCtrl::CalxDeviceCtrl(wxWindow *win, wxWindowID id, CalX::DeviceController *dev)
+	CalxMotorCtrl::CalxMotorCtrl(wxWindow *win, wxWindowID id, CalX::MotorController *dev)
 		: wxPanel::wxPanel(win, id) {
 		this->dev = dev;
 		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
@@ -174,11 +174,11 @@ namespace CalXUI {
 		wxBoxSizer *moveCtrlSizer = new wxBoxSizer(wxHORIZONTAL);
 		
 		wxButton *moveButton = new wxButton(moveCtrlPanel, wxID_ANY, "Move");
-		moveButton->Bind(wxEVT_BUTTON, &CalxDeviceCtrl::moveClick, this);
+		moveButton->Bind(wxEVT_BUTTON, &CalxMotorCtrl::moveClick, this);
 		moveCtrlSizer->Add(moveButton, 1, wxEXPAND);
 		
 		wxButton *rmoveButton = new wxButton(moveCtrlPanel, wxID_ANY, "Relative Move");
-		rmoveButton->Bind(wxEVT_BUTTON, &CalxDeviceCtrl::rmoveClick, this);
+		rmoveButton->Bind(wxEVT_BUTTON, &CalxMotorCtrl::rmoveClick, this);
 		moveCtrlSizer->Add(rmoveButton, 1, wxEXPAND);
 		
 		moveCtrlPanel->SetSizer(moveCtrlSizer);
@@ -192,27 +192,27 @@ namespace CalXUI {
 		wxBoxSizer *actionSizer = new wxBoxSizer(wxVERTICAL);
 		
 		wxButton *switchPowerButton = new wxButton(actionPanel, wxID_ANY, "Switch Power");
-		switchPowerButton->Bind(wxEVT_BUTTON, &CalxDeviceCtrl::switchPowerClick, this);
+		switchPowerButton->Bind(wxEVT_BUTTON, &CalxMotorCtrl::switchPowerClick, this);
 		actionSizer->Add(switchPowerButton, 1, wxEXPAND);
 		
 		wxButton *roll1Button = new wxButton(actionPanel, wxID_ANY, "Roll to trailer 1");
-		roll1Button->Bind(wxEVT_BUTTON, &CalxDeviceCtrl::rollToTrailer1, this);
+		roll1Button->Bind(wxEVT_BUTTON, &CalxMotorCtrl::rollToTrailer1, this);
 		actionSizer->Add(roll1Button, 1, wxEXPAND);
 		
 		wxButton *roll2Button = new wxButton(actionPanel, wxID_ANY, "Roll to trailer 2");
-		roll2Button->Bind(wxEVT_BUTTON, &CalxDeviceCtrl::rollToTrailer2, this);
+		roll2Button->Bind(wxEVT_BUTTON, &CalxMotorCtrl::rollToTrailer2, this);
 		actionSizer->Add(roll2Button, 1, wxEXPAND);
 		
 		this->stopButton = new wxButton(actionPanel, wxID_ANY, "Stop");
-		stopButton->Bind(wxEVT_BUTTON, &CalxDeviceCtrl::stopClick, this);
+		stopButton->Bind(wxEVT_BUTTON, &CalxMotorCtrl::stopClick, this);
 		actionSizer->Add(stopButton, 1, wxEXPAND);
 		
 		actionPanel->SetSizer(actionSizer);
 		sizer->Add(actionPanel, 0, wxALL, 10);
 
 		
-		this->Bind(wxEVT_COMMAND_QUEUE_UPDATE, &CalxDeviceCtrl::threadUpdate, this);
-		Bind(wxEVT_CLOSE_WINDOW, &CalxDeviceCtrl::OnExit, this);
+		this->Bind(wxEVT_COMMAND_QUEUE_UPDATE, &CalxMotorCtrl::threadUpdate, this);
+		Bind(wxEVT_CLOSE_WINDOW, &CalxMotorCtrl::OnExit, this);
 		// Post init
 		this->dev->addEventListener(this->listener);
 		this->queue->Run();
@@ -222,7 +222,7 @@ namespace CalXUI {
 		this->timer.Start(100);
 	}
 	
-	void CalxDeviceCtrl::setEnabled(bool e) {
+	void CalxMotorCtrl::setEnabled(bool e) {
 		movePanel->Enable(e);
 		for (auto i = actionPanel->GetChildren().begin(); i != actionPanel->GetChildren().end(); ++i) {
 			if (*i != this->stopButton) {
@@ -232,19 +232,19 @@ namespace CalXUI {
 		this->stopButton->Enable(!e && this->master);
 	}
 	
-	void CalxDeviceCtrl::setMaster(bool m) {
+	void CalxMotorCtrl::setMaster(bool m) {
 		this->master = m;
 	}
 	
 	
-	void CalxDeviceCtrl::updateUI() {
+	void CalxMotorCtrl::updateUI() {
 		std::string pos = "Position: " + std::to_string(this->dev->getPosition());
-		std::string pwr = "Power: " + std::string(dev->getDevice()->getPowerState() == Power::FullPower ?
-								"full" : (dev->getDevice()->getPowerState() == Power::HalfPower ?
+		std::string pwr = "Power: " + std::string(dev->getMotor()->getPowerState() == Power::FullPower ?
+								"full" : (dev->getMotor()->getPowerState() == Power::HalfPower ?
 								"half" : "no"));
-		std::string stat = "State: " + std::string(dev->getDevice()->isRunning() ? "Running" : "Not running");
-		std::string tra1 = "Trailer 1: " + std::string(dev->getDevice()->isTrailerPressed(1) ? "Pushed" : "Unpushed");
-		std::string tra2 = "Trailer 2: " + std::string(dev->getDevice()->isTrailerPressed(2) ? "Pushed" : "Unpushed");
+		std::string stat = "State: " + std::string(dev->getMotor()->isRunning() ? "Running" : "Not running");
+		std::string tra1 = "Trailer 1: " + std::string(dev->getMotor()->isTrailerPressed(1) ? "Pushed" : "Unpushed");
+		std::string tra2 = "Trailer 2: " + std::string(dev->getMotor()->isTrailerPressed(2) ? "Pushed" : "Unpushed");
 		this->position->SetLabel(pos);
 		this->power->SetLabel(pwr);
 		this->state->SetLabel(stat);
@@ -252,40 +252,40 @@ namespace CalXUI {
 		this->trailer2->SetLabel(tra2);
 	}
 	
-	void CalxDeviceCtrl::stop() {
+	void CalxMotorCtrl::stop() {
 		this->queue->stop();
 	}
 	
-	void CalxDeviceCtrl::switchPowerClick(wxCommandEvent &evt) {
-		dev->getDevice()->flipPower();
+	void CalxMotorCtrl::switchPowerClick(wxCommandEvent &evt) {
+		dev->getMotor()->flipPower();
 	}
 	
-	void CalxDeviceCtrl::rollToTrailer1(wxCommandEvent &evt) {
+	void CalxMotorCtrl::rollToTrailer1(wxCommandEvent &evt) {
 		this->queue->addAction(new CalxDevCalAction(this, dev, 1));
 	}
 	
-	void CalxDeviceCtrl::rollToTrailer2(wxCommandEvent &evt) {
+	void CalxMotorCtrl::rollToTrailer2(wxCommandEvent &evt) {
 		this->queue->addAction(new CalxDevCalAction(this, dev, 2));
 	}
 	
-	void CalxDeviceCtrl::stopClick(wxCommandEvent &evt) {
+	void CalxMotorCtrl::stopClick(wxCommandEvent &evt) {
 		this->queue->stopCurrent();
 	}
 	
-	void CalxDeviceCtrl::moveClick(wxCommandEvent &evt) {
+	void CalxMotorCtrl::moveClick(wxCommandEvent &evt) {
 		this->queue->addAction(new CalxDevMoveAction(this, dev, this->moveSpin->GetValue(),
 			this->moveSpeedSpin->GetValue(), false));
 	}
 	
-	void CalxDeviceCtrl::rmoveClick(wxCommandEvent &evt) {
+	void CalxMotorCtrl::rmoveClick(wxCommandEvent &evt) {
 		this->queue->addAction(new CalxDevMoveAction(this, dev, this->moveSpin->GetValue(),
 			this->moveSpeedSpin->GetValue(), true));
 	}
 	
-	void CalxDeviceCtrl::threadUpdate(wxThreadEvent &evt) {
+	void CalxMotorCtrl::threadUpdate(wxThreadEvent &evt) {
 	}
 	
-	void CalxDeviceCtrl::OnExit(wxCloseEvent &evt) {
+	void CalxMotorCtrl::OnExit(wxCloseEvent &evt) {
 		this->timer.Stop();
 		this->dev->removeEventListener(this->listener);
 		this->dev->stop();

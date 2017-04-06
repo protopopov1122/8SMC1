@@ -43,13 +43,13 @@ namespace CalX {
 #define TRAILER_COMEBACK 800
 
 	
-	class DeviceController {
+	class MotorController {
 		public:
 			friend class CoordController;
 
-			DeviceController(Device*, ConfigManager*);
-			virtual ~DeviceController();
-			Device *getDevice();
+			MotorController(Motor*, ConfigManager*);
+			virtual ~MotorController();
+			Motor *getMotor();
 			device_id_t getID();
 
 			ErrorCode moveToTrailer(int);
@@ -74,7 +74,7 @@ namespace CalX {
 			ErrorCode waitWhileRunning();
 			ErrorCode checkTrailers();
 			
-			Device *dev;
+			Motor *dev;
 			MoveType dest;
 			ConfigManager *config;
 			

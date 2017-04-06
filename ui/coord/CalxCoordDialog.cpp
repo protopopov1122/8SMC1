@@ -70,7 +70,7 @@ namespace CalXUI {
 		sizer->Add(ctrlPanel, 0, wxALL | wxEXPAND, 10);
 		
 		
-		for (size_t i = 0; i < sysman->getDeviceCount(); i++) {
+		for (size_t i = 0; i < sysman->getMotorCount(); i++) {
 			std::string id = "Device #" + std::to_string(i);
 			xChoice->Append(id);
 			yChoice->Append(id);
@@ -83,7 +83,7 @@ namespace CalXUI {
 			instrChoice->Append(id);
 		}
 		
-		if (sysman->getDeviceCount() >= 2) {
+		if (sysman->getMotorCount() >= 2) {
 			xChoice->SetSelection(0);
 			yChoice->SetSelection(1);
 		}
