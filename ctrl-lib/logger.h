@@ -35,6 +35,7 @@ extern std::ostream *WARNINGS;
 extern std::ostream *DEBUG;
 extern std::ostream *INFO;
 extern std::ostream *RESOURCES;
+extern std::ostream *INSTRUMENTS;
 
 #define SET_LOGGER(name, val) name = val;
 
@@ -54,6 +55,7 @@ extern std::ostream *RESOURCES;
 #define LOG_WARNING(tag, msg) WRITE_LOG(WARNINGS, tag, msg)
 #define LOG_DEBUG(tag, msg) WRITE_LOG(DEBUG, tag, msg)
 #define LOG(tag, msg) WRITE_LOG(INFO, tag, msg)
+#define LOG_INSTR(id, msg) WRITE_LOG(INSTRUMENTS, "Instrument #" + std::to_string(id), msg)
 
 #define INIT_LOG(name) WRITE_LOG(RESOURCES, "resource", std::string(name) + " initialized")
 #define DESTROY_LOG(name) WRITE_LOG(RESOURCES, "resource", std::string(name) + " destroyed")

@@ -62,6 +62,7 @@ namespace CalXUI {
 			std::ofstream *debug_log;
 			std::ofstream *info_log;
 			std::ofstream *resources_log;
+			std::ofstream *instruments_log;
 	};
 	
 }

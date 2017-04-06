@@ -23,6 +23,7 @@
 #include "8SMC1DeviceManager.h"
 
 namespace CalX {
+	#define ILOG(msg) LOG_INSTR(this->getID(), msg)
 	
 	_8SMC1Instrument::_8SMC1Instrument(device_id_t id, DeviceSerialPortConnectionPrms *prms, DeviceManager *devman)
 		: Instrument::Instrument() {
@@ -31,16 +32,19 @@ namespace CalX {
 		this->state = false;
 		memcpy(&this->prms, prms, sizeof(DeviceSerialPortConnectionPrms));
 		
-		// Testing stub values
 		int baudrate = prms->speed;
-		
+		ILOG("Init on COM" + std::to_string(prms->port) + ", baudrate: " + std::to_string(prms->speed) +
+			", parity: " + std::to_string(static_cast<int>(prms->parity)));
 		this->handle = CreateFile(("COM" + std::to_string(prms->port)).c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL,
 			OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 		if (this->handle == INVALID_HANDLE_VALUE) {
+			ILOG("COM port opening error");
 			this->errors.push_back("Error opening COM" + std::to_string(prms->port));
 			this->handle = INVALID_HANDLE_VALUE;
 			return;
 		}
+		
+		ILOG("Setting COM port parameters");
 		
 		SetCommMask(handle, EV_RXCHAR);
 		SetupComm(handle, 1500, 1500);
@@ -53,6 +57,7 @@ namespace CalX {
 		CommTimeOuts.WriteTotalTimeoutConstant = 1;
 
 		if(!SetCommTimeouts(handle, &CommTimeOuts)) {
+			ILOG("COM port parameters setting error");
 			CloseHandle(handle);
 			this->errors.push_back("Error configuring COM" + std::to_string(prms->port));
 			return;
@@ -67,39 +72,50 @@ namespace CalX {
 		ComDCM.Parity = static_cast<BYTE>(prms->parity);
 
 		if(!SetCommState(handle, &ComDCM)) {
+			ILOG("COM port parameters setting error");
 			CloseHandle(handle);
 			this->errors.push_back("Error configuring COM" + std::to_string(prms->port));
 		}
 		
+		
+		ILOG("Initializing instrument state");
 		if (!writeSerial(ADJUSTMENT_CMD)) {
+			ILOG("Instrument state setting error");
 			this->errors.push_back("Error configuring COM" + std::to_string(prms->port));
 		}
 		
 		this->mode = static_cast<size_t>(_8SMC1InstrumentMode::Adjustment);
 		this->modes.push_back("Adjustment");
 		this->modes.push_back("Full Power");
+		
+		ILOG("Instrument ready");
 	}
 	
 	_8SMC1Instrument::~_8SMC1Instrument() {
 		if (this->handle != INVALID_HANDLE_VALUE) {
 			CloseHandle(handle);
 		}
+		ILOG("Instrument closed");
 	}
 	
 	bool _8SMC1Instrument::enable(bool en) {
 		if (handle == INVALID_HANDLE_VALUE) {
+			ILOG("Enable error: instrument closed");
 			return false;
 		}
 		if (en == enabled()) {
+			ILOG("Enable: state not changed");
 			return true;
 		}
 		
+		ILOG("Changing instrument state to " + std::string(en ? "enabled" : "disabled"));
 		std::string data = std::string(en ? ENABLE_CMD : DISABLE_CMD);
 		if (!writeSerial(data)) {
 			return false;
 		}
 		
 		state = en;
+		ILOG("Instrument state changed to " + std::string(en ? "enabled" : "disabled"));
 		return true;
 	}
 	
@@ -109,27 +125,33 @@ namespace CalX {
 	
 	bool _8SMC1Instrument::setMode(size_t mode) {
 		if (handle == INVALID_HANDLE_VALUE) {
+			ILOG("Set mode error: instrument closed");
 			return false;
 		}
 		
 		if (mode != static_cast<size_t>(_8SMC1InstrumentMode::Adjustment) &&
 			mode != static_cast<size_t>(_8SMC1InstrumentMode::FullPower)) {
+			ILOG("Set mode error: wrong mode");
 			return false;
 		}
 		
+		ILOG("Changing instrument mode to " + std::to_string(mode));
 		std::string data = std::string(mode == static_cast<size_t>(_8SMC1InstrumentMode::Adjustment) ? ADJUSTMENT_CMD : FULL_POWER_CMD);
 		if (!writeSerial(data)) {
 			return false;
 		}
 		
 		this->mode = mode;
+		ILOG("Mode changed to " + std::to_string(mode));
 		return true;
 	}
 	
 	bool _8SMC1Instrument::writeSerial(std::string stdStr) {
 		if (this->handle == INVALID_HANDLE_VALUE) {
+			ILOG("COM port write error: port closed");
 			return false;
 		}
+		ILOG("Writing to COM" + std::to_string(prms.port) + ": '" + stdStr + "'");
 		const char *data = stdStr.c_str();
 		DWORD feedback;
 		if(!WriteFile(handle, data, (DWORD) strlen(data), &feedback, 0) || feedback != (DWORD) strlen(data)) {
@@ -141,6 +163,7 @@ namespace CalX {
 			getDeviceManager()->saveError();
 			return false;*/
 		}
+		ILOG("Write finished");
 		return true;
 	}
 	

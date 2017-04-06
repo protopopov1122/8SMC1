@@ -24,3 +24,4 @@ std::ostream *WARNINGS = nullptr;
 std::ostream *DEBUG = nullptr;
 std::ostream *INFO = nullptr;
 std::ostream *RESOURCES = nullptr;
+std::ostream *INSTRUMENTS = nullptr;

@@ -81,6 +81,7 @@ namespace CalXUI {
 		SETUP_LOG(debug_log, "debug", DEBUG)
 		SETUP_LOG(info_log, "info", INFO)
 		SETUP_LOG(resources_log, "resources", RESOURCES)
+		SETUP_LOG(instruments_log, "instruments", INSTRUMENTS)
 
 		#undef SETUP_LOG
 	
@@ -88,9 +89,11 @@ namespace CalXUI {
 		this->sysman = new SystemManager(this->devman, conf);
 		this->error_handler = new CalxErrorHandler(this->sysman);
 		
-		if (this->debug_mode) {
+		if (this->debug_mode && conf->getEntry("ui")->getBool("console", false)) {
 			this->debug_console = new CalxDebugConsole(this->sysman);
 			this->debug_console->Run();
+		} else {
+			this->debug_console = nullptr;
 		}
 		
 		this->frame = new CalxFrame("CalX UI");
@@ -101,7 +104,7 @@ namespace CalXUI {
 	}
 	
 	int CalxApp::OnExit() {
-		if (this->debug_mode) {
+		if (this->debug_console != nullptr) {
 			this->debug_console->Kill();
 		}
 		

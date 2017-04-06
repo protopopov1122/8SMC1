@@ -21,6 +21,7 @@
 #ifndef CALX_DEVICE_H_
 #define CALX_DEVICE_H_
 
+#include "ctrl-lib/logger.h"
 #include <cinttypes>
 #include <string>
 

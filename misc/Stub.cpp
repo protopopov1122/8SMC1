@@ -36,7 +36,6 @@ char *Serials[] = {
 };
 
 DWORD USMC_Init(USMC_Devices &devs) {
-	std::cout << "Init devices" << std::endl;
 	devs.NOD = 2;
 	devs.Serial = Serials;
 	devs.Version = Serials;
@@ -44,7 +43,6 @@ DWORD USMC_Init(USMC_Devices &devs) {
 }
 
 DWORD USMC_Close() {
-	std::cout << "Close devices" << std::endl;
 	return FALSE;
 }
 
