@@ -74,8 +74,8 @@ namespace CalXUI {
 			
 			CoordHandle *ctrl;
 			CoordEventListener *listener;
-			CalxCoordDeviceListener *xListener;
-			CalxCoordDeviceListener *yListener;
+			CalxCoordMotorListener *xListener;
+			CalxCoordMotorListener *yListener;
 			CalxCoordInstrumentListener *instrListener;
 			CalxActionQueue *queue;
 			int used;

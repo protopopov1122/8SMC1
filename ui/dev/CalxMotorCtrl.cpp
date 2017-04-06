@@ -31,7 +31,7 @@ using namespace CalX;
 
 namespace CalXUI {
 	
-	void CalxDeviceTimer::Notify() {
+	void CalxMotorTimer::Notify() {
 		ctrl->updateUI();
 	}
 
@@ -58,9 +58,9 @@ namespace CalXUI {
 		}
 	}
 
-	class CalxDevMoveAction : public CalxAction {
+	class CalxMotorMoveAction : public CalxAction {
 		public:
-			CalxDevMoveAction(CalxMotorCtrl *ctrl, MotorController *dev, int dest, float speed, bool rel) {
+			CalxMotorMoveAction(CalxMotorCtrl *ctrl, MotorController *dev, int dest, float speed, bool rel) {
 				this->ctrl = ctrl;
 				this->dev = dev;
 				this->dest = dest;
@@ -68,7 +68,7 @@ namespace CalXUI {
 				this->rel = rel;
 			}
 			
-			virtual ~CalxDevMoveAction() {
+			virtual ~CalxMotorMoveAction() {
 				
 			}
 			
@@ -93,15 +93,15 @@ namespace CalXUI {
 			bool rel;
 	};
 
-	class CalxDevCalAction : public CalxAction {
+	class CalxMotorCalibrationAction : public CalxAction {
 		public:
-			CalxDevCalAction(CalxMotorCtrl *ctrl, MotorController *dev, int tr) {
+			CalxMotorCalibrationAction(CalxMotorCtrl *ctrl, MotorController *dev, int tr) {
 				this->ctrl = ctrl;
 				this->dev = dev;
 				this->tr = tr;
 			}
 			
-			virtual ~CalxDevCalAction() {
+			virtual ~CalxMotorCalibrationAction() {
 				
 			}
 			
@@ -261,11 +261,11 @@ namespace CalXUI {
 	}
 	
 	void CalxMotorCtrl::rollToTrailer1(wxCommandEvent &evt) {
-		this->queue->addAction(new CalxDevCalAction(this, dev, 1));
+		this->queue->addAction(new CalxMotorCalibrationAction(this, dev, 1));
 	}
 	
 	void CalxMotorCtrl::rollToTrailer2(wxCommandEvent &evt) {
-		this->queue->addAction(new CalxDevCalAction(this, dev, 2));
+		this->queue->addAction(new CalxMotorCalibrationAction(this, dev, 2));
 	}
 	
 	void CalxMotorCtrl::stopClick(wxCommandEvent &evt) {
@@ -273,12 +273,12 @@ namespace CalXUI {
 	}
 	
 	void CalxMotorCtrl::moveClick(wxCommandEvent &evt) {
-		this->queue->addAction(new CalxDevMoveAction(this, dev, this->moveSpin->GetValue(),
+		this->queue->addAction(new CalxMotorMoveAction(this, dev, this->moveSpin->GetValue(),
 			this->moveSpeedSpin->GetValue(), false));
 	}
 	
 	void CalxMotorCtrl::rmoveClick(wxCommandEvent &evt) {
-		this->queue->addAction(new CalxDevMoveAction(this, dev, this->moveSpin->GetValue(),
+		this->queue->addAction(new CalxMotorMoveAction(this, dev, this->moveSpin->GetValue(),
 			this->moveSpeedSpin->GetValue(), true));
 	}
 	

@@ -51,10 +51,10 @@ namespace CalXUI {
 			CalxCoordCtrl *ctrl;
 	};
 	
-	class CalxCoordDeviceListener : public MotorEventListener {
+	class CalxCoordMotorListener : public MotorEventListener {
 		public:
-			CalxCoordDeviceListener(CalxCoordCtrl*);
-			virtual ~CalxCoordDeviceListener();
+			CalxCoordMotorListener(CalxCoordCtrl*);
+			virtual ~CalxCoordMotorListener();
 			virtual void use();
 			virtual void unuse();
 		private:

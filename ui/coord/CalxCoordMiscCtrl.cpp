@@ -43,18 +43,18 @@ namespace CalXUI {
 		ctrl->unuse();
 	}
 	
-	CalxCoordDeviceListener::CalxCoordDeviceListener(CalxCoordCtrl *ctrl) {
+	CalxCoordMotorListener::CalxCoordMotorListener(CalxCoordCtrl *ctrl) {
 		this->ctrl = ctrl;
 	}
 	
-	CalxCoordDeviceListener::~CalxCoordDeviceListener() {
+	CalxCoordMotorListener::~CalxCoordMotorListener() {
 	}
 	
-	void CalxCoordDeviceListener::use() {
+	void CalxCoordMotorListener::use() {
 		ctrl->use();
 	}
 	
-	void CalxCoordDeviceListener::unuse() {
+	void CalxCoordMotorListener::unuse() {
 		ctrl->unuse();
 	}
 	

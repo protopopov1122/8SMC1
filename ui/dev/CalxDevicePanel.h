@@ -36,7 +36,7 @@ namespace CalXUI {
 			void updateUI();
 		private:
 			void OnExit(wxCloseEvent&);
-			void OnCOMConnectDevice(wxCommandEvent&);
+			void OnCOMConnectMotor(wxCommandEvent&);
 			void OnCOMConnectInstrument(wxCommandEvent&);
 			std::vector<CalxMotorCtrl*> devs;
 			std::vector<CalxInstrumentCtrl*> instrs;

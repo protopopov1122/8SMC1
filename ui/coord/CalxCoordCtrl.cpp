@@ -53,8 +53,8 @@ namespace CalXUI {
 		this->queue->Run();
 		this->listener = new CalxCoordEventListener(this);
 		this->ctrl->addEventListener(this->listener);
-		this->xListener = new CalxCoordDeviceListener(this);
-		this->yListener = new CalxCoordDeviceListener(this);
+		this->xListener = new CalxCoordMotorListener(this);
+		this->yListener = new CalxCoordMotorListener(this);
 		this->ctrl->getController()->getXAxis()->addEventListener(this->xListener);
 		this->ctrl->getController()->getYAxis()->addEventListener(this->yListener);
 		if (this->ctrl->getController()->getInstrument() != nullptr) {

@@ -47,7 +47,7 @@ namespace CalXUI {
 				case DeviceConnectionType::SerialPort: {
 					wxButton *comButton = new wxButton(connectPanel, wxID_ANY, "Connect COM motor");
 					connectSizer->Add(comButton, 0, wxALL, 5);
-					comButton->Bind(wxEVT_BUTTON, &CalxDevicePanel::OnCOMConnectDevice, this);
+					comButton->Bind(wxEVT_BUTTON, &CalxDevicePanel::OnCOMConnectMotor, this);
 				} break;
 			}
 		}
@@ -132,7 +132,7 @@ namespace CalXUI {
 		Layout();
 	}
 	
-	void CalxDevicePanel::OnCOMConnectDevice(wxCommandEvent &evt) {
+	void CalxDevicePanel::OnCOMConnectMotor(wxCommandEvent &evt) {
 		if (isBusy()) {
 			wxMessageBox("Devices are busy", "Error", wxICON_ERROR);
 			return;

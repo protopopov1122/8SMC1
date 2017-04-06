@@ -44,11 +44,11 @@ namespace CalXUI {
 	};
 	
 	
-	class CalxDeviceTimer : public wxTimer {
+	class CalxMotorTimer : public wxTimer {
 		public:
-			CalxDeviceTimer() : wxTimer::wxTimer() {
+			CalxMotorTimer() : wxTimer::wxTimer() {
 			}
-			~CalxDeviceTimer() {}
+			~CalxMotorTimer() {}
 			void setCtrl(CalxMotorCtrl *d) {this->ctrl = d;}
 			virtual void Notify();
 		private:
@@ -80,7 +80,7 @@ namespace CalXUI {
 			CalX::MotorController *dev;
 			CalxActionQueue *queue;
 			MotorEventListener *listener;
-			CalxDeviceTimer timer;
+			CalxMotorTimer timer;
 			bool master;
 			
 			wxPanel *infoPanel;
