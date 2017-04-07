@@ -43,6 +43,7 @@ namespace CalXUI {
 			void OnStateButton(wxCommandEvent&);
 			void OnEnableButton(wxCommandEvent&);
 			void OnModeClick(wxCommandEvent&);
+			void OnConfClick(wxCommandEvent&);
 			
 			wxStaticText *infoText;
 			wxStaticText *instrInfoText;

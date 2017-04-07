@@ -21,7 +21,8 @@
 #ifndef CALX_DEVICE_H_
 #define CALX_DEVICE_H_
 
-#include "ctrl-lib/logger.h"
+#include "ctrl-lib/CtrlCore.h"
+#include "ctrl-lib/ConfigManager.h"
 #include <cinttypes>
 #include <string>
 
@@ -110,11 +111,13 @@ namespace CalX {
 			virtual void getModes(std::vector<std::string>&);
 			virtual bool setMode(size_t) = 0;
 			virtual size_t getMode() = 0;
+			virtual ConfigManager *getConfiguration();
 		protected:
 			device_id_t dev;
 			DeviceManager *devman;
 			std::vector<std::string> errors;
 			std::vector<std::string> modes;
+			ConfigManager config;
 	};
 }
 

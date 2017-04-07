@@ -29,6 +29,7 @@ namespace CalXUI {
 	class CalxDevicePanel; // Forward referencing
 	class CalxCoordPanel; // Forward referencing
 	class CalxTaskPanel; // Forward referencing
+	class CalxConfigEditor; //Forward referencing
 	
 	class CalxPanel : public wxNotebook {
 		public:
@@ -44,6 +45,7 @@ namespace CalXUI {
 			CalxDevicePanel *dev;
 			CalxCoordPanel *coord;
 			CalxTaskPanel *task;
+			CalxConfigEditor *conf;
 	};
 }
 

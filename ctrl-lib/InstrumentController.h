@@ -45,6 +45,7 @@ namespace CalX {
 			void getModes(std::vector<std::string>&);
 			size_t getMode();
 			bool setMode(size_t);
+			ConfigManager *getConfiguration();
 			
 			void addEventListener(InstrumentEventListener*);
 			void removeEventListener(InstrumentEventListener*);

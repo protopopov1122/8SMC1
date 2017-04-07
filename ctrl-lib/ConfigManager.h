@@ -23,6 +23,7 @@
 
 #include <string>
 #include <map>
+#include <vector>
 #include <cinttypes>
 #include <iostream>
 #include "CtrlCore.h"
@@ -116,6 +117,8 @@ namespace CalX {
 			real_conf_t getReal(std::string, real_conf_t = 0);
 			bool getBool(std::string, bool = false);
 			std::string getString(std::string, std::string = "");
+			
+			void getContent(std::vector<std::pair<std::string, ConfigValue*>>&);
 		private:
 			std::string name;
 			std::map<std::string, ConfigValue*> content;
@@ -129,6 +132,7 @@ namespace CalX {
 			ConfigEntry *getEntry(std::string, bool = true);
 			bool hasEntry(std::string);
 			void store(std::ostream*);
+			void getEntries(std::vector<ConfigEntry*>&);
 			
 			static ConfigManager *load(std::istream*, std::ostream*);
 		private:

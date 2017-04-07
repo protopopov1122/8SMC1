@@ -110,6 +110,12 @@ namespace CalX {
 		}
 	}
 	
+	void ConfigEntry::getContent(std::vector<std::pair<std::string, ConfigValue*>> &vec) {
+		for (const auto& kv : this->content) {
+			vec.push_back(make_pair(kv.first, kv.second));
+		}
+	}
+	
 	void ConfigEntry::store(std::ostream *os) {
 		for (const auto& kv : this->content) {
 			*os << kv.first << '=';
@@ -156,6 +162,12 @@ namespace CalX {
 	
 	bool ConfigManager::hasEntry(std::string id) {
 		return this->entries.count(id) != 0;
+	}
+	
+	void ConfigManager::getEntries(std::vector<ConfigEntry*> &vec) {
+		for (const auto& kv : this->entries) {
+			vec.push_back(kv.second);
+		}
 	}
 	
 	void ConfigManager::store(std::ostream *os) {

@@ -41,6 +41,10 @@ namespace CalX {
 		return this->instr->getID();
 	}
 	
+	ConfigManager *InstrumentController::getConfiguration() {
+		return this->instr->getConfiguration();
+	}
+	
 	bool InstrumentController::isEnabled() {
 		return this->instr->enabled();
 	}

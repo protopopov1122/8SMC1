@@ -20,6 +20,7 @@
 
 #include "CalxInstrumentCtrl.h"
 #include "CalxErrorHandler.h"
+#include "CalxConfigEditor.h"
 #include <wx/sizer.h>
 
 namespace CalXUI {
@@ -151,6 +152,9 @@ namespace CalXUI {
 		ctrlSizer->Add(enabledButton, 0, wxALL | wxEXPAND);
 		stateButton->Bind(wxEVT_BUTTON, &CalxInstrumentCtrl::OnStateButton, this);
 		enabledButton->Bind(wxEVT_BUTTON, &CalxInstrumentCtrl::OnEnableButton, this);
+		wxButton *confButton = new wxButton(ctrlPanel, wxID_ANY, "Configuration");
+		ctrlSizer->Add(confButton, 0, wxALL | wxEXPAND);
+		confButton->Bind(wxEVT_BUTTON, &CalxInstrumentCtrl::OnConfClick, this);
 		
 		wxPanel *modePanel = new wxPanel(mainPanel, wxID_ANY);
 		mainSizer->Add(modePanel, 0, wxALL, 10);
@@ -207,5 +211,13 @@ namespace CalXUI {
 		if (this->modeChoice->GetSelection() != wxNOT_FOUND) {
 			queue->addAction(new CalxInstrumentModeAction(this->ctrl, this->modeChoice->GetSelection()));
 		}
+	}
+	
+	void CalxInstrumentCtrl::OnConfClick(wxCommandEvent &evt) {
+		CalxConfigDialog *editor = new CalxConfigDialog(this, wxID_ANY, this->ctrl->getConfiguration());
+		if (editor->ShowModal() == wxID_OK) {
+			
+		}
+		delete editor;
 	}
 }

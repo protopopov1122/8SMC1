@@ -22,6 +22,7 @@
 #include "dev/CalxDevicePanel.h"
 #include "coord/CalxCoordPanel.h"
 #include "task/CalxTaskPanel.h"
+#include "CalxConfigEditor.h"
 
 namespace CalXUI {
 	
@@ -34,6 +35,8 @@ namespace CalXUI {
 		this->AddPage(this->coord, "Coordinate planes");
 		this->task = new CalxTaskPanel(this, wxID_ANY);
 		this->AddPage(this->task, "Tasks");
+		this->conf = new CalxConfigEditor(this, wxID_ANY, wxGetApp().getSystemManager()->getConfiguration());
+		this->AddPage(this->conf, "Configuration");
 		
 		Bind(wxEVT_CLOSE_WINDOW, &CalxPanel::OnExit, this);
 	}

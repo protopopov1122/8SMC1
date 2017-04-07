@@ -77,4 +77,8 @@ namespace CalX {
 			vec.push_back(mode);
 		}
 	}
+	
+	ConfigManager *Instrument::getConfiguration() {
+		return &this->config;
+	}
 }
