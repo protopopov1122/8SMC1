@@ -29,13 +29,15 @@
 
 #include <fstream>
 #include "ctrl-lib/ConfigManager.h"
+#include "ctrl-lib/ConfigValidator.h"
 
 namespace CalXUI {
 	
 	bool CalxApp::OnInit() {		
 		std::ifstream cnf("config.ini");
 		ConfigManager *conf = ConfigManager::load(&cnf, &std::cout);
-		cnf.close();
+		cnf.close();		
+		
 		this->debug_mode = conf->getEntry("ui")->getBool("debug", false);
 		std::string lib_addr = conf->getEntry("ui")->getString("devicelib", STRINGIZE(DEVICES_LIB));
 		

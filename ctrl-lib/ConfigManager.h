@@ -35,6 +35,8 @@
 
 namespace CalX {
 
+	class ConfigValidator; // Forward referencing
+
 	typedef int64_t int_conf_t;
 	typedef double real_conf_t;
 
@@ -133,10 +135,14 @@ namespace CalX {
 			bool hasEntry(std::string);
 			void store(std::ostream*);
 			void getEntries(std::vector<ConfigEntry*>&);
+			void setValidator(ConfigValidator*);
+			ConfigValidator *getValidator();
+			bool validate(ConfigValidator* = nullptr);
 			
 			static ConfigManager *load(std::istream*, std::ostream*);
 		private:
 			std::map<std::string, ConfigEntry*> entries;
+			ConfigValidator *validator;
 	};
 
 }

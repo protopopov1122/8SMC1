@@ -20,6 +20,7 @@
 
 #include <string.h>
 #include "ConfigManager.h"
+#include "ConfigValidator.h"
 
 namespace CalX {
 	
@@ -139,6 +140,7 @@ namespace CalX {
 	}
 	
 	ConfigManager::ConfigManager() {
+		this->validator = nullptr;
 	}
 	
 	ConfigManager::~ConfigManager() {
@@ -168,6 +170,24 @@ namespace CalX {
 		for (const auto& kv : this->entries) {
 			vec.push_back(kv.second);
 		}
+	}
+	
+	ConfigValidator *ConfigManager::getValidator() {
+		return this->validator;
+	}
+	
+	void ConfigManager::setValidator(ConfigValidator *v) {
+		if (this->validator != nullptr) {
+			delete this->validator;
+		}
+		this->validator = v;
+	}
+	
+	bool ConfigManager::validate(ConfigValidator *v) {
+		if (v == nullptr) {
+			v = this->validator;
+		}
+		return v->validate(this);
 	}
 	
 	void ConfigManager::store(std::ostream *os) {
