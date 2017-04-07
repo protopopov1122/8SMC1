@@ -130,6 +130,55 @@ namespace CalXUI {
 		updateUI();
 	}
 	
+	CalxNewEntryDialog::CalxNewEntryDialog(wxWindow *win, wxWindowID id, ConfigManager *config)
+		: wxDialog::wxDialog(win, id, "Add new entry") {
+		
+		this->config = config;
+		
+		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
+		SetSizer(sizer);
+		
+		wxPanel *mainPanel = new wxPanel(this, wxID_ANY);
+		sizer->Add(mainPanel, 1, wxEXPAND | wxALL, 10);
+		wxBoxSizer *mainSizer = new wxBoxSizer(wxHORIZONTAL);
+		mainPanel->SetSizer(mainSizer);
+		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, "Entry name:"), 0, wxALL, 5);
+		this->entryName = new wxTextCtrl(mainPanel, wxID_ANY, "");
+		mainSizer->Add(this->entryName);
+		
+		wxPanel *buttonPanel = new wxPanel(this, wxID_ANY);
+		sizer->Add(buttonPanel, 0, wxALL, 5);
+		wxBoxSizer *buttonSizer = new wxBoxSizer(wxHORIZONTAL);
+		buttonPanel->SetSizer(buttonSizer);
+		wxButton *okButton = new wxButton(buttonPanel, wxID_OK, "OK");
+		wxButton *cancelButton = new wxButton(buttonPanel, wxID_CANCEL, "Cancel");
+		buttonSizer->Add(okButton);
+		buttonSizer->Add(cancelButton);
+		okButton->Bind(wxEVT_BUTTON, &CalxNewEntryDialog::OnOkClick, this);
+		cancelButton->Bind(wxEVT_BUTTON, &CalxNewEntryDialog::OnCancelClick, this);
+		
+		Layout();
+		Fit();
+	}
+	
+	void CalxNewEntryDialog::OnOkClick(wxCommandEvent &evt) {
+		std::string name = this->entryName->GetValue().ToStdString();
+		if (name.empty()) {
+			wxMessageBox("Entry name is empty", "Warning", wxICON_WARNING);
+			return;
+		}
+		if (this->config->hasEntry(name)) {
+			wxMessageBox("Entry '" + name + "' already exists", "Error", wxICON_ERROR);
+			return;
+		}
+		this->config->getEntry(name);
+		Hide();
+	}
+	
+	void CalxNewEntryDialog::OnCancelClick(wxCommandEvent &evt) {
+		Hide();
+	}
+	
 	CalxConfigEditor::CalxConfigEditor(wxWindow *win, wxWindowID id, ConfigManager *conf)
 		: wxScrolledWindow::wxScrolledWindow(win, id) {
 		
@@ -148,6 +197,12 @@ namespace CalXUI {
 		this->entryList = new wxListBox(entryPanel, wxID_ANY);
 		entrySizer->Add(this->entryList, 1, wxBOTTOM | wxALL | wxEXPAND);
 		entryList->Bind(wxEVT_LISTBOX, &CalxConfigEditor::OnEntryClick, this);
+		wxButton *newEntryButton = new wxButton(entryPanel, wxID_ANY, "New");
+		entrySizer->Add(newEntryButton, 0, wxEXPAND | wxALL);
+		wxButton *removeEntryButton = new wxButton(entryPanel, wxID_ANY, "Remove");
+		entrySizer->Add(removeEntryButton, 0, wxEXPAND | wxALL);
+		newEntryButton->Bind(wxEVT_BUTTON, &CalxConfigEditor::OnNewEntryClick, this);
+		removeEntryButton->Bind(wxEVT_BUTTON, &CalxConfigEditor::OnRemoveEntryClick, this);
 		
 		this->valuePanel = new wxPanel(mainPanel, wxID_ANY);
 		wxBoxSizer *valueSizer = new wxBoxSizer(wxVERTICAL);
@@ -226,6 +281,25 @@ namespace CalXUI {
 	
 	ConfigManager *CalxConfigEditor::getConfiguration() {
 		return this->config;
+	}
+	
+	void CalxConfigEditor::OnNewEntryClick(wxCommandEvent &evt) {
+		CalxNewEntryDialog *dialog = new CalxNewEntryDialog(this, wxID_ANY, this->config);
+		dialog->ShowModal();
+		delete dialog;
+		updateEntries();
+		updateEntry();
+	}
+	
+	void CalxConfigEditor::OnRemoveEntryClick(wxCommandEvent &evt) {
+		if (this->entryList->GetSelection() != wxNOT_FOUND) {
+			std::string name = this->entryList->GetStringSelection().ToStdString();
+			this->config->removeEntry(name);
+			updateEntries();
+			updateEntry();
+		} else {
+			wxMessageBox("Select entry to remove", "Warning", wxICON_WARNING);
+		}
 	}
 	
 	void CalxConfigEditor::OnEntryClick(wxCommandEvent &evt) {
@@ -336,14 +410,15 @@ namespace CalXUI {
 			this->entryList->Append(entry->getEntryName());
 		}
 		Layout();
+		this->entryList->SetSelection(wxNOT_FOUND);
 	}
 	
 	void CalxConfigEditor::updateEntry() {
+		this->valueList->DeleteAllItems();
 		if (this->entryList->GetSelection() == wxNOT_FOUND) {
 			return;
 		}
 		
-		this->valueList->DeleteAllItems();
 		std::string entryName = this->entryList->GetStringSelection().ToStdString();
 		ConfigEntry *entry = this->config->getEntry(entryName);
 		std::vector<std::pair<std::string, ConfigValue*>> content;

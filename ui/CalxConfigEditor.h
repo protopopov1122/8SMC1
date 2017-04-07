@@ -52,6 +52,17 @@ namespace CalXUI {
 			wxTextCtrl *string;
 	};
 	
+	class CalxNewEntryDialog : public wxDialog {
+		public:
+			CalxNewEntryDialog(wxWindow*, wxWindowID, ConfigManager*);
+		private:
+			void OnOkClick(wxCommandEvent&);
+			void OnCancelClick(wxCommandEvent&);
+			
+			wxTextCtrl *entryName;
+			ConfigManager *config;
+	};
+	
 	class CalxConfigEditor : public wxScrolledWindow {
 		public:
 			CalxConfigEditor(wxWindow*, wxWindowID, ConfigManager*);
@@ -70,6 +81,8 @@ namespace CalXUI {
 			void OnStringEdit(wxCommandEvent&);
 			void OnNewKeyClick(wxCommandEvent&);
 			void OnRemoveKeyClick(wxCommandEvent&);
+			void OnNewEntryClick(wxCommandEvent&);
+			void OnRemoveEntryClick(wxCommandEvent&);
 			void OnExit(wxCloseEvent&);
 			wxButton *okButton;
 			wxListBox *entryList;

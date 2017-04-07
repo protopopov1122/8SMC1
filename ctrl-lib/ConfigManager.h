@@ -137,6 +137,7 @@ namespace CalX {
 		
 			ConfigEntry *getEntry(std::string, bool = true);
 			bool hasEntry(std::string);
+			bool removeEntry(std::string);
 			void store(std::ostream*);
 			void getEntries(std::vector<ConfigEntry*>&);
 			void setValidator(ConfigValidator*);

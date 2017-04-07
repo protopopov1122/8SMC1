@@ -166,6 +166,15 @@ namespace CalX {
 		return this->entries.count(id) != 0;
 	}
 	
+	bool ConfigManager::removeEntry(std::string id) {
+		if (this->entries.count(id) == 0) {
+			return false;
+		}
+		delete this->entries[id];
+		this->entries.erase(id);
+		return true;
+	}
+	
 	void ConfigManager::getEntries(std::vector<ConfigEntry*> &vec) {
 		for (const auto& kv : this->entries) {
 			vec.push_back(kv.second);
