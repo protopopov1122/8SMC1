@@ -24,6 +24,9 @@
 #include "CalxApp.h"
 #include <wx/listbox.h>
 #include <wx/dataview.h>
+#include <wx/spinctrl.h>
+#include <wx/textctrl.h>
+#include <wx/checkbox.h>
 #include "ctrl-lib/ConfigManager.h"
 
 namespace CalXUI {
@@ -36,13 +39,31 @@ namespace CalXUI {
 		private:
 			void updateEntries();
 			void updateEntry();
+			void updateEditor();
 		
 			void OnEntryClick(wxCommandEvent&);
+			void OnKeyClick(wxDataViewEvent&);
+			void OnIntegerEdit(wxCommandEvent&);
+			void OnRealEdit(wxCommandEvent&);
+			void OnBooleanEdit(wxCommandEvent&);
+			void OnStringEdit(wxCommandEvent&);
 			void OnExit(wxCloseEvent&);
 			wxButton *okButton;
 			wxListBox *entryList;
 			wxDataViewListCtrl *valueList;
+			wxPanel *valuePanel;
 			wxPanel *editorPanel;
+			
+			ConfigValue *currentValue;
+			wxPanel *integerEditor;
+			wxSpinCtrl *integerSpin;
+			wxPanel *realEditor;
+			wxTextCtrl *realCtrl;
+			wxPanel *booleanEditor;
+			wxCheckBox *booleanCheckbox;
+			wxPanel *stringEditor;
+			wxTextCtrl *stringCtrl;
+			
 			ConfigManager *config;
 	};
 	

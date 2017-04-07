@@ -61,6 +61,7 @@ namespace CalX {
 			}
 
 			int_conf_t getValue() {return this->value;}
+			void setValue(int_conf_t v) {this->value = v;}
 		private:
 			int_conf_t value;
 	};
@@ -73,6 +74,7 @@ namespace CalX {
 			}
 
 			real_conf_t getValue() {return this->value;}
+			void setValue(real_conf_t v) {this->value = v;}
 		private:
 			real_conf_t value;
 	};
@@ -85,6 +87,7 @@ namespace CalX {
 			}
 
 			bool getValue() {return this->value;}
+			void setValue(bool v) {this->value = v;}
 		private:
 			bool value;
 	};
@@ -97,6 +100,7 @@ namespace CalX {
 			}
 
 			std::string getValue() {return this->value;}
+			void setValue(std::string v) {this->value = v;}
 		private:
 			std::string value;
 	};
