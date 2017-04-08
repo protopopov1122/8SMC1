@@ -19,12 +19,14 @@
 
 
 #include <string.h>
+#include <algorithm>
 #include "ConfigManager.h"
 #include "ConfigValidator.h"
 
 namespace CalX {
 	
-	ConfigEntry::ConfigEntry(std::string name) {
+	ConfigEntry::ConfigEntry(ConfigManager *conf, std::string name) {
+		this->config = conf;
 		this->name = name;
 	}
 	
@@ -52,13 +54,23 @@ namespace CalX {
 	}
 	
 	bool ConfigEntry::put(std::string id, ConfigValue *value) {
+		bool change = false;
 		if (this->has(id)) {
-			this->remove(id);
+			delete this->content[id];
+			this->content.erase(id);
+			change = true;
 		}
 		if (value == nullptr) {
 			return false;
 		}
 		this->content[id] = value;
+		for (const auto& l : this->config->getEventListeners()) {
+			if (change) {
+				l->keyChanged(this->config, this, id);
+			} else {
+				l->keyAdded(this->config, this, id);
+			}
+		}
 		return true;
 	}
 	
@@ -68,6 +80,9 @@ namespace CalX {
 		}
 		delete this->content[id];
 		this->content.erase(id);
+		for (const auto& l : this->config->getEventListeners()) {
+			l->keyRemoved(this->config, this, id);
+		}
 		return true;
 	}
 	
@@ -144,6 +159,10 @@ namespace CalX {
 	}
 	
 	ConfigManager::~ConfigManager() {
+		for (const auto& l : this->listeners) {
+			delete l;
+		}
+		this->listeners.clear();
 		for (const auto& kv : this->entries) {
 			delete kv.second;
 		}
@@ -154,8 +173,11 @@ namespace CalX {
 		if (this->entries.count(id) != 0) {
 			return this->entries[id];
 		} else if (createNew) {
-			ConfigEntry *entry = new ConfigEntry(id);
+			ConfigEntry *entry = new ConfigEntry(this, id);
 			this->entries[id] = entry;
+			for (const auto& l : this->listeners) {
+				l->entryAdded(this, id);
+			}
 			return entry;
 		} else {
 			return nullptr;
@@ -172,6 +194,9 @@ namespace CalX {
 		}
 		delete this->entries[id];
 		this->entries.erase(id);
+		for (const auto& l : this->listeners) {
+			l->entryRemoved(this, id);
+		}
 		return true;
 	}
 	
@@ -205,6 +230,21 @@ namespace CalX {
 			kv.second->store(os);
 			*os << std::endl;
 		}
+	}
+	
+	void ConfigManager::addEventListener(ConfigEventListener *l) {
+		this->listeners.push_back(l);
+	}
+	
+	void ConfigManager::removeEventListener(ConfigEventListener *l) {
+		this->listeners.erase(
+			std::remove(this->listeners.begin(), this->listeners.end(),
+				l), this->listeners.end());
+		delete l;	
+	}
+	
+	std::vector<ConfigEventListener*> &ConfigManager::getEventListeners() {
+		return this->listeners;
 	}
 	
 	size_t skipWhitespaces(char *line, size_t start) {

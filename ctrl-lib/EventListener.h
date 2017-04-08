@@ -21,9 +21,13 @@
 #ifndef CALX_CTRL_LIB_EVENT_LISTENER_H_
 #define CALX_CTRL_LIB_EVENT_LISTENER_H_
 
+#include <string>
 #include "CtrlCore.h"
 
 namespace CalX {
+	
+	class ConfigManager; // Forward referencing
+	class ConfigEntry; // Forward referencing
 	
 	struct MotorMoveEvent {
 		motor_coord_t destination;
@@ -87,6 +91,17 @@ namespace CalX {
 			virtual void stopped(CoordErrorEvent&) {}
 			virtual void calibrating(CoordCalibrateEvent&) {}
 			virtual void calibrated(CoordCalibrateEvent&) {}
+	};
+	
+	class ConfigEventListener {
+		public:
+			ConfigEventListener() {INIT_LOG("ConfigEventListener");}
+			virtual ~ConfigEventListener() {DESTROY_LOG("ConfigEventListener");}
+			virtual void entryAdded(ConfigManager*, std::string) {}
+			virtual void entryRemoved(ConfigManager*, std::string) {}
+			virtual void keyAdded(ConfigManager*, ConfigEntry*, std::string) {}
+			virtual void keyRemoved(ConfigManager*, ConfigEntry*, std::string) {}
+			virtual void keyChanged(ConfigManager*, ConfigEntry*, std::string) {}
 	};
 }
 

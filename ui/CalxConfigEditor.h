@@ -63,16 +63,30 @@ namespace CalXUI {
 			ConfigManager *config;
 	};
 	
+	class CalxConfigEventListener : public ConfigEventListener {
+		public:
+			CalxConfigEventListener(CalxConfigEditor*);
+			virtual ~CalxConfigEventListener();
+			virtual void entryAdded(ConfigManager*, std::string);
+			virtual void entryRemoved(ConfigManager*, std::string);
+			virtual void keyAdded(ConfigManager*, ConfigEntry*, std::string);
+			virtual void keyRemoved(ConfigManager*, ConfigEntry*, std::string);
+			virtual void keyChanged(ConfigManager*, ConfigEntry*, std::string);
+		private:
+			CalxConfigEditor *editor;
+	};
+	
 	class CalxConfigEditor : public wxScrolledWindow {
 		public:
 			CalxConfigEditor(wxWindow*, wxWindowID, ConfigManager*);
 			ConfigManager *getConfiguration();
 			wxButton *getOkButton();
-		private:
+			
 			void updateEntries();
 			void updateEntry();
 			void updateEditor();
-		
+			void updateKey();
+		private:
 			void OnEntryClick(wxCommandEvent&);
 			void OnKeyClick(wxDataViewEvent&);
 			void OnIntegerEdit(wxCommandEvent&);
@@ -101,6 +115,7 @@ namespace CalXUI {
 			wxTextCtrl *stringCtrl;
 			
 			ConfigManager *config;
+			CalxConfigEventListener *listener;
 	};
 	
 	class CalxConfigDialog : public wxDialog {

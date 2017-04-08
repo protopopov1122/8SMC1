@@ -179,6 +179,38 @@ namespace CalXUI {
 		Hide();
 	}
 	
+	CalxConfigEventListener::CalxConfigEventListener(CalxConfigEditor *editor) {
+		this->editor = editor;
+	}
+	
+	CalxConfigEventListener::~CalxConfigEventListener() {
+		
+	}
+	
+	void CalxConfigEventListener::entryAdded(ConfigManager *manager, std::string id) {
+		editor->updateEntries();
+		editor->updateEntry();
+	}
+	
+	void CalxConfigEventListener::entryRemoved(ConfigManager *manager, std::string id) {
+		editor->updateEntries();
+		editor->updateEntry();
+	}
+	
+	void CalxConfigEventListener::keyAdded(ConfigManager *manager, ConfigEntry *entry, std::string key) {
+		editor->updateEntry();
+	}
+	
+	void CalxConfigEventListener::keyRemoved(ConfigManager *manager, ConfigEntry *entry, std::string key) {
+		editor->updateEntry();
+	}
+	
+	void CalxConfigEventListener::keyChanged(ConfigManager *manager, ConfigEntry *entry, std::string key) {
+		editor->updateKey();
+	}
+	
+	
+	
 	CalxConfigEditor::CalxConfigEditor(wxWindow *win, wxWindowID id, ConfigManager *conf)
 		: wxScrolledWindow::wxScrolledWindow(win, id) {
 		
@@ -270,6 +302,9 @@ namespace CalXUI {
 		stringSizer->Add(this->stringCtrl, 0, wxALIGN_CENTER);
 		this->stringCtrl->Bind(wxEVT_TEXT, &CalxConfigEditor::OnStringEdit, this);
 		
+		this->listener = new CalxConfigEventListener(this);
+		this->config->addEventListener(this->listener);
+		
 		updateEditor();
 		updateEntries();
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxConfigEditor::OnExit, this);
@@ -287,16 +322,12 @@ namespace CalXUI {
 		CalxNewEntryDialog *dialog = new CalxNewEntryDialog(this, wxID_ANY, this->config);
 		dialog->ShowModal();
 		delete dialog;
-		updateEntries();
-		updateEntry();
 	}
 	
 	void CalxConfigEditor::OnRemoveEntryClick(wxCommandEvent &evt) {
 		if (this->entryList->GetSelection() != wxNOT_FOUND) {
 			std::string name = this->entryList->GetStringSelection().ToStdString();
 			this->config->removeEntry(name);
-			updateEntries();
-			updateEntry();
 		} else {
 			wxMessageBox("Select entry to remove", "Warning", wxICON_WARNING);
 		}
@@ -332,8 +363,12 @@ namespace CalXUI {
 		int_conf_t value = this->integerSpin->GetValue();
 		if (this->currentValue != nullptr &&
 			this->currentValue->getType() == ConfigValueType::Integer) {
-			this->valueList->SetValue(wxVariant(std::to_string(value)), this->valueList->GetSelectedRow(), 2);
-			((IntegerConfigValue*) this->currentValue)->setValue(value);
+			std::string entry = this->entryList->GetStringSelection().ToStdString();
+			wxVariant vrt;
+			this->valueList->GetValue(vrt, this->valueList->GetSelectedRow(), 0);
+			std::string key = vrt.GetString().ToStdString();
+			this->currentValue = new IntegerConfigValue(value);
+			this->config->getEntry(entry)->put(key, currentValue);
 		}
 	}
 	
@@ -349,8 +384,12 @@ namespace CalXUI {
 		}
 		if (this->currentValue != nullptr &&
 			this->currentValue->getType() == ConfigValueType::Real) {
-			this->valueList->SetValue(wxVariant(std::to_string(value)), this->valueList->GetSelectedRow(), 2);
-			((RealConfigValue*) this->currentValue)->setValue(value);
+			std::string entry = this->entryList->GetStringSelection().ToStdString();
+			wxVariant vrt;
+			this->valueList->GetValue(vrt, this->valueList->GetSelectedRow(), 0);
+			std::string key = vrt.GetString().ToStdString();
+			this->currentValue = new RealConfigValue(value);
+			this->config->getEntry(entry)->put(key, currentValue);
 		}
 	}
 	
@@ -358,8 +397,12 @@ namespace CalXUI {
 		bool value = this->booleanCheckbox->GetValue();
 		if (this->currentValue != nullptr &&
 			this->currentValue->getType() == ConfigValueType::Boolean) {
-			this->valueList->SetValue(wxVariant(std::string(value ? "true" : "false")), this->valueList->GetSelectedRow(), 2);
-			((BoolConfigValue*) this->currentValue)->setValue(value);
+			std::string entry = this->entryList->GetStringSelection().ToStdString();
+			wxVariant vrt;
+			this->valueList->GetValue(vrt, this->valueList->GetSelectedRow(), 0);
+			std::string key = vrt.GetString().ToStdString();
+			this->currentValue = new BoolConfigValue(value);
+			this->config->getEntry(entry)->put(key, currentValue);
 		}
 	}
 	
@@ -367,8 +410,12 @@ namespace CalXUI {
 		std::string value = this->stringCtrl->GetValue().ToStdString();
 		if (this->currentValue != nullptr &&
 			this->currentValue->getType() == ConfigValueType::String) {
-			this->valueList->SetValue(wxVariant(value), this->valueList->GetSelectedRow(), 2);
-			((StringConfigValue*) this->currentValue)->setValue(value);
+			std::string entry = this->entryList->GetStringSelection().ToStdString();
+			wxVariant vrt;
+			this->valueList->GetValue(vrt, this->valueList->GetSelectedRow(), 0);
+			std::string key = vrt.GetString().ToStdString();
+			this->currentValue = new StringConfigValue(value);
+			this->config->getEntry(entry)->put(key, currentValue);
 		}
 	}
 	
@@ -378,7 +425,6 @@ namespace CalXUI {
 			CalxNewKeyDialog *dialog = new CalxNewKeyDialog(this, wxID_ANY, entry);
 			dialog->ShowModal();
 			delete dialog;
-			updateEntry();
 		} else {
 			wxMessageBox("Select one entry to add key", "Attention", wxICON_INFORMATION);
 		}
@@ -392,13 +438,13 @@ namespace CalXUI {
 			this->valueList->GetValue(vrt, this->valueList->GetSelectedRow(), 0);
 			std::string key = vrt.GetString().ToStdString();
 			entry->remove(key);
-			updateEntry();
 		} else {
 			wxMessageBox("Select key to remove", "Warning", wxICON_WARNING);
 		}
 	}
 	
 	void CalxConfigEditor::OnExit(wxCloseEvent &evt) {
+		this->config->removeEventListener(this->listener);
 		Destroy();
 	}
 	
@@ -481,6 +527,38 @@ namespace CalXUI {
 		this->valuePanel->Layout();
 	}
 	
+	void CalxConfigEditor::updateKey() {
+		if (this->entryList->GetSelection() != wxNOT_FOUND &&
+			this->valueList->GetSelectedRow() != wxNOT_FOUND) {
+			
+			ConfigEntry *entry = this->config->getEntry(this->entryList->GetStringSelection().ToStdString());
+			wxVariant vrt;
+			this->valueList->GetValue(vrt, this->valueList->GetSelectedRow(), 0);
+			std::string key = vrt.GetString().ToStdString();
+			ConfigValue *value = entry->get(key);
+			if (value == nullptr) {
+				return;
+			}
+			switch (value->getType()) {
+				case ConfigValueType::Integer:
+					this->valueList->SetValue(wxVariant("integer"), this->valueList->GetSelectedRow(), 1);
+					this->valueList->SetValue(wxVariant(std::to_string(((IntegerConfigValue*) value)->getValue())), this->valueList->GetSelectedRow(), 2);
+				break;
+				case ConfigValueType::Real:
+					this->valueList->SetValue(wxVariant(std::to_string(((RealConfigValue*) value)->getValue())), this->valueList->GetSelectedRow(), 2);
+				break;
+				case ConfigValueType::Boolean:
+					this->valueList->SetValue(wxVariant("boolean"), this->valueList->GetSelectedRow(), 1);
+					this->valueList->SetValue(wxVariant(std::string(((BoolConfigValue*) value)->getValue() ? "true" : "false")), this->valueList->GetSelectedRow(), 2);
+				break;
+				case ConfigValueType::String:
+					this->valueList->SetValue(wxVariant("string"), this->valueList->GetSelectedRow(), 1);
+					this->valueList->SetValue(wxVariant(((StringConfigValue*) value)->getValue()), this->valueList->GetSelectedRow(), 2);
+				break;
+			}
+		}
+	}
+	
 	CalxConfigDialog::CalxConfigDialog(wxWindow *win, wxWindowID id, ConfigManager *conf)
 		: wxDialog::wxDialog(win, id, "Configuration Editor", wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER) {
 		
@@ -503,6 +581,7 @@ namespace CalXUI {
 	}
 	
 	void CalxConfigDialog::OnOkClick(wxCommandEvent &evt) {
+		this->editor->Close(true);
 		Hide();
 	}
 }

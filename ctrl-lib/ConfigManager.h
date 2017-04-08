@@ -27,6 +27,7 @@
 #include <cinttypes>
 #include <iostream>
 #include "CtrlCore.h"
+#include "EventListener.h"
 
 /* This file contains configuration manager - configuration parameter storage.
    It represents structure similar to INI file, but all values have types.
@@ -61,7 +62,6 @@ namespace CalX {
 			}
 
 			int_conf_t getValue() {return this->value;}
-			void setValue(int_conf_t v) {this->value = v;}
 		private:
 			int_conf_t value;
 	};
@@ -74,7 +74,6 @@ namespace CalX {
 			}
 
 			real_conf_t getValue() {return this->value;}
-			void setValue(real_conf_t v) {this->value = v;}
 		private:
 			real_conf_t value;
 	};
@@ -87,7 +86,6 @@ namespace CalX {
 			}
 
 			bool getValue() {return this->value;}
-			void setValue(bool v) {this->value = v;}
 		private:
 			bool value;
 	};
@@ -100,7 +98,6 @@ namespace CalX {
 			}
 
 			std::string getValue() {return this->value;}
-			void setValue(std::string v) {this->value = v;}
 		private:
 			std::string value;
 	};
@@ -108,7 +105,7 @@ namespace CalX {
 
 	class ConfigEntry {
 		public:
-			ConfigEntry(std::string);
+			ConfigEntry(ConfigManager*, std::string);
 			virtual ~ConfigEntry();
 			std::string getEntryName();
 		
@@ -126,6 +123,7 @@ namespace CalX {
 			
 			void getContent(std::vector<std::pair<std::string, ConfigValue*>>&);
 		private:
+			ConfigManager *config;
 			std::string name;
 			std::map<std::string, ConfigValue*> content;
 	};
@@ -144,10 +142,15 @@ namespace CalX {
 			ConfigValidator *getValidator();
 			bool validate(ConfigValidator* = nullptr);
 			
+			void addEventListener(ConfigEventListener*);
+			void removeEventListener(ConfigEventListener*);
+			std::vector<ConfigEventListener*> &getEventListeners();
+			
 			static ConfigManager *load(std::istream*, std::ostream*);
 		private:
 			std::map<std::string, ConfigEntry*> entries;
 			ConfigValidator *validator;
+			std::vector<ConfigEventListener*> listeners;
 	};
 
 }
