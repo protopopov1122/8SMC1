@@ -28,46 +28,39 @@ namespace CalXUI {
 		: wxDialog::wxDialog(win, id, "New coordinate plane") {
 		this->sysman = sysman;
 		this->ctrl = nullptr;
-		
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
+		SetSizer(sizer);
 		
-		wxPanel *xPanel = new wxPanel(this, wxID_ANY);
-		wxBoxSizer *xSizer = new wxBoxSizer(wxHORIZONTAL);
-		wxStaticText *xText = new wxStaticText(xPanel, wxID_ANY, "X Axis: ");
-		this->xChoice = new wxChoice(xPanel, wxID_ANY);
-		xSizer->Add(xText, 0, wxALL | wxALIGN_CENTER, 5);
-		xSizer->Add(xChoice, 0, wxALL | wxEXPAND);
-		xPanel->SetSizer(xSizer);
-		sizer->Add(xPanel, 0, wxALL | wxEXPAND);
+		wxPanel *mainPanel = new wxPanel(this, wxID_ANY);
+		sizer->Add(mainPanel, 1, wxALL | wxEXPAND, 10);
+		wxFlexGridSizer *mainSizer = new wxFlexGridSizer(2);
+		mainPanel->SetSizer(mainSizer);
 		
-		wxPanel *yPanel = new wxPanel(this, wxID_ANY);
-		wxBoxSizer *ySizer = new wxBoxSizer(wxHORIZONTAL);
-		wxStaticText *yText = new wxStaticText(yPanel, wxID_ANY, "Y Axis: ");
-		this->yChoice = new wxChoice(yPanel, wxID_ANY);
-		ySizer->Add(yText, 0, wxALL | wxALIGN_CENTER, 5);
-		ySizer->Add(yChoice, 0, wxALL | wxEXPAND);
-		yPanel->SetSizer(ySizer);
-		sizer->Add(yPanel, 0, wxALL | wxEXPAND);
+		wxStaticText *xText = new wxStaticText(mainPanel, wxID_ANY, "X Axis: ");
+		this->xChoice = new wxChoice(mainPanel, wxID_ANY);
+		mainSizer->Add(xText, 0, wxRIGHT | wxALIGN_RIGHT, 5);
+		mainSizer->Add(xChoice, 0, wxALL | wxEXPAND);
 		
-		wxPanel *instrPanel = new wxPanel(this, wxID_ANY);
-		wxBoxSizer *instrSizer = new wxBoxSizer(wxHORIZONTAL);
-		wxStaticText *instrText = new wxStaticText(instrPanel, wxID_ANY, "Instrument: ");
-		this->instrChoice = new wxChoice(instrPanel, wxID_ANY);
-		instrSizer->Add(instrText, 0, wxALL | wxALIGN_CENTER, 5);
-		instrSizer->Add(instrChoice, 0, wxALL | wxEXPAND);
-		instrPanel->SetSizer(instrSizer);
-		sizer->Add(instrPanel, 0, wxALL | wxEXPAND);
+		wxStaticText *yText = new wxStaticText(mainPanel, wxID_ANY, "Y Axis: ");
+		this->yChoice = new wxChoice(mainPanel, wxID_ANY);
+		mainSizer->Add(yText, 0, wxRIGHT | wxALIGN_RIGHT, 5);
+		mainSizer->Add(yChoice, 0, wxALL | wxEXPAND);
 		
-		wxPanel *ctrlPanel = new wxPanel(this, wxID_ANY);
-		wxBoxSizer *ctrlSizer = new wxBoxSizer(wxHORIZONTAL);
-		wxButton *okButton = new wxButton(ctrlPanel, wxID_OK, "OK");
-		ctrlSizer->Add(okButton, 0, wxALIGN_CENTER);
+		wxStaticText *instrText = new wxStaticText(mainPanel, wxID_ANY, "Instrument: ");
+		this->instrChoice = new wxChoice(mainPanel, wxID_ANY);
+		mainSizer->Add(instrText, 0, wxRIGHT | wxALIGN_RIGHT, 5);
+		mainSizer->Add(instrChoice, 0, wxALL | wxEXPAND);
+		
+		wxPanel *buttonPanel = new wxPanel(this, wxID_ANY);
+		sizer->Add(buttonPanel, 0, wxALIGN_CENTER | wxALL, 5);
+		wxBoxSizer *buttonSizer = new wxBoxSizer(wxHORIZONTAL);
+		buttonPanel->SetSizer(buttonSizer);
+		wxButton *okButton = new wxButton(buttonPanel, wxID_OK, "OK");
 		okButton->Bind(wxEVT_BUTTON, &CalxCoordDialog::OnOkButtonClick, this);
-		wxButton *cancelButton = new wxButton(ctrlPanel, wxID_CANCEL, "Cancel");
-		ctrlSizer->Add(cancelButton, 0, wxALIGN_CENTER);
+		wxButton *cancelButton = new wxButton(buttonPanel, wxID_CANCEL, "Cancel");
 		cancelButton->Bind(wxEVT_BUTTON, &CalxCoordDialog::OnCancelButtonClick, this);
-		ctrlPanel->SetSizer(ctrlSizer);
-		sizer->Add(ctrlPanel, 0, wxALL | wxEXPAND, 10);
+		buttonSizer->Add(okButton);
+		buttonSizer->Add(cancelButton);
 		
 		
 		for (size_t i = 0; i < sysman->getMotorCount(); i++) {
@@ -94,7 +87,7 @@ namespace CalXUI {
 			instrChoice->SetSelection(0);
 		}
 		
-		SetSizer(sizer);
+		Layout();
 		Fit();
 	}
 	

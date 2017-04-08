@@ -38,10 +38,11 @@ namespace CalXUI {
 		CalxGcode, CalxProgrammed
 	};
 	
-	class CalxTaskHandle : public wxPanel {
+	class CalxTaskHandle : public wxScrolledWindow {
 		public:
 			CalxTaskHandle(wxWindow *win, wxWindowID id, CalxTaskType type)
-				: wxPanel::wxPanel(win, id) {
+				: wxScrolledWindow::wxScrolledWindow(win, id) {
+				this->SetScrollRate(5, 5);
 				this->type = type;
 			}
 			CalxTaskType getType() {return this->type;}

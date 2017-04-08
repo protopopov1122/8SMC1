@@ -57,6 +57,7 @@ namespace CalXUI {
 		SetMinSize(min);
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxVirtualPlane::OnExit, this);
 		this->Bind(wxEVT_PAINT, &CalxVirtualPlane::OnPaintEvent, this);
+		this->Bind(wxEVT_SIZE, &CalxVirtualPlane::OnResizeEvent, this);
 	}
 	
 	CoordPlaneStack *CalxVirtualPlane::getPlane() {
@@ -75,6 +76,10 @@ namespace CalXUI {
 	void CalxVirtualPlane::OnPaintEvent(wxPaintEvent &evt) {
 		wxPaintDC dc(this);
 		render(dc);
+	}
+	
+	void CalxVirtualPlane::OnResizeEvent(wxSizeEvent &evt) {
+		Refresh();
 	}
 	
 	void CalxVirtualPlane::repaint() {
@@ -126,7 +131,7 @@ namespace CalXUI {
 
 	CalxVirtualPlaneDialog::CalxVirtualPlaneDialog(wxWindow *win, wxWindowID id,
 		CoordHandle *base, wxSize min)
-		: wxDialog::wxDialog(win , id, "Preview") {
+		: wxDialog::wxDialog(win , id, "Preview", wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER) {
 		
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(sizer);
@@ -134,7 +139,7 @@ namespace CalXUI {
 		this->mouseCoords = new wxStaticText(this, wxID_ANY, "Preview building may take some time.");
 		sizer->Add(this->mouseCoords);
 		this->plane = new CalxVirtualPlane(this, wxID_ANY, base, min);
-		sizer->Add(this->plane, 0, wxALL, 5);
+		sizer->Add(this->plane, 1, wxALL | wxEXPAND, 5);
 		
 		wxButton *okButton = new wxButton(this, wxID_OK, "OK");
 		sizer->Add(okButton, 0, wxALL | wxALIGN_CENTER);

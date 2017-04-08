@@ -26,6 +26,7 @@
 #include "CalxTaskPanel.h"
 #include <wx/sizer.h>
 #include <wx/stattext.h>
+#include <wx/splitter.h>
 #include "coord/CalxCoordPanel.h"
 #include "coord/CalxVirtualPlane.h"
 #include "ctrl-lib/misc/GCodeWriter.h"
@@ -92,11 +93,13 @@ namespace CalXUI {
 		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
 		this->queue->Run();
 		wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
+		SetSizer(sizer);
+		wxSplitterWindow *splitter = new wxSplitterWindow(this, wxID_ANY);
+		sizer->Add(splitter, 1, wxALL | wxEXPAND);
 		
-		this->taskPanel = new wxPanel(this, wxID_ANY);
+		this->taskPanel = new wxPanel(splitter, wxID_ANY);
 		wxBoxSizer *taskSizer = new wxBoxSizer(wxVERTICAL);
 		taskPanel->SetSizer(taskSizer);
-		sizer->Add(taskPanel, 0, wxALL | wxEXPAND, 5);
 		this->taskList = new wxListBox(taskPanel, wxID_ANY);
 		taskSizer->Add(this->taskList, 1, wxALL | wxEXPAND);
 		wxButton *newGcodeButton = new wxButton(taskPanel, wxID_ANY, "Load GCode");
@@ -109,8 +112,7 @@ namespace CalXUI {
 		newProgrammedeButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnNewProgrammedClick, this);
 		removeButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnRemoveClick, this);
 		
-		this->mainPanel = new wxPanel(this, wxID_ANY);
-		sizer->Add(mainPanel, 1, wxALL | wxEXPAND);
+		this->mainPanel = new wxPanel(splitter, wxID_ANY);
 		wxBoxSizer *mainSizer = new wxBoxSizer(wxVERTICAL);
 		mainPanel->SetSizer(mainSizer);
 		
@@ -137,7 +139,10 @@ namespace CalXUI {
 		previewButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnPreviewClick, this);
 		linearizeButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnLinearizeClick, this);
 		
-		SetSizer(sizer);
+		splitter->Initialize(mainPanel);
+		splitter->SplitVertically(taskPanel, mainPanel);
+		splitter->SetSashGravity(0.1f);
+		
 		Layout();
 		setEnabled(true);
         this->SetScrollRate(5, 5);
@@ -169,6 +174,7 @@ namespace CalXUI {
 		if (calxPanel->getCoords()->getCoordCount() > 0) {
 			plane->SetSelection(0);
 		}
+		this->mainPanel->Layout();
 		Layout();
 	}
 	

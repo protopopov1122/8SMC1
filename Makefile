@@ -246,6 +246,7 @@ ifneq ($(WXLIB),)
 	cp $(WX)/$(WXLIB) $(BUILD)
 endif
 	$(MAKE) icon
+	`$(WX)/wx-config --rescomp` winbuild/calxui.rc -O coff -o $(ICON)
 	$(CC) -o $(BUILD)/$(UI).exe CalxAboutDialog.o CalxActionQueue.o CalxApp.o CalxConfigEditor.o CalxConsoleWidget.o CalxDebugConsole.o CalxErrorHandler.o CalxFrame.o CalxPanel.o CalxCoordArcCtrl.o CalxCoordCtrl.o CalxCoordDialog.o CalxCoordFilter.o CalxCoordGraphCtrl.o CalxCoordLinearCtrl.o CalxCoordMiscCtrl.o CalxCoordOtherCtrl.o CalxCoordPanel.o CalxVirtualPlane.o CalxCOMSelectDialog.o CalxDevicePanel.o CalxInstrumentCtrl.o CalxMotorCtrl.o CalxGcodeHandle.o CalxGcodeLoader.o CalxProgrammedTaskHandle.o CalxTaskPanel.o CalxTaskStepHandle.o  $(ICON) $(LDFLAGS) -Wl,--library-path=\$(BUILD) -lcalx `$(WX)/wx-config --libs`
 
 all:
@@ -265,7 +266,6 @@ ifdef ICON
 	convert icon.png -resize 48x48 -quality 100 icon48.png
 	convert icon.png -resize 32x32 -quality 100 icon32.png
 	convert *.png $(BUILD)/icon.ico
-	$(WINDRES) winbuild/calxui.rc -O coff -o $(ICON)
 endif
 
 clean:

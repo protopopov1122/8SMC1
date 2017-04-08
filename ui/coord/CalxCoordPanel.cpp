@@ -21,6 +21,7 @@
 #include "CalxPanel.h"
 #include <wx/listbook.h>
 #include <wx/sizer.h>
+#include <wx/splitter.h>
 #include "CalxCoordPanel.h"
 #include "CalxCoordDialog.h"
 
@@ -30,8 +31,12 @@ namespace CalXUI {
 		: wxPanel::wxPanel(win, id) {
 		
 		wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
+		SetSizer(sizer);
+		wxSplitterWindow *splitter = new wxSplitterWindow(this, wxID_ANY);
+		sizer->Add(splitter, 1, wxALL | wxEXPAND);
 		
-		wxPanel *listPanel = new wxPanel(this, wxID_ANY);
+		
+		wxPanel *listPanel = new wxPanel(splitter, wxID_ANY);
 		wxBoxSizer *listSizer = new wxBoxSizer(wxVERTICAL);
 		
 		this->coordList = new wxListBox(listPanel, wxID_ANY);
@@ -45,14 +50,17 @@ namespace CalXUI {
 		removeButton->Bind(wxEVT_BUTTON, &CalxCoordPanel::OnRemoveButtonClick, this);
 		
 		listPanel->SetSizer(listSizer);
-		sizer->Add(listPanel, 0, wxALL | wxEXPAND, 5);
 		
-		this->mainPanel = new wxPanel(this, wxID_ANY);
+		this->mainPanel = new wxPanel(splitter, wxID_ANY);
 		wxBoxSizer *mainSizer = new wxBoxSizer(wxVERTICAL);
-		sizer->Add(mainPanel, 1, wxEXPAND | wxALL, 10);
 		mainPanel->SetSizer(mainSizer);
 		
-		SetSizer(sizer);
+		splitter->Initialize(mainPanel);
+		splitter->SplitVertically(listPanel, mainPanel);
+		splitter->SetSashGravity(0.1f);
+		
+		
+		Layout();
 		Bind(wxEVT_CLOSE_WINDOW, &CalxCoordPanel::OnExit, this);
 		
 		this->nextId = 0;
@@ -77,7 +85,7 @@ namespace CalXUI {
 	
 	void CalxCoordPanel::addPlane(CoordHandle *handle) {
 		CalxCoordCtrl *ctrl = new CalxCoordCtrl(this->mainPanel, wxID_ANY, handle);
-		this->mainPanel->GetSizer()->Add(ctrl, 1, wxALL | wxEXPAND, 0);
+		this->mainPanel->GetSizer()->Add(ctrl, 1, wxALL | wxEXPAND, 5);
 		this->coords.push_back(ctrl);
 		this->coordList->Append("Plane #" + std::to_string(handle->getID()));
 		this->coordList->SetSelection(this->coordList->GetCount() - 1);

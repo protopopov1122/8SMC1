@@ -52,6 +52,7 @@ namespace CalXUI {
 		private:
 			void OnExit(wxCloseEvent&);
 			void OnPaintEvent(wxPaintEvent&);
+			void OnResizeEvent(wxSizeEvent&);
 			void render(wxDC&);
 		
 			CalxPlaneTracker *tracker;

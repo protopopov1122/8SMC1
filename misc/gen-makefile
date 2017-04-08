@@ -61,6 +61,7 @@ printf "ifneq (\$(WXLIB),)\n"
 printf "\tcp \$(WX)/\$(WXLIB) \$(BUILD)\n"
 printf "endif\n"
 printf "\t\$(MAKE) icon\n"
+printf '\t`$(WX)/wx-config --rescomp` winbuild/calxui.rc -O coff -o $(ICON)\n'
 printf "\t\$(CC) -o \$(BUILD)/\$(UI).exe " 
 printf "$OBJS \$(ICON)"
 printf ' $(LDFLAGS) -Wl,--library-path=\$(BUILD) -lcalx `$(WX)/wx-config --libs`\n\n'
