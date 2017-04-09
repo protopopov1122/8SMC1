@@ -22,6 +22,7 @@
 #define CALX_NL300_INSTRUMENT_H_
 
 #include <string>
+#include <vector>
 #include <cinttypes>
 #include "device/Device.h"
 
@@ -34,17 +35,22 @@ namespace CalX {
 		Adjustment = 0, FullPower = 1
 	};
 	
+	enum class NL300MessageType {
+		System, General
+	};
 	
 	class NL300Message {
 		public:
 			// Arguments: receiver, message, sender
-			NL300Message(std::string, std::string, std::string);
+			NL300Message(NL300MessageType, std::string, std::string, std::string);
 			virtual ~NL300Message();
+			NL300MessageType getType();
 			std::string getReceiver();
 			std::string getMessage();
 			std::string getSender();
 			virtual std::string toCommand();
 		private:
+			NL300MessageType type;
 			std::string receiver;
 			std::string message;
 			std::string sender;
@@ -60,6 +66,9 @@ namespace CalX {
 			virtual ~NL300Parameter();
 			NL300ParameterType getType();
 			virtual std::string getString() = 0;
+			int64_t getInt(int64_t);
+			double getReal(double);
+			std::string getString(std::string);
 		private:
 			NL300ParameterType type;
 	};
@@ -133,6 +142,8 @@ namespace CalX {
 			NL300Parameter *parameter;
 	};
 	
+	#define NL300_LASER_NAME "NL"
+	#define NL300_PC_NAME "PC"
 	#define NL300_ENTRY_NAME "core"
 	#define NL300_PACK_PULSES "pack_pulses"
 	#define NL300_MAX_OUTPUT_DELAY "max_output_delay"
@@ -174,12 +185,19 @@ namespace CalX {
 			int readSerial();
 			bool start();
 			bool stop();
+			
+			std::pair<std::string, std::string> getSystemCommandResponse(NL300SystemCommand&);
+			NL300GeneralCommand *inquireGeneralParameter(char, uint16_t);
+			int64_t inquireIntegerParameter(char, uint16_t, int64_t);
 		
 			bool state;
 			size_t mode;
 			HANDLE handle;
 			DeviceSerialPortConnectionPrms prms;
 			NL300ConfigEventListener *listener;
+			
+			std::string hardwareInfo;
+			std::string softwareInfo;
 	};
 }
 
