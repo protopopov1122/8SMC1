@@ -7,6 +7,7 @@
 #include <string>
 #include <cinttypes>
 #include "8SMC1Device.h"
+#include "NL300Instrument.h"
 #include "device/DeviceManager.h"
 
 /* Device manager initialise existing controllers and keep track of usable devices */

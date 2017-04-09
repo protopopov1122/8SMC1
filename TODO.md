@@ -1,5 +1,7 @@
+Now this file is not actual anymore. All goals and ideas from this file are implemented or considered as unnecessary, however I'd like to keep this TODO file to review it after project finish and evaluate work.
+
+
 This file contains detailed information about project goals.
-Currently(by 09/03/2017) most of the work is done, most of goals are reached, some of them become unactual, some transformed. Track the project strcture, READMEs and NEWS to get most recent info about goals and existing project state.
 ------------------------------------
 All work on the project may be splitted into few steps:
 * Write more tests for different parts of system.

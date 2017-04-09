@@ -1,8 +1,31 @@
+/*
+    Copyright (c) 2017 Jevgenijs Protopopovs
+
+    This file is part of CalX project.
+
+    CalX is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    CalX is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with CalX.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+
+
 #ifndef CALX_8SMC1_DEVICE_H_
 #define CALX_8SMC1_DEVICE_H_
 
+#include <string>
 #include <vector>
 #include "device/Device.h"
+#include "NL300Instrument.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -12,36 +35,6 @@
    that are not used by other code. */
 
 namespace CalX {
-	
-	// Temporary stub implementation of instrument
-	
-	enum class _8SMC1InstrumentMode {
-		Adjustment = 0, FullPower = 1
-	};
-	
-	// Stub commands
-	#define ENABLE_CMD "Laser: enable\r\n"
-	#define DISABLE_CMD "Laser: disable\r\n"
-	#define ADJUSTMENT_CMD "Laser: adjustment\r\n"
-	#define FULL_POWER_CMD "Laser: full power\r\n"
-	
-	class _8SMC1Instrument : public Instrument {
-		public:
-			_8SMC1Instrument(device_id_t, DeviceSerialPortConnectionPrms*, DeviceManager*);
-			virtual ~_8SMC1Instrument();
-			virtual bool enable(bool);
-			virtual bool enabled();
-			virtual std::string getInfo();
-			virtual bool setMode(size_t);
-			virtual size_t getMode();
-		private:
-			bool writeSerial(std::string);
-		
-			bool state;
-			size_t mode;
-			HANDLE handle;
-			DeviceSerialPortConnectionPrms prms;
-	};
 	
 	class _8SMC1Motor : public Motor {
 		public:

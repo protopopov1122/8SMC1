@@ -248,7 +248,7 @@ namespace CalXUI {
 		
 		mainPanel->Initialize(valuePanel);
 		mainPanel->SplitVertically(entryPanel, valuePanel);
-		mainPanel->SetSashGravity(0.1f);
+		mainPanel->SetSashGravity(0.2f);
 		
 		this->editorPanel = new wxPanel(valuePanel, wxID_ANY);
 		valueSizer->Add(editorPanel, 0, wxEXPAND | wxALL);
@@ -307,6 +307,7 @@ namespace CalXUI {
 		
 		updateEditor();
 		updateEntries();
+		updateEntry();
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxConfigEditor::OnExit, this);
 	}
 	
@@ -456,7 +457,7 @@ namespace CalXUI {
 			this->entryList->Append(entry->getEntryName());
 		}
 		Layout();
-		this->entryList->SetSelection(wxNOT_FOUND);
+		this->entryList->SetSelection(entries.empty() ? wxNOT_FOUND : 0);
 	}
 	
 	void CalxConfigEditor::updateEntry() {

@@ -122,3 +122,7 @@ Most of project is finished. GUI is almost functional for many purposes(however 
 
 ##### 30/03/2017
 GUI and system itself is almost fully functional. Most of the functions were implemented and added. The last part is connection to laser commands for out laser(Eksma NL300) and some small improvements.
+
+##### 08/04/2017
+Project is almost completely finished. Last part is laser integration and system final installation, after that project alpha version will be added on GitHub. Then I'm planning to add some features, that are not necessary now(e.g. compilation and work on stub drivers on Linux, console interface extension, some other stuff), and release it as final version.
+There are also some further work planned: integrate other device types in system structure and interface.

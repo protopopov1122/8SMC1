@@ -30,8 +30,11 @@ LDFLAGS=-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bd
 8SMC1DeviceManager.o:
 	$(CC) $(CFLAGS) -Ires -c device/8smc1/8SMC1DeviceManager.cpp
 
-dev_8smc1.dll: 8SMC1Device.o 8SMC1DeviceManager.o  $(OUTPUT).dll
-	$(CC) $(CFLAGS) -shared -o $(BUILD)/dev_8smc1.dll 8SMC1Device.o 8SMC1DeviceManager.o  -Wl,-Bdynamic,--library-path=$(BUILD) -lUSMCDLL $(LDFLAGS) -Wl,--library-path=$(LIB) -lcalx -Wl,--out-implib,$(BUILD)/\dev_8smc1.a
+NL300Instrument.o:
+	$(CC) $(CFLAGS) -Ires -c device/8smc1/NL300Instrument.cpp
+
+dev_8smc1.dll: 8SMC1Device.o 8SMC1DeviceManager.o NL300Instrument.o  $(OUTPUT).dll
+	$(CC) $(CFLAGS) -shared -o $(BUILD)/dev_8smc1.dll 8SMC1Device.o 8SMC1DeviceManager.o NL300Instrument.o  -Wl,-Bdynamic,--library-path=$(BUILD) -lUSMCDLL $(LDFLAGS) -Wl,--library-path=$(LIB) -lcalx -Wl,--out-implib,$(BUILD)/\dev_8smc1.a
 
 Device.o:
 	$(CC) $(CFLAGS) -c device/Device.cpp

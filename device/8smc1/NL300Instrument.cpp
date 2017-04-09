@@ -1,0 +1,596 @@
+/*
+    Copyright (c) 2017 Jevgenijs Protopopovs
+
+    This file is part of CalX project.
+
+    CalX is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    CalX is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with CalX.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+
+#include <string.h>
+#include <string>
+#include "NL300Instrument.h"
+
+namespace CalX {
+	
+	NL300Message::NL300Message(std::string recv, std::string msg, std::string snd) {
+		this->receiver = recv;
+		this->message = msg;
+		this->sender = snd;
+	}
+	
+	NL300Message::~NL300Message() {
+		
+	}
+	
+	std::string NL300Message::getReceiver() {
+		return this->receiver;
+	}
+	
+	std::string NL300Message::getMessage() {
+		return this->message;
+	}
+	
+	std::string NL300Message::getSender() {
+		return this->sender;
+	}
+	
+	std::string NL300Message::toCommand() {
+		return "[" + this->receiver + ":" + this->message + "\\" + this->sender + "]";
+	}
+	
+	NL300Parameter::NL300Parameter(NL300ParameterType t) {
+		this->type = t;
+	}
+	
+	NL300Parameter::~NL300Parameter() {
+		
+	}
+	
+	NL300ParameterType NL300Parameter::getType() {
+		return this->type;
+	}
+	
+	NL300IntegerParameter::NL300IntegerParameter(int64_t v)
+		: NL300Parameter::NL300Parameter(NL300ParameterType::Integer) {
+		this->value = v;
+	}
+	
+	NL300IntegerParameter::~NL300IntegerParameter() {
+		
+	}
+	
+	int64_t NL300IntegerParameter::getValue() {
+		return this->value;
+	}
+	
+	std::string NL300IntegerParameter::getString() {
+		return std::to_string(this->value);
+	}
+	
+	NL300RealParameter::NL300RealParameter(double v)
+		: NL300Parameter::NL300Parameter(NL300ParameterType::Real) {
+		this->value = v;
+	}
+	
+	NL300RealParameter::~NL300RealParameter() {
+		
+	}
+	
+	double NL300RealParameter::getValue() {
+		return this->value;
+	}
+	
+	std::string NL300RealParameter::getString() {
+		return std::to_string(this->value);
+	}
+	
+	NL300StringParameter::NL300StringParameter(std::string v)
+		: NL300Parameter::NL300Parameter(NL300ParameterType::String) {
+		this->value = v;	
+	}
+	
+	NL300StringParameter::~NL300StringParameter() {
+		
+	}
+	
+	std::string NL300StringParameter::getValue() {
+		return this->value;
+	}
+	
+	std::string NL300StringParameter::getString() {
+		return "=" + this->value;
+	}
+	
+	NL300NoneParameter::NL300NoneParameter()
+		: NL300Parameter::NL300Parameter(NL300ParameterType::None) {
+			
+	}
+	
+	NL300NoneParameter::~NL300NoneParameter() {
+		
+	}
+	
+	std::string NL300NoneParameter::getString() {
+		return "";
+	}
+
+	NL300SystemCommand::NL300SystemCommand(std::string recv, std::string com, std::string parm, std::string send)
+		: NL300Message::NL300Message(recv, com + (parm.empty() ? "" :  "=" + parm), send) {
+		this->command = com;
+		this->parameter = parm;
+	}
+	
+	NL300SystemCommand::~NL300SystemCommand() {
+		
+	}
+
+	std::string NL300SystemCommand::getCommand() {
+		return this->command;
+	}
+
+	std::string NL300SystemCommand::getParameter() {
+		return this->parameter;
+	}
+	
+	NL300GeneralCommand::NL300GeneralCommand(std::string recv, char array, uint16_t index,
+		NL300GeneralAction action, NL300Parameter *parm, std::string send)
+		: NL300Message::NL300Message(recv, array + std::to_string(index) + '/' +
+			static_cast<char>(action) + parm->getString(), send) {
+				
+		this->array = array;
+		this->index = index;
+		this->action = action;
+		this->parameter = parm;
+	}
+	
+	NL300GeneralCommand::~NL300GeneralCommand() {
+		delete this->parameter;
+	}
+	
+	char NL300GeneralCommand::getArray() {
+		return this->array;
+	}
+	
+	uint16_t NL300GeneralCommand::getIndex() {
+		return this->index;
+	}
+	
+	NL300GeneralAction NL300GeneralCommand::getAction() {
+		return this->action;
+	}
+	
+	NL300Parameter *NL300GeneralCommand::getParameter() {
+		return this->parameter;
+	}
+	
+	NL300ConfigEventListener::NL300ConfigEventListener(NL300Instrument *i) {
+		this->instr = i;
+	}
+	
+	NL300ConfigEventListener::~NL300ConfigEventListener() {
+		
+	}
+	
+	void NL300ConfigEventListener::entryAdded(ConfigManager *conf, std::string id) {
+		
+	}
+	
+	void NL300ConfigEventListener::entryRemoved(ConfigManager *conf, std::string id) {
+		
+	}
+	
+	void NL300ConfigEventListener::keyAdded(ConfigManager *conf, ConfigEntry *entry, std::string key) {
+		process(conf, entry, key);
+	}
+	
+	void NL300ConfigEventListener::keyRemoved(ConfigManager *conf, ConfigEntry *entry, std::string key) {
+		
+	}
+	
+	void NL300ConfigEventListener::keyChanged(ConfigManager *conf, ConfigEntry *entry, std::string key) {
+		process(conf, entry, key);
+	}
+	
+	void NL300ConfigEventListener::process(ConfigManager *conf, ConfigEntry *entry, std::string key) {
+		if (entry->getEntryName().compare(NL300_ENTRY_NAME) != 0) {
+			return;
+		}
+		if (key.compare(NL300_PACK_PULSES) == 0) {
+			int_conf_t value = entry->getInt(key, 1);
+			NL300GeneralCommand cmd("NL", 'P', 0, NL300GeneralAction::Set, new NL300IntegerParameter(value), "PC");
+			this->instr->writeMessage(cmd);
+		} else if (key.compare(NL300_MAX_OUTPUT_DELAY) == 0) {
+			int_conf_t value = entry->getInt(key, 1);
+			NL300GeneralCommand cmd("NL", 'D', 0, NL300GeneralAction::Set, new NL300IntegerParameter(value), "PC");
+			this->instr->writeMessage(cmd);
+		} else if (key.compare(NL300_ADJ_OUTPUT_DELAY) == 0) {
+			int_conf_t value = entry->getInt(key, 1);
+			NL300GeneralCommand cmd("NL", 'D', 1, NL300GeneralAction::Set, new NL300IntegerParameter(value), "PC");
+			this->instr->writeMessage(cmd);
+		} else if (key.compare(NL300_SYNC_OUT_DELAY) == 0) {
+			int_conf_t value = entry->getInt(key, 1);
+			NL300GeneralCommand cmd("NL", 'D', 2, NL300GeneralAction::Set, new NL300IntegerParameter(value), "PC");
+			this->instr->writeMessage(cmd);
+		} else if (key.compare(NL300_REPETITION_RATE_DIV) == 0) {
+			int_conf_t value = entry->getInt(key, 1);
+			NL300GeneralCommand cmd("NL", 'F', 0, NL300GeneralAction::Set, new NL300IntegerParameter(value), "PC");
+			this->instr->writeMessage(cmd);
+		}
+	}
+	
+	#define ILOG(msg) LOG_INSTR(this->getID(), msg)
+	
+	NL300Instrument::NL300Instrument(device_id_t id, DeviceSerialPortConnectionPrms *prms, DeviceManager *devman)
+		: Instrument::Instrument() {
+		this->dev = id;
+		this->devman = devman;
+		this->state = false;
+		memcpy(&this->prms, prms, sizeof(DeviceSerialPortConnectionPrms));
+		
+		int baudrate = prms->speed;
+		ILOG("Init on COM" + std::to_string(prms->port) + ", baudrate: " + std::to_string(prms->speed) +
+			", parity: " + std::to_string(static_cast<int>(prms->parity)));
+		this->handle = CreateFile(("COM" + std::to_string(prms->port)).c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL,
+			OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+		if (this->handle == INVALID_HANDLE_VALUE) {
+			ILOG("COM port opening error");
+			this->errors.push_back("Error opening COM" + std::to_string(prms->port));
+			this->handle = INVALID_HANDLE_VALUE;
+			return;
+		}
+		
+		ILOG("Setting COM port parameters");
+		
+		SetCommMask(handle, EV_RXCHAR);
+		SetupComm(handle, 1500, 1500);
+
+		// TODO Properly setup timeouts
+		COMMTIMEOUTS CommTimeOuts;
+		CommTimeOuts.ReadIntervalTimeout = 1;
+		CommTimeOuts.ReadTotalTimeoutMultiplier = 1;
+		CommTimeOuts.ReadTotalTimeoutConstant = 0xFFFFFFFF;
+		CommTimeOuts.WriteTotalTimeoutMultiplier = 1;
+		CommTimeOuts.WriteTotalTimeoutConstant = 1;
+
+		if(!SetCommTimeouts(handle, &CommTimeOuts)) {
+			ILOG("COM port parameters setting error");
+			CloseHandle(handle);
+			this->errors.push_back("Error configuring COM" + std::to_string(prms->port));
+			return;
+		}
+	
+		DCB ComDCM;
+	
+		memset(&ComDCM,0,sizeof(ComDCM));
+		ComDCM.DCBlength = sizeof(DCB);
+		GetCommState(handle, &ComDCM);
+		ComDCM.BaudRate = DWORD(baudrate);
+		ComDCM.Parity = static_cast<BYTE>(prms->parity);
+
+		if(!SetCommState(handle, &ComDCM)) {
+			ILOG("COM port parameters setting error");
+			CloseHandle(handle);
+			this->errors.push_back("Error configuring COM" + std::to_string(prms->port));
+		}
+		
+		
+		ILOG("Initializing instrument state");
+		NL300GeneralCommand cmd("NL", 'E', 0, NL300GeneralAction::Set, new NL300IntegerParameter(1), "PC");
+		if (!writeMessage(cmd)) {
+			ILOG("Instrument state setting error");
+			this->errors.push_back("Error configuring COM" + std::to_string(prms->port));
+		}
+
+		this->listener = new NL300ConfigEventListener(this);
+		this->config.addEventListener(this->listener);
+		
+		this->mode = static_cast<size_t>(NL300InstrumentMode::Adjustment);
+		this->modes.push_back("Adjustment");
+		this->modes.push_back("Full Power");
+		
+		ConfigEntry *core = this->config.getEntry(NL300_ENTRY_NAME);
+		core->put(NL300_PACK_PULSES, new IntegerConfigValue(1));
+		core->put(NL300_MAX_OUTPUT_DELAY, new IntegerConfigValue(400));
+		core->put(NL300_ADJ_OUTPUT_DELAY, new IntegerConfigValue(400));
+		core->put(NL300_SYNC_OUT_DELAY, new IntegerConfigValue(0));
+		core->put(NL300_REPETITION_RATE_DIV, new IntegerConfigValue(1));
+		
+		ILOG("Instrument ready");
+	}
+	
+	NL300Instrument::~NL300Instrument() {
+		this->config.removeEventListener(this->listener);
+		if (this->handle != INVALID_HANDLE_VALUE) {
+			CloseHandle(handle);
+		}
+		ILOG("Instrument closed");
+	}
+	
+	bool NL300Instrument::enable(bool en) {
+		if (handle == INVALID_HANDLE_VALUE) {
+			ILOG("Enable error: instrument closed");
+			return false;
+		}
+		if (en == enabled()) {
+			ILOG("Enable: state not changed");
+			return true;
+		}
+		
+		ILOG("Changing instrument state to " + std::string(en ? "enabled" : "disabled"));
+		bool status = en ? start() : stop();
+		if (!status) {
+			return false;
+		}
+		
+		state = en;
+		ILOG("Instrument state changed to " + std::string(en ? "enabled" : "disabled"));
+		return true;
+	}
+
+	bool NL300Instrument::start() {
+		NL300Message msg("NL", "START", "PC");
+		bool b = writeMessage(msg);
+		/*NL300Message *mesg = readMessage();
+		if (mesg != nullptr) {
+			std::cout << mesg->toCommand() << std::endl;
+			delete mesg;
+		}*/
+		return b;
+	}
+
+	bool NL300Instrument::stop() {
+		NL300Message msg("NL", "STOP", "PC");
+		return writeMessage(msg);
+	}
+	
+	size_t NL300Instrument::getMode() {
+		return this->mode;
+	}
+	
+	bool NL300Instrument::setMode(size_t mode) {
+		if (handle == INVALID_HANDLE_VALUE) {
+			ILOG("Set mode error: instrument closed");
+			return false;
+		}
+		
+		if (mode != static_cast<size_t>(NL300InstrumentMode::Adjustment) &&
+			mode != static_cast<size_t>(NL300InstrumentMode::FullPower)) {
+			ILOG("Set mode error: wrong mode");
+			return false;
+		}
+		
+		ILOG("Changing instrument mode to " + std::to_string(mode));
+		NL300GeneralCommand cmd("NL", 'E', 0, NL300GeneralAction::Set, new NL300IntegerParameter(mode == static_cast<size_t>(NL300InstrumentMode::Adjustment) ? 1 : 2), "PC");
+		if (!writeMessage(cmd)) {
+			return false;
+		}
+		
+		this->mode = mode;
+		ILOG("Mode changed to " + std::to_string(mode));
+		return true;
+	}
+	
+	bool NL300Instrument::writeMessage(NL300Message &msg) {
+		return writeSerial(msg.toCommand());
+	}
+
+	NL300Message *NL300Instrument::readMessage() {
+		NL300Message *out = nullptr;
+		
+		const int MAX_LEN = 128;
+		char mesg[MAX_LEN];
+		size_t offset = 0;
+		char chr;
+		do {
+			chr = readSerial();
+			if (chr == EOF) {
+				return nullptr;
+			}
+			mesg[offset++] = chr;
+		} while (chr != ']' && offset < MAX_LEN - 1);
+		mesg[offset] = '\0';
+		if (strlen(mesg) < 2 ||
+			mesg[0] != '[' ||
+			mesg[strlen(mesg) - 1] != ']') {
+			return nullptr;
+		}
+
+		std::string recv;
+		std::string message;
+		std::string sender;
+		const char *ptr = &mesg[1];
+		while (*ptr != ':' &&
+			*ptr != ']') {
+			recv.push_back(*ptr);
+			ptr++;
+		}
+		if (*ptr != ':') {
+			return nullptr;
+		}
+		ptr++;
+		while (*ptr != '\\' &&
+			*ptr != ']') {
+			message.push_back(*ptr);
+			ptr++;
+		}
+		if (*ptr != '\\') {
+			return nullptr;
+		}
+		ptr++;
+		while (*ptr != ']') {
+			sender.push_back(*ptr);
+			ptr++;
+		}
+
+		do { // Do-While used only to provide useful break operation
+			if (message.find('/') != std::string::npos &&
+				message.length() >= 4) {	// May be General command
+				ptr = message.c_str();
+				char array = *(ptr++);
+				uint16_t index = 0;
+				while (isdigit(*ptr) &&
+					*ptr != '/' &&
+					*ptr != '\0') {
+					index *= 10;
+					index += (*ptr) - '0';
+					ptr++;
+				}
+				if (*ptr != '/') {
+					break;
+				}
+				ptr++;
+				NL300GeneralAction act = NL300GeneralAction::Inquiry;
+				char op = *ptr;
+				if (op == static_cast<char>(NL300GeneralAction::Set)) {
+					act = NL300GeneralAction::Set;
+				} else 
+				if (op == static_cast<char>(NL300GeneralAction::Add)) {
+					act = NL300GeneralAction::Add;
+				} else 
+				if (op == static_cast<char>(NL300GeneralAction::Program)) {
+					act = NL300GeneralAction::Program;
+				} else 
+				if (op == static_cast<char>(NL300GeneralAction::Inquiry)) {
+					act = NL300GeneralAction::Inquiry;
+				} else {
+					break;
+				}
+				ptr++;
+				std::string parameter;
+				while (*ptr != '\0') {
+					parameter.push_back(*ptr);
+					ptr++;
+				}
+				NL300Parameter *pr = nullptr;
+				if (!parameter.empty()) {
+					ptr = parameter.c_str();
+					if (*ptr == '=') {
+						pr = new NL300StringParameter(std::string(ptr + 1));
+					}
+					bool integer = true;
+					bool fp = false;
+					for (size_t i = 0; i < strlen(ptr); i++) {
+						char chr = ptr[i];
+						if (isdigit(chr)) {
+							continue;
+						} else if (chr == '.' && !fp) {
+							fp = true;
+						} else {
+							integer = false;
+						}
+					}
+					if (integer) {
+						if (fp) {
+							pr = new NL300RealParameter(std::stod(parameter));
+						} else {
+							pr = new NL300IntegerParameter(std::stoll(parameter));
+						}
+					}
+				}
+				std::cout << array << ' ' << index << ' ' << static_cast<char>(act) << ' ' << pr->getString() << std::endl;
+				out = new NL300GeneralCommand(recv, array, index, act, pr, sender);
+			}
+		} while (false);
+		if (out == nullptr) {	// System command
+			std::string command;
+			std::string parameter;
+			ptr = message.c_str();
+			while (*ptr != '=' && *ptr != '\0' && *ptr != '\"') {
+				command.push_back(*ptr);
+				ptr++;
+			}
+			if (*ptr == '=') {
+				ptr++;
+				while (*ptr != '\0') {
+					parameter.push_back(*ptr);	
+					ptr++;
+				}
+			} else if (*ptr == '\"') {
+				ptr++;
+				while (*ptr != '\"' && *ptr != '\0') {
+					parameter.push_back(*ptr);
+					ptr++;
+				}
+			}
+			out = new NL300SystemCommand(recv, command, parameter, sender);
+		}
+
+		return out;
+	}
+	
+	bool NL300Instrument::writeSerial(std::string stdStr) {
+		if (this->handle == INVALID_HANDLE_VALUE) {
+			ILOG("COM port write error: port closed");
+			return false;
+		}
+		std::cout << stdStr << std::endl;
+		ILOG("Writing to COM" + std::to_string(prms.port) + ": '" + stdStr + "'");
+		const char *data = stdStr.c_str();
+		DWORD feedback;
+		if(!WriteFile(handle, data, (DWORD) strlen(data), &feedback, 0) || feedback != (DWORD) strlen(data)) {
+			// TODO Add proper IO error handle
+			/*std::cout << feedback << std::endl;
+			CloseHandle(handle);
+			handle = INVALID_HANDLE_VALUE;
+			this->errors.push_back("Error writing to COM" + std::to_string(prms.port));
+			getDeviceManager()->saveError();
+			return false;*/
+		}
+		ILOG("Write finished");
+		return true;
+	}
+
+	int NL300Instrument::readSerial() {
+		if (this->handle == INVALID_HANDLE_VALUE) {
+			return EOF;
+		}
+
+		int chr;
+		DWORD feedback;
+		if (!ReadFile(this->handle, &chr, 1, &feedback, NULL) || feedback != (DWORD) 1) {
+			std::cout << "Error" << std::endl;
+			return EOF;
+		}
+		return chr;
+	}
+	
+	bool NL300Instrument::enabled() {
+		return state;
+	}
+	
+	std::string NL300Instrument::getInfo() {
+		std::string out = "Connected via serial: COM" +
+			std::to_string(prms.port) + "; speed: " +
+			std::to_string(prms.speed) + "; parity: ";
+		switch (prms.parity) {
+			case SerialPortParity::No:
+				out += "No";
+			break;
+			case SerialPortParity::Odd:
+				out += "Odd";
+			break;
+			case SerialPortParity::Even:
+				out += "Even";
+			break;
+			case SerialPortParity::Mark:
+				out += "Mark";
+			break;
+			case SerialPortParity::Space:
+				out += "Space";
+			break;
+		}
+		return out;
+	}
+}
