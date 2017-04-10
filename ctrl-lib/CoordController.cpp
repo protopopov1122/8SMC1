@@ -135,7 +135,17 @@ namespace CalX {
 		yAxis->sendMovingEvent(ymevt);
 		
 		if (this->instr != nullptr && sync) {
-			this->instr->enable(true);
+			ErrorCode errcode = this->instr->enable(true);
+			if (errcode != ErrorCode::NoError) {
+				MotorErrorEvent merrevt = {errcode};
+				xAxis->sendStoppedEvent(merrevt);
+				yAxis->sendStoppedEvent(merrevt);
+				CoordErrorEvent eevt = {errcode};
+				sendStoppedEvent(eevt);
+				xAxis->unuse();
+				yAxis->unuse();
+				return errcode;
+			}
 			this->instr->use();
 		}
 		
@@ -189,8 +199,9 @@ namespace CalX {
 			}
 		}
 		
+		ErrorCode errcode = ErrorCode::NoError;
 		if (this->instr != nullptr && sync) {
-			this->instr->enable(false);
+			errcode = this->instr->enable(false);
 			this->instr->unuse();
 		}
 		xAxis->sendMovedEvent(xmevt);
@@ -199,7 +210,7 @@ namespace CalX {
 		xAxis->unuse();
 		yAxis->unuse();
 		unuse();
-		return ErrorCode::NoError;
+		return errcode;
 	}
 
 	ErrorCode CoordPlane::relativeMove(motor_point_t relpoint, float speed, int div,
