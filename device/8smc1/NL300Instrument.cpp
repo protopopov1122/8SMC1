@@ -336,17 +336,8 @@ namespace CalX {
 		core->put(NL300_SYNC_OUT_DELAY, new IntegerConfigValue(inquireIntegerParameter('D', 2, 0)));
 		core->put(NL300_REPETITION_RATE_DIV, new IntegerConfigValue(inquireIntegerParameter('F', 0, 1)));
 		
-		NL300SystemCommand verCmd(NL300_LASER_NAME, "VER", "", NL300_PC_NAME);
-		std::pair<std::string, std::string> verRes = getSystemCommandResponse(verCmd);
-		if (verRes.first.compare("VER") == 0) {
-			this->hardwareInfo = verRes.second;
-		}
-		
-		NL300SystemCommand snCmd(NL300_LASER_NAME, "SN", "", NL300_PC_NAME);
-		std::pair<std::string, std::string> snRes = getSystemCommandResponse(snCmd);
-		if (snRes.first.compare("SN") == 0) {
-			this->softwareInfo = snRes.second;
-		}
+		this->hardwareInfo = getSystemCommandResponse("VER", "");
+		this->softwareInfo = getSystemCommandResponse("SN", "");
 		
 		ILOG("Instrument ready");
 	}
@@ -381,14 +372,8 @@ namespace CalX {
 	}
 
 	bool NL300Instrument::start() {
-		NL300SystemCommand msg(NL300_LASER_NAME, "START", "", NL300_PC_NAME);
-		bool b = writeMessage(msg);
-		/*NL300Message *mesg = readMessage();
-		if (mesg != nullptr) {
-			std::cout << mesg->toCommand() << std::endl;
-			delete mesg;
-		}*/
-		return b;
+		std::string res = getSystemCommandResponse("START", "error");
+		return res.empty();
 	}
 
 	bool NL300Instrument::stop() {
@@ -657,6 +642,16 @@ namespace CalX {
 		std::pair<std::string, std::string> out = make_pair(sysres->getCommand(), sysres->getParameter());
 		delete sysres;
 		return out;
+	}
+	
+	std::string NL300Instrument::getSystemCommandResponse(std::string cmd, std::string def) {
+		NL300SystemCommand syscom(NL300_LASER_NAME, cmd, "", NL300_PC_NAME);
+		std::pair<std::string, std::string> res = getSystemCommandResponse(syscom);
+		if (res.first.compare(cmd) == 0) {
+			return res.second;
+		} else {
+			return def;
+		}
 	}
 	
 	NL300GeneralCommand *NL300Instrument::inquireGeneralParameter(char array, uint16_t index) {
