@@ -63,3 +63,4 @@ build
 *.ico
 *.res
 *.log
+lang/*.mo

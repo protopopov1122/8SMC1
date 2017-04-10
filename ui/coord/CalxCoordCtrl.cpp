@@ -168,14 +168,14 @@ namespace CalXUI {
 		std::string general = __("Name: Coordinate plane #") + std::to_string(ctrl->getID()) +
 								__("\nDevices: #") + std::to_string(ctrl->getController()->getXAxis()->getID()) +
 									__(" #") + std::to_string(ctrl->getController()->getYAxis()->getID()) +
-								__("\nInstrument: ") + (ctrl->getController()->getInstrument() != nullptr ?
+								__("\nInstrument") + std::string(": ") + (ctrl->getController()->getInstrument() != nullptr ?
 									__("#") + std::to_string(ctrl->getController()->getInstrument()->getID())
 										: __("No")) + 
-								__("\nPosition: ") + std::to_string(ctrl->getPosition().x) +
+								__("\nPosition") + std::string(": ") + std::to_string(ctrl->getPosition().x) +
 									+ __("x") + std::to_string(ctrl->getPosition().y) +
-								__("\nStart: ") + (ctrl->isMeasured() ? (std::to_string(ctrl->getSize().x) +
+								__("\nStart") + std::string(": ") + (ctrl->isMeasured() ? (std::to_string(ctrl->getSize().x) +
 									+ __("x") + std::to_string(ctrl->getSize().y)) : __("Not measured")) +
-								__("\nSize: ") + (ctrl->isMeasured() ? (std::to_string(ctrl->getSize().w) +
+								__("\nSize") + std::string(": ") + (ctrl->isMeasured() ? (std::to_string(ctrl->getSize().w) +
 									+ __("x") + std::to_string(ctrl->getSize().h)) : __("Not measured"));
 		this->generalInfoText->SetLabel(general);
 	}

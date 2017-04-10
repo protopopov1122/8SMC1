@@ -171,7 +171,7 @@ namespace CalXUI {
 			mouse.y < real_size.y) {
 			motor_coord_t rx = (motor_coord_t) mouse.x * plane_size.w / real_size.x + plane_size.x;
 			motor_coord_t ry = (motor_coord_t) plane_size.h - mouse.y * plane_size.h / real_size.y + plane_size.y;
-			std::string res = __("x: ") + std::to_string(rx) + __("; y: ") + std::to_string(ry);
+			std::string res = __("x") + std::string(": ") + std::to_string(rx) + __("; y") + std::string(": ") + std::to_string(ry);
 			this->mouseCoords->SetLabel(res);
 		}
 	}

@@ -123,7 +123,7 @@ namespace CalXUI {
 		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
 		this->listener = new CalxInstrumentEventListener(this);
 		
-		wxStaticBox *box = new wxStaticBox(this, wxID_ANY, __("Instrument #") + std::to_string(ctrl->getID()));
+		wxStaticBox *box = new wxStaticBox(this, wxID_ANY, FORMAT(__("Instrument #%" DEVICE_ID_FMT), ctrl->getID()));
 		wxStaticBoxSizer *sizer = new wxStaticBoxSizer(box, wxVERTICAL);
 		SetSizer(sizer);
 		
@@ -160,7 +160,7 @@ namespace CalXUI {
 		mainSizer->Add(modePanel, 0, wxALL, 10);
 		wxBoxSizer *modeSizer = new wxBoxSizer(wxHORIZONTAL);
 		modePanel->SetSizer(modeSizer);
-		modeSizer->Add(new wxStaticText(modePanel, wxID_ANY, __("Mode:")), 0, wxRIGHT | wxALIGN_CENTER, 5);
+		modeSizer->Add(new wxStaticText(modePanel, wxID_ANY, __("Mode") + std::string(":")), 0, wxRIGHT | wxALIGN_CENTER, 5);
 		this->modeChoice = new wxChoice(modePanel, wxID_ANY);
 		modeSizer->Add(this->modeChoice, 0, wxALIGN_CENTER);
 		this->ctrl->getModes(modes);
@@ -185,8 +185,8 @@ namespace CalXUI {
 	}
 	
 	void CalxInstrumentCtrl::updateUI() {
-		std::string text = __("State: ") + std::string(ctrl->isRunnable() ? __("on") : __("off")) +
-		__("\nEnabled: ") + std::string(ctrl->isEnabled() ? __("true") : __("false"));
+		std::string text = __("State") + std::string(": ") + std::string(ctrl->isRunnable() ? __("on") : __("off")) +
+		__("\nEnabled") + std::string(": ") + std::string(ctrl->isEnabled() ? __("true") : __("false"));
 		this->infoText->SetLabel(text);
 		enabledButton->Enable(ctrl->isRunnable());
 	}

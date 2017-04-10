@@ -1,5 +1,6 @@
 CC=i686-w64-mingw32-g++
 WINDRES=i686-w64-mingw32-windres
+MSGFMT := $(shell command -v msgfmt 2> /dev/null)
 
 CONVERT := $(shell command -v convert 2> /dev/null)
 ifdef CONVERT

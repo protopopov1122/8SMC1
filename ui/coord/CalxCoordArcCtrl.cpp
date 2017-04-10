@@ -44,23 +44,23 @@ namespace CalXUI {
 		this->moveButton = new wxButton(this, wxID_ANY, __("Move"));
 		
 		
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("Destination:")));
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Destination") + std::string(":")));
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("x:")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("x") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		sizer->Add(xCoord, 0, wxALL | wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("y:")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("y") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		sizer->Add(yCoord, 0, wxALL | wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("Center:")));
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Center") + std::string(":")));
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("x:")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("x") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		sizer->Add(cxCoord, 0, wxALL | wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("y:")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("y") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		sizer->Add(cyCoord, 0, wxALL | wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("Speed:")));
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Speed") + std::string(":")));
 		sizer->Add(speed, 0, wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("Divisor:")));
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Divisor") + std::string(":")));
 		sizer->Add(divisor);
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("Splitter:")));
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Splitter") + std::string(":")));
 		sizer->Add(splitter, 0, wxEXPAND);
 		sizer->Add(clockwise);
 		sizer->Add(relative);

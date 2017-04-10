@@ -52,8 +52,15 @@ printf "\t\$(CC) -shared -o \$(BUILD)/\$(OUTPUT).dll "
 printf "$OBJS" 
 printf " \$(LDFLAGS) -Wl,--out-implib,\$(BUILD)/\$(OUTPUT).a\n\n" 
 
+#Generate lang target
+printf "langs:\n"
+printf "ifdef MSGFMT\n"
+printf '\tmkdir -p $(BUILD)/lang\n'
+find lang -name "*.po" | awk -F/ '{split($NF, arr, "\\."); print "\tmsgfmt -o $(BUILD)/lang/"arr[1]".mo lang/"$NF"\n"}'
+printf "endif\n"
+
 #Generate UI link target
-printf "\$(UI).exe: "
+printf "\$(UI).exe: langs "
 OBJS=`find ui -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
 echo $OBJS
 printf "\t@mkdir -p \$(BUILD)\n"
@@ -61,6 +68,7 @@ printf "ifneq (\$(WXLIB),)\n"
 printf "\tcp \$(WX)/\$(WXLIB) \$(BUILD)\n"
 printf "endif\n"
 printf "\t\$(MAKE) icon\n"
+printf "\t\$(MAKE) lang\n"
 printf '\t`$(WX)/wx-config --rescomp` winbuild/calxui.rc -O coff -o $(ICON)\n'
 printf "\t\$(CC) -o \$(BUILD)/\$(UI).exe " 
 printf "$OBJS \$(ICON)"

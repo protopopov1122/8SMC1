@@ -10,6 +10,7 @@ ifdef ICON
 	convert *.png $(BUILD)/icon.ico
 endif
 
+
 clean:
 	@rm -f *.o
 	@rm -rf $(BUILD)

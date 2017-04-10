@@ -34,7 +34,7 @@ namespace CalXUI {
 	
 	void CalxErrorHandler::handle(ErrorCode code) {
 		if (code != ErrorCode::NoError) {
-			std::string text = __("Error occured during execution.\nError code: ") + std::to_string(code) + "\n";
+			std::string text = __("Error occured during execution.\nError code") + std::string(": ") + std::to_string(code) + "\n";
 			switch (code) {
 				default:
 					text += __("Detailed description not available.");

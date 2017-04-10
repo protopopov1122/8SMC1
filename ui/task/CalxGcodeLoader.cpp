@@ -32,7 +32,7 @@ namespace CalXUI {
 		SetSizer(sizer);
 		this->state = false;
 		
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("Choose GCode file:")));
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Choose GCode file") + std::string(":")));
 		wxPanel *gcodePanel = new wxPanel(this, wxID_ANY);
 		sizer->Add(gcodePanel, 0, wxALL | wxEXPAND, 5);
 		wxBoxSizer *gcodeSizer = new wxBoxSizer(wxHORIZONTAL);

@@ -45,13 +45,13 @@ namespace CalXUI {
 		
 		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, __("Function ")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		graphSizer->Add(expr, 0, wxEXPAND);
-		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, __("X axis range:")));
+		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, __("X axis range") + std::string(":")));
 		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, ""));
 		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, __("min")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		graphSizer->Add(xmin, 0, wxEXPAND);
 		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, __("max")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		graphSizer->Add(xmax, 0, wxEXPAND);
-		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, __("Y axis range:")));
+		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, __("Y axis range") + std::string(":")));
 		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, ""));
 		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, __("min")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		graphSizer->Add(ymin, 0, wxEXPAND);

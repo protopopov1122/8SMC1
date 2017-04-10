@@ -39,13 +39,13 @@ namespace CalXUI {
 		this->relative = new wxCheckBox(this, wxID_ANY, __("Relative"));
 		this->relative->SetValue(step->isRelative());
 		
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("Destination:")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Destination") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""), 0, wxALIGN_RIGHT | wxRIGHT, 5);
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("x:")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("x") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(xCoord);
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("y:")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("y") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(yCoord);
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("Speed:")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Speed") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(speed);
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(relative);
@@ -89,13 +89,13 @@ namespace CalXUI {
 		this->relative = new wxCheckBox(this, wxID_ANY, __("Relative"));
 		this->relative->SetValue(step->isRelative());
 		
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("Destination:")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Destination") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""), 0, wxALIGN_RIGHT | wxRIGHT, 5);
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("x:")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("x") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(xCoord);
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("y:")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("y") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(yCoord);
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("Speed:")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Speed") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(speed);
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(relative);
@@ -144,21 +144,21 @@ namespace CalXUI {
 		this->relative = new wxCheckBox(this, wxID_ANY, __("Relative"));
 		relative->SetValue(step->isRelative());
 		
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("Destination:")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Destination") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""), 0, wxALIGN_RIGHT | wxRIGHT, 5);
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("x:")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("x") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(destXCoord);
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("y:")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("y") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(destYCoord);
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("Center:")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Center") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""), 0, wxALIGN_RIGHT | wxRIGHT, 5);
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("x:")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("x") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(cenXCoord);
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("y:")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("y") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(cenYCoord);
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("Speed:")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Speed") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(speed);
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("Splitter:")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Splitter") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(splitter);
 		sizer->Add(clockwise);
 		sizer->Add(relative);		

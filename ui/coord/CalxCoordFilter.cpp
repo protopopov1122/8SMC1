@@ -43,13 +43,13 @@ namespace CalXUI {
 		this->xscale = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, this->translator->getScale().w);
 		this->yscale = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX,  this->translator->getScale().h);
 		
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("X offset:")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("X offset") + std::string(":")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		sizer->Add(xoffset, 0, wxALL | wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("Y offset:")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Y offset") + std::string(":")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		sizer->Add(yoffset, 0, wxALL | wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("X scale:")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("X scale") + std::string(":")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		sizer->Add(xscale, 0, wxALL | wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("Y scale:")), 0,wxRIGHT |  wxALIGN_RIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Y scale") + std::string(":")), 0,wxRIGHT |  wxALIGN_RIGHT, 5);
 		sizer->Add(yscale, 0, wxALL | wxEXPAND);
 				
 		Layout();
@@ -80,13 +80,13 @@ namespace CalXUI {
 		this->xscale = new wxTextCtrl(this, wxID_ANY, std::to_string(ctrl->getScale().x));
 		this->yscale = new wxTextCtrl(this, wxID_ANY, std::to_string(ctrl->getScale().y));
 		
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("X offset:")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("X offset") + std::string(":")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		sizer->Add(xoffset, 0, wxALL | wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("Y offset:")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Y offset") + std::string(":")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		sizer->Add(yoffset, 0, wxALL | wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("X scale:")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("X scale") + std::string(":")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		sizer->Add(xscale, 0, wxALL | wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("Y scale:")), 0,wxRIGHT |  wxALIGN_RIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Y scale") + std::string(":")), 0,wxRIGHT |  wxALIGN_RIGHT, 5);
 		sizer->Add(yscale, 0, wxALL | wxEXPAND);
 		
 		xoffset->Bind(wxEVT_TEXT, &CalxCoordLinearFilter::OnFieldChange, this);
@@ -147,9 +147,9 @@ namespace CalXUI {
 		this->xscale = new wxTextCtrl(this, wxID_ANY, std::to_string(trans->getScale().x));
 		this->yscale = new wxTextCtrl(this, wxID_ANY, std::to_string(trans->getScale().y));
 		
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("X scale:")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("X scale") + std::string(":")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		sizer->Add(xscale, 0, wxALL | wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("Y scale:")), 0,wxRIGHT |  wxALIGN_RIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Y scale") + std::string(":")), 0,wxRIGHT |  wxALIGN_RIGHT, 5);
 		sizer->Add(yscale, 0, wxALL | wxEXPAND);
 		
 		xscale->Bind(wxEVT_TEXT, &CalxCoordLogarithmicFilter::OnFieldChange, this);

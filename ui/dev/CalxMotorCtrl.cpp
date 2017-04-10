@@ -134,15 +134,15 @@ namespace CalXUI {
 		// Info panel elements
 		this->infoPanel = new wxPanel(box, wxID_ANY);
 		wxBoxSizer *infoSizer = new wxBoxSizer(wxVERTICAL);
-		this->position = new wxStaticText(infoPanel, wxID_ANY, __("Position: "));
+		this->position = new wxStaticText(infoPanel, wxID_ANY, __("Position") + std::string(": "));
 		infoSizer->Add(position);
-		this->power = new wxStaticText(infoPanel, wxID_ANY, __("Power: "));
+		this->power = new wxStaticText(infoPanel, wxID_ANY, __("Power") + std::string(": "));
 		infoSizer->Add(power);
-		this->state = new wxStaticText(infoPanel, wxID_ANY, __("State: "));
+		this->state = new wxStaticText(infoPanel, wxID_ANY, __("State") + std::string(": "));
 		infoSizer->Add(state);
-		this->trailer1 = new wxStaticText(infoPanel, wxID_ANY, __("Trailer 1: "));
+		this->trailer1 = new wxStaticText(infoPanel, wxID_ANY, __("Trailer 1") + std::string(": "));
 		infoSizer->Add(trailer1);
-		this->trailer2 = new wxStaticText(infoPanel, wxID_ANY, __("Trailer 2: "));
+		this->trailer2 = new wxStaticText(infoPanel, wxID_ANY, __("Trailer 2") + std::string(": "));
 		infoSizer->Add(trailer2);
 		infoPanel->SetSizer(infoSizer);
 		sizer->Add(infoPanel, 0, wxALL, 10);
@@ -153,7 +153,7 @@ namespace CalXUI {
 		
 		wxPanel *moveDestPanel = new wxPanel(movePanel, wxID_ANY);
 		wxBoxSizer *moveDestSizer = new wxBoxSizer(wxHORIZONTAL);
-		wxStaticText *moveDestText = new wxStaticText(moveDestPanel, wxID_ANY, __("Destination: "));
+		wxStaticText *moveDestText = new wxStaticText(moveDestPanel, wxID_ANY, __("Destination") + std::string(": "));
 		moveDestSizer->Add(moveDestText, 0, wxALIGN_CENTER);
 		moveSpin = new wxSpinCtrl(moveDestPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,  wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
 		moveDestSizer->Add(moveSpin, 1, wxEXPAND);
@@ -162,7 +162,7 @@ namespace CalXUI {
 		
 		wxPanel *moveSpeedPanel = new wxPanel(movePanel, wxID_ANY);
 		wxBoxSizer *moveSpeedSizer = new wxBoxSizer(wxHORIZONTAL);
-		wxStaticText *moveSpeedText = new wxStaticText(moveSpeedPanel, wxID_ANY, __("Speed: "));
+		wxStaticText *moveSpeedText = new wxStaticText(moveSpeedPanel, wxID_ANY, __("Speed") + std::string(": "));
 		moveSpeedSizer->Add(moveSpeedText, 0, wxALIGN_CENTER);
 		this->moveSpeedSpin = new wxSpinCtrl(moveSpeedPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,  wxDefaultSize, wxSP_ARROW_KEYS, 0, wxGetApp().getSystemManager()->getConfiguration()->getEntry("core")->getInt("maxspeed", 4000), wxGetApp().getSystemManager()->getConfiguration()->getEntry("core")->getInt("maxspeed", 4000));
 		moveSpeedSizer->Add(moveSpeedSpin, 1, wxEXPAND);
@@ -238,13 +238,13 @@ namespace CalXUI {
 	
 	
 	void CalxMotorCtrl::updateUI() {
-		std::string pos = __("Position: ") + std::to_string(this->dev->getPosition());
-		std::string pwr = __("Power: ") + std::string(dev->getMotor()->getPowerState() == Power::FullPower ?
+		std::string pos = __("Position") + std::string(": ") + std::to_string(this->dev->getPosition());
+		std::string pwr = __("Power") + std::string(": ") + std::string(dev->getMotor()->getPowerState() == Power::FullPower ?
 								__("full") : (dev->getMotor()->getPowerState() == Power::HalfPower ?
 								__("half") : __("no")));
-		std::string stat = __("State: ") + std::string(dev->getMotor()->isRunning() ? __("Running") : __("Not running"));
-		std::string tra1 = __("Trailer 1: ") + std::string(dev->getMotor()->isTrailerPressed(1) ? __("Pushed") : __("Unpushed"));
-		std::string tra2 = __("Trailer 2: ") + std::string(dev->getMotor()->isTrailerPressed(2) ? __("Pushed") : __("Unpushed"));
+		std::string stat = __("State") + std::string(": ") + std::string(dev->getMotor()->isRunning() ? __("Running") : __("Not running"));
+		std::string tra1 = __("Trailer 1") + std::string(": ") + std::string(dev->getMotor()->isTrailerPressed(1) ? __("Pushed") : __("Unpushed"));
+		std::string tra2 = __("Trailer 2") + std::string(": ") + std::string(dev->getMotor()->isTrailerPressed(2) ? __("Pushed") : __("Unpushed"));
 		this->position->SetLabel(pos);
 		this->power->SetLabel(pwr);
 		this->state->SetLabel(stat);

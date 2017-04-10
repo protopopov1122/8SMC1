@@ -18,11 +18,11 @@ namespace CalXUI {
 		wxFlexGridSizer *mainSizer = new wxFlexGridSizer(2);
 		mainPanel->SetSizer(mainSizer);
 		
-		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, __("Name:")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, __("Name") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		this->key = new wxTextCtrl(mainPanel, wxID_ANY, "");
 		mainSizer->Add(key);
 		
-		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, __("Type:")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, __("Type") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		this->type = new wxComboBox(mainPanel, wxID_ANY);
 		this->type->Append(__("Integer"));
 		this->type->Append(__("Real"));
@@ -32,7 +32,7 @@ namespace CalXUI {
 		mainSizer->Add(this->type);
 		this->type->Bind(wxEVT_COMBOBOX, &CalxNewKeyDialog::OnTypeChange, this);
 		
-		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, __("Value:")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, __("Value") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		this->editorPanel = new wxPanel(mainPanel, wxID_ANY);
 		mainSizer->Add(this->editorPanel);
 		wxBoxSizer *editorSizer = new wxBoxSizer(wxVERTICAL);
@@ -93,7 +93,7 @@ namespace CalXUI {
 			return;
 		}
 		if (entry->has(key)) {
-			wxMessageBox(__("Key '") + key + __("' already exists"), __("Warning"), wxICON_WARNING);
+			wxMessageBox(FORMAT(__("Key '%s' already exists"), key.c_str()), __("Warning"), wxICON_WARNING);
 			return;
 		}
 		switch (this->type->GetSelection()) {
@@ -142,7 +142,7 @@ namespace CalXUI {
 		sizer->Add(mainPanel, 1, wxEXPAND | wxALL, 10);
 		wxBoxSizer *mainSizer = new wxBoxSizer(wxHORIZONTAL);
 		mainPanel->SetSizer(mainSizer);
-		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, __("Entry name:")), 0, wxALL, 5);
+		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, __("Entry name") + std::string(":")), 0, wxALL, 5);
 		this->entryName = new wxTextCtrl(mainPanel, wxID_ANY, "");
 		mainSizer->Add(this->entryName);
 		
@@ -168,7 +168,7 @@ namespace CalXUI {
 			return;
 		}
 		if (this->config->hasEntry(name)) {
-			wxMessageBox(__("Entry '") + name + __("' already exists"), __("Error"), wxICON_ERROR);
+			wxMessageBox(FORMAT(__("Entry '%s' already exists"), name.c_str()), __("Error"), wxICON_ERROR);
 			return;
 		}
 		this->config->getEntry(name);
@@ -270,7 +270,7 @@ namespace CalXUI {
 		editorSizer->Add(this->integerEditor, 0, wxEXPAND | wxALL);
 		wxBoxSizer *integerSizer = new wxBoxSizer(wxHORIZONTAL);
 		integerEditor->SetSizer(integerSizer);
-		integerSizer->Add(new wxStaticText(integerEditor, wxID_ANY, __("Value:")), 0, wxALL | wxALIGN_CENTER, 5);
+		integerSizer->Add(new wxStaticText(integerEditor, wxID_ANY, __("Value") + std::string(":")), 0, wxALL | wxALIGN_CENTER, 5);
 		this->integerSpin = new wxSpinCtrl(this->integerEditor, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
 		integerSizer->Add(this->integerSpin, 0, wxALIGN_CENTER);
 		this->integerSpin->Bind(wxEVT_SPINCTRL, &CalxConfigEditor::OnIntegerEdit, this);
@@ -279,7 +279,7 @@ namespace CalXUI {
 		editorSizer->Add(this->realEditor, 0, wxEXPAND | wxALL);
 		wxBoxSizer *realSizer = new wxBoxSizer(wxHORIZONTAL);
 		realEditor->SetSizer(realSizer);
-		realSizer->Add(new wxStaticText(realEditor, wxID_ANY, __("Value: ")), 0, wxALL | wxALIGN_CENTER, 5);
+		realSizer->Add(new wxStaticText(realEditor, wxID_ANY, __("Value") + std::string(": ")), 0, wxALL | wxALIGN_CENTER, 5);
 		this->realCtrl = new wxTextCtrl(realEditor, wxID_ANY, "0");
 		realSizer->Add(this->realCtrl, 0, wxALIGN_CENTER);
 		this->realCtrl->Bind(wxEVT_TEXT, &CalxConfigEditor::OnRealEdit, this);
@@ -288,7 +288,7 @@ namespace CalXUI {
 		editorSizer->Add(this->booleanEditor, 0, wxEXPAND | wxALL);
 		wxBoxSizer *booleanSizer = new wxBoxSizer(wxHORIZONTAL);
 		booleanEditor->SetSizer(booleanSizer);
-		booleanSizer->Add(new wxStaticText(booleanEditor, wxID_ANY, __("Value: ")), 0, wxALL | wxALIGN_CENTER, 5);
+		booleanSizer->Add(new wxStaticText(booleanEditor, wxID_ANY, __("Value") + std::string(": ")), 0, wxALL | wxALIGN_CENTER, 5);
 		this->booleanCheckbox = new wxCheckBox(booleanEditor, wxID_ANY, "");
 		booleanSizer->Add(this->booleanCheckbox, 0, wxALIGN_CENTER);
 		this->booleanCheckbox->Bind(wxEVT_CHECKBOX, &CalxConfigEditor::OnBooleanEdit, this);
@@ -297,7 +297,7 @@ namespace CalXUI {
 		editorSizer->Add(this->stringEditor, 0, wxEXPAND | wxALL);
 		wxBoxSizer *stringSizer = new wxBoxSizer(wxHORIZONTAL);
 		stringEditor->SetSizer(stringSizer);
-		stringSizer->Add(new wxStaticText(stringEditor, wxID_ANY, __("Value: ")), 0, wxALL | wxALIGN_CENTER, 5);
+		stringSizer->Add(new wxStaticText(stringEditor, wxID_ANY, __("Value") + std::string(": ")), 0, wxALL | wxALIGN_CENTER, 5);
 		this->stringCtrl = new wxTextCtrl(stringEditor, wxID_ANY, "");
 		stringSizer->Add(this->stringCtrl, 0, wxALIGN_CENTER);
 		this->stringCtrl->Bind(wxEVT_TEXT, &CalxConfigEditor::OnStringEdit, this);

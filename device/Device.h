@@ -62,6 +62,7 @@ namespace CalX {
 	};
 	
 	typedef int64_t device_id_t;
+	#define DEVICE_ID_FMT PRId64
 
 	// Device power indicator
 	enum class Power {

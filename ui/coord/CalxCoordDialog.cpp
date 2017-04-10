@@ -36,17 +36,17 @@ namespace CalXUI {
 		wxFlexGridSizer *mainSizer = new wxFlexGridSizer(2);
 		mainPanel->SetSizer(mainSizer);
 		
-		wxStaticText *xText = new wxStaticText(mainPanel, wxID_ANY, __("X Axis: "));
+		wxStaticText *xText = new wxStaticText(mainPanel, wxID_ANY, __("X Axis") + std::string(": "));
 		this->xChoice = new wxChoice(mainPanel, wxID_ANY);
 		mainSizer->Add(xText, 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		mainSizer->Add(xChoice, 0, wxALL | wxEXPAND);
 		
-		wxStaticText *yText = new wxStaticText(mainPanel, wxID_ANY, __("Y Axis: "));
+		wxStaticText *yText = new wxStaticText(mainPanel, wxID_ANY, __("Y Axis") + std::string(": "));
 		this->yChoice = new wxChoice(mainPanel, wxID_ANY);
 		mainSizer->Add(yText, 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		mainSizer->Add(yChoice, 0, wxALL | wxEXPAND);
 		
-		wxStaticText *instrText = new wxStaticText(mainPanel, wxID_ANY, __("Instrument: "));
+		wxStaticText *instrText = new wxStaticText(mainPanel, wxID_ANY, __("Instrument") + std::string(": "));
 		this->instrChoice = new wxChoice(mainPanel, wxID_ANY);
 		mainSizer->Add(instrText, 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		mainSizer->Add(instrChoice, 0, wxALL | wxEXPAND);

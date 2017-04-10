@@ -329,7 +329,7 @@ namespace CalX {
 		this->modes.push_back("Adjustment");
 		this->modes.push_back("Full Power");
 		
-		ConfigEntry *core = this->config.getEntry(NL300_ENTRY_NAME);
+		/*ConfigEntry *core = this->config.getEntry(NL300_ENTRY_NAME);
 		core->put(NL300_PACK_PULSES, new IntegerConfigValue(inquireIntegerParameter('P', 0, 1)));
 		core->put(NL300_MAX_OUTPUT_DELAY, new IntegerConfigValue(inquireIntegerParameter('D', 0, 400)));
 		core->put(NL300_ADJ_OUTPUT_DELAY, new IntegerConfigValue(inquireIntegerParameter('D', 1, 400)));
@@ -337,7 +337,7 @@ namespace CalX {
 		core->put(NL300_REPETITION_RATE_DIV, new IntegerConfigValue(inquireIntegerParameter('F', 0, 1)));
 		
 		this->hardwareInfo = getSystemCommandResponse("VER", "");
-		this->softwareInfo = getSystemCommandResponse("SN", "");
+		this->softwareInfo = getSystemCommandResponse("SN", "");*/
 		
 		ILOG("Instrument ready");
 	}
