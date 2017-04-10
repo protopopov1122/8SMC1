@@ -71,6 +71,7 @@ namespace CalXUI {
 			void OnExit(wxCloseEvent&);
 			void OnQueueUpdate(wxThreadEvent&);
 			void OnStopClick(wxCommandEvent&);
+			void OnWatcherClick(wxCommandEvent&);
 			
 			CoordHandle *ctrl;
 			CoordEventListener *listener;

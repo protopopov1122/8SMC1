@@ -29,6 +29,7 @@
 #include "ctrl-lib/graph/FunctionEngine.h"
 #include "CalxCoordCtrl.h"
 #include "task/CalxTaskPanel.h"
+#include "CalxCoordPlaneWatcher.h"
 
 namespace CalXUI {
 	
@@ -68,8 +69,11 @@ namespace CalXUI {
 		wxStaticBox *generalBox = new wxStaticBox(generalPanel, wxID_ANY, __("General info"));
 		wxStaticBoxSizer *generalSizer = new wxStaticBoxSizer(generalBox, wxVERTICAL);
 		this->generalInfoText = new wxStaticText(generalPanel, wxID_ANY, "");
+		wxButton *watcherButton = new wxButton(generalPanel, wxID_ANY, __("Watcher"));
+		watcherButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnWatcherClick, this);
 		this->stopButton = new wxButton(generalPanel, wxID_ANY, __("Stop"));
-		generalSizer->Add(this->generalInfoText, 0, wxALL | wxEXPAND, 5);
+		generalSizer->Add(this->generalInfoText, 0, wxTOP | wxEXPAND, 5);
+		generalSizer->Add(watcherButton, 0, wxALL, 5);
 		generalSizer->Add(this->stopButton, 0, wxALL, 5);
 		this->stopButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnStopClick, this);
 		generalPanel->SetSizer(generalSizer);
@@ -294,6 +298,15 @@ namespace CalXUI {
 		validator->setMinimum(min);
 		validator->setMaximum(max);
 		validator->setMaxSpeed(otherCtrl->getSpeed());
+	}
+	
+	void CalxCoordCtrl::OnWatcherClick(wxCommandEvent &evt) {
+		if (!this->ctrl->isMeasured()) {
+			wxMessageBox(__("Plane need to be measured before preview"), __("Warning"), wxICON_WARNING);
+			return;
+		}
+		CalxCoordPlaneWatcherDialog *watcher = new CalxCoordPlaneWatcherDialog(this, wxID_ANY, this->ctrl);
+		watcher->Show(true);
 	}
 	
 	void CalxCoordCtrl::OnExit(wxCloseEvent &evt) {

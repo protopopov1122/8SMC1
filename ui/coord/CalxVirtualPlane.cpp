@@ -109,7 +109,7 @@ namespace CalXUI {
 			bool move = path->at(i).second;
 			double x = ((double) (point.x - plane_size.x)) * scaleX;
 			double y = real_size.y - ((double) (point.y - plane_size.y)) * scaleY;
-			dc.DrawRectangle((int) x - 1, (int) y - 1, 2, 2);
+			dc.DrawRectangle((int) x, (int) y, 2, 2);
 			if (move) {
 				dc.DrawLine(lastX, lastY, x, y);
 			}

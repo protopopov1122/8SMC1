@@ -39,7 +39,7 @@
    to free filter memory, otherwise you are responsible to free memroy. */
 
 namespace CalX {
-		
+	
 	// Main interface
 	class CoordPlane {
 		public:
