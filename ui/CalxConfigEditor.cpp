@@ -6,7 +6,7 @@
 namespace CalXUI {
 	
 	CalxNewKeyDialog::CalxNewKeyDialog(wxWindow *win, wxWindowID id, ConfigEntry *entry)
-		: wxDialog::wxDialog(win, id, "Add new key") {
+		: wxDialog::wxDialog(win, id, __("Add new key")) {
 			
 		this->entry = entry;
 
@@ -18,21 +18,21 @@ namespace CalXUI {
 		wxFlexGridSizer *mainSizer = new wxFlexGridSizer(2);
 		mainPanel->SetSizer(mainSizer);
 		
-		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, "Name:"), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, __("Name:")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		this->key = new wxTextCtrl(mainPanel, wxID_ANY, "");
 		mainSizer->Add(key);
 		
-		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, "Type:"), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, __("Type:")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		this->type = new wxComboBox(mainPanel, wxID_ANY);
-		this->type->Append("Integer");
-		this->type->Append("Real");
-		this->type->Append("Boolean");
-		this->type->Append("String");
+		this->type->Append(__("Integer"));
+		this->type->Append(__("Real"));
+		this->type->Append(__("Boolean"));
+		this->type->Append(__("String"));
 		this->type->SetSelection(0);
 		mainSizer->Add(this->type);
 		this->type->Bind(wxEVT_COMBOBOX, &CalxNewKeyDialog::OnTypeChange, this);
 		
-		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, "Value:"), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, __("Value:")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		this->editorPanel = new wxPanel(mainPanel, wxID_ANY);
 		mainSizer->Add(this->editorPanel);
 		wxBoxSizer *editorSizer = new wxBoxSizer(wxVERTICAL);
@@ -51,8 +51,8 @@ namespace CalXUI {
 		sizer->Add(buttonPanel, 0, wxALIGN_CENTER | wxALL, 5);
 		wxBoxSizer *buttonSizer = new wxBoxSizer(wxHORIZONTAL);
 		buttonPanel->SetSizer(buttonSizer);
-		wxButton *okButton = new wxButton(buttonPanel, wxID_OK, "OK");
-		wxButton *cancelButton = new wxButton(buttonPanel, wxID_CANCEL, "Cancel");
+		wxButton *okButton = new wxButton(buttonPanel, wxID_OK, __("OK"));
+		wxButton *cancelButton = new wxButton(buttonPanel, wxID_CANCEL, __("Cancel"));
 		buttonSizer->Add(okButton);
 		buttonSizer->Add(cancelButton);
 		okButton->Bind(wxEVT_BUTTON, &CalxNewKeyDialog::OnOkClick, this);
@@ -89,11 +89,11 @@ namespace CalXUI {
 	void CalxNewKeyDialog::OnOkClick(wxCommandEvent &evt) {
 		std::string key = this->key->GetValue().ToStdString();
 		if (key.empty()) {
-			wxMessageBox("Key is empty", "Warning", wxICON_WARNING);
+			wxMessageBox(__("Key is empty"), __("Warning"), wxICON_WARNING);
 			return;
 		}
 		if (entry->has(key)) {
-			wxMessageBox("Key '" + key + "' already exists", "Warning", wxICON_WARNING);
+			wxMessageBox(__("Key '") + key + __("' already exists"), __("Warning"), wxICON_WARNING);
 			return;
 		}
 		switch (this->type->GetSelection()) {
@@ -105,7 +105,7 @@ namespace CalXUI {
 				wxString raw = this->real->GetValue();
 				double val;
 				if (!raw.ToDouble(&val)) {
-					wxMessageBox("Enter valid real value", "Error", wxICON_ERROR);
+					wxMessageBox(__("Enter valid real value"), __("Error"), wxICON_ERROR);
 					return;
 				}
 				this->entry->put(key, new RealConfigValue(val));
@@ -131,7 +131,7 @@ namespace CalXUI {
 	}
 	
 	CalxNewEntryDialog::CalxNewEntryDialog(wxWindow *win, wxWindowID id, ConfigManager *config)
-		: wxDialog::wxDialog(win, id, "Add new entry") {
+		: wxDialog::wxDialog(win, id, __("Add new entry")) {
 		
 		this->config = config;
 		
@@ -142,7 +142,7 @@ namespace CalXUI {
 		sizer->Add(mainPanel, 1, wxEXPAND | wxALL, 10);
 		wxBoxSizer *mainSizer = new wxBoxSizer(wxHORIZONTAL);
 		mainPanel->SetSizer(mainSizer);
-		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, "Entry name:"), 0, wxALL, 5);
+		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, __("Entry name:")), 0, wxALL, 5);
 		this->entryName = new wxTextCtrl(mainPanel, wxID_ANY, "");
 		mainSizer->Add(this->entryName);
 		
@@ -150,8 +150,8 @@ namespace CalXUI {
 		sizer->Add(buttonPanel, 0, wxALL, 5);
 		wxBoxSizer *buttonSizer = new wxBoxSizer(wxHORIZONTAL);
 		buttonPanel->SetSizer(buttonSizer);
-		wxButton *okButton = new wxButton(buttonPanel, wxID_OK, "OK");
-		wxButton *cancelButton = new wxButton(buttonPanel, wxID_CANCEL, "Cancel");
+		wxButton *okButton = new wxButton(buttonPanel, wxID_OK, __("OK"));
+		wxButton *cancelButton = new wxButton(buttonPanel, wxID_CANCEL, __("Cancel"));
 		buttonSizer->Add(okButton);
 		buttonSizer->Add(cancelButton);
 		okButton->Bind(wxEVT_BUTTON, &CalxNewEntryDialog::OnOkClick, this);
@@ -164,11 +164,11 @@ namespace CalXUI {
 	void CalxNewEntryDialog::OnOkClick(wxCommandEvent &evt) {
 		std::string name = this->entryName->GetValue().ToStdString();
 		if (name.empty()) {
-			wxMessageBox("Entry name is empty", "Warning", wxICON_WARNING);
+			wxMessageBox(__("Entry name is empty"), __("Warning"), wxICON_WARNING);
 			return;
 		}
 		if (this->config->hasEntry(name)) {
-			wxMessageBox("Entry '" + name + "' already exists", "Error", wxICON_ERROR);
+			wxMessageBox(__("Entry '") + name + __("' already exists"), __("Error"), wxICON_ERROR);
 			return;
 		}
 		this->config->getEntry(name);
@@ -229,9 +229,9 @@ namespace CalXUI {
 		this->entryList = new wxListBox(entryPanel, wxID_ANY);
 		entrySizer->Add(this->entryList, 1, wxBOTTOM | wxALL | wxEXPAND);
 		entryList->Bind(wxEVT_LISTBOX, &CalxConfigEditor::OnEntryClick, this);
-		wxButton *newEntryButton = new wxButton(entryPanel, wxID_ANY, "New");
+		wxButton *newEntryButton = new wxButton(entryPanel, wxID_ANY, __("New"));
 		entrySizer->Add(newEntryButton, 0, wxEXPAND | wxALL);
-		wxButton *removeEntryButton = new wxButton(entryPanel, wxID_ANY, "Remove");
+		wxButton *removeEntryButton = new wxButton(entryPanel, wxID_ANY, __("Remove"));
 		entrySizer->Add(removeEntryButton, 0, wxEXPAND | wxALL);
 		newEntryButton->Bind(wxEVT_BUTTON, &CalxConfigEditor::OnNewEntryClick, this);
 		removeEntryButton->Bind(wxEVT_BUTTON, &CalxConfigEditor::OnRemoveEntryClick, this);
@@ -241,9 +241,9 @@ namespace CalXUI {
 		valuePanel->SetSizer(valueSizer);
 		this->valueList = new wxDataViewListCtrl (valuePanel, wxID_ANY);
 		valueSizer->Add(this->valueList, 1, wxEXPAND | wxALL);
-		this->valueList->AppendTextColumn("Name");
-		this->valueList->AppendTextColumn("Type");
-		this->valueList->AppendTextColumn("Value");
+		this->valueList->AppendTextColumn(__("Name"));
+		this->valueList->AppendTextColumn(__("Type"));
+		this->valueList->AppendTextColumn(__("Value"));
 		this->valueList->Bind(wxEVT_DATAVIEW_SELECTION_CHANGED, &CalxConfigEditor::OnKeyClick, this);
 		
 		mainPanel->Initialize(valuePanel);
@@ -259,10 +259,10 @@ namespace CalXUI {
 		editorSizer->Add(entryCtrlPanel);
 		wxBoxSizer *entryCtrlSizer = new wxBoxSizer(wxHORIZONTAL);
 		entryCtrlPanel->SetSizer(entryCtrlSizer);
-		wxButton *newKeyButton = new wxButton(entryCtrlPanel, wxID_ANY, "New");
+		wxButton *newKeyButton = new wxButton(entryCtrlPanel, wxID_ANY, __("New"));
 		entryCtrlSizer->Add(newKeyButton);
 		newKeyButton->Bind(wxEVT_BUTTON, &CalxConfigEditor::OnNewKeyClick, this);
-		wxButton *removeKeyButton = new wxButton(entryCtrlPanel, wxID_ANY, "Remove");
+		wxButton *removeKeyButton = new wxButton(entryCtrlPanel, wxID_ANY, __("Remove"));
 		entryCtrlSizer->Add(removeKeyButton);
 		removeKeyButton->Bind(wxEVT_BUTTON, &CalxConfigEditor::OnRemoveKeyClick, this);
 		
@@ -270,7 +270,7 @@ namespace CalXUI {
 		editorSizer->Add(this->integerEditor, 0, wxEXPAND | wxALL);
 		wxBoxSizer *integerSizer = new wxBoxSizer(wxHORIZONTAL);
 		integerEditor->SetSizer(integerSizer);
-		integerSizer->Add(new wxStaticText(integerEditor, wxID_ANY, "Value:"), 0, wxALL | wxALIGN_CENTER, 5);
+		integerSizer->Add(new wxStaticText(integerEditor, wxID_ANY, __("Value:")), 0, wxALL | wxALIGN_CENTER, 5);
 		this->integerSpin = new wxSpinCtrl(this->integerEditor, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
 		integerSizer->Add(this->integerSpin, 0, wxALIGN_CENTER);
 		this->integerSpin->Bind(wxEVT_SPINCTRL, &CalxConfigEditor::OnIntegerEdit, this);
@@ -279,7 +279,7 @@ namespace CalXUI {
 		editorSizer->Add(this->realEditor, 0, wxEXPAND | wxALL);
 		wxBoxSizer *realSizer = new wxBoxSizer(wxHORIZONTAL);
 		realEditor->SetSizer(realSizer);
-		realSizer->Add(new wxStaticText(realEditor, wxID_ANY, "Value: "), 0, wxALL | wxALIGN_CENTER, 5);
+		realSizer->Add(new wxStaticText(realEditor, wxID_ANY, __("Value: ")), 0, wxALL | wxALIGN_CENTER, 5);
 		this->realCtrl = new wxTextCtrl(realEditor, wxID_ANY, "0");
 		realSizer->Add(this->realCtrl, 0, wxALIGN_CENTER);
 		this->realCtrl->Bind(wxEVT_TEXT, &CalxConfigEditor::OnRealEdit, this);
@@ -288,7 +288,7 @@ namespace CalXUI {
 		editorSizer->Add(this->booleanEditor, 0, wxEXPAND | wxALL);
 		wxBoxSizer *booleanSizer = new wxBoxSizer(wxHORIZONTAL);
 		booleanEditor->SetSizer(booleanSizer);
-		booleanSizer->Add(new wxStaticText(booleanEditor, wxID_ANY, "Value: "), 0, wxALL | wxALIGN_CENTER, 5);
+		booleanSizer->Add(new wxStaticText(booleanEditor, wxID_ANY, __("Value: ")), 0, wxALL | wxALIGN_CENTER, 5);
 		this->booleanCheckbox = new wxCheckBox(booleanEditor, wxID_ANY, "");
 		booleanSizer->Add(this->booleanCheckbox, 0, wxALIGN_CENTER);
 		this->booleanCheckbox->Bind(wxEVT_CHECKBOX, &CalxConfigEditor::OnBooleanEdit, this);
@@ -297,7 +297,7 @@ namespace CalXUI {
 		editorSizer->Add(this->stringEditor, 0, wxEXPAND | wxALL);
 		wxBoxSizer *stringSizer = new wxBoxSizer(wxHORIZONTAL);
 		stringEditor->SetSizer(stringSizer);
-		stringSizer->Add(new wxStaticText(stringEditor, wxID_ANY, "Value: "), 0, wxALL | wxALIGN_CENTER, 5);
+		stringSizer->Add(new wxStaticText(stringEditor, wxID_ANY, __("Value: ")), 0, wxALL | wxALIGN_CENTER, 5);
 		this->stringCtrl = new wxTextCtrl(stringEditor, wxID_ANY, "");
 		stringSizer->Add(this->stringCtrl, 0, wxALIGN_CENTER);
 		this->stringCtrl->Bind(wxEVT_TEXT, &CalxConfigEditor::OnStringEdit, this);
@@ -330,7 +330,7 @@ namespace CalXUI {
 			std::string name = this->entryList->GetStringSelection().ToStdString();
 			this->config->removeEntry(name);
 		} else {
-			wxMessageBox("Select entry to remove", "Warning", wxICON_WARNING);
+			wxMessageBox(__("Select entry to remove"), __("Warning"), wxICON_WARNING);
 		}
 	}
 	
@@ -377,7 +377,7 @@ namespace CalXUI {
 		wxString raw = this->realCtrl->GetValue();
 		double value;
 		if (!raw.ToDouble(&value)) {
-			wxMessageBox("Enter valid real value", "Error", wxICON_ERROR);
+			wxMessageBox(__("Enter valid real value"), __("Error"), wxICON_ERROR);
 			wxVariant vrt;
 			this->valueList->GetValue(vrt, this->valueList->GetSelectedRow(), 2);
 			this->realCtrl->SetValue(vrt.GetString());
@@ -427,7 +427,7 @@ namespace CalXUI {
 			dialog->ShowModal();
 			delete dialog;
 		} else {
-			wxMessageBox("Select one entry to add key", "Attention", wxICON_INFORMATION);
+			wxMessageBox(__("Select one entry to add key"), __("Attention"), wxICON_INFORMATION);
 		}
 	}
 	
@@ -440,7 +440,7 @@ namespace CalXUI {
 			std::string key = vrt.GetString().ToStdString();
 			entry->remove(key);
 		} else {
-			wxMessageBox("Select key to remove", "Warning", wxICON_WARNING);
+			wxMessageBox(__("Select key to remove"), __("Warning"), wxICON_WARNING);
 		}
 	}
 	
@@ -476,19 +476,19 @@ namespace CalXUI {
 			ConfigValue *value = kv.second;
 			switch (value->getType()) {
 				case ConfigValueType::Integer:
-					data.push_back(wxVariant("integer"));
+					data.push_back(wxVariant(__("integer")));
 					data.push_back(wxVariant(std::to_string(((IntegerConfigValue*) value)->getValue())));
 				break;
 				case ConfigValueType::Real:
-					data.push_back(wxVariant("real"));
+					data.push_back(wxVariant(__("real")));
 					data.push_back(wxVariant(std::to_string(((RealConfigValue*) value)->getValue())));
 				break;
 				case ConfigValueType::Boolean:
-					data.push_back(wxVariant("boolean"));
+					data.push_back(wxVariant(__("boolean")));
 					data.push_back(wxVariant(((BoolConfigValue*) value)->getValue() ? "true" : "false"));
 				break;
 				case ConfigValueType::String:
-					data.push_back(wxVariant("string"));
+					data.push_back(wxVariant(__("string")));
 					data.push_back(wxVariant(((StringConfigValue*) value)->getValue()));
 				break;
 			}
@@ -542,18 +542,19 @@ namespace CalXUI {
 			}
 			switch (value->getType()) {
 				case ConfigValueType::Integer:
-					this->valueList->SetValue(wxVariant("integer"), this->valueList->GetSelectedRow(), 1);
+					this->valueList->SetValue(wxVariant(__("integer")), this->valueList->GetSelectedRow(), 1);
 					this->valueList->SetValue(wxVariant(std::to_string(((IntegerConfigValue*) value)->getValue())), this->valueList->GetSelectedRow(), 2);
 				break;
 				case ConfigValueType::Real:
+					this->valueList->SetValue(wxVariant(__("real")), this->valueList->GetSelectedRow(), 1);
 					this->valueList->SetValue(wxVariant(std::to_string(((RealConfigValue*) value)->getValue())), this->valueList->GetSelectedRow(), 2);
 				break;
 				case ConfigValueType::Boolean:
-					this->valueList->SetValue(wxVariant("boolean"), this->valueList->GetSelectedRow(), 1);
+					this->valueList->SetValue(wxVariant(__("boolean")), this->valueList->GetSelectedRow(), 1);
 					this->valueList->SetValue(wxVariant(std::string(((BoolConfigValue*) value)->getValue() ? "true" : "false")), this->valueList->GetSelectedRow(), 2);
 				break;
 				case ConfigValueType::String:
-					this->valueList->SetValue(wxVariant("string"), this->valueList->GetSelectedRow(), 1);
+					this->valueList->SetValue(wxVariant(__("string")), this->valueList->GetSelectedRow(), 1);
 					this->valueList->SetValue(wxVariant(((StringConfigValue*) value)->getValue()), this->valueList->GetSelectedRow(), 2);
 				break;
 			}
@@ -561,7 +562,7 @@ namespace CalXUI {
 	}
 	
 	CalxConfigDialog::CalxConfigDialog(wxWindow *win, wxWindowID id, ConfigManager *conf)
-		: wxDialog::wxDialog(win, id, "Configuration Editor", wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER) {
+		: wxDialog::wxDialog(win, id, __("Configuration Editor"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER) {
 		
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(sizer);
@@ -569,7 +570,7 @@ namespace CalXUI {
 		this->editor = new CalxConfigEditor(this, wxID_ANY, conf);
 		sizer->Add(this->editor, 1, wxEXPAND | wxALL, 5);
 		
-		wxButton *okButton = new wxButton(this, wxID_OK, "OK");
+		wxButton *okButton = new wxButton(this, wxID_OK, __("OK"));
 		sizer->Add(okButton, 0, wxALIGN_CENTER);
 		okButton->Bind(wxEVT_BUTTON, &CalxConfigDialog::OnOkClick, this);
 		

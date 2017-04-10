@@ -102,11 +102,11 @@ namespace CalXUI {
 		taskPanel->SetSizer(taskSizer);
 		this->taskList = new wxListBox(taskPanel, wxID_ANY);
 		taskSizer->Add(this->taskList, 1, wxALL | wxEXPAND);
-		wxButton *newGcodeButton = new wxButton(taskPanel, wxID_ANY, "Load GCode");
+		wxButton *newGcodeButton = new wxButton(taskPanel, wxID_ANY, __("Load GCode"));
 		taskSizer->Add(newGcodeButton, 0, wxALL | wxEXPAND);
-		wxButton *newProgrammedeButton = new wxButton(taskPanel, wxID_ANY, "New Programmed");
+		wxButton *newProgrammedeButton = new wxButton(taskPanel, wxID_ANY, __("New Programmed"));
 		taskSizer->Add(newProgrammedeButton, 0, wxALL | wxEXPAND);
-		wxButton *removeButton = new wxButton(taskPanel, wxID_ANY, "Remove");
+		wxButton *removeButton = new wxButton(taskPanel, wxID_ANY, __("Remove"));
 		taskSizer->Add(removeButton, 0, wxALL | wxEXPAND);
 		newGcodeButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnNewGcodeClick, this);
 		newProgrammedeButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnNewProgrammedClick, this);
@@ -120,19 +120,19 @@ namespace CalXUI {
 		mainSizer->Add(execPanel, 0, wxALL | wxEXPAND, 5);
 		wxBoxSizer *execSizer = new wxBoxSizer(wxHORIZONTAL);
 		execPanel->SetSizer(execSizer);
-		wxButton *buildButton = new wxButton(execPanel, wxID_ANY, "Build");
+		wxButton *buildButton = new wxButton(execPanel, wxID_ANY, __("Build"));
 		execSizer->Add(buildButton);
 		this->plane = new wxChoice(execPanel, wxID_ANY);
 		this->speed = new wxSpinCtrl(execPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, wxGetApp().getSystemManager()->getConfiguration()->getEntry("core")->getInt("maxspeed", 4000), wxGetApp().getSystemManager()->getConfiguration()->getEntry("core")->getInt("maxspeed", 4000));
-		execSizer->Add(new wxStaticText(execPanel, wxID_ANY, " on "), 0, wxALL | wxALIGN_CENTER);
+		execSizer->Add(new wxStaticText(execPanel, wxID_ANY, __(" on ")), 0, wxALL | wxALIGN_CENTER);
 		execSizer->Add(plane, 0, wxALL, 5);
-		execSizer->Add(new wxStaticText(execPanel, wxID_ANY, " with speed "), 0, wxALL | wxALIGN_CENTER);
+		execSizer->Add(new wxStaticText(execPanel, wxID_ANY, __(" with speed ")), 0, wxALL | wxALIGN_CENTER);
 		execSizer->Add(speed, 0, wxALL, 5);
-		this->stopButton = new wxButton(execPanel, wxID_ANY, "Stop");
+		this->stopButton = new wxButton(execPanel, wxID_ANY, __("Stop"));
 		execSizer->Add(stopButton);
-		wxButton *previewButton = new wxButton(execPanel, wxID_ANY, "Preview");
+		wxButton *previewButton = new wxButton(execPanel, wxID_ANY, __("Preview"));
 		execSizer->Add(previewButton);
-		wxButton *linearizeButton = new wxButton(execPanel, wxID_ANY, "Linearize to GCode");
+		wxButton *linearizeButton = new wxButton(execPanel, wxID_ANY, __("Linearize to GCode"));
 		execSizer->Add(linearizeButton);
 		buildButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnBuildClick, this);
 		stopButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnStopClick, this);
@@ -218,7 +218,7 @@ namespace CalXUI {
 	void CalxTaskPanel::OnNewProgrammedClick(wxCommandEvent &evt) {
 		CalxProgrammedTaskHandle *handle = new CalxProgrammedTaskHandle(mainPanel, wxID_ANY);
 		list.push_back(handle);
-		taskList->Append("Task #" + std::to_string(list.size()));
+		taskList->Append(__("Task #") + std::to_string(list.size()));
 		mainPanel->GetSizer()->Add(handle, 1, wxALL | wxEXPAND, 5);
 		taskList->SetSelection(list.size() - 1);
 		Layout();
@@ -233,8 +233,8 @@ namespace CalXUI {
 			this->list.erase(this->list.begin() + sel);
 			updateUI();
 		} else {
-			std::string message = "Select task to remove";
-			wxMessageDialog *dialog = new wxMessageDialog(this, message, "Warning", wxOK | wxICON_WARNING);
+			std::string message = __("Select task to remove");
+			wxMessageDialog *dialog = new wxMessageDialog(this, message, __("Warning"), wxOK | wxICON_WARNING);
 			dialog->ShowModal();
 			dialog->Destroy();
 		}
@@ -253,11 +253,11 @@ namespace CalXUI {
 			TaskParameters prms = {(float) this->speed->GetValue()};
 			queue->addAction(new CalxTaskAction(this, handle, task, prms));
 		} else {
-			std::string message = "Select coordinate plane";
+			std::string message = __("Select coordinate plane");
 			if (taskList->GetSelection() == wxNOT_FOUND) {
-				message = "Select task to build";
+				message = __("Select task to build");
 			}
-			wxMessageDialog *dialog = new wxMessageDialog(this, message, "Warning", wxOK | wxICON_WARNING);
+			wxMessageDialog *dialog = new wxMessageDialog(this, message, __("Warning"), wxOK | wxICON_WARNING);
 			dialog->ShowModal();
 			dialog->Destroy();
 		}
@@ -270,7 +270,7 @@ namespace CalXUI {
 			CoordTask *task = list.at(taskList->GetSelection())->getTask();
 			CoordHandle *handle = wxGetApp().getMainFrame()->getPanel()->getCoords()->getCoord(plane->GetSelection());
 			if (!handle->isMeasured()) {
-				wxMessageBox("Plane need to be measured before preview", "Warning", wxICON_WARNING);
+				wxMessageBox(__("Plane need to be measured before preview"), __("Warning"), wxICON_WARNING);
 				return;
 			}
 			TaskParameters prms = {(float) this->speed->GetValue()};
@@ -280,11 +280,11 @@ namespace CalXUI {
 			dialog->ShowModal();
 			delete dialog;
 		} else {
-			std::string message = "Select coordinate plane";
+			std::string message = __("Select coordinate plane");
 			if (taskList->GetSelection() == wxNOT_FOUND) {
-				message = "Select task to build";
+				message = __("Select task to build");
 			}
-			wxMessageDialog *dialog = new wxMessageDialog(this, message, "Warning", wxOK | wxICON_WARNING);
+			wxMessageDialog *dialog = new wxMessageDialog(this, message, __("Warning"), wxOK | wxICON_WARNING);
 			dialog->ShowModal();
 			dialog->Destroy();
 		}
@@ -297,7 +297,7 @@ namespace CalXUI {
 			CoordTask *task = list.at(taskList->GetSelection())->getTask();
 			CoordHandle *handle = wxGetApp().getMainFrame()->getPanel()->getCoords()->getCoord(plane->GetSelection());
 			if (!handle->isMeasured()) {
-				wxMessageBox("Plane need to be measured to linearize", "Warning", wxICON_WARNING);
+				wxMessageBox(__("Plane need to be measured to linearize"), __("Warning"), wxICON_WARNING);
 				return;
 			}
 			TaskParameters prms = {(float) this->speed->GetValue()};
@@ -315,7 +315,7 @@ namespace CalXUI {
 
 
 			
-			wxFileDialog *dialog = new wxFileDialog(this, "Export linearized GCode", "", "",
+			wxFileDialog *dialog = new wxFileDialog(this, __("Export linearized GCode"), "", "",
                        "", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 			if (dialog->ShowModal() == wxID_OK) {
 				std::string path = dialog->GetPath().ToStdString();
@@ -325,7 +325,7 @@ namespace CalXUI {
 			}
 			ss.seekg(0);
 
-			CalxGcodeHandle *gcodeHandle = new CalxGcodeHandle(mainPanel, wxID_ANY, "Linear " + taskList->GetStringSelection().ToStdString(), &ss, list.at(taskList->GetSelection())->getTranslator()->clone(nullptr));
+			CalxGcodeHandle *gcodeHandle = new CalxGcodeHandle(mainPanel, wxID_ANY, __("Linear ") + taskList->GetStringSelection().ToStdString(), &ss, list.at(taskList->GetSelection())->getTranslator()->clone(nullptr));
 			
 			list.push_back(gcodeHandle);
 			taskList->Append(gcodeHandle->getId());
@@ -335,11 +335,11 @@ namespace CalXUI {
 			updateUI();
 			dialog->Destroy();
 		} else {
-			std::string message = "Select coordinate plane";
+			std::string message = __("Select coordinate plane");
 			if (taskList->GetSelection() == wxNOT_FOUND) {
-				message = "Select task to build";
+				message = __("Select task to build");
 			}
-			wxMessageDialog *dialog = new wxMessageDialog(this, message, "Warning", wxOK | wxICON_WARNING);
+			wxMessageDialog *dialog = new wxMessageDialog(this, message, __("Warning"), wxOK | wxICON_WARNING);
 			dialog->ShowModal();
 			dialog->Destroy();
 		}

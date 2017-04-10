@@ -131,17 +131,17 @@ namespace CalXUI {
 
 	CalxVirtualPlaneDialog::CalxVirtualPlaneDialog(wxWindow *win, wxWindowID id,
 		CoordHandle *base, wxSize min)
-		: wxDialog::wxDialog(win , id, "Preview", wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER) {
+		: wxDialog::wxDialog(win , id, __("Preview"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER) {
 		
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(sizer);
 		
-		this->mouseCoords = new wxStaticText(this, wxID_ANY, "Preview building may take some time.");
+		this->mouseCoords = new wxStaticText(this, wxID_ANY, __("Preview building may take some time."));
 		sizer->Add(this->mouseCoords);
 		this->plane = new CalxVirtualPlane(this, wxID_ANY, base, min);
 		sizer->Add(this->plane, 1, wxALL | wxEXPAND, 5);
 		
-		wxButton *okButton = new wxButton(this, wxID_OK, "OK");
+		wxButton *okButton = new wxButton(this, wxID_OK, __("OK"));
 		sizer->Add(okButton, 0, wxALL | wxALIGN_CENTER);
 		okButton->Bind(wxEVT_BUTTON, &CalxVirtualPlaneDialog::OnOkClick, this);
 		this->plane->Bind(wxEVT_MOTION, &CalxVirtualPlaneDialog::OnMouseMove, this);
@@ -171,7 +171,7 @@ namespace CalXUI {
 			mouse.y < real_size.y) {
 			motor_coord_t rx = (motor_coord_t) mouse.x * plane_size.w / real_size.x + plane_size.x;
 			motor_coord_t ry = (motor_coord_t) plane_size.h - mouse.y * plane_size.h / real_size.y + plane_size.y;
-			std::string res = "x: " + std::to_string(rx) + "; y: " + std::to_string(ry);
+			std::string res = __("x: ") + std::to_string(rx) + __("; y: ") + std::to_string(ry);
 			this->mouseCoords->SetLabel(res);
 		}
 	}

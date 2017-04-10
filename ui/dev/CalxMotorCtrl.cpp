@@ -127,22 +127,22 @@ namespace CalXUI {
 		this->listener = new CalxMotorEventListener(this);
 		this->master = false;
 		
-		wxStaticBox *box = new wxStaticBox(this, wxID_ANY, "Device #" + std::to_string(this->dev->getID()));
+		wxStaticBox *box = new wxStaticBox(this, wxID_ANY, __("Device #") + std::to_string(this->dev->getID()));
 		wxStaticBoxSizer *sizer = new wxStaticBoxSizer(box, wxHORIZONTAL);
 		this->SetSizer(sizer);
 		
 		// Info panel elements
 		this->infoPanel = new wxPanel(box, wxID_ANY);
 		wxBoxSizer *infoSizer = new wxBoxSizer(wxVERTICAL);
-		this->position = new wxStaticText(infoPanel, wxID_ANY, "Position: ");
+		this->position = new wxStaticText(infoPanel, wxID_ANY, __("Position: "));
 		infoSizer->Add(position);
-		this->power = new wxStaticText(infoPanel, wxID_ANY, "Power: ");
+		this->power = new wxStaticText(infoPanel, wxID_ANY, __("Power: "));
 		infoSizer->Add(power);
-		this->state = new wxStaticText(infoPanel, wxID_ANY, "State: ");
+		this->state = new wxStaticText(infoPanel, wxID_ANY, __("State: "));
 		infoSizer->Add(state);
-		this->trailer1 = new wxStaticText(infoPanel, wxID_ANY, "Trailer 1: ");
+		this->trailer1 = new wxStaticText(infoPanel, wxID_ANY, __("Trailer 1: "));
 		infoSizer->Add(trailer1);
-		this->trailer2 = new wxStaticText(infoPanel, wxID_ANY, "Trailer 2: ");
+		this->trailer2 = new wxStaticText(infoPanel, wxID_ANY, __("Trailer 2: "));
 		infoSizer->Add(trailer2);
 		infoPanel->SetSizer(infoSizer);
 		sizer->Add(infoPanel, 0, wxALL, 10);
@@ -153,7 +153,7 @@ namespace CalXUI {
 		
 		wxPanel *moveDestPanel = new wxPanel(movePanel, wxID_ANY);
 		wxBoxSizer *moveDestSizer = new wxBoxSizer(wxHORIZONTAL);
-		wxStaticText *moveDestText = new wxStaticText(moveDestPanel, wxID_ANY, "Destination: ");
+		wxStaticText *moveDestText = new wxStaticText(moveDestPanel, wxID_ANY, __("Destination: "));
 		moveDestSizer->Add(moveDestText, 0, wxALIGN_CENTER);
 		moveSpin = new wxSpinCtrl(moveDestPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,  wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
 		moveDestSizer->Add(moveSpin, 1, wxEXPAND);
@@ -162,7 +162,7 @@ namespace CalXUI {
 		
 		wxPanel *moveSpeedPanel = new wxPanel(movePanel, wxID_ANY);
 		wxBoxSizer *moveSpeedSizer = new wxBoxSizer(wxHORIZONTAL);
-		wxStaticText *moveSpeedText = new wxStaticText(moveSpeedPanel, wxID_ANY, "Speed: ");
+		wxStaticText *moveSpeedText = new wxStaticText(moveSpeedPanel, wxID_ANY, __("Speed: "));
 		moveSpeedSizer->Add(moveSpeedText, 0, wxALIGN_CENTER);
 		this->moveSpeedSpin = new wxSpinCtrl(moveSpeedPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,  wxDefaultSize, wxSP_ARROW_KEYS, 0, wxGetApp().getSystemManager()->getConfiguration()->getEntry("core")->getInt("maxspeed", 4000), wxGetApp().getSystemManager()->getConfiguration()->getEntry("core")->getInt("maxspeed", 4000));
 		moveSpeedSizer->Add(moveSpeedSpin, 1, wxEXPAND);
@@ -173,11 +173,11 @@ namespace CalXUI {
 		wxPanel *moveCtrlPanel = new wxPanel(movePanel, wxID_ANY);
 		wxBoxSizer *moveCtrlSizer = new wxBoxSizer(wxHORIZONTAL);
 		
-		wxButton *moveButton = new wxButton(moveCtrlPanel, wxID_ANY, "Move");
+		wxButton *moveButton = new wxButton(moveCtrlPanel, wxID_ANY, __("Move"));
 		moveButton->Bind(wxEVT_BUTTON, &CalxMotorCtrl::moveClick, this);
 		moveCtrlSizer->Add(moveButton, 1, wxEXPAND);
 		
-		wxButton *rmoveButton = new wxButton(moveCtrlPanel, wxID_ANY, "Relative Move");
+		wxButton *rmoveButton = new wxButton(moveCtrlPanel, wxID_ANY, __("Relative Move"));
 		rmoveButton->Bind(wxEVT_BUTTON, &CalxMotorCtrl::rmoveClick, this);
 		moveCtrlSizer->Add(rmoveButton, 1, wxEXPAND);
 		
@@ -191,19 +191,19 @@ namespace CalXUI {
 		this->actionPanel = new wxPanel(box, wxID_ANY);
 		wxBoxSizer *actionSizer = new wxBoxSizer(wxVERTICAL);
 		
-		wxButton *switchPowerButton = new wxButton(actionPanel, wxID_ANY, "Switch Power");
+		wxButton *switchPowerButton = new wxButton(actionPanel, wxID_ANY, __("Switch Power"));
 		switchPowerButton->Bind(wxEVT_BUTTON, &CalxMotorCtrl::switchPowerClick, this);
 		actionSizer->Add(switchPowerButton, 1, wxEXPAND);
 		
-		wxButton *roll1Button = new wxButton(actionPanel, wxID_ANY, "Roll to trailer 1");
+		wxButton *roll1Button = new wxButton(actionPanel, wxID_ANY, __("Roll to trailer 1"));
 		roll1Button->Bind(wxEVT_BUTTON, &CalxMotorCtrl::rollToTrailer1, this);
 		actionSizer->Add(roll1Button, 1, wxEXPAND);
 		
-		wxButton *roll2Button = new wxButton(actionPanel, wxID_ANY, "Roll to trailer 2");
+		wxButton *roll2Button = new wxButton(actionPanel, wxID_ANY, __("Roll to trailer 2"));
 		roll2Button->Bind(wxEVT_BUTTON, &CalxMotorCtrl::rollToTrailer2, this);
 		actionSizer->Add(roll2Button, 1, wxEXPAND);
 		
-		this->stopButton = new wxButton(actionPanel, wxID_ANY, "Stop");
+		this->stopButton = new wxButton(actionPanel, wxID_ANY, __("Stop"));
 		stopButton->Bind(wxEVT_BUTTON, &CalxMotorCtrl::stopClick, this);
 		actionSizer->Add(stopButton, 1, wxEXPAND);
 		
@@ -238,13 +238,13 @@ namespace CalXUI {
 	
 	
 	void CalxMotorCtrl::updateUI() {
-		std::string pos = "Position: " + std::to_string(this->dev->getPosition());
-		std::string pwr = "Power: " + std::string(dev->getMotor()->getPowerState() == Power::FullPower ?
-								"full" : (dev->getMotor()->getPowerState() == Power::HalfPower ?
-								"half" : "no"));
-		std::string stat = "State: " + std::string(dev->getMotor()->isRunning() ? "Running" : "Not running");
-		std::string tra1 = "Trailer 1: " + std::string(dev->getMotor()->isTrailerPressed(1) ? "Pushed" : "Unpushed");
-		std::string tra2 = "Trailer 2: " + std::string(dev->getMotor()->isTrailerPressed(2) ? "Pushed" : "Unpushed");
+		std::string pos = __("Position: ") + std::to_string(this->dev->getPosition());
+		std::string pwr = __("Power: ") + std::string(dev->getMotor()->getPowerState() == Power::FullPower ?
+								__("full") : (dev->getMotor()->getPowerState() == Power::HalfPower ?
+								__("half") : __("no")));
+		std::string stat = __("State: ") + std::string(dev->getMotor()->isRunning() ? __("Running") : __("Not running"));
+		std::string tra1 = __("Trailer 1: ") + std::string(dev->getMotor()->isTrailerPressed(1) ? __("Pushed") : __("Unpushed"));
+		std::string tra2 = __("Trailer 2: ") + std::string(dev->getMotor()->isTrailerPressed(2) ? __("Pushed") : __("Unpushed"));
 		this->position->SetLabel(pos);
 		this->power->SetLabel(pwr);
 		this->state->SetLabel(stat);

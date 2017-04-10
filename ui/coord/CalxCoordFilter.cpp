@@ -43,13 +43,13 @@ namespace CalXUI {
 		this->xscale = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, this->translator->getScale().w);
 		this->yscale = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX,  this->translator->getScale().h);
 		
-		sizer->Add(new wxStaticText(this, wxID_ANY, "X offset:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("X offset:")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		sizer->Add(xoffset, 0, wxALL | wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, "Y offset:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Y offset:")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		sizer->Add(yoffset, 0, wxALL | wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, "X scale:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("X scale:")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		sizer->Add(xscale, 0, wxALL | wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, "Y scale:"), 0,wxRIGHT |  wxALIGN_RIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Y scale:")), 0,wxRIGHT |  wxALIGN_RIGHT, 5);
 		sizer->Add(yscale, 0, wxALL | wxEXPAND);
 				
 		Layout();
@@ -75,20 +75,18 @@ namespace CalXUI {
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(2);
 		SetSizer(sizer);
 		
-		std::cout << ctrl->getScale().x << " " << ctrl->getScale().y << std::endl;
-		
 		this->xoffset = new wxTextCtrl(this, wxID_ANY, std::to_string(ctrl->getOffset().x));
 		this->yoffset = new wxTextCtrl(this, wxID_ANY, std::to_string(ctrl->getOffset().y));
 		this->xscale = new wxTextCtrl(this, wxID_ANY, std::to_string(ctrl->getScale().x));
 		this->yscale = new wxTextCtrl(this, wxID_ANY, std::to_string(ctrl->getScale().y));
 		
-		sizer->Add(new wxStaticText(this, wxID_ANY, "X offset:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("X offset:")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		sizer->Add(xoffset, 0, wxALL | wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, "Y offset:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Y offset:")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		sizer->Add(yoffset, 0, wxALL | wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, "X scale:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("X scale:")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		sizer->Add(xscale, 0, wxALL | wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, "Y scale:"), 0,wxRIGHT |  wxALIGN_RIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Y scale:")), 0,wxRIGHT |  wxALIGN_RIGHT, 5);
 		sizer->Add(yscale, 0, wxALL | wxEXPAND);
 		
 		xoffset->Bind(wxEVT_TEXT, &CalxCoordLinearFilter::OnFieldChange, this);
@@ -107,24 +105,24 @@ namespace CalXUI {
 	void CalxCoordLinearFilter::updateData() {
 		double ox, oy, sx, sy;
 		if (!this->xoffset->GetValue().ToDouble(&ox)) {
-			wxMessageBox("Enter valid real value", "Error", wxICON_ERROR);
+			wxMessageBox(__("Enter valid real value"), __("Error"), wxICON_ERROR);
 			this->xoffset->SetValue(std::to_string(translator->getOffset().x));
 			return;
 		}
 		
 		if (!this->yoffset->GetValue().ToDouble(&oy)) {
-			wxMessageBox("Enter valid real value", "Error", wxICON_ERROR);
+			wxMessageBox(__("Enter valid real value"), __("Error"), wxICON_ERROR);
 			this->yoffset->SetValue(std::to_string(translator->getOffset().y));
 			return;
 		}
 		
 		if (!this->xscale->GetValue().ToDouble(&sx)) {
-			wxMessageBox("Enter valid real value", "Error", wxICON_ERROR);
+			wxMessageBox(__("Enter valid real value"), __("Error"), wxICON_ERROR);
 			this->xscale->SetValue(std::to_string(translator->getScale().x));
 			return;
 		}
 		if (!this->yscale->GetValue().ToDouble(&sy)) {
-			wxMessageBox("Enter valid real value", "Error", wxICON_ERROR);
+			wxMessageBox(__("Enter valid real value"), __("Error"), wxICON_ERROR);
 			this->yscale->SetValue(std::to_string(translator->getScale().y));
 			return;
 		}
@@ -149,9 +147,9 @@ namespace CalXUI {
 		this->xscale = new wxTextCtrl(this, wxID_ANY, std::to_string(trans->getScale().x));
 		this->yscale = new wxTextCtrl(this, wxID_ANY, std::to_string(trans->getScale().y));
 		
-		sizer->Add(new wxStaticText(this, wxID_ANY, "X scale:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("X scale:")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		sizer->Add(xscale, 0, wxALL | wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, "Y scale:"), 0,wxRIGHT |  wxALIGN_RIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Y scale:")), 0,wxRIGHT |  wxALIGN_RIGHT, 5);
 		sizer->Add(yscale, 0, wxALL | wxEXPAND);
 		
 		xscale->Bind(wxEVT_TEXT, &CalxCoordLogarithmicFilter::OnFieldChange, this);
@@ -168,12 +166,12 @@ namespace CalXUI {
 	void CalxCoordLogarithmicFilter::updateData() {
 		double sx, sy;
 		if (!this->xscale->GetValue().ToDouble(&sx)) {
-			wxMessageBox("Enter valid real value", "Error", wxICON_ERROR);
+			wxMessageBox(__("Enter valid real value"), __("Error"), wxICON_ERROR);
 			this->xscale->SetValue(std::to_string(translator->getScale().x));
 			return;
 		}
 		if (!this->yscale->GetValue().ToDouble(&sy)) {
-			wxMessageBox("Enter valid real value", "Error", wxICON_ERROR);
+			wxMessageBox(__("Enter valid real value"), __("Error"), wxICON_ERROR);
 			this->yscale->SetValue(std::to_string(translator->getScale().y));
 			return;
 		}
@@ -192,7 +190,7 @@ namespace CalXUI {
 		
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(sizer);
-		sizer->Add(new wxStaticText(this, wxID_ANY, "Polar coordinate filter have not any parameters.\n Add other filters."));
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Polar coordinate filter have not any parameters.\n Add other filters.")));
 	}
 	
 	CoordTranslator *CalxCoordPolarFilter::getTranslator() {
@@ -212,10 +210,10 @@ namespace CalXUI {
 		this->filterList = new wxListBox(listPanel, wxID_ANY);
 		listSizer->Add(this->filterList, 1, wxBOTTOM | wxEXPAND);
 		this->filterList->Bind(wxEVT_LISTBOX, &CalxCoordFilterCtrl::OnListClick, this);
-		wxButton *addLinearButton = new wxButton(listPanel, wxID_ANY, "Add Linear");
-		wxButton *addLogarithmicButton = new wxButton(listPanel, wxID_ANY, "Add Logarithmic");
-		wxButton *addPolarButton = new wxButton(listPanel, wxID_ANY, "Add Polar");
-		this->removeButton = new wxButton(listPanel, wxID_ANY, "Remove");
+		wxButton *addLinearButton = new wxButton(listPanel, wxID_ANY, __("Add Linear"));
+		wxButton *addLogarithmicButton = new wxButton(listPanel, wxID_ANY, __("Add Logarithmic"));
+		wxButton *addPolarButton = new wxButton(listPanel, wxID_ANY, __("Add Polar"));
+		this->removeButton = new wxButton(listPanel, wxID_ANY, __("Remove"));
 		listSizer->Add(addLinearButton, 0, wxEXPAND);
 		listSizer->Add(addLogarithmicButton, 0, wxEXPAND);
 		listSizer->Add(addPolarButton, 0, wxEXPAND);
@@ -315,19 +313,19 @@ namespace CalXUI {
 		switch (tr->getType()) {
 			case CoordType::BasicCoord:
 				fil = new CalxCoordBasicFilter(mainPanel, wxID_ANY, (BasicCoordTranslator*) tr);
-				filterList->Append("Basic");
+				filterList->Append(__("Basic"));
 				break;
 			case CoordType::LinearCoord:
 				fil = new CalxCoordLinearFilter(mainPanel, wxID_ANY, (LinearCoordTranslator*) tr);
-				filterList->Append("Linear");
+				filterList->Append(__("Linear"));
 				break;
 			case CoordType::LogarithmicCoord:
 				fil = new CalxCoordLogarithmicFilter(mainPanel, wxID_ANY, (LogarithmicCoordTranslator*) tr);
-				filterList->Append("Logarithmic");
+				filterList->Append(__("Logarithmic"));
 				break;
 			case CoordType::PolarCoord:
 				fil = new CalxCoordPolarFilter(mainPanel, wxID_ANY, (PolarCoordTranslator*) tr);
-				filterList->Append("Polar");
+				filterList->Append(__("Polar"));
 				break;
 			default:
 				break;

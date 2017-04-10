@@ -19,6 +19,8 @@
 
 
 #include "CalxErrorHandler.h"
+#include <wx/sizer.h>
+#include <wx/stattext.h>
 
 namespace CalXUI {
 	
@@ -32,7 +34,13 @@ namespace CalXUI {
 	
 	void CalxErrorHandler::handle(ErrorCode code) {
 		if (code != ErrorCode::NoError) {
-			wxMessageBox("System error(" + std::to_string(code) + ")", "System error", wxICON_ERROR);
+			std::string text = __("Error occured during execution.\nError code: ") + std::to_string(code) + "\n";
+			switch (code) {
+				default:
+					text += __("Detailed description not available.");
+				break;
+			}
+			wxMessageBox(text, __("Error occured"), wxICON_ERROR);
 		}
 	}
 }

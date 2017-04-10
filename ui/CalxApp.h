@@ -33,6 +33,9 @@ using namespace CalX;
 #define DEVICES_LIB dev_8smc1
 #endif
 
+// For internatization purposes
+#define __(String) (String)
+
 namespace CalXUI {
 	
 	class CalxDebugConsole; // Forward referencing

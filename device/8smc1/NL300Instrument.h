@@ -25,6 +25,7 @@
 #include <vector>
 #include <cinttypes>
 #include "device/Device.h"
+#include "device/DeviceManager.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>

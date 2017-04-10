@@ -22,7 +22,7 @@
 #define CALX_UI_CALX_COORD_DIALOG_H_
 
 #include <string>
-#include "calx.h"
+#include "CalxApp.h"
 #include <wx/choice.h>
 
 using namespace CalX;

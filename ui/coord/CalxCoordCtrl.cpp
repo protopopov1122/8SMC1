@@ -65,10 +65,10 @@ namespace CalXUI {
 		this->SetSizer(sizer);
 		
 		this->generalPanel = new wxPanel(this, wxID_ANY);
-		wxStaticBox *generalBox = new wxStaticBox(generalPanel, wxID_ANY, "General info");
+		wxStaticBox *generalBox = new wxStaticBox(generalPanel, wxID_ANY, __("General info"));
 		wxStaticBoxSizer *generalSizer = new wxStaticBoxSizer(generalBox, wxVERTICAL);
 		this->generalInfoText = new wxStaticText(generalPanel, wxID_ANY, "");
-		this->stopButton = new wxButton(generalPanel, wxID_ANY, "Stop");
+		this->stopButton = new wxButton(generalPanel, wxID_ANY, __("Stop"));
 		generalSizer->Add(this->generalInfoText, 0, wxALL | wxEXPAND, 5);
 		generalSizer->Add(this->stopButton, 0, wxALL, 5);
 		this->stopButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnStopClick, this);
@@ -85,7 +85,7 @@ namespace CalXUI {
 		actionSizer->Add(actionSubPanel, 0, wxALL | wxEXPAND);
 		
 		wxPanel *linearPanel = new wxPanel(actionSubPanel, wxID_ANY);
-		wxStaticBox *linearBox = new wxStaticBox(linearPanel, wxID_ANY, "Linear movement");
+		wxStaticBox *linearBox = new wxStaticBox(linearPanel, wxID_ANY, __("Linear movement"));
 		wxStaticBoxSizer *linearSizer = new wxStaticBoxSizer(linearBox, wxHORIZONTAL);	
 		linearPanel->SetSizer(linearSizer);
 		this->linear = new CalxCoordLinearCtrl(linearPanel, wxID_ANY);
@@ -95,7 +95,7 @@ namespace CalXUI {
 		actionSubSizer->Add(linearPanel, 0, wxALL | wxEXPAND);
 		
 		wxPanel *arcPanel = new wxPanel(actionSubPanel, wxID_ANY);
-		wxStaticBox *arcBox = new wxStaticBox(arcPanel, wxID_ANY, "Arc movement");
+		wxStaticBox *arcBox = new wxStaticBox(arcPanel, wxID_ANY, __("Arc movement"));
 		wxStaticBoxSizer *arcSizer = new wxStaticBoxSizer(arcBox, wxHORIZONTAL);	
 		arcPanel->SetSizer(arcSizer);
 		this->arc = new CalxCoordArcCtrl(arcPanel, wxID_ANY);
@@ -104,7 +104,7 @@ namespace CalXUI {
 		actionSubSizer->Add(arcPanel, 0, wxALL | wxEXPAND);
 		
 		wxPanel *graphPanel = new wxPanel(actionSubPanel, wxID_ANY);
-		wxStaticBox *graphBox = new wxStaticBox(graphPanel, wxID_ANY, "Function graph");
+		wxStaticBox *graphBox = new wxStaticBox(graphPanel, wxID_ANY, __("Function graph"));
 		wxStaticBoxSizer *graphSizer = new wxStaticBoxSizer(graphBox, wxHORIZONTAL);	
 		graphPanel->SetSizer(graphSizer);
 		graphCtrl = new CalxCoordGraphCtrl(graphPanel, wxID_ANY);
@@ -115,7 +115,7 @@ namespace CalXUI {
 		
 		wxPanel *actionSub2Panel = new wxPanel(actionPanel, wxID_ANY);
 		actionSizer->Add(actionSub2Panel, 1, wxLEFT | wxEXPAND, 5);
-		wxStaticBox *otherBox = new wxStaticBox(actionSub2Panel, wxID_ANY, "Other");
+		wxStaticBox *otherBox = new wxStaticBox(actionSub2Panel, wxID_ANY, __("Other"));
 		wxStaticBoxSizer *otherSizer = new wxStaticBoxSizer(otherBox, wxVERTICAL);
 		actionSub2Panel->SetSizer(otherSizer);
 		this->otherCtrl = new CalxCoordOtherCtrl(this, actionSub2Panel, wxID_ANY);
@@ -165,18 +165,18 @@ namespace CalXUI {
 	}
 	
 	void CalxCoordCtrl::updateUI() {
-		std::string general = "Name: Coordinate plane #" + std::to_string(ctrl->getID()) +
-								"\nDevices: #" + std::to_string(ctrl->getController()->getXAxis()->getID()) +
-									" #" + std::to_string(ctrl->getController()->getYAxis()->getID()) +
-								"\nInstrument: " + (ctrl->getController()->getInstrument() != nullptr ?
-									"#" + std::to_string(ctrl->getController()->getInstrument()->getID())
-										: "No") + 
-								"\nPosition: " + std::to_string(ctrl->getPosition().x) +
-									+ "x" + std::to_string(ctrl->getPosition().y) +
-								"\nStart: " + (ctrl->isMeasured() ? (std::to_string(ctrl->getSize().x) +
-									+ "x" + std::to_string(ctrl->getSize().y)) : "Not measured") +
-								"\nSize: " + (ctrl->isMeasured() ? (std::to_string(ctrl->getSize().w) +
-									+ "x" + std::to_string(ctrl->getSize().h)) : "Not measured");
+		std::string general = __("Name: Coordinate plane #") + std::to_string(ctrl->getID()) +
+								__("\nDevices: #") + std::to_string(ctrl->getController()->getXAxis()->getID()) +
+									__(" #") + std::to_string(ctrl->getController()->getYAxis()->getID()) +
+								__("\nInstrument: ") + (ctrl->getController()->getInstrument() != nullptr ?
+									__("#") + std::to_string(ctrl->getController()->getInstrument()->getID())
+										: __("No")) + 
+								__("\nPosition: ") + std::to_string(ctrl->getPosition().x) +
+									+ __("x") + std::to_string(ctrl->getPosition().y) +
+								__("\nStart: ") + (ctrl->isMeasured() ? (std::to_string(ctrl->getSize().x) +
+									+ __("x") + std::to_string(ctrl->getSize().y)) : __("Not measured")) +
+								__("\nSize: ") + (ctrl->isMeasured() ? (std::to_string(ctrl->getSize().w) +
+									+ __("x") + std::to_string(ctrl->getSize().h)) : __("Not measured"));
 		this->generalInfoText->SetLabel(general);
 	}
 	
@@ -235,7 +235,7 @@ namespace CalXUI {
 	
 	void CalxCoordCtrl::OnGraphPreviewClick(wxCommandEvent &evt) {
 		if (!this->ctrl->isMeasured()) {
-			wxMessageBox("Plane need to be measured before preview", "Warning", wxICON_WARNING);
+			wxMessageBox(__("Plane need to be measured before preview"), __("Warning"), wxICON_WARNING);
 			return;
 		}
 		std::stringstream ss(graphCtrl->getExpression());
@@ -278,12 +278,12 @@ namespace CalXUI {
 		motor_point_t moffset = {otherCtrl->getXOffset(), otherCtrl->getYOffset()};
 		motor_scale_t mscale = {otherCtrl->getXScale(), otherCtrl->getYScale()};
 		if (std::isnan(mscale.x)) {
-			wxMessageBox("Enter valid real value", "Error", wxICON_ERROR);
+			wxMessageBox(__("Enter valid real value"), __("Error"), wxICON_ERROR);
 			otherCtrl->setXScale(map->getScale().x);
 			return;
 		}
 		if (std::isnan(mscale.y)) {
-			wxMessageBox("Enter valid real value", "Error", wxICON_ERROR);
+			wxMessageBox(__("Enter valid real value"), __("Error"), wxICON_ERROR);
 			otherCtrl->setYScale(map->getScale().y);
 			return;
 		}

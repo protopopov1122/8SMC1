@@ -565,13 +565,11 @@ namespace CalX {
 		const char *data = stdStr.c_str();
 		DWORD feedback;
 		if(!WriteFile(handle, data, (DWORD) strlen(data), &feedback, 0) || feedback != (DWORD) strlen(data)) {
-			// TODO Add proper IO error handle
-			/*std::cout << feedback << std::endl;
 			CloseHandle(handle);
 			handle = INVALID_HANDLE_VALUE;
 			this->errors.push_back("Error writing to COM" + std::to_string(prms.port));
 			getDeviceManager()->saveError();
-			return false;*/
+			return false;
 		}
 		ILOG("Write finished");
 		return true;
@@ -585,7 +583,10 @@ namespace CalX {
 		int chr;
 		DWORD feedback;
 		if (!ReadFile(this->handle, &chr, 1, &feedback, NULL) || feedback != (DWORD) 1) {
-			std::cout << "Error" << std::endl;
+			CloseHandle(handle);
+			handle = INVALID_HANDLE_VALUE;
+			this->errors.push_back("Error reading from COM" + std::to_string(prms.port));
+			getDeviceManager()->saveError();
 			return EOF;
 		}
 		return chr;

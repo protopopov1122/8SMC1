@@ -30,13 +30,13 @@ namespace CalXUI {
 		: wxNotebook::wxNotebook(win, id) {
 		
 		this->dev = new CalxDevicePanel(this, wxID_ANY);
-		this->AddPage(this->dev, "Devices");
+		this->AddPage(this->dev, __("Devices"));
 		this->coord = new CalxCoordPanel(this, wxID_ANY);
-		this->AddPage(this->coord, "Coordinate planes");
+		this->AddPage(this->coord, __("Coordinate planes"));
 		this->task = new CalxTaskPanel(this, wxID_ANY);
-		this->AddPage(this->task, "Tasks");
+		this->AddPage(this->task, __("Tasks"));
 		this->conf = new CalxConfigEditor(this, wxID_ANY, wxGetApp().getSystemManager()->getConfiguration());
-		this->AddPage(this->conf, "Configuration");
+		this->AddPage(this->conf, __("Configuration"));
 		
 		Bind(wxEVT_CLOSE_WINDOW, &CalxPanel::OnExit, this);
 	}

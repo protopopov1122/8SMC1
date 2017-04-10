@@ -42,10 +42,10 @@ namespace CalXUI {
 		this->coordList = new wxListBox(listPanel, wxID_ANY);
 		listSizer->Add(this->coordList, 1, wxBOTTOM | wxEXPAND, 5);
 		this->coordList->Bind(wxEVT_LISTBOX, &CalxCoordPanel::OnListClick, this);
-		wxButton *addButton = new wxButton(listPanel, wxID_ANY, "Add");
+		wxButton *addButton = new wxButton(listPanel, wxID_ANY, __("Add"));
 		listSizer->Add(addButton, 0, wxALL | wxEXPAND);
 		addButton->Bind(wxEVT_BUTTON, &CalxCoordPanel::OnAddButtonClick, this);
-		wxButton *removeButton = new wxButton(listPanel, wxID_ANY, "Remove");
+		wxButton *removeButton = new wxButton(listPanel, wxID_ANY, __("Remove"));
 		listSizer->Add(removeButton, 0, wxALL | wxEXPAND);
 		removeButton->Bind(wxEVT_BUTTON, &CalxCoordPanel::OnRemoveButtonClick, this);
 		
@@ -125,7 +125,7 @@ namespace CalXUI {
 		if (this->coordList->GetSelection() != wxNOT_FOUND) {
 			removePlane(this->coordList->GetSelection());
 		} else {
-			wxMessageBox("Select plane to remove", "Warning", wxOK | wxICON_WARNING);
+			wxMessageBox(__("Select plane to remove"), __("Warning"), wxOK | wxICON_WARNING);
 		}
 	}
 	

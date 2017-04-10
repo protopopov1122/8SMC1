@@ -123,7 +123,7 @@ namespace CalXUI {
 		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
 		this->listener = new CalxInstrumentEventListener(this);
 		
-		wxStaticBox *box = new wxStaticBox(this, wxID_ANY, "Instrument #" + std::to_string(ctrl->getID()));
+		wxStaticBox *box = new wxStaticBox(this, wxID_ANY, __("Instrument #") + std::to_string(ctrl->getID()));
 		wxStaticBoxSizer *sizer = new wxStaticBoxSizer(box, wxVERTICAL);
 		SetSizer(sizer);
 		
@@ -146,13 +146,13 @@ namespace CalXUI {
 		mainSizer->Add(ctrlPanel, 0, wxALL, 10);
 		wxBoxSizer *ctrlSizer = new wxBoxSizer(wxVERTICAL);
 		ctrlPanel->SetSizer(ctrlSizer);
-		wxButton *stateButton = new wxButton(ctrlPanel, wxID_ANY, "Switch state");
-		enabledButton = new wxButton(ctrlPanel, wxID_ANY, "Enable/Disable");
+		wxButton *stateButton = new wxButton(ctrlPanel, wxID_ANY, __("Switch state"));
+		enabledButton = new wxButton(ctrlPanel, wxID_ANY, __("Enable/Disable"));
 		ctrlSizer->Add(stateButton, 0, wxALL | wxEXPAND);
 		ctrlSizer->Add(enabledButton, 0, wxALL | wxEXPAND);
 		stateButton->Bind(wxEVT_BUTTON, &CalxInstrumentCtrl::OnStateButton, this);
 		enabledButton->Bind(wxEVT_BUTTON, &CalxInstrumentCtrl::OnEnableButton, this);
-		wxButton *confButton = new wxButton(ctrlPanel, wxID_ANY, "Configuration");
+		wxButton *confButton = new wxButton(ctrlPanel, wxID_ANY, __("Configuration"));
 		ctrlSizer->Add(confButton, 0, wxALL | wxEXPAND);
 		confButton->Bind(wxEVT_BUTTON, &CalxInstrumentCtrl::OnConfClick, this);
 		
@@ -160,7 +160,7 @@ namespace CalXUI {
 		mainSizer->Add(modePanel, 0, wxALL, 10);
 		wxBoxSizer *modeSizer = new wxBoxSizer(wxHORIZONTAL);
 		modePanel->SetSizer(modeSizer);
-		modeSizer->Add(new wxStaticText(modePanel, wxID_ANY, "Mode:"), 0, wxRIGHT | wxALIGN_CENTER, 5);
+		modeSizer->Add(new wxStaticText(modePanel, wxID_ANY, __("Mode:")), 0, wxRIGHT | wxALIGN_CENTER, 5);
 		this->modeChoice = new wxChoice(modePanel, wxID_ANY);
 		modeSizer->Add(this->modeChoice, 0, wxALIGN_CENTER);
 		this->ctrl->getModes(modes);
@@ -185,8 +185,8 @@ namespace CalXUI {
 	}
 	
 	void CalxInstrumentCtrl::updateUI() {
-		std::string text = "State: " + std::string(ctrl->isRunnable() ? "on" : "off") +
-		"\nEnabled: " + std::string(ctrl->isEnabled() ? "true" : "false");
+		std::string text = __("State: ") + std::string(ctrl->isRunnable() ? __("on") : __("off")) +
+		__("\nEnabled: ") + std::string(ctrl->isEnabled() ? __("true") : __("false"));
 		this->infoText->SetLabel(text);
 		enabledButton->Enable(ctrl->isRunnable());
 	}

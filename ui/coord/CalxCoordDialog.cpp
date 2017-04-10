@@ -25,7 +25,7 @@
 namespace CalXUI {
 	
 	CalxCoordDialog::CalxCoordDialog(wxWindow* win, wxWindowID id, SystemManager *sysman)
-		: wxDialog::wxDialog(win, id, "New coordinate plane") {
+		: wxDialog::wxDialog(win, id, __("New coordinate plane")) {
 		this->sysman = sysman;
 		this->ctrl = nullptr;
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
@@ -36,17 +36,17 @@ namespace CalXUI {
 		wxFlexGridSizer *mainSizer = new wxFlexGridSizer(2);
 		mainPanel->SetSizer(mainSizer);
 		
-		wxStaticText *xText = new wxStaticText(mainPanel, wxID_ANY, "X Axis: ");
+		wxStaticText *xText = new wxStaticText(mainPanel, wxID_ANY, __("X Axis: "));
 		this->xChoice = new wxChoice(mainPanel, wxID_ANY);
 		mainSizer->Add(xText, 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		mainSizer->Add(xChoice, 0, wxALL | wxEXPAND);
 		
-		wxStaticText *yText = new wxStaticText(mainPanel, wxID_ANY, "Y Axis: ");
+		wxStaticText *yText = new wxStaticText(mainPanel, wxID_ANY, __("Y Axis: "));
 		this->yChoice = new wxChoice(mainPanel, wxID_ANY);
 		mainSizer->Add(yText, 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		mainSizer->Add(yChoice, 0, wxALL | wxEXPAND);
 		
-		wxStaticText *instrText = new wxStaticText(mainPanel, wxID_ANY, "Instrument: ");
+		wxStaticText *instrText = new wxStaticText(mainPanel, wxID_ANY, __("Instrument: "));
 		this->instrChoice = new wxChoice(mainPanel, wxID_ANY);
 		mainSizer->Add(instrText, 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		mainSizer->Add(instrChoice, 0, wxALL | wxEXPAND);
@@ -55,24 +55,24 @@ namespace CalXUI {
 		sizer->Add(buttonPanel, 0, wxALIGN_CENTER | wxALL, 5);
 		wxBoxSizer *buttonSizer = new wxBoxSizer(wxHORIZONTAL);
 		buttonPanel->SetSizer(buttonSizer);
-		wxButton *okButton = new wxButton(buttonPanel, wxID_OK, "OK");
+		wxButton *okButton = new wxButton(buttonPanel, wxID_OK, __("OK"));
 		okButton->Bind(wxEVT_BUTTON, &CalxCoordDialog::OnOkButtonClick, this);
-		wxButton *cancelButton = new wxButton(buttonPanel, wxID_CANCEL, "Cancel");
+		wxButton *cancelButton = new wxButton(buttonPanel, wxID_CANCEL, __("Cancel"));
 		cancelButton->Bind(wxEVT_BUTTON, &CalxCoordDialog::OnCancelButtonClick, this);
 		buttonSizer->Add(okButton);
 		buttonSizer->Add(cancelButton);
 		
 		
 		for (size_t i = 0; i < sysman->getMotorCount(); i++) {
-			std::string id = "Device #" + std::to_string(i);
+			std::string id = __("Device #") + std::to_string(i);
 			xChoice->Append(id);
 			yChoice->Append(id);
 		}
 		
-		instrChoice->Append("No instrument");
+		instrChoice->Append(__("No instrument"));
 		
 		for (size_t i = 0; i < sysman->getInstrumentCount(); i++) {
-			std::string id = "Instrument #" + std::to_string(i);
+			std::string id = __("Instrument #") + std::to_string(i);
 			instrChoice->Append(id);
 		}
 		
@@ -102,7 +102,7 @@ namespace CalXUI {
 		if (x != wxNOT_FOUND &&
 			y != wxNOT_FOUND) {
 			if (x == y) {
-				wxMessageBox("Devices cannot be same", "Warning", wxOK | wxICON_WARNING);
+				wxMessageBox(__("Devices cannot be same"), __("Warning"), wxOK | wxICON_WARNING);
 				return;
 			}
 			this->ctrl = sysman->createCoord(x, y, i == wxNOT_FOUND || i == 0 ? -1 : (i - 1));

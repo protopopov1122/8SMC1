@@ -43,11 +43,11 @@ namespace CalXUI {
 		
 		this->dynlib = new wxDynamicLibrary(wxDynamicLibrary::CanonicalizeName(lib_addr), wxDL_DEFAULT | wxDL_QUIET);
 		if (!dynlib->IsLoaded()) {
-			wxMessageBox("Device API plugin not found\nSpecify library location", "Warning", wxOK | wxICON_WARNING);
+			wxMessageBox(__("Device API plugin not found\nSpecify library location"), __("Warning"), wxOK | wxICON_WARNING);
 			loadDevicesPlugin();
 		}
 		if (!dynlib->IsLoaded()) {
-			wxMessageBox("Dynamic library not found", "Error", wxOK | wxICON_ERROR);
+			wxMessageBox(__("Dynamic library not found"), __("Error"), wxOK | wxICON_ERROR);
 			return false;
 		}
 		
@@ -55,7 +55,7 @@ namespace CalXUI {
 		void *raw_getter = dynlib->GetSymbol("getDeviceManager", &suc);
 		DeviceManager_getter getter = *((DeviceManager_getter*) &raw_getter);
 		if (!suc) {
-			wxMessageBox("Dynamic library is corrupt", "Error", wxOK | wxICON_ERROR);
+			wxMessageBox(__("Dynamic library is corrupt"), __("Error"), wxOK | wxICON_ERROR);
 			return false;
 		}
 		
@@ -98,7 +98,7 @@ namespace CalXUI {
 			this->debug_console = nullptr;
 		}
 		
-		this->frame = new CalxFrame("CalX UI");
+		this->frame = new CalxFrame(__("CalX UI"));
 		this->frame->Show(true);
 		this->frame->Maximize(true);
 		
@@ -142,7 +142,7 @@ namespace CalXUI {
 	}
 	
 	void CalxApp::loadDevicesPlugin() {
-		wxFileDialog openDialog(nullptr, "Load devices plugin");
+		wxFileDialog openDialog(nullptr, __("Load devices plugin"));
 		if (openDialog.ShowModal() == wxID_CANCEL) {
 			return;
 		}

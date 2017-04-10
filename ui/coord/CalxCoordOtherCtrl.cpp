@@ -28,7 +28,7 @@ namespace CalXUI {
 		SetSizer(sizer);
 		
 		if (ctrl->getHandle()->getController()->getInstrument() != nullptr) {
-			this->enableInstrument = new wxCheckBox(this, wxID_ANY, "Enable instrument");
+			this->enableInstrument = new wxCheckBox(this, wxID_ANY, __("Enable instrument"));
 			sizer->Add(enableInstrument, 0, wxALL, 5);
 			enableInstrument->Bind(wxEVT_CHECKBOX, &CalxCoordCtrl::OnInstrumentEnableClick, ctrl);
 			this->enableInstrument->SetValue(ctrl->getHandle()->getController()->getInstrument()->isRunnable());
@@ -38,13 +38,13 @@ namespace CalXUI {
 		sizer->Add(calibratePanel, 0, wxALL, 5);
 		wxBoxSizer *calibrateSizer = new wxBoxSizer(wxHORIZONTAL);
 		calibratePanel->SetSizer(calibrateSizer);
-		wxButton *calibrateButton = new wxButton(calibratePanel, wxID_ANY, "Calibrate");
+		wxButton *calibrateButton = new wxButton(calibratePanel, wxID_ANY, __("Calibrate"));
 		calibrateButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnCalibrateClick, ctrl);
 		calibrateSizer->Add(calibrateButton);
-		calibrateSizer->Add(new wxStaticText(calibratePanel, wxID_ANY, " to "), wxALL | wxALIGN_CENTER, 5);
+		calibrateSizer->Add(new wxStaticText(calibratePanel, wxID_ANY, __(" to ")), wxALL | wxALIGN_CENTER, 5);
 		trailer = new wxChoice(calibratePanel, wxID_ANY);
-		trailer->Append("trailer 1");
-		trailer->Append("trailer 2");
+		trailer->Append(__("trailer 1"));
+		trailer->Append(__("trailer 2"));
 		trailer->SetSelection(0);
 		calibrateSizer->Add(trailer, 0, wxALL);
 		
@@ -52,13 +52,13 @@ namespace CalXUI {
 		sizer->Add(measurePanel, 0, wxBOTTOM | wxLEFT, 5);
 		wxBoxSizer *measureSizer = new wxBoxSizer(wxHORIZONTAL);
 		measurePanel->SetSizer(measureSizer);
-		wxButton *measureButton = new wxButton(measurePanel, wxID_ANY, "Measure");
+		wxButton *measureButton = new wxButton(measurePanel, wxID_ANY, __("Measure"));
 		measureButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnMeasureClick, ctrl);
 		measureSizer->Add(measureButton);
-		measureSizer->Add(new wxStaticText(measurePanel, wxID_ANY, " to "), wxALL | wxALIGN_CENTER, 5);
+		measureSizer->Add(new wxStaticText(measurePanel, wxID_ANY, __(" to ")), wxALL | wxALIGN_CENTER, 5);
 		measureTrailer = new wxChoice(measurePanel, wxID_ANY);
-		measureTrailer->Append("trailer 1");
-		measureTrailer->Append("trailer 2");
+		measureTrailer->Append(__("trailer 1"));
+		measureTrailer->Append(__("trailer 2"));
 		measureTrailer->SetSelection(0);
 		measureSizer->Add(measureTrailer, 0, wxALL);
 		
@@ -66,8 +66,8 @@ namespace CalXUI {
 		sizer->Add(logPanel, 0, wxALL | wxEXPAND, 5);
 		wxBoxSizer *logSizer = new wxBoxSizer(wxHORIZONTAL);
 		logPanel->SetSizer(logSizer);
-		this->logActions = new wxCheckBox(logPanel, wxID_ANY, "Log actions");		
-		this->logErrors = new wxCheckBox(logPanel, wxID_ANY, "Log errors");
+		this->logActions = new wxCheckBox(logPanel, wxID_ANY, __("Log actions"));		
+		this->logErrors = new wxCheckBox(logPanel, wxID_ANY, __("Log errors"));
 		logSizer->Add(logActions);
 		logSizer->Add(logErrors);
 		
@@ -79,17 +79,17 @@ namespace CalXUI {
 		this->yOffset = new wxSpinCtrl(mapPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
 		this->xScale = new wxTextCtrl(mapPanel, wxID_ANY, "1");
 		this->yScale = new wxTextCtrl(mapPanel, wxID_ANY, "1");
-		mapSizer->Add(new wxStaticText(mapPanel, wxID_ANY, "Coordinate offset:"));
+		mapSizer->Add(new wxStaticText(mapPanel, wxID_ANY, __("Coordinate offset:")));
 		mapSizer->Add(new wxStaticText(mapPanel, wxID_ANY, ""));
-		mapSizer->Add(new wxStaticText(mapPanel, wxID_ANY, "x:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
+		mapSizer->Add(new wxStaticText(mapPanel, wxID_ANY, __("x:")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		mapSizer->Add(xOffset, 0, wxEXPAND);
-		mapSizer->Add(new wxStaticText(mapPanel, wxID_ANY, "y:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
+		mapSizer->Add(new wxStaticText(mapPanel, wxID_ANY, __("y:")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		mapSizer->Add(yOffset, 0, wxEXPAND);
-		mapSizer->Add(new wxStaticText(mapPanel, wxID_ANY, "Coordinate scale:"));
+		mapSizer->Add(new wxStaticText(mapPanel, wxID_ANY, __("Coordinate scale:")));
 		mapSizer->Add(new wxStaticText(mapPanel, wxID_ANY, ""));
-		mapSizer->Add(new wxStaticText(mapPanel, wxID_ANY, "x:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
+		mapSizer->Add(new wxStaticText(mapPanel, wxID_ANY, __("x:")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		mapSizer->Add(xScale, 0, wxEXPAND);
-		mapSizer->Add(new wxStaticText(mapPanel, wxID_ANY, "y:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
+		mapSizer->Add(new wxStaticText(mapPanel, wxID_ANY, __("y:")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		mapSizer->Add(yScale, 0, wxEXPAND);
 		
 		wxPanel *validatePanel = new wxPanel(this, wxID_ANY);
@@ -101,17 +101,17 @@ namespace CalXUI {
 		this->maxx = new wxSpinCtrl(validatePanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
 		this->maxy = new wxSpinCtrl(validatePanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
 		this->speed = new wxSpinCtrl(validatePanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, wxGetApp().getSystemManager()->getConfiguration()->getEntry("core")->getInt("maxspeed", 4000), wxGetApp().getSystemManager()->getConfiguration()->getEntry("core")->getInt("maxspeed", 4000));
-		validateSizer->Add(new wxStaticText(validatePanel, wxID_ANY, "Coordinate validation:"));
+		validateSizer->Add(new wxStaticText(validatePanel, wxID_ANY, __("Coordinate validation:")));
 		validateSizer->Add(new wxStaticText(validatePanel, wxID_ANY, ""));
-		validateSizer->Add(new wxStaticText(validatePanel, wxID_ANY, "min x:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
+		validateSizer->Add(new wxStaticText(validatePanel, wxID_ANY, __("min x:")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		validateSizer->Add(minx, 0, wxEXPAND);
-		validateSizer->Add(new wxStaticText(validatePanel, wxID_ANY, "min y:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
+		validateSizer->Add(new wxStaticText(validatePanel, wxID_ANY, __("min y:")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		validateSizer->Add(miny, 0, wxEXPAND);
-		validateSizer->Add(new wxStaticText(validatePanel, wxID_ANY, "max x:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
+		validateSizer->Add(new wxStaticText(validatePanel, wxID_ANY, __("max x:")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		validateSizer->Add(maxx, 0, wxEXPAND);
-		validateSizer->Add(new wxStaticText(validatePanel, wxID_ANY, "max y:"), 0, wxRIGHT | wxALIGN_RIGHT, 5);
+		validateSizer->Add(new wxStaticText(validatePanel, wxID_ANY, __("max y:")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		validateSizer->Add(maxy, 0, wxEXPAND);
-		validateSizer->Add(new wxStaticText(validatePanel, wxID_ANY, "Maximum speed"));
+		validateSizer->Add(new wxStaticText(validatePanel, wxID_ANY, __("Maximum speed")));
 		validateSizer->Add(speed, 0, wxEXPAND);
 		
 		logActions->SetValue(ctrl->getPlaneLog()->isLoggingActions());

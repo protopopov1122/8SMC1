@@ -45,7 +45,7 @@ namespace CalXUI {
 		for (const auto& devCon : devConType) {
 			switch (devCon) {
 				case DeviceConnectionType::SerialPort: {
-					wxButton *comButton = new wxButton(connectPanel, wxID_ANY, "Connect COM motor");
+					wxButton *comButton = new wxButton(connectPanel, wxID_ANY, __("Connect COM motor"));
 					connectSizer->Add(comButton, 0, wxALL, 5);
 					comButton->Bind(wxEVT_BUTTON, &CalxDevicePanel::OnCOMConnectMotor, this);
 				} break;
@@ -54,7 +54,7 @@ namespace CalXUI {
 		for (const auto& instrCon : instrConType) {
 			switch (instrCon) {
 				case DeviceConnectionType::SerialPort: {
-					wxButton *comButton = new wxButton(connectPanel, wxID_ANY, "Connect COM instrument");
+					wxButton *comButton = new wxButton(connectPanel, wxID_ANY, __("Connect COM instrument"));
 					connectSizer->Add(comButton, 0, wxALL, 5);
 					comButton->Bind(wxEVT_BUTTON, &CalxDevicePanel::OnCOMConnectInstrument, this);
 				} break;
@@ -134,7 +134,7 @@ namespace CalXUI {
 	
 	void CalxDevicePanel::OnCOMConnectMotor(wxCommandEvent &evt) {
 		if (isBusy()) {
-			wxMessageBox("Devices are busy", "Error", wxICON_ERROR);
+			wxMessageBox(__("Devices are busy"), __("Error"), wxICON_ERROR);
 			return;
 		}
 		CalxApp &app = wxGetApp();		
@@ -147,8 +147,8 @@ namespace CalXUI {
 			prms.parity = SerialPortParity::No;
 			MotorController *ctrl = app.getSystemManager()->connectMotor(&prms);
 			if (ctrl == nullptr) {
-				wxMessageBox("Device can't be connected on COM" + std::to_string(dialog->getPort()),
-					"Connection error", wxICON_WARNING);
+				wxMessageBox(__("Device can't be connected on COM") + std::to_string(dialog->getPort()),
+					__("Connection error"), wxICON_WARNING);
 			}
 			updateUI();
 		}
@@ -157,7 +157,7 @@ namespace CalXUI {
 	
 	void CalxDevicePanel::OnCOMConnectInstrument(wxCommandEvent &evt) {
 		if (isBusy()) {
-			wxMessageBox("Devices are busy", "Error", wxICON_ERROR);
+			wxMessageBox(__("Devices are busy"), __("Error"), wxICON_ERROR);
 			return;
 		}
 		CalxApp &app = wxGetApp();		
@@ -170,8 +170,8 @@ namespace CalXUI {
 			prms.parity = dialog->getParity();
 			InstrumentController *ctrl = app.getSystemManager()->connectInstrument(&prms);
 			if (ctrl == nullptr) {
-				wxMessageBox("Instrument can't be connected on COM" + std::to_string(dialog->getPort()),
-					"Connection error", wxICON_WARNING);
+				wxMessageBox(__("Instrument can't be connected on COM") + std::to_string(dialog->getPort()),
+					__("Connection error"), wxICON_WARNING);
 			}
 		}
 		dialog->Destroy();

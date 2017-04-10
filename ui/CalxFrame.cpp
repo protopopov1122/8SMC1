@@ -23,19 +23,19 @@
 #include <wx/splitter.h>
 #include <wx/textctrl.h>
 #include <wx/app.h>
+#include <wx/aboutdlg.h>
 #include "CalxPanel.h"
 #include "task/CalxTaskPanel.h"
 #include "coord/CalxCoordPanel.h"
 #include "dev/CalxDevicePanel.h"
 #include "CalxConsoleWidget.h"
-#include "CalxAboutDialog.h"
 
 namespace CalXUI {
 	CalxFrame::CalxFrame(std::string title)
 		: wxFrame::wxFrame(nullptr, wxID_ANY, title) {
 		
 		this->CreateStatusBar(1);
-		this->SetStatusText("CalX UI", 0);
+		this->SetStatusText(__("CalX UI"), 0);
 		
 		wxSplitterWindow *mainPanel = new wxSplitterWindow(this, wxID_ANY);
 		
@@ -53,11 +53,11 @@ namespace CalXUI {
 		
 		this->menuBar = new wxMenuBar();
 		this->aboutMenu = new wxMenu();
-		wxMenuItem *aboutItem = new wxMenuItem(this->aboutMenu, wxID_ABOUT, "About");
+		wxMenuItem *aboutItem = new wxMenuItem(this->aboutMenu, wxID_ABOUT, __("About"));
 		this->aboutMenu->Append(aboutItem);
 		Bind( wxEVT_COMMAND_MENU_SELECTED, &CalxFrame::OnAboutMenuClick, this, 
             wxID_ABOUT);
-		this->menuBar->Append(this->aboutMenu, "About");
+		this->menuBar->Append(this->aboutMenu, __("About"));
 		SetMenuBar(this->menuBar);
 		
 		Layout();
@@ -76,8 +76,8 @@ namespace CalXUI {
 		if (panel->getDevices()->isBusy() ||
 			panel->getCoords()->isBusy() ||
 			panel->getTasks()->isBusy()) {
-			if (wxMessageBox("Cancel current and actions and exit",
-				"Actions are performed", wxYES_NO | wxICON_QUESTION) == wxNO) {
+			if (wxMessageBox(__("Cancel current and actions and exit"),
+				__("Actions are performed"), wxYES_NO | wxICON_QUESTION) == wxNO) {
 				evt.Veto();
 				return;
 			}
@@ -87,8 +87,25 @@ namespace CalXUI {
 	}
 	
 	void CalxFrame::OnAboutMenuClick(wxCommandEvent &evt) {
-			CalxAboutDialog *dialog = new CalxAboutDialog(this, wxID_ANY);
-			dialog->ShowModal();
-			dialog->Destroy();
+		 wxAboutDialogInfo about;
+		 std::string LICENSE = "CalX is free software: you can redistribute it and/or modify "
+								"it under the terms of the GNU Lesser General Public License as published by "
+								"the Free Software Foundation, either version 3 of the License, or "
+								"(at your option) any later version.\n"
+								"CalX is distributed in the hope that it will be useful, "
+								"but WITHOUT ANY WARRANTY; without even the implied warranty of "
+								"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the "
+								"GNU Lesser General Public License for more details. "
+								"You should have received a copy of the GNU Lesser General Public License "
+								"along with CalX.  If not, see <http://www.gnu.org/licenses/>.";
+		 
+		 about.SetName(__("CalX"));
+		 about.AddDeveloper(__("Jevgenijs Protopopovs"));
+		 about.SetDescription(__("CalX - stepped motor and instrument control UI and library."));
+		 about.SetCopyright(__("(C) 2017 Jevgenijs Protopopovs"));
+		 about.SetWebSite("https://github.com/protopopov1122/CalX");
+		 about.SetLicense(LICENSE);
+		 
+		 wxAboutBox(about);
 	}
 }

@@ -35,19 +35,19 @@ namespace CalXUI {
 		this->divisor->Append("4");
 		this->divisor->Append("8");
 		this->divisor->SetSelection(3);
-		this->relative = new wxCheckBox(this, wxID_ANY, "Relative");
-		this->moveButton = new wxButton(this, wxID_ANY, "Move");
-		this->jumpButton = new wxButton(this, wxID_ANY, "Jump");
+		this->relative = new wxCheckBox(this, wxID_ANY, __("Relative"));
+		this->moveButton = new wxButton(this, wxID_ANY, __("Move"));
+		this->jumpButton = new wxButton(this, wxID_ANY, __("Jump"));
 		
-		sizer->Add(new wxStaticText(this, wxID_ANY, "Destination:"));
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Destination:")));
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
-		sizer->Add(new wxStaticText(this, wxID_ANY, "x:"), 0, wxALIGN_RIGHT | wxRIGHT, 10);
+		sizer->Add(new wxStaticText(this, wxID_ANY, _("x:")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		sizer->Add(xCoord, 0, wxALL | wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, "y:"), 0, wxALIGN_RIGHT | wxRIGHT, 10);
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("y:")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		sizer->Add(yCoord, 0, wxALL | wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, "Speed:"));
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Speed:")));
 		sizer->Add(speed, 0, wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, "Divisor:"));
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Divisor:")));
 		sizer->Add(divisor);
 		sizer->Add(relative, 0, wxALIGN_CENTER);
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
