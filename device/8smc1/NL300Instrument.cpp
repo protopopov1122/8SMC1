@@ -373,6 +373,22 @@ namespace CalX {
 
 	bool NL300Instrument::start() {
 		std::string res = getSystemCommandResponse("START", "error");
+		if (!res.empty()) {
+			if (res.compare("1") == 0) {
+				this->errors.push_back("NL300 start error: laser not ready");
+			} else if (res.compare("2") == 0) {
+				this->errors.push_back("NL300 start error: overheat");
+			} else if (res.compare("4") == 0) {
+				this->errors.push_back("NL300 start error: flash lamp");
+			} else if (res.compare("8") == 0) {
+				this->errors.push_back("NL300 start error: interlock");
+			} else if (res.compare("16") == 0) {
+				this->errors.push_back("NL300 start error: cover");
+			} else {
+				this->errors.push_back("NL300 start error: unknown");
+			}
+			getDeviceManager()->saveError();
+		}
 		return res.empty();
 	}
 

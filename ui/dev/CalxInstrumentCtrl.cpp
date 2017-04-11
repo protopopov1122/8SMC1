@@ -70,7 +70,9 @@ namespace CalXUI {
 			}
 			
 			virtual void perform(SystemManager *sysman) {
+				ctrl->use();
 				wxGetApp().getErrorHandler()->handle(ctrl->flipState());
+				ctrl->unuse();
 			}
 			
 			virtual void stop() {
@@ -87,7 +89,9 @@ namespace CalXUI {
 			}
 			
 			virtual void perform(SystemManager *sysman) {
+				ctrl->use();
 				ctrl->setRunnable(!ctrl->isRunnable());
+				ctrl->unuse();
 			}
 			
 			virtual void stop() {
@@ -105,7 +109,9 @@ namespace CalXUI {
 			}
 			
 			virtual void perform(SystemManager *sysman) {
+				ctrl->use();
 				this->ctrl->setMode(this->mode);
+				ctrl->unuse();
 			}
 			
 			virtual void stop() {

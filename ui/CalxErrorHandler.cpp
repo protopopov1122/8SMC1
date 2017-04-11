@@ -36,6 +36,13 @@ namespace CalXUI {
 		if (code != ErrorCode::NoError) {
 			std::string text = __("Error occured during execution.\nError code") + std::string(": ") + std::to_string(code) + "\n";
 			switch (code) {
+				case ErrorCode::LowLevelError: {
+					text += "Device low level error log:\n";
+					DeviceManager *devman = this->sysman->getDeviceManager();
+					while (devman->hasError()) {
+						text += "\t" + devman->pollError() + "\n";
+					}
+				} break;
 				default:
 					text += __("Detailed description not available.");
 				break;
