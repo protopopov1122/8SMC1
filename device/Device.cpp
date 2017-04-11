@@ -71,12 +71,6 @@ namespace CalX {
 		this->errors.erase(this->errors.begin());
 		return err;
 	}
-
-	void Instrument::getModes(std::vector<std::string> &vec) {
-		for (const auto& mode : this->modes) {
-			vec.push_back(mode);
-		}
-	}
 	
 	ConfigManager *Instrument::getConfiguration() {
 		return &this->config;

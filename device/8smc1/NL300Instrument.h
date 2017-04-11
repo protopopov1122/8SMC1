@@ -146,6 +146,7 @@ namespace CalX {
 	#define NL300_LASER_NAME "NL"
 	#define NL300_PC_NAME "PC"
 	#define NL300_ENTRY_NAME "core"
+	#define NL300_MODE "mode"
 	#define NL300_PACK_PULSES "pack_pulses"
 	#define NL300_MAX_OUTPUT_DELAY "max_output_delay"
 	#define NL300_ADJ_OUTPUT_DELAY "adj_output_delay"
@@ -176,8 +177,8 @@ namespace CalX {
 			virtual bool enable(bool);
 			virtual bool enabled();
 			virtual std::string getInfo();
-			virtual bool setMode(size_t);
-			virtual size_t getMode();
+			virtual bool setMode(InstrumentMode);
+			virtual InstrumentMode getMode();
 			
 			bool writeMessage(NL300Message&);
 			NL300Message *readMessage();
@@ -193,7 +194,7 @@ namespace CalX {
 			int64_t inquireIntegerParameter(char, uint16_t, int64_t);
 		
 			bool state;
-			size_t mode;
+			InstrumentMode mode;
 			HANDLE handle;
 			DeviceSerialPortConnectionPrms prms;
 			NL300ConfigEventListener *listener;

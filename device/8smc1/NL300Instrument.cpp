@@ -321,13 +321,10 @@ namespace CalX {
 			ILOG("Instrument state setting error");
 			this->errors.push_back("Error configuring COM" + std::to_string(prms->port));
 		}
+		this->mode = InstrumentMode::Off;
 
 		this->listener = new NL300ConfigEventListener(this);
 		this->config.addEventListener(this->listener);
-		
-		this->mode = static_cast<size_t>(NL300InstrumentMode::Adjustment);
-		this->modes.push_back("Adjustment");
-		this->modes.push_back("Full Power");
 		
 		ConfigEntry *core = this->config.getEntry(NL300_ENTRY_NAME);
 		core->put(NL300_PACK_PULSES, new IntegerConfigValue(inquireIntegerParameter('P', 0, 1)));
@@ -397,30 +394,35 @@ namespace CalX {
 		return writeMessage(msg);
 	}
 	
-	size_t NL300Instrument::getMode() {
+	InstrumentMode NL300Instrument::getMode() {
 		return this->mode;
 	}
 	
-	bool NL300Instrument::setMode(size_t mode) {
+	bool NL300Instrument::setMode(InstrumentMode mode) {
 		if (handle == INVALID_HANDLE_VALUE) {
 			ILOG("Set mode error: instrument closed");
 			return false;
 		}
-		
-		if (mode != static_cast<size_t>(NL300InstrumentMode::Adjustment) &&
-			mode != static_cast<size_t>(NL300InstrumentMode::FullPower)) {
-			ILOG("Set mode error: wrong mode");
-			return false;
+		if (this->mode == mode) {
+			return true;
 		}
 		
-		ILOG("Changing instrument mode to " + std::to_string(mode));
-		NL300GeneralCommand cmd(NL300_LASER_NAME, 'E', 0, NL300GeneralAction::Set, new NL300IntegerParameter(mode == static_cast<size_t>(NL300InstrumentMode::Adjustment) ? 1 : 2), NL300_PC_NAME);
+		int imode = mode == InstrumentMode::Off ? 0 : (mode == InstrumentMode::Prepare? 1 : 2);
+		ILOG("Changing instrument mode to " + std::to_string(imode));
+		NL300GeneralCommand cmd(NL300_LASER_NAME, 'E', 0, NL300GeneralAction::Set, new NL300IntegerParameter(imode), NL300_PC_NAME);
 		if (!writeMessage(cmd)) {
 			return false;
 		}
+		int syncDelay = 0;
+		if (mode == InstrumentMode::Prepare) {
+			syncDelay = this->config.getEntry(NL300_ENTRY_NAME)->getInt(NL300_ADJ_OUTPUT_DELAY, 400);
+		} else if (mode == InstrumentMode::Full) {
+			syncDelay = this->config.getEntry(NL300_ENTRY_NAME)->getInt(NL300_MAX_OUTPUT_DELAY, 400);
+		}
+		Sleep(syncDelay);
 		
 		this->mode = mode;
-		ILOG("Mode changed to " + std::to_string(mode));
+		ILOG("Mode changed to " + std::to_string(imode));
 		return true;
 	}
 	

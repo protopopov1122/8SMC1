@@ -135,6 +135,7 @@ namespace CalX {
 		yAxis->sendMovingEvent(ymevt);
 		
 		if (this->instr != nullptr && sync) {
+			this->instr->use();
 			ErrorCode errcode = this->instr->enable(true);
 			if (errcode != ErrorCode::NoError) {
 				MotorErrorEvent merrevt = {errcode};
@@ -144,9 +145,9 @@ namespace CalX {
 				sendStoppedEvent(eevt);
 				xAxis->unuse();
 				yAxis->unuse();
+				instr->unuse();
 				return errcode;
 			}
-			this->instr->use();
 		}
 		
 		CoordMoveEvent evt = {point, speed, div, sync};

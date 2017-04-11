@@ -79,15 +79,11 @@ namespace CalX {
 		return this->instr->getInfo();
 	}
 	
-	void InstrumentController::getModes(std::vector<std::string> &modes) {
-		this->instr->getModes(modes);
-	}
-	
-	size_t InstrumentController::getMode() {
+	InstrumentMode InstrumentController::getMode() {
 		return this->instr->getMode();
 	}
 	
-	bool InstrumentController::setMode(size_t m) {
+	bool InstrumentController::setMode(InstrumentMode m) {
 		return this->instr->setMode(m);
 	}
 	

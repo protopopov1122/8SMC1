@@ -103,7 +103,7 @@ namespace CalXUI {
 	
 	class CalxInstrumentModeAction : public CalxAction {
 		public:
-			CalxInstrumentModeAction(InstrumentController *ctrl, size_t m) {
+			CalxInstrumentModeAction(InstrumentController *ctrl, InstrumentMode m) {
 				this->ctrl = ctrl;
 				this->mode = m;
 			}
@@ -119,7 +119,7 @@ namespace CalXUI {
 			}
 		private:
 			InstrumentController *ctrl;
-			size_t mode;
+			InstrumentMode mode;
 	};
 	
 	CalxInstrumentCtrl::CalxInstrumentCtrl(wxWindow *win, wxWindowID id, InstrumentController *ctrl)
@@ -161,7 +161,7 @@ namespace CalXUI {
 		wxButton *confButton = new wxButton(ctrlPanel, wxID_ANY, __("Configuration"));
 		ctrlSizer->Add(confButton, 0, wxALL | wxEXPAND);
 		confButton->Bind(wxEVT_BUTTON, &CalxInstrumentCtrl::OnConfClick, this);
-		
+				
 		wxPanel *modePanel = new wxPanel(mainPanel, wxID_ANY);
 		mainSizer->Add(modePanel, 0, wxALL, 10);
 		wxBoxSizer *modeSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -169,11 +169,11 @@ namespace CalXUI {
 		modeSizer->Add(new wxStaticText(modePanel, wxID_ANY, __("Mode") + std::string(":")), 0, wxRIGHT | wxALIGN_CENTER, 5);
 		this->modeChoice = new wxChoice(modePanel, wxID_ANY);
 		modeSizer->Add(this->modeChoice, 0, wxALIGN_CENTER);
-		this->ctrl->getModes(modes);
-		for (const auto& mode : modes) {
-			this->modeChoice->Append(mode);
-		}
-		this->modeChoice->SetSelection(this->ctrl->getMode());
+		this->modeChoice->Append(__("Off"));
+		this->modeChoice->Append(__("Prepare"));
+		this->modeChoice->Append(__("Maximal"));
+		this->modeChoice->SetSelection(this->ctrl->getMode() == InstrumentMode::Off ? 0 : 
+			(this->ctrl->getMode() == InstrumentMode::Prepare ? 1 : 2));
 		this->modeChoice->Bind(wxEVT_CHOICE, &CalxInstrumentCtrl::OnModeClick, this);
 		
 		updateUI();
@@ -213,17 +213,19 @@ namespace CalXUI {
 		queue->addAction(new CalxInstrumentStateAction(this->ctrl));
 	}
 	
-	void CalxInstrumentCtrl::OnModeClick(wxCommandEvent &evt) {
-		if (this->modeChoice->GetSelection() != wxNOT_FOUND) {
-			queue->addAction(new CalxInstrumentModeAction(this->ctrl, this->modeChoice->GetSelection()));
-		}
-	}
-	
 	void CalxInstrumentCtrl::OnConfClick(wxCommandEvent &evt) {
 		CalxConfigDialog *editor = new CalxConfigDialog(this, wxID_ANY, this->ctrl->getConfiguration());
 		if (editor->ShowModal() == wxID_OK) {
 			
 		}
 		delete editor;
+	}
+	
+	void CalxInstrumentCtrl::OnModeClick(wxCommandEvent &evt) {
+		if (this->modeChoice->GetSelection() != wxNOT_FOUND) {
+			int sel = this->modeChoice->GetSelection();
+			InstrumentMode mode = sel == 0 ? InstrumentMode::Off : (sel == 1 ? InstrumentMode::Prepare : InstrumentMode::Full);
+			queue->addAction(new CalxInstrumentModeAction(this->ctrl, mode));
+		}
 	}
 }

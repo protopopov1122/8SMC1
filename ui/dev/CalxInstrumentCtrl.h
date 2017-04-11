@@ -54,7 +54,6 @@ namespace CalXUI {
 			InstrumentController *ctrl;
 			InstrumentEventListener *listener;
 			wxTimer *timer;
-			std::vector<std::string> modes;
 	};
 }
 
