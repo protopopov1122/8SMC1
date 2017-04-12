@@ -111,6 +111,18 @@ namespace CalX {
 				MoveType::MoveDown;
 		xAxis->use();
 		yAxis->use();
+		
+		
+		if (this->instr != nullptr && sync) {
+			this->instr->use();
+			ErrorCode errcode = this->instr->enable(true);
+			if (errcode != ErrorCode::NoError) {
+				xAxis->unuse();
+				yAxis->unuse();
+				instr->unuse();
+				return errcode;
+			}
+		}
 		MotorMoveEvent xmevt = {point.x, x_speed, div};
 		if (!xAxis->dev->start(point.x, x_speed, div, false)) {
 			xAxis->unuse();
@@ -133,22 +145,6 @@ namespace CalX {
 			return ErrorCode::LowLevelError;
 		}
 		yAxis->sendMovingEvent(ymevt);
-		
-		if (this->instr != nullptr && sync) {
-			this->instr->use();
-			ErrorCode errcode = this->instr->enable(true);
-			if (errcode != ErrorCode::NoError) {
-				MotorErrorEvent merrevt = {errcode};
-				xAxis->sendStoppedEvent(merrevt);
-				yAxis->sendStoppedEvent(merrevt);
-				CoordErrorEvent eevt = {errcode};
-				sendStoppedEvent(eevt);
-				xAxis->unuse();
-				yAxis->unuse();
-				instr->unuse();
-				return errcode;
-			}
-		}
 		
 		CoordMoveEvent evt = {point, speed, div, sync};
 		sendMovingEvent(evt);
