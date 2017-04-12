@@ -36,7 +36,7 @@ using namespace CalX;
 // For internatization purposes
 #define __(String) (String)
 
-#define FORMAT(str,...) (wxString::Format(str, __VA_ARGS__))
+#define FORMAT(str,...) (wxString::Format(str, __VA_ARGS__).ToStdString())
 
 namespace CalXUI {
 	

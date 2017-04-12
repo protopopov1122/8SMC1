@@ -178,18 +178,18 @@ namespace CalXUI {
 	}
 	
 	void CalxCoordCtrl::updateUI() {
-		std::string general = __("Name: Coordinate plane #") + std::to_string(ctrl->getID()) +
-								__("\nDevices: #") + std::to_string(ctrl->getController()->getXAxis()->getID()) +
-									__(" #") + std::to_string(ctrl->getController()->getYAxis()->getID()) +
-								__("\nInstrument") + std::string(": ") + (ctrl->getController()->getInstrument() != nullptr ?
-									__("#") + std::to_string(ctrl->getController()->getInstrument()->getID())
-										: __("No")) + 
-								__("\nPosition") + std::string(": ") + std::to_string(ctrl->getPosition().x) +
-									+ __("x") + std::to_string(ctrl->getPosition().y) +
-								__("\nStart") + std::string(": ") + (ctrl->isMeasured() ? (std::to_string(ctrl->getSize().x) +
-									+ __("x") + std::to_string(ctrl->getSize().y)) : __("Not measured")) +
-								__("\nSize") + std::string(": ") + (ctrl->isMeasured() ? (std::to_string(ctrl->getSize().w) +
-									+ __("x") + std::to_string(ctrl->getSize().h)) : __("Not measured"));
+		std::string general = FORMAT(__("Name: Coordinate plane #%s"), std::to_string(ctrl->getID())) + "\n" +
+							  FORMAT(__("Devices: #%s #%s"), std::to_string(ctrl->getController()->getXAxis()->getID()),
+									std::to_string(ctrl->getController()->getYAxis()->getID())) + "\n" +
+							  (ctrl->getController()->getInstrument() != nullptr ?
+								FORMAT(__("Instrument #%s"), std::to_string(ctrl->getController()->getInstrument()->getID())) :
+								__("Instrument: no")) + "\n" +
+							  FORMAT(__("Position: %sx%s"), std::to_string(ctrl->getPosition().x),
+									std::to_string(ctrl->getPosition().y)) + "\n" +
+							  FORMAT(__("Start: %s"), (ctrl->isMeasured() ? (std::to_string(ctrl->getSize().x) +
+									+ __("x") + std::to_string(ctrl->getSize().y)) : __("Not measured"))) + "\n" +
+							  FORMAT(__("Size: %s"), (ctrl->isMeasured() ? (std::to_string(ctrl->getSize().w) +
+									+ __("x") + std::to_string(ctrl->getSize().h)) : __("Not measured")));
 		this->generalInfoText->SetLabel(general);
 	}
 	

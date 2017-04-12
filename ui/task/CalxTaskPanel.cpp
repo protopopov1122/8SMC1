@@ -124,9 +124,9 @@ namespace CalXUI {
 		execSizer->Add(buildButton);
 		this->plane = new wxChoice(execPanel, wxID_ANY);
 		this->speed = new wxSpinCtrl(execPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, wxGetApp().getSystemManager()->getConfiguration()->getEntry("core")->getInt("maxspeed", 4000), wxGetApp().getSystemManager()->getConfiguration()->getEntry("core")->getInt("maxspeed", 4000));
-		execSizer->Add(new wxStaticText(execPanel, wxID_ANY, __(" on ")), 0, wxALL | wxALIGN_CENTER);
+		execSizer->Add(new wxStaticText(execPanel, wxID_ANY, __("on")), 0, wxLEFT | wxRIGHT | wxALIGN_CENTER, 5);
 		execSizer->Add(plane, 0, wxALL, 5);
-		execSizer->Add(new wxStaticText(execPanel, wxID_ANY, __(" with speed ")), 0, wxALL | wxALIGN_CENTER);
+		execSizer->Add(new wxStaticText(execPanel, wxID_ANY, __("with speed")), 0, wxLEFT | wxRIGHT | wxALIGN_CENTER, 5);
 		execSizer->Add(speed, 0, wxALL, 5);
 		this->stopButton = new wxButton(execPanel, wxID_ANY, __("Stop"));
 		execSizer->Add(stopButton);
@@ -218,7 +218,7 @@ namespace CalXUI {
 	void CalxTaskPanel::OnNewProgrammedClick(wxCommandEvent &evt) {
 		CalxProgrammedTaskHandle *handle = new CalxProgrammedTaskHandle(mainPanel, wxID_ANY);
 		list.push_back(handle);
-		taskList->Append(__("Task #") + std::to_string(list.size()));
+		taskList->Append(FORMAT(__("Task #%s"), std::to_string(list.size())));
 		mainPanel->GetSizer()->Add(handle, 1, wxALL | wxEXPAND, 5);
 		taskList->SetSelection(list.size() - 1);
 		Layout();

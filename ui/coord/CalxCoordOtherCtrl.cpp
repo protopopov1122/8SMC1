@@ -42,7 +42,7 @@ namespace CalXUI {
 		wxButton *calibrateButton = new wxButton(calibratePanel, wxID_ANY, __("Calibrate"));
 		calibrateButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnCalibrateClick, ctrl);
 		calibrateSizer->Add(calibrateButton);
-		calibrateSizer->Add(new wxStaticText(calibratePanel, wxID_ANY, __("to")), wxALL | wxALIGN_CENTER, 10);
+		calibrateSizer->Add(new wxStaticText(calibratePanel, wxID_ANY, __("to")), 0, wxLEFT | wxRIGHT | wxALIGN_CENTER, 5);
 		trailer = new wxChoice(calibratePanel, wxID_ANY);
 		trailer->Append(__("trailer 1"));
 		trailer->Append(__("trailer 2"));
@@ -56,7 +56,7 @@ namespace CalXUI {
 		wxButton *measureButton = new wxButton(measurePanel, wxID_ANY, __("Measure"));
 		measureButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnMeasureClick, ctrl);
 		measureSizer->Add(measureButton);
-		measureSizer->Add(new wxStaticText(measurePanel, wxID_ANY, __(" to ")), wxALL | wxALIGN_CENTER, 5);
+		measureSizer->Add(new wxStaticText(measurePanel, wxID_ANY, __("to")), 0, wxLEFT | wxRIGHT | wxALIGN_CENTER, 5);
 		measureTrailer = new wxChoice(measurePanel, wxID_ANY);
 		measureTrailer->Append(__("trailer 1"));
 		measureTrailer->Append(__("trailer 2"));

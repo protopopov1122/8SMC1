@@ -129,7 +129,7 @@ namespace CalXUI {
 		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
 		this->listener = new CalxInstrumentEventListener(this);
 		
-		wxStaticBox *box = new wxStaticBox(this, wxID_ANY, FORMAT(__("Instrument #%" DEVICE_ID_FMT), ctrl->getID()));
+		wxStaticBox *box = new wxStaticBox(this, wxID_ANY, FORMAT(__("Instrument #%s"), std::to_string(ctrl->getID())));
 		wxStaticBoxSizer *sizer = new wxStaticBoxSizer(box, wxVERTICAL);
 		SetSizer(sizer);
 		

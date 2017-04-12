@@ -127,7 +127,7 @@ namespace CalXUI {
 		this->listener = new CalxMotorEventListener(this);
 		this->master = false;
 		
-		wxStaticBox *box = new wxStaticBox(this, wxID_ANY, __("Device #") + std::to_string(this->dev->getID()));
+		wxStaticBox *box = new wxStaticBox(this, wxID_ANY, FORMAT(__("Device #%s"), std::to_string(this->dev->getID())));
 		wxStaticBoxSizer *sizer = new wxStaticBoxSizer(box, wxHORIZONTAL);
 		this->SetSizer(sizer);
 		
