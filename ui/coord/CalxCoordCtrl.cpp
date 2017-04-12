@@ -186,10 +186,14 @@ namespace CalXUI {
 								__("Instrument: no")) + "\n" +
 							  FORMAT(__("Position: %sx%s"), std::to_string(ctrl->getPosition().x),
 									std::to_string(ctrl->getPosition().y)) + "\n" +
-							  FORMAT(__("Start: %s"), (ctrl->isMeasured() ? (std::to_string(ctrl->getSize().x) +
-									+ __("x") + std::to_string(ctrl->getSize().y)) : __("Not measured"))) + "\n" +
-							  FORMAT(__("Size: %s"), (ctrl->isMeasured() ? (std::to_string(ctrl->getSize().w) +
-									+ __("x") + std::to_string(ctrl->getSize().h)) : __("Not measured")));
+							  /*FORMAT(__("Start: %s"), (ctrl->isMeasured() ? (std::to_string(ctrl->getSize().x) +
+									+ __("x") + std::to_string(ctrl->getSize().y)) : __("Not measured"))) + "\n" +*/
+							  (ctrl->isMeasured() ? FORMAT(__("Start: %sx%s"), std::to_string(ctrl->getSize().x),
+							                                                   std::to_string(ctrl->getSize().y)) :
+													__("Start: Not measured")) + "\n" +
+							  (ctrl->isMeasured() ? FORMAT(__("Size: %sx%s"), std::to_string(ctrl->getSize().w),
+							                                                   std::to_string(ctrl->getSize().h)) :
+													__("Size: Not measured"));
 		this->generalInfoText->SetLabel(general);
 	}
 	

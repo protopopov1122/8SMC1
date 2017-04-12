@@ -33,7 +33,8 @@
 
 namespace CalXUI {
 	
-	bool CalxApp::OnInit() {		
+	bool CalxApp::OnInit() {	
+	
 		std::ifstream cnf("config.ini");
 		ConfigManager *conf = ConfigManager::load(&cnf, &std::cout);
 		cnf.close();		

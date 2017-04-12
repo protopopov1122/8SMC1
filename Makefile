@@ -247,8 +247,6 @@ $(OUTPUT).dll: ConfigManager.o ConfigValidator.o CoordController.o CoordHandle.o
 langs:
 ifdef MSGFMT
 	mkdir -p $(BUILD)/lang
-	msgfmt -o $(BUILD)/lang/en.mo lang/en.po
-
 endif
 $(UI).exe: langs CalxActionQueue.o CalxApp.o CalxConfigEditor.o CalxConsoleWidget.o CalxDebugConsole.o CalxErrorHandler.o CalxFrame.o CalxPanel.o CalxCoordArcCtrl.o CalxCoordCtrl.o CalxCoordDialog.o CalxCoordFilter.o CalxCoordGraphCtrl.o CalxCoordLinearCtrl.o CalxCoordMiscCtrl.o CalxCoordOtherCtrl.o CalxCoordPanel.o CalxCoordPlaneWatcher.o CalxVirtualPlane.o CalxCOMSelectDialog.o CalxDevicePanel.o CalxInstrumentCtrl.o CalxMotorCtrl.o CalxGcodeHandle.o CalxGcodeLoader.o CalxProgrammedTaskHandle.o CalxTaskPanel.o CalxTaskStepHandle.o
 	@mkdir -p $(BUILD)

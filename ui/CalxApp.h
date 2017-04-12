@@ -25,6 +25,7 @@
 #include <fstream>
 #include "calx.h"
 #include <wx/dynlib.h>
+#include <wx/intl.h>
 #include "CalxFrame.h"
 
 using namespace CalX;
@@ -34,9 +35,9 @@ using namespace CalX;
 #endif
 
 // For internatization purposes
-#define __(String) (String)
+#define __(String) (wxGetTranslation(String).ToStdString().c_str())
 
-#define FORMAT(str,...) (wxString::Format(str, __VA_ARGS__).ToStdString())
+#define FORMAT(str, ...) (wxString::Format(str, __VA_ARGS__).ToStdString())
 
 namespace CalXUI {
 	
@@ -55,6 +56,7 @@ namespace CalXUI {
 		
 			CalxFrame *frame;
 			wxDynamicLibrary *dynlib;
+			wxLocale *locale;
 			DeviceManager *devman;
 			SystemManager *sysman;
 			
