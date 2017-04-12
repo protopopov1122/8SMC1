@@ -24,11 +24,80 @@
 #include <wx/splitter.h>
 #include "CalxCoordPanel.h"
 #include "CalxCoordDialog.h"
+#include "CalxErrorHandler.h"
 
 namespace CalXUI {
 	
+	wxDEFINE_EVENT(wxEVT_COORD_PANEL_UPDATE, wxThreadEvent);
+	
+	class CalxCoordPlaneAddRequest : public RequestProvider {
+		public:
+			CalxCoordPlaneAddRequest(CalxCoordPanel *panel)
+				: RequestProvider::RequestProvider("plane.create") {
+				this->panel = panel;
+			}
+			
+			virtual ~CalxCoordPlaneAddRequest() {
+				
+			}
+			
+			virtual bool execute(Request *req, SystemManager *sysman) {
+				PROVIDER_PROVIDER_ARGC(req, 3)
+				PROVIDER_PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
+				PROVIDER_PROVIDER_ARG_TYPE(req, 1, ConfigValueType::Integer)
+				PROVIDER_PROVIDER_ARG_TYPE(req, 2, ConfigValueType::Integer)
+				device_id_t dev1 = (device_id_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 0))->getValue();
+				device_id_t dev2 = (device_id_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 1))->getValue();
+				device_id_t instr = (device_id_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 2))->getValue();
+				CoordHandle *handle = sysman->createCoord(dev1, dev2, instr);
+				if (handle == nullptr) {
+					return false;
+				}
+				bool ready = false;
+				panel->updateList(handle, &ready);
+				while (!ready) wxThread::Yield();	
+
+				return true;
+			}
+		private:
+			CalxCoordPanel *panel;
+	};
+	
+	class CalxCoordPlaneMeasureRequest : public RequestProvider {
+		public:
+			CalxCoordPlaneMeasureRequest(CalxCoordPanel *panel)
+				: RequestProvider::RequestProvider("plane.measure") {
+				this->panel = panel;
+			}
+			
+			virtual ~CalxCoordPlaneMeasureRequest() {
+				
+			}
+			
+			virtual bool execute(Request *req, SystemManager *sysman) {
+				PROVIDER_PROVIDER_ARGC(req, 2)
+				PROVIDER_PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
+				PROVIDER_PROVIDER_ARG_TYPE(req, 1, ConfigValueType::Integer)
+				device_id_t plid = (device_id_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 0))->getValue();
+				device_id_t tr = (device_id_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 1))->getValue() % 2;
+				TrailerId trailer = tr == 1 ? TrailerId::Trailer1 : TrailerId::Trailer2;
+				if (sysman->getCoord(plid) != nullptr) {
+					panel->measure(plid, trailer);
+					return true;
+				} else {
+					return false;
+				}
+			}
+		private:
+			CalxCoordPanel *panel;
+	};
+	
 	CalxCoordPanel::CalxCoordPanel(wxWindow *win, wxWindowID id)
 		: wxPanel::wxPanel(win, id) {
+		
+		CalxApp &app = wxGetApp();
+		app.getSystemManager()->getRequestResolver()->registerProvider(new CalxCoordPlaneAddRequest(this));
+		app.getSystemManager()->getRequestResolver()->registerProvider(new CalxCoordPlaneMeasureRequest(this));
 		
 		wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 		SetSizer(sizer);
@@ -62,15 +131,24 @@ namespace CalXUI {
 		
 		Layout();
 		Bind(wxEVT_CLOSE_WINDOW, &CalxCoordPanel::OnExit, this);
+		Bind(wxEVT_COORD_PANEL_UPDATE, &CalxCoordPanel::OnCoordPlaneAdd, this);
 		
 		this->nextId = 0;
 		
 	}
 	
-	void CalxCoordPanel::updateList() {
-		SystemManager *sysman = wxGetApp().getSystemManager();
-		for (size_t i = 0; i < sysman->getCoordCount(); i++) {
-			addPlane(sysman->getCoord(i));
+	void CalxCoordPanel::updateList(CoordHandle *handle, bool *ready) {
+		wxThreadEvent evt(wxEVT_COORD_PANEL_UPDATE);
+		evt.SetPayload(std::make_pair(handle, ready));
+		wxPostEvent(this, evt);
+	}
+	
+	void CalxCoordPanel::measure(device_id_t id, TrailerId tr) {
+		for (const auto& ctrl : this->coords) {
+			if (ctrl->getHandle()->getID() == id) {
+				ctrl->measure(tr);
+				break;
+			}
 		}
 	}
 	
@@ -139,5 +217,11 @@ namespace CalXUI {
 	
 	void CalxCoordPanel::OnListClick(wxCommandEvent &evt) {
 		updateUI();
+	}
+	
+	void CalxCoordPanel::OnCoordPlaneAdd(wxThreadEvent &evt) {
+		std::pair<CoordHandle*, bool*> pair = evt.GetPayload<std::pair<CoordHandle*, bool*>>();
+		addPlane(pair.first);
+		*pair.second = true;
 	}
 }

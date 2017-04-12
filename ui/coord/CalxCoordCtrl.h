@@ -69,6 +69,7 @@ namespace CalXUI {
 			bool isBusy() {
 				return !queue->isEmpty();
 			}
+			void measure(TrailerId);
 		private:
 			void OnExit(wxCloseEvent&);
 			void OnQueueUpdate(wxThreadEvent&);

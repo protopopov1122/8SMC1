@@ -177,6 +177,10 @@ namespace CalXUI {
 		stopButton->Enable(!e && this->master);
 	}
 	
+	void CalxCoordCtrl::measure(TrailerId tr) {
+		this->queue->addAction(new CalxCoordMeasureAction(this, ctrl, tr));
+	}
+	
 	void CalxCoordCtrl::updateUI() {
 		std::string general = FORMAT(__("Name: Coordinate plane #%s"), std::to_string(ctrl->getID())) + "\n" +
 							  FORMAT(__("Devices: #%s #%s"), std::to_string(ctrl->getController()->getXAxis()->getID()),
@@ -286,7 +290,7 @@ namespace CalXUI {
 	
 	void CalxCoordCtrl::OnMeasureClick(wxCommandEvent &evt) {
 		TrailerId tr = otherCtrl->getMeasureTrailer();
-		this->queue->addAction(new CalxCoordMeasureAction(this, ctrl, tr));
+		measure(tr);
 	}
 	
 	void CalxCoordCtrl::OnUpdateFiltersClick(wxCommandEvent &evt) {

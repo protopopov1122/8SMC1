@@ -28,16 +28,20 @@ namespace CalXUI {
 	class CalxMotorCtrl; // Forward referencing
 	class CalxInstrumentCtrl; // Forward referencing
 	
+	wxDECLARE_EVENT(wxEVT_DEVICE_PANEL_UPDATE, wxThreadEvent);
+	
 	class CalxDevicePanel : public wxScrolledWindow {
 		public:
 			CalxDevicePanel(wxWindow*, wxWindowID);
 			void stop();
 			bool isBusy();
 			void updateUI();
+			void requestUpdate();
 		private:
 			void OnExit(wxCloseEvent&);
 			void OnCOMConnectMotor(wxCommandEvent&);
 			void OnCOMConnectInstrument(wxCommandEvent&);
+			void OnDevicePanelUpdate(wxThreadEvent&);
 			std::vector<CalxMotorCtrl*> devs;
 			std::vector<CalxInstrumentCtrl*> instrs;
 	};
