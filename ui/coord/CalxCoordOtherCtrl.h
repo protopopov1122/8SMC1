@@ -27,6 +27,7 @@
 #include <wx/choice.h>
 #include <wx/checkbox.h>
 #include <wx/spinctrl.h>
+#include <wx/collpane.h>
 #include "CalxActionQueue.h"
 #include "CalxFrame.h"
 

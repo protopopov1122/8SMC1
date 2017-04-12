@@ -26,6 +26,7 @@
 #include <wx/choice.h>
 #include <wx/checkbox.h>
 #include <wx/spinctrl.h>
+#include <wx/collpane.h>
 #include "CalxActionQueue.h"
 #include "CalxFrame.h"
 #include "CalxCoordLinearCtrl.h"
@@ -59,6 +60,7 @@ namespace CalXUI {
 			void OnMeasureClick(wxCommandEvent&);
 			void OnUpdateFiltersClick(wxCommandEvent&);
 			void OnInstrumentEnableClick(wxCommandEvent&);
+			void OnInterfaceUpdate(wxCollapsiblePaneEvent&);
 			void use();
 			void unuse();
 			bool isUsed();

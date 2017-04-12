@@ -67,16 +67,20 @@ namespace CalXUI {
 		
 		this->generalPanel = new wxPanel(this, wxID_ANY);
 		wxStaticBox *generalBox = new wxStaticBox(generalPanel, wxID_ANY, __("General info"));
-		wxStaticBoxSizer *generalSizer = new wxStaticBoxSizer(generalBox, wxVERTICAL);
-		this->generalInfoText = new wxStaticText(generalPanel, wxID_ANY, "");
-		wxButton *watcherButton = new wxButton(generalPanel, wxID_ANY, __("Watcher"));
-		watcherButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnWatcherClick, this);
-		this->stopButton = new wxButton(generalPanel, wxID_ANY, __("Stop"));
-		generalSizer->Add(this->generalInfoText, 0, wxTOP | wxEXPAND, 5);
-		generalSizer->Add(watcherButton, 0, wxALL, 5);
-		generalSizer->Add(this->stopButton, 0, wxALL, 5);
-		this->stopButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnStopClick, this);
+		wxStaticBoxSizer *generalSizer = new wxStaticBoxSizer(generalBox, wxHORIZONTAL);
 		generalPanel->SetSizer(generalSizer);
+		this->generalInfoText = new wxStaticText(generalPanel, wxID_ANY, "");
+		wxPanel *generalButtonPanel = new wxPanel(generalPanel, wxID_ANY);
+		wxBoxSizer *generalButtonSizer = new wxBoxSizer(wxVERTICAL);
+		generalButtonPanel->SetSizer(generalButtonSizer);
+		wxButton *watcherButton = new wxButton(generalButtonPanel, wxID_ANY, __("Watcher"));
+		watcherButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnWatcherClick, this);
+		this->stopButton = new wxButton(generalButtonPanel, wxID_ANY, __("Stop"));
+		generalSizer->Add(this->generalInfoText, 0, wxTOP | wxEXPAND, 5);
+		generalSizer->Add(generalButtonPanel, 0, wxALL, 10);
+		generalButtonSizer->Add(watcherButton, 0, wxALL);
+		generalButtonSizer->Add(this->stopButton, 0, wxALL);
+		this->stopButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnStopClick, this);
 		sizer->Add(generalPanel, 0, wxALL | wxEXPAND, 0);
 		
 		this->actionPanel = new wxPanel(this, wxID_ANY);
@@ -88,34 +92,39 @@ namespace CalXUI {
 		actionSubPanel->SetSizer(actionSubSizer);
 		actionSizer->Add(actionSubPanel, 0, wxALL | wxEXPAND);
 		
-		wxPanel *linearPanel = new wxPanel(actionSubPanel, wxID_ANY);
-		wxStaticBox *linearBox = new wxStaticBox(linearPanel, wxID_ANY, __("Linear movement"));
-		wxStaticBoxSizer *linearSizer = new wxStaticBoxSizer(linearBox, wxHORIZONTAL);	
+		wxCollapsiblePane *linearPane = new wxCollapsiblePane(actionSubPanel, wxID_ANY, __("Linear movement"));
+		actionSubSizer->Add(linearPane, 0, wxALL | wxEXPAND);
+		wxWindow *linearPanel = linearPane->GetPane();
+		wxBoxSizer *linearSizer = new wxBoxSizer(wxHORIZONTAL);
 		linearPanel->SetSizer(linearSizer);
 		this->linear = new CalxCoordLinearCtrl(linearPanel, wxID_ANY);
 		linearSizer->Add(linear, 0, wxALL);
 		linear->getMoveButton()->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnLinearMoveClick, this);
 		linear->getJumpButton()->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnLinearJumpClick, this);
-		actionSubSizer->Add(linearPanel, 0, wxALL | wxEXPAND);
+		linearPane->Bind(wxEVT_COLLAPSIBLEPANE_CHANGED, &CalxCoordCtrl::OnInterfaceUpdate, this);
 		
-		wxPanel *arcPanel = new wxPanel(actionSubPanel, wxID_ANY);
-		wxStaticBox *arcBox = new wxStaticBox(arcPanel, wxID_ANY, __("Arc movement"));
-		wxStaticBoxSizer *arcSizer = new wxStaticBoxSizer(arcBox, wxHORIZONTAL);	
+		
+		wxCollapsiblePane *arcPane = new wxCollapsiblePane(actionSubPanel, wxID_ANY, __("Arc movement"));
+		actionSubSizer->Add(arcPane, 0, wxALL | wxEXPAND);
+		wxWindow *arcPanel = arcPane->GetPane();
+		wxBoxSizer *arcSizer = new wxBoxSizer(wxHORIZONTAL);
 		arcPanel->SetSizer(arcSizer);
 		this->arc = new CalxCoordArcCtrl(arcPanel, wxID_ANY);
-		arc->getMoveButton()->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnArcMoveClick, this);
 		arcSizer->Add(arc, 0, wxALL);
-		actionSubSizer->Add(arcPanel, 0, wxALL | wxEXPAND);
+		arc->getMoveButton()->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnArcMoveClick, this);
+		arcPane->Bind(wxEVT_COLLAPSIBLEPANE_CHANGED, &CalxCoordCtrl::OnInterfaceUpdate, this);
 		
-		wxPanel *graphPanel = new wxPanel(actionSubPanel, wxID_ANY);
-		wxStaticBox *graphBox = new wxStaticBox(graphPanel, wxID_ANY, __("Function graph"));
-		wxStaticBoxSizer *graphSizer = new wxStaticBoxSizer(graphBox, wxHORIZONTAL);	
+		wxCollapsiblePane *graphPane = new wxCollapsiblePane(actionSubPanel, wxID_ANY, __("Function graph"));
+		actionSubSizer->Add(graphPane, 0, wxALL | wxEXPAND);
+		wxWindow *graphPanel = graphPane->GetPane();
+		wxBoxSizer *graphSizer = new wxBoxSizer(wxHORIZONTAL);
 		graphPanel->SetSizer(graphSizer);
-		graphCtrl = new CalxCoordGraphCtrl(graphPanel, wxID_ANY);
+		this->graphCtrl = new CalxCoordGraphCtrl(graphPanel, wxID_ANY);
 		graphSizer->Add(graphCtrl, 0, wxALL);
 		graphCtrl->getBuildButton()->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnGraphBuildClick, this);
 		graphCtrl->getPreviewButton()->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnGraphPreviewClick, this);
-		actionSubSizer->Add(graphPanel, 0, wxALL | wxEXPAND);
+		graphPane->Bind(wxEVT_COLLAPSIBLEPANE_CHANGED, &CalxCoordCtrl::OnInterfaceUpdate, this);
+		graphPane->Collapse(false);
 		
 		wxPanel *actionSub2Panel = new wxPanel(actionPanel, wxID_ANY);
 		actionSizer->Add(actionSub2Panel, 1, wxLEFT | wxEXPAND, 5);
@@ -340,5 +349,10 @@ namespace CalXUI {
 	
 	void CalxCoordCtrl::OnInstrumentEnableClick(wxCommandEvent &evt) {
 		this->ctrl->getController()->getInstrument()->setRunnable(this->otherCtrl->isInstrumentEnabled());
+	}
+	
+	void CalxCoordCtrl::OnInterfaceUpdate(wxCollapsiblePaneEvent &evt) {
+		Layout();
+		Refresh();
 	}
 }

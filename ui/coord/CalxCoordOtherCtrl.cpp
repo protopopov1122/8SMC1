@@ -19,6 +19,7 @@
 
 
 #include "CalxCoordCtrl.h"
+#include <wx/collpane.h>
 
 namespace CalXUI {
 	
@@ -62,8 +63,16 @@ namespace CalXUI {
 		measureTrailer->SetSelection(0);
 		measureSizer->Add(measureTrailer, 0, wxALL);
 		
-		wxPanel *logPanel = new wxPanel(this, wxID_ANY);
-		sizer->Add(logPanel, 0, wxALL | wxEXPAND, 5);
+		wxCollapsiblePane  *filtersCollPane = new wxCollapsiblePane(this, wxID_ANY, __("Filters"));
+		wxWindow *filtersPane = filtersCollPane->GetPane();
+		sizer->Add(filtersCollPane, 1, wxALL | wxEXPAND);
+		wxBoxSizer *filtersSizer = new wxBoxSizer(wxVERTICAL);
+		filtersPane->SetSizer(filtersSizer);
+		filtersCollPane->Bind(wxEVT_COLLAPSIBLEPANE_CHANGED, &CalxCoordCtrl::OnInterfaceUpdate, ctrl);
+		
+		
+		wxPanel *logPanel = new wxPanel(filtersPane, wxID_ANY);
+		filtersSizer->Add(logPanel, 0, wxALL | wxEXPAND, 5);
 		wxBoxSizer *logSizer = new wxBoxSizer(wxHORIZONTAL);
 		logPanel->SetSizer(logSizer);
 		this->logActions = new wxCheckBox(logPanel, wxID_ANY, __("Log actions"));		
@@ -71,8 +80,8 @@ namespace CalXUI {
 		logSizer->Add(logActions);
 		logSizer->Add(logErrors);
 		
-		wxPanel *mapPanel = new wxPanel(this, wxID_ANY);
-		sizer->Add(mapPanel, 0, wxALL | wxEXPAND, 5);
+		wxPanel *mapPanel = new wxPanel(filtersPane, wxID_ANY);
+		filtersSizer->Add(mapPanel, 0, wxALL | wxEXPAND, 5);
 		wxFlexGridSizer *mapSizer = new wxFlexGridSizer(2);
 		mapPanel->SetSizer(mapSizer);
 		this->xOffset = new wxSpinCtrl(mapPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
@@ -92,8 +101,8 @@ namespace CalXUI {
 		mapSizer->Add(new wxStaticText(mapPanel, wxID_ANY, __("y") + std::string(":")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		mapSizer->Add(yScale, 0, wxEXPAND);
 		
-		wxPanel *validatePanel = new wxPanel(this, wxID_ANY);
-		sizer->Add(validatePanel, 0, wxALL | wxEXPAND, 5);
+		wxPanel *validatePanel = new wxPanel(filtersPane, wxID_ANY);
+		filtersSizer->Add(validatePanel, 0, wxALL | wxEXPAND, 5);
 		wxFlexGridSizer *validateSizer = new wxFlexGridSizer(2);
 		validatePanel->SetSizer(validateSizer);
 		this->minx = new wxSpinCtrl(validatePanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
@@ -137,5 +146,7 @@ namespace CalXUI {
 		maxx->Bind(wxEVT_SPINCTRL, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
 		maxy->Bind(wxEVT_SPINCTRL, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
 		speed->Bind(wxEVT_SPINCTRL, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
+		
+		Layout();
 	}
 }
