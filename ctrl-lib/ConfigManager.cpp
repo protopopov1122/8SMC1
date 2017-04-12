@@ -247,12 +247,63 @@ namespace CalX {
 		return this->listeners;
 	}
 	
-	size_t skipWhitespaces(char *line, size_t start) {
+	size_t skipWhitespaces(const char *line, size_t start) {
 		while (start < strlen(line) &&
 			iswspace(line[start])) {
 			start++;	
 		}
 		return start;
+	}
+	
+	ConfigValue *ConfigManager::parseValue(const char *input) {
+		size_t pos = 0;
+		pos = skipWhitespaces(input, pos);
+		const char *val = &input[pos];
+		if (val[0] == '\"') {
+			if (strlen(val) == 1 ||
+				val[strlen(val) - 1] != '\"') {
+				//*err << "Error at line " << line_num <<  ": expected '\"' in the line" << std::endl;
+				//continue;
+				return nullptr;
+			}
+			std::string strval(&val[1]);
+			strval.erase(strval.begin() + strval.length() - 1);
+			return new StringConfigValue(strval);
+		} else if (strcmp(val, "true") == 0 ||
+			strcmp(val, "false") == 0) {
+			bool boolval = strcmp(val, "true") == 0;
+			return new BoolConfigValue(boolval);
+		} else {
+			bool integer = true, real = false;
+			for (size_t i = 0; i < strlen(val); i++) {
+				if (val[i] == '.') {
+					if (!real) {
+						real = true;
+					} else {
+						integer = false;
+						break;
+					}
+				} else if ((val[i] == '+'
+					|| val[i] == '-') &&
+					i == 0) {
+				} else if (!isdigit(val[i])) {
+					integer = false;
+					break;
+				}
+			}
+			if (integer) {
+				if (real) {
+					real_conf_t realval = std::stod(val);
+					return new RealConfigValue(realval);
+				} else {
+					int_conf_t intval = std::stoll(val);
+					return new IntegerConfigValue(intval);
+				}
+			} else {
+				std::string strval(val);
+				return new StringConfigValue(strval);
+			}
+		}
 	}
 	
 	ConfigManager *ConfigManager::load(std::istream *is, std::ostream *err) {
@@ -321,56 +372,9 @@ namespace CalX {
 					*err << "Error at line " << line_num <<  ": expected value in the line" << std::endl;
 					continue;
 				}
-				
-				char *val = &line[pos];
-				if (val[0] == '\"') {
-					if (strlen(val) == 1 ||
-						val[strlen(val) - 1] != '\"') {
-						*err << "Error at line " << line_num <<  ": expected '\"' in the line" << std::endl;
-						continue;
-					}
-					val[strlen(val) - 1] = '\0';
-					std::string strval(&val[1]);
-					ConfigValue *confval = new StringConfigValue(strval);
-					entry->put(key, confval);
-				} else if (strcmp(val, "true") == 0 ||
-					strcmp(val, "false") == 0) {
-					bool boolval = strcmp(val, "true") == 0;
-					ConfigValue *confval = new BoolConfigValue(boolval);
-					entry->put(key, confval);
-				} else {
-					bool integer = true, real = false;
-					for (size_t i = 0; i < strlen(val); i++) {
-						if (val[i] == '.') {
-							if (!real) {
-								real = true;
-							} else {
-								integer = false;
-								break;
-							}
-						} else if ((val[i] == '+'
-							|| val[i] == '-') &&
-							i == 0) {
-						} else if (!isdigit(val[i])) {
-							integer = false;
-							break;
-						}
-					}
-					if (integer) {
-						if (real) {
-							real_conf_t realval = std::stod(val);
-							ConfigValue *confval = new RealConfigValue(realval);
-							entry->put(key, confval);
-						} else {
-							int_conf_t intval = std::stoll(val);
-							ConfigValue *confval = new IntegerConfigValue(intval);
-							entry->put(key, confval);
-						}
-					} else {
-						std::string strval(val);
-						ConfigValue *confval = new StringConfigValue(strval);
-						entry->put(key, confval);
-					}
+				ConfigValue *value = parseValue(&line[pos]);
+				if (value != nullptr) {
+					entry->put(key, value);
 				}
 			}
 		}

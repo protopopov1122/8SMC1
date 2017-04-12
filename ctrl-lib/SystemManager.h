@@ -29,6 +29,7 @@
 #include "task/CoordTask.h"
 #include "misc/GraphBuilder.h"
 #include "graph/FunctionEngine.h"
+#include "RequestResolver.h"
 
 /* SystemManager is component that store and control most system 
    objects. System manager was made to use with command line, so
@@ -48,6 +49,7 @@ namespace CalX {
 			InstrumentController *getInstrumentController(device_id_t);
 			size_t getInstrumentCount();
 			FunctionEngine *getFunctionEngine();
+			RequestResolver *getRequestResolver();
 			// Tasks control
 			size_t getTaskCount();
 			CoordTask *getTask(size_t);
@@ -57,7 +59,7 @@ namespace CalX {
 			// Coordinate plane control
 			size_t getCoordCount();
 			CoordHandle *getCoord(size_t);
-			CoordHandle* createCoord(device_id_t, device_id_t, device_id_t = -1);
+			CoordHandle *createCoord(device_id_t, device_id_t, device_id_t = -1);
 			void removeCoord(size_t);
 			// Device connection
 			MotorController *connectMotor(DeviceConnectionPrms*);
@@ -70,6 +72,7 @@ namespace CalX {
 			std::vector<CoordTask*> tasks;
 			std::vector<CoordHandle*> coords;
 			FunctionEngine engine;
+			RequestResolver *resolver;
 
 	};
 

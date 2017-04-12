@@ -35,11 +35,14 @@ namespace CalX {
 		}
 		LOG(SYSMAN_TAG, "System startup. Found " + std::to_string(devman->getMotorCount()) + " motors and " + std::to_string(devman->getInstrumentCount()) + " instruments.");
 		FunctionEngine_add_default_functions(&this->engine);
+		this->resolver = new RequestResolver(this);
+		RequestResolver_init_standart_providers(this->resolver);
 		INIT_LOG("SystemManager");
 	}
 
 	SystemManager::~SystemManager() {
 		LOG(SYSMAN_TAG, "System exiting");
+		delete this->resolver;
 		for (size_t i = 0; i < this->tasks.size(); i++) {
 			delete this->tasks.at(i);
 		}
@@ -73,6 +76,10 @@ namespace CalX {
 	
 	FunctionEngine *SystemManager::getFunctionEngine() {
 		return &this->engine;
+	}
+	
+	RequestResolver *SystemManager::getRequestResolver() {
+		return this->resolver;
 	}
 
 	size_t SystemManager::getMotorCount() {

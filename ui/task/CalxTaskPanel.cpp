@@ -121,7 +121,7 @@ namespace CalXUI {
 		wxBoxSizer *execSizer = new wxBoxSizer(wxHORIZONTAL);
 		execPanel->SetSizer(execSizer);
 		wxButton *buildButton = new wxButton(execPanel, wxID_ANY, __("Build"));
-		execSizer->Add(buildButton);
+		execSizer->Add(buildButton, 0, wxALL | wxALIGN_CENTER);
 		this->plane = new wxChoice(execPanel, wxID_ANY);
 		this->speed = new wxSpinCtrl(execPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, wxGetApp().getSystemManager()->getConfiguration()->getEntry("core")->getInt("maxspeed", 4000), wxGetApp().getSystemManager()->getConfiguration()->getEntry("core")->getInt("maxspeed", 4000));
 		execSizer->Add(new wxStaticText(execPanel, wxID_ANY, __("on")), 0, wxLEFT | wxRIGHT | wxALIGN_CENTER, 5);

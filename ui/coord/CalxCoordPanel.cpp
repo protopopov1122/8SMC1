@@ -64,6 +64,14 @@ namespace CalXUI {
 		Bind(wxEVT_CLOSE_WINDOW, &CalxCoordPanel::OnExit, this);
 		
 		this->nextId = 0;
+		
+	}
+	
+	void CalxCoordPanel::updateList() {
+		SystemManager *sysman = wxGetApp().getSystemManager();
+		for (size_t i = 0; i < sysman->getCoordCount(); i++) {
+			addPlane(sysman->getCoord(i));
+		}
 	}
 	
 	void CalxCoordPanel::updateUI() {

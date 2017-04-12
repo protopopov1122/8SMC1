@@ -37,6 +37,7 @@ namespace CalXUI {
 			CoordHandle *getCoord(size_t sz) {return sz < coords.size() ? coords.at(sz)->getHandle() : nullptr;}
 			CalxCoordCtrl *getCoordCtrl(size_t sz) {return sz < coords.size() ? coords.at(sz) : nullptr;}
 			void updateUI();
+			void updateList();
 			void stop();
 			bool isBusy() {
 				for (const auto& c : coords) {

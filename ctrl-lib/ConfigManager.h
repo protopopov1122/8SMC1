@@ -50,6 +50,7 @@ namespace CalX {
 			ConfigValue(ConfigValueType type) {this->type = type;}
 			virtual ~ConfigValue() {}
 			ConfigValueType getType() {return this->type;}
+			virtual std::string toString() = 0;
 		protected:
 			ConfigValueType type;
 	};
@@ -62,6 +63,7 @@ namespace CalX {
 			}
 
 			int_conf_t getValue() {return this->value;}
+			virtual std::string toString() {return std::to_string(this->value);}
 		private:
 			int_conf_t value;
 	};
@@ -74,6 +76,7 @@ namespace CalX {
 			}
 
 			real_conf_t getValue() {return this->value;}
+			virtual std::string toString() {return std::to_string(this->value);}
 		private:
 			real_conf_t value;
 	};
@@ -86,6 +89,7 @@ namespace CalX {
 			}
 
 			bool getValue() {return this->value;}
+			virtual std::string toString() {return std::string(this->value ? "true" : "false");}
 		private:
 			bool value;
 	};
@@ -98,6 +102,7 @@ namespace CalX {
 			}
 
 			std::string getValue() {return this->value;}
+			virtual std::string toString() {return this->value;}
 		private:
 			std::string value;
 	};
@@ -147,6 +152,7 @@ namespace CalX {
 			std::vector<ConfigEventListener*> &getEventListeners();
 			
 			static ConfigManager *load(std::istream*, std::ostream*);
+			static ConfigValue *parseValue(const char*);
 		private:
 			std::map<std::string, ConfigEntry*> entries;
 			ConfigValidator *validator;

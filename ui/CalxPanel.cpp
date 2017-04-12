@@ -42,6 +42,7 @@ namespace CalXUI {
 	}
 	
 	void CalxPanel::updateUI() {
+		this->dev->updateUI();
 		this->coord->updateUI();
 		this->task->updateUI();
 	}

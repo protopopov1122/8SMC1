@@ -26,6 +26,7 @@
 #include "CalxDebugConsole.h"
 #include "CalxErrorHandler.h"
 #include "device/DeviceManager.h"
+#include "ui/coord/CalxCoordPanel.h"
 
 #include <fstream>
 #include "ctrl-lib/ConfigManager.h"
@@ -99,9 +100,18 @@ namespace CalXUI {
 			this->debug_console = nullptr;
 		}
 		
+		std::string autoconf = conf->getEntry("core")->getString("autoconf", "");
+		if (!autoconf.empty()) {
+			std::ifstream is(autoconf);
+			this->sysman->getRequestResolver()->execute(&is);
+			is.close();
+		}
+		
 		this->frame = new CalxFrame(__("CalX UI"));
 		this->frame->Show(true);
 		this->frame->Maximize(true);
+		
+		this->frame->getPanel()->getCoords()->updateList();
 		
 		return true;
 	}
