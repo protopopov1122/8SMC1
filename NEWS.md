@@ -126,3 +126,6 @@ GUI and system itself is almost fully functional. Most of the functions were imp
 ##### 08/04/2017
 Project is almost completely finished. Last part is laser integration and system final installation, after that project alpha version will be added on GitHub. Then I'm planning to add some features, that are not necessary now(e.g. compilation and work on stub drivers on Linux, console interface extension, some other stuff), and release it as final version.
 There are also some further work planned: integrate other device types in system structure and interface.
+
+##### 13/04/2017
+By and large, system is finished. Ctrl-lib and Calx UI works well, all device drivers finished. Final system test will be on 20/04/2017, after that release will be published on GitHub. Until tests some slight changes may be added and main goal is debug and usability increase.

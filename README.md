@@ -1,13 +1,13 @@
 CalX Stepper motor tools.
 ===================
 
-CalX is project of creating high level control application and library for stepper motors and instruments for them. Project codebase is device and platform independent, so may be adopted to any kind of motor controllers, only requirement is implementation of some interfaces for them(called Device API). During development and testing is used Standa 8SMC1 stepper motor controllers, so so CalX already contains Device API implementation for them.
+CalX is project of creating high level control application and library for stepper motors and instruments for them. Project codebase is device and platform independent, so may be adopted to any kind of motor controllers, only requirement is implementation of some interfaces for them(called Device API). During development and testing are used Standa 8SMC1 stepper motor controllers and EKSPLA NL300 lasers, so so CalX already contains Device API implementation for them. By 13/04/2017 program 1.0 version is finished and final tests will take place on 20/04/2017, then release will be published on GitHub. However, system is already usable and completed.
 
 Project consists of several parts:
 * Device API - the only code which directly interacts with motor controller/drivers and instruments, it is platform dependent. Its components are stored in device subdirectory. Device API defines abstract intefaces so that other code uses only them and is device-independent. To add new device class support to system, you must implement these interfaces(they are tiny) and patch some files(two lines per cli/main.cpp and ui/CalxApp.cpp) to use them. Reference Device API implementation is wrappers for Standa 8SMC1 controllers(located in device/8smc1 directory), but they have a lot of extra code that isn't necessary.
 * Ctrl-lib - main and central component of project. Is offers different actions and abstractions that are used for complex stepper motor control. It uses only Device API created abstractions, so Ctrl-lib is platform-independent and may be used with any compatible controller/motor. Basically it is project functional core, on top of it works GUI and command line interface.
 * CLI(command line interface) - interface that was used during Ctrl-lib development and testing. It doesn't cover all Ctrl-lib possibilities(however most of them) and has complex commands and parameters, however it can be useful.
-* UI(graphical user interface) - wxWidgets based graphical application that uses Ctrl-lib to provide convinient device control and cover its functions. Ctrl-lib has big variety of features, so UI itself may be not very user-friendly. Ctrl-lib is extended to needs of UI, because UI is development target.
+* UI(graphical user interface) - wxWidgets based graphical application that uses Ctrl-lib to provide convinient device control and cover its functions. Ctrl-lib has big variety of features, so UI itself may be not very user-friendly. Ctrl-lib is extended to needs of UI.
 
 Track NEWS.md to view recent changes.
 For more info see READMEs in subdirectories(read this README before).
@@ -15,7 +15,7 @@ For more info see READMEs in subdirectories(read this README before).
 
 Motivation
 ===================
-This project started with goal to create two-axis moving laser using existing stepper motor and controller for physics lab for educational purposes. Currently it is more universal and has more features.
+This project started with goal to create two-axis moving laser using existing stepper motor and controller for physics lab for educational purposes. Currently it is more universal and has more features. After first version release, there may added also other device types and functions.
 
 Known issues
 ===================
@@ -26,13 +26,13 @@ Project started as simple Standa 8SMC1 motor control interface, however during d
 
 Disclaimer
 ===================
-Project is on development stage so it may be unstable.
+Project is not fully tested, it may contain some bugs.
 
-The only Device API implementation is written for Standa controllers, other device support may be added later. 8SMC1 devices have own standart packages for similar purposes, but they require additional licenses and are discontinued by manufacter.
+The only Device API implementation is written for Standa controllers and EKSPLA laser, other device support may be added later. 8SMC1 devices have own standart packages for similar purposes, but they require additional licenses and are discontinued by manufacter.
 
 Building
 ===================
-Project is built using MSVC and MinGW cross compiler(MinGW build tested on top of Linux and Windows Subsystem for Linux). Project UI depends on wxWidgets and links to it dynamically.
+Project is built using MSVC and MinGW cross compiler(MinGW build tested on top of Linux and Windows Subsystem for Linux). Project UI depends on wxWidgets and links to it dynamically. Before using you should make sure that 'autoconf' key in config.ini is commented/disable, because it contains configuration parameters specific to used equipment and will not work on other systems.
 
 To use 8SMC1 controller:
 You must install MiscoSMC driver. Create 'res' directory in root of project and copy 'USMCDLL.h', 'USMCDLL.lib' and 'USMCDLL.dll' to it(it required to proper build, these files located in MicroSMC folder in Program files). You should also copy 'USMCDLL.lib' to root of project, if you are building by MSVC without use of stub.
@@ -64,7 +64,7 @@ misc/gen-winbuild
 
 Authors and Contributions
 ===================
-Author: Jevgenijs Protopopovs <protopopov1122@yandex.ru>.
+Author: Jevgēnijs Protopopovs <protopopov1122@yandex.ru>.
 
 Testing is performed in command.
 
