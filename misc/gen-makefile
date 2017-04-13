@@ -20,9 +20,9 @@ ALL=$ALL'\t$(MAKE) $(OUTPUT).exe\n\t$(MAKE) $(UI).exe\n'
 
 # Generate library, stub and cli object file build targets
 printf "\n" 
-find device -maxdepth 1 -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS) -c "$0"\n"}'
-find misc -name "Stub.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS) -Ires -c "$0"\n"}'
-find ctrl-lib cli -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS) -c "$0"\n"}'
+find device -maxdepth 1 -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(LIBCFLAGS) $(CFLAGS) -c "$0"\n"}'
+find misc -name "Stub.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(LIBCFLAGS) $(CFLAGS) -Ires -c "$0"\n"}'
+find ctrl-lib cli -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(LIBCFLAGS) $(CFLAGS) -c "$0"\n"}'
  
 # Generate ui object file build targets
 printf "\n" 
@@ -32,7 +32,7 @@ find ui -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); prin
 printf "stub: Stub.o\n\t\$(CC) -shared -o \$(BUILD)/USMCDLL.dll Stub.o \$(LDFLAGS)\n\n" 
 
 # Generate console program link target
-printf "\$(OUTPUT).exe: \$(OUTPUT).dll dev_standart.dll " 
+printf "\$(OUTPUT.EXE): \$(OUTPUT.LIB) dev_standart.dll " 
 OBJS=`find cli -name "main.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
 echo $OBJS 
 printf "\t@mkdir -p \$(BUILD)\n"
@@ -41,16 +41,16 @@ printf "$OBJS"
 printf " \$(LDFLAGS) -Wl,--library-path=\$(BUILD) -ldev_standart -l\$(OUTPUT)\n\n" 
 
 #Generate Ctrl-lib link target
-printf "\$(OUTPUT).dll: "
+printf "\$(OUTPUT.LIB): "
 OBJS1=`find ctrl-lib -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
 OBJS2=`find cli -not -name "main.cpp" -and -name "*.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
 OBJS3=`find device -maxdepth 1 -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
 OBJS=$OBJS1$OBJS2$OBJS3
 echo $OBJS 
 printf "\t@mkdir -p \$(BUILD)\n"
-printf "\t\$(CC) -shared -o \$(BUILD)/\$(OUTPUT).dll " 
+printf "\t\$(CC) -shared -o \$(BUILD)/\$(OUTPUT.LIB) " 
 printf "$OBJS" 
-printf " \$(LDFLAGS) -Wl,--out-implib,\$(BUILD)/\$(OUTPUT).a\n\n" 
+printf " \$(LDFLAGS) \$(LIBLDFLAGS)\n\n" 
 
 #Generate lang target
 printf "langs:\n"
@@ -60,7 +60,7 @@ find lang -name "*.po" | awk -F/ '{split($NF, arr, "\\."); print "\tmsgfmt -o $(
 printf "endif\n"
 
 #Generate UI link target
-printf "\$(UI).exe: langs "
+printf "\$(OUTPUT_UI): langs "
 OBJS=`find ui -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
 echo $OBJS
 printf "\t@mkdir -p \$(BUILD)\n"
@@ -69,8 +69,10 @@ printf "\tcp \$(WX)/\$(WXLIB) \$(BUILD)\n"
 printf "endif\n"
 printf "\t\$(MAKE) icon\n"
 printf "\t\$(MAKE) lang\n"
+printf "ifeq (\$(PLATFORM), 'win')\n"
 printf '\t`$(WX)/wx-config --rescomp` winbuild/calxui.rc -O coff -o $(ICON)\n'
-printf "\t\$(CC) -o \$(BUILD)/\$(UI).exe " 
+printf "endif\n"
+printf "\t\$(CC) -o \$(BUILD)/\$(OUTPUT_UI) " 
 printf "$OBJS \$(ICON)"
 printf ' $(LDFLAGS) -Wl,--library-path=\$(BUILD) -lcalx `$(WX)/wx-config --libs`\n\n'
 
