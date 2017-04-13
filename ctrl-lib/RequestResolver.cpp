@@ -99,10 +99,8 @@ namespace CalX {
 	}
 	
 	Request *RequestResolver::parseRequest(std::string str) {
-		const char *rawcstr = str.c_str();
-		char *cstr = new char[strlen(rawcstr) + 1];
-		memcpy(cstr, rawcstr, strlen(rawcstr) + 1);
-		for (size_t i = 0; i < strlen(cstr); i++) {
+		const char *cstr = str.c_str();
+		/*for (size_t i = 0; i < strlen(cstr); i++) {
 			if (cstr[i] == '#') {
 				cstr[i] = '\0';
 				break;
@@ -146,6 +144,50 @@ namespace CalX {
 		if (provider.empty() && args.empty()) {
 			return nullptr;
 		}
+		return new Request(provider, args);*/
+		
+		std::string provider;
+		std::vector<ConfigValue*> args;
+		size_t pos = 0;
+		for (; pos < strlen(cstr) && cstr[pos] != ':'; pos++) {
+			provider.push_back(cstr[pos]);
+		}
+		if (cstr[pos] == ':') {
+				pos++;
+		}
+		
+		bool quote = false;
+		std::string arg;
+		for (; pos < strlen(cstr); pos++) {
+			char chr = cstr[pos];
+			if (chr == ',' && !quote) {
+				if (!arg.empty()) {
+					ConfigValue *value = ConfigManager::parseValue(arg.c_str());
+					if (value != nullptr) {
+						args.push_back(value);
+					}
+					arg.clear();
+				}
+			} else if (isspace(chr) && !quote) {
+			} else if (chr == '#' && !quote) {
+				break;
+			} else {
+				if (chr == '\"') {
+					quote = !quote;
+				}
+				arg.push_back(chr);
+			}
+		}
+		if (!arg.empty()) {
+			ConfigValue *value = ConfigManager::parseValue(arg.c_str());
+			if (value != nullptr) {
+				args.push_back(value);
+			}
+		}
+		if (provider.empty() && args.empty()) {
+			return nullptr;
+		}
+		
 		return new Request(provider, args);
 	}
 	
