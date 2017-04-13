@@ -14,7 +14,7 @@ function GenDevAPI {
 	ALL=$ALL"\t\$(MAKE) dev_$1.dll\n"
 }
 
-GenDevAPI "8smc1" "-Ires" "-Wl,-Bdynamic,--library-path=\$(BUILD) -lUSMCDLL"
+GenDevAPI "standart" "-Ires" "-Wl,-Bdynamic,--library-path=\$(BUILD) -lUSMCDLL"
 
 ALL=$ALL'\t$(MAKE) $(OUTPUT).exe\n\t$(MAKE) $(UI).exe\n'
 
@@ -32,13 +32,13 @@ find ui -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); prin
 printf "stub: Stub.o\n\t\$(CC) -shared -o \$(BUILD)/USMCDLL.dll Stub.o \$(LDFLAGS)\n\n" 
 
 # Generate console program link target
-printf "\$(OUTPUT).exe: \$(OUTPUT).dll dev_8smc1.dll " 
+printf "\$(OUTPUT).exe: \$(OUTPUT).dll dev_standart.dll " 
 OBJS=`find cli -name "main.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
 echo $OBJS 
 printf "\t@mkdir -p \$(BUILD)\n"
 printf "\t\$(CC) -o \$(BUILD)/\$(OUTPUT).exe " 
 printf "$OBJS" 
-printf " \$(LDFLAGS) -Wl,--library-path=\$(BUILD) -ldev_8smc1 -l\$(OUTPUT)\n\n" 
+printf " \$(LDFLAGS) -Wl,--library-path=\$(BUILD) -ldev_standart -l\$(OUTPUT)\n\n" 
 
 #Generate Ctrl-lib link target
 printf "\$(OUTPUT).dll: "

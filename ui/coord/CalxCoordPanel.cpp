@@ -30,22 +30,22 @@ namespace CalXUI {
 	
 	wxDEFINE_EVENT(wxEVT_COORD_PANEL_UPDATE, wxThreadEvent);
 	
-	class CalxCoordPlaneAddRequest : public RequestProvider {
+	class CalxCoordPlaneAddProvider : public RequestProvider {
 		public:
-			CalxCoordPlaneAddRequest(CalxCoordPanel *panel)
+			CalxCoordPlaneAddProvider(CalxCoordPanel *panel)
 				: RequestProvider::RequestProvider("plane.create") {
 				this->panel = panel;
 			}
 			
-			virtual ~CalxCoordPlaneAddRequest() {
+			virtual ~CalxCoordPlaneAddProvider() {
 				
 			}
 			
 			virtual bool execute(Request *req, SystemManager *sysman) {
-				PROVIDER_PROVIDER_ARGC(req, 3)
-				PROVIDER_PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
-				PROVIDER_PROVIDER_ARG_TYPE(req, 1, ConfigValueType::Integer)
-				PROVIDER_PROVIDER_ARG_TYPE(req, 2, ConfigValueType::Integer)
+				PROVIDER_ARGC(req, 3)
+				PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
+				PROVIDER_ARG_TYPE(req, 1, ConfigValueType::Integer)
+				PROVIDER_ARG_TYPE(req, 2, ConfigValueType::Integer)
 				device_id_t dev1 = (device_id_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 0))->getValue();
 				device_id_t dev2 = (device_id_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 1))->getValue();
 				device_id_t instr = (device_id_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 2))->getValue();
@@ -63,21 +63,21 @@ namespace CalXUI {
 			CalxCoordPanel *panel;
 	};
 	
-	class CalxCoordPlaneMeasureRequest : public RequestProvider {
+	class CalxCoordPlaneMeasureProvider : public RequestProvider {
 		public:
-			CalxCoordPlaneMeasureRequest(CalxCoordPanel *panel)
+			CalxCoordPlaneMeasureProvider(CalxCoordPanel *panel)
 				: RequestProvider::RequestProvider("plane.measure") {
 				this->panel = panel;
 			}
 			
-			virtual ~CalxCoordPlaneMeasureRequest() {
+			virtual ~CalxCoordPlaneMeasureProvider() {
 				
 			}
 			
 			virtual bool execute(Request *req, SystemManager *sysman) {
-				PROVIDER_PROVIDER_ARGC(req, 2)
-				PROVIDER_PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
-				PROVIDER_PROVIDER_ARG_TYPE(req, 1, ConfigValueType::Integer)
+				PROVIDER_ARGC(req, 2)
+				PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
+				PROVIDER_ARG_TYPE(req, 1, ConfigValueType::Integer)
 				device_id_t plid = (device_id_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 0))->getValue();
 				device_id_t tr = (device_id_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 1))->getValue() % 2;
 				TrailerId trailer = tr == 1 ? TrailerId::Trailer1 : TrailerId::Trailer2;
@@ -92,22 +92,22 @@ namespace CalXUI {
 			CalxCoordPanel *panel;
 	};
 	
-	class CalxCoordPlanePositionRequest : public RequestProvider {
+	class CalxCoordPlanePositionProvider : public RequestProvider {
 		public:
-			CalxCoordPlanePositionRequest(CalxCoordPanel *panel)
+			CalxCoordPlanePositionProvider(CalxCoordPanel *panel)
 				: RequestProvider::RequestProvider("plane.position") {
 				this->panel = panel;
 			}
 			
-			virtual ~CalxCoordPlanePositionRequest() {
+			virtual ~CalxCoordPlanePositionProvider() {
 				
 			}
 			
 			virtual bool execute(Request *req, SystemManager *sysman) {
-				PROVIDER_PROVIDER_ARGC(req, 3)
-				PROVIDER_PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
-				PROVIDER_PROVIDER_ARG_TYPE(req, 1, ConfigValueType::Real)
-				PROVIDER_PROVIDER_ARG_TYPE(req, 2, ConfigValueType::Real)
+				PROVIDER_ARGC(req, 3)
+				PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
+				PROVIDER_ARG_TYPE(req, 1, ConfigValueType::Real)
+				PROVIDER_ARG_TYPE(req, 2, ConfigValueType::Real)
 				device_id_t plid = (device_id_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 0))->getValue();
 				double x =  ((RealConfigValue*) PROVIDER_ARG(req, 1))->getValue();
 				double y =  ((RealConfigValue*) PROVIDER_ARG(req, 2))->getValue();
@@ -122,22 +122,22 @@ namespace CalXUI {
 			CalxCoordPanel *panel;
 	};
 	
-	class CalxCoordPlanePositionAbsRequest : public RequestProvider {
+	class CalxCoordPlanePositionAbsProvider : public RequestProvider {
 		public:
-			CalxCoordPlanePositionAbsRequest(CalxCoordPanel *panel)
+			CalxCoordPlanePositionAbsProvider(CalxCoordPanel *panel)
 				: RequestProvider::RequestProvider("plane.position.abs") {
 				this->panel = panel;
 			}
 			
-			virtual ~CalxCoordPlanePositionAbsRequest() {
+			virtual ~CalxCoordPlanePositionAbsProvider() {
 				
 			}
 			
 			virtual bool execute(Request *req, SystemManager *sysman) {
-				PROVIDER_PROVIDER_ARGC(req, 3)
-				PROVIDER_PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
-				PROVIDER_PROVIDER_ARG_TYPE(req, 1, ConfigValueType::Integer)
-				PROVIDER_PROVIDER_ARG_TYPE(req, 2, ConfigValueType::Integer)
+				PROVIDER_ARGC(req, 3)
+				PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
+				PROVIDER_ARG_TYPE(req, 1, ConfigValueType::Integer)
+				PROVIDER_ARG_TYPE(req, 2, ConfigValueType::Integer)
 				device_id_t plid = (device_id_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 0))->getValue();
 				motor_coord_t x = (motor_coord_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 1))->getValue();
 				motor_coord_t y = (motor_coord_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 2))->getValue();
@@ -153,20 +153,20 @@ namespace CalXUI {
 			CalxCoordPanel *panel;
 	};
 	
-	class CalxCoordPlaneCenterRequest : public RequestProvider {
+	class CalxCoordPlaneCenterProvider : public RequestProvider {
 		public:
-			CalxCoordPlaneCenterRequest(CalxCoordPanel *panel)
+			CalxCoordPlaneCenterProvider(CalxCoordPanel *panel)
 				: RequestProvider::RequestProvider("plane.position.center") {
 				this->panel = panel;
 			}
 			
-			virtual ~CalxCoordPlaneCenterRequest() {
+			virtual ~CalxCoordPlaneCenterProvider() {
 				
 			}
 			
 			virtual bool execute(Request *req, SystemManager *sysman) {
-				PROVIDER_PROVIDER_ARGC(req, 1)
-				PROVIDER_PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
+				PROVIDER_ARGC(req, 1)
+				PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
 				device_id_t plid = (device_id_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 0))->getValue();
 				if (sysman->getCoord(plid) != nullptr) {
 					panel->center(plid);
@@ -179,20 +179,20 @@ namespace CalXUI {
 			CalxCoordPanel *panel;
 	};
 	
-	class CalxCoordPlaneInvertRequest : public RequestProvider {
+	class CalxCoordPlaneInvertProvider : public RequestProvider {
 		public:
-			CalxCoordPlaneInvertRequest(CalxCoordPanel *panel)
+			CalxCoordPlaneInvertProvider(CalxCoordPanel *panel)
 				: RequestProvider::RequestProvider("plane.axis.invert") {
 				this->panel = panel;
 			}
 			
-			virtual ~CalxCoordPlaneInvertRequest() {
+			virtual ~CalxCoordPlaneInvertProvider() {
 				
 			}
 			
 			virtual bool execute(Request *req, SystemManager *sysman) {
-				PROVIDER_PROVIDER_ARGC(req, 1)
-				PROVIDER_PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
+				PROVIDER_ARGC(req, 1)
+				PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
 				device_id_t plid = (device_id_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 0))->getValue();
 				if (sysman->getCoord(plid) != nullptr) {
 					panel->invert(plid);
@@ -205,20 +205,20 @@ namespace CalXUI {
 			CalxCoordPanel *panel;
 	};
 	
-	class CalxCoordPlaneWatcherRequest : public RequestProvider {
+	class CalxCoordPlaneWatcherProvider : public RequestProvider {
 		public:
-			CalxCoordPlaneWatcherRequest(CalxCoordPanel *panel)
+			CalxCoordPlaneWatcherProvider(CalxCoordPanel *panel)
 				: RequestProvider::RequestProvider("plane.watcher") {
 				this->panel = panel;
 			}
 			
-			virtual ~CalxCoordPlaneWatcherRequest() {
+			virtual ~CalxCoordPlaneWatcherProvider() {
 				
 			}
 			
 			virtual bool execute(Request *req, SystemManager *sysman) {
-				PROVIDER_PROVIDER_ARGC(req, 1)
-				PROVIDER_PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
+				PROVIDER_ARGC(req, 1)
+				PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
 				device_id_t plid = (device_id_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 0))->getValue();
 				if (sysman->getCoord(plid) != nullptr) {
 					panel->watcher(plid);
@@ -235,13 +235,13 @@ namespace CalXUI {
 		: wxPanel::wxPanel(win, id) {
 		
 		CalxApp &app = wxGetApp();
-		app.getSystemManager()->getRequestResolver()->registerProvider(new CalxCoordPlaneAddRequest(this));
-		app.getSystemManager()->getRequestResolver()->registerProvider(new CalxCoordPlaneMeasureRequest(this));
-		app.getSystemManager()->getRequestResolver()->registerProvider(new CalxCoordPlanePositionRequest(this));
-		app.getSystemManager()->getRequestResolver()->registerProvider(new CalxCoordPlanePositionAbsRequest(this));
-		app.getSystemManager()->getRequestResolver()->registerProvider(new CalxCoordPlaneCenterRequest(this));
-		app.getSystemManager()->getRequestResolver()->registerProvider(new CalxCoordPlaneInvertRequest(this));
-		app.getSystemManager()->getRequestResolver()->registerProvider(new CalxCoordPlaneWatcherRequest(this));
+		app.getSystemManager()->getRequestResolver()->registerProvider(new CalxCoordPlaneAddProvider(this));
+		app.getSystemManager()->getRequestResolver()->registerProvider(new CalxCoordPlaneMeasureProvider(this));
+		app.getSystemManager()->getRequestResolver()->registerProvider(new CalxCoordPlanePositionProvider(this));
+		app.getSystemManager()->getRequestResolver()->registerProvider(new CalxCoordPlanePositionAbsProvider(this));
+		app.getSystemManager()->getRequestResolver()->registerProvider(new CalxCoordPlaneCenterProvider(this));
+		app.getSystemManager()->getRequestResolver()->registerProvider(new CalxCoordPlaneInvertProvider(this));
+		app.getSystemManager()->getRequestResolver()->registerProvider(new CalxCoordPlaneWatcherProvider(this));
 		
 		wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 		SetSizer(sizer);

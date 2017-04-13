@@ -31,22 +31,22 @@ namespace CalXUI {
 	
 	wxDEFINE_EVENT(wxEVT_DEVICE_PANEL_UPDATE, wxThreadEvent);
 	
-	class CalxInstrumentSerialConnectRequest : public RequestProvider {
+	class CalxInstrumentSerialConnectProvider : public RequestProvider {
 		public:
-			CalxInstrumentSerialConnectRequest(CalxDevicePanel *devpanel)
+			CalxInstrumentSerialConnectProvider(CalxDevicePanel *devpanel)
 				: RequestProvider::RequestProvider("connect.serial.instrument") {
 				this->devpanel = devpanel;
 			}
 			
-			virtual ~CalxInstrumentSerialConnectRequest() {
+			virtual ~CalxInstrumentSerialConnectProvider() {
 				
 			}
 			
 			virtual bool execute(Request *req, SystemManager *sysman) {
-				PROVIDER_PROVIDER_ARGC(req, 3)
-				PROVIDER_PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
-				PROVIDER_PROVIDER_ARG_TYPE(req, 1, ConfigValueType::Integer)
-				PROVIDER_PROVIDER_ARG_TYPE(req, 2, ConfigValueType::Integer)
+				PROVIDER_ARGC(req, 3)
+				PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
+				PROVIDER_ARG_TYPE(req, 1, ConfigValueType::Integer)
+				PROVIDER_ARG_TYPE(req, 2, ConfigValueType::Integer)
 				uint8_t port = (uint8_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 0))->getValue();
 				uint32_t speed = (uint16_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 1))->getValue();
 				int_conf_t par = ((IntegerConfigValue*) PROVIDER_ARG(req, 2))->getValue();
@@ -83,22 +83,22 @@ namespace CalXUI {
 			CalxDevicePanel *devpanel;
 	};
 	
-	class CalxMotorSerialConnectRequest : public RequestProvider {
+	class CalxMotorSerialConnectProvider : public RequestProvider {
 		public:
-			CalxMotorSerialConnectRequest(CalxDevicePanel *devpanel)
+			CalxMotorSerialConnectProvider(CalxDevicePanel *devpanel)
 				: RequestProvider::RequestProvider("connect.serial.motor") {
 				this->devpanel = devpanel;
 			}
 			
-			virtual ~CalxMotorSerialConnectRequest() {
+			virtual ~CalxMotorSerialConnectProvider() {
 				
 			}
 			
 			virtual bool execute(Request *req, SystemManager *sysman) {
-				PROVIDER_PROVIDER_ARGC(req, 3)
-				PROVIDER_PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
-				PROVIDER_PROVIDER_ARG_TYPE(req, 1, ConfigValueType::Integer)
-				PROVIDER_PROVIDER_ARG_TYPE(req, 2, ConfigValueType::Integer)
+				PROVIDER_ARGC(req, 3)
+				PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
+				PROVIDER_ARG_TYPE(req, 1, ConfigValueType::Integer)
+				PROVIDER_ARG_TYPE(req, 2, ConfigValueType::Integer)
 				uint8_t port = (uint8_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 0))->getValue();
 				uint32_t speed = (uint16_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 1))->getValue();
 				int_conf_t par = ((IntegerConfigValue*) PROVIDER_ARG(req, 2))->getValue();
@@ -139,8 +139,8 @@ namespace CalXUI {
 		: wxScrolledWindow::wxScrolledWindow(win, id) {
 			
 		CalxApp &app = wxGetApp();
-		app.getSystemManager()->getRequestResolver()->registerProvider(new CalxMotorSerialConnectRequest(this));
-		app.getSystemManager()->getRequestResolver()->registerProvider(new CalxInstrumentSerialConnectRequest(this));
+		app.getSystemManager()->getRequestResolver()->registerProvider(new CalxMotorSerialConnectProvider(this));
+		app.getSystemManager()->getRequestResolver()->registerProvider(new CalxInstrumentSerialConnectProvider(this));
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		
 		wxPanel *connectPanel = new wxPanel(this, wxID_ANY);

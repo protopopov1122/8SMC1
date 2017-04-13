@@ -31,7 +31,7 @@
 using namespace CalX;
 
 #ifndef DEVICES_LIB
-#define DEVICES_LIB dev_8smc1
+#define DEVICES_LIB dev_standart
 #endif
 
 // For internatization purposes

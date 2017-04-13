@@ -83,11 +83,11 @@ namespace CalX {
 	
 	void RequestResolver_init_standart_providers(RequestResolver*);
 	
-	#define PROVIDER_PROVIDER_ARGC(req, count)\
+	#define PROVIDER_ARGC(req, count)\
 		if (req->getArguments().size() != count) {\
 			return false;\
 		}
-	#define PROVIDER_PROVIDER_ARG_TYPE(req, index, type)\
+	#define PROVIDER_ARG_TYPE(req, index, type)\
 		if (index >= req->getArguments().size() ||\
 			req->getArguments().at(index)->getType() != type) {\
 			return false;\

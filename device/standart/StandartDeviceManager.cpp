@@ -26,7 +26,7 @@
 
 namespace CalX {
 	
-	_8SMC1DeviceManager::_8SMC1DeviceManager()
+	StandartDeviceManager::StandartDeviceManager()
 		: DeviceManager::DeviceManager() {
 		this->refresh();
 		for (size_t i = 0; i < devs.NOD; i++) {
@@ -36,7 +36,7 @@ namespace CalX {
 		this->instrConType.push_back(DeviceConnectionType::SerialPort);
 	}
 
-	_8SMC1DeviceManager::~_8SMC1DeviceManager() {
+	StandartDeviceManager::~StandartDeviceManager() {
 		for (size_t i = 0; i < this->dev.size(); i++) {
 			delete this->dev.at(i);
 		}
@@ -49,13 +49,13 @@ namespace CalX {
 		}
 	}
 
-	void _8SMC1DeviceManager::refresh() {
+	void StandartDeviceManager::refresh() {
 		if (USMC_Init(this->devs)) {
 			saveError();
 		}
 	}
 
-	void _8SMC1DeviceManager::saveError() {
+	void StandartDeviceManager::saveError() {
 		char er[101];
 		do {
 			USMC_GetLastErr(er,100);
@@ -73,25 +73,25 @@ namespace CalX {
 		}
 	}
 
-	std::string _8SMC1DeviceManager::getMotorSerial(device_id_t id) {
+	std::string StandartDeviceManager::getMotorSerial(device_id_t id) {
 		if (id >= this->devs.NOD) {
 			return "";
 		}
 		return std::string(this->devs.Serial[id]);
 	}
 
-	std::string _8SMC1DeviceManager::getMotorVersion(device_id_t id) {
+	std::string StandartDeviceManager::getMotorVersion(device_id_t id) {
 		if (id >= this->devs.NOD) {
 			return "";
 		}
 		return std::string(this->devs.Version[id]);
 	}
 	
-	Motor *_8SMC1DeviceManager::connectMotor(DeviceConnectionPrms *prms) {
+	Motor *StandartDeviceManager::connectMotor(DeviceConnectionPrms *prms) {
 		return nullptr;
 	}
 	
-	Instrument *_8SMC1DeviceManager::connectInstrument(DeviceConnectionPrms *_prms) {
+	Instrument *StandartDeviceManager::connectInstrument(DeviceConnectionPrms *_prms) {
 		if (_prms->type != DeviceConnectionType::SerialPort) {
 			return nullptr;
 		}
@@ -107,6 +107,6 @@ namespace CalX {
 	}
 	
 	extern "C" LIBEXPORT DeviceManager *getDeviceManager() {
-		return new _8SMC1DeviceManager();
+		return new StandartDeviceManager();
 	}
 }

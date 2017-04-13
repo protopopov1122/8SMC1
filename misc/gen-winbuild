@@ -62,7 +62,7 @@ fi
 
 mkdir -p winbuild
 ./misc/gen-winbuild stub > winbuild/build-stub.bat
-./misc/gen-winbuild device 8smc1 "/I res" "build\\\USMCDLL.lib" > winbuild/build-8smc1.bat
+./misc/gen-winbuild device standart "/I res" "build\\\USMCDLL.lib" > winbuild/build-8smc1.bat
 ./misc/gen-winbuild native calx > winbuild/build-exe.bat
 ./misc/gen-winbuild native-lib calx > winbuild/build-dll.bat
 ./misc/gen-winbuild ui calxui > winbuild/build-ui.bat

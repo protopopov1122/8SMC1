@@ -14,10 +14,10 @@
 
 namespace CalX {
 
-	class _8SMC1DeviceManager : public DeviceManager {
+	class StandartDeviceManager : public DeviceManager {
 		public:
-			_8SMC1DeviceManager();
-			virtual ~_8SMC1DeviceManager();
+			StandartDeviceManager();
+			virtual ~StandartDeviceManager();
 			virtual void refresh();				// USMC_Init
 			virtual void saveError();			// USMC_GetLastErr
 			virtual std::string getMotorSerial(device_id_t);

@@ -26,16 +26,16 @@ CFLAGS=$(LANG) $(DBG) $(INCLUDES) $(EXTRA)
 LDFLAGS=-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic
 
 8SMC1Device.o:
-	$(CC) $(CFLAGS) -Ires -c device/8smc1/8SMC1Device.cpp
-
-8SMC1DeviceManager.o:
-	$(CC) $(CFLAGS) -Ires -c device/8smc1/8SMC1DeviceManager.cpp
+	$(CC) $(CFLAGS) -Ires -c device/standart/8SMC1Device.cpp
 
 NL300Instrument.o:
-	$(CC) $(CFLAGS) -Ires -c device/8smc1/NL300Instrument.cpp
+	$(CC) $(CFLAGS) -Ires -c device/standart/NL300Instrument.cpp
 
-dev_8smc1.dll: 8SMC1Device.o 8SMC1DeviceManager.o NL300Instrument.o  $(OUTPUT).dll
-	$(CC) $(CFLAGS) -shared -o $(BUILD)/dev_8smc1.dll 8SMC1Device.o 8SMC1DeviceManager.o NL300Instrument.o  -Wl,-Bdynamic,--library-path=$(BUILD) -lUSMCDLL $(LDFLAGS) -Wl,--library-path=$(LIB) -lcalx -Wl,--out-implib,$(BUILD)/\dev_8smc1.a
+StandartDeviceManager.o:
+	$(CC) $(CFLAGS) -Ires -c device/standart/StandartDeviceManager.cpp
+
+dev_standart.dll: 8SMC1Device.o NL300Instrument.o StandartDeviceManager.o  $(OUTPUT).dll
+	$(CC) $(CFLAGS) -shared -o $(BUILD)/dev_standart.dll 8SMC1Device.o NL300Instrument.o StandartDeviceManager.o  -Wl,-Bdynamic,--library-path=$(BUILD) -lUSMCDLL $(LDFLAGS) -Wl,--library-path=$(LIB) -lcalx -Wl,--out-implib,$(BUILD)/\dev_standart.a
 
 Device.o:
 	$(CC) $(CFLAGS) -c device/Device.cpp
@@ -245,9 +245,9 @@ CalxTaskStepHandle.o:
 stub: Stub.o
 	$(CC) -shared -o $(BUILD)/USMCDLL.dll Stub.o $(LDFLAGS)
 
-$(OUTPUT).exe: $(OUTPUT).dll dev_8smc1.dll main.o
+$(OUTPUT).exe: $(OUTPUT).dll dev_standart.dll main.o
 	@mkdir -p $(BUILD)
-	$(CC) -o $(BUILD)/$(OUTPUT).exe main.o  $(LDFLAGS) -Wl,--library-path=$(BUILD) -ldev_8smc1 -l$(OUTPUT)
+	$(CC) -o $(BUILD)/$(OUTPUT).exe main.o  $(LDFLAGS) -Wl,--library-path=$(BUILD) -ldev_standart -l$(OUTPUT)
 
 $(OUTPUT).dll: ConfigManager.o ConfigValidator.o CoordController.o CoordHandle.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o InstrumentController.o logger.o CircleGenerator.o GCodeParser.o GCodeWriter.o GraphBuilder.o MotorController.o CoordPlaneLinearizer.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o VirtualCoordPlane.o RequestResolver.o StandartRequestResolvers.o SystemManager.o CoordTask.o CoordTaskWrapper.o GCodeCoordTask.o BasicCoordTranslator.o ComplexCoordTranslator.o LinearCoordTranslator.o LogarithmicCoordTranslator.o PolarCoordTranslator.o CLI.o DevCLI.o Device.o DeviceManager.o
 	@mkdir -p $(BUILD)
@@ -269,7 +269,7 @@ endif
 
 all:
 	$(MAKE) $(OUTPUT).dll
-	$(MAKE) dev_8smc1.dll
+	$(MAKE) dev_standart.dll
 	$(MAKE) $(OUTPUT).exe
 	$(MAKE) $(UI).exe
 	$(MAKE) copy
