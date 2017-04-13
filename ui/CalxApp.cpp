@@ -45,7 +45,7 @@ namespace CalXUI {
 		protected:
 			virtual ExitCode Entry() {
 				std::ifstream is(autoconf);
-				wxGetApp().getSystemManager()->getRequestResolver()->execute(&is);
+				wxGetApp().getSystemManager()->getRequestResolver()->execute(&is, waitDialog);
 				is.close();
 				waitDialog->Close(true);
 				return nullptr;

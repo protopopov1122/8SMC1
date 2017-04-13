@@ -23,15 +23,20 @@
 
 #include <iostream>
 #include "CalxApp.h"
+#include <wx/stattext.h>
+#include "ctrl-lib/RequestResolver.h"
 
 
 namespace CalXUI {
 	
-	class CalxAutoconfDialog : public wxDialog {
+	class CalxAutoconfDialog : public wxDialog, public RequestResolveWatcher {
 		public:
 			CalxAutoconfDialog(wxWindow*, wxWindowID);
+			virtual void resolving(std::string, size_t, size_t);
+			virtual void failed(std::string, size_t, size_t);
 		private:
 			void OnExit(wxCloseEvent&);
+			wxStaticText *text;
 	};
 }
 

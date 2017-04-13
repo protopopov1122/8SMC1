@@ -28,7 +28,8 @@ namespace CalXUI {
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(sizer);
 		
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("Please wait until initialization finishes")), 0, wxALL | wxALIGN_CENTER, 100);
+		this->text = new wxStaticText(this, wxID_ANY, __("Please wait until initialization finishes"));
+		sizer->Add(text, 0, wxALL | wxALIGN_CENTER, 100);
 		
 		Layout();
 		Fit();
@@ -38,6 +39,19 @@ namespace CalXUI {
 		wxSize size = GetSize();
 		SetPosition(wxPoint((parentSize.x - size.x) / 2, (parentSize.y - size.y) / 2));
 		GetParent()->Enable(false);
+	}
+	
+	void CalxAutoconfDialog::resolving(std::string code, size_t step, size_t full) {
+		std::string txt = FORMAT(__("Please wait until initialization finishes\nPerforming step %s of %s:\n%s"),
+			std::to_string(step), std::to_string(full), code);
+		this->text->SetLabel(txt);
+	}
+	
+	void CalxAutoconfDialog::failed(std::string code, size_t step, size_t full) {
+		std::string txt = FORMAT(__("Initialization stopped\nStep %s of %s failed:\n%s"),
+			std::to_string(step), std::to_string(full), code);
+		this->text->SetLabel(txt);
+		wxMessageBox(txt, "Initialization error", wxICON_ERROR);
 	}
 	
 	void CalxAutoconfDialog::OnExit(wxCloseEvent &evt) {

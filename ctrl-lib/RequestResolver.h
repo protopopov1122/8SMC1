@@ -57,6 +57,14 @@ namespace CalX {
 			std::string name;
 	};
 	
+	class RequestResolveWatcher {
+		public:
+			RequestResolveWatcher() {}
+			virtual ~RequestResolveWatcher() {}
+			virtual void resolving(std::string, size_t, size_t) {}
+			virtual void failed(std::string, size_t, size_t) {}
+	};
+	
 	class RequestResolver {
 		public:
 			RequestResolver(SystemManager*);
@@ -65,7 +73,7 @@ namespace CalX {
 			bool registerProvider(RequestProvider*);
 			bool resolveRequest(Request*);
 			bool hasProvider(std::string);
-			void execute(std::istream*);
+			void execute(std::istream*, RequestResolveWatcher* = nullptr);
 			
 			static Request *parseRequest(std::string);
 		private:

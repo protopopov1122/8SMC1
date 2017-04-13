@@ -149,7 +149,10 @@ namespace CalX {
 		std::string provider;
 		std::vector<ConfigValue*> args;
 		size_t pos = 0;
-		for (; pos < strlen(cstr) && cstr[pos] != ':'; pos++) {
+		for (; pos < strlen(cstr) && cstr[pos] != ':' && cstr[pos] != '#'; pos++) {
+			if (isspace(cstr[pos])) {
+				continue;
+			}
 			provider.push_back(cstr[pos]);
 		}
 		if (cstr[pos] == ':') {
@@ -191,16 +194,32 @@ namespace CalX {
 		return new Request(provider, args);
 	}
 	
-	void RequestResolver::execute(std::istream *is) {
+	void RequestResolver::execute(std::istream *is, RequestResolveWatcher *watcher) {
 		const size_t LINE_LEN = 1024;
 		char line[LINE_LEN];
+		std::vector<Request*> init_code;
+		std::vector<std::string> code;
 		while (!is->eof()) {
 			is->getline(line, LINE_LEN);
 			Request *req = RequestResolver::parseRequest(std::string(line));
 			if (req != nullptr) {
-				this->resolveRequest(req);
-				delete req;
+				code.push_back(std::string(line));
+				init_code.push_back(req);
 			}
+		}
+		
+		for (size_t i = 0; i < init_code.size(); i++) {
+			if (watcher != nullptr) {
+				watcher->resolving(code.at(i), i + 1, init_code.size());
+			}
+			if (!this->resolveRequest(init_code.at(i)) && watcher != nullptr) {
+				watcher->failed(code.at(i), i + 1, init_code.size());
+				break;
+			}
+		}
+		
+		for (const auto& req : init_code) {
+			delete req;
 		}
 	}
 }
