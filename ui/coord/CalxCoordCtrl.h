@@ -68,6 +68,9 @@ namespace CalXUI {
 			bool isUsed();
 			void setMaster(bool);
 			void setEnabled(bool);
+			void bindWatcher();
+			void unbindWatcher();
+			bool hasWatchers();
 			bool isBusy() {
 				return !queue->isEmpty();
 			}
@@ -92,6 +95,7 @@ namespace CalXUI {
 			CalxActionQueue *queue;
 			int used;
 			bool master;
+			int watchers;
 			
 			
 			// Components

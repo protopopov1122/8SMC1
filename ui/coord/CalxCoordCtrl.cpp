@@ -39,6 +39,7 @@ namespace CalXUI {
 		: wxScrolledWindow::wxScrolledWindow(win, id) {
 		this->ctrl = ctrl;
 		this->used = 0;
+		this->watchers = 0;
 		this->master = false;
 		
 		motor_point_t validateMin = {INT_MIN, INT_MIN};
@@ -178,6 +179,18 @@ namespace CalXUI {
 	void CalxCoordCtrl::setEnabled(bool e) {
 		actionPanel->Enable(e);
 		stopButton->Enable(!e && this->master);
+	}
+	
+	void CalxCoordCtrl::bindWatcher() {
+		this->watchers++;
+	}
+	
+	void CalxCoordCtrl::unbindWatcher() {
+		this->watchers--;
+	}
+	
+	bool CalxCoordCtrl::hasWatchers() {
+		return this->watchers != 0;
 	}
 	
 	void CalxCoordCtrl::measure(TrailerId tr) {
@@ -334,7 +347,7 @@ namespace CalXUI {
 	
 	void CalxCoordCtrl::OnMeasureClick(wxCommandEvent &evt) {
 		TrailerId tr = otherCtrl->getMeasureTrailer();
-		measure(tr);
+		this->queue->addAction(new CalxCoordMeasureAction(this, ctrl, tr));
 	}
 	
 	void CalxCoordCtrl::OnUpdateFiltersClick(wxCommandEvent &evt) {

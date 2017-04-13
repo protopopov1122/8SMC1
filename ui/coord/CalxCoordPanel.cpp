@@ -287,6 +287,24 @@ namespace CalXUI {
 		wxPostEvent(this, evt);
 	}
 	
+	void CalxCoordPanel::bindWatcher(device_id_t id) {
+		for (const auto& ctrl : this->coords) {
+			if (ctrl->getHandle()->getID() == id) {
+				ctrl->bindWatcher();
+				break;
+			}
+		}
+	}
+	
+	void CalxCoordPanel::unbindWatcher(device_id_t id) {
+		for (const auto& ctrl : this->coords) {
+			if (ctrl->getHandle()->getID() == id) {
+				ctrl->unbindWatcher();
+				break;
+			}
+		}
+	}
+	
 	void CalxCoordPanel::measure(device_id_t id, TrailerId tr) {
 		for (const auto& ctrl : this->coords) {
 			if (ctrl->getHandle()->getID() == id) {
@@ -368,6 +386,10 @@ namespace CalXUI {
 	}
 	
 	void CalxCoordPanel::removePlane(size_t pl) {
+		if (coords.at(pl)->hasWatchers()) {
+			wxMessageBox("Watchers are attached to this plane. Detach them first.", "Error", wxICON_ERROR);
+			return;
+		}
 		this->coordList->Delete(pl);
 		this->mainPanel->GetSizer()->Detach(coords.at(pl));
 		this->coords.at(pl)->Close(true);

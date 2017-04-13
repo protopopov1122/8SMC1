@@ -40,6 +40,8 @@ namespace CalXUI {
 			CalxCoordCtrl *getCoordCtrl(size_t sz) {return sz < coords.size() ? coords.at(sz) : nullptr;}
 			void updateUI();
 			void updateList(CoordHandle*, bool*);
+			void bindWatcher(device_id_t);
+			void unbindWatcher(device_id_t);
 			void measure(device_id_t, TrailerId);
 			void position(device_id_t, double, double);
 			void positionAbs(device_id_t, motor_point_t);

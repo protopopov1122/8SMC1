@@ -19,6 +19,7 @@
 
 
 #include "CalxCoordPlaneWatcher.h"
+#include "coord/CalxCoordPanel.h"
 #include <wx/sizer.h>
 
 namespace CalXUI {
@@ -49,6 +50,7 @@ namespace CalXUI {
 		: wxWindow::wxWindow(win, id) {
 		
 		this->handle = handle;
+		wxGetApp().getMainFrame()->getPanel()->getCoords()->bindWatcher(handle->getID());
 		
 		SetMinSize(min);
 		
@@ -98,11 +100,13 @@ namespace CalXUI {
 	}
 	
 	void CalxCoordPlaneWatcher::OnExit(wxCloseEvent &evt) {
+		wxGetApp().getMainFrame()->getPanel()->getCoords()->unbindWatcher(handle->getID());
 		if (this->timer != nullptr) {
 			this->timer->Stop();
 			delete this->timer;
 		}
 		this->handle->removeEventListener(this->listener);
+		Destroy();
 	}
 	
 	void CalxCoordPlaneWatcher::render(wxDC &dc) {
