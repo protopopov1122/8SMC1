@@ -27,6 +27,7 @@
 #include "CalxErrorHandler.h"
 #include "device/DeviceManager.h"
 #include "ui/coord/CalxCoordPanel.h"
+#include "ui/CalxAutoconfDialog.h"
 
 #include <fstream>
 #include "ctrl-lib/ConfigManager.h"
@@ -36,7 +37,7 @@ namespace CalXUI {
 	
 	class AutoconfThread : public wxThread {
 		public:
-			AutoconfThread(std::string autoconf, wxDialog *waitDialog)
+			AutoconfThread(std::string autoconf, CalxAutoconfDialog *waitDialog)
 				: wxThread::wxThread(wxTHREAD_DETACHED) {
 				this->autoconf = autoconf;
 				this->waitDialog = waitDialog;
@@ -46,14 +47,12 @@ namespace CalXUI {
 				std::ifstream is(autoconf);
 				wxGetApp().getSystemManager()->getRequestResolver()->execute(&is);
 				is.close();
-				waitDialog->Hide();
-				waitDialog->Destroy();
-				wxGetApp().getMainFrame()->Enable(true);
+				waitDialog->Close(true);
 				return nullptr;
 			}
 		private:
 			std::string autoconf;
-			wxDialog *waitDialog;
+			CalxAutoconfDialog *waitDialog;
 	};
 	
 	bool CalxApp::OnInit() {	
@@ -129,19 +128,12 @@ namespace CalXUI {
 		std::string autoconf = conf->getEntry("core")->getString("autoconf", "");
 		if (!autoconf.empty()) {
 			this->frame->Enable(false);
-			wxDialog *waitDialog = new wxDialog(this->frame, wxID_ANY, __("Please wait"), wxPoint(frame->GetSize().x / 3, frame->GetSize().y / 3), wxDefaultSize, wxBORDER_NONE);
-			wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
-			waitDialog->SetSizer(sizer);
-			sizer->Add(new wxStaticText(waitDialog, wxID_ANY, __("Please wait until initialization finishes")), 0, wxALL | wxALIGN_CENTER, 50);
-			waitDialog->Layout();
-			waitDialog->Fit();
+			CalxAutoconfDialog *waitDialog = new CalxAutoconfDialog(this->frame, wxID_ANY);
 			waitDialog->Show(true);
 			AutoconfThread *th = new AutoconfThread(autoconf, waitDialog);
 			if (th->Run() != wxTHREAD_NO_ERROR) {
 				delete th;
-				waitDialog->Hide();
-				waitDialog->Destroy();
-				this->frame->Enable(true);
+				waitDialog->Close(true);
 			}
 		}
 		
