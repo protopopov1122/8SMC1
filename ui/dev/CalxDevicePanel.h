@@ -21,7 +21,8 @@
 #ifndef CALX_UI_CALX_DEVICE_PANEL_H_
 #define CALX_UI_CALX_DEVICE_PANEL_H_
 
-#include "calx.h"
+#include "CalxApp.h"
+#include "CalxActionQueue.h"
 
 namespace CalXUI {
 	
@@ -42,8 +43,10 @@ namespace CalXUI {
 			void OnCOMConnectMotor(wxCommandEvent&);
 			void OnCOMConnectInstrument(wxCommandEvent&);
 			void OnDevicePanelUpdate(wxThreadEvent&);
+			
 			std::vector<CalxMotorCtrl*> devs;
 			std::vector<CalxInstrumentCtrl*> instrs;
+			CalxActionQueue *queue;
 	};
 }
 

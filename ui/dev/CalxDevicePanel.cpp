@@ -135,12 +135,67 @@ namespace CalXUI {
 			CalxDevicePanel *devpanel;
 	};
 	
+	class CalxMotorConnectAction : public CalxAction {
+		public:
+			CalxMotorConnectAction(CalxDevicePanel *panel, DeviceConnectionPrms *prms) {
+				this->panel = panel;
+				this->prms = prms;
+			}
+			virtual ~CalxMotorConnectAction() {
+				delete this->prms;
+			}
+			
+			virtual void perform(SystemManager *sysman) {
+				MotorController *ctrl = sysman->connectMotor(prms);
+				if (ctrl == nullptr) {
+					wxMessageBox(__("Motor can't be connected"),
+						__("Connection error"), wxICON_WARNING);
+				} else {
+					panel->requestUpdate();
+				}
+			}
+			
+			virtual void stop() {
+			}
+		private:
+			CalxDevicePanel *panel;
+			DeviceConnectionPrms *prms;
+	};
+	
+	class CalxInstrumentConnectAction : public CalxAction {
+		public:
+			CalxInstrumentConnectAction(CalxDevicePanel *panel, DeviceConnectionPrms *prms) {
+				this->panel = panel;
+				this->prms = prms;
+			}
+			virtual ~CalxInstrumentConnectAction() {
+				delete this->prms;
+			}
+			
+			virtual void perform(SystemManager *sysman) {
+				InstrumentController *ctrl = sysman->connectInstrument(prms);
+				if (ctrl == nullptr) {
+					wxMessageBox(__("Instrument can't be connected"),
+						__("Connection error"), wxICON_WARNING);
+				} else {
+					panel->requestUpdate();
+				}
+			}
+			
+			virtual void stop() {
+			}
+		private:
+			CalxDevicePanel *panel;
+			DeviceConnectionPrms *prms;
+	};
+	
 	CalxDevicePanel::CalxDevicePanel(wxWindow *win, wxWindowID id)
 		: wxScrolledWindow::wxScrolledWindow(win, id) {
 			
 		CalxApp &app = wxGetApp();
 		app.getSystemManager()->getRequestResolver()->registerProvider(new CalxMotorSerialConnectProvider(this));
 		app.getSystemManager()->getRequestResolver()->registerProvider(new CalxInstrumentSerialConnectProvider(this));
+		this->queue = new CalxActionQueue(app.getSystemManager(), this);
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		
 		wxPanel *connectPanel = new wxPanel(this, wxID_ANY);
@@ -176,6 +231,7 @@ namespace CalXUI {
         this->SetScrollRate(5, 5);
 		Bind(wxEVT_CLOSE_WINDOW, &CalxDevicePanel::OnExit, this);
 		Bind(wxEVT_DEVICE_PANEL_UPDATE, &CalxDevicePanel::OnDevicePanelUpdate, this);
+		this->queue->Run();
 	}
 	
 	void CalxDevicePanel::stop() {
@@ -189,6 +245,7 @@ namespace CalXUI {
 	}
 	
 	void CalxDevicePanel::OnExit(wxCloseEvent &evt) {
+		this->queue->stop();
 		for (const auto& instr : instrs) {
 			instr->Close(true);
 		}
@@ -255,16 +312,11 @@ namespace CalXUI {
 		CalxCOMSelectDialog *dialog = new CalxCOMSelectDialog(this, wxID_ANY);
 		dialog->ShowModal();
 		if (dialog->getPort() != -1) {
-			DeviceSerialPortConnectionPrms prms;
-			prms.port = dialog->getPort();
-			prms.speed = 9600;
-			prms.parity = SerialPortParity::No;
-			MotorController *ctrl = app.getSystemManager()->connectMotor(&prms);
-			if (ctrl == nullptr) {
-				wxMessageBox(__("Device can't be connected on COM") + std::to_string(dialog->getPort()),
-					__("Connection error"), wxICON_WARNING);
-			}
-			updateUI();
+			DeviceSerialPortConnectionPrms *prms = new DeviceSerialPortConnectionPrms();
+			prms->port = dialog->getPort();
+			prms->speed = dialog->getSpeed();
+			prms->parity = dialog->getParity();
+			this->queue->addAction(new CalxMotorConnectAction(this, prms));
 		}
 		dialog->Destroy();
 	}
@@ -274,22 +326,16 @@ namespace CalXUI {
 			wxMessageBox(__("Devices are busy"), __("Error"), wxICON_ERROR);
 			return;
 		}
-		CalxApp &app = wxGetApp();		
 		CalxCOMSelectDialog *dialog = new CalxCOMSelectDialog(this, wxID_ANY);
 		dialog->ShowModal();
 		if (dialog->getPort() != -1) {
-			DeviceSerialPortConnectionPrms prms;
-			prms.port = dialog->getPort();
-			prms.speed = dialog->getSpeed();
-			prms.parity = dialog->getParity();
-			InstrumentController *ctrl = app.getSystemManager()->connectInstrument(&prms);
-			if (ctrl == nullptr) {
-				wxMessageBox(__("Instrument can't be connected on COM") + std::to_string(dialog->getPort()),
-					__("Connection error"), wxICON_WARNING);
-			}
+			DeviceSerialPortConnectionPrms *prms = new DeviceSerialPortConnectionPrms();
+			prms->port = dialog->getPort();
+			prms->speed = dialog->getSpeed();
+			prms->parity = dialog->getParity();
+			this->queue->addAction(new CalxInstrumentConnectAction(this, prms));
 		}
 		dialog->Destroy();
-		updateUI();
 	}
 	
 	void CalxDevicePanel::OnDevicePanelUpdate(wxThreadEvent &evt) {
