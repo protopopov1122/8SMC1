@@ -33,6 +33,8 @@
 
 namespace CalXUI {
 	
+	wxDEFINE_EVENT(wxEVT_COORD_CTRL_WATCHER, wxThreadEvent);
+	
 	CalxCoordCtrl::CalxCoordCtrl(wxWindow *win, wxWindowID id, CoordHandle *ctrl)
 		: wxScrolledWindow::wxScrolledWindow(win, id) {
 		this->ctrl = ctrl;
@@ -136,6 +138,7 @@ namespace CalXUI {
 		
 		sizer->Add(actionPanel, 0, wxALL | wxEXPAND, 0);
 		Bind(wxEVT_COMMAND_QUEUE_UPDATE, &CalxCoordCtrl::OnQueueUpdate, this);
+		Bind(wxEVT_COORD_CTRL_WATCHER, &CalxCoordCtrl::OnWatcherRequest, this);
 		Bind(wxEVT_CLOSE_WINDOW, &CalxCoordCtrl::OnExit, this);
 		graphCtrl->Bind(wxEVT_CLOSE_WINDOW, &CalxCoordGraphCtrl::OnClose, graphCtrl);
 		updateUI();
@@ -178,7 +181,50 @@ namespace CalXUI {
 	}
 	
 	void CalxCoordCtrl::measure(TrailerId tr) {
-		this->queue->addAction(new CalxCoordMeasureAction(this, ctrl, tr));
+		bool ready = false;
+		this->queue->addAction(new CalxCoordMeasureAction(this, ctrl, tr), &ready);
+		while (!ready) {wxThread::Yield();}
+	}
+	
+	void CalxCoordCtrl::position(double x, double y) {
+		motor_rect_t sz = ctrl->getSize();
+		motor_point_t dest = {(motor_coord_t) (sz.x + sz.w * x), (motor_coord_t) (sz.y + sz.h * y)};
+		ConfigManager *config = wxGetApp().getSystemManager()->getConfiguration();
+		int speed = config->getEntry("core")->getInt("roll_speed", ROLL_SPEED);
+		int div = config->getEntry("core")->getInt("roll_div", ROLL_DIV);
+		bool ready = false;
+		this->queue->addAction(new CalxCoordMoveAction(this, ctrl, false, false, dest, speed, div), &ready);
+		while (!ready) {wxThread::Yield();}
+	}
+	
+	void CalxCoordCtrl::positionAbs(motor_point_t dest) {
+		ConfigManager *config = wxGetApp().getSystemManager()->getConfiguration();
+		int speed = config->getEntry("core")->getInt("roll_speed", ROLL_SPEED);
+		int div = config->getEntry("core")->getInt("roll_div", ROLL_DIV);
+		bool ready = false;
+		this->queue->addAction(new CalxCoordMoveAction(this, ctrl, false, false, dest, speed, div), &ready);
+		while (!ready) {wxThread::Yield();}
+	}
+	
+	void CalxCoordCtrl::center() {
+		motor_point_t offset = ctrl->getPosition();
+		this->map->setOffset(offset);
+		this->otherCtrl->setXOffset(offset.x);
+		this->otherCtrl->setYOffset(offset.y);
+	}
+	
+	void CalxCoordCtrl::invert() {
+		motor_scale_t scale = map->getScale();
+		scale.x *= -1;
+		scale.y *= -1;
+		this->map->setScale(scale);
+		this->otherCtrl->setXScale(scale.x);
+		this->otherCtrl->setYScale(scale.y);
+	}
+	
+	void CalxCoordCtrl::watcher() {
+		wxThreadEvent evt(wxEVT_COORD_CTRL_WATCHER);
+		wxPostEvent(this, evt);
 	}
 	
 	void CalxCoordCtrl::updateUI() {
@@ -190,8 +236,6 @@ namespace CalXUI {
 								__("Instrument: no")) + "\n" +
 							  FORMAT(__("Position: %sx%s"), std::to_string(ctrl->getPosition().x),
 									std::to_string(ctrl->getPosition().y)) + "\n" +
-							  /*FORMAT(__("Start: %s"), (ctrl->isMeasured() ? (std::to_string(ctrl->getSize().x) +
-									+ __("x") + std::to_string(ctrl->getSize().y)) : __("Not measured"))) + "\n" +*/
 							  (ctrl->isMeasured() ? FORMAT(__("Start: %sx%s"), std::to_string(ctrl->getSize().x),
 							                                                   std::to_string(ctrl->getSize().y)) :
 													__("Start: Not measured")) + "\n" +
@@ -362,5 +406,12 @@ namespace CalXUI {
 	void CalxCoordCtrl::OnInterfaceUpdate(wxCollapsiblePaneEvent &evt) {
 		Layout();
 		Refresh();
+	}
+	
+	void CalxCoordCtrl::OnWatcherRequest(wxThreadEvent &evt) {
+		if (this->ctrl->isMeasured()) {
+			CalxCoordPlaneWatcherDialog *watcher = new CalxCoordPlaneWatcherDialog(this, wxID_ANY, this->ctrl);
+			watcher->Show(true);
+		}
 	}
 }

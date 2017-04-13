@@ -39,6 +39,8 @@ using namespace CalX;
 
 namespace CalXUI {
 	
+	wxDECLARE_EVENT(wxEVT_COORD_CTRL_WATCHER, wxThreadEvent);
+	
 	class CalxCoordCtrl : public wxScrolledWindow {
 		public:
 			friend class CalxCoordEventListener;
@@ -70,11 +72,17 @@ namespace CalXUI {
 				return !queue->isEmpty();
 			}
 			void measure(TrailerId);
+			void position(double, double);
+			void positionAbs(motor_point_t);
+			void center();
+			void invert();
+			void watcher();
 		private:
 			void OnExit(wxCloseEvent&);
 			void OnQueueUpdate(wxThreadEvent&);
 			void OnStopClick(wxCommandEvent&);
 			void OnWatcherClick(wxCommandEvent&);
+			void OnWatcherRequest(wxThreadEvent&);
 			
 			CoordHandle *ctrl;
 			CoordEventListener *listener;

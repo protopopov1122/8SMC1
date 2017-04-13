@@ -43,7 +43,7 @@ namespace CalXUI {
 			public:
 				CalxActionQueue(SystemManager*, wxEvtHandler*);
 				virtual ~CalxActionQueue();
-				void addAction(CalxAction*);
+				void addAction(CalxAction*, bool* = nullptr);
 				bool isEmpty();
 				void stop();
 				void stopCurrent();
@@ -55,7 +55,7 @@ namespace CalXUI {
 				wxMutex *mutex;
 				wxCondition *cond;
 				wxMutex condMutex;
-				std::vector<CalxAction*> queue;
+				std::vector<std::pair<CalxAction*, bool*>> queue;
 				CalxAction *current;
 				bool work;
 				SystemManager *sysman;

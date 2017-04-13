@@ -51,6 +51,12 @@ namespace CalXUI {
 			bool isLoggingErrors() {return logActions->GetValue();}
 			int getXOffset() {return xOffset->GetValue();}
 			int getYOffset() {return yOffset->GetValue();}
+			void setXOffset(int x) {
+				xOffset->SetValue(x);
+			}
+			void setYOffset(int y) {
+				yOffset->SetValue(y);
+			}
 			double getXScale() {
 				double val;
 				if (!xScale->GetValue().ToDouble(&val)) {
