@@ -135,6 +135,30 @@ namespace CalXUI {
 			CalxDevicePanel *devpanel;
 	};
 	
+	class CalxMotorPowerProvider : public RequestProvider {
+		public:
+			CalxMotorPowerProvider(CalxDevicePanel *devpanel)
+				: RequestProvider::RequestProvider("motor.power") {
+				this->devpanel = devpanel;
+			}
+			
+			virtual ~CalxMotorPowerProvider() {
+				
+			}
+			
+			virtual bool execute(Request *req, SystemManager *sysman) {
+				PROVIDER_ARGC(req, 2)
+				PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
+				PROVIDER_ARG_TYPE(req, 1, ConfigValueType::Boolean)
+				device_id_t devid = (device_id_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 0))->getValue();
+				bool power = ((BoolConfigValue*) PROVIDER_ARG(req, 1))->getValue();
+				MotorController *ctrl = sysman->getMotorController(devid);
+				return ctrl->getMotor()->enablePower(power);
+			}
+		private:
+			CalxDevicePanel *devpanel;
+	};
+	
 	class CalxMotorConnectAction : public CalxAction {
 		public:
 			CalxMotorConnectAction(CalxDevicePanel *panel, DeviceConnectionPrms *prms) {
@@ -195,6 +219,7 @@ namespace CalXUI {
 		CalxApp &app = wxGetApp();
 		app.getSystemManager()->getRequestResolver()->registerProvider(new CalxMotorSerialConnectProvider(this));
 		app.getSystemManager()->getRequestResolver()->registerProvider(new CalxInstrumentSerialConnectProvider(this));
+		app.getSystemManager()->getRequestResolver()->registerProvider(new CalxMotorPowerProvider(this));
 		this->queue = new CalxActionQueue(app.getSystemManager(), this);
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		
