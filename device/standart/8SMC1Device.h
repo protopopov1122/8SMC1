@@ -44,13 +44,12 @@ namespace CalX {
 			virtual ~_8SMC1Motor();
 			virtual DeviceManager *getDeviceManager();
 			virtual std::string getDeviceInfo();
+			virtual std::string getRuntimeInfo();
 			/* Methods that implement Device interface */
 			virtual int getPosition();		// CurPos
 			virtual Power getPowerState();		// Power & FullPower
 			virtual bool isRunning();		// RUN
 			virtual bool isTrailerPressed(int);	// Trailer1 & Trailer2
-			virtual float getTemperature();		// Temp
-			virtual float getVoltage();		// Volatage
 			virtual bool start(int, float,
 					unsigned char, bool  = false);	// Specify location, speed, divisor
 			virtual bool stop();				// Stop motor
@@ -61,6 +60,8 @@ namespace CalX {
 			bool isAutoSaving();
 			bool flush();	// Send mode and parameters to device
 
+			virtual float getTemperature();		// Temp
+			virtual float getVoltage();		// Volatage
 			// USMC_State
 			/* This group of methods allows getting information from controller.
 				NOTE: Each call updates state structure. */

@@ -65,6 +65,13 @@ namespace CalX {
 			}
 		} while (strlen(er) > 0);
 		
+		for (size_t i = 0; i < this->dev.size(); i++) {
+			Motor *m = this->dev.at(i);
+			while (m->hasErrors()) {
+				this->error_queue.push_back(m->pollError());
+			}
+		}
+		
 		for (size_t i = 0; i < this->instr.size(); i++) {
 			Instrument *in = this->instr.at(i);
 			while (in->hasErrors()) {

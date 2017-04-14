@@ -181,6 +181,7 @@ namespace CalX {
 			virtual bool enable(bool);
 			virtual bool enabled();
 			virtual std::string getDeviceInfo();
+			virtual std::string getRuntimeInfo();
 			virtual bool setMode(InstrumentMode);
 			virtual InstrumentMode getMode();
 			

@@ -661,6 +661,10 @@ namespace CalX {
 		return out;
 	}
 	
+	std::string NL300Instrument::getRuntimeInfo() {
+		return "";
+	}
+	
 	std::pair<std::string, std::string> NL300Instrument::getSystemCommandResponse(NL300SystemCommand &syscom) {
 		bool b = writeMessage(syscom);
 		if (!b) {

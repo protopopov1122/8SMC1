@@ -55,12 +55,11 @@ namespace CalX {
 				}
 				std::cout << "Device #" << dev->getID() << " state" << std::endl;
 				std::cout << "\tCurrent position\t" << dev->getPosition() << std::endl;
-				std::cout << "\tTemperature\t" << dev->getTemperature() << std::endl;
-				std::cout << "\tVoltage\t" << dev->getVoltage() << std::endl;
+				std::cout << "\tDevice info: " << dev->getDeviceInfo() << std::endl;
+				std::cout << "\tRuntime info: " << dev->getRuntimeInfo() << std::endl;
 				std::cout << "\tPower\t" << (dev->getPowerState() == Power::FullPower ?
 								"full" : (dev->getPowerState() == Power::HalfPower ?
 								"half" : "no")) << std::endl;
-				std::cout << "\tTemperature\t" << dev->getTemperature() << std::endl;
 				std::cout << "\tTrailer 1\t" << (dev->isTrailerPressed(1) ? "Pushed" : "Unpushed") << std::endl;
 				std::cout << "\tTrailer 2\t" << (dev->isTrailerPressed(2) ? "Pushed" : "Unpushed") << std::endl;
 				std::cout << (dev->isRunning() ? "\tRunning" : "\tNot running") << std::endl;

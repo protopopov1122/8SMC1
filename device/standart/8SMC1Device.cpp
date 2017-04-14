@@ -49,6 +49,11 @@ namespace CalX {
 			"; Version: " + this->devman->getMotorVersion(this->dev);
 	}
 	
+	std::string _8SMC1Motor::getRuntimeInfo() {
+		return "Temperature: " + std::to_string(this->getTemperature()) +
+			"; Voltage: " + std::to_string(this->getVoltage());
+	}
+	
 	bool _8SMC1Motor::enablePower(bool power) {
 		Power pwr = getPowerState();
 		if ((pwr == Power::NoPower &&
