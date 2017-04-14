@@ -39,8 +39,6 @@ namespace CalX {
 			virtual ~EmuDeviceManager();
 			virtual void refresh();
 			virtual void saveError();
-			virtual std::string getMotorSerial(device_id_t);
-			virtual std::string getMotorVersion(device_id_t);
 			virtual Motor *connectMotor(DeviceConnectionPrms*);
 			virtual Instrument *connectInstrument(DeviceConnectionPrms*);
 	};

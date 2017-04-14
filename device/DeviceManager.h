@@ -41,8 +41,6 @@ namespace CalX {
 			virtual void saveError() = 0;			// Poll all device generated errors and save them into queue
 			virtual Motor *getMotor(device_id_t);	// Return device by id
 			virtual size_t getMotorCount();		// Get device count
-			virtual std::string getMotorSerial(device_id_t) = 0;	// Optional. Return device serial number
-			virtual std::string getMotorVersion(device_id_t) = 0;	// Optional. Return device version.
 			virtual size_t getInstrumentCount();	// Get instrument count
 			virtual Instrument *getInstrument(device_id_t);	// Get instrument by id
 			virtual bool hasError();				// Check errors

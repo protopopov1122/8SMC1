@@ -46,14 +46,6 @@ namespace CalX {
 		
 	}
 	
-	std::string EmuDeviceManager::getMotorSerial(device_id_t id) {
-		return "";
-	}
-	
-	std::string EmuDeviceManager::getMotorVersion(device_id_t id) {
-		return "";
-	}
-	
 	Motor *EmuDeviceManager::connectMotor(DeviceConnectionPrms *prms) {
 		EmuMotor *motor = new EmuMotor(this->dev.size(), this);
 		this->dev.push_back(motor);
