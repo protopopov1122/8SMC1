@@ -27,6 +27,7 @@
 const int MIN_POS = -150000;
 const int MAX_POS = 150000;
 int POS[] = {0, 0};
+int POWER[] = {0, 0};
 
 char SER01[] = "01";
 char SER02[] = "02";
@@ -50,6 +51,8 @@ DWORD USMC_GetState(DWORD dev, USMC_State &state) {
 	state.CurPos = POS[dev];
 	state.Trailer1 = POS[dev] < MIN_POS;
 	state.Trailer2 = POS[dev] > MAX_POS;
+	state.Power = POWER[dev] > 0;
+	state.FullPower = POWER[dev] > 1;
 	return FALSE;
 }
 
@@ -58,9 +61,10 @@ DWORD USMC_SetCurrentPosition(DWORD dev, int pos) {
 }
 
 DWORD USMC_Start(DWORD dev, int DestPos, float &Speed, USMC_StartParameters &Str) {
-/*	std::cout << "Move #" << dev << " to " << DestPos
-			<< " with speed " << Speed
-			<< "; sync: " << (Str.WSyncIN ? "enabled" : "disabled") << std::endl;*/
+	if (POWER[dev] == 0) {
+		return FALSE;
+	}
+	POWER[dev] = 2;
 	POS[dev] = DestPos;
 	return FALSE;
 }
@@ -74,6 +78,7 @@ DWORD USMC_GetMode(DWORD dev, USMC_Mode &mod) {
 }
 
 DWORD USMC_SetMode(DWORD dev, USMC_Mode &Str) {
+	POWER[dev] = Str.ResetD ? 0 : 1;
 	return FALSE;
 }
 

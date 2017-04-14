@@ -69,9 +69,7 @@ printf "\tcp \$(WX)/\$(WXLIB) \$(BUILD)\n"
 printf "endif\n"
 printf "\t\$(MAKE) icon\n"
 printf "\t\$(MAKE) lang\n"
-printf "ifeq (\$(PLATFORM), 'win')\n"
 printf '\t`$(WX)/wx-config --rescomp` winbuild/calxui.rc -O coff -o $(ICON)\n'
-printf "endif\n"
 printf "\t\$(CC) -o \$(BUILD)/\$(OUTPUT_UI) " 
 printf "$OBJS \$(ICON)"
 printf ' $(LDFLAGS) -Wl,--library-path=\$(BUILD) -lcalx `$(WX)/wx-config --libs`\n\n'

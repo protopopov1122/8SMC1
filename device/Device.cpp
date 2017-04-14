@@ -23,47 +23,32 @@
 /* Implementations of API wrappers */
 
 namespace CalX {
-
-	Motor::~Motor() {
-		
-	}
-
-	DeviceManager *Motor::getDeviceManager() {
-		return this->devman;
-	}
-
-	device_id_t Motor::getID() {
-		return this->dev;
-	}
-
-	std::string Motor::getSerial() {
-		return this->devman->getMotorSerial(this->dev);
-	}
-
-	std::string Motor::getVersion() {
-		return this->devman->getMotorVersion(this->dev);
+	
+	Device::Device(DeviceType t) {
+		this->type = t;
 	}
 	
-	Instrument::Instrument() {
-	}
-	
-	Instrument::~Instrument() {
+	Device::~Device() {
 		
 	}
 	
-	device_id_t Instrument::getID() {
+	DeviceType Device::getType() {
+		return this->type;
+	}
+	
+	device_id_t Device::getID() {
 		return this->dev;
 	}
 	
-	DeviceManager *Instrument::getDeviceManager() {
-		return this->devman;
+	ConfigManager *Device::getConfiguration() {
+		return &this->config;
 	}
 	
-	bool Instrument::hasErrors() {
+	bool Device::hasErrors() {
 		return this->errors.size() != 0;
 	}
 	
-	std::string Instrument::pollError() {
+	std::string Device::pollError() {
 		if (this->errors.size() == 0) {
 			return "";
 		}
@@ -72,7 +57,20 @@ namespace CalX {
 		return err;
 	}
 	
-	ConfigManager *Instrument::getConfiguration() {
-		return &this->config;
+	Motor::Motor()
+		: Device::Device(DeviceType::Motor) {
+			
+	}
+
+	Motor::~Motor() {
+		
+	}
+	
+	Instrument::Instrument()
+		: Device::Device(DeviceType::Instrument) {
+	}
+	
+	Instrument::~Instrument() {
+		
 	}
 }

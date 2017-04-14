@@ -1,5 +1,5 @@
-#ifndef CALX_8SMC1_DEVICE_MANAGER_H_
-#define CALX_8SMC1_DEVICE_MANAGER_H_
+#ifndef CALX_STANDART_DEVICE_MANAGER_H_
+#define CALX_STANDART_DEVICE_MANAGER_H_
 
 #include <stdlib.h>
 #include <string.h>

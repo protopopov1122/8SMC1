@@ -20,11 +20,11 @@
 
 #include <iostream>
 #include <string.h>
-#include "8SMC1DeviceManager.h"
+#include "StandartDeviceManager.h"
 
 namespace CalX {
 	
-	_8SMC1Motor::_8SMC1Motor(device_id_t dev, DeviceManager *devman) {
+	_8SMC1Motor::_8SMC1Motor(device_id_t dev, StandartDeviceManager *devman) {
 		this->dev = dev;
 		this->devman = devman;
 		this->speed = 1500;
@@ -38,6 +38,26 @@ namespace CalX {
 	}
 
 	_8SMC1Motor::~_8SMC1Motor() {
+	}
+	
+	DeviceManager *_8SMC1Motor::getDeviceManager() {
+		return this->devman;
+	}
+
+	std::string _8SMC1Motor::getDeviceInfo() {
+		return "Serial: " + this->devman->getMotorSerial(this->dev) +
+			"; Version: " + this->devman->getMotorVersion(this->dev);
+	}
+	
+	bool _8SMC1Motor::enablePower(bool power) {
+		Power pwr = getPowerState();
+		if ((pwr == Power::NoPower &&
+				power) ||
+			(pwr != Power::NoPower &&
+				!power)) {
+			return flipPower();		
+		}
+		return true;
 	}
 
 	bool _8SMC1Motor::isAutoSaving() {

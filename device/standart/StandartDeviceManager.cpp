@@ -18,7 +18,7 @@
 */
 
 
-#include "8SMC1DeviceManager.h"
+#include "StandartDeviceManager.h"
 #include <stdio.h>
 #include <string.h>
 #include <iostream>

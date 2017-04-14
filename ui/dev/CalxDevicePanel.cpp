@@ -307,8 +307,7 @@ namespace CalXUI {
 		if (isBusy()) {
 			wxMessageBox(__("Devices are busy"), __("Error"), wxICON_ERROR);
 			return;
-		}
-		CalxApp &app = wxGetApp();		
+		}	
 		CalxCOMSelectDialog *dialog = new CalxCOMSelectDialog(this, wxID_ANY);
 		dialog->ShowModal();
 		if (dialog->getPort() != -1) {

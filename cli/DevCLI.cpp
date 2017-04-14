@@ -35,8 +35,7 @@ namespace CalX {
 			for (unsigned int i = 0; i < sysman->getDeviceManager()->getMotorCount(); i++) {
 				Motor *dev = sysman->getDeviceManager()->getMotor(i);
 				std::cout << "Device - " << dev->getID() << "; "
-					<< "Serial Number - " << dev->getSerial() << "; "
-					<< "Version - " << dev->getVersion() << std::endl;
+					<< "Info - " << dev->getDeviceInfo() << std::endl;
 			}
 		} else {
 			std::string req = args.at(0);
@@ -185,7 +184,7 @@ namespace CalX {
 					std::cout << "Device #" << i << " not found" << std::endl;
 					return;
 				}
-				if (dev->flipPower()) {
+				if (dev->enablePower(dev->getPowerState() == Power::NoPower)) {
 					std::cout << "\tDevice #" << i << ": power\t" << (dev->getPowerState() == Power::FullPower ?
 									"full" : (dev->getPowerState() == Power::HalfPower ?
 									"half" : "no")) << std::endl;

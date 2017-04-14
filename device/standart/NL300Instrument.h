@@ -31,7 +31,9 @@
 #include <windows.h>
 
 namespace CalX {
-		
+	
+	class StandartDeviceManager; // Forward referencing
+	
 	enum class NL300InstrumentMode {
 		Adjustment = 0, FullPower = 1
 	};
@@ -173,11 +175,12 @@ namespace CalX {
 	
 	class NL300Instrument : public Instrument {
 		public:
-			NL300Instrument(device_id_t, DeviceSerialPortConnectionPrms*, DeviceManager*);
+			NL300Instrument(device_id_t, DeviceSerialPortConnectionPrms*, StandartDeviceManager*);
 			virtual ~NL300Instrument();
+			virtual DeviceManager *getDeviceManager();
 			virtual bool enable(bool);
 			virtual bool enabled();
-			virtual std::string getInfo();
+			virtual std::string getDeviceInfo();
 			virtual bool setMode(InstrumentMode);
 			virtual InstrumentMode getMode();
 			
@@ -194,6 +197,7 @@ namespace CalX {
 			NL300GeneralCommand *inquireGeneralParameter(char, uint16_t);
 			int64_t inquireIntegerParameter(char, uint16_t, int64_t);
 		
+			StandartDeviceManager *devman;
 			bool state;
 			InstrumentMode mode;
 			HANDLE handle;

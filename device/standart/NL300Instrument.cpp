@@ -21,6 +21,7 @@
 #include <string.h>
 #include <string>
 #include "NL300Instrument.h"
+#include "StandartDeviceManager.h"
 
 namespace CalX {
 	
@@ -261,7 +262,7 @@ namespace CalX {
 	
 	#define ILOG(msg) LOG_INSTR(this->getID(), msg)
 	
-	NL300Instrument::NL300Instrument(device_id_t id, DeviceSerialPortConnectionPrms *prms, DeviceManager *devman)
+	NL300Instrument::NL300Instrument(device_id_t id, DeviceSerialPortConnectionPrms *prms, StandartDeviceManager *devman)
 		: Instrument::Instrument() {
 		this->dev = id;
 		this->devman = devman;
@@ -347,6 +348,10 @@ namespace CalX {
 			CloseHandle(handle);
 		}
 		ILOG("Instrument closed");
+	}
+	
+	DeviceManager *NL300Instrument::getDeviceManager() {
+		return this->devman;
 	}
 	
 	bool NL300Instrument::enable(bool en) {
@@ -626,7 +631,7 @@ namespace CalX {
 		return state;
 	}
 	
-	std::string NL300Instrument::getInfo() {
+	std::string NL300Instrument::getDeviceInfo() {
 		std::string out = "Connected via serial port: COM" +
 			std::to_string(prms.port) + "; speed: " +
 			std::to_string(prms.speed) + "; parity: ";

@@ -76,7 +76,7 @@ namespace CalX {
 	}
 	
 	std::string InstrumentController::getInfo() {
-		return this->instr->getInfo();
+		return this->instr->getDeviceInfo();
 	}
 	
 	InstrumentMode InstrumentController::getMode() {

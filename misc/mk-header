@@ -31,6 +31,7 @@ LANG_win=-std=c++11 -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-attribute
 DBG_win_debug=-O0 -DLOGGING
 DBG_win_release=-O2
 DBG_win=$(DBG_win_$(TARGET))
+INCLUDES_win=-I.
 LIBCFLAGS_win=
 LIB_LDFLAGS_win=
 CFLAGS_win=$(LANG_win) $(DBG_win) $(INCLUDES_win) $(EXTRA)
@@ -38,9 +39,7 @@ LDFLAGS_win=-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl
 # Windows tools
 CONVERT := $(shell command -v convert 2> /dev/null)
 ifdef CONVERT
-ifdef WINDRES
 ICON=calxui.res
-endif
 endif
 
 #Build flags

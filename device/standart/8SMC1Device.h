@@ -36,10 +36,14 @@
 
 namespace CalX {
 	
+	class StandartDeviceManager; // Forward referencing
+	
 	class _8SMC1Motor : public Motor {
 		public:
-			_8SMC1Motor(device_id_t, DeviceManager*);
+			_8SMC1Motor(device_id_t, StandartDeviceManager*);
 			virtual ~_8SMC1Motor();
+			virtual DeviceManager *getDeviceManager();
+			virtual std::string getDeviceInfo();
 			/* Methods that implement Device interface */
 			virtual int getPosition();		// CurPos
 			virtual Power getPowerState();		// Power & FullPower
@@ -50,6 +54,7 @@ namespace CalX {
 			virtual bool start(int, float,
 					unsigned char, bool  = false);	// Specify location, speed, divisor
 			virtual bool stop();				// Stop motor
+			virtual bool enablePower(bool);		// Power control
 			
 			/* Some misc methods */
 			void setAutoSave(bool);
@@ -114,6 +119,7 @@ namespace CalX {
 			bool waitsForSync();		// Motor wait for sync
 			void waitForSync(bool);
 		private:
+			StandartDeviceManager *devman;
 			// USMC API structures
 			USMC_State state;
 			USMC_StartParameters startPrms;

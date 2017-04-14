@@ -78,13 +78,34 @@ namespace CalX {
 	       * methods that are actually performing some actions or return useful information - Functional.
 		   * methods that are optional and may return fake values - Optional.
 	*/
-	class Motor {
+	
+	enum class DeviceType {
+		Motor, Instrument
+	};
+	
+	class Device {
 		public:
+			Device(DeviceType);
+			virtual ~Device();
+			DeviceType getType();
+			virtual device_id_t getID();
+			virtual bool hasErrors();
+			virtual std::string pollError();
+			virtual ConfigManager *getConfiguration();
+			virtual DeviceManager *getDeviceManager() = 0;
+			virtual std::string getDeviceInfo() = 0;
+		protected:
+			device_id_t dev;
+			ConfigManager config;
+			std::vector<std::string> errors;
+		private:
+			DeviceType type;
+	};
+	
+	class Motor : public Device {
+		public:
+			Motor();
 			virtual ~Motor();
-			virtual DeviceManager *getDeviceManager();
-			virtual device_id_t getID();		// Defined by device manager.
-			virtual std::string getSerial();	// Optional. Depends on device manager.
-			virtual std::string getVersion();	// Optional. Depends on device manager.
 			virtual int getPosition() = 0;		// Functional. Returns motor position in motor steps.
 			virtual bool isTrailerPressed(int) = 0;	// Functional. Provides info about device trailers.
 			virtual bool isRunning() = 0;		// Functional. Provides info about device state.
@@ -92,35 +113,21 @@ namespace CalX {
 			virtual bool start(int, float,
 					unsigned char, bool  = false) = 0;	// Functional. Controls device movement.
 			virtual bool stop() = 0;			// Functional. Controls device movement.
-			virtual bool flipPower() = 0;		// Functional. Controls device power.
+			virtual bool enablePower(bool) = 0;		// Functional. Controls device power.
 			virtual float getTemperature() = 0;	// Optional. Provides info about motor temperature.
 			virtual float getVoltage() = 0;		// Optional. Provides info about motor voltage.
-		protected:
-			device_id_t dev;
-			DeviceManager *devman;
 	};
 
 	/* Abstract instrument.
 	   Has few methods to enable/disable and check state. They all are functional. */
-	class Instrument {
+	class Instrument : public Device {
 		public:
 			Instrument();
 			virtual ~Instrument();
-			virtual device_id_t getID();	// Defined by device manager
-			virtual DeviceManager *getDeviceManager();
 			virtual bool enable(bool) = 0;
 			virtual bool enabled() = 0;
-			virtual std::string getInfo() = 0;
-			virtual bool hasErrors();
-			virtual std::string pollError();
 			virtual InstrumentMode getMode() = 0;
 			virtual bool setMode(InstrumentMode) = 0;
-			virtual ConfigManager *getConfiguration();
-		protected:
-			device_id_t dev;
-			DeviceManager *devman;
-			std::vector<std::string> errors;
-			ConfigManager config;
 	};
 }
 
