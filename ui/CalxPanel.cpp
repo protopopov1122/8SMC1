@@ -54,8 +54,13 @@ namespace CalXUI {
 		
 		wxMilliSleep(400);
 		
+		while (GetPageCount()) {
+			RemovePage(0);
+		}
 		getCoords()->Close(true);
 		getDevices()->Close(true);
 		getTasks()->Close(true);
+		
+		Destroy();
 	}
 }

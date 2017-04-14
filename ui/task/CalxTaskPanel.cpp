@@ -191,6 +191,7 @@ namespace CalXUI {
 		for (const auto& h : list) {
 			h->Close(true);
 		}
+		Destroy();
 	}
 	
 	void CalxTaskPanel::OnNewGcodeClick(wxCommandEvent &evt) {
