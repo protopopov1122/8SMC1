@@ -1,55 +1,55 @@
-# Build target
+# Build settings
 TARGET=debug
 PLATFORM=win
-OUTPUT=calx
-UI=calxui
+NAME=calx
+UINAME=calxui
 BUILD=./build
 WXLIB=
 EXTRA=
+DEVAPI=standart
 
 # Linux build specific
-OUTPUT.EXE_linux=$(OUTPUT)
-OUTPUT.LIB_linux=lib$(OUTPUT).so
-OUTPUT_UI_linux=$(UI)
+OUTPUT_linux=$(NAME)
+OUTPUT_LIB_linux=lib$(NAME).so
+OUTPUT_UI_linux=$(UINAME)
 CC_linux=g++
 LANG_linux=-std=c++11 -Wall -Wextra -pedantic -Wno-unused-parameter
-DBG_linux_debug=-O0 -DLOGGING
-DBG_linux_release=-O2
-DBG_linux=$(DBG_linux_$(TARGET))
+DBG_debug_linux=-O0 -DLOGGING
+DBG_release_linux=-O2
 INCLUDES_linux=-I.
-LIBCFLAGS_linux=-fPIC
-LIBLDFLAGS_linux=
-CFLAGS_linux=$(LANG_linux) $(DBG_linux) $(INCLUDES_linux) $(EXTRA)
+CFLAGS_LIB_linux=-fPIC
+LDFLAGS_LIB_linux=
+CFLAGS_linux=$(LANG_linux) $(DBG_linux) $(INCLUDES_linux)
 LDFLAGS_linux=-lpthread
 
-# Windows build specific
-OUTPUT.EXE_win=$(OUTPUT).exe
-OUTPUT.LIB_win=$(OUTPUT).dll
-OUTPUT_UI_win=$(UI).exe
+# Windows specific
+OUTPUT_win=$(NAME).exe
+OUTPUT_LIB_win=$(NAME).dll
+OUTPUT_UI_win=$(UINAME).exe
 CC_win=i686-w64-mingw32-g++
 LANG_win=-std=c++11 -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-attributes
-DBG_win_debug=-O0 -DLOGGING
-DBG_win_release=-O2
-DBG_win=$(DBG_win_$(TARGET))
+DBG_debug_win=-O0 -DLOGGING
+DBG_release_win=-O2
 INCLUDES_win=-I.
-LIBCFLAGS_win=
-LIB_LDFLAGS_win=
-CFLAGS_win=$(LANG_win) $(DBG_win) $(INCLUDES_win) $(EXTRA)
+CFLAGS_LIB_win=
+LDFLAGS_LIB_win=
+CFLAGS_win=$(LANG_win) $(DBG_win) $(INCLUDES_win)
 LDFLAGS_win=-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic
-# Windows tools
 CONVERT := $(shell command -v convert 2> /dev/null)
 ifdef CONVERT
 ICON=calxui.res
 endif
 
-#Build flags
-OUTPUT.EXE=$(OUTPUT.EXE_$(PLATFORM))
-OUTPUT.LIB=$(OUTPUT.LIB_$(PLATFORM))
+# Build parameters
+OUTPUT=$(OUTPUT_$(PLATFORM))
+OUTPUT_LIB=$(OUTPUT_LIB_$(PLATFORM))
 OUTPUT_UI=$(OUTPUT_UI_$(PLATFORM))
 CC=$(CC_$(PLATFORM))
-LIBCFLAGS=$(LIBCFLAGS_$(PLATFORM))
-LIBLDFLAGS=$(LIBLDFLAGS_$(PLATFORM))
+LANG=$(LANG_$(PLATFORM))
+DBG=$(DBG_$(TARGET)_$(PLATFORM))
+INCLUDES=$(INCLUDES_$(PLATFORM))
+CFLAGS_LIB=$(CFLAGS_LIB_$(PLATFORM))
+LDFLAGS_LIB=$(LDFLAGS_LIB_$(PLATFORM))
+CFLAGS=$(CFLAGS_$(PLATFORM)) $(EXTRA)
 LDFLAGS=$(LDFLAGS_$(PLATFORM))
-CFLAGS=$(CFLAGS_$(PLATFORM))
-
 

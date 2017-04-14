@@ -1,5 +1,3 @@
-
-
 icon:
 ifdef ICON
 	convert misc/icon.svg -resize 256x256 -quality 100 icon.png
@@ -8,6 +6,7 @@ ifdef ICON
 	convert icon.png -resize 48x48 -quality 100 icon48.png
 	convert icon.png -resize 32x32 -quality 100 icon32.png
 	convert *.png $(BUILD)/icon.ico
+	`$(WX)/wx-config --rescomp` winbuild/calxui.rc -O coff -o $(ICON)
 endif
 
 
