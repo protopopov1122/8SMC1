@@ -38,6 +38,9 @@ LDFLAGS_win=-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl
 CONVERT := $(shell command -v convert 2> /dev/null)
 ifdef CONVERT
 ICON=calxui.res
+ifeq ($(PLATFORM), win)
+ICON_RES=$(ICON)
+endif
 endif
 
 # Build parameters
@@ -54,16 +57,27 @@ CFLAGS=$(CFLAGS_$(PLATFORM)) $(EXTRA)
 LDFLAGS=$(LDFLAGS_$(PLATFORM))
 
 8SMC1Device.o:
-	$(CC) $(CFLAGS) -Ires -c device/standart/8SMC1Device.cpp
-
-NL300Instrument.o:
-	$(CC) $(CFLAGS) -Ires -c device/standart/NL300Instrument.cpp
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -Ires -c device/standart/8SMC1Device.cpp
 
 StandartDeviceManager.o:
-	$(CC) $(CFLAGS) -Ires -c device/standart/StandartDeviceManager.cpp
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -Ires -c device/standart/StandartDeviceManager.cpp
 
-devapi_standart: 8SMC1Device.o NL300Instrument.o StandartDeviceManager.o  $(OUTPUT_LIB)
-	$(CC) $(CFLAGS) -shared -o $(BUILD)/dev_standart.dll 8SMC1Device.o NL300Instrument.o StandartDeviceManager.o  -Wl,-Bdynamic,--library-path=$(BUILD) -lUSMCDLL $(LDFLAGS) -Wl,--library-path=$(LIB) -lcalx -Wl,--out-implib,$(BUILD)/\dev_standart.a
+NL300Instrument.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -Ires -c device/standart/NL300Instrument.cpp
+
+devapi_standart: 8SMC1Device.o StandartDeviceManager.o NL300Instrument.o  $(OUTPUT_LIB)
+	$(CC) -shared 8SMC1Device.o StandartDeviceManager.o NL300Instrument.o   -o $(BUILD)/dev_standart.dll -Wl,-Bdynamic,--library-path=$(BUILD) -lUSMCDLL  -Wl,--out-implib,$(BUILD)/\dev_standart.a $(LDFLAGS) $(LDFLAGS_LIB) -Wl,--library-path=$(LIB) -lcalx
+EmuInstrument.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS)  -c device/emulated/EmuInstrument.cpp
+
+EmuDeviceManager.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS)  -c device/emulated/EmuDeviceManager.cpp
+
+EmuMotor.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS)  -c device/emulated/EmuMotor.cpp
+
+devapi_emulated: EmuInstrument.o EmuDeviceManager.o EmuMotor.o  $(OUTPUT_LIB)
+	$(CC) -shared EmuInstrument.o EmuDeviceManager.o EmuMotor.o   -o $(BUILD)/libdev_emulated.so -Wl,-Bdynamic,--library-path=$(BUILD) $(LDFLAGS) $(LDFLAGS_LIB) -Wl,--library-path=$(LIB) -lcalx
 
 Device.o:
 	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c device/Device.cpp
@@ -74,56 +88,68 @@ DeviceManager.o:
 Stub.o:
 	$(CC) $(CFLAGS_LIB) $(CFLAGS) -Ires -c misc/Stub.cpp
 
-ConfigManager.o:
-	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/ConfigManager.cpp
+CoordTask.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/task/CoordTask.cpp
 
-ConfigValidator.o:
-	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/ConfigValidator.cpp
+CoordTaskWrapper.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/task/CoordTaskWrapper.cpp
 
-CoordController.o:
-	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/CoordController.cpp
+GCodeCoordTask.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/task/GCodeCoordTask.cpp
 
-CoordHandle.o:
-	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/CoordHandle.cpp
+LogarithmicCoordTranslator.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/translator/LogarithmicCoordTranslator.cpp
 
-AST.o:
-	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/graph/AST.cpp
+PolarCoordTranslator.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/translator/PolarCoordTranslator.cpp
 
-DefaultFunctions.o:
-	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/graph/DefaultFunctions.cpp
+LinearCoordTranslator.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/translator/LinearCoordTranslator.cpp
 
-FunctionEngine.o:
-	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/graph/FunctionEngine.cpp
+BasicCoordTranslator.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/translator/BasicCoordTranslator.cpp
 
-FunctionLexer.o:
-	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/graph/FunctionLexer.cpp
-
-FunctionParser.o:
-	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/graph/FunctionParser.cpp
-
-InstrumentController.o:
-	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/InstrumentController.cpp
-
-logger.o:
-	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/logger.cpp
-
-CircleGenerator.o:
-	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/misc/CircleGenerator.cpp
-
-GCodeParser.o:
-	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/misc/GCodeParser.cpp
-
-GCodeWriter.o:
-	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/misc/GCodeWriter.cpp
-
-GraphBuilder.o:
-	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/misc/GraphBuilder.cpp
+ComplexCoordTranslator.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/translator/ComplexCoordTranslator.cpp
 
 MotorController.o:
 	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/MotorController.cpp
 
-CoordPlaneLinearizer.o:
-	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/plane/CoordPlaneLinearizer.cpp
+GraphBuilder.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/misc/GraphBuilder.cpp
+
+GCodeWriter.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/misc/GCodeWriter.cpp
+
+GCodeParser.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/misc/GCodeParser.cpp
+
+CircleGenerator.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/misc/CircleGenerator.cpp
+
+ConfigValidator.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/ConfigValidator.cpp
+
+DefaultFunctions.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/graph/DefaultFunctions.cpp
+
+FunctionLexer.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/graph/FunctionLexer.cpp
+
+FunctionEngine.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/graph/FunctionEngine.cpp
+
+AST.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/graph/AST.cpp
+
+FunctionParser.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/graph/FunctionParser.cpp
+
+logger.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/logger.cpp
+
+CoordHandle.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/CoordHandle.cpp
 
 CoordPlaneLog.o:
 	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/plane/CoordPlaneLog.cpp
@@ -134,47 +160,32 @@ CoordPlaneMap.o:
 CoordPlaneStack.o:
 	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/plane/CoordPlaneStack.cpp
 
+VirtualCoordPlane.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/plane/VirtualCoordPlane.cpp
+
 CoordPlaneValidator.o:
 	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/plane/CoordPlaneValidator.cpp
 
-VirtualCoordPlane.o:
-	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/plane/VirtualCoordPlane.cpp
+CoordPlaneLinearizer.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/plane/CoordPlaneLinearizer.cpp
 
 RequestResolver.o:
 	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/RequestResolver.cpp
 
-StandartRequestResolvers.o:
-	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/StandartRequestResolvers.cpp
-
 SystemManager.o:
 	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/SystemManager.cpp
 
-CoordTask.o:
-	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/task/CoordTask.cpp
+StandartRequestResolvers.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/StandartRequestResolvers.cpp
 
-CoordTaskWrapper.o:
-	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/task/CoordTaskWrapper.cpp
+ConfigManager.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/ConfigManager.cpp
 
-GCodeCoordTask.o:
-	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/task/GCodeCoordTask.cpp
+CoordController.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/CoordController.cpp
 
-BasicCoordTranslator.o:
-	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/translator/BasicCoordTranslator.cpp
-
-ComplexCoordTranslator.o:
-	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/translator/ComplexCoordTranslator.cpp
-
-LinearCoordTranslator.o:
-	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/translator/LinearCoordTranslator.cpp
-
-LogarithmicCoordTranslator.o:
-	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/translator/LogarithmicCoordTranslator.cpp
-
-PolarCoordTranslator.o:
-	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/translator/PolarCoordTranslator.cpp
-
-CLI.o:
-	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c cli/CLI.cpp
+InstrumentController.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/InstrumentController.cpp
 
 DevCLI.o:
 	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c cli/DevCLI.cpp
@@ -182,81 +193,9 @@ DevCLI.o:
 main.o:
 	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c cli/main.cpp
 
+CLI.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c cli/CLI.cpp
 
-CalxActionQueue.o:
-	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/CalxActionQueue.cpp
-
-CalxApp.o:
-	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/CalxApp.cpp
-
-CalxAutoconfDialog.o:
-	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/CalxAutoconfDialog.cpp
-
-CalxConfigEditor.o:
-	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/CalxConfigEditor.cpp
-
-CalxConsoleWidget.o:
-	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/CalxConsoleWidget.cpp
-
-CalxDebugConsole.o:
-	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/CalxDebugConsole.cpp
-
-CalxErrorHandler.o:
-	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/CalxErrorHandler.cpp
-
-CalxFrame.o:
-	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/CalxFrame.cpp
-
-CalxPanel.o:
-	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/CalxPanel.cpp
-
-CalxCoordArcCtrl.o:
-	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/coord/CalxCoordArcCtrl.cpp
-
-CalxCoordCtrl.o:
-	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/coord/CalxCoordCtrl.cpp
-
-CalxCoordDialog.o:
-	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/coord/CalxCoordDialog.cpp
-
-CalxCoordFilter.o:
-	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/coord/CalxCoordFilter.cpp
-
-CalxCoordGraphCtrl.o:
-	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/coord/CalxCoordGraphCtrl.cpp
-
-CalxCoordLinearCtrl.o:
-	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/coord/CalxCoordLinearCtrl.cpp
-
-CalxCoordMiscCtrl.o:
-	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/coord/CalxCoordMiscCtrl.cpp
-
-CalxCoordOtherCtrl.o:
-	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/coord/CalxCoordOtherCtrl.cpp
-
-CalxCoordPanel.o:
-	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/coord/CalxCoordPanel.cpp
-
-CalxCoordPlaneWatcher.o:
-	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/coord/CalxCoordPlaneWatcher.cpp
-
-CalxVirtualPlane.o:
-	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/coord/CalxVirtualPlane.cpp
-
-CalxCOMSelectDialog.o:
-	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/dev/CalxCOMSelectDialog.cpp
-
-CalxDevicePanel.o:
-	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/dev/CalxDevicePanel.cpp
-
-CalxInstrumentCtrl.o:
-	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/dev/CalxInstrumentCtrl.cpp
-
-CalxMotorCtrl.o:
-	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/dev/CalxMotorCtrl.cpp
-
-CalxGcodeHandle.o:
-	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/task/CalxGcodeHandle.cpp
 
 CalxGcodeLoader.o:
 	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/task/CalxGcodeLoader.cpp
@@ -267,8 +206,83 @@ CalxProgrammedTaskHandle.o:
 CalxTaskPanel.o:
 	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/task/CalxTaskPanel.cpp
 
+CalxGcodeHandle.o:
+	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/task/CalxGcodeHandle.cpp
+
 CalxTaskStepHandle.o:
 	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/task/CalxTaskStepHandle.cpp
+
+CalxDebugConsole.o:
+	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/CalxDebugConsole.cpp
+
+CalxActionQueue.o:
+	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/CalxActionQueue.cpp
+
+CalxFrame.o:
+	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/CalxFrame.cpp
+
+CalxCoordArcCtrl.o:
+	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/coord/CalxCoordArcCtrl.cpp
+
+CalxCoordCtrl.o:
+	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/coord/CalxCoordCtrl.cpp
+
+CalxCoordFilter.o:
+	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/coord/CalxCoordFilter.cpp
+
+CalxCoordOtherCtrl.o:
+	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/coord/CalxCoordOtherCtrl.cpp
+
+CalxCoordDialog.o:
+	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/coord/CalxCoordDialog.cpp
+
+CalxCoordMiscCtrl.o:
+	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/coord/CalxCoordMiscCtrl.cpp
+
+CalxCoordPlaneWatcher.o:
+	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/coord/CalxCoordPlaneWatcher.cpp
+
+CalxCoordGraphCtrl.o:
+	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/coord/CalxCoordGraphCtrl.cpp
+
+CalxVirtualPlane.o:
+	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/coord/CalxVirtualPlane.cpp
+
+CalxCoordPanel.o:
+	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/coord/CalxCoordPanel.cpp
+
+CalxCoordLinearCtrl.o:
+	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/coord/CalxCoordLinearCtrl.cpp
+
+CalxPanel.o:
+	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/CalxPanel.cpp
+
+CalxDevicePanel.o:
+	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/dev/CalxDevicePanel.cpp
+
+CalxCOMSelectDialog.o:
+	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/dev/CalxCOMSelectDialog.cpp
+
+CalxInstrumentCtrl.o:
+	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/dev/CalxInstrumentCtrl.cpp
+
+CalxMotorCtrl.o:
+	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/dev/CalxMotorCtrl.cpp
+
+CalxConfigEditor.o:
+	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/CalxConfigEditor.cpp
+
+CalxErrorHandler.o:
+	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/CalxErrorHandler.cpp
+
+CalxApp.o:
+	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/CalxApp.cpp
+
+CalxAutoconfDialog.o:
+	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/CalxAutoconfDialog.cpp
+
+CalxConsoleWidget.o:
+	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/CalxConsoleWidget.cpp
 
 stub: Stub.o
 	$(CC) -shared -o $(BUILD)/USMCDLL.dll Stub.o $(LDFLAGS)
@@ -277,27 +291,28 @@ $(OUTPUT): $(OUTPUT_LIB) devapi_standart main.o
 	@mkdir -p $(BUILD)
 	$(CC) -o $(BUILD)/$(OUTPUT) main.o  $(LDFLAGS) -Wl,--library-path=$(BUILD) -ldev_$(DEVAPI) -l$(NAME)
 
-$(OUTPUT_LIB): ConfigManager.o ConfigValidator.o CoordController.o CoordHandle.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o InstrumentController.o logger.o CircleGenerator.o GCodeParser.o GCodeWriter.o GraphBuilder.o MotorController.o CoordPlaneLinearizer.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o VirtualCoordPlane.o RequestResolver.o StandartRequestResolvers.o SystemManager.o CoordTask.o CoordTaskWrapper.o GCodeCoordTask.o BasicCoordTranslator.o ComplexCoordTranslator.o LinearCoordTranslator.o LogarithmicCoordTranslator.o PolarCoordTranslator.o CLI.o DevCLI.o Device.o DeviceManager.o
+$(OUTPUT_LIB): CoordTask.o CoordTaskWrapper.o GCodeCoordTask.o LogarithmicCoordTranslator.o PolarCoordTranslator.o LinearCoordTranslator.o BasicCoordTranslator.o ComplexCoordTranslator.o MotorController.o GraphBuilder.o GCodeWriter.o GCodeParser.o CircleGenerator.o ConfigValidator.o DefaultFunctions.o FunctionLexer.o FunctionEngine.o AST.o FunctionParser.o logger.o CoordHandle.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o VirtualCoordPlane.o CoordPlaneValidator.o CoordPlaneLinearizer.o RequestResolver.o SystemManager.o StandartRequestResolvers.o ConfigManager.o CoordController.o InstrumentController.o DevCLI.o CLI.o Device.o DeviceManager.o
 	@mkdir -p $(BUILD)
-	$(CC) -shared -o $(BUILD)/$(OUTPUT_LIB) ConfigManager.o ConfigValidator.o CoordController.o CoordHandle.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o InstrumentController.o logger.o CircleGenerator.o GCodeParser.o GCodeWriter.o GraphBuilder.o MotorController.o CoordPlaneLinearizer.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o VirtualCoordPlane.o RequestResolver.o StandartRequestResolvers.o SystemManager.o CoordTask.o CoordTaskWrapper.o GCodeCoordTask.o BasicCoordTranslator.o ComplexCoordTranslator.o LinearCoordTranslator.o LogarithmicCoordTranslator.o PolarCoordTranslator.o CLI.o DevCLI.o Device.o DeviceManager.o  $(LDFLAGS) $(LDFLAGS_LIB)
+	$(CC) -shared -o $(BUILD)/$(OUTPUT_LIB) CoordTask.o CoordTaskWrapper.o GCodeCoordTask.o LogarithmicCoordTranslator.o PolarCoordTranslator.o LinearCoordTranslator.o BasicCoordTranslator.o ComplexCoordTranslator.o MotorController.o GraphBuilder.o GCodeWriter.o GCodeParser.o CircleGenerator.o ConfigValidator.o DefaultFunctions.o FunctionLexer.o FunctionEngine.o AST.o FunctionParser.o logger.o CoordHandle.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o VirtualCoordPlane.o CoordPlaneValidator.o CoordPlaneLinearizer.o RequestResolver.o SystemManager.o StandartRequestResolvers.o ConfigManager.o CoordController.o InstrumentController.o DevCLI.o CLI.o Device.o DeviceManager.o  $(LDFLAGS) $(LDFLAGS_LIB)
 
 langs:
 ifdef MSGFMT
 	mkdir -p $(BUILD)/lang
 endif
 
-$(OUTPUT_UI): langs CalxActionQueue.o CalxApp.o CalxAutoconfDialog.o CalxConfigEditor.o CalxConsoleWidget.o CalxDebugConsole.o CalxErrorHandler.o CalxFrame.o CalxPanel.o CalxCoordArcCtrl.o CalxCoordCtrl.o CalxCoordDialog.o CalxCoordFilter.o CalxCoordGraphCtrl.o CalxCoordLinearCtrl.o CalxCoordMiscCtrl.o CalxCoordOtherCtrl.o CalxCoordPanel.o CalxCoordPlaneWatcher.o CalxVirtualPlane.o CalxCOMSelectDialog.o CalxDevicePanel.o CalxInstrumentCtrl.o CalxMotorCtrl.o CalxGcodeHandle.o CalxGcodeLoader.o CalxProgrammedTaskHandle.o CalxTaskPanel.o CalxTaskStepHandle.o
+$(OUTPUT_UI): langs CalxGcodeLoader.o CalxProgrammedTaskHandle.o CalxTaskPanel.o CalxGcodeHandle.o CalxTaskStepHandle.o CalxDebugConsole.o CalxActionQueue.o CalxFrame.o CalxCoordArcCtrl.o CalxCoordCtrl.o CalxCoordFilter.o CalxCoordOtherCtrl.o CalxCoordDialog.o CalxCoordMiscCtrl.o CalxCoordPlaneWatcher.o CalxCoordGraphCtrl.o CalxVirtualPlane.o CalxCoordPanel.o CalxCoordLinearCtrl.o CalxPanel.o CalxDevicePanel.o CalxCOMSelectDialog.o CalxInstrumentCtrl.o CalxMotorCtrl.o CalxConfigEditor.o CalxErrorHandler.o CalxApp.o CalxAutoconfDialog.o CalxConsoleWidget.o
 	@mkdir -p $(BUILD)
 ifneq ($(WXLIB),)
 	cp $(WX)/$(WXLIB) $(BUILD)
 endif
 	$(MAKE) icon
 	$(MAKE) lang
-	$(CC) -o $(BUILD)/$(OUTPUT_UI) CalxActionQueue.o CalxApp.o CalxAutoconfDialog.o CalxConfigEditor.o CalxConsoleWidget.o CalxDebugConsole.o CalxErrorHandler.o CalxFrame.o CalxPanel.o CalxCoordArcCtrl.o CalxCoordCtrl.o CalxCoordDialog.o CalxCoordFilter.o CalxCoordGraphCtrl.o CalxCoordLinearCtrl.o CalxCoordMiscCtrl.o CalxCoordOtherCtrl.o CalxCoordPanel.o CalxCoordPlaneWatcher.o CalxVirtualPlane.o CalxCOMSelectDialog.o CalxDevicePanel.o CalxInstrumentCtrl.o CalxMotorCtrl.o CalxGcodeHandle.o CalxGcodeLoader.o CalxProgrammedTaskHandle.o CalxTaskPanel.o CalxTaskStepHandle.o  $(ICON) $(LDFLAGS) -Wl,--library-path=\$(BUILD) -l$(NAME) `$(WX)/wx-config --libs`
+	$(CC) -o $(BUILD)/$(OUTPUT_UI) CalxGcodeLoader.o CalxProgrammedTaskHandle.o CalxTaskPanel.o CalxGcodeHandle.o CalxTaskStepHandle.o CalxDebugConsole.o CalxActionQueue.o CalxFrame.o CalxCoordArcCtrl.o CalxCoordCtrl.o CalxCoordFilter.o CalxCoordOtherCtrl.o CalxCoordDialog.o CalxCoordMiscCtrl.o CalxCoordPlaneWatcher.o CalxCoordGraphCtrl.o CalxVirtualPlane.o CalxCoordPanel.o CalxCoordLinearCtrl.o CalxPanel.o CalxDevicePanel.o CalxCOMSelectDialog.o CalxInstrumentCtrl.o CalxMotorCtrl.o CalxConfigEditor.o CalxErrorHandler.o CalxApp.o CalxAutoconfDialog.o CalxConsoleWidget.o  $(ICON_RES) $(LDFLAGS) -Wl,--library-path=\$(BUILD) -l$(NAME) `$(WX)/wx-config --libs`
 
 all:
 	$(MAKE) $(OUTPUT_LIB)
 	$(MAKE) devapi_standart
+	$(MAKE) devapi_emulated
 	$(MAKE) $(OUTPUT)
 	$(MAKE) $(OUTPUT_UI)
 	$(MAKE) copy
@@ -310,7 +325,9 @@ ifdef ICON
 	convert icon.png -resize 48x48 -quality 100 icon48.png
 	convert icon.png -resize 32x32 -quality 100 icon32.png
 	convert *.png $(BUILD)/icon.ico
+ifeq ($(PLATFORM), win)
 	`$(WX)/wx-config --rescomp` winbuild/calxui.rc -O coff -o $(ICON)
+endif
 endif
 
 

@@ -38,6 +38,9 @@ LDFLAGS_win=-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl
 CONVERT := $(shell command -v convert 2> /dev/null)
 ifdef CONVERT
 ICON=calxui.res
+ifeq ($(PLATFORM), win)
+ICON_RES=$(ICON)
+endif
 endif
 
 # Build parameters

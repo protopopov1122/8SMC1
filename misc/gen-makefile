@@ -8,13 +8,14 @@ ALL='\t$(MAKE) $(OUTPUT_LIB)\n'
 # Generate Device API handlers
 
 function GenDevAPI {
-	find device/$1 -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS) '$2' -c "$0"\n"}'
+	find device/$1 -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS_LIB) $(CFLAGS) '$2' -c "$0"\n"}'
 	OBJS=`find device/$1 -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
-	printf "devapi_$1: $OBJS \$(OUTPUT_LIB)\n\t\$(CC) \$(CFLAGS) -shared -o \$(BUILD)/dev_$1.dll $OBJS $3 \$(LDFLAGS) -Wl,--library-path=\$(LIB) -lcalx -Wl,--out-implib,\$(BUILD)/\dev_$1.a\n"
+	printf "devapi_$1: $OBJS \$(OUTPUT_LIB)\n\t\$(CC) -shared $OBJS $3 \$(LDFLAGS) \$(LDFLAGS_LIB) -Wl,--library-path=\$(LIB) -lcalx\n"
 	ALL=$ALL"\t\$(MAKE) devapi_$1\n"
 }
 
-GenDevAPI "standart" "-Ires" "-Wl,-Bdynamic,--library-path=\$(BUILD) -lUSMCDLL"
+GenDevAPI "standart" "-Ires" " -o \$(BUILD)/dev_standart.dll -Wl,-Bdynamic,--library-path=\$(BUILD) -lUSMCDLL  -Wl,--out-implib,\$(BUILD)/\dev_standart.a"
+GenDevAPI "emulated" "" " -o \$(BUILD)/libdev_emulated.so -Wl,-Bdynamic,--library-path=\$(BUILD)"
 
 ALL=$ALL'\t$(MAKE) $(OUTPUT)\n\t$(MAKE) $(OUTPUT_UI)\n'
 
@@ -70,7 +71,7 @@ printf "endif\n"
 printf "\t\$(MAKE) icon\n"
 printf "\t\$(MAKE) lang\n"
 printf "\t\$(CC) -o \$(BUILD)/\$(OUTPUT_UI) " 
-printf "$OBJS \$(ICON)"
+printf "$OBJS \$(ICON_RES)"
 printf ' $(LDFLAGS) -Wl,--library-path=\$(BUILD) -l$(NAME) `$(WX)/wx-config --libs`\n\n'
 
 printf "all:\n$ALL\t\$(MAKE) copy\n\n"

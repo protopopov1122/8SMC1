@@ -6,7 +6,9 @@ ifdef ICON
 	convert icon.png -resize 48x48 -quality 100 icon48.png
 	convert icon.png -resize 32x32 -quality 100 icon32.png
 	convert *.png $(BUILD)/icon.ico
+ifeq ($(PLATFORM), win)
 	`$(WX)/wx-config --rescomp` winbuild/calxui.rc -O coff -o $(ICON)
+endif
 endif
 
 
