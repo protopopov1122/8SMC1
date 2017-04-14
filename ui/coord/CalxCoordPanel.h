@@ -26,6 +26,7 @@
 #include "CalxApp.h"
 #include <wx/listbox.h>
 #include "CalxCoordCtrl.h"
+#include "CalxCoordPlaneWatcher.h"
 
 namespace CalXUI {
 	
@@ -40,8 +41,8 @@ namespace CalXUI {
 			CalxCoordCtrl *getCoordCtrl(size_t sz) {return sz < coords.size() ? coords.at(sz) : nullptr;}
 			void updateUI();
 			void updateList(CoordHandle*, bool*);
-			void bindWatcher(device_id_t);
-			void unbindWatcher(device_id_t);
+			void bindWatcher(device_id_t, CalxCoordPlaneWatcher*);
+			void unbindWatcher(device_id_t, CalxCoordPlaneWatcher*);
 			void stop();
 			bool isBusy() {
 				for (const auto& c : coords) {

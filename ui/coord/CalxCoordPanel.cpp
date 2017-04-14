@@ -287,19 +287,19 @@ namespace CalXUI {
 		wxPostEvent(this, evt);
 	}
 	
-	void CalxCoordPanel::bindWatcher(device_id_t id) {
+	void CalxCoordPanel::bindWatcher(device_id_t id, CalxCoordPlaneWatcher *w) {
 		for (const auto& ctrl : this->coords) {
 			if (ctrl->getHandle()->getID() == id) {
-				ctrl->bindWatcher();
+				ctrl->bindWatcher(w);
 				break;
 			}
 		}
 	}
 	
-	void CalxCoordPanel::unbindWatcher(device_id_t id) {
+	void CalxCoordPanel::unbindWatcher(device_id_t id, CalxCoordPlaneWatcher *w) {
 		for (const auto& ctrl : this->coords) {
 			if (ctrl->getHandle()->getID() == id) {
-				ctrl->unbindWatcher();
+				ctrl->unbindWatcher(w);
 				break;
 			}
 		}

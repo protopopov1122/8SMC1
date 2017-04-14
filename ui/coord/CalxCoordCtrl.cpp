@@ -20,6 +20,7 @@
 
 #include <math.h>
 #include <sstream>
+#include <algorithm>
 #include "CalxApp.h"
 #include "CalxErrorHandler.h"
 #include <wx/stattext.h>
@@ -39,7 +40,6 @@ namespace CalXUI {
 		: wxScrolledWindow::wxScrolledWindow(win, id) {
 		this->ctrl = ctrl;
 		this->used = 0;
-		this->watchers = 0;
 		this->master = false;
 		
 		motor_point_t validateMin = {INT_MIN, INT_MIN};
@@ -181,16 +181,16 @@ namespace CalXUI {
 		stopButton->Enable(!e && this->master);
 	}
 	
-	void CalxCoordCtrl::bindWatcher() {
-		this->watchers++;
+	void CalxCoordCtrl::bindWatcher(CalxCoordPlaneWatcher *w) {
+		this->watchers.push_back(w);
 	}
 	
-	void CalxCoordCtrl::unbindWatcher() {
-		this->watchers--;
+	void CalxCoordCtrl::unbindWatcher(CalxCoordPlaneWatcher *w) {
+		this->watchers.erase(std::remove(this->watchers.begin(), this->watchers.end(), w), this->watchers.end());
 	}
 	
 	bool CalxCoordCtrl::hasWatchers() {
-		return this->watchers != 0;
+		return !this->watchers.empty();
 	}
 	
 	void CalxCoordCtrl::requestMeasure(TrailerId tr) {
@@ -385,6 +385,10 @@ namespace CalXUI {
 	
 	void CalxCoordCtrl::OnExit(wxCloseEvent &evt) {
 		stop();
+		
+		for (const auto& w : this->watchers) {
+			w->Close(true);
+		}
 		
 		this->ctrl->removeEventListener(this->listener);
 		this->ctrl->getController()->getXAxis()->removeEventListener(this->xListener);

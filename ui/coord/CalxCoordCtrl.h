@@ -39,6 +39,8 @@ using namespace CalX;
 
 namespace CalXUI {
 	
+	class CalxCoordPlaneWatcher; // Forward referencing
+	
 	wxDECLARE_EVENT(wxEVT_COORD_CTRL_WATCHER, wxThreadEvent);
 	
 	class CalxCoordCtrl : public wxScrolledWindow {
@@ -68,8 +70,8 @@ namespace CalXUI {
 			bool isUsed();
 			void setMaster(bool);
 			void setEnabled(bool);
-			void bindWatcher();
-			void unbindWatcher();
+			void bindWatcher(CalxCoordPlaneWatcher*);
+			void unbindWatcher(CalxCoordPlaneWatcher*);
 			bool hasWatchers();
 			bool isBusy() {
 				return !queue->isEmpty();
@@ -97,7 +99,7 @@ namespace CalXUI {
 			CalxActionQueue *queue;
 			int used;
 			bool master;
-			int watchers;
+			std::vector<CalxCoordPlaneWatcher*> watchers;
 			
 			
 			// Components
