@@ -45,11 +45,11 @@ namespace CalX {
 	}
 	
 	bool Device::hasErrors() {
-		return this->errors.size() != 0;
+		return !this->errors.empty();
 	}
 	
 	std::string Device::pollError() {
-		if (this->errors.size() == 0) {
+		if (this->errors.empty()) {
 			return "";
 		}
 		std::string err = this->errors.at(0);

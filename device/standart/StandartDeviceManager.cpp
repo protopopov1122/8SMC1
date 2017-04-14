@@ -72,12 +72,12 @@ namespace CalX {
 			}
 		}
 		
-		for (size_t i = 0; i < this->instr.size(); i++) {
+		/*for (size_t i = 0; i < this->instr.size(); i++) {
 			Instrument *in = this->instr.at(i);
 			while (in->hasErrors()) {
 				this->error_queue.push_back(in->pollError());
 			}
-		}
+		}*/
 	}
 
 	std::string StandartDeviceManager::getMotorSerial(device_id_t id) {

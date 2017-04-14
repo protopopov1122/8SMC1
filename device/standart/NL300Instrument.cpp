@@ -392,6 +392,7 @@ namespace CalX {
 				this->errors.push_back("NL300 start error: unknown");
 			}
 			getDeviceManager()->saveError();
+			return false;
 		}
 		if (this->config.getEntry(NL300_ENTRY_NAME)->getBool(NL300_ENABLE_DELAY, true)) {
 			int syncDelay = 0;
@@ -402,7 +403,7 @@ namespace CalX {
 			}
 			Sleep(syncDelay);
 		}
-		return res.empty();
+		return true;
 	}
 
 	bool NL300Instrument::stop() {
