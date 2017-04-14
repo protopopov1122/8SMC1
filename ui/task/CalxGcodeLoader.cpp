@@ -27,14 +27,19 @@ namespace CalXUI {
 	
 	CalxGcodeLoader::CalxGcodeLoader(wxWindow *win, wxWindowID id)
 		: wxDialog::wxDialog(win, id, __("Load GCode")) {
-		
+
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(sizer);
+		
+		wxPanel *mainPanel = new wxPanel(this, wxID_ANY);
+		sizer->Add(mainPanel, 1, wxALL | wxALIGN_CENTER);
+		wxBoxSizer *mainSizer = new wxBoxSizer(wxVERTICAL);
+		mainPanel->SetSizer(mainSizer);
 		this->state = false;
 		
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("Choose GCode file") + std::string(":")));
-		wxPanel *gcodePanel = new wxPanel(this, wxID_ANY);
-		sizer->Add(gcodePanel, 0, wxALL | wxEXPAND, 5);
+		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, __("Choose GCode file") + std::string(":")));
+		wxPanel *gcodePanel = new wxPanel(mainPanel, wxID_ANY);
+		mainSizer->Add(gcodePanel, 0, wxALL | wxEXPAND, 5);
 		wxBoxSizer *gcodeSizer = new wxBoxSizer(wxHORIZONTAL);
 		gcodePanel->SetSizer(gcodeSizer);
 		this->gcodePath = new wxTextCtrl(gcodePanel, wxID_ANY, "");
@@ -44,23 +49,29 @@ namespace CalXUI {
 		gcodeSizer->Add(chooseButton, 0, wxALL);
 		chooseButton->Bind(wxEVT_BUTTON, &CalxGcodeLoader::OnChooseClick, this);
 		
-		this->translator = new CalxCoordFilterCtrl(this, wxID_ANY);
-		sizer->Add(translator, 0, wxALL | wxEXPAND, 10);
+		this->translator = new CalxCoordFilterCtrl(mainPanel, wxID_ANY);
+		mainSizer->Add(translator, 0, wxALL | wxEXPAND, 10);
 				
-		wxPanel *buttonPanel = new wxPanel(this, wxID_ANY);
-		sizer->Add(buttonPanel, 1, wxALL | wxALIGN_CENTER, 5);
+		wxPanel *buttonPanel = new wxPanel(mainPanel, wxID_ANY);
+		mainSizer->Add(buttonPanel, 1, wxALL | wxALIGN_CENTER, 5);
 		wxBoxSizer *buttonSizer = new wxBoxSizer(wxHORIZONTAL);
 		buttonPanel->SetSizer(buttonSizer);
 		wxButton *okButton = new wxButton(buttonPanel, wxID_OK, __("OK"));
 		wxButton *cancelButton = new wxButton(buttonPanel, wxID_CANCEL, __("Cancel"));
-		buttonSizer->Add(okButton, 0, wxALIGN_CENTER);
-		buttonSizer->Add(cancelButton, 0, wxALIGN_CENTER);
+		buttonSizer->Add(okButton);
+		buttonSizer->Add(cancelButton);
 		okButton->Bind(wxEVT_BUTTON, &CalxGcodeLoader::OnOkClick, this);
 		cancelButton->Bind(wxEVT_BUTTON, &CalxGcodeLoader::OnCancelClick, this);
 		Bind(wxEVT_SHOW, &CalxGcodeLoader::OnShow, this);
 		
 		Layout();
 		Fit();
+		#ifdef __WXGTK__
+		wxSize size = GetSize();
+		size.x *= 1.1;
+		size.y *= 1.1;
+		SetSize(size);
+		#endif
 	}
 	
 	bool CalxGcodeLoader::isLoaded() {

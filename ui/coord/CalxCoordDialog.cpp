@@ -89,6 +89,12 @@ namespace CalXUI {
 		
 		Layout();
 		Fit();
+		#ifdef __WXGTK__
+		wxSize size = GetSize();
+		size.x *= 1.15;
+		size.y *= 1.15;
+		SetSize(size);
+		#endif
 	}
 	
 	CoordHandle *CalxCoordDialog::getCoordPlane() {
