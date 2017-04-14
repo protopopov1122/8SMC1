@@ -30,6 +30,7 @@ namespace CalXUI {
 			CalxErrorHandler(SystemManager*);
 			virtual ~CalxErrorHandler();
 			void handle(ErrorCode);
+			void display(ErrorCode);
 		private:
 			SystemManager *sysman;
 	};

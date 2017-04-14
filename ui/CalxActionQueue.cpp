@@ -80,12 +80,14 @@ namespace CalXUI {
 	void *CalxActionQueue::Entry() {
 		while (work) {
 			while (!this->queue.empty() && work) {
+				this->mutex->Lock();
 				std::pair<CalxAction*, bool*> pair = this->queue.at(0);
 				CalxAction *action = pair.first;
 				this->current = action;
+				this->queue.erase(this->queue.begin());
+				this->mutex->Unlock();
 				action->perform(sysman);
 				this->current = nullptr;
-				this->queue.erase(this->queue.begin());
 				delete action;
 				if (pair.second != nullptr) {
 					*pair.second = true;

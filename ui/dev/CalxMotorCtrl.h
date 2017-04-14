@@ -30,6 +30,7 @@
 namespace CalXUI {
 	
 	class CalxMotorCtrl; // Forward reference
+	wxDECLARE_EVENT(wxEVT_MOTOR_CTRL_ENABLE, wxThreadEvent);
 	
 	class CalxMotorEventListener : public MotorEventListener {
 		public:
@@ -76,6 +77,7 @@ namespace CalXUI {
 			void rmoveClick(wxCommandEvent&);
 			void threadUpdate(wxThreadEvent&);
 			void OnExit(wxCloseEvent&);
+			void OnEnableEvent(wxThreadEvent&);
 		
 			CalX::MotorController *dev;
 			CalxActionQueue *queue;

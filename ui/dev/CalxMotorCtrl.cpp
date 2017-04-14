@@ -30,6 +30,7 @@
 using namespace CalX;
 
 namespace CalXUI {
+	wxDEFINE_EVENT(wxEVT_MOTOR_CTRL_ENABLE, wxThreadEvent);
 	
 	void CalxMotorTimer::Notify() {
 		ctrl->updateUI();
@@ -213,6 +214,7 @@ namespace CalXUI {
 		
 		this->Bind(wxEVT_COMMAND_QUEUE_UPDATE, &CalxMotorCtrl::threadUpdate, this);
 		Bind(wxEVT_CLOSE_WINDOW, &CalxMotorCtrl::OnExit, this);
+		Bind(wxEVT_MOTOR_CTRL_ENABLE, &CalxMotorCtrl::OnEnableEvent, this);
 		// Post init
 		this->dev->addEventListener(this->listener);
 		this->queue->Run();
@@ -223,13 +225,9 @@ namespace CalXUI {
 	}
 	
 	void CalxMotorCtrl::setEnabled(bool e) {
-		movePanel->Enable(e);
-		for (auto i = actionPanel->GetChildren().begin(); i != actionPanel->GetChildren().end(); ++i) {
-			if (*i != this->stopButton) {
-				(*i)->Enable(e);
-			}
-		}
-		this->stopButton->Enable(!e && this->master);
+		wxThreadEvent evt(wxEVT_MOTOR_CTRL_ENABLE);
+		evt.SetPayload(e);
+		wxPostEvent(this, evt);
 	}
 	
 	void CalxMotorCtrl::setMaster(bool m) {
@@ -290,5 +288,16 @@ namespace CalXUI {
 		this->dev->removeEventListener(this->listener);
 		this->dev->stop();
 		Destroy();
+	}
+
+	void CalxMotorCtrl::OnEnableEvent(wxThreadEvent &evt) {
+		bool e = evt.GetPayload<bool>();
+		movePanel->Enable(e);
+		for (auto i = actionPanel->GetChildren().begin(); i != actionPanel->GetChildren().end(); ++i) {
+			if (*i != this->stopButton) {
+				(*i)->Enable(e);
+			}
+		}
+		this->stopButton->Enable(!e && this->master);
 	}
 }

@@ -34,6 +34,8 @@
 #include "ctrl-lib/ConfigValidator.h"
 
 namespace CalXUI {
+
+	wxDEFINE_EVENT(wxEVT_APP_ERROR, wxThreadEvent);
 	
 	class AutoconfThread : public wxThread {
 		public:
@@ -120,6 +122,7 @@ namespace CalXUI {
 		} else {
 			this->debug_console = nullptr;
 		}
+		this->Bind(wxEVT_APP_ERROR, &CalxApp::OnErrorEvent, this);
 		
 		this->frame = new CalxFrame(__("CalX UI"));
 		this->frame->Show(true);
@@ -182,6 +185,10 @@ namespace CalXUI {
 			return;
 		}
 		dynlib->Load(openDialog.GetPath(), wxDL_DEFAULT | wxDL_QUIET);
+	}
+
+	void CalxApp::OnErrorEvent(wxThreadEvent &evt) {
+		this->error_handler->display(evt.GetPayload<ErrorCode>());
 	}
 }
 

@@ -35,6 +35,7 @@
 namespace CalXUI {
 	
 	wxDEFINE_EVENT(wxEVT_COORD_CTRL_WATCHER, wxThreadEvent);
+	wxDEFINE_EVENT(wxEVT_COORD_CTRL_ENABLE, wxThreadEvent);
 	
 	CalxCoordCtrl::CalxCoordCtrl(wxWindow *win, wxWindowID id, CoordHandle *ctrl)
 		: wxScrolledWindow::wxScrolledWindow(win, id) {
@@ -142,11 +143,12 @@ namespace CalXUI {
 		Bind(wxEVT_COORD_CTRL_WATCHER, &CalxCoordCtrl::OnWatcherRequest, this);
 		Bind(wxEVT_CLOSE_WINDOW, &CalxCoordCtrl::OnExit, this);
 		graphCtrl->Bind(wxEVT_CLOSE_WINDOW, &CalxCoordGraphCtrl::OnClose, graphCtrl);
+		Bind(wxEVT_COORD_CTRL_ENABLE, &CalxCoordCtrl::OnEnableEvent, this);
 		updateUI();
 		
 		this->Layout();
 		this->setEnabled(true);
-        this->SetScrollRate(5, 5);
+        	this->SetScrollRate(5, 5);
 		
 		this->timer.setCtrl(this);
 		timer.Start(100);
@@ -155,16 +157,18 @@ namespace CalXUI {
 	void CalxCoordCtrl::use() {
 		this->used++;
 		if (this->used == 1) {
-			setEnabled(false);
-			wxGetApp().getMainFrame()->getPanel()->getTasks()->updateUI();
+			wxThreadEvent evt(wxEVT_COORD_CTRL_ENABLE);
+			evt.SetPayload(false);
+			wxPostEvent(this, evt);
 		}
 	}
 	
 	void CalxCoordCtrl::unuse() {
 		this->used--;
 		if (this->used == 0) {
-			setEnabled(true);
-			wxGetApp().getMainFrame()->getPanel()->getTasks()->updateUI();
+			wxThreadEvent evt(wxEVT_COORD_CTRL_ENABLE);
+			evt.SetPayload(true);
+			wxPostEvent(this, evt);
 		}
 	}
 	
@@ -429,5 +433,10 @@ namespace CalXUI {
 			CalxCoordPlaneWatcherDialog *watcher = new CalxCoordPlaneWatcherDialog(this, wxID_ANY, this->ctrl);
 			watcher->Show(true);
 		}
+	}
+
+	void CalxCoordCtrl::OnEnableEvent(wxThreadEvent &evt) {
+		setEnabled(evt.GetPayload<bool>());
+		wxGetApp().getMainFrame()->getPanel()->getTasks()->updateUI();
 	}
 }

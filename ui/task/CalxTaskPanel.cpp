@@ -33,6 +33,8 @@
 #include "CalxGcodeLoader.h"
 
 namespace CalXUI {
+
+	wxDEFINE_EVENT(wxEVT_TASK_PANEL_ENABLE, wxThreadEvent);
 	
 	class CalxTaskAction : public CalxAction {
 		public:
@@ -145,10 +147,11 @@ namespace CalXUI {
 		
 		Layout();
 		setEnabled(true);
-        this->SetScrollRate(5, 5);
+	        this->SetScrollRate(5, 5);
 		
 		taskList->Bind(wxEVT_LISTBOX, &CalxTaskPanel::OnListClick, this);		
-		this->Bind(wxEVT_CLOSE_WINDOW, &CalxTaskPanel::OnExit, this);	
+		this->Bind(wxEVT_CLOSE_WINDOW, &CalxTaskPanel::OnExit, this);
+		this->Bind(wxEVT_TASK_PANEL_ENABLE, &CalxTaskPanel::OnEnableEvent, this);
 	}
 	
 	void CalxTaskPanel::stop() {
@@ -179,16 +182,9 @@ namespace CalXUI {
 	}
 	
 	void CalxTaskPanel::setEnabled(bool e) {
-		for (const auto& h : list) {
-			h->Enable(e);
-		}
-		taskPanel->Enable(e);
-		for (auto i = execPanel->GetChildren().begin(); i != execPanel->GetChildren().end(); ++i) {
-			if (*i != this->stopButton) {
-				(*i)->Enable(e);
-			}
-		}
-		this->stopButton->Enable(!e);
+		wxThreadEvent evt(wxEVT_TASK_PANEL_ENABLE);
+		evt.SetPayload(e);
+		wxPostEvent(this, evt);
 	}
 	
 	void CalxTaskPanel::OnExit(wxCloseEvent &evt) {
@@ -347,5 +343,19 @@ namespace CalXUI {
 	
 	void CalxTaskPanel::OnStopClick(wxCommandEvent &evt) {
 		this->queue->stopCurrent();
+	}
+
+	void CalxTaskPanel::OnEnableEvent(wxThreadEvent &evt) {
+		bool e = evt.GetPayload<bool>();	
+		for (const auto& h : list) {
+			h->Enable(e);
+		}
+		taskPanel->Enable(e);
+		for (auto i = execPanel->GetChildren().begin(); i != execPanel->GetChildren().end(); ++i) {
+			if (*i != this->stopButton) {
+				(*i)->Enable(e);
+			}
+		}
+		this->stopButton->Enable(!e);
 	}
 }

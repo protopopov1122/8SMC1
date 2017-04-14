@@ -31,8 +31,14 @@ namespace CalXUI {
 	CalxErrorHandler::~CalxErrorHandler() {
 		
 	}
-	
+
 	void CalxErrorHandler::handle(ErrorCode code) {
+		wxThreadEvent evt(wxEVT_APP_ERROR);
+		evt.SetPayload(code);
+		wxPostEvent(&wxGetApp(), evt);
+	}
+	
+	void CalxErrorHandler::display(ErrorCode code) {
 		if (code != ErrorCode::NoError) {
 			std::string text = __("Error occured during execution.\nError code") + std::string(": ") + std::to_string(code) + "\n";
 			switch (code) {

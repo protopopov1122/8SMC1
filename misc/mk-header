@@ -19,7 +19,7 @@ DBG_release_linux=-O2
 INCLUDES_linux=-I.
 CFLAGS_LIB_linux=-fPIC
 LDFLAGS_LIB_linux=
-CFLAGS_linux=$(LANG_linux) $(DBG_linux) $(INCLUDES_linux)
+CFLAGS_linux=$(LANG_linux) $(INCLUDES_linux)
 LDFLAGS_linux=-lpthread
 
 # Windows specific
@@ -53,6 +53,6 @@ DBG=$(DBG_$(TARGET)_$(PLATFORM))
 INCLUDES=$(INCLUDES_$(PLATFORM))
 CFLAGS_LIB=$(CFLAGS_LIB_$(PLATFORM))
 LDFLAGS_LIB=$(LDFLAGS_LIB_$(PLATFORM))
-CFLAGS=$(CFLAGS_$(PLATFORM)) $(EXTRA)
+CFLAGS=$(CFLAGS_$(PLATFORM)) $(DBG) $(EXTRA)
 LDFLAGS=$(LDFLAGS_$(PLATFORM))
 

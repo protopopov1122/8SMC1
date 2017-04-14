@@ -253,7 +253,7 @@ namespace CalXUI {
 		
 		updateUI();
 		Layout();
-        this->SetScrollRate(5, 5);
+        	this->SetScrollRate(5, 5);
 		Bind(wxEVT_CLOSE_WINDOW, &CalxDevicePanel::OnExit, this);
 		Bind(wxEVT_DEVICE_PANEL_UPDATE, &CalxDevicePanel::OnDevicePanelUpdate, this);
 		this->queue->Run();

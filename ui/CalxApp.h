@@ -43,11 +43,14 @@ namespace CalXUI {
 	
 	class CalxDebugConsole; // Forward referencing
 	class CalxErrorHandler; // Forward referencing
+
+	wxDECLARE_EVENT(wxEVT_APP_ERROR, wxThreadEvent);
 	
 	class CalxApp : public wxApp {
 		public:
 			virtual bool OnInit();
 			virtual int OnExit();
+			void OnErrorEvent(wxThreadEvent&);
 			SystemManager *getSystemManager();
 			CalxErrorHandler *getErrorHandler();
 			CalxFrame *getMainFrame();

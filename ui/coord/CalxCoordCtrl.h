@@ -42,6 +42,7 @@ namespace CalXUI {
 	class CalxCoordPlaneWatcher; // Forward referencing
 	
 	wxDECLARE_EVENT(wxEVT_COORD_CTRL_WATCHER, wxThreadEvent);
+	wxDECLARE_EVENT(wxEVT_COORD_CTRL_ENABLE, wxThreadEvent);
 	
 	class CalxCoordCtrl : public wxScrolledWindow {
 		public:
@@ -90,6 +91,7 @@ namespace CalXUI {
 			void OnStopClick(wxCommandEvent&);
 			void OnWatcherClick(wxCommandEvent&);
 			void OnWatcherRequest(wxThreadEvent&);
+			void OnEnableEvent(wxThreadEvent&);
 			
 			CoordHandle *ctrl;
 			CoordEventListener *listener;

@@ -32,6 +32,8 @@
 namespace CalXUI {
 	
 	class CalxTaskHandle; // Forward referencing
+
+	wxDECLARE_EVENT(wxEVT_TASK_PANEL_ENABLE, wxThreadEvent);
 	
 	class CalxTaskPanel : public wxScrolledWindow {
 		public:
@@ -54,6 +56,7 @@ namespace CalXUI {
 			void OnLinearizeClick(wxCommandEvent&);
 			void OnQueueUpdate(wxThreadEvent&);
 			void OnStopClick(wxCommandEvent&);
+			void OnEnableEvent(wxThreadEvent&);
 			
 			wxListBox *taskList;
 			wxPanel *mainPanel;
