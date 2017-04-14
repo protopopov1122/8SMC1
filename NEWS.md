@@ -129,3 +129,6 @@ There are also some further work planned: integrate other device types in system
 
 ##### 13/04/2017
 By and large, system is finished. Ctrl-lib and Calx UI works well, all device drivers finished. Final system test will be on 20/04/2017, after that release will be published on GitHub. Until tests some slight changes may be added and main goal is debug and usability increase.
+
+##### 14/04/2017
+Project mostly ported on Linux and some refractoring was performed. TODO: retest all functions.

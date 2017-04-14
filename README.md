@@ -22,7 +22,7 @@ Known issues
 Project started as simple Standa 8SMC1 motor control interface, however during development it extended with features that wasn't necessary at start, so there is some consequences:
 * Not all text files that describe project is up-to-date. Development is quite fast and focused on new function implementation, so not all textual descriptions are actual.
 * Currently CalX has possibility to use any stepper motors, however the only hardware controller we have is Standa 8SMC1 - all functionality is tested with them.
-* Currently project should be able to build/run on different OS, however main platform is Windows XP.
+* Project is portable and has versions for Windows and Linux. Main development version is Windows version, Linux version currently is unstable.
 
 Disclaimer
 ===================
@@ -50,9 +50,19 @@ make clean	# Clean all
 make stub	# Build stub to test CLI without controller
 make calx.exe # Build CLI
 make calx.dll # Build library; required for GUI
-make calxui.exe WX=$(WX) [WXLIB=...] # Build GUI(currently under development); $(WX) - wxWidgets directory; requires calx.dll build first. WXLIB - target library to copy(something like 'lib/wxmsw310u_gcc_custom.dll'), not necessary during build(however useful to run from build directory).
+make calxui.exe WX=$(WX) [WXLIB=...] # Build GUI; $(WX) - wxWidgets directory; requires calx.dll build first. WXLIB - target library to copy(something like 'lib/wxmsw310u_gcc_custom.dll'), not necessary during build(however useful to run from build directory).
 ```
 Build all command also performs some other steps, prepares build directory, so after that build directory contains fully functional and complete system. Program requires 'config.ini' in working directory, it contains some system settings. If ImageMagick is installed Makefile builds .ico(from misc/icon.svg) file and result executable will have icon.
+
+To build on Linux:
+Project supports build on Linux and is fully working, however functionality was not tested and this version is unstable. 
+```bash
+make clean	# Clean all
+make libcalx.so	# Build functional core
+make devapi_emulated # Build Device API implementation
+make calxui	# Build GUI; WX=$(WX) [WXLIB=...] # Build GUI; $(WX) - wxWidgets directory; requires calx.dll build first. WXLIB - target library to copy(something like 'lib/wxmsw310u_gcc_custom.dll'), not necessary during build(however useful to run from build directory).
+
+```
 
 For MSVC:
 Build by MSVC is possible, however it's not main compiler for development.

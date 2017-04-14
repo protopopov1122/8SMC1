@@ -153,7 +153,11 @@ namespace CalXUI {
 				device_id_t devid = (device_id_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 0))->getValue();
 				bool power = ((BoolConfigValue*) PROVIDER_ARG(req, 1))->getValue();
 				MotorController *ctrl = sysman->getMotorController(devid);
-				return ctrl->getMotor()->enablePower(power);
+				if (ctrl != nullptr) {
+					return ctrl->getMotor()->enablePower(power);
+				} else {
+					return false;
+				}
 			}
 		private:
 			CalxDevicePanel *devpanel;

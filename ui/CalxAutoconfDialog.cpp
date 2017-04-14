@@ -21,6 +21,9 @@
 #include "CalxAutoconfDialog.h"
 
 namespace CalXUI {
+
+	wxDEFINE_EVENT(wxEVT_AUTOCONF_RESOLVING, wxThreadEvent);
+	wxDEFINE_EVENT(wxEVT_AUTOCONF_FAILED, wxThreadEvent);
 	
 	CalxAutoconfDialog::CalxAutoconfDialog(wxWindow *win, wxWindowID id)
 		: wxDialog::wxDialog(win, id, __("Please wait"), wxDefaultPosition, wxDefaultSize, wxBORDER_NONE) {
@@ -34,6 +37,8 @@ namespace CalXUI {
 		Layout();
 		Fit();
 		Bind(wxEVT_CLOSE_WINDOW, &CalxAutoconfDialog::OnExit, this);
+		Bind(wxEVT_AUTOCONF_RESOLVING, &CalxAutoconfDialog::OnResolvingEvent, this);
+		Bind(wxEVT_AUTOCONF_FAILED, &CalxAutoconfDialog::OnFailedEvent, this);
 		
 		wxSize parentSize = GetParent()->GetSize();
 		wxSize size = GetSize();
@@ -42,20 +47,36 @@ namespace CalXUI {
 	}
 	
 	void CalxAutoconfDialog::resolving(std::string code, size_t step, size_t full) {
-		std::string txt = FORMAT(__("Please wait until initialization finishes\nPerforming step %s of %s:\n%s"),
-			std::to_string(step), std::to_string(full), code);
-		this->text->SetLabel(txt);
+		CalxAutoconfInfo info = {code, step, full};
+		wxThreadEvent evt(wxEVT_AUTOCONF_RESOLVING);
+		evt.SetPayload(info);
+		wxPostEvent(this, evt);
 	}
 	
 	void CalxAutoconfDialog::failed(std::string code, size_t step, size_t full) {
-		std::string txt = FORMAT(__("Initialization stopped\nStep %s of %s failed:\n%s"),
-			std::to_string(step), std::to_string(full), code);
-		this->text->SetLabel(txt);
-		wxMessageBox(txt, "Initialization error", wxICON_ERROR);
+		CalxAutoconfInfo info = {code, step, full};
+		wxThreadEvent evt(wxEVT_AUTOCONF_FAILED);
+		evt.SetPayload(info);
+		wxPostEvent(this, evt);
 	}
 	
 	void CalxAutoconfDialog::OnExit(wxCloseEvent &evt) {
 		GetParent()->Enable(true);
 		Destroy();
+	}
+
+	void CalxAutoconfDialog::OnResolvingEvent(wxThreadEvent &evt) {
+		CalxAutoconfInfo info = evt.GetPayload<CalxAutoconfInfo>();
+		std::string txt = FORMAT(__("Please wait until initialization finishes\nPerforming step %s of %s:\n%s"),
+			std::to_string(info.step), std::to_string(info.full), info.code);
+		this->text->SetLabel(txt);
+	}
+	void CalxAutoconfDialog::OnFailedEvent(wxThreadEvent &evt) {
+		CalxAutoconfInfo info = evt.GetPayload<CalxAutoconfInfo>();
+		std::string txt = FORMAT(__("Initialization stopped\nStep %s of %s failed:\n%s"),
+			std::to_string(info.step), std::to_string(info.full), info.code);
+		this->text->SetLabel(txt);
+		wxMessageBox(txt, "Initialization error", wxICON_ERROR);
+
 	}
 }

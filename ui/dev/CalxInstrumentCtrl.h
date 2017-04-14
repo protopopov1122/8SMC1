@@ -29,6 +29,8 @@
 #include <iostream>
 
 namespace CalXUI {
+
+	wxDECLARE_EVENT(wxEVT_INSTRUMENT_CTRL_ENABLE, wxThreadEvent);
 	
 	class CalxInstrumentCtrl : public wxPanel {
 		public:
@@ -44,6 +46,7 @@ namespace CalXUI {
 			void OnEnableButton(wxCommandEvent&);
 			void OnModeClick(wxCommandEvent&);
 			void OnConfClick(wxCommandEvent&);
+			void OnEnableEvent(wxThreadEvent&);
 			
 			wxStaticText *infoText;
 			wxStaticText *instrInfoText;

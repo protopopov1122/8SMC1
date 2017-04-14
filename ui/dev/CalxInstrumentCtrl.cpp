@@ -24,6 +24,8 @@
 #include <wx/sizer.h>
 
 namespace CalXUI {
+
+	wxDEFINE_EVENT(wxEVT_INSTRUMENT_CTRL_ENABLE, wxThreadEvent);
 	
 	class CalxInstrumentEventListener : public InstrumentEventListener  {
 		public:
@@ -34,7 +36,9 @@ namespace CalXUI {
 			
 			virtual void use() {
 				if (used == 0) {
-					ctrl->Enable(false);
+					wxThreadEvent evt(wxEVT_INSTRUMENT_CTRL_ENABLE);
+					evt.SetPayload(false);
+					wxPostEvent(ctrl, evt);
 				}
 				used++;
 			}
@@ -42,7 +46,9 @@ namespace CalXUI {
 			virtual void unuse() {
 				used--;
 				if (used == 0) {
-					ctrl->Enable(true);
+					wxThreadEvent evt(wxEVT_INSTRUMENT_CTRL_ENABLE);
+					evt.SetPayload(true);
+					wxPostEvent(ctrl, evt);
 				}
 			}
 		private:
@@ -184,6 +190,7 @@ namespace CalXUI {
 		this->timer = new CalxInstrumentTimer(this);
 		timer->Start(100);
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxInstrumentCtrl::OnExit, this);
+		this->Bind(wxEVT_INSTRUMENT_CTRL_ENABLE, &CalxInstrumentCtrl::OnEnableEvent, this);
 	}
 	
 	void CalxInstrumentCtrl::stop() {
@@ -225,5 +232,10 @@ namespace CalXUI {
 			InstrumentMode mode = sel == 0 ? InstrumentMode::Off : (sel == 1 ? InstrumentMode::Prepare : InstrumentMode::Full);
 			queue->addAction(new CalxInstrumentModeAction(this->ctrl, mode));
 		}
+	}
+
+	void CalxInstrumentCtrl::OnEnableEvent(wxThreadEvent &evt) {
+		bool e = evt.GetPayload<bool>();
+		Enable(e);
 	}
 }

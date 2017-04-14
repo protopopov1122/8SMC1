@@ -8,26 +8,26 @@ ALL='\t$(MAKE) $(OUTPUT_LIB)\n'
 # Generate Device API handlers
 
 function GenDevAPI {
-	find device/$1 -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS_LIB) $(CFLAGS) '$2' -c "$0"\n"}'
-	OBJS=`find device/$1 -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
-	printf "devapi_$1: $OBJS \$(OUTPUT_LIB)\n\t\$(CC) -shared $OBJS $3 \$(LDFLAGS) \$(LDFLAGS_LIB) -Wl,--library-path=\$(LIB) -lcalx\n"
+	find device/$1 -name "*.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS_LIB) $(CFLAGS) '$2' -c "$0"\n"}'
+	OBJS=`find device/$1 -name "*.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
+	printf "devapi_$1: $OBJS \$(OUTPUT_LIB)\n\t\$(CC) -shared $OBJS $3 \$(LDFLAGS) \$(LDFLAGS_LIB) -Wl,--library-path=\$(BUILD) -lcalx\n"
 	ALL=$ALL"\t\$(MAKE) devapi_$1\n"
 }
 
 GenDevAPI "standart" "-Ires" " -o \$(BUILD)/dev_standart.dll -Wl,-Bdynamic,--library-path=\$(BUILD) -lUSMCDLL  -Wl,--out-implib,\$(BUILD)/\dev_standart.a"
-GenDevAPI "emulated" "" " -o \$(BUILD)/libdev_emulated.so -Wl,-Bdynamic,--library-path=\$(BUILD)"
+GenDevAPI "emulated" "" " -o \$(BUILD)/libdev_emulated.so"
 
 ALL=$ALL'\t$(MAKE) $(OUTPUT)\n\t$(MAKE) $(OUTPUT_UI)\n'
 
 # Generate library, stub and cli object file build targets
 printf "\n" 
-find device -maxdepth 1 -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS_LIB) $(CFLAGS) -c "$0"\n"}'
+find device -maxdepth 1 -name "*.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS_LIB) $(CFLAGS) -c "$0"\n"}'
 find misc -name "Stub.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS_LIB) $(CFLAGS) -Ires -c "$0"\n"}'
-find ctrl-lib cli -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS_LIB) $(CFLAGS) -c "$0"\n"}'
+find ctrl-lib cli -name "*.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS_LIB) $(CFLAGS) -c "$0"\n"}'
  
 # Generate ui object file build targets
 printf "\n" 
-find ui -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c "$0"\n"}' 
+find ui -name "*.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c "$0"\n"}' 
 
 # Generate 8SMC1 Stub link target
 printf "stub: Stub.o\n\t\$(CC) -shared -o \$(BUILD)/USMCDLL.dll Stub.o \$(LDFLAGS)\n\n" 
@@ -43,9 +43,9 @@ printf " \$(LDFLAGS) -Wl,--library-path=\$(BUILD) -ldev_\$(DEVAPI) -l\$(NAME)\n\
 
 #Generate Ctrl-lib link target
 printf "\$(OUTPUT_LIB): "
-OBJS1=`find ctrl-lib -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
+OBJS1=`find ctrl-lib -name "*.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
 OBJS2=`find cli -not -name "main.cpp" -and -name "*.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
-OBJS3=`find device -maxdepth 1 -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
+OBJS3=`find device -maxdepth 1 -name "*.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
 OBJS=$OBJS1$OBJS2$OBJS3
 echo $OBJS 
 printf "\t@mkdir -p \$(BUILD)\n"
@@ -62,7 +62,7 @@ printf "endif\n\n"
 
 #Generate UI link target
 printf "\$(OUTPUT_UI): langs "
-OBJS=`find ui -name "*.cpp" -or -name "*.cxx" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
+OBJS=`find ui -name "*.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
 echo $OBJS
 printf "\t@mkdir -p \$(BUILD)\n"
 printf "ifneq (\$(WXLIB),)\n"

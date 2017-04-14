@@ -28,13 +28,24 @@
 
 
 namespace CalXUI {
+
+	wxDECLARE_EVENT(wxEVT_AUTOCONF_RESOLVING, wxThreadEvent);
+	wxDECLARE_EVENT(wxEVT_AUTOCONF_FAILED, wxThreadEvent);
 	
+	struct CalxAutoconfInfo {
+		std::string code;
+		size_t step;
+		size_t full;
+	};
+
 	class CalxAutoconfDialog : public wxDialog, public RequestResolveWatcher {
 		public:
 			CalxAutoconfDialog(wxWindow*, wxWindowID);
 			virtual void resolving(std::string, size_t, size_t);
 			virtual void failed(std::string, size_t, size_t);
 		private:
+			void OnResolvingEvent(wxThreadEvent&);
+			void OnFailedEvent(wxThreadEvent&);
 			void OnExit(wxCloseEvent&);
 			wxStaticText *text;
 	};

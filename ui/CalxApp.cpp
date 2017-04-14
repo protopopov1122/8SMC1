@@ -36,6 +36,7 @@
 namespace CalXUI {
 
 	wxDEFINE_EVENT(wxEVT_APP_ERROR, wxThreadEvent);
+	wxDEFINE_EVENT(wxEVT_APP_AUTOCONF, wxThreadEvent);
 	
 	class AutoconfThread : public wxThread {
 		public:
@@ -127,22 +128,13 @@ namespace CalXUI {
 		this->frame = new CalxFrame(__("CalX UI"));
 		this->frame->Show(true);
 		this->frame->Maximize(true);
-		
-		std::string autoconf = conf->getEntry("core")->getString("autoconf", "");
-		if (!autoconf.empty()) {
-			this->frame->Enable(false);
-			CalxAutoconfDialog *waitDialog = new CalxAutoconfDialog(this->frame, wxID_ANY);
-			waitDialog->Show(true);
-			AutoconfThread *th = new AutoconfThread(autoconf, waitDialog);
-			if (th->Run() != wxTHREAD_NO_ERROR) {
-				delete th;
-				waitDialog->Close(true);
-			}
-		}
+		this->Bind(wxEVT_APP_AUTOCONF, &CalxApp::OnAutoconfEvent, this);
+		wxThreadEvent evt(wxEVT_APP_AUTOCONF);
+		wxPostEvent(this, evt);
 		
 		return true;
 	}
-	
+
 	int CalxApp::OnExit() {
 		if (this->debug_console != nullptr) {
 			this->debug_console->Kill();
@@ -165,6 +157,22 @@ namespace CalXUI {
 			delete this->resources_log;
 		}
 		return 0;
+	}
+
+	void CalxApp::OnAutoconfEvent(wxThreadEvent &evt) {
+		
+		std::string autoconf = sysman->getConfiguration()->getEntry("core")->getString("autoconf", "");
+		if (!autoconf.empty()) {
+			this->frame->Enable(false);
+			CalxAutoconfDialog *waitDialog = new CalxAutoconfDialog(this->frame, wxID_ANY);
+			waitDialog->Show(true);
+			AutoconfThread *th = new AutoconfThread(autoconf, waitDialog);
+			if (th->Run() != wxTHREAD_NO_ERROR) {
+				delete th;
+				waitDialog->Close(true);
+			}
+		}
+
 	}
 	
 	SystemManager *CalxApp::getSystemManager() {
