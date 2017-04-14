@@ -43,19 +43,19 @@ namespace CalX {
 	};
 	class FunctionEngine; // Forward referencing
 	
-	enum NodeType {
+	enum class NodeType {
 		IntegerConstant, RealConstant,
 		Variable, Function,
-		Binary
+		Binary, Invert
 	};
 	
 	class Node {
 		public:
 			Node(NodeType tp) {
 				this->type = tp;
-				INIT_LOG("Node" + tp);
+				INIT_LOG("Node" + static_cast<int>(tp));
 			}
-			virtual ~Node() {DESTROY_LOG("Node" + type);}
+			virtual ~Node() {DESTROY_LOG("Node" + static_cast<int>(type));}
 			NodeType getType() {return this->type;}
 			virtual engine_value_t eval(FunctionEngine*) = 0;
 		private:
@@ -84,12 +84,26 @@ namespace CalX {
 	
 	class VariableNode : public Node {
 		public:
-			VariableNode(std::string i) : Node::Node(NodeType::Variable) {this->id = i;};
+			VariableNode(std::string i) : Node::Node(NodeType::Variable) {this->id = i;}
 			virtual ~VariableNode() {}
 			std::string getId() {return this->id;}
 			virtual engine_value_t eval(FunctionEngine*);
 		private:
 			std::string id;
+	};
+	
+	class InvertNode : public Node {
+		public:
+			InvertNode(Node *n) : Node::Node(NodeType::Invert) {this->node = n;}
+			virtual ~InvertNode() {delete this->node;}
+			Node *getExpression() {return this->node;}
+			virtual engine_value_t eval(FunctionEngine *eng) {
+				engine_value_t val = this->node->eval(eng);
+				val.value *= -1;
+				return val;
+			}
+		private:
+			Node *node;
 	};
 	
 	enum BinaryOperation {

@@ -74,12 +74,14 @@ namespace CalXUI {
 			bool isBusy() {
 				return !queue->isEmpty();
 			}
-			void measure(TrailerId);
-			void position(double, double);
-			void positionAbs(motor_point_t);
-			void center();
-			void invert();
-			void watcher();
+			
+			// Request synchronizing with interface
+			void requestMeasure(TrailerId);
+			void requestPosition(double, double);
+			void requestPositionAbs(motor_point_t);
+			void requestCenter();
+			void requestInvert();
+			void requestWatcher();
 		private:
 			void OnExit(wxCloseEvent&);
 			void OnQueueUpdate(wxThreadEvent&);

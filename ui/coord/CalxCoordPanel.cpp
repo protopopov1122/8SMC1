@@ -55,7 +55,7 @@ namespace CalXUI {
 				}
 				bool ready = false;
 				panel->updateList(handle, &ready);
-				while (!ready) wxThread::Yield();	
+				while (!ready) {wxThread::Yield();}
 
 				return true;
 			}
@@ -82,7 +82,7 @@ namespace CalXUI {
 				device_id_t tr = (device_id_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 1))->getValue() % 2;
 				TrailerId trailer = tr == 1 ? TrailerId::Trailer1 : TrailerId::Trailer2;
 				if (sysman->getCoord(plid) != nullptr) {
-					panel->measure(plid, trailer);
+					panel->requestMeasure(plid, trailer);
 					return true;
 				} else {
 					return false;
@@ -112,7 +112,7 @@ namespace CalXUI {
 				double x =  ((RealConfigValue*) PROVIDER_ARG(req, 1))->getValue();
 				double y =  ((RealConfigValue*) PROVIDER_ARG(req, 2))->getValue();
 				if (sysman->getCoord(plid) != nullptr) {
-					panel->position(plid, x, y);
+					panel->requestPosition(plid, x, y);
 					return true;
 				} else {
 					return false;
@@ -143,7 +143,7 @@ namespace CalXUI {
 				motor_coord_t y = (motor_coord_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 2))->getValue();
 				motor_point_t dest = {x, y};
 				if (sysman->getCoord(plid) != nullptr) {
-					panel->positionAbs(plid, dest);
+					panel->requestPositionAbs(plid, dest);
 					return true;
 				} else {
 					return false;
@@ -169,7 +169,7 @@ namespace CalXUI {
 				PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
 				device_id_t plid = (device_id_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 0))->getValue();
 				if (sysman->getCoord(plid) != nullptr) {
-					panel->center(plid);
+					panel->requestCenter(plid);
 					return true;
 				} else {
 					return false;
@@ -195,7 +195,7 @@ namespace CalXUI {
 				PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
 				device_id_t plid = (device_id_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 0))->getValue();
 				if (sysman->getCoord(plid) != nullptr) {
-					panel->invert(plid);
+					panel->requestInvert(plid);
 					return true;
 				} else {
 					return false;
@@ -221,7 +221,7 @@ namespace CalXUI {
 				PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
 				device_id_t plid = (device_id_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 0))->getValue();
 				if (sysman->getCoord(plid) != nullptr) {
-					panel->watcher(plid);
+					panel->requestWatcher(plid);
 					return true;
 				} else {
 					return false;
@@ -305,55 +305,55 @@ namespace CalXUI {
 		}
 	}
 	
-	void CalxCoordPanel::measure(device_id_t id, TrailerId tr) {
+	void CalxCoordPanel::requestMeasure(device_id_t id, TrailerId tr) {
 		for (const auto& ctrl : this->coords) {
 			if (ctrl->getHandle()->getID() == id) {
-				ctrl->measure(tr);
+				ctrl->requestMeasure(tr);
 				break;
 			}
 		}
 	}
 	
-	void CalxCoordPanel::position(device_id_t id, double x, double y) {
+	void CalxCoordPanel::requestPosition(device_id_t id, double x, double y) {
 		for (const auto& ctrl : this->coords) {
 			if (ctrl->getHandle()->getID() == id) {
-				ctrl->position(x, y);
+				ctrl->requestPosition(x, y);
 				break;
 			}
 		}
 	}
 	
-	void CalxCoordPanel::positionAbs(device_id_t id, motor_point_t dest) {
+	void CalxCoordPanel::requestPositionAbs(device_id_t id, motor_point_t dest) {
 		for (const auto& ctrl : this->coords) {
 			if (ctrl->getHandle()->getID() == id) {
-				ctrl->positionAbs(dest);
+				ctrl->requestPositionAbs(dest);
 				break;
 			}
 		}
 	}
 	
-	void CalxCoordPanel::center(device_id_t id) {
+	void CalxCoordPanel::requestCenter(device_id_t id) {
 		for (const auto& ctrl : this->coords) {
 			if (ctrl->getHandle()->getID() == id) {
-				ctrl->center();
+				ctrl->requestCenter();
 				break;
 			}
 		}
 	}
 	
-	void CalxCoordPanel::invert(device_id_t id) {
+	void CalxCoordPanel::requestInvert(device_id_t id) {
 		for (const auto& ctrl : this->coords) {
 			if (ctrl->getHandle()->getID() == id) {
-				ctrl->invert();
+				ctrl->requestInvert();
 				break;
 			}
 		}
 	}
 	
-	void CalxCoordPanel::watcher(device_id_t id) {
+	void CalxCoordPanel::requestWatcher(device_id_t id) {
 		for (const auto& ctrl : this->coords) {
 			if (ctrl->getHandle()->getID() == id) {
-				ctrl->watcher();
+				ctrl->requestWatcher();
 				break;
 			}
 		}

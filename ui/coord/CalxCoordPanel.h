@@ -42,12 +42,6 @@ namespace CalXUI {
 			void updateList(CoordHandle*, bool*);
 			void bindWatcher(device_id_t);
 			void unbindWatcher(device_id_t);
-			void measure(device_id_t, TrailerId);
-			void position(device_id_t, double, double);
-			void positionAbs(device_id_t, motor_point_t);
-			void center(device_id_t);
-			void invert(device_id_t);
-			void watcher(device_id_t);
 			void stop();
 			bool isBusy() {
 				for (const auto& c : coords) {
@@ -57,6 +51,13 @@ namespace CalXUI {
 				}
 				return false;
 			}
+			// Request synchronizing with interface
+			void requestMeasure(device_id_t, TrailerId);
+			void requestPosition(device_id_t, double, double);
+			void requestPositionAbs(device_id_t, motor_point_t);
+			void requestCenter(device_id_t);
+			void requestInvert(device_id_t);
+			void requestWatcher(device_id_t);
 		private:
 			void addPlane(CoordHandle*);
 			void removePlane(size_t);

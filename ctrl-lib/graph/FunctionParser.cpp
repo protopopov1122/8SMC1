@@ -109,6 +109,13 @@ namespace CalX {
 			}
 			VariableNode *node = new VariableNode(id);
 			return node;
+		} else if (expectOperator(OperatorType::PLUS)) {
+			nextToken();
+			return nextFactor();
+		} else if (expectOperator(OperatorType::MINUS)) {
+			nextToken();
+			Node *node = nextFactor();
+			return new InvertNode(node);
 		} else if (expectOperator(OperatorType::OPENING_PARENTHESE)) {
 			nextToken();
 			Node *node = nextAddsub();

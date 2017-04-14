@@ -193,13 +193,13 @@ namespace CalXUI {
 		return this->watchers != 0;
 	}
 	
-	void CalxCoordCtrl::measure(TrailerId tr) {
+	void CalxCoordCtrl::requestMeasure(TrailerId tr) {
 		bool ready = false;
 		this->queue->addAction(new CalxCoordMeasureAction(this, ctrl, tr), &ready);
 		while (!ready) {wxThread::Yield();}
 	}
 	
-	void CalxCoordCtrl::position(double x, double y) {
+	void CalxCoordCtrl::requestPosition(double x, double y) {
 		motor_rect_t sz = ctrl->getSize();
 		motor_point_t dest = {(motor_coord_t) (sz.x + sz.w * x), (motor_coord_t) (sz.y + sz.h * y)};
 		ConfigManager *config = wxGetApp().getSystemManager()->getConfiguration();
@@ -210,7 +210,7 @@ namespace CalXUI {
 		while (!ready) {wxThread::Yield();}
 	}
 	
-	void CalxCoordCtrl::positionAbs(motor_point_t dest) {
+	void CalxCoordCtrl::requestPositionAbs(motor_point_t dest) {
 		ConfigManager *config = wxGetApp().getSystemManager()->getConfiguration();
 		int speed = config->getEntry("core")->getInt("roll_speed", ROLL_SPEED);
 		int div = config->getEntry("core")->getInt("roll_div", ROLL_DIV);
@@ -219,14 +219,14 @@ namespace CalXUI {
 		while (!ready) {wxThread::Yield();}
 	}
 	
-	void CalxCoordCtrl::center() {
+	void CalxCoordCtrl::requestCenter() {
 		motor_point_t offset = ctrl->getPosition();
 		this->map->setOffset(offset);
 		this->otherCtrl->setXOffset(offset.x);
 		this->otherCtrl->setYOffset(offset.y);
 	}
 	
-	void CalxCoordCtrl::invert() {
+	void CalxCoordCtrl::requestInvert() {
 		motor_scale_t scale = map->getScale();
 		scale.x *= -1;
 		scale.y *= -1;
@@ -235,7 +235,7 @@ namespace CalXUI {
 		this->otherCtrl->setYScale(scale.y);
 	}
 	
-	void CalxCoordCtrl::watcher() {
+	void CalxCoordCtrl::requestWatcher() {
 		wxThreadEvent evt(wxEVT_COORD_CTRL_WATCHER);
 		wxPostEvent(this, evt);
 	}
