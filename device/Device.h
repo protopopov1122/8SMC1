@@ -94,6 +94,7 @@ namespace CalX {
 			virtual ConfigManager *getConfiguration();
 			virtual DeviceManager *getDeviceManager() = 0;
 			virtual std::string getDeviceInfo() = 0;
+			virtual std::string getRuntimeInfo() = 0;
 		protected:
 			device_id_t dev;
 			ConfigManager config;
@@ -114,8 +115,6 @@ namespace CalX {
 					unsigned char, bool  = false) = 0;	// Functional. Controls device movement.
 			virtual bool stop() = 0;			// Functional. Controls device movement.
 			virtual bool enablePower(bool) = 0;		// Functional. Controls device power.
-			virtual float getTemperature() = 0;	// Optional. Provides info about motor temperature.
-			virtual float getVoltage() = 0;		// Optional. Provides info about motor voltage.
 	};
 
 	/* Abstract instrument.

@@ -257,7 +257,7 @@ namespace CalXUI {
 	}
 	
 	void CalxMotorCtrl::switchPowerClick(wxCommandEvent &evt) {
-		dev->getMotor()->enablePower(dev->getMotor()->getPowerState() == Power::NoPower);
+		wxGetApp().getErrorHandler()->handle(dev->flipPower());
 	}
 	
 	void CalxMotorCtrl::rollToTrailer1(wxCommandEvent &evt) {

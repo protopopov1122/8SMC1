@@ -45,6 +45,19 @@ namespace CalX {
 	device_id_t MotorController::getID() {
 		return this->dev->getID();
 	}
+	
+	Power MotorController::getPowerState() {
+		return this->dev->getPowerState();
+	}
+	
+	ErrorCode MotorController::enablePower(bool p) {
+		bool res = this->dev->enablePower(p);
+		return res ? ErrorCode::NoError : ErrorCode::LowLevelError;
+	}
+	
+	ErrorCode MotorController::flipPower() {
+		return enablePower(getPowerState() == Power::NoPower);
+	}
 
 	ErrorCode MotorController::checkTrailers() {
 		ErrorCode errcode = ErrorCode::NoError;

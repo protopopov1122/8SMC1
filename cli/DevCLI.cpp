@@ -179,12 +179,12 @@ namespace CalX {
 			if (args.empty()) {
 				std::cout << "Provide device id" << std::endl;
 			} else for (size_t i = 0; i < args.size(); i++) {
-				Motor *dev = sysman->getDeviceManager()->getMotor(std::stoi(args.at(i)));
+				MotorController *dev = sysman->getMotorController(std::stoi(args.at(i)));
 				if (dev == nullptr) {
 					std::cout << "Device #" << i << " not found" << std::endl;
 					return;
 				}
-				if (dev->enablePower(dev->getPowerState() == Power::NoPower)) {
+				if (dev->flipPower()) {
 					std::cout << "\tDevice #" << i << ": power\t" << (dev->getPowerState() == Power::FullPower ?
 									"full" : (dev->getPowerState() == Power::HalfPower ?
 									"half" : "no")) << std::endl;

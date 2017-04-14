@@ -52,6 +52,10 @@ namespace CalX {
 			Motor *getMotor();
 			device_id_t getID();
 
+			Power getPowerState();
+			ErrorCode enablePower(bool);
+			ErrorCode flipPower();
+			
 			ErrorCode moveToTrailer(int);
 			ErrorCode startMove(motor_coord_t, float, int, bool = false);
 			ErrorCode startRelativeMove(motor_coord_t, float, int, bool = false);
