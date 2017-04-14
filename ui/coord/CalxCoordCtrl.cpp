@@ -403,7 +403,6 @@ namespace CalXUI {
 		this->graphCtrl->Close(true);
 		this->otherCtrl->Close(true);
 		
-		delete this->queue;
 		
 		Destroy();
 	}

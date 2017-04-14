@@ -199,9 +199,7 @@ namespace CalXUI {
 	
 	void CalxInstrumentCtrl::OnExit(wxCloseEvent &evt) {
 		timer->Stop();
-		delete timer;
 		ctrl->removeEventListener(listener);
-		delete this->queue;
 		Destroy();
 	}
 	
