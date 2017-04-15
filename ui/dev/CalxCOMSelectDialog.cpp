@@ -66,7 +66,13 @@ namespace CalXUI {
 		cancelButton->Bind(wxEVT_BUTTON, &CalxCOMSelectDialog::OnCancelClick, this);
 		
 		Layout();
-		Fit();
+		Fit();		
+		#ifdef __WXGTK__
+		wxSize size = GetSize();
+		size.x *= 1.15;
+		size.y *= 1.15;
+		SetSize(size);
+		#endif
 	}
 	
 	int16_t CalxCOMSelectDialog::getPort() {

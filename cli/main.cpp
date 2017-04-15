@@ -24,7 +24,7 @@
 #include <iostream>
 #include <fstream>
 #include <cinttypes>
-#include "device/DeviceManager.h"
+#include "ctrl-lib/device/DeviceManager.h"
 #include "ctrl-lib/SystemManager.h"
 #include "ctrl-lib/translator/CoordTranslator.h"
 #include "DevCLI.h"

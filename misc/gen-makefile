@@ -20,8 +20,7 @@ GenDevAPI "emulated" "" " -o \$(BUILD)/libdev_emulated.so"
 ALL=$ALL'\t$(MAKE) $(OUTPUT)\n\t$(MAKE) $(OUTPUT_UI)\n'
 
 # Generate library, stub and cli object file build targets
-printf "\n" 
-find device -maxdepth 1 -name "*.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS_LIB) $(CFLAGS) -c "$0"\n"}'
+printf "\n"
 find misc -name "Stub.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS_LIB) $(CFLAGS) -Ires -c "$0"\n"}'
 find ctrl-lib cli -name "*.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS_LIB) $(CFLAGS) -c "$0"\n"}'
  
@@ -33,8 +32,8 @@ find ui -name "*.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(
 printf "stub: Stub.o\n\t\$(CC) -shared -o \$(BUILD)/USMCDLL.dll Stub.o \$(LDFLAGS)\n\n" 
 
 # Generate console program link target
-printf "\$(OUTPUT): \$(OUTPUT_LIB) devapi_standart " 
-OBJS=`find cli -name "main.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
+printf "\$(OUTPUT): \$(OUTPUT_LIB) devapi_\$(DEVAPI) " 
+OBJS=`find cli -name "*.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
 echo $OBJS 
 printf "\t@mkdir -p \$(BUILD)\n"
 printf "\t\$(CC) -o \$(BUILD)/\$(OUTPUT) " 
@@ -43,10 +42,7 @@ printf " \$(LDFLAGS) -Wl,--library-path=\$(BUILD) -ldev_\$(DEVAPI) -l\$(NAME)\n\
 
 #Generate Ctrl-lib link target
 printf "\$(OUTPUT_LIB): "
-OBJS1=`find ctrl-lib -name "*.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
-OBJS2=`find cli -not -name "main.cpp" -and -name "*.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
-OBJS3=`find device -maxdepth 1 -name "*.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
-OBJS=$OBJS1$OBJS2$OBJS3
+OBJS=`find ctrl-lib -name "*.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
 echo $OBJS 
 printf "\t@mkdir -p \$(BUILD)\n"
 printf "\t\$(CC) -shared -o \$(BUILD)/\$(OUTPUT_LIB) " 
@@ -62,7 +58,9 @@ printf "endif\n\n"
 
 #Generate UI link target
 printf "\$(OUTPUT_UI): langs "
-OBJS=`find ui -name "*.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
+OBJS1=`find ui -name "*.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
+OBJS2=`find cli -not -name "main.cpp" -and -name "*.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
+OBJS=$OBJS1$OBJS2
 echo $OBJS
 printf "\t@mkdir -p \$(BUILD)\n"
 printf "ifneq (\$(WXLIB),)\n"

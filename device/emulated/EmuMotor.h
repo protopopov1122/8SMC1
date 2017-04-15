@@ -24,7 +24,7 @@
 
 #include <string>
 #include <vector>
-#include "device/Device.h"
+#include "ctrl-lib/device/Device.h"
 
 
 namespace CalX {

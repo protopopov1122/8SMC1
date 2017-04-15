@@ -28,7 +28,7 @@
 #include <cinttypes>
 #include "EmuMotor.h"
 #include "EmuInstrument.h"
-#include "device/DeviceManager.h"
+#include "ctrl-lib/device/DeviceManager.h"
 
 
 namespace CalX {

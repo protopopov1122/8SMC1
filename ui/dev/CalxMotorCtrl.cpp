@@ -22,7 +22,7 @@
 #include "CalxErrorHandler.h"
 #include "CalxMotorCtrl.h"
 #include "ctrl-lib/SystemManager.h"
-#include "device/DeviceManager.h"
+#include "ctrl-lib/device/DeviceManager.h"
 #include <wx/statbox.h>
 #include <limits.h>
 #include <iostream>

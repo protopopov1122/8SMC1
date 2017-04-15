@@ -25,7 +25,7 @@
 #include <wx/filedlg.h>
 #include "CalxDebugConsole.h"
 #include "CalxErrorHandler.h"
-#include "device/DeviceManager.h"
+#include "ctrl-lib/device/DeviceManager.h"
 #include "ui/coord/CalxCoordPanel.h"
 #include "ui/CalxAutoconfDialog.h"
 
