@@ -38,7 +38,6 @@ namespace CalX {
 			EmuDeviceManager();
 			virtual ~EmuDeviceManager();
 			virtual void refresh();
-			virtual void saveError();
 			virtual Motor *connectMotor(DeviceConnectionPrms*);
 			virtual Instrument *connectInstrument(DeviceConnectionPrms*);
 	};

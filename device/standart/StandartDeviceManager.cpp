@@ -45,17 +45,17 @@ namespace CalX {
 		}
 		this->dev.clear();
 		if (USMC_Close()) {
-			saveError();
+			saveMotorError();
 		}
 	}
 
 	void StandartDeviceManager::refresh() {
 		if (USMC_Init(this->devs)) {
-			saveError();
+			saveMotorError();
 		}
 	}
 
-	void StandartDeviceManager::saveError() {
+	void StandartDeviceManager::saveMotorError() {
 		char er[101];
 		do {
 			USMC_GetLastErr(er,100);
@@ -72,12 +72,16 @@ namespace CalX {
 			}
 		}
 		
-		/*for (size_t i = 0; i < this->instr.size(); i++) {
-			Instrument *in = this->instr.at(i);
-			while (in->hasErrors()) {
-				this->error_queue.push_back(in->pollError());
+	}
+	
+	
+	void StandartDeviceManager::saveInstrumentError() {
+		for (size_t i = 0; i < this->instr.size(); i++) {
+			Instrument *ins = this->instr.at(i);
+			while (ins->hasErrors()) {
+				this->error_queue.push_back(ins->pollError());
 			}
-		}*/
+		}
 	}
 
 	std::string StandartDeviceManager::getMotorSerial(device_id_t id) {
@@ -105,7 +109,7 @@ namespace CalX {
 		DeviceSerialPortConnectionPrms *prms = (DeviceSerialPortConnectionPrms*) _prms;
 		NL300Instrument *instr = new NL300Instrument((device_id_t) this->instr.size(), prms, this);
 		if (instr->hasErrors()) {
-			this->saveError();
+			this->saveInstrumentError();
 			delete instr;
 			return nullptr;
 		}

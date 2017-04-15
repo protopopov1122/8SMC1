@@ -42,10 +42,6 @@ namespace CalX {
 		
 	}
 	
-	void EmuDeviceManager::saveError() {
-		
-	}
-	
 	Motor *EmuDeviceManager::connectMotor(DeviceConnectionPrms *prms) {
 		EmuMotor *motor = new EmuMotor(this->dev.size(), this);
 		this->dev.push_back(motor);

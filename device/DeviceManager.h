@@ -38,7 +38,6 @@ namespace CalX {
 		public:
 			virtual ~DeviceManager();
 			virtual void refresh() = 0;				// Refresh device list, reinitialise them.
-			virtual void saveError() = 0;			// Poll all device generated errors and save them into queue
 			virtual Motor *getMotor(device_id_t);	// Return device by id
 			virtual size_t getMotorCount();		// Get device count
 			virtual size_t getInstrumentCount();	// Get instrument count

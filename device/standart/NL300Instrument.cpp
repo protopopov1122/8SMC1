@@ -391,7 +391,7 @@ namespace CalX {
 			} else {
 				this->errors.push_back("NL300 start error: unknown");
 			}
-			getDeviceManager()->saveError();
+			devman->saveInstrumentError();
 			return false;
 		}
 		if (this->config.getEntry(NL300_ENTRY_NAME)->getBool(NL300_ENABLE_DELAY, true)) {
@@ -604,7 +604,7 @@ namespace CalX {
 			CloseHandle(handle);
 			handle = INVALID_HANDLE_VALUE;
 			this->errors.push_back("Error writing to COM" + std::to_string(prms.port));
-			getDeviceManager()->saveError();
+			this->devman->saveInstrumentError();
 			return false;
 		}
 		ILOG("Write finished");
@@ -622,7 +622,7 @@ namespace CalX {
 			CloseHandle(handle);
 			handle = INVALID_HANDLE_VALUE;
 			this->errors.push_back("Error reading from COM" + std::to_string(prms.port));
-			getDeviceManager()->saveError();
+			this->devman->saveInstrumentError();
 			return EOF;
 		}
 		return chr;
