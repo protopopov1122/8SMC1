@@ -1,0 +1,18 @@
+cmake_minimum_required(VERSION 2.6)
+project(CalX)
+
+set(wxWidgets_USE_LIBS)
+find_package(wxWidgets)
+if (wxWidgets_FOUND)
+	include("${wxWidgets_USE_FILE}")
+	include_directories(${CMAKE_SOURCE_DIR})
+	include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+	find_package(wxWidgets)
+	file(GLOB_RECURSE SRCS *.cpp ${CMAKE_SOURCE_DIR}/cli/CLI.cpp ${CMAKE_SOURCE_DIR}/cli/DevCLI.cpp)
+	add_executable(calxui ${SRCS})
+	target_link_libraries(calxui ${wxWidgets_LIBRARIES} calx)
+	install(TARGETS calxui DESTINATION bin)
+else(wxWidgets_FOUND)
+	message("wxWidgets not found!")
+endif(wxWidgets_FOUND)
+

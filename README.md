@@ -32,6 +32,17 @@ The only Device API implementation is written for Standa controllers and EKSPLA 
 
 Building
 ===================
+Project contains two build systems:
+* CMake build files. Recently integrated into project, however CMake files are quite simple. Recomended to use. Currently it is main priority, successfully builds Device API drivers, Ctrl-lib and Calx UI. Build steps:
+```bash
+mkdir -p build
+cd build	# Create and enter build directory
+cmake ..	# Generate build files
+make		# Build project
+make install	# Install software. Not tested
+```
+* Custom shell-script based build system. Quite complex, will be removed after full CMake integration.
+
 Project is built using MSVC and MinGW cross compiler(MinGW build tested on top of Linux and Windows Subsystem for Linux). Project UI depends on wxWidgets and links to it dynamically. Before using you should make sure that 'autoconf' key in config.ini is commented/disable, because it contains configuration parameters specific to used equipment and will not work on other systems.
 
 To use 8SMC1 controller:
