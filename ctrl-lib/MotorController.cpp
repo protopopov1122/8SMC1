@@ -99,6 +99,9 @@ namespace CalX {
 		if (this->dev->isRunning()) {
 			return ErrorCode::MotorRunning;
 		}
+		if (this->dev->getPowerState() == Power::NoPower) {
+			return ErrorCode::PowerOff;
+		}
 		if (tr != 1 && tr != 2) {
 			return ErrorCode::WrongParameter;
 		}
@@ -152,6 +155,9 @@ namespace CalX {
 			float speed, int div, bool syncIn) {
 		if (this->dev->isRunning()) {
 			return ErrorCode::MotorRunning;
+		}
+		if (this->dev->getPowerState() == Power::NoPower) {
+			return ErrorCode::PowerOff;
 		}
 		this->work = true;
 		this->dest = dest > this->dev->getPosition() ? MoveType::MoveUp :

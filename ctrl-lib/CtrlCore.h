@@ -33,15 +33,15 @@ namespace CalX {
 	
 	/* Ctrl-lib possible errors. It doesn't include all Device API low-level errors.*/
 	enum ErrorCode {
-		NoError = 0,
-		LowLevelError = 1, WrongParameter = 2,
-		Trailer1Pressed = 3, Trailer2Pressed = 4,
-		MotorRunning = 5, MotorStopped = 6,
-		ArcError = 7,
-		InvalidCoordinates = 8, InvalidSpeed = 9,
-		MathExprError = 10,
-		MathRuntimeNoVar = 11, MathRuntimeNoFunction = 12,
-		MathRuntimeWrongPrms = 13
+		NoError = 0, PowerOff = 1,
+		LowLevelError = 2, WrongParameter = 3,
+		Trailer1Pressed = 4, Trailer2Pressed = 5,
+		MotorRunning = 6, MotorStopped = 7,
+		ArcError = 8,
+		InvalidCoordinates = 9, InvalidSpeed = 10,
+		MathExprError = 11,
+		MathRuntimeNoVar = 12, MathRuntimeNoFunction = 13,
+		MathRuntimeWrongPrms = 14
 	};
 
 	/* Used in device controller. Describes current move type and state.*/

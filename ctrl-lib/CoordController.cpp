@@ -78,6 +78,10 @@ namespace CalX {
 		Motor *yDev = this->yAxis->getMotor();
 		motor_coord_t dx = point.x - xDev->getPosition();
 		motor_coord_t dy = point.y - yDev->getPosition();
+		if (this->xAxis->getPowerState() == Power::NoPower ||
+			this->yAxis->getPowerState() == Power::NoPower) {
+			return ErrorCode::PowerOff;
+		}
 
 		// Calculate x and y axis speed v=sqrt(vx^2 + vy^2); vy = n*vx
 
@@ -223,6 +227,10 @@ namespace CalX {
 				|| this->yAxis->getMotor()->isRunning()) {
 			return ErrorCode::MotorRunning;
 		}
+		if (this->xAxis->getPowerState() == Power::NoPower ||
+			this->yAxis->getPowerState() == Power::NoPower) {
+			return ErrorCode::PowerOff;
+		}
 		if (tr != TrailerId::Trailer1 && tr != TrailerId::Trailer2) {
 			return ErrorCode::WrongParameter;
 		}
@@ -341,6 +349,10 @@ namespace CalX {
 
 	ErrorCode CoordController::arc(motor_point_t dest, motor_point_t center, int spl,
 				float speed, int div, bool clockwise, bool strict) {
+		if (this->xAxis->getPowerState() == Power::NoPower ||
+			this->yAxis->getPowerState() == Power::NoPower) {
+			return ErrorCode::PowerOff;
+		}
 		motor_point_t src = this->getPosition();
 		double r1 = pow(src.x - center.x, 2) +
 			     pow(src.y - center.y, 2);
@@ -427,6 +439,10 @@ namespace CalX {
 	}
 	
 	ErrorCode CoordController::measure(TrailerId tid) {
+		if (this->xAxis->getPowerState() == Power::NoPower ||
+			this->yAxis->getPowerState() == Power::NoPower) {
+			return ErrorCode::PowerOff;
+		}
 		work = defWork;
 		TrailerId tid1 = (tid == TrailerId::Trailer1 ? TrailerId::Trailer2 : TrailerId::Trailer1);
 		TrailerId tid2 = tid;
