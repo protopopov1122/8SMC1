@@ -311,8 +311,8 @@ namespace CalX {
 		ConfigEntry *entry = nullptr;
 		const int LINE_LEN = 256;
 		char rawline[LINE_LEN];
-		int line_num = 0;
-		while (!is->eof()) {
+        int line_num = 0;
+        while (is->good()) {
 			is->getline(rawline, LINE_LEN);
 			line_num++;
 			// Remove comments

@@ -59,10 +59,16 @@ namespace CalXUI {
 	};
 	
 	bool CalxApp::OnInit() {	
-	
-		std::ifstream cnf("config.ini");
-		ConfigManager *conf = ConfigManager::load(&cnf, &std::cout);
-		cnf.close();		
+
+        ConfigManager *conf = nullptr;
+        std::ifstream cnf("config.ini");
+        if (!cnf.good()) {
+            wxMessageBox(__("Can't open configuration. Using default values."), __("Warning"), wxICON_WARNING);
+            conf = new ConfigManager();
+        } else {
+            conf = ConfigManager::load(&cnf, &std::cout);
+        }
+        cnf.close();
 		
 		this->debug_mode = conf->getEntry("ui")->getBool("debug", false);
 		std::string lib_addr = conf->getEntry("ui")->getString("devicelib", STRINGIZE(DEVICES_LIB));

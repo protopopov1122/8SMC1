@@ -16,7 +16,7 @@ namespace CalXUI {
 		wxPanel *mainPanel = new wxPanel(this, wxID_ANY);
 		sizer->Add(mainPanel, 1, wxALL | wxEXPAND, 5);
 		wxFlexGridSizer *mainSizer = new wxFlexGridSizer(2);
-		mainPanel->SetSizer(mainSizer);
+        mainPanel->SetSizer(mainSizer);
 		
 		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, __("Name") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		this->key = new wxTextCtrl(mainPanel, wxID_ANY, "");

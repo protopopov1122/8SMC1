@@ -58,8 +58,14 @@ class HelpCMD : public CLICommand  {
 
 int main(int argc, char **argv) {	
 	DeviceManager *devman = getDeviceManager();
-	std::ifstream cnf("config.ini");
-	ConfigManager *conf = ConfigManager::load(&cnf, &std::cout);
+    ConfigManager *conf = nullptr;
+    std::ifstream cnf("config.ini");
+    if (!cnf.good()) {
+        std::cout << "Can't load configuration, using default values." << std::endl;
+        conf = new ConfigManager();
+    } else {
+        conf = ConfigManager::load(&cnf, &std::cout);
+    }
 	cnf.close();
 	SystemManager *sysman = new SystemManager(devman, conf);
 	CLI cli(std::cout, std::cin);
