@@ -34,6 +34,9 @@ Building
 ===================
 Project contains two build systems:
 * CMake build files. Recently integrated into project, however CMake files are quite simple. Recomended to use. Currently it is main priority, successfully builds Device API drivers, Ctrl-lib and Calx UI. Build steps:
+For Windows: generate MSVC soultion and build it by Visual Studio.
+
+For Linux:
 ```bash
 mkdir -p build
 cd build	# Create and enter build directory

@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.6)
 project(CalX)
 
+
 include_directories(${CMAKE_SOURCE_DIR})
 add_definitions(-DLOGGING)
 file(GLOB_RECURSE SRCS *.cpp)

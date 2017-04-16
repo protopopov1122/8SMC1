@@ -19,9 +19,34 @@
 
 #include "logger.h"
 
-std::ostream *ERRORS = nullptr;
-std::ostream *WARNINGS = nullptr;
-std::ostream *DEBUG = nullptr;
-std::ostream *INFO = nullptr;
-std::ostream *RESOURCES = nullptr;
-std::ostream *INSTRUMENTS = nullptr;
+std::ostream *__ERRORS = nullptr;
+std::ostream *__WARNINGS = nullptr;
+std::ostream *__DEBUG = nullptr;
+std::ostream *__INFO = nullptr;
+std::ostream *__RESOURCES = nullptr;
+std::ostream *__INSTRUMENTS = nullptr;
+
+std::ostream **getStreamPtr(std::string str) {
+	if (str.compare(ERRORS) == 0) {
+		return &__ERRORS;
+	} else if (str.compare(WARNINGS) == 0) {
+		return &__WARNINGS;
+	} else if (str.compare(INFO) == 0) {
+		return &__INFO;
+	} else if (str.compare(RESOURCES) == 0) {
+		return &__RESOURCES;
+	} else if (str.compare(DEBUG) == 0) {
+		return &__DEBUG;
+	} else if (str.compare(INSTRUMENTS) == 0) {
+		return &__INSTRUMENTS;
+	} else {
+		return nullptr;
+	}
+}
+
+void SET_LOGGER(std::string str, std::ostream *s) {
+	std::ostream **ptr = getStreamPtr(str);
+	if (ptr != nullptr) {
+		*ptr = s;
+	}
+}

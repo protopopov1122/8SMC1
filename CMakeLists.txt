@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.6)
 project(CalX)
 
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
 add_subdirectory(device)
 add_subdirectory(ctrl-lib)
 add_subdirectory(cli)

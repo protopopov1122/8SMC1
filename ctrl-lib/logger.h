@@ -28,21 +28,25 @@
 	
 	To enable loggins define LOGGING macro */
 
+#include "platform.h"
 #include <iostream>
 
-extern std::ostream *ERRORS;
-extern std::ostream *WARNINGS;
-extern std::ostream *DEBUG;
-extern std::ostream *INFO;
-extern std::ostream *RESOURCES;
-extern std::ostream *INSTRUMENTS;
+#define ERRORS "errors"
+#define WARNINGS "warnings"
+#define DEBUG "debug"
+#define INFO "info"
+#define RESOURCES "resources"
+#define INSTRUMENTS "instruments"
 
-#define SET_LOGGER(name, val) name = val;
+
+std::ostream **getStreamPtr(std::string);
+void SET_LOGGER(std::string, std::ostream*);
 
 #ifdef LOGGING
-#define WRITE_LOG(output, tag, msg) do { const char *__file = __FILE__; int __line = __LINE__;\
-                                if ((output) != nullptr) {\
-                                    *(output) << __file << ':' << __line\
+#define WRITE_LOG(__output, tag, msg) do { const char *__file = __FILE__; int __line = __LINE__;\
+								std::ostream **output = getStreamPtr(__output);\
+                                if (output != nullptr && *output != nullptr) {\
+                                    **(output) << __file << ':' << __line\
                                                    << '(' << __DATE__ << ' ' << __TIME__ << ')'\
 								                   << ' ' << (tag) << ": " << (msg) << std::endl;\
                                 }\
