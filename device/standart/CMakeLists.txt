@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.6)
 project(CalX)
 
 if (WIN32)
+	
 	if (EXISTS ${CMAKE_SOURCE_DIR}/res/USMCDLL.h)
 		include_directories(${CMAKE_SOURCE_DIR}/res)
 		add_library(USMCDLL SHARED stub.cpp)
@@ -9,8 +10,13 @@ if (WIN32)
 		add_library(USMCDLL SHARED IMPORTED)
 	endif (EXISTS ${CMAKE_SOURCE_DIR}/res/USMCDLL.h)
 	
+	
 	include_directories(${CMAKE_SOURCE_DIR})
 	add_library(dev_standart SHARED 8SMC1Device.cpp NL300Instrument.cpp StandartDeviceManager.cpp)
 	target_link_libraries(dev_standart calx USMCDLL)
-	install(TARGETS dev_standart DESTINATION lib/calx_devapi)
+	if (WIN32)
+		install(TARGETS dev_standart DESTINATION /)
+	else (WIN32)
+		install(TARGETS dev_standart DESTINATION lib/calx_devapi)
+	endif (WIN32)
 endif (WIN32)
