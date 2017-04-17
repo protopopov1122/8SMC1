@@ -1,6 +1,7 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.1)
 project(CalX)
 
+set (CMAKE_CXX_STANDARD 11)
 include_directories(${CMAKE_SOURCE_DIR})
 add_executable(calxcli DevCLI.cpp CLI.cpp main.cpp)
 set(CPACK_COMPONENT_CALXCLI_DEPENDS calx_ctrl_lib CACHE INTERNAL "")

@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Append header to Makefile
-cat misc/mk-header 
+cat misc/old-build/mk-header 
 
-ALL='\t$(MAKE) $(OUTPUT_LIB)\n'
+ALL='\t$(MAKE) -f ./misc/old-build/Makefile $(OUTPUT_LIB) BUILD=$(BUILD)\n'
 
 # Generate Device API handlers
 
@@ -11,13 +11,13 @@ function GenDevAPI {
 	find device/$1 -name "*.cpp" -not -name "$2" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS_LIB) $(CFLAGS) '$3' -c "$0"\n"}'
 	OBJS=`find device/$1 -name "*.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
 	printf "devapi_$1: $OBJS \$(OUTPUT_LIB)\n\t\$(CC) -shared $OBJS $4 \$(LDFLAGS) \$(LDFLAGS_LIB) -Wl,--library-path=\$(BUILD) -lcalx\n"
-	ALL=$ALL"\t\$(MAKE) devapi_$1\n"
+	ALL=$ALL"\t\$(MAKE) -f ./misc/old-build/Makefile devapi_$1 BUILD=\$(BUILD)\n"
 }
 
 GenDevAPI "standart" "Stub.cpp" "-Ires" " -o \$(BUILD)/dev_standart.dll -Wl,-Bdynamic,--library-path=\$(BUILD) -lUSMCDLL  -Wl,--out-implib,\$(BUILD)/\dev_standart.a"
 GenDevAPI "emulated" "" "" " -o \$(BUILD)/libdev_emulated.so"
 
-ALL=$ALL'\t$(MAKE) $(OUTPUT)\n\t$(MAKE) $(OUTPUT_UI)\n'
+ALL=$ALL'\t$(MAKE) -f ./misc/old-build/Makefile $(OUTPUT) BUILD=$(BUILD)\n\t$(MAKE) -f ./misc/old-build/Makefile $(OUTPUT_LIB) $(OUTPUT_UI) BUILD=$(BUILD)\n'
 
 # Generate library, stub and cli object file build targets
 printf "\n"
@@ -49,15 +49,9 @@ printf "\t\$(CC) -shared -o \$(BUILD)/\$(OUTPUT_LIB) "
 printf "$OBJS" 
 printf " \$(LDFLAGS) \$(LDFLAGS_LIB)\n\n" 
 
-#Generate lang target
-printf "langs:\n"
-printf "ifdef MSGFMT\n"
-printf '\tmkdir -p $(BUILD)/lang\n'
-find lang -name "*.po" | awk -F/ '{split($NF, arr, "\\."); print "\tmsgfmt -o $(BUILD)/lang/"arr[1]".mo lang/"$NF"\n"}'
-printf "endif\n\n"
 
 #Generate UI link target
-printf "\$(OUTPUT_UI): langs "
+printf "\$(OUTPUT_UI): "
 OBJS1=`find ui -name "*.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
 OBJS2=`find cli -not -name "main.cpp" -and -name "*.cpp" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
 OBJS=$OBJS1$OBJS2
@@ -66,13 +60,12 @@ printf "\t@mkdir -p \$(BUILD)\n"
 printf "ifneq (\$(WXLIB),)\n"
 printf "\tcp \$(WX)/\$(WXLIB) \$(BUILD)\n"
 printf "endif\n"
-printf "\t\$(MAKE) icon\n"
-printf "\t\$(MAKE) lang\n"
+printf "\t\$(MAKE) -f ./misc/old-build/Makefile icon BUILD=\$(BUILD)\n"
 printf "\t\$(CC) -o \$(BUILD)/\$(OUTPUT_UI) " 
 printf "$OBJS \$(ICON_RES)"
 printf ' $(LDFLAGS) -Wl,--library-path=\$(BUILD) -l$(NAME) `$(WX)/wx-config --libs`\n\n'
 
-printf "all:\n$ALL\t\$(MAKE) copy\n\n"
+printf "all:\n$ALL\t\$(MAKE) -f ./misc/old-build/Makefile copy BUILD=\$(BUILD)\n\n"
 
 # Append footer to Makefile
-cat misc/mk-footer 
+cat misc/old-build/mk-footer 

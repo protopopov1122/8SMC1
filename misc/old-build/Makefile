@@ -55,7 +55,6 @@ CFLAGS_LIB=$(CFLAGS_LIB_$(PLATFORM))
 LDFLAGS_LIB=$(LDFLAGS_LIB_$(PLATFORM))
 CFLAGS=$(CFLAGS_$(PLATFORM)) $(DBG) $(EXTRA)
 LDFLAGS=$(LDFLAGS_$(PLATFORM))
-
 8SMC1Device.o:
 	$(CC) $(CFLAGS_LIB) $(CFLAGS) -Ires -c device/standart/8SMC1Device.cpp
 
@@ -295,27 +294,21 @@ $(OUTPUT_LIB): ConfigManager.o ConfigValidator.o CoordController.o CoordHandle.o
 	@mkdir -p $(BUILD)
 	$(CC) -shared -o $(BUILD)/$(OUTPUT_LIB) ConfigManager.o ConfigValidator.o CoordController.o CoordHandle.o Device.o DeviceManager.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o InstrumentController.o logger.o CircleGenerator.o GCodeParser.o GCodeWriter.o GraphBuilder.o MotorController.o CoordPlaneLinearizer.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o VirtualCoordPlane.o RequestResolver.o StandartRequestResolvers.o SystemManager.o CoordTask.o CoordTaskWrapper.o GCodeCoordTask.o BasicCoordTranslator.o ComplexCoordTranslator.o LinearCoordTranslator.o LogarithmicCoordTranslator.o PolarCoordTranslator.o  $(LDFLAGS) $(LDFLAGS_LIB)
 
-langs:
-ifdef MSGFMT
-	mkdir -p $(BUILD)/lang
-endif
-
-$(OUTPUT_UI): langs CalxActionQueue.o CalxApp.o CalxAutoconfDialog.o CalxConfigEditor.o CalxConsoleWidget.o CalxDebugConsole.o CalxErrorHandler.o CalxFrame.o CalxPanel.o CalxCoordArcCtrl.o CalxCoordCtrl.o CalxCoordDialog.o CalxCoordFilter.o CalxCoordGraphCtrl.o CalxCoordLinearCtrl.o CalxCoordMiscCtrl.o CalxCoordOtherCtrl.o CalxCoordPanel.o CalxCoordPlaneWatcher.o CalxVirtualPlane.o CalxCOMSelectDialog.o CalxDevicePanel.o CalxInstrumentCtrl.o CalxMotorCtrl.o CalxGcodeHandle.o CalxGcodeLoader.o CalxProgrammedTaskHandle.o CalxTaskPanel.o CalxTaskStepHandle.o CLI.o DevCLI.o
+$(OUTPUT_UI): CalxActionQueue.o CalxApp.o CalxAutoconfDialog.o CalxConfigEditor.o CalxConsoleWidget.o CalxDebugConsole.o CalxErrorHandler.o CalxFrame.o CalxPanel.o CalxCoordArcCtrl.o CalxCoordCtrl.o CalxCoordDialog.o CalxCoordFilter.o CalxCoordGraphCtrl.o CalxCoordLinearCtrl.o CalxCoordMiscCtrl.o CalxCoordOtherCtrl.o CalxCoordPanel.o CalxCoordPlaneWatcher.o CalxVirtualPlane.o CalxCOMSelectDialog.o CalxDevicePanel.o CalxInstrumentCtrl.o CalxMotorCtrl.o CalxGcodeHandle.o CalxGcodeLoader.o CalxProgrammedTaskHandle.o CalxTaskPanel.o CalxTaskStepHandle.o CLI.o DevCLI.o
 	@mkdir -p $(BUILD)
 ifneq ($(WXLIB),)
 	cp $(WX)/$(WXLIB) $(BUILD)
 endif
-	$(MAKE) icon
-	$(MAKE) lang
+	$(MAKE) -f ./misc/old-build/Makefile icon BUILD=$(BUILD)
 	$(CC) -o $(BUILD)/$(OUTPUT_UI) CalxActionQueue.o CalxApp.o CalxAutoconfDialog.o CalxConfigEditor.o CalxConsoleWidget.o CalxDebugConsole.o CalxErrorHandler.o CalxFrame.o CalxPanel.o CalxCoordArcCtrl.o CalxCoordCtrl.o CalxCoordDialog.o CalxCoordFilter.o CalxCoordGraphCtrl.o CalxCoordLinearCtrl.o CalxCoordMiscCtrl.o CalxCoordOtherCtrl.o CalxCoordPanel.o CalxCoordPlaneWatcher.o CalxVirtualPlane.o CalxCOMSelectDialog.o CalxDevicePanel.o CalxInstrumentCtrl.o CalxMotorCtrl.o CalxGcodeHandle.o CalxGcodeLoader.o CalxProgrammedTaskHandle.o CalxTaskPanel.o CalxTaskStepHandle.o CLI.o DevCLI.o  $(ICON_RES) $(LDFLAGS) -Wl,--library-path=\$(BUILD) -l$(NAME) `$(WX)/wx-config --libs`
 
 all:
-	$(MAKE) $(OUTPUT_LIB)
-	$(MAKE) devapi_standart
-	$(MAKE) devapi_emulated
-	$(MAKE) $(OUTPUT)
-	$(MAKE) $(OUTPUT_UI)
-	$(MAKE) copy
+	$(MAKE) -f ./misc/old-build/Makefile $(OUTPUT_LIB) BUILD=$(BUILD)
+	$(MAKE) -f ./misc/old-build/Makefile devapi_standart BUILD=$(BUILD)
+	$(MAKE) -f ./misc/old-build/Makefile devapi_emulated BUILD=$(BUILD)
+	$(MAKE) -f ./misc/old-build/Makefile $(OUTPUT) BUILD=$(BUILD)
+	$(MAKE) -f ./misc/old-build/Makefile $(OUTPUT_LIB) $(OUTPUT_UI) BUILD=$(BUILD)
+	$(MAKE) -f ./misc/old-build/Makefile copy BUILD=$(BUILD)
 
 icon:
 ifdef ICON
@@ -350,8 +343,8 @@ clean:
 	
 copy:
 	zip -r $(BUILD)/src.zip *.md Makefile platform.h config.ini device ctrl-lib ui winbuild misc cli tests COPYING COPYING.LESSER NOTICE auto.conf
-	cp config.ini $(BUILD)
+	cp misc/config.ini $(BUILD)
 	cp COPYING $(BUILD)
 	cp COPYING.LESSER $(BUILD)
 	cp NOTICE $(BUILD)
-	cp auto.conf $(BUILD)
+	cp misc/auto.conf $(BUILD)

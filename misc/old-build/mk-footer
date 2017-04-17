@@ -1,0 +1,38 @@
+icon:
+ifdef ICON
+	convert misc/icon.svg -resize 256x256 -quality 100 icon.png
+	convert icon.png -resize 128x128 -quality 100 icon128.png
+	convert icon.png -resize 64x64 -quality 100 icon64.png
+	convert icon.png -resize 48x48 -quality 100 icon48.png
+	convert icon.png -resize 32x32 -quality 100 icon32.png
+	convert *.png $(BUILD)/icon.ico
+ifeq ($(PLATFORM), win)
+	`$(WX)/wx-config --rescomp` ui/calxui.rc -O coff -o $(ICON)
+endif
+endif
+
+
+clean:
+	@rm -f *.o
+	@rm -rf $(BUILD)
+	@mkdir -p $(BUILD)
+	@rm -f *.obj
+	@rm -f *.exe
+	@rm -f *.lib
+	@rm -f *.dll
+	@rm -f *.exp
+	@rm -f *.ilk
+	@rm -f *.pdb
+	@rm -f *.idb
+	@rm -f *.manifest
+	@rm -f *.png
+	@rm -f *.res
+	@rm -f *.log
+	
+copy:
+	zip -r $(BUILD)/src.zip *.md Makefile platform.h config.ini device ctrl-lib ui winbuild misc cli tests COPYING COPYING.LESSER NOTICE auto.conf
+	cp misc/config.ini $(BUILD)
+	cp COPYING $(BUILD)
+	cp COPYING.LESSER $(BUILD)
+	cp NOTICE $(BUILD)
+	cp misc/auto.conf $(BUILD)
