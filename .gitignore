@@ -59,8 +59,5 @@ dkms.conf
 res
 build
 *.manifest
-*.png
-*.ico
 *.res
 *.log
-lang/*.mo
