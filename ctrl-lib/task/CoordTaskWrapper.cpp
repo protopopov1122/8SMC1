@@ -46,10 +46,11 @@ namespace CalX {
 		this->val_speed = speed;
 	}
 	
-	void CoordTaskWrapper::setMap(motor_point_t offset, motor_scale_t sc) {
+	void CoordTaskWrapper::setMap(motor_point_t offset, motor_scale_t sc, float speed) {
 		this->coord_map = true;
 		this->coord_offset = offset;
 		this->coord_scale = sc;
+		this->coord_speed_scale = speed;
 	}
 	
 	ErrorCode CoordTaskWrapper::perform(CoordPlane *plane, TaskParameters &prms, SystemManager *sysman, TaskState *state) {
@@ -64,7 +65,7 @@ namespace CalX {
 			vec.push_back(val);
 		}
 		if (this->coord_map) {
-			CoordPlaneMap *map = new CoordPlaneMap(this->coord_offset, this->coord_scale,
+			CoordPlaneMap *map = new CoordPlaneMap(this->coord_offset, this->coord_scale, this->coord_speed_scale,
 				vec.at(vec.size() - 1));
 			vec.push_back(map);
 		}

@@ -22,10 +22,11 @@
 
 namespace CalX {
 	
-	CoordPlaneMap::CoordPlaneMap(motor_point_t offset, motor_scale_t scale, CoordPlane *plane) {
+	CoordPlaneMap::CoordPlaneMap(motor_point_t offset, motor_scale_t scale, float speedSc, CoordPlane *plane) {
 		this->offset = offset;
 		this->scale = scale;
 		this->plane = plane;
+		this->speedScale = speedSc;
 		INIT_LOG("CoordPlaneMap");
 	}
 	
@@ -45,6 +46,10 @@ namespace CalX {
 		return this->scale;
 	}
 	
+	float CoordPlaneMap::getSpeedScale() {
+		return this->speedScale;
+	}
+	
 	void CoordPlaneMap::setOffset(motor_point_t p) {
 		this->offset = p;
 	}
@@ -53,12 +58,16 @@ namespace CalX {
 		this->scale = s;
 	}
 	
+	void CoordPlaneMap::setSpeedScale(float sc) {
+		this->speedScale = sc;
+	}
+	
 	ErrorCode CoordPlaneMap::move(motor_point_t dest, float speed, int div, bool sync) {
 		dest.x *= this->scale.x;
 		dest.y *= this->scale.y;
 		dest.x += this->offset.x;
 		dest.y += this->offset.y;
-		return this->plane->move(dest, speed, div, sync);
+		return this->plane->move(dest, speed * this->speedScale, div, sync);
 	}
 	
 	ErrorCode CoordPlaneMap::arc(motor_point_t dest, motor_point_t center, int splitter, float speed, int div, bool clockwise, bool strict) {
@@ -71,7 +80,7 @@ namespace CalX {
 		center.y *= this->scale.y;
 		center.x += this->offset.x;
 		center.y += this->offset.y;
-		return this->plane->arc(dest, center, splitter, speed, div, clockwise, strict);
+		return this->plane->arc(dest, center, splitter, speed * this->speedScale, div, clockwise, strict);
 	}
 	
 	ErrorCode CoordPlaneMap::calibrate(TrailerId tr) {
@@ -124,6 +133,6 @@ namespace CalX {
 	}
 	
 	CoordPlane *CoordPlaneMap::clone(CoordPlane *base) {
-		return new CoordPlaneMap(this->offset, this->scale, base);
+		return new CoordPlaneMap(this->offset, this->scale, this->speedScale, base);
 	}
 }

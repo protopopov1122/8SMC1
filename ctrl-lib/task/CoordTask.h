@@ -189,7 +189,7 @@ namespace CalX {
 			
 			void setCalibration(TrailerId);
 			void setValidation(motor_point_t, motor_point_t, float);
-			void setMap(motor_point_t, motor_scale_t);
+			void setMap(motor_point_t, motor_scale_t, float);
 		private:
 			CoordTask *task;
 			// Wrapper options
@@ -201,6 +201,7 @@ namespace CalX {
 			// Map
 			motor_point_t coord_offset;
 			motor_scale_t coord_scale;
+			float coord_speed_scale;
 			// Validate
 			motor_point_t val_min;
 			motor_point_t val_max;

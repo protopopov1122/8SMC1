@@ -1,3 +1,4 @@
+
 /*
     Copyright (c) 2017 Jevgenijs Protopopovs
 
@@ -51,7 +52,7 @@ namespace CalXUI {
 		ctrl->pushPlane(this->log);
 		motor_point_t mapOffset = {0, 0};
 		motor_scale_t mapScale = {1.0f, 1.0f};
-		this->map = new CoordPlaneMap(mapOffset, mapScale, ctrl->peekPlane());
+		this->map = new CoordPlaneMap(mapOffset, mapScale, 1, ctrl->peekPlane());
 		ctrl->pushPlane(this->map);
 		
 		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);

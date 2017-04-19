@@ -327,6 +327,8 @@ namespace CalX {
 		if (work) {
 			xAxis->startMove(xAxis->getMotor()->getPosition() + comeback, roll_speed, roll_div);
 			yAxis->startMove(yAxis->getMotor()->getPosition() + comeback, roll_speed, roll_div);
+			xAxis->waitWhileRunning();
+			yAxis->waitWhileRunning();
 		}
 		xAxis->sendRolledEvent(mevt);
 		yAxis->sendRolledEvent(mevt);

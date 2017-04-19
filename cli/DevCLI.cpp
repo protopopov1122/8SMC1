@@ -253,7 +253,7 @@ namespace CalX {
 			}
 			motor_point_t offset = {std::stoi(args.at(1)), std::stoi(args.at(2))};
 			motor_scale_t scale = {std::stod(args.at(3)), std::stod(args.at(4))};
-			ctrl->pushPlane(new CoordPlaneMap(offset, scale, ctrl->peekPlane()));
+			ctrl->pushPlane(new CoordPlaneMap(offset, scale, 1, ctrl->peekPlane()));
 		} else if (com.compare("validate") == 0) {
 			if (args.size() < 6) {
 				std::cout << "Provide arguments" << std::endl;

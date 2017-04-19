@@ -176,13 +176,15 @@ namespace CalX {
 	// Mapping coordinates
 	class CoordPlaneMap : public CoordPlane {
 		public:
-			CoordPlaneMap(motor_point_t, motor_scale_t, CoordPlane*);
+			CoordPlaneMap(motor_point_t, motor_scale_t, float, CoordPlane*);
 			virtual ~CoordPlaneMap();
 			CoordPlane *getBase();
 			motor_point_t getOffset();
 			motor_scale_t getScale();
+			float getSpeedScale();
 			void setOffset(motor_point_t);
 			void setScale(motor_scale_t);
+			void setSpeedScale(float);
 						
 			virtual ErrorCode move(motor_point_t, float, int, bool);
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
@@ -200,6 +202,7 @@ namespace CalX {
 			CoordPlane* plane;
 			motor_point_t offset;
 			motor_scale_t scale;
+			float speedScale;
 	};
 	
 	// Coordinate and speed validation
