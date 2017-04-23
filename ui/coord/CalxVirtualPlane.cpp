@@ -19,6 +19,7 @@
 
 
 #include "CalxVirtualPlane.h"
+#include "ui/CalxUnitProcessor.h"
 #include <wx/sizer.h>
 #include <wx/utils.h>
 
@@ -119,13 +120,13 @@ namespace CalXUI {
 		
 		dc.SetPen(*wxBLACK_PEN);
 		wxCoord x, y;
-		dc.DrawText(std::to_string(plane_size.x), 0, real_size.y / 2);
-		dc.GetMultiLineTextExtent(std::to_string(plane_size.x + plane_size.w), &x, &y);
-		dc.DrawText(std::to_string(plane_size.x + plane_size.w), real_size.x - x, real_size.y / 2);
-		dc.GetMultiLineTextExtent(std::to_string(plane_size.y), &x, &y);
-		dc.DrawText(std::to_string(plane_size.y + plane_size.h), real_size.x / 2 - x / 2, 0);
-		dc.GetMultiLineTextExtent(std::to_string(plane_size.y), &x, &y);
-		dc.DrawText(std::to_string(plane_size.y), real_size.x / 2 - x / 2, real_size.y - y);
+		dc.DrawText(std::to_string(wxGetApp().getUnitProcessor()->toUnits(plane_size.x)), 0, real_size.y / 2);
+		dc.GetMultiLineTextExtent(std::to_string(wxGetApp().getUnitProcessor()->toUnits(plane_size.x + plane_size.w)), &x, &y);
+		dc.DrawText(std::to_string(wxGetApp().getUnitProcessor()->toUnits(plane_size.x + plane_size.w)), real_size.x - x, real_size.y / 2);
+		dc.GetMultiLineTextExtent(std::to_string(wxGetApp().getUnitProcessor()->toUnits(plane_size.y + plane_size.h)), &x, &y);
+		dc.DrawText(std::to_string(wxGetApp().getUnitProcessor()->toUnits(plane_size.y + plane_size.h)), real_size.x / 2 - x / 2, 0);
+		dc.GetMultiLineTextExtent(std::to_string(wxGetApp().getUnitProcessor()->toUnits(plane_size.y)), &x, &y);
+		dc.DrawText(std::to_string(wxGetApp().getUnitProcessor()->toUnits(plane_size.y)), real_size.x / 2 - x / 2, real_size.y - y);
 		
 	}
 
@@ -171,7 +172,8 @@ namespace CalXUI {
 			mouse.y < real_size.y) {
 			motor_coord_t rx = (motor_coord_t) mouse.x * plane_size.w / real_size.x + plane_size.x;
 			motor_coord_t ry = (motor_coord_t) plane_size.h - mouse.y * plane_size.h / real_size.y + plane_size.y;
-			std::string res = FORMAT(__("x: %s; y: %s"), std::to_string(rx), std::to_string(ry));
+			std::string res = FORMAT(__("x: %s; y: %s"), wxGetApp().getUnitProcessor()->toTextUnits(rx),
+				wxGetApp().getUnitProcessor()->toTextUnits(ry));
 			this->mouseCoords->SetLabel(res);
 		}
 	}

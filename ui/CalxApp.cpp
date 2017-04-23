@@ -28,6 +28,7 @@
 #include "ctrl-lib/device/DeviceManager.h"
 #include "ui/coord/CalxCoordPanel.h"
 #include "ui/CalxAutoconfDialog.h"
+#include "ui/CalxUnitProcessor.h"
 
 #include <fstream>
 #include "ctrl-lib/ConfigManager.h"
@@ -122,6 +123,9 @@ namespace CalXUI {
 		this->devman = getter();
 		this->sysman = new SystemManager(this->devman, conf);
 		this->error_handler = new CalxErrorHandler(this->sysman);
+		double unit_scale = conf->getEntry("ui")->getReal("unit_scale", 1);
+		std::string unit_suffix = conf->getEntry("ui")->getString("unit_suffix", "");
+		this->units = new CalxUnitProcessor(unit_suffix, unit_scale);
 		
 		if (this->debug_mode && conf->getEntry("ui")->getBool("console", false)) {
 			this->debug_console = new CalxDebugConsole(this->sysman);
@@ -187,6 +191,10 @@ namespace CalXUI {
 	
 	CalxErrorHandler *CalxApp::getErrorHandler() {
 		return this->error_handler;
+	}
+	
+	CalxUnitProcessor *CalxApp::getUnitProcessor() {
+		return this->units;
 	}
 	
 	CalxFrame *CalxApp::getMainFrame() {

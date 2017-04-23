@@ -43,6 +43,7 @@ namespace CalXUI {
 	
 	class CalxDebugConsole; // Forward referencing
 	class CalxErrorHandler; // Forward referencing
+	class CalxUnitProcessor; // Forward referencing
 
 	wxDECLARE_EVENT(wxEVT_APP_ERROR, wxThreadEvent);
 	wxDECLARE_EVENT(wxEVT_APP_AUTOCONF, wxThreadEvent);
@@ -55,6 +56,7 @@ namespace CalXUI {
 			void OnAutoconfEvent(wxThreadEvent&);
 			SystemManager *getSystemManager();
 			CalxErrorHandler *getErrorHandler();
+			CalxUnitProcessor *getUnitProcessor();
 			CalxFrame *getMainFrame();
 		private:
 			void loadDevicesPlugin();
@@ -68,6 +70,7 @@ namespace CalXUI {
 			bool debug_mode;
 			CalxDebugConsole *debug_console;
 			CalxErrorHandler *error_handler;
+			CalxUnitProcessor *units;
 
 			std::ofstream *errors_log;
 			std::ofstream *warnings_log;

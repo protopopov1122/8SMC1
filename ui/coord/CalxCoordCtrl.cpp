@@ -32,6 +32,7 @@
 #include "CalxCoordCtrl.h"
 #include "task/CalxTaskPanel.h"
 #include "CalxCoordPlaneWatcher.h"
+#include "ui/CalxUnitProcessor.h"
 
 namespace CalXUI {
 	
@@ -252,15 +253,17 @@ namespace CalXUI {
 							  (ctrl->getController()->getInstrument() != nullptr ?
 								FORMAT(__("Instrument #%s"), std::to_string(ctrl->getController()->getInstrument()->getID())) :
 								__("Instrument: no")) + "\n" +
-							  FORMAT(__("Position: %sx%s"), std::to_string(ctrl->getPosition().x),
-									std::to_string(ctrl->getPosition().y)) + "\n" +
-							  (ctrl->isMeasured() ? FORMAT(__("Start: %sx%s"), std::to_string(ctrl->getSize().x),
-							                                                   std::to_string(ctrl->getSize().y)) :
+							  FORMAT(__("Position: %sx%s %s"), std::to_string(wxGetApp().getUnitProcessor()->toUnits(ctrl->getPosition().x)),
+									std::to_string(wxGetApp().getUnitProcessor()->toUnits(ctrl->getPosition().y)),
+										wxGetApp().getUnitProcessor()->getSuffix()) + "\n" +
+							  (ctrl->isMeasured() ? FORMAT(__("Start: %sx%s %s"), std::to_string(wxGetApp().getUnitProcessor()->toUnits(ctrl->getSize().x)),
+							                                                   std::to_string(wxGetApp().getUnitProcessor()->toUnits(ctrl->getSize().y)), wxGetApp().getUnitProcessor()->getSuffix()) :
 													__("Start: Not measured")) + "\n" +
-							  (ctrl->isMeasured() ? FORMAT(__("Size: %sx%s"), std::to_string(ctrl->getSize().w),
-							                                                   std::to_string(ctrl->getSize().h)) :
+							  (ctrl->isMeasured() ? FORMAT(__("Size: %sx%s %s"), std::to_string(wxGetApp().getUnitProcessor()->toUnits(ctrl->getSize().w)),
+							                                                   std::to_string(wxGetApp().getUnitProcessor()->toUnits(ctrl->getSize().h)), wxGetApp().getUnitProcessor()->getSuffix()) :
 													__("Size: Not measured"));
 		this->generalInfoText->SetLabel(general);
+		Layout();
 	}
 	
 	void CalxCoordCtrl::stop() {
@@ -286,13 +289,17 @@ namespace CalXUI {
 	
 	void CalxCoordCtrl::OnLinearJumpClick(wxCommandEvent &evt) {
 		motor_point_t dest = {linear->getCoordX(), linear->getCoordY()};
-		this->queue->addAction(new CalxCoordMoveAction(this, ctrl, false, linear->isRelative(), dest, linear->getSpeed(), linear->getDivisor()));
+		float speed = linear->getSpeed();
+		speed *= wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("speed_scale", 1);
+		this->queue->addAction(new CalxCoordMoveAction(this, ctrl, false, linear->isRelative(), dest, speed, linear->getDivisor()));
 	}
 	
 	void CalxCoordCtrl::OnArcMoveClick(wxCommandEvent &evt) {
 		motor_point_t dest = {arc->getCoordX(), arc->getCoordY()};
 		motor_point_t cen = {arc->getCenterCoordX(), arc->getCenterCoordY()};
-		this->queue->addAction(new CalxCoordArcAction(this, ctrl, arc->isRelative(), dest, cen, arc->getSplitter(), arc->getSpeed(), arc->getDivisor(), arc->isClockwise()));
+		float speed = arc->getSpeed();
+		speed *= wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("speed_scale", 1);
+		this->queue->addAction(new CalxCoordArcAction(this, ctrl, arc->isRelative(), dest, cen, arc->getSplitter(), speed, arc->getDivisor(), arc->isClockwise()));
 	}
 	
 	void CalxCoordCtrl::OnGraphBuildClick(wxCommandEvent &evt) {
@@ -309,6 +316,7 @@ namespace CalXUI {
 		double maxy = graphCtrl->getYMax();
 		double step = graphCtrl->getStep();
 		float speed = graphCtrl->getSpeed();
+		speed *= wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("speed_scale", 1);
 		CoordTranslator *trans = graphCtrl->getCoordTranslator();
 		coord_point_t min = {minx, miny};
 		coord_point_t max = {maxx, maxy};
