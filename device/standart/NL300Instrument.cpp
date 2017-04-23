@@ -270,7 +270,9 @@ namespace CalX {
 	}
 	
 	NL300Instrument::~NL300Instrument() {
-		this->config.removeEventListener(this->listener);
+		if (this->listener != nullptr) {
+			this->config.removeEventListener(this->listener);
+		}
 		if (this->handle != INVALID_HANDLE_VALUE) {
 			CloseHandle(handle);
 		}
@@ -278,6 +280,7 @@ namespace CalX {
 	}
 
 	bool NL300Instrument::connect(DeviceSerialPortConnectionPrms *prms) {
+		this->listener = nullptr;
 		memcpy(&this->prms, prms, sizeof(DeviceSerialPortConnectionPrms));
 		
 		int baudrate = prms->speed;
@@ -416,8 +419,10 @@ namespace CalX {
 	}
 
 	bool NL300Instrument::stop() {
-		NL300SystemCommand msg(NL300_LASER_NAME, "STOP", "", NL300_PC_NAME);
-		return writeMessage(msg);
+		NL300SystemCommand syscom(NL300_LASER_NAME, "STOP", "", NL300_PC_NAME);
+		std::pair<std::string, std::string> res = getSystemCommandResponse(syscom);
+		bool result = !res.first.empty();
+		return result;
 	}
 	
 	InstrumentMode NL300Instrument::getMode() {
