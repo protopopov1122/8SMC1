@@ -142,13 +142,13 @@ namespace CalXUI {
 		
 		dc.SetPen(*wxBLACK_PEN);
 		wxCoord x, y;
-		dc.DrawText(std::to_string(wxGetApp().getUnitProcessor()->toUnits(plane_size.x)), 0, real_size.y / 2);
-		dc.GetMultiLineTextExtent(std::to_string(wxGetApp().getUnitProcessor()->toUnits(plane_size.x + plane_size.w)), &x, &y);
-		dc.DrawText(std::to_string(wxGetApp().getUnitProcessor()->toUnits(plane_size.x + plane_size.w)), real_size.x - x, real_size.y / 2);
-		dc.GetMultiLineTextExtent(std::to_string(wxGetApp().getUnitProcessor()->toUnits(plane_size.y + plane_size.h)), &x, &y);
-		dc.DrawText(std::to_string(wxGetApp().getUnitProcessor()->toUnits(plane_size.y + plane_size.h)), real_size.x / 2 - x / 2, 0);
-		dc.GetMultiLineTextExtent(std::to_string(wxGetApp().getUnitProcessor()->toUnits(plane_size.y)), &x, &y);
-		dc.DrawText(std::to_string(wxGetApp().getUnitProcessor()->toUnits(plane_size.y)), real_size.x / 2 - x / 2, real_size.y - y);
+		dc.DrawText(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(plane_size.x)), 0, real_size.y / 2);
+		dc.GetMultiLineTextExtent(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(plane_size.x + plane_size.w)), &x, &y);
+		dc.DrawText(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(plane_size.x + plane_size.w)), real_size.x - x, real_size.y / 2);
+		dc.GetMultiLineTextExtent(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(plane_size.y + plane_size.h)), &x, &y);
+		dc.DrawText(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(plane_size.y + plane_size.h)), real_size.x / 2 - x / 2, 0);
+		dc.GetMultiLineTextExtent(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(plane_size.y)), &x, &y);
+		dc.DrawText(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(plane_size.y)), real_size.x / 2 - x / 2, real_size.y - y);
 	}
 	
 	CalxCoordPlaneWatcherDialog::CalxCoordPlaneWatcherDialog(wxWindow *win, wxWindowID id, CoordHandle *handle)

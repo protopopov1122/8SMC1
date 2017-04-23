@@ -253,14 +253,14 @@ namespace CalXUI {
 							  (ctrl->getController()->getInstrument() != nullptr ?
 								FORMAT(__("Instrument #%s"), std::to_string(ctrl->getController()->getInstrument()->getID())) :
 								__("Instrument: no")) + "\n" +
-							  FORMAT(__("Position: %sx%s %s"), std::to_string(wxGetApp().getUnitProcessor()->toUnits(ctrl->getPosition().x)),
-									std::to_string(wxGetApp().getUnitProcessor()->toUnits(ctrl->getPosition().y)),
+							  FORMAT(__("Position: %sx%s %s"), std::string(wxGetApp().getUnitProcessor()->toUnitsStr(ctrl->getPosition().x)),
+									std::string(wxGetApp().getUnitProcessor()->toUnitsStr(ctrl->getPosition().y)),
 										wxGetApp().getUnitProcessor()->getSuffix()) + "\n" +
-							  (ctrl->isMeasured() ? FORMAT(__("Start: %sx%s %s"), std::to_string(wxGetApp().getUnitProcessor()->toUnits(ctrl->getSize().x)),
-							                                                   std::to_string(wxGetApp().getUnitProcessor()->toUnits(ctrl->getSize().y)), wxGetApp().getUnitProcessor()->getSuffix()) :
+							  (ctrl->isMeasured() ? FORMAT(__("Start: %sx%s %s"), std::string(wxGetApp().getUnitProcessor()->toUnitsStr(ctrl->getSize().x)),
+							                                                   std::string(wxGetApp().getUnitProcessor()->toUnitsStr(ctrl->getSize().y)), wxGetApp().getUnitProcessor()->getSuffix()) :
 													__("Start: Not measured")) + "\n" +
-							  (ctrl->isMeasured() ? FORMAT(__("Size: %sx%s %s"), std::to_string(wxGetApp().getUnitProcessor()->toUnits(ctrl->getSize().w)),
-							                                                   std::to_string(wxGetApp().getUnitProcessor()->toUnits(ctrl->getSize().h)), wxGetApp().getUnitProcessor()->getSuffix()) :
+							  (ctrl->isMeasured() ? FORMAT(__("Size: %sx%s %s"), std::string(wxGetApp().getUnitProcessor()->toUnitsStr(ctrl->getSize().w)),
+							                                                   std::string(wxGetApp().getUnitProcessor()->toUnitsStr(ctrl->getSize().h)), wxGetApp().getUnitProcessor()->getSuffix()) :
 													__("Size: Not measured"));
 		this->generalInfoText->SetLabel(general);
 		Layout();
@@ -309,6 +309,7 @@ namespace CalXUI {
 		Node *node = parser.parse();
 		if (node == nullptr) {
 			wxGetApp().getErrorHandler()->handle(ErrorCode::MathExprError);
+			return;
 		}
 		double minx = graphCtrl->getXMin();
 		double maxx = graphCtrl->getXMax();

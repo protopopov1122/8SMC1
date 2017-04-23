@@ -43,6 +43,20 @@ namespace CalXUI {
 		return ((double) i) * this->scale;
 	}
 	
+	std::string CalxUnitProcessor::toUnitsStr(int64_t i) {
+		double u = toUnits(i);
+		std::string str = std::to_string(u);
+		size_t end = str.length();
+		while (str.at(end - 1) == '0') {
+			end--;
+		}
+		if (str.at(end - 1) == '.') {
+			end--;
+		}
+		
+		return str.substr(0, end);
+	}
+	
 	int64_t CalxUnitProcessor::toSteps(double u) {
 		return (int64_t) (u / this->scale);
 	}

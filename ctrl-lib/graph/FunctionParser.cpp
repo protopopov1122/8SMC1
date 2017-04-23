@@ -41,7 +41,8 @@ namespace CalX {
 	}
 	
 	Node *FunctionParser::parse() {
-		return nextAddsub();
+		Node *node = nextAddsub();
+		return node;
 	}
 	
 	Node *FunctionParser::nextAddsub() {
@@ -127,7 +128,7 @@ namespace CalX {
 					args->push_back(nextAddsub());
 					if (expectOperator(OperatorType::COMMA)) {
 						nextToken();	
-					} else {
+					} else if (!expectOperator(OperatorType::CLOSING_PARENTHESE)) {
 						for (const auto& nd : *args) {
 							delete nd;
 						}

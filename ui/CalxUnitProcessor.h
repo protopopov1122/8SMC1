@@ -34,6 +34,7 @@ namespace CalXUI {
 			std::string getSuffix();
 			
 			double toUnits(int64_t);
+			std::string toUnitsStr(int64_t);
 			int64_t toSteps(double);
 			std::string toTextUnits(int64_t);
 		private:
