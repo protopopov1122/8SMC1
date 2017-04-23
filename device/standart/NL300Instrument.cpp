@@ -303,11 +303,11 @@ namespace CalX {
 
 		// TODO Properly setup timeouts
 		COMMTIMEOUTS CommTimeOuts;
-		CommTimeOuts.ReadIntervalTimeout = 1;
-		CommTimeOuts.ReadTotalTimeoutMultiplier = 1;
-		CommTimeOuts.ReadTotalTimeoutConstant = 0xFFFFFFFF;
-		CommTimeOuts.WriteTotalTimeoutMultiplier = 1;
-		CommTimeOuts.WriteTotalTimeoutConstant = 1;
+		CommTimeOuts.ReadIntervalTimeout = this->config.getEntry("connection")->getInt("ReadIntervalTimeout", 1);
+		CommTimeOuts.ReadTotalTimeoutMultiplier = this->config.getEntry("connection")->getInt("ReadTotalTimeoutMultiplier", 1);
+		CommTimeOuts.ReadTotalTimeoutConstant = this->config.getEntry("connection")->getInt("ReadTotalTimeoutConstant", 0xFFFFFFFF);
+		CommTimeOuts.WriteTotalTimeoutMultiplier = this->config.getEntry("connection")->getInt("WriteTotalTimeoutMultiplier", 1);
+		CommTimeOuts.WriteTotalTimeoutConstant = this->config.getEntry("connection")->getInt("WriteTotalTimeoutConstant", 1);
 
 		if(!SetCommTimeouts(handle, &CommTimeOuts)) {
 			ILOG("COM port parameters setting error");
@@ -423,16 +423,20 @@ namespace CalX {
 		NL300SystemCommand syscom(NL300_LASER_NAME, "STOP", "", NL300_PC_NAME);
 		std::pair<std::string, std::string> res = getSystemCommandResponse(syscom);
 		bool result = !res.first.empty();
-		if (getCoreEntry()->getBool(NL300_CORE_DISABLE_DELAY, true)) {
-			int syncDelay = 0;
-			if (mode == InstrumentMode::Prepare) {
-				syncDelay = getCoreEntry()->getInt(NL300_CORE_DISABLE_ADJ_DELAY, 400);
-			} else if (mode == InstrumentMode::Full) {
-				syncDelay = getCoreEntry()->getInt(NL300_CORE_DISABLE_MAX_DELAY, 400);
-			} else {
-				syncDelay = getCoreEntry()->getInt(NL300_CORE_DISABLE_OFF_DELAY, 400);
+		while (res.first.compare("NOTREADY") == 0) {
+			if (getCoreEntry()->getBool(NL300_CORE_DISABLE_DELAY, true)) {
+				int syncDelay = 0;
+				if (mode == InstrumentMode::Prepare) {
+					syncDelay = getCoreEntry()->getInt(NL300_CORE_DISABLE_ADJ_DELAY, 400);
+				} else if (mode == InstrumentMode::Full) {
+					syncDelay = getCoreEntry()->getInt(NL300_CORE_DISABLE_MAX_DELAY, 400);
+				} else {
+					syncDelay = getCoreEntry()->getInt(NL300_CORE_DISABLE_OFF_DELAY, 400);
+				}
+				Sleep(syncDelay);
 			}
-			Sleep(syncDelay);
+			NL300SystemCommand syscom2(NL300_LASER_NAME, "SAY", "", NL300_PC_NAME);
+			res = getSystemCommandResponse(syscom2);
 		}
 		return result;
 	}
