@@ -46,11 +46,18 @@ namespace CalX {
 	
 	Node *FunctionParser::nextAddsub() {
 		Node *node = nextMuldiv();
+		if (node == nullptr) {
+			return nullptr;
+		}
 		while (expectOperator(OperatorType::PLUS) ||
 				expectOperator(OperatorType::MINUS)) {
 			bool plus = this->tokens[0]->oper == OperatorType::PLUS;
 			this->nextToken();
 			Node *right = nextMuldiv();
+			if (right == nullptr) {
+				delete node;
+				return nullptr;
+			}
 			node = new BinaryNode(plus ? BinaryOperation::Add : BinaryOperation::Subtract, node, right);
 		}
 		return node;
@@ -58,11 +65,18 @@ namespace CalX {
 	
 	Node *FunctionParser::nextMuldiv() {
 		Node *node = nextPower();
+		if (node == nullptr) {
+			return nullptr;
+		}
 		while (expectOperator(OperatorType::STAR) ||
 				expectOperator(OperatorType::SLASH)) {
 			bool mul = this->tokens[0]->oper == OperatorType::STAR;
 			this->nextToken();
 			Node *right = nextPower();
+			if (right == nullptr) {
+				delete node;
+				return nullptr;
+			}
 			node = new BinaryNode(mul ? BinaryOperation::Multiply : BinaryOperation::Divide, node, right);
 		}
 		return node;
@@ -70,9 +84,16 @@ namespace CalX {
 	
 	Node *FunctionParser::nextPower() {
 		Node *node = nextFactor();
+		if (node == nullptr) {
+			return nullptr;
+		}
 		while (expectOperator(OperatorType::POWER)) {
 			this->nextToken();
 			Node *right = nextFactor();
+			if (right == nullptr) {
+				delete node;
+				return nullptr;
+			}
 			node = new BinaryNode(BinaryOperation::PowerOp, node, right);
 		}
 		return node;
@@ -96,11 +117,21 @@ namespace CalX {
 			if (expectOperator(OperatorType::OPENING_PARENTHESE)) {
 				std::vector<Node*> *args = new std::vector<Node*>();
 				nextToken();
-				while (this->tokens[0] != nullptr &&
-					!expectOperator(OperatorType::CLOSING_PARENTHESE)) {
+				while (!expectOperator(OperatorType::CLOSING_PARENTHESE)) {
+					if (this->tokens[0] == nullptr) {
+						for (const auto& nd : *args) {
+							delete nd;
+						}
+						return nullptr;
+					}
 					args->push_back(nextAddsub());
 					if (expectOperator(OperatorType::COMMA)) {
 						nextToken();	
+					} else {
+						for (const auto& nd : *args) {
+							delete nd;
+						}
+						return nullptr;
 					}
 				}
 				nextToken();
@@ -119,6 +150,10 @@ namespace CalX {
 		} else if (expectOperator(OperatorType::OPENING_PARENTHESE)) {
 			nextToken();
 			Node *node = nextAddsub();
+			if (!expectOperator(OperatorType::OPENING_PARENTHESE)) {
+				delete node;
+				return nullptr;
+			}
 			nextToken();
 			return node;
 		}

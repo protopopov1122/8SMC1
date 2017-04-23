@@ -492,6 +492,10 @@ namespace CalX {
 			FunctionLexer lexer(ss);
 			FunctionParser parser(&lexer);
 			Node *node = parser.parse();
+			if (node == nullptr) {
+				std::cout << "Math expression parse error" << std::endl;
+				return;
+			}
 			motor_point_t toffset = {std::stoi(args.at(2)), std::stoi(args.at(3))};
 			motor_size_t tsize = {std::stoi(args.at(4)), std::stoi(args.at(5))};
 			double minx = std::stold(args.at(6));

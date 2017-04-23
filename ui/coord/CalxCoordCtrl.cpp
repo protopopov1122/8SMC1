@@ -335,6 +335,7 @@ namespace CalXUI {
 		Node *node = parser.parse();
 		if (node == nullptr) {
 			wxGetApp().getErrorHandler()->handle(ErrorCode::MathExprError);
+			return;
 		}
 		double minx = graphCtrl->getXMin();
 		double maxx = graphCtrl->getXMax();
