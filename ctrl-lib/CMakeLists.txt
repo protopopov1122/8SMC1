@@ -7,6 +7,9 @@ add_definitions(-DLOGGING)
 file(GLOB_RECURSE SRCS *.cpp)
 add_library(calx SHARED ${SRCS})
 target_include_directories(calx PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+add_custom_command(TARGET calx POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:calx> ${build_directory}
+)
 if (WIN32)
 	install(TARGETS calx DESTINATION / COMPONENT calx_ctrl_lib)
 else (WIN32)

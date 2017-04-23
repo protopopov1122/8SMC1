@@ -8,6 +8,9 @@ if (WIN32)
 	if (EXISTS ${CMAKE_SOURCE_DIR}/res/USMCDLL.h)
 		include_directories(${CMAKE_SOURCE_DIR}/res)
 		add_library(USMCDLL SHARED stub.cpp)
+		add_custom_command(TARGET USMCDLL POST_BUILD
+    		COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:USMCDLL> ${build_directory}
+		)
 		install(TARGETS USMCDLL DESTINATION / COMPONENT usmc_stub)
 		set(CPACK_COMPONENT_USMC_STUB_DISPLAY_NAME "USMC driver stub" CACHE INTERNAL "")
 		set(CPACK_COMPONENT_USMC_STUB_GROUP "Libraries" CACHE INTERNAL "")
@@ -21,6 +24,9 @@ if (WIN32)
 	include_directories(${CMAKE_SOURCE_DIR})
 	add_library(dev_standart SHARED 8SMC1Device.cpp NL300Instrument.cpp StandartDeviceManager.cpp)
 	target_link_libraries(dev_standart calx USMCDLL)
+	add_custom_command(TARGET dev_standart POST_BUILD
+    	COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:dev_standart> ${build_directory}
+	)
 	install(TARGETS dev_standart DESTINATION / COMPONENT devapi_standart)
 	set(CPACK_COMPONENT_DEVAPI_STANDART_DISPLAY_NAME "8SMC1 stepped motors and NL300 laser Device API" CACHE INTERNAL "")
 	set(CPACK_COMPONENT_DEVAPI_STANDART_DEPENDS calx_ctrl_lib CACHE INTERNAL "")

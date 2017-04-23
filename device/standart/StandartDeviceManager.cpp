@@ -107,8 +107,8 @@ namespace CalX {
 			return nullptr;
 		}
 		DeviceSerialPortConnectionPrms *prms = (DeviceSerialPortConnectionPrms*) _prms;
-		NL300Instrument *instr = new NL300Instrument((device_id_t) this->instr.size(), prms, this);
-		if (instr->hasErrors()) {
+		NL300Instrument *instr = new NL300Instrument((device_id_t) this->instr.size(), this);
+		if (!instr->connect(prms) || instr->hasErrors()) {
 			this->saveInstrumentError();
 			delete instr;
 			return nullptr;

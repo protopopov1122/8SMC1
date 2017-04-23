@@ -262,11 +262,22 @@ namespace CalX {
 	
 	#define ILOG(msg) LOG_INSTR(this->getID(), msg)
 	
-	NL300Instrument::NL300Instrument(device_id_t id, DeviceSerialPortConnectionPrms *prms, StandartDeviceManager *devman)
+	NL300Instrument::NL300Instrument(device_id_t id, StandartDeviceManager *devman)
 		: Instrument::Instrument() {
 		this->dev = id;
 		this->devman = devman;
 		this->state = false;
+	}
+	
+	NL300Instrument::~NL300Instrument() {
+		this->config.removeEventListener(this->listener);
+		if (this->handle != INVALID_HANDLE_VALUE) {
+			CloseHandle(handle);
+		}
+		ILOG("Instrument closed");
+	}
+
+	bool NL300Instrument::connect(DeviceSerialPortConnectionPrms *prms) {
 		memcpy(&this->prms, prms, sizeof(DeviceSerialPortConnectionPrms));
 		
 		int baudrate = prms->speed;
@@ -278,7 +289,7 @@ namespace CalX {
 			ILOG("COM port opening error");
 			this->errors.push_back("Error opening COM" + std::to_string(prms->port));
 			this->handle = INVALID_HANDLE_VALUE;
-			return;
+			return false;
 		}
 		
 		ILOG("Setting COM port parameters");
@@ -297,8 +308,9 @@ namespace CalX {
 		if(!SetCommTimeouts(handle, &CommTimeOuts)) {
 			ILOG("COM port parameters setting error");
 			CloseHandle(handle);
+			this->handle = INVALID_HANDLE_VALUE;
 			this->errors.push_back("Error configuring COM" + std::to_string(prms->port));
-			return;
+			return false;
 		}
 	
 		DCB ComDCM;
@@ -312,6 +324,7 @@ namespace CalX {
 		if(!SetCommState(handle, &ComDCM)) {
 			ILOG("COM port parameters setting error");
 			CloseHandle(handle);
+			this->handle = INVALID_HANDLE_VALUE;
 			this->errors.push_back("Error configuring COM" + std::to_string(prms->port));
 		}
 		
@@ -321,6 +334,9 @@ namespace CalX {
 		if (!writeMessage(cmd)) {
 			ILOG("Instrument state setting error");
 			this->errors.push_back("Error configuring COM" + std::to_string(prms->port));
+			CloseHandle(this->handle);
+			this->handle = INVALID_HANDLE_VALUE;
+			return false;
 		}
 		this->mode = InstrumentMode::Off;
 
@@ -340,14 +356,7 @@ namespace CalX {
 		this->softwareInfo = getSystemCommandResponse("SN", "");
 		
 		ILOG("Instrument ready");
-	}
-	
-	NL300Instrument::~NL300Instrument() {
-		this->config.removeEventListener(this->listener);
-		if (this->handle != INVALID_HANDLE_VALUE) {
-			CloseHandle(handle);
-		}
-		ILOG("Instrument closed");
+		return true;
 	}
 	
 	DeviceManager *NL300Instrument::getDeviceManager() {

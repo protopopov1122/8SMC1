@@ -175,8 +175,9 @@ namespace CalX {
 	
 	class NL300Instrument : public Instrument {
 		public:
-			NL300Instrument(device_id_t, DeviceSerialPortConnectionPrms*, StandartDeviceManager*);
+			NL300Instrument(device_id_t, StandartDeviceManager*);
 			virtual ~NL300Instrument();
+			bool connect(DeviceSerialPortConnectionPrms*);
 			virtual DeviceManager *getDeviceManager();
 			virtual bool enable(bool);
 			virtual bool enabled();

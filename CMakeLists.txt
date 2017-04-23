@@ -3,6 +3,14 @@ project(CalX)
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
+set(build_directory ${CMAKE_BINARY_DIR}/build CACHE INTERNAL "")
+add_custom_target(make-build-directory ALL COMMAND ${CMAKE_COMMAND} -E make_directory ${build_directory})
+add_custom_target(copy-config ALL
+	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/config.ini ${build_directory}
+	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/auto.conf ${build_directory}
+	DEPENDS make-build-directory
+)
+
 add_subdirectory(device)
 add_subdirectory(ctrl-lib)
 add_subdirectory(cli)

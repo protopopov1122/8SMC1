@@ -44,8 +44,14 @@ if (wxWidgets_FOUND)
 			set(CPACK_COMPONENT_WXLIBS_DESCRIPTION "wxWidgets user interface libraries. See <https://www.wxwidgets.org/>" CACHE INTERNAL "")
 		endif (NOT CMAKE_BUILD_TYPE EQUAL DEBUG)
 		file(COPY ${wxDll} DESTINATION ${CMAKE_BINARY_DIR})
+		add_custom_command(TARGET calxui POST_BUILD
+    		COMMAND ${CMAKE_COMMAND} -E copy ${wxDll} ${build_directory}
+		)
 	endif(WIN32)
 	target_link_libraries(calxui ${wxWidgets_LIBRARIES} calx)
+	add_custom_command(TARGET calxui POST_BUILD
+    	COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:calxui> ${build_directory}
+	)
 	if (WIN32)
 		install(TARGETS calxui DESTINATION / COMPONENT calxui)
 	else (WIN32)

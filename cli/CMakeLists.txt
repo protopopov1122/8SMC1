@@ -12,6 +12,9 @@ else (TARGET dev_standart)
 	target_link_libraries(calxcli calx dev_emulated)
 	set(CPACK_COMPONENT_CALXCLI_DEPENDS ${CPACK_COMPONENT_CALXCLI_DEPENDS} devapi_emulated CACHE INTERNAL "")
 endif (TARGET dev_standart)
+add_custom_command(TARGET calxcli POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:calxcli> ${build_directory}
+)
 if (WIN32)
 	install(TARGETS calxcli DESTINATION / COMPONENT calxcli)
 else (WIN32)

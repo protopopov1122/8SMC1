@@ -5,6 +5,9 @@ set (CMAKE_CXX_STANDARD 11)
 include_directories(${CMAKE_SOURCE_DIR})
 add_library(dev_emulated SHARED EmuMotor.cpp EmuInstrument.cpp EmuDeviceManager.cpp)
 target_link_libraries(dev_emulated calx)
+add_custom_command(TARGET dev_emulated POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:dev_emulated> ${build_directory}
+)
 if (WIN32)
 	install(TARGETS dev_emulated DESTINATION / COMPONENT devapi_emulated)
 else (WIN32)
