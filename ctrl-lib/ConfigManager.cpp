@@ -306,8 +306,10 @@ namespace CalX {
 		}
 	}
 	
-	ConfigManager *ConfigManager::load(std::istream *is, std::ostream *err) {
-		ConfigManager *man = new ConfigManager();
+	ConfigManager *ConfigManager::load(std::istream *is, std::ostream *err, ConfigManager *man) {
+		if (man == nullptr) {
+			man = new ConfigManager();
+		}
 		ConfigEntry *entry = nullptr;
 		const int LINE_LEN = 256;
 		char rawline[LINE_LEN];

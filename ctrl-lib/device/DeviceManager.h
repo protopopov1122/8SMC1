@@ -50,6 +50,7 @@ namespace CalX {
 			virtual void getConnectionTypes(std::vector<DeviceConnectionType>&, std::vector<DeviceConnectionType>&);
 			virtual bool canMotorConnect(DeviceConnectionType);
 			virtual bool canInstrumentConnect(DeviceConnectionType);
+			virtual bool loadConfiguration(std::string, ConfigManager*);
 		protected:
 			std::vector<std::string> error_queue;
 			std::vector<Motor*> dev;

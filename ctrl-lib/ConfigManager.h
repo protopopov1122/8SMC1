@@ -151,7 +151,7 @@ namespace CalX {
 			void removeEventListener(ConfigEventListener*);
 			std::vector<ConfigEventListener*> &getEventListeners();
 			
-			static ConfigManager *load(std::istream*, std::ostream*);
+			static ConfigManager *load(std::istream*, std::ostream*, ConfigManager* = nullptr);
 			static ConfigValue *parseValue(const char*);
 		private:
 			std::map<std::string, ConfigEntry*> entries;

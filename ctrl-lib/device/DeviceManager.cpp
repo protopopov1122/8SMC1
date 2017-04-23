@@ -21,6 +21,7 @@
 #include "DeviceManager.h"
 #include <stdio.h>
 #include <iostream>
+#include <fstream>
 #include <algorithm>
 
 
@@ -79,6 +80,17 @@ namespace CalX {
 	
 	bool DeviceManager::canInstrumentConnect(DeviceConnectionType d) {
 		return std::find(instrConType.begin(), instrConType.end(), d) != instrConType.end();
+	}
+
+	bool DeviceManager::loadConfiguration(std::string path, ConfigManager *conf) {
+        std::ifstream cnf(path);
+        if (!cnf.good()) {
+			return false;
+        } else {
+            ConfigManager::load(&cnf, &std::cout, conf);
+        }
+        cnf.close();
+		return true;
 	}
 	
 }

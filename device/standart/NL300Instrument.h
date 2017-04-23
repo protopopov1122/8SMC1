@@ -147,14 +147,28 @@ namespace CalX {
 	
 	#define NL300_LASER_NAME "NL"
 	#define NL300_PC_NAME "PC"
-	#define NL300_ENTRY_NAME "core"
-	#define NL300_MODE_CHANGE_DELAY "mode_change_delay"
-	#define NL300_ENABLE_DELAY "enable_delay"
+	#define NL300_ENTRY_NAME "instrument"
+	#define NL300_CORE_NAME "core"
 	#define NL300_PACK_PULSES "pack_pulses"
 	#define NL300_MAX_OUTPUT_DELAY "max_output_delay"
 	#define NL300_ADJ_OUTPUT_DELAY "adj_output_delay"
 	#define NL300_SYNC_OUT_DELAY "sync_out_delay"
 	#define NL300_REPETITION_RATE_DIV "repetition_rate_div"
+
+	#define NL300_CORE_MODE "mode"
+	#define NL300_MODE_CHANGE_DELAY "mode_change_delay"
+	#define NL300_CORE_ENABLE_DELAY "enable_delay"
+	#define NL300_CORE_DISABLE_DELAY "disable_delay"
+	#define NL300_CORE_OFF_DELAY "off_mode_delay"
+	#define NL300_CORE_ADJ_DELAY "adj_mode_delay"
+	#define NL300_CORE_MAX_DELAY "max_mode_delay"
+	#define NL300_CORE_ENABLE_OFF_DELAY "enable_off_delay"
+	#define NL300_CORE_ENABLE_ADJ_DELAY "enable_adj_delay"
+	#define NL300_CORE_ENABLE_MAX_DELAY "enable_max_delay"
+	#define NL300_CORE_DISABLE_OFF_DELAY "disable_off_delay"
+	#define NL300_CORE_DISABLE_ADJ_DELAY "disable_adj_delay"
+	#define NL300_CORE_DISABLE_MAX_DELAY "disable_max_delay"
+
 	
 	class NL300Instrument; // Forward referencing
 
@@ -198,6 +212,7 @@ namespace CalX {
 			std::string getSystemCommandResponse(std::string, std::string);
 			NL300GeneralCommand *inquireGeneralParameter(char, uint16_t);
 			int64_t inquireIntegerParameter(char, uint16_t, int64_t);
+			ConfigEntry *getCoreEntry();
 		
 			StandartDeviceManager *devman;
 			bool state;

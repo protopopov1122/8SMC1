@@ -281,6 +281,7 @@ namespace CalX {
 
 	bool NL300Instrument::connect(DeviceSerialPortConnectionPrms *prms) {
 		this->listener = nullptr;
+		getDeviceManager()->loadConfiguration("NL300.ini", &this->config);
 		memcpy(&this->prms, prms, sizeof(DeviceSerialPortConnectionPrms));
 		
 		int baudrate = prms->speed;
@@ -347,8 +348,6 @@ namespace CalX {
 		this->config.addEventListener(this->listener);
 		
 		ConfigEntry *core = this->config.getEntry(NL300_ENTRY_NAME);
-		core->put(NL300_MODE_CHANGE_DELAY, new BoolConfigValue(true));
-		core->put(NL300_ENABLE_DELAY, new BoolConfigValue(true));
 		core->put(NL300_PACK_PULSES, new IntegerConfigValue(inquireIntegerParameter('P', 0, 1)));
 		core->put(NL300_MAX_OUTPUT_DELAY, new IntegerConfigValue(inquireIntegerParameter('D', 0, 400)));
 		core->put(NL300_ADJ_OUTPUT_DELAY, new IntegerConfigValue(inquireIntegerParameter('D', 1, 400)));
@@ -406,12 +405,14 @@ namespace CalX {
 			devman->saveInstrumentError();
 			return false;
 		}
-		if (this->config.getEntry(NL300_ENTRY_NAME)->getBool(NL300_ENABLE_DELAY, true)) {
+		if (getCoreEntry()->getBool(NL300_CORE_ENABLE_DELAY, true)) {
 			int syncDelay = 0;
 			if (mode == InstrumentMode::Prepare) {
-				syncDelay = this->config.getEntry(NL300_ENTRY_NAME)->getInt(NL300_ADJ_OUTPUT_DELAY, 400);
+				syncDelay = getCoreEntry()->getInt(NL300_CORE_ENABLE_ADJ_DELAY, 400);
 			} else if (mode == InstrumentMode::Full) {
-				syncDelay = this->config.getEntry(NL300_ENTRY_NAME)->getInt(NL300_MAX_OUTPUT_DELAY, 400);
+				syncDelay = getCoreEntry()->getInt(NL300_CORE_ENABLE_MAX_DELAY, 400);
+			} else {
+				syncDelay = getCoreEntry()->getInt(NL300_CORE_ENABLE_OFF_DELAY, 400);
 			}
 			Sleep(syncDelay);
 		}
@@ -422,6 +423,17 @@ namespace CalX {
 		NL300SystemCommand syscom(NL300_LASER_NAME, "STOP", "", NL300_PC_NAME);
 		std::pair<std::string, std::string> res = getSystemCommandResponse(syscom);
 		bool result = !res.first.empty();
+		if (getCoreEntry()->getBool(NL300_CORE_DISABLE_DELAY, true)) {
+			int syncDelay = 0;
+			if (mode == InstrumentMode::Prepare) {
+				syncDelay = getCoreEntry()->getInt(NL300_CORE_DISABLE_ADJ_DELAY, 400);
+			} else if (mode == InstrumentMode::Full) {
+				syncDelay = getCoreEntry()->getInt(NL300_CORE_DISABLE_MAX_DELAY, 400);
+			} else {
+				syncDelay = getCoreEntry()->getInt(NL300_CORE_DISABLE_OFF_DELAY, 400);
+			}
+			Sleep(syncDelay);
+		}
 		return result;
 	}
 	
@@ -444,12 +456,14 @@ namespace CalX {
 		if (!writeMessage(cmd)) {
 			return false;
 		}
-		if (this->config.getEntry(NL300_ENTRY_NAME)->getBool(NL300_MODE_CHANGE_DELAY, true)) {
+		if (getCoreEntry()->getBool(NL300_MODE_CHANGE_DELAY, true)) {
 			int syncDelay = 0;
 			if (mode == InstrumentMode::Prepare) {
-				syncDelay = this->config.getEntry(NL300_ENTRY_NAME)->getInt(NL300_ADJ_OUTPUT_DELAY, 400);
+				syncDelay = getCoreEntry()->getInt(NL300_CORE_ADJ_DELAY, 400);
 			} else if (mode == InstrumentMode::Full) {
-				syncDelay = this->config.getEntry(NL300_ENTRY_NAME)->getInt(NL300_MAX_OUTPUT_DELAY, 400);
+				syncDelay = getCoreEntry()->getInt(NL300_CORE_MAX_DELAY, 400);
+			} else {
+				syncDelay = getCoreEntry()->getInt(NL300_CORE_OFF_DELAY, 400);
 			}
 			Sleep(syncDelay);
 		}
@@ -746,5 +760,10 @@ namespace CalX {
 		int64_t val = parm->getInt(def);
 		delete cmd;
 		return val;
+	}
+
+	ConfigEntry *NL300Instrument::getCoreEntry() {
+		std::string name = this->config.getEntry(NL300_CORE_NAME)->getString(NL300_CORE_MODE, "default");
+		return this->config.getEntry(name);
 	}
 }
