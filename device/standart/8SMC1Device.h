@@ -50,7 +50,7 @@ namespace CalX {
 			virtual Power getPowerState();		// Power & FullPower
 			virtual bool isRunning();		// RUN
 			virtual bool isTrailerPressed(int);	// Trailer1 & Trailer2
-			virtual bool start(motor_point_t, float,
+			virtual bool start(motor_coord_t, float,
 					unsigned char, bool  = false);	// Specify location, speed, divisor
 			virtual bool stop();				// Stop motor
 			virtual bool enablePower(bool);		// Power control
