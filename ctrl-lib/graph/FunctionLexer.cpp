@@ -76,7 +76,7 @@ namespace CalX {
 				if (chr == '.') {
 					real = true;
 				}
-				buf[offset++] = chr;
+                buf[offset++] = (char) chr;
 			}
 			in->unget();
 			buf[offset] = '\0';
@@ -85,7 +85,7 @@ namespace CalX {
 			lexem->literal = raw;
 			if (real) {
 				lexem->type = TokenType::Real;
-				lexem->real = std::stold(raw);
+                lexem->real = std::stod(raw);
 			} else {
 				lexem->type = TokenType::Integer;
 				lexem->integer = std::stoi(raw);
@@ -93,7 +93,7 @@ namespace CalX {
 			return lexem;
 		}
 		while (offset + 1 < BUF_SZ) {
-			buf[offset++] = chr;
+            buf[offset++] = (char) chr;
 			
 			chr = in->get();
 			if (chr == EOF) {

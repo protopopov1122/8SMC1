@@ -34,12 +34,21 @@ namespace CalXUI {
 		graphPanel->SetSizer(graphSizer);
 		
 		this->expr = new wxTextCtrl(graphPanel, wxID_ANY, "x");
-		this->xmin = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, -10);
-		this->xmax = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 10);
-		this->ymin = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, -10);
-		this->ymax = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 10);
+        this->xmin = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                    wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, -10);
+        this->xmax = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                    wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 10);
+        this->ymin = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                    wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, -10);
+        this->ymax = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                    wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 10);
 		this->step = new wxTextCtrl(graphPanel, wxID_ANY, "1");
-		this->speed = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, wxGetApp().getSystemManager()->getConfiguration()->getEntry("core")->getInt("maxspeed", 4000), wxGetApp().getSystemManager()->getConfiguration()->getEntry("core")->getInt("maxspeed", 4000));
+        this->speed = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                     wxDefaultSize, wxSP_ARROW_KEYS, 0,
+                                     (int) wxGetApp().getSystemManager()->getConfiguration()->
+                                        getEntry("core")->getInt("maxspeed", 4000),
+                                     (int) wxGetApp().getSystemManager()->getConfiguration()->
+                                        getEntry("core")->getInt("maxspeed", 4000));
 		this->buildButton = new wxButton(graphPanel, wxID_ANY, __("Build"));
 		this->previewButton = new wxButton(graphPanel, wxID_ANY, __("Preview"));
 		

@@ -312,14 +312,14 @@ namespace CalXUI {
 		
 		for (size_t i = 0; i < app.getSystemManager()->getMotorCount(); i++) {
 			CalxMotorCtrl *ctrl = new CalxMotorCtrl(this, wxID_ANY,
-				app.getSystemManager()->getMotorController(i));
+                app.getSystemManager()->getMotorController((device_id_t) i));
 			devs.push_back(ctrl);
 			GetSizer()->Add(ctrl, 0, wxEXPAND | wxALL, 10);
 		}	
 		
 		for (size_t i = 0; i < app.getSystemManager()->getInstrumentCount(); i++) {
 			CalxInstrumentCtrl *ctrl = new CalxInstrumentCtrl(this, wxID_ANY,
-				app.getSystemManager()->getInstrumentController(i));
+                app.getSystemManager()->getInstrumentController((device_id_t) i));
 			instrs.push_back(ctrl);
 			GetSizer()->Add(ctrl, 0, wxEXPAND | wxALL, 10);
 		}
@@ -341,8 +341,8 @@ namespace CalXUI {
 		dialog->ShowModal();
 		if (dialog->getPort() != -1) {
 			DeviceSerialPortConnectionPrms *prms = new DeviceSerialPortConnectionPrms();
-			prms->port = dialog->getPort();
-			prms->speed = dialog->getSpeed();
+            prms->port = (uint8_t) dialog->getPort();
+            prms->speed = (uint32_t) dialog->getSpeed();
 			prms->parity = dialog->getParity();
 			this->queue->addAction(new CalxMotorConnectAction(this, prms));
 		}
@@ -358,8 +358,8 @@ namespace CalXUI {
 		dialog->ShowModal();
 		if (dialog->getPort() != -1) {
 			DeviceSerialPortConnectionPrms *prms = new DeviceSerialPortConnectionPrms();
-			prms->port = dialog->getPort();
-			prms->speed = dialog->getSpeed();
+            prms->port = (uint8_t) dialog->getPort();
+            prms->speed = (uint16_t) dialog->getSpeed();
 			prms->parity = dialog->getParity();
 			this->queue->addAction(new CalxInstrumentConnectAction(this, prms));
 		}

@@ -62,8 +62,7 @@ namespace CalXUI {
 			void loadDevicesPlugin();
 		
 			CalxFrame *frame;
-			wxDynamicLibrary *dynlib;
-			wxLocale *locale;
+            wxDynamicLibrary *dynlib;
 			DeviceManager *devman;
 			SystemManager *sysman;
 			

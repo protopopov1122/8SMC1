@@ -84,8 +84,10 @@ namespace CalXUI {
 		filtersSizer->Add(mapPanel, 0, wxALL | wxEXPAND, 5);
 		wxFlexGridSizer *mapSizer = new wxFlexGridSizer(2);
 		mapPanel->SetSizer(mapSizer);
-		this->xOffset = new wxSpinCtrl(mapPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
-		this->yOffset = new wxSpinCtrl(mapPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
+        this->xOffset = new wxSpinCtrl(mapPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                       wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
+        this->yOffset = new wxSpinCtrl(mapPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                       wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
 		this->xScale = new wxTextCtrl(mapPanel, wxID_ANY, "1");
 		this->yScale = new wxTextCtrl(mapPanel, wxID_ANY, "1");
 		mapSizer->Add(new wxStaticText(mapPanel, wxID_ANY, __("Coordinate offset") + std::string(":")));
@@ -105,11 +107,20 @@ namespace CalXUI {
 		filtersSizer->Add(validatePanel, 0, wxALL | wxEXPAND, 5);
 		wxFlexGridSizer *validateSizer = new wxFlexGridSizer(2);
 		validatePanel->SetSizer(validateSizer);
-		this->minx = new wxSpinCtrl(validatePanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
-		this->miny = new wxSpinCtrl(validatePanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
-		this->maxx = new wxSpinCtrl(validatePanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
-		this->maxy = new wxSpinCtrl(validatePanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
-		this->speed = new wxSpinCtrl(validatePanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, wxGetApp().getSystemManager()->getConfiguration()->getEntry("core")->getInt("maxspeed", 4000), wxGetApp().getSystemManager()->getConfiguration()->getEntry("core")->getInt("maxspeed", 4000));
+        this->minx = new wxSpinCtrl(validatePanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                    wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
+        this->miny = new wxSpinCtrl(validatePanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                    wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
+        this->maxx = new wxSpinCtrl(validatePanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                    wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
+        this->maxy = new wxSpinCtrl(validatePanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                    wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
+        this->speed = new wxSpinCtrl(validatePanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                     wxDefaultSize, wxSP_ARROW_KEYS, 0,
+                                     (int) wxGetApp().getSystemManager()->getConfiguration()->
+                                        getEntry("core")->getInt("maxspeed", 4000),
+                                     (int) wxGetApp().getSystemManager()->getConfiguration()->
+                                        getEntry("core")->getInt("maxspeed", 4000));
 		validateSizer->Add(new wxStaticText(validatePanel, wxID_ANY, __("Coordinate validation") + std::string(":")));
 		validateSizer->Add(new wxStaticText(validatePanel, wxID_ANY, ""));
 		validateSizer->Add(new wxStaticText(validatePanel, wxID_ANY, __("min x") + std::string(":")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
@@ -125,15 +136,15 @@ namespace CalXUI {
 		
 		logActions->SetValue(ctrl->getPlaneLog()->isLoggingActions());
 		logErrors->SetValue(ctrl->getPlaneLog()->isLoggingErrors());
-		xOffset->SetValue(ctrl->getPlaneMap()->getOffset().x);
-		yOffset->SetValue(ctrl->getPlaneMap()->getOffset().y);
+        xOffset->SetValue((int) ctrl->getPlaneMap()->getOffset().x);
+        yOffset->SetValue((int) ctrl->getPlaneMap()->getOffset().y);
 		xScale->SetValue(std::to_string((float) ctrl->getPlaneMap()->getScale().x));
 		yScale->SetValue(std::to_string((float) ctrl->getPlaneMap()->getScale().y));
-		minx->SetValue(ctrl->getPlaneValidator()->getMinimum().x);
-		miny->SetValue(ctrl->getPlaneValidator()->getMinimum().y);
-		maxx->SetValue(ctrl->getPlaneValidator()->getMaximum().x);
-		maxy->SetValue(ctrl->getPlaneValidator()->getMaximum().y);
-		speed->SetValue(ctrl->getPlaneValidator()->getMaxSpeed());
+        minx->SetValue((int) ctrl->getPlaneValidator()->getMinimum().x);
+        miny->SetValue((int) ctrl->getPlaneValidator()->getMinimum().y);
+        maxx->SetValue((int) ctrl->getPlaneValidator()->getMaximum().x);
+        maxy->SetValue((int) ctrl->getPlaneValidator()->getMaximum().y);
+        speed->SetValue(static_cast<int>(ctrl->getPlaneValidator()->getMaxSpeed()));
 		
 		logActions->Bind(wxEVT_CHECKBOX, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
 		logErrors->Bind(wxEVT_CHECKBOX, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);

@@ -75,7 +75,7 @@ namespace CalX {
 				return ErrorCode::ArcError;
 		}
 		double fullCircle = 2 * M_PI * sqrt(r1);
-		int64_t splitter = (int64_t) ceil(fullCircle / spl);
+        uint32_t splitter = (uint32_t) ceil(fullCircle / spl);
 		if (splitter == 0) {
 			splitter = 1;
 		}

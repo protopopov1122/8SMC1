@@ -70,7 +70,7 @@ namespace CalX {
 			return ErrorCode::ArcError;
 		}
 		motor_point_t pnt;
-		size_t count = 0;
+        int64_t count = 0;
 		work = defWork;
 		if (!work) {
 			return ErrorCode::NoError;

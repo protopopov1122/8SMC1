@@ -104,7 +104,7 @@ namespace CalX {
 			MotorController *getYAxis();
 			InstrumentController *getInstrument();
 			
-			virtual ErrorCode move(motor_point_t, float, int, bool);
+                        virtual ErrorCode move(motor_point_t, float, int, bool);
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
 			virtual ErrorCode calibrate(TrailerId);
 			virtual ErrorCode measure(TrailerId);

@@ -52,8 +52,8 @@ namespace CalX {
 	}
 
 	motor_point_t BasicCoordTranslator::get(double x, double y) {
-		int64_t xtr = x * this->scale.w;
-		int64_t ytr = y * this->scale.h;
+        int64_t xtr = static_cast<int64_t>(x * this->scale.w);
+        int64_t ytr = static_cast<int64_t>(y * this->scale.h);
 		motor_point_t pnt = {0, 0};
 		pnt.x = xtr;
 		pnt.y = ytr;

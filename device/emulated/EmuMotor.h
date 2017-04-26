@@ -42,17 +42,17 @@ namespace CalX {
 			virtual std::string getDeviceInfo();
 			virtual std::string getRuntimeInfo();
 			
-			virtual int getPosition();
+            virtual motor_coord_t getPosition();
 			virtual bool isTrailerPressed(int);
 			virtual bool isRunning();
 			virtual Power getPowerState();
-			virtual bool start(int, float,
+            virtual bool start(motor_coord_t, float,
 					unsigned char, bool  = false);
 			virtual bool stop();
 			virtual bool enablePower(bool);
 		private:
 			EmuDeviceManager *devman;
-			int pos;
+            motor_coord_t pos;
 			Power power;
 			
 			

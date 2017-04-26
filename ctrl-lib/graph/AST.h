@@ -53,9 +53,9 @@ namespace CalX {
 		public:
 			Node(NodeType tp) {
 				this->type = tp;
-				INIT_LOG("Node" + static_cast<int>(tp));
+                INIT_LOG("Node" + std::to_string(static_cast<int>(tp)));
 			}
-			virtual ~Node() {DESTROY_LOG("Node" + static_cast<int>(type));}
+            virtual ~Node() {DESTROY_LOG("Node" + std::to_string(static_cast<int>(type)));}
 			NodeType getType() {return this->type;}
 			virtual engine_value_t eval(FunctionEngine*) = 0;
 		private:

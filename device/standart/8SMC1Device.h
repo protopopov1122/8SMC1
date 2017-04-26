@@ -46,11 +46,11 @@ namespace CalX {
 			virtual std::string getDeviceInfo();
 			virtual std::string getRuntimeInfo();
 			/* Methods that implement Device interface */
-			virtual int getPosition();		// CurPos
+			virtual motor_coord_t getPosition();		// CurPos
 			virtual Power getPowerState();		// Power & FullPower
 			virtual bool isRunning();		// RUN
 			virtual bool isTrailerPressed(int);	// Trailer1 & Trailer2
-			virtual bool start(int, float,
+			virtual bool start(motor_point_t, float,
 					unsigned char, bool  = false);	// Specify location, speed, divisor
 			virtual bool stop();				// Stop motor
 			virtual bool enablePower(bool);		// Power control

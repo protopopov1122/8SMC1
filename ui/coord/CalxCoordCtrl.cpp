@@ -209,8 +209,8 @@ namespace CalXUI {
 		motor_rect_t sz = ctrl->getSize();
 		motor_point_t dest = {(motor_coord_t) (sz.x + sz.w * x), (motor_coord_t) (sz.y + sz.h * y)};
 		ConfigManager *config = wxGetApp().getSystemManager()->getConfiguration();
-		int speed = config->getEntry("core")->getInt("roll_speed", ROLL_SPEED);
-		int div = config->getEntry("core")->getInt("roll_div", ROLL_DIV);
+        int_conf_t speed = config->getEntry("core")->getInt("roll_speed", ROLL_SPEED);
+        int div = (int) config->getEntry("core")->getInt("roll_div", ROLL_DIV);
 		bool ready = false;
 		this->queue->addAction(new CalxCoordMoveAction(this, ctrl, false, false, dest, speed, div), &ready);
 		while (!ready) {wxThread::Yield();}
@@ -218,8 +218,8 @@ namespace CalXUI {
 	
 	void CalxCoordCtrl::requestPositionAbs(motor_point_t dest) {
 		ConfigManager *config = wxGetApp().getSystemManager()->getConfiguration();
-		int speed = config->getEntry("core")->getInt("roll_speed", ROLL_SPEED);
-		int div = config->getEntry("core")->getInt("roll_div", ROLL_DIV);
+        int_conf_t speed = config->getEntry("core")->getInt("roll_speed", ROLL_SPEED);
+        int div = (int) config->getEntry("core")->getInt("roll_div", ROLL_DIV);
 		bool ready = false;
 		this->queue->addAction(new CalxCoordMoveAction(this, ctrl, false, false, dest, speed, div), &ready);
 		while (!ready) {wxThread::Yield();}

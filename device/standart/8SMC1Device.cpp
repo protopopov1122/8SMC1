@@ -107,7 +107,7 @@ namespace CalX {
 		}
 	}
 
-	int _8SMC1Motor::getPosition() {
+	motor_coord_t _8SMC1Motor::getPosition() {
 		this->updateState();
 		return this->state.CurPos;
 	}
@@ -204,7 +204,7 @@ namespace CalX {
 		return true;
 	}
 
-	bool _8SMC1Motor::start(int dest, float speed,
+	bool _8SMC1Motor::start(motor_point_t dest, float speed,
 			unsigned char divisor, bool syncIn) {
 		if (USMC_GetStartParameters(dev, startPrms)) {
 			devman->saveMotorError();

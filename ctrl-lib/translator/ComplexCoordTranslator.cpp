@@ -39,7 +39,7 @@ namespace CalX {
 		return this->list.size();
 	}
 	
-	CoordTranslator *ComplexCoordTranslator::get(size_t i) {
+    CoordTranslator *ComplexCoordTranslator::getTranslator(size_t i) {
 		if (i >= this->list.size()) {
 			return nullptr;
 		}
@@ -56,7 +56,7 @@ namespace CalX {
 		}
 		CoordTranslator *trans = this->list.at(i);
 		delete trans;
-		this->list.erase(this->list.begin() + i);
+        this->list.erase(this->list.begin() + (std::ptrdiff_t) i);
 		if (i >= this->list.size()) {
 			return true;
 		}
@@ -72,7 +72,7 @@ namespace CalX {
 		if (i >= this->list.size()) {
 			return false;
 		}
-		this->list.insert(this->list.begin() + i, t);
+        this->list.insert(this->list.begin() + (std::ptrdiff_t) i, t);
 		this->list.at(i + 1)->setBase(t);
 		if (i > 0) {
 			t->setBase(this->list.at(i - 1));
@@ -108,7 +108,7 @@ namespace CalX {
 		}
 		ComplexCoordTranslator *trans = new ComplexCoordTranslator(base);
 		for (size_t i = 1; i < this->list.size(); i++) {
-			trans->add(this->get(i)->clone(trans->get(i - 1)));
+            trans->add(this->getTranslator(i)->clone(trans->getTranslator(i - 1)));
 		}
 		return trans;
 	}

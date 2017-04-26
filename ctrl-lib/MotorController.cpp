@@ -106,12 +106,12 @@ namespace CalX {
 			return ErrorCode::WrongParameter;
 		}
 		this->work = true;
-		int roll_step = config->getEntry("core")->getInt("roll_step", ROLL_STEP);
-		int roll_speed = config->getEntry("core")->getInt("roll_speed", ROLL_SPEED);
-		int roll_div = config->getEntry("core")->getInt("roll_div", ROLL_DIV);
-		int comeback = config->getEntry("core")->getInt("trailer_comeback", TRAILER_COMEBACK);
+        int_conf_t roll_step = config->getEntry("core")->getInt("roll_step", ROLL_STEP);
+        int_conf_t roll_speed = config->getEntry("core")->getInt("roll_speed", ROLL_SPEED);
+        unsigned char roll_div = (unsigned char) config->getEntry("core")->getInt("roll_div", ROLL_DIV);
+        int_conf_t comeback = config->getEntry("core")->getInt("trailer_comeback", TRAILER_COMEBACK);
 		
-		int dest = (tr == 1 ? -roll_step : roll_step);
+        int_conf_t dest = (tr == 1 ? -roll_step : roll_step);
 		this->dest = (tr == 1 ? MoveType::RollDown : MoveType::RollUp);
 		MotorRollEvent evt = {tr};
 		use();
@@ -152,7 +152,8 @@ namespace CalX {
 	}
 
 	ErrorCode MotorController::startMove(motor_coord_t dest,
-			float speed, int div, bool syncIn) {
+            float speed, int idiv, bool syncIn) {
+        unsigned char div = (unsigned char) idiv;
 		if (this->dev->isRunning()) {
 			return ErrorCode::MotorRunning;
 		}
@@ -169,7 +170,9 @@ namespace CalX {
 		if (!this->dev->start(dest, speed, div, syncIn)) {
 			errcode = ErrorCode::LowLevelError;
 		}
-		errcode = this->waitWhileRunning();
+        if (errcode != ErrorCode::NoError) {
+            errcode = this->waitWhileRunning();
+        }
 		if (errcode != ErrorCode::NoError) {
 			MotorErrorEvent sevt = {errcode};
 			this->sendStoppedEvent(sevt);

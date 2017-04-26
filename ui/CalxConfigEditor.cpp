@@ -354,7 +354,7 @@ namespace CalXUI {
 		}
 		std::string entry = this->entryList->GetStringSelection().ToStdString();
 		wxVariant vrt;
-		this->valueList->GetValue(vrt, this->valueList->GetSelectedRow(), 0);
+        this->valueList->GetValue(vrt, (unsigned int) this->valueList->GetSelectedRow(), 0);
 		std::string key = vrt.GetString().ToStdString();
 		this->currentValue = this->config->getEntry(entry)->get(key);
 		updateEditor();
@@ -366,7 +366,7 @@ namespace CalXUI {
 			this->currentValue->getType() == ConfigValueType::Integer) {
 			std::string entry = this->entryList->GetStringSelection().ToStdString();
 			wxVariant vrt;
-			this->valueList->GetValue(vrt, this->valueList->GetSelectedRow(), 0);
+            this->valueList->GetValue(vrt, (unsigned int) this->valueList->GetSelectedRow(), 0);
 			std::string key = vrt.GetString().ToStdString();
 			this->currentValue = new IntegerConfigValue(value);
 			this->config->getEntry(entry)->put(key, currentValue);
@@ -379,7 +379,7 @@ namespace CalXUI {
 		if (!raw.ToDouble(&value)) {
 			wxMessageBox(__("Enter valid real value"), __("Error"), wxICON_ERROR);
 			wxVariant vrt;
-			this->valueList->GetValue(vrt, this->valueList->GetSelectedRow(), 2);
+            this->valueList->GetValue(vrt, (unsigned int) this->valueList->GetSelectedRow(), 2);
 			this->realCtrl->SetValue(vrt.GetString());
 			return;
 		}
@@ -387,7 +387,7 @@ namespace CalXUI {
 			this->currentValue->getType() == ConfigValueType::Real) {
 			std::string entry = this->entryList->GetStringSelection().ToStdString();
 			wxVariant vrt;
-			this->valueList->GetValue(vrt, this->valueList->GetSelectedRow(), 0);
+            this->valueList->GetValue(vrt, (unsigned int) this->valueList->GetSelectedRow(), 0);
 			std::string key = vrt.GetString().ToStdString();
 			this->currentValue = new RealConfigValue(value);
 			this->config->getEntry(entry)->put(key, currentValue);
@@ -400,7 +400,7 @@ namespace CalXUI {
 			this->currentValue->getType() == ConfigValueType::Boolean) {
 			std::string entry = this->entryList->GetStringSelection().ToStdString();
 			wxVariant vrt;
-			this->valueList->GetValue(vrt, this->valueList->GetSelectedRow(), 0);
+            this->valueList->GetValue(vrt, (unsigned int) this->valueList->GetSelectedRow(), 0);
 			std::string key = vrt.GetString().ToStdString();
 			this->currentValue = new BoolConfigValue(value);
 			this->config->getEntry(entry)->put(key, currentValue);
@@ -413,7 +413,7 @@ namespace CalXUI {
 			this->currentValue->getType() == ConfigValueType::String) {
 			std::string entry = this->entryList->GetStringSelection().ToStdString();
 			wxVariant vrt;
-			this->valueList->GetValue(vrt, this->valueList->GetSelectedRow(), 0);
+            this->valueList->GetValue(vrt, (unsigned int) this->valueList->GetSelectedRow(), 0);
 			std::string key = vrt.GetString().ToStdString();
 			this->currentValue = new StringConfigValue(value);
 			this->config->getEntry(entry)->put(key, currentValue);
@@ -436,7 +436,7 @@ namespace CalXUI {
 			this->valueList->GetSelectedRow() != wxNOT_FOUND) {
 			ConfigEntry *entry = this->config->getEntry(this->entryList->GetStringSelection().ToStdString());
 			wxVariant vrt;
-			this->valueList->GetValue(vrt, this->valueList->GetSelectedRow(), 0);
+            this->valueList->GetValue(vrt, (unsigned int) this->valueList->GetSelectedRow(), 0);
 			std::string key = vrt.GetString().ToStdString();
 			entry->remove(key);
 		} else {
@@ -509,7 +509,7 @@ namespace CalXUI {
 		switch (this->currentValue->getType()) {
 			case ConfigValueType::Integer:
 				this->integerEditor->Show(true);
-				this->integerSpin->SetValue(((IntegerConfigValue*) this->currentValue)->getValue());
+                this->integerSpin->SetValue((int) ((IntegerConfigValue*) this->currentValue)->getValue());
 			break;
 			case ConfigValueType::Real:
 				this->realEditor->Show(true);
@@ -534,7 +534,7 @@ namespace CalXUI {
 			
 			ConfigEntry *entry = this->config->getEntry(this->entryList->GetStringSelection().ToStdString());
 			wxVariant vrt;
-			this->valueList->GetValue(vrt, this->valueList->GetSelectedRow(), 0);
+            this->valueList->GetValue(vrt, (unsigned int) this->valueList->GetSelectedRow(), 0);
 			std::string key = vrt.GetString().ToStdString();
 			ConfigValue *value = entry->get(key);
 			if (value == nullptr) {
@@ -542,20 +542,24 @@ namespace CalXUI {
 			}
 			switch (value->getType()) {
 				case ConfigValueType::Integer:
-					this->valueList->SetValue(wxVariant(__("integer")), this->valueList->GetSelectedRow(), 1);
-					this->valueList->SetValue(wxVariant(std::to_string(((IntegerConfigValue*) value)->getValue())), this->valueList->GetSelectedRow(), 2);
+                    this->valueList->SetValue(wxVariant(__("integer")), (unsigned int) this->valueList->GetSelectedRow(), 1);
+                    this->valueList->SetValue(wxVariant(std::to_string(((IntegerConfigValue*) value)->getValue())),
+                                              (unsigned int) this->valueList->GetSelectedRow(), 2);
 				break;
 				case ConfigValueType::Real:
-					this->valueList->SetValue(wxVariant(__("real")), this->valueList->GetSelectedRow(), 1);
-					this->valueList->SetValue(wxVariant(std::to_string(((RealConfigValue*) value)->getValue())), this->valueList->GetSelectedRow(), 2);
+                    this->valueList->SetValue(wxVariant(__("real")), (unsigned int) this->valueList->GetSelectedRow(), 1);
+                    this->valueList->SetValue(wxVariant(std::to_string(((RealConfigValue*) value)->getValue())),
+                                              (unsigned int) this->valueList->GetSelectedRow(), 2);
 				break;
 				case ConfigValueType::Boolean:
-					this->valueList->SetValue(wxVariant(__("boolean")), this->valueList->GetSelectedRow(), 1);
-					this->valueList->SetValue(wxVariant(std::string(((BoolConfigValue*) value)->getValue() ? "true" : "false")), this->valueList->GetSelectedRow(), 2);
+                    this->valueList->SetValue(wxVariant(__("boolean")), (unsigned int) this->valueList->GetSelectedRow(), 1);
+                    this->valueList->SetValue(wxVariant(std::string(((BoolConfigValue*) value)->getValue() ? "true" : "false")),
+                                              (unsigned int) this->valueList->GetSelectedRow(), 2);
 				break;
 				case ConfigValueType::String:
-					this->valueList->SetValue(wxVariant(__("string")), this->valueList->GetSelectedRow(), 1);
-					this->valueList->SetValue(wxVariant(((StringConfigValue*) value)->getValue()), this->valueList->GetSelectedRow(), 2);
+                    this->valueList->SetValue(wxVariant(__("string")), (unsigned int) this->valueList->GetSelectedRow(), 1);
+                    this->valueList->SetValue(wxVariant(((StringConfigValue*) value)->getValue()),
+                                              (unsigned int) this->valueList->GetSelectedRow(), 2);
 				break;
 			}
 		}

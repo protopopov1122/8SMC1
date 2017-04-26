@@ -44,10 +44,10 @@ namespace CalX {
 	}
 	
 	Motor *DeviceManager::getMotor(device_id_t d) {
-		if (d >= this->dev.size() || d < 0) {
+        if (d >= (device_id_t) this->dev.size() || d < 0) {
 			return nullptr;
 		}
-		return this->dev.at(d);
+        return this->dev.at((size_t) d);
 	}
 
 	size_t DeviceManager::getMotorCount() {
@@ -59,10 +59,10 @@ namespace CalX {
 	}
 	
 	Instrument *DeviceManager::getInstrument(device_id_t id) {
-		if (id >= this->instr.size() || id < 0) {
+        if (id >= (device_id_t) this->instr.size() || id < 0) {
 			return nullptr;
 		}
-		return this->instr.at(id);
+        return this->instr.at((size_t) id);
 	}
 	
 	void DeviceManager::getConnectionTypes(std::vector<DeviceConnectionType> &dev, std::vector<DeviceConnectionType> &instr) {

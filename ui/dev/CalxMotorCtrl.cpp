@@ -156,7 +156,8 @@ namespace CalXUI {
 		wxBoxSizer *moveDestSizer = new wxBoxSizer(wxHORIZONTAL);
 		wxStaticText *moveDestText = new wxStaticText(moveDestPanel, wxID_ANY, __("Destination") + std::string(": "));
 		moveDestSizer->Add(moveDestText, 0, wxALIGN_CENTER);
-		moveSpin = new wxSpinCtrl(moveDestPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,  wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
+        moveSpin = new wxSpinCtrl(moveDestPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                  wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
 		moveDestSizer->Add(moveSpin, 1, wxEXPAND);
 		moveDestPanel->SetSizer(moveDestSizer);
 		moveSizer->Add(moveDestPanel, 1, wxEXPAND);
@@ -165,7 +166,12 @@ namespace CalXUI {
 		wxBoxSizer *moveSpeedSizer = new wxBoxSizer(wxHORIZONTAL);
 		wxStaticText *moveSpeedText = new wxStaticText(moveSpeedPanel, wxID_ANY, __("Speed") + std::string(": "));
 		moveSpeedSizer->Add(moveSpeedText, 0, wxALIGN_CENTER);
-		this->moveSpeedSpin = new wxSpinCtrl(moveSpeedPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,  wxDefaultSize, wxSP_ARROW_KEYS, 0, wxGetApp().getSystemManager()->getConfiguration()->getEntry("core")->getInt("maxspeed", 4000), wxGetApp().getSystemManager()->getConfiguration()->getEntry("core")->getInt("maxspeed", 4000));
+        this->moveSpeedSpin = new wxSpinCtrl(moveSpeedPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                             wxDefaultSize, wxSP_ARROW_KEYS, 0,
+                                             (int) wxGetApp().getSystemManager()->getConfiguration()->
+                                                getEntry("core")->getInt("maxspeed", 4000),
+                                             (int) wxGetApp().getSystemManager()->getConfiguration()->
+                                                getEntry("core")->getInt("maxspeed", 4000));
 		moveSpeedSizer->Add(moveSpeedSpin, 1, wxEXPAND);
 		moveSpeedPanel->SetSizer(moveSpeedSizer);
 		moveSizer->Add(moveSpeedPanel, 1, wxEXPAND);

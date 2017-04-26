@@ -51,7 +51,7 @@ namespace CalXUI {
 		: wxWindow::wxWindow(win, id) {
 		
 		this->handle = handle;
-		wxGetApp().getMainFrame()->getPanel()->getCoords()->bindWatcher(handle->getID(), this);
+        wxGetApp().getMainFrame()->getPanel()->getCoords()->bindWatcher((device_id_t) handle->getID(), this);
 		
 		SetMinSize(min);
 		
@@ -64,7 +64,7 @@ namespace CalXUI {
 		int_conf_t interval = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getInt("watcher_interval", 500);
 		if (interval != -1) {
 			this->timer = new CalxCoordPlaneWatcherTimer(this, this->handle);
-			this->timer->Start(interval);
+            this->timer->Start((int) interval);
 		} else {
 			this->timer = nullptr;
 		}
@@ -101,7 +101,7 @@ namespace CalXUI {
 	}
 	
 	void CalxCoordPlaneWatcher::OnExit(wxCloseEvent &evt) {
-		wxGetApp().getMainFrame()->getPanel()->getCoords()->unbindWatcher(handle->getID(), this);
+        wxGetApp().getMainFrame()->getPanel()->getCoords()->unbindWatcher((device_id_t) handle->getID(), this);
 		if (this->timer != nullptr) {
 			this->timer->Stop();
 			delete this->timer;
@@ -134,7 +134,8 @@ namespace CalXUI {
 			double y = real_size.y - ((double) (point.y - plane_size.y)) * scaleY;
 			dc.DrawRectangle((int) x, (int) y, 2, 2);
 			if (move) {
-				dc.DrawLine(lastX, lastY, x, y);
+                dc.DrawLine(static_cast<wxCoord>(lastX), static_cast<wxCoord>(lastY),
+                            static_cast<wxCoord>(x), static_cast<wxCoord>(y));
 			}
 			lastX = x;
 			lastY = y;

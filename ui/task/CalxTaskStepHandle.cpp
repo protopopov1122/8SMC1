@@ -33,8 +33,10 @@ namespace CalXUI {
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(2);
 		SetSizer(sizer);
 		
-		this->xCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, pos.x);
-		this->yCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, pos.y);
+        this->xCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                      wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, (int) pos.x);
+        this->yCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                      wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, (int) pos.y);
 		this->speed = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1, 1, 0.01);
 		this->relative = new wxCheckBox(this, wxID_ANY, __("Relative"));
 		this->relative->SetValue(step->isRelative());
@@ -83,9 +85,12 @@ namespace CalXUI {
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(2);
 		SetSizer(sizer);
 		
-		this->xCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, pos.x);
-		this->yCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, pos.y);
-		this->speed = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1, 1, 0.01);
+        this->xCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                      wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, (int) pos.x);
+        this->yCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                      wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, (int) pos.y);
+        this->speed = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                           wxDefaultSize, wxSP_ARROW_KEYS, 0, 1, 1, 0.01);
 		this->relative = new wxCheckBox(this, wxID_ANY, __("Relative"));
 		this->relative->SetValue(step->isRelative());
 		
@@ -133,11 +138,16 @@ namespace CalXUI {
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(2);
 		SetSizer(sizer);
 		
-		this->destXCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, pnt.x);
-		this->destYCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, pnt.y);
-		this->cenXCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, pnt.x);
-		this->cenYCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, pnt.y);
-		this->splitter = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1000, step->getSplitter());
+        this->destXCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                          wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, (int) pnt.x);
+        this->destYCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                          wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, (int) pnt.y);
+        this->cenXCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                         wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, (int) pnt.x);
+        this->cenYCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                         wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, (int) pnt.y);
+        this->splitter = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                        wxDefaultSize, wxSP_ARROW_KEYS, 0, 1000, step->getSplitter());
 		this->speed = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1, step->getSpeed(), 0.01);
 		this->clockwise = new wxCheckBox(this, wxID_ANY, __("Clockwise"));
 		clockwise->SetValue(step->isClockwise());
@@ -183,7 +193,7 @@ namespace CalXUI {
 	void CalxTaskArcStepHandle::update() {
 		motor_point_t dest = {destXCoord->GetValue(), destYCoord->GetValue()};
 		motor_point_t cen = {cenXCoord->GetValue(), cenYCoord->GetValue()};
-		float speed = this->speed->GetValue();
+        float speed = static_cast<float>(this->speed->GetValue());
 		int splitter = this->splitter->GetValue();
 		bool cw = this->clockwise->GetValue();
 		bool rel = this->clockwise->GetValue();

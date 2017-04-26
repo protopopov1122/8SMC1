@@ -44,7 +44,7 @@ namespace CalX {
 		return this->center;
 	}
 
-	int Circle::getRadius() {
+    int64_t Circle::getRadius() {
 		return this->radius;
 	}
 

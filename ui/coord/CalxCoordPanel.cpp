@@ -81,7 +81,7 @@ namespace CalXUI {
 				device_id_t plid = (device_id_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 0))->getValue();
 				device_id_t tr = (device_id_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 1))->getValue() % 2;
 				TrailerId trailer = tr == 1 ? TrailerId::Trailer1 : TrailerId::Trailer2;
-				if (sysman->getCoord(plid) != nullptr) {
+                if (sysman->getCoord((size_t) plid) != nullptr) {
 					panel->requestMeasure(plid, trailer);
 					return true;
 				} else {
@@ -111,7 +111,7 @@ namespace CalXUI {
 				device_id_t plid = (device_id_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 0))->getValue();
 				double x =  ((RealConfigValue*) PROVIDER_ARG(req, 1))->getValue();
 				double y =  ((RealConfigValue*) PROVIDER_ARG(req, 2))->getValue();
-				if (sysman->getCoord(plid) != nullptr) {
+                if (sysman->getCoord((size_t) plid) != nullptr) {
 					panel->requestPosition(plid, x, y);
 					return true;
 				} else {
@@ -142,7 +142,7 @@ namespace CalXUI {
 				motor_coord_t x = (motor_coord_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 1))->getValue();
 				motor_coord_t y = (motor_coord_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 2))->getValue();
 				motor_point_t dest = {x, y};
-				if (sysman->getCoord(plid) != nullptr) {
+                if (sysman->getCoord((size_t) plid) != nullptr) {
 					panel->requestPositionAbs(plid, dest);
 					return true;
 				} else {
@@ -168,7 +168,7 @@ namespace CalXUI {
 				PROVIDER_ARGC(req, 1)
 				PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
 				device_id_t plid = (device_id_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 0))->getValue();
-				if (sysman->getCoord(plid) != nullptr) {
+                if (sysman->getCoord((size_t) plid) != nullptr) {
 					panel->requestCenter(plid);
 					return true;
 				} else {
@@ -194,7 +194,7 @@ namespace CalXUI {
 				PROVIDER_ARGC(req, 1)
 				PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
 				device_id_t plid = (device_id_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 0))->getValue();
-				if (sysman->getCoord(plid) != nullptr) {
+                if (sysman->getCoord((size_t) plid) != nullptr) {
 					panel->requestInvert(plid);
 					return true;
 				} else {
@@ -220,7 +220,7 @@ namespace CalXUI {
 				PROVIDER_ARGC(req, 1)
 				PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
 				device_id_t plid = (device_id_t) ((IntegerConfigValue*) PROVIDER_ARG(req, 0))->getValue();
-				if (sysman->getCoord(plid) != nullptr) {
+                if (sysman->getCoord((size_t) plid) != nullptr) {
 					panel->requestWatcher(plid);
 					return true;
 				} else {
@@ -289,7 +289,7 @@ namespace CalXUI {
 	
 	void CalxCoordPanel::bindWatcher(device_id_t id, CalxCoordPlaneWatcher *w) {
 		for (const auto& ctrl : this->coords) {
-			if (ctrl->getHandle()->getID() == id) {
+            if ((device_id_t) ctrl->getHandle()->getID() == id) {
 				ctrl->bindWatcher(w);
 				break;
 			}
@@ -298,7 +298,7 @@ namespace CalXUI {
 	
 	void CalxCoordPanel::unbindWatcher(device_id_t id, CalxCoordPlaneWatcher *w) {
 		for (const auto& ctrl : this->coords) {
-			if (ctrl->getHandle()->getID() == id) {
+            if ((device_id_t) ctrl->getHandle()->getID() == id) {
 				ctrl->unbindWatcher(w);
 				break;
 			}
@@ -307,7 +307,7 @@ namespace CalXUI {
 	
 	void CalxCoordPanel::requestMeasure(device_id_t id, TrailerId tr) {
 		for (const auto& ctrl : this->coords) {
-			if (ctrl->getHandle()->getID() == id) {
+            if ((device_id_t) ctrl->getHandle()->getID() == id) {
 				ctrl->requestMeasure(tr);
 				break;
 			}
@@ -316,7 +316,7 @@ namespace CalXUI {
 	
 	void CalxCoordPanel::requestPosition(device_id_t id, double x, double y) {
 		for (const auto& ctrl : this->coords) {
-			if (ctrl->getHandle()->getID() == id) {
+            if ((device_id_t) ctrl->getHandle()->getID() == id) {
 				ctrl->requestPosition(x, y);
 				break;
 			}
@@ -325,7 +325,7 @@ namespace CalXUI {
 	
 	void CalxCoordPanel::requestPositionAbs(device_id_t id, motor_point_t dest) {
 		for (const auto& ctrl : this->coords) {
-			if (ctrl->getHandle()->getID() == id) {
+            if ((device_id_t) ctrl->getHandle()->getID() == id) {
 				ctrl->requestPositionAbs(dest);
 				break;
 			}
@@ -334,7 +334,7 @@ namespace CalXUI {
 	
 	void CalxCoordPanel::requestCenter(device_id_t id) {
 		for (const auto& ctrl : this->coords) {
-			if (ctrl->getHandle()->getID() == id) {
+            if ((device_id_t) ctrl->getHandle()->getID() == id) {
 				ctrl->requestCenter();
 				break;
 			}
@@ -343,7 +343,7 @@ namespace CalXUI {
 	
 	void CalxCoordPanel::requestInvert(device_id_t id) {
 		for (const auto& ctrl : this->coords) {
-			if (ctrl->getHandle()->getID() == id) {
+            if ((device_id_t) ctrl->getHandle()->getID() == id) {
 				ctrl->requestInvert();
 				break;
 			}
@@ -352,7 +352,7 @@ namespace CalXUI {
 	
 	void CalxCoordPanel::requestWatcher(device_id_t id) {
 		for (const auto& ctrl : this->coords) {
-			if (ctrl->getHandle()->getID() == id) {
+            if ((device_id_t) ctrl->getHandle()->getID() == id) {
 				ctrl->requestWatcher();
 				break;
 			}
@@ -364,7 +364,7 @@ namespace CalXUI {
 			ctrl->Hide();
 		}
 		if (this->coordList->GetSelection() != wxNOT_FOUND) {
-			this->coords.at(this->coordList->GetSelection())->Show(true);
+            this->coords.at((size_t) this->coordList->GetSelection())->Show(true);
 		}
 		mainPanel->Layout();
 		Layout();
@@ -381,7 +381,7 @@ namespace CalXUI {
 		this->mainPanel->GetSizer()->Add(ctrl, 1, wxALL | wxEXPAND, 5);
 		this->coords.push_back(ctrl);
 		this->coordList->Append("Plane #" + std::to_string(handle->getID()));
-		this->coordList->SetSelection(this->coordList->GetCount() - 1);
+        this->coordList->SetSelection((int) this->coordList->GetCount() - 1);
 		wxGetApp().getMainFrame()->getPanel()->updateUI();
 	}
 	
@@ -390,10 +390,10 @@ namespace CalXUI {
 			wxMessageBox("Watchers are attached to this plane. Detach them first.", "Error", wxICON_ERROR);
 			return;
 		}
-		this->coordList->Delete(pl);
+        this->coordList->Delete((unsigned int) pl);
 		this->mainPanel->GetSizer()->Detach(coords.at(pl));
 		this->coords.at(pl)->Close(true);
-		this->coords.erase(this->coords.begin() + pl);
+        this->coords.erase(this->coords.begin() + (std::ptrdiff_t) pl);
 		wxGetApp().getMainFrame()->getPanel()->updateUI();
 	}
 	
@@ -401,9 +401,9 @@ namespace CalXUI {
 		while (!this->coords.empty()) {
 			size_t pl = 0;
 			this->mainPanel->GetSizer()->Detach(coords.at(pl));
-			this->coordList->Delete(pl);
+            this->coordList->Delete((unsigned int) pl);
 			coords.at(pl)->Close(true);
-			this->coords.erase(this->coords.begin() + pl);
+            this->coords.erase(this->coords.begin() + (std::ptrdiff_t) pl);
 		}
 		Destroy();
 	}
@@ -420,7 +420,7 @@ namespace CalXUI {
 	
 	void CalxCoordPanel::OnRemoveButtonClick(wxCommandEvent &evt) {
 		if (this->coordList->GetSelection() != wxNOT_FOUND) {
-			removePlane(this->coordList->GetSelection());
+            removePlane((size_t) this->coordList->GetSelection());
 		} else {
 			wxMessageBox(__("Select plane to remove"), __("Warning"), wxOK | wxICON_WARNING);
 		}

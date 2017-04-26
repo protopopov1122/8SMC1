@@ -43,13 +43,13 @@ namespace CalX {
 	}
 	
 	Motor *EmuDeviceManager::connectMotor(DeviceConnectionPrms *prms) {
-		EmuMotor *motor = new EmuMotor(this->dev.size(), this);
+        EmuMotor *motor = new EmuMotor((device_id_t) this->dev.size(), this);
 		this->dev.push_back(motor);
 		return motor;
 	}
 	
 	Instrument *EmuDeviceManager::connectInstrument(DeviceConnectionPrms *prms) {
-		EmuInstrument *instr = new EmuInstrument(this->instr.size(), this);
+        EmuInstrument *instr = new EmuInstrument((device_id_t) this->instr.size(), this);
 		this->instr.push_back(instr);
 		return instr;
 	}

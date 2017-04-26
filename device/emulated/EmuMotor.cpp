@@ -46,7 +46,7 @@ namespace CalX {
 		return "";
 	}
 	
-	int EmuMotor::getPosition() {
+    motor_coord_t EmuMotor::getPosition() {
 		return this->pos;
 	}
 	
@@ -68,7 +68,7 @@ namespace CalX {
 		return this->power;
 	}
 	
-	bool EmuMotor::start(int dest, float speed, unsigned char div, bool sync) {
+    bool EmuMotor::start(motor_coord_t dest, float speed, unsigned char div, bool sync) {
 		if (this->power == Power::NoPower) {
 			return true;
 		}

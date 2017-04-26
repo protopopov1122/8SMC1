@@ -111,8 +111,9 @@ namespace CalXUI {
 			double x = ((double) (point.x - plane_size.x)) * scaleX;
 			double y = real_size.y - ((double) (point.y - plane_size.y)) * scaleY;
 			dc.DrawRectangle((int) x, (int) y, 2, 2);
-			if (move) {
-				dc.DrawLine(lastX, lastY, x, y);
+            if (move) {
+                dc.DrawLine(static_cast<wxCoord>(lastX), static_cast<wxCoord>(lastY),
+                            static_cast<wxCoord>(x), static_cast<wxCoord>(y));
 			}
 			lastX = x;
 			lastY = y;

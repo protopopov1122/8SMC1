@@ -92,7 +92,7 @@ namespace CalX {
 	void HaltCommand::execute(CLI *cli, std::vector<std::string> &args) {
 		DeviceManager *devman = sysman->getDeviceManager();
 		for (size_t i = 0; i < devman->getMotorCount(); i++) {
-			Motor *dev = devman->getMotor(i);
+            Motor *dev = devman->getMotor((device_id_t) i);
 			dev->stop();
 		}
 	}
@@ -134,7 +134,7 @@ namespace CalX {
 					return;
 				}
 				int dest = std::stoi(args.at(1));
-				float speed = std::stod(args.at(2));
+                float speed = static_cast<float>(std::stod(args.at(2)));
 				int div = std::stoi(args.at(3));
 				std::cout << "\tStarted device #" << dev->getMotor()->getID() << " to " << dest
 					<< " with speed " << speed << " steps/sec and " << div << " step divisor"
@@ -155,7 +155,7 @@ namespace CalX {
 					return;
 				}
 				int dest = std::stoi(args.at(1));
-				float speed = std::stod(args.at(2));
+                float speed = static_cast<float>(std::stod(args.at(2)));
 				int div = std::stoi(args.at(3));
 				std::cout << "\tStarted device #" << dev->getMotor()->getID() << " to " << dest
 					<< " with speed " << speed << " steps/sec and " << div << " step divisor"
@@ -217,7 +217,7 @@ namespace CalX {
 				std::cout << "Provide arguments" << std::endl;
 				return;
 			}
-			CoordPlaneStack *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+            CoordPlaneStack *ctrl = sysman->getCoord((size_t) std::stoul(args.at(0)));
 			if (ctrl->popPlane()) {
 				std::cout << "\tOk" << std::endl;
 			} else {
@@ -228,7 +228,7 @@ namespace CalX {
 				std::cout << "Provide coord id" << std::endl;
 				return;
 			}
-			CoordPlaneStack *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+            CoordPlaneStack *ctrl = sysman->getCoord((size_t) std::stoul(args.at(0)));
 			if (ctrl == nullptr) {
 				std::cout << "Wrong coord id" << std::endl;
 				return;
@@ -246,7 +246,7 @@ namespace CalX {
 				std::cout << "Provide arguments" << std::endl;
 				return;
 			}
-			CoordPlaneStack *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+            CoordPlaneStack *ctrl = sysman->getCoord((size_t) std::stoul(args.at(0)));
 			if (ctrl == nullptr) {
 				std::cout << "Wrong coord id" << std::endl;
 				return;
@@ -259,24 +259,24 @@ namespace CalX {
 				std::cout << "Provide arguments" << std::endl;
 				return;
 			}
-			CoordPlaneStack *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+            CoordPlaneStack *ctrl = sysman->getCoord((size_t) std::stoul(args.at(0)));
 			if (ctrl == nullptr) {
 				std::cout << "Wrong coord id" << std::endl;
 				return;
 			}
 			motor_point_t min = {std::stoi(args.at(1)), std::stoi(args.at(2))};
 			motor_point_t max = {std::stoi(args.at(3)), std::stoi(args.at(4))};
-			float speed = std::stod(args.at(5));
+            float speed = static_cast<float>(std::stod(args.at(5)));
 			ctrl->pushPlane(new CoordPlaneValidator(min, max, speed, ctrl->peekPlane()));
 		} else if (com.compare("move") == 0) {
 			if (args.size() < 5) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
-				CoordPlaneStack *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+                CoordPlaneStack *ctrl = sysman->getCoord((size_t) std::stoul(args.at(0)));
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
-				float speed = std::stod(args.at(3));
-				int div = std::stod(args.at(4));
+                float speed = static_cast<float>(std::stod(args.at(3)));
+                int div = std::stoi(args.at(4));
 				if (ctrl == nullptr) {
 					std::cout << "Wrong coord id" << std::endl;
 				} else {
@@ -291,11 +291,11 @@ namespace CalX {
 			if (args.size() < 5) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
-				CoordPlaneStack *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+                CoordPlaneStack *ctrl = sysman->getCoord((size_t) std::stoul(args.at(0)));
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
-				float speed = std::stod(args.at(3));
-				int div = std::stod(args.at(4));
+                float speed = static_cast<float>(std::stod(args.at(3)));
+                int div = std::stoi(args.at(4));
 				if (ctrl == nullptr) {
 					std::cout << "Wrong coord id" << std::endl;
 				} else {
@@ -310,11 +310,11 @@ namespace CalX {
 			if (args.size() < 5) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
-				CoordPlaneStack *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+                CoordPlaneStack *ctrl = sysman->getCoord((size_t) std::stoul(args.at(0)));
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
-				float speed = std::stod(args.at(3));
-				int div = std::stod(args.at(4));
+                float speed = static_cast<float>(std::stod(args.at(3)));
+                int div = std::stoi(args.at(4));
 				if (ctrl == nullptr) {
 					std::cout << "Wrong coord id" << std::endl;
 				} else {
@@ -329,11 +329,11 @@ namespace CalX {
 			if (args.size() < 5) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
-				CoordPlaneStack *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+                CoordPlaneStack *ctrl = sysman->getCoord((size_t) std::stoul(args.at(0)));
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
-				float speed = std::stod(args.at(3));
-				int div = std::stod(args.at(4));
+                float speed = static_cast<float>(std::stod(args.at(3)));
+                int div = std::stoi(args.at(4));
 				if (ctrl == nullptr) {
 					std::cout << "Wrong coord id" << std::endl;
 				} else {
@@ -348,14 +348,14 @@ namespace CalX {
 			if (args.size() < 8) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
-				CoordPlaneStack *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+                CoordPlaneStack *ctrl = sysman->getCoord((size_t) std::stoul(args.at(0)));
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
 				int cx = std::stoi(args.at(3));
 				int cy = std::stoi(args.at(4));
 				int sp = std::stoi(args.at(5));
-				float speed = std::stod(args.at(6));
-				int div = std::stod(args.at(7));
+                float speed = static_cast<float>(std::stod(args.at(6)));
+                int div = std::stoi(args.at(7));
 				if (ctrl == nullptr) {
 					std::cout << "Wrong coord id" << std::endl;
 				} else {
@@ -373,14 +373,14 @@ namespace CalX {
 			if (args.size() < 8) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
-				CoordPlaneStack *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+                CoordPlaneStack *ctrl = sysman->getCoord((size_t) std::stoi(args.at(0)));
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
 				int cx = std::stoi(args.at(3));
 				int cy = std::stoi(args.at(4));
 				int sp = std::stoi(args.at(5));
-				float speed = std::stod(args.at(6));
-				int div = std::stod(args.at(7));
+                float speed = static_cast<float>(std::stod(args.at(6)));
+                int div = std::stoi(args.at(7));
 				if (ctrl == nullptr) {
 					std::cout << "Wrong coord id" << std::endl;
 				} else {
@@ -398,14 +398,14 @@ namespace CalX {
 			if (args.size() < 8) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
-				CoordPlaneStack *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+                CoordPlaneStack *ctrl = sysman->getCoord((size_t) std::stoul(args.at(0)));
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
 				int cx = std::stoi(args.at(3));
 				int cy = std::stoi(args.at(4));
 				int sp = std::stoi(args.at(5));
-				float speed = std::stod(args.at(6));
-				int div = std::stod(args.at(7));
+                float speed = static_cast<float>(std::stod(args.at(6)));
+                int div = std::stoi(args.at(7));
 				if (ctrl == nullptr) {
 					std::cout << "Wrong coord id" << std::endl;
 				} else {
@@ -423,14 +423,14 @@ namespace CalX {
 			if (args.size() < 8) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
-				CoordPlaneStack *ctrl = sysman->getCoord(std::stoi(args.at(0)));
+                CoordPlaneStack *ctrl = sysman->getCoord((size_t) std::stoul(args.at(0)));
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
 				int cx = std::stoi(args.at(3));
 				int cy = std::stoi(args.at(4));
 				int sp = std::stoi(args.at(5));
-				float speed = std::stod(args.at(6));
-				int div = std::stod(args.at(7));
+                float speed = static_cast<float>(std::stod(args.at(6)));
+                int div = std::stoi(args.at(7));
 				if (ctrl == nullptr) {
 					std::cout << "Wrong coord id" << std::endl;
 				} else {
@@ -449,7 +449,7 @@ namespace CalX {
 				std::cout << "Provide arguments" << std::endl;
 				return;
 			}
-			int coordNum = std::stoi(args.at(0));
+            size_t coordNum = (size_t) std::stoul(args.at(0));
 			int coordTrailer = std::stoi(args.at(1));
 			CoordPlaneStack *coordController = sysman->getCoord(coordNum);
 			if (coordController == nullptr) {
@@ -466,7 +466,7 @@ namespace CalX {
 				std::cout << "Provide arguments" << std::endl;
 				return;
 			}
-			int coordNum = std::stoi(args.at(0));
+            size_t coordNum = (size_t) std::stoul(args.at(0));
 			int coordTrailer = std::stoi(args.at(1));
 			CoordController *coordController = sysman->getCoord(coordNum)->getController();
 			if (coordController == nullptr) {
@@ -483,7 +483,7 @@ namespace CalX {
 				std::cout << "Provide args" << std::endl;
 				return;
 			}
-			CoordPlane *plane = sysman->getCoord(std::stoi(args.at(0)));
+            CoordPlane *plane = sysman->getCoord((size_t) std::stoul(args.at(0)));
 			if (plane == nullptr) {
 				std::cout << "Wrong coord id" << std::endl;
 				return;
@@ -498,12 +498,12 @@ namespace CalX {
 			}
 			motor_point_t toffset = {std::stoi(args.at(2)), std::stoi(args.at(3))};
 			motor_size_t tsize = {std::stoi(args.at(4)), std::stoi(args.at(5))};
-			double minx = std::stold(args.at(6));
-			double maxx = std::stold(args.at(7));
-			double miny = std::stold(args.at(8));
-			double maxy = std::stold(args.at(9));
-			double step = std::stold(args.at(10));
-			float speed = std::stod(args.at(11));
+            double minx = std::stod(args.at(6));
+            double maxx = std::stod(args.at(7));
+            double miny = std::stod(args.at(8));
+            double maxy = std::stod(args.at(9));
+            double step = std::stod(args.at(10));
+            float speed = static_cast<float>(std::stod(args.at(11)));
 			BasicCoordTranslator trans(toffset, tsize);
 			coord_point_t min = {minx, miny};
 			coord_point_t max = {maxx, maxy};
@@ -539,14 +539,14 @@ namespace CalX {
 				std::cout << "Provide task id" << std::endl;
 				return;
 			}
-			if (!sysman->removeTask(std::stoi(args.at(1)))) {
+            if (!sysman->removeTask((size_t) std::stoul(args.at(1)))) {
 				std::cout << "Wrong task id" << std::endl;
 			} else {
 				std::cout << "Ok" << std::endl;
 			}
 		} else if (args.at(0).compare("add") == 0) {
 			args.erase(args.begin());
-			CoordTask *tsk = sysman->getTask(std::stoi(args.at(0)));
+            CoordTask *tsk = sysman->getTask((size_t) std::stoul(args.at(0)));
 			args.erase(args.begin());
 			std::string com = args.at(0);
 			args.erase(args.begin());
@@ -566,7 +566,7 @@ namespace CalX {
 				}
 				int x = std::stoi(args.at(0));
 				int y = std::stoi(args.at(1));
-				float sp = std::stod(args.at(2));
+                float sp = static_cast<float>(std::stod(args.at(2)));
 				if (sp <= 0 || sp > 1) {
 					std::cout << "Wrong speed coef" << std::endl;
 					return;
@@ -580,7 +580,7 @@ namespace CalX {
 				}
 				int x = std::stoi(args.at(0));
 				int y = std::stoi(args.at(1));
-				float sp = std::stod(args.at(2));
+                float sp = static_cast<float>(std::stod(args.at(2)));
 				if (sp <= 0 || sp > 1) {
 					std::cout << "Wrong speed coef" << std::endl;
 					return;
@@ -594,7 +594,7 @@ namespace CalX {
 				}
 				int x = std::stoi(args.at(0));
 				int y = std::stoi(args.at(1));
-				float sp = std::stod(args.at(2));
+                float sp = static_cast<float>(std::stod(args.at(2)));
 				if (sp <= 0 || sp > 1) {
 					std::cout << "Wrong speed coef" << std::endl;
 					return;
@@ -608,7 +608,7 @@ namespace CalX {
 				}
 				int x = std::stoi(args.at(0));
 				int y = std::stoi(args.at(1));
-				float sp = std::stod(args.at(2));
+                float sp = static_cast<float>(std::stod(args.at(2)));
 				if (sp <= 0 || sp > 1) {
 					std::cout << "Wrong speed coef" << std::endl;
 					return;
@@ -625,7 +625,7 @@ namespace CalX {
 				int cx = std::stoi(args.at(2));
 				int cy = std::stoi(args.at(3));
 				int sp = std::stoi(args.at(4));
-				float speed = std::stod(args.at(5));
+                float speed = static_cast<float>(std::stod(args.at(5)));
 				if (speed <= 0 || speed > 1) {
 					std::cout << "Wrong speed coef" << std::endl;
 					return;
@@ -643,7 +643,7 @@ namespace CalX {
 				int cx = std::stoi(args.at(2));
 				int cy = std::stoi(args.at(3));
 				int sp = std::stoi(args.at(4));
-				float speed = std::stod(args.at(5));
+                float speed = static_cast<float>(std::stod(args.at(5)));
 				if (speed <= 0 || speed > 1) {
 					std::cout << "Wrong speed coef" << std::endl;
 					return;
@@ -663,7 +663,7 @@ namespace CalX {
 				int cx = std::stoi(args.at(2));
 				int cy = std::stoi(args.at(3));
 				int sp = std::stoi(args.at(4));
-				float speed = std::stod(args.at(5));
+                float speed = static_cast<float>(std::stod(args.at(5)));
 				if (speed <= 0 || speed > 1) {
 					std::cout << "Wrong speed coef" << std::endl;
 					return;
@@ -681,7 +681,7 @@ namespace CalX {
 				int cx = std::stoi(args.at(2));
 				int cy = std::stoi(args.at(3));
 				int sp = std::stoi(args.at(4));
-				float speed = std::stod(args.at(5));
+                float speed = static_cast<float>(std::stod(args.at(5)));
 				if (speed <= 0 || speed > 1) {
 					std::cout << "Wrong speed coef" << std::endl;
 					return;
@@ -710,9 +710,9 @@ namespace CalX {
 				std::cout << "Wrong argument count" << std::endl;
 				return;
 			}
-			CoordTask *task = sysman->getTask(std::stoi(args.at(1)));
-			CoordPlaneStack *coord = sysman->getCoord(std::stoi(args.at(2)));
-			float speed = std::stod(args.at(3));
+            CoordTask *task = sysman->getTask((size_t) std::stoul(args.at(1)));
+            CoordPlaneStack *coord = sysman->getCoord((size_t) std::stoul(args.at(2)));
+            float speed = static_cast<float>(std::stod(args.at(3)));
 			if (task == nullptr) {
 				std::cout << "Wrong task id" << std::endl;
 				return;
@@ -753,12 +753,12 @@ namespace CalX {
 			Node *node = parser.parse();
 			motor_point_t toffset = {std::stoi(args.at(2)), std::stoi(args.at(3))};
 			motor_size_t tsize = {std::stoi(args.at(4)), std::stoi(args.at(5))};
-			double minx = std::stold(args.at(6));
-			double maxx = std::stold(args.at(7));
-			double miny = std::stold(args.at(8));
-			double maxy = std::stold(args.at(9));
-			double step = std::stold(args.at(10));
-			float speed = std::stod(args.at(11));
+            double minx = std::stod(args.at(6));
+            double maxx = std::stod(args.at(7));
+            double miny = std::stod(args.at(8));
+            double maxy = std::stod(args.at(9));
+            double step = std::stod(args.at(10));
+            float speed = static_cast<float>(std::stod(args.at(11)));
 			CoordTranslator *trans = new BasicCoordTranslator(toffset, tsize);
 			coord_point_t min = {minx, miny};
 			coord_point_t max = {maxx, maxy};

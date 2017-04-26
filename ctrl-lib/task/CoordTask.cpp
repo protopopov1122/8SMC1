@@ -71,7 +71,7 @@ namespace CalX {
 			return false;
 		}
 		delete this->list.at(i);
-		this->list.erase(this->list.begin() + i);
+        this->list.erase(this->list.begin() + (std::ptrdiff_t) i);
 		return true;
 	}
 	
@@ -80,7 +80,7 @@ namespace CalX {
 			return nullptr;
 		}
 		TaskStep *step = this->list.at(i);
-		this->list.erase(this->list.begin() + i);
+        this->list.erase(this->list.begin() + (std::ptrdiff_t) i);
 		return step;
 	}
 	
@@ -91,7 +91,7 @@ namespace CalX {
 		if (i == this->list.size()) {
 			this->list.push_back(step);
 		} else {
-			this->list.insert(this->list.begin() + i, step);
+            this->list.insert(this->list.begin() + (std::ptrdiff_t) i, step);
 		}
 		return true;
 	}

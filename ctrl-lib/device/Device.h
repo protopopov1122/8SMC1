@@ -107,11 +107,11 @@ namespace CalX {
 		public:
 			Motor();
 			virtual ~Motor();
-			virtual int getPosition() = 0;		// Functional. Returns motor position in motor steps.
+            virtual motor_coord_t getPosition() = 0;		// Functional. Returns motor position in motor steps.
 			virtual bool isTrailerPressed(int) = 0;	// Functional. Provides info about device trailers.
 			virtual bool isRunning() = 0;		// Functional. Provides info about device state.
 			virtual Power getPowerState() = 0;	// Functional. Provides info about device power state.
-			virtual bool start(int, float,
+            virtual bool start(motor_coord_t, float,
 					unsigned char, bool  = false) = 0;	// Functional. Controls device movement.
 			virtual bool stop() = 0;			// Functional. Controls device movement.
 			virtual bool enablePower(bool) = 0;		// Functional. Controls device power.

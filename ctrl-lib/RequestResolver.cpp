@@ -91,7 +91,7 @@ namespace CalX {
 	void trimString(std::string &str) {
 		for (size_t i = str.length() - 1; i < str.length(); i--) {
 			if (isspace(str.at(i))) {
-				str.erase(str.begin() + i);
+                str.erase(str.begin() + (std::ptrdiff_t) i);
 			} else {
 				break;
 			}

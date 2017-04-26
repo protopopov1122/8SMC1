@@ -70,8 +70,9 @@ namespace CalX {
 		return this->instr;
 	}
 
-	ErrorCode CoordController::move(motor_point_t point, float speed, int div,
+    ErrorCode CoordController::move(motor_point_t point, float speed, int idiv,
 			bool sync) {
+        unsigned char div = (unsigned char) idiv;
 
 		// TODO Enable proper motor syncing
 		Motor *xDev = this->xAxis->getMotor();
@@ -238,11 +239,11 @@ namespace CalX {
 		if (!work) {
 			return ErrorCode::NoError;
 		}
-		int roll_step = config->getEntry("core")->getInt("roll_step", ROLL_STEP);
-		int roll_speed = config->getEntry("core")->getInt("roll_speed", ROLL_SPEED);
-		int roll_div = config->getEntry("core")->getInt("roll_div", ROLL_DIV);
-		int comeback = config->getEntry("core")->getInt("trailer_comeback", TRAILER_COMEBACK);
-		int dest = (tr == TrailerId::Trailer1 ? -roll_step : roll_step);
+        int_conf_t roll_step = config->getEntry("core")->getInt("roll_step", ROLL_STEP);
+        int_conf_t roll_speed = config->getEntry("core")->getInt("roll_speed", ROLL_SPEED);
+        unsigned char roll_div = (unsigned char) config->getEntry("core")->getInt("roll_div", ROLL_DIV);
+        int_conf_t comeback = config->getEntry("core")->getInt("trailer_comeback", TRAILER_COMEBACK);
+        int_conf_t dest = (tr == TrailerId::Trailer1 ? -roll_step : roll_step);
 		xAxis->dest = (tr == TrailerId::Trailer1 ? MoveType::RollDown : MoveType::RollUp);
 		yAxis->dest = (tr == TrailerId::Trailer1 ? MoveType::RollDown : MoveType::RollUp);
 		bool xpr = false;
@@ -364,7 +365,7 @@ namespace CalX {
 				return ErrorCode::ArcError;
 		}
 		double fullCircle = 2 * M_PI * sqrt(r1);
-		int64_t splitter = (int64_t) ceil(fullCircle / spl);
+        uint64_t splitter = (uint64_t) ceil(fullCircle / spl);
 		if (splitter == 0) {
 			splitter = 1;
 		}

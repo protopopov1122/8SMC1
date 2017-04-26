@@ -38,11 +38,19 @@ namespace CalXUI {
 		sizer->Add(mainPanel, 0, wxALL, 10);
 		wxFlexGridSizer *mainSizer = new wxFlexGridSizer(2);
 		mainPanel->SetSizer(mainSizer);
-		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, __("Port") + std::string(": ")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
-		this->portSpin = new wxSpinCtrl(mainPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 255, wxGetApp().getSystemManager()->getConfiguration()->getEntry("serial")->getInt("port", 1));
+        mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, __("Port") + std::string(": ")),
+                       0, wxALIGN_RIGHT | wxRIGHT, 5);
+        this->portSpin = new wxSpinCtrl(mainPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                        wxDefaultSize, wxSP_ARROW_KEYS, 1, 255,
+                                        (int) wxGetApp().getSystemManager()->getConfiguration()->
+                                            getEntry("serial")->getInt("port", 1));
 		mainSizer->Add(this->portSpin);
-		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, __("Baud rate") + std::string(": ")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
-		this->speedSpin = new wxSpinCtrl(mainPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, INT_MAX, wxGetApp().getSystemManager()->getConfiguration()->getEntry("serial")->getInt("speed", 9600));
+        mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, __("Baud rate") + std::string(": ")),
+                       0, wxALIGN_RIGHT | wxRIGHT, 5);
+        this->speedSpin = new wxSpinCtrl(mainPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                         wxDefaultSize, wxSP_ARROW_KEYS, 0, INT_MAX,
+                                         (int) wxGetApp().getSystemManager()->getConfiguration()->
+                                            getEntry("serial")->getInt("speed", 9600));
 		mainSizer->Add(this->speedSpin);
 		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, __("Parity") + std::string(": ")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		this->parityCh = new wxChoice(mainPanel, wxID_ANY);
@@ -51,7 +59,8 @@ namespace CalXUI {
 		this->parityCh->Append(__("Even"));
 		this->parityCh->Append(__("Mark"));
 		this->parityCh->Append(__("Space"));
-		this->parityCh->SetSelection(wxGetApp().getSystemManager()->getConfiguration()->getEntry("serial")->getInt("parity", 0));
+        this->parityCh->SetSelection((int) wxGetApp().getSystemManager()->getConfiguration()->
+                                         getEntry("serial")->getInt("parity", 0));
 		mainSizer->Add(this->parityCh);
 		
 		wxPanel *buttonPanel = new wxPanel(this, wxID_ANY);
@@ -88,7 +97,7 @@ namespace CalXUI {
 	}
 	
 	void CalxCOMSelectDialog::OnOkClick(wxCommandEvent &evt) {
-		this->port = this->portSpin->GetValue();
+        this->port = (int16_t) this->portSpin->GetValue();
 		this->speed = this->speedSpin->GetValue();
 		this->parity = SerialPortParity::No;
 		switch (this->parityCh->GetSelection()) {

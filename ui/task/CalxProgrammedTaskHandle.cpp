@@ -95,7 +95,7 @@ namespace CalXUI {
 			s->Hide();
 		}
 		if (stepList->GetSelection() != wxNOT_FOUND) {
-			this->steps.at(stepList->GetSelection())->Show(true);
+            this->steps.at((size_t) stepList->GetSelection())->Show(true);
 			this->moveUpButton->Enable(stepList->GetSelection() > 0);
 			this->moveDownButton->Enable(stepList->GetSelection() < (int) (task->getSubCount() - 1));
 		}
@@ -112,7 +112,7 @@ namespace CalXUI {
 		this->mainPanel->GetSizer()->Add(handle, 0, wxALL | wxEXPAND, 5);
 		steps.push_back(handle);
 		stepList->Append("#" + std::to_string(steps.size()) + __(" Move"));
-		stepList->SetSelection(steps.size() - 1);
+        stepList->SetSelection((int) steps.size() - 1);
 		task->addStep(handle->getTaskStep());
 		updateUI();
 	}
@@ -122,7 +122,7 @@ namespace CalXUI {
 		this->mainPanel->GetSizer()->Add(handle, 0, wxALL | wxEXPAND, 5);
 		steps.push_back(handle);
 		stepList->Append("#" + std::to_string(steps.size()) + __(" Jump"));
-		stepList->SetSelection(steps.size() - 1);
+        stepList->SetSelection((int) steps.size() - 1);
 		task->addStep(handle->getTaskStep());
 		updateUI();
 	}
@@ -132,7 +132,7 @@ namespace CalXUI {
 		this->mainPanel->GetSizer()->Add(handle, 0, wxALL | wxEXPAND, 5);
 		steps.push_back(handle);
 		stepList->Append("#" + std::to_string(steps.size()) + __(" Arc"));
-		stepList->SetSelection(steps.size() - 1);
+        stepList->SetSelection((int) steps.size() - 1);
 		task->addStep(handle->getTaskStep());
 		updateUI();
 	}
@@ -143,16 +143,16 @@ namespace CalXUI {
 			return;
 		}
 		
-		TaskStep *step = task->pollStep(sel);
-		task->insertStep(sel - 1, step);
+        TaskStep *step = task->pollStep((size_t) sel);
+        task->insertStep((size_t) sel - 1, step);
 		
-		CalxTaskStepHandle *handle = steps.at(sel);
+        CalxTaskStepHandle *handle = steps.at((size_t) sel);
 		steps.erase(steps.begin() + sel);
 		steps.insert(steps.begin() + sel - 1, handle);
 		
-		wxString lbl = stepList->GetString(sel);
-		stepList->Delete(sel);
-		stepList->Insert(lbl, sel - 1);
+        wxString lbl = stepList->GetString((unsigned int) sel);
+        stepList->Delete((unsigned int) sel);
+        stepList->Insert(lbl, (unsigned int) sel - 1);
 		stepList->SetSelection(sel - 1);
 		updateUI();
 	}
@@ -163,26 +163,26 @@ namespace CalXUI {
 			return;
 		}
 		
-		TaskStep *step = task->pollStep(sel);
-		task->insertStep(sel + 1, step);
+        TaskStep *step = task->pollStep((size_t) sel);
+        task->insertStep((size_t) sel + 1, step);
 		
-		CalxTaskStepHandle *handle = steps.at(sel);
+        CalxTaskStepHandle *handle = steps.at((size_t) sel);
 		steps.erase(steps.begin() + sel);
 		steps.insert(steps.begin() + sel + 1, handle);
 		
-		wxString lbl = stepList->GetString(sel);
-		stepList->Delete(sel);
-		stepList->Insert(lbl, sel + 1);
+        wxString lbl = stepList->GetString((unsigned int) sel);
+        stepList->Delete((unsigned int) sel);
+        stepList->Insert(lbl, (unsigned int) sel + 1);
 		stepList->SetSelection(sel + 1);
 		updateUI();
 	}
 	
 	void CalxProgrammedTaskHandle::OnRemoveClick(wxCommandEvent &evt) {
 		if (this->stepList->GetSelection() != wxNOT_FOUND) {
-			task->removeStep(this->stepList->GetSelection());
-			this->steps.at(this->stepList->GetSelection())->Destroy();
+            task->removeStep((size_t) this->stepList->GetSelection());
+            this->steps.at((size_t) this->stepList->GetSelection())->Destroy();
 			this->steps.erase(this->steps.begin() + this->stepList->GetSelection());
-			stepList->Delete(this->stepList->GetSelection());
+            stepList->Delete((unsigned int) this->stepList->GetSelection());
 			updateUI();
 		}
 	}

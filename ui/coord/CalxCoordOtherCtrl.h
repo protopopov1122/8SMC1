@@ -51,11 +51,11 @@ namespace CalXUI {
 			bool isLoggingErrors() {return logActions->GetValue();}
 			int getXOffset() {return xOffset->GetValue();}
 			int getYOffset() {return yOffset->GetValue();}
-			void setXOffset(int x) {
-				xOffset->SetValue(x);
+            void setXOffset(motor_coord_t x) {
+                xOffset->SetValue((int) x);
 			}
-			void setYOffset(int y) {
-				yOffset->SetValue(y);
+            void setYOffset(motor_coord_t y) {
+                yOffset->SetValue((int) y);
 			}
 			double getXScale() {
 				double val;

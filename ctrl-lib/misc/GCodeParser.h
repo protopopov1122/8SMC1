@@ -61,10 +61,10 @@ namespace CalX {
 	
 	class GCodeCommand {
 		public:
-			GCodeCommand(char, int);
+            GCodeCommand(char, int64_t);
 			virtual ~GCodeCommand();
 			char getLetter();
-			int getCommand();
+            int64_t getCommand();
 			bool hasArg(char);
 			GCodeValue getArg(char);
 			void setArg(char, GCodeValue);
@@ -72,7 +72,7 @@ namespace CalX {
 			std::map<char, GCodeValue>::iterator argsEnd();
 		private:
 			char letter;
-			int command;
+            int64_t command;
 			std::map<char, GCodeValue> args;
 	};
 	

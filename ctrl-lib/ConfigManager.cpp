@@ -249,7 +249,7 @@ namespace CalX {
 	
 	size_t skipWhitespaces(const char *line, size_t start) {
 		while (start < strlen(line) &&
-			iswspace(line[start])) {
+            isspace(line[start])) {
 			start++;	
 		}
 		return start;
@@ -267,7 +267,7 @@ namespace CalX {
 				return nullptr;
 			}
 			std::string strval(&val[1]);
-			strval.erase(strval.begin() + strval.length() - 1);
+            strval.erase(strval.begin() + (std::ptrdiff_t) strval.length() - 1);
 			return new StringConfigValue(strval);
 		} else if (strcmp(val, "true") == 0 ||
 			strcmp(val, "false") == 0) {
@@ -327,12 +327,12 @@ namespace CalX {
 			// Trim input line
 			size_t start = 0, end = strlen(rawline) - 1;
 			while (start < strlen(rawline) &&
-				iswspace(rawline[start])) {
+                isspace(rawline[start])) {
 				start++;	
 			}
 			while (end < strlen(rawline) &&
 				end >= start &&
-				iswspace(rawline[end])) {
+                isspace(rawline[end])) {
 				end--;	
 			}
 			rawline[end + 1] = '\0';
@@ -354,30 +354,31 @@ namespace CalX {
 			} else {	// Line is a key/value pair
 				if (entry == nullptr) {
 					*err << "Error at line " << line_num << ": entry not defined" << std::endl;
-				}
-				std::string key;
-				size_t pos = 0;
-				while (pos < strlen(line) &&
-					(isalpha(line[pos]) ||
-						isdigit(line[pos]) ||
-						line[pos] == '_')) {
-					key.push_back(line[pos++]);	
-				}
-				pos = skipWhitespaces(line, pos);
-				if (pos >= strlen(line) ||
-					line[pos] != '=') {
-					*err << "Error at line " << line_num << ": expected '=' in the line" << std::endl;
-					continue;
-				}
-				pos = skipWhitespaces(line, ++pos);
-				if (pos >= strlen(line)) {
-					*err << "Error at line " << line_num <<  ": expected value in the line" << std::endl;
-					continue;
-				}
-				ConfigValue *value = parseValue(&line[pos]);
-				if (value != nullptr) {
-					entry->put(key, value);
-				}
+                } else {
+                    std::string key;
+                    size_t pos = 0;
+                    while (pos < strlen(line) &&
+                        (isalpha(line[pos]) ||
+                            isdigit(line[pos]) ||
+                            line[pos] == '_')) {
+                        key.push_back(line[pos++]);
+                    }
+                    pos = skipWhitespaces(line, pos);
+                    if (pos >= strlen(line) ||
+                        line[pos] != '=') {
+                        *err << "Error at line " << line_num << ": expected '=' in the line" << std::endl;
+                        continue;
+                    }
+                    pos = skipWhitespaces(line, ++pos);
+                    if (pos >= strlen(line)) {
+                        *err << "Error at line " << line_num <<  ": expected value in the line" << std::endl;
+                        continue;
+                    }
+                    ConfigValue *value = parseValue(&line[pos]);
+                    if (value != nullptr) {
+                        entry->put(key, value);
+                    }
+                }
 			}
 		}
 		return man;

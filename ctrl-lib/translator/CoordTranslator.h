@@ -130,7 +130,7 @@ namespace CalX {
 			virtual motor_point_t get(double, double);
 			virtual coord_point_t get(motor_point_t);
 			size_t getSize();
-			CoordTranslator* get(size_t);
+                        CoordTranslator* getTranslator(size_t);
 			void add(CoordTranslator*);
 			bool remove(size_t);
 			bool insert(size_t, CoordTranslator*);

@@ -43,7 +43,7 @@ namespace CalXUI {
 		std::string code;
 		int chr;
 		while ((chr = is->get()) != EOF) {
-			code += chr;
+            code += (char) chr;
 		}
 		codeText->SetValue(code);
 		

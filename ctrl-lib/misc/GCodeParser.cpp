@@ -30,7 +30,7 @@
 
 namespace CalX {
 
-	GCodeCommand::GCodeCommand(char letter, int com) {
+    GCodeCommand::GCodeCommand(char letter, int64_t com) {
 		this->letter = letter;
 		this->command = com;
 		INIT_LOG("GCodeCommand");
@@ -44,7 +44,7 @@ namespace CalX {
 		return this->letter;
 	}
 	
-	int GCodeCommand::getCommand() {
+    int64_t GCodeCommand::getCommand() {
 		return this->command;
 	}
 
@@ -102,7 +102,7 @@ namespace CalX {
 		if (chr == EOF) {
 			return nullptr;
 		}
-		char letter = chr;
+        char letter = (char) chr;
 		bool fract = false;
 		chr = readChar();
 		while (isspace(chr) && chr != EOF) {
@@ -117,7 +117,7 @@ namespace CalX {
 		for (; buf_offset + 1 < BUF_SZ &&
 				(isdigit(chr) || chr == '.' || chr == '-');
 				chr = readChar()) {
-			buf[buf_offset++] = chr;
+            buf[buf_offset++] = (char) chr;
 			if (chr == '.') {
 				fract = true;
 			}
@@ -129,7 +129,7 @@ namespace CalX {
 		fld->value.fract = fract;
 		if (buf_offset != 0) {
 			if (fract) {
-				fld->value.value.fraction = std::stold(buf);
+                fld->value.value.fraction = std::stod(buf);
 			} else {
 				fld->value.value.integer = std::stoi(buf);
 			}
@@ -204,7 +204,7 @@ namespace CalX {
 			invert *= -1;
 		}
 		GCodeCommand *cmd = nullptr;
-		const int CHORD_COUNT = conf->getEntry("core")->getInt("chord_count", 100);
+        const int_conf_t CHORD_COUNT = conf->getEntry("core")->getInt("chord_count", 100);
 		while ((cmd = parser->nextCommand()) != nullptr) {
 			
 			if (cmd->getLetter() == 'G') {
@@ -224,7 +224,7 @@ namespace CalX {
 						motor_point_t center = translator->get(i, j);
 						center.x -= offset.x;
 						center.y -= offset.y;
-						RelArcTaskStep *step = new RelArcTaskStep(real, center, CHORD_COUNT, 1.0f);
+                        RelArcTaskStep *step = new RelArcTaskStep(real, center, (int) CHORD_COUNT, 1.0f);
 						step->setClockwise(invert == 1);
 						task->addStep(step);
 					} break;
@@ -234,7 +234,7 @@ namespace CalX {
 						motor_point_t center = translator->get(i, j);
 						center.x -= offset.x;
 						center.y -= offset.y;
-						RelArcTaskStep *step = new RelArcTaskStep(real, center, CHORD_COUNT, 1.0f);
+                        RelArcTaskStep *step = new RelArcTaskStep(real, center, (int) CHORD_COUNT, 1.0f);
 						step->setClockwise(invert != 1);
 						task->addStep(step);
 					} break;

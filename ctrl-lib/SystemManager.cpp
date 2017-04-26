@@ -27,10 +27,10 @@ namespace CalX {
 	SystemManager::SystemManager(DeviceManager *devman, ConfigManager *conf) {
 		this->devman = devman;
 		this->conf = conf;
-		for (device_id_t d = 0; d < devman->getMotorCount(); d++) {
+        for (device_id_t d = 0; d < (device_id_t) devman->getMotorCount(); d++) {
 			this->dev.push_back(new MotorController(devman->getMotor(d), this->conf));
 		}
-		for (device_id_t i = 0; i < devman->getInstrumentCount(); i++) {
+        for (device_id_t i = 0; i < (device_id_t) devman->getInstrumentCount(); i++) {
 			this->instr.push_back(new InstrumentController(devman->getInstrument(i)));
 		}
 		LOG(SYSMAN_TAG, "System startup. Found " + std::to_string(devman->getMotorCount()) + " motors and " + std::to_string(devman->getInstrumentCount()) + " instruments.");
@@ -49,11 +49,11 @@ namespace CalX {
 		for (size_t i = 0; i < this->coords.size(); i++) {
 			delete this->coords.at(i);
 		}
-		for (device_id_t i = 0; i < this->devman->getInstrumentCount(); i++) {
-			delete this->instr.at(i);
+        for (device_id_t i = 0; i < (device_id_t) this->devman->getInstrumentCount(); i++) {
+            delete this->instr.at((size_t) i);
 		}
-		for (device_id_t d = 0; d < this->devman->getMotorCount(); d++) {
-			delete this->dev.at(d);
+        for (device_id_t d = 0; d < (device_id_t) this->devman->getMotorCount(); d++) {
+            delete this->dev.at((size_t) d);
 		}
 		delete this->conf;
 		DESTROY_LOG("SystemManager");
@@ -68,10 +68,10 @@ namespace CalX {
 	}
 
 	MotorController *SystemManager::getMotorController(device_id_t d) {
-		if (d >= this->devman->getMotorCount() || d < 0) {
+        if (d >= (device_id_t) this->devman->getMotorCount() || d < 0) {
 			return nullptr;
 		}
-		return this->dev.at(d);
+        return this->dev.at((size_t) d);
 	}
 	
 	FunctionEngine *SystemManager::getFunctionEngine() {
@@ -115,7 +115,7 @@ namespace CalX {
 			return false;
 		}
 		delete this->tasks.at(i);
-		this->tasks.erase(this->tasks.begin() + i);
+        this->tasks.erase(this->tasks.begin() + (std::ptrdiff_t) i);
 		LOG(SYSMAN_TAG, "Removed task # " + std::to_string(i) + ". Task count: " + std::to_string(this->tasks.size()));
 		return true;
 	}
@@ -132,7 +132,7 @@ namespace CalX {
 	}
 
 	CoordHandle *SystemManager::createCoord(device_id_t d1, device_id_t d2, device_id_t instr) {
-		if (d1 >= this->devman->getMotorCount() || d2 >= this->devman->getMotorCount()) {
+        if (d1 >= (device_id_t) this->devman->getMotorCount() || d2 >= (device_id_t) this->devman->getMotorCount()) {
 			return nullptr;
 		}
 
@@ -147,8 +147,8 @@ namespace CalX {
 	void SystemManager::removeCoord(size_t id) {
 		if (id < this->coords.size()) {
 			delete this->coords.at(id);
-			this->coords.erase(this->coords.begin() + id);
-			LOG(SYSMAN_TAG, "Removed coord #" + id);
+            this->coords.erase(this->coords.begin() + (std::ptrdiff_t) id);
+            LOG(SYSMAN_TAG, "Removed coord #" + std::to_string(id));
 		}
 	}
 	
@@ -157,10 +157,10 @@ namespace CalX {
 	}
 	
 	InstrumentController *SystemManager::getInstrumentController(device_id_t i) {
-		if (i >= this->devman->getInstrumentCount() || i < 0) {
+        if (i >= (device_id_t) this->devman->getInstrumentCount() || i < 0) {
 			return nullptr;
 		}
-		return this->instr.at(i);
+        return this->instr.at((size_t) i);
 	}
 	
 	MotorController *SystemManager::connectMotor(DeviceConnectionPrms *prms) {
