@@ -301,13 +301,12 @@ namespace CalX {
 		SetCommMask(handle, EV_RXCHAR);
 		SetupComm(handle, 1500, 1500);
 
-		// TODO Properly setup timeouts
 		COMMTIMEOUTS CommTimeOuts;
 		CommTimeOuts.ReadIntervalTimeout = this->config.getEntry("connection")->getInt("ReadIntervalTimeout", 1);
 		CommTimeOuts.ReadTotalTimeoutMultiplier = this->config.getEntry("connection")->getInt("ReadTotalTimeoutMultiplier", 1);
 		CommTimeOuts.ReadTotalTimeoutConstant = this->config.getEntry("connection")->getInt("ReadTotalTimeoutConstant", 0xFFFFFFFF);
 		CommTimeOuts.WriteTotalTimeoutMultiplier = this->config.getEntry("connection")->getInt("WriteTotalTimeoutMultiplier", 1);
-		CommTimeOuts.WriteTotalTimeoutConstant = this->config.getEntry("connection")->getInt("WriteTotalTimeoutConstant", 1);
+		CommTimeOuts.WriteTotalTimeoutConstant = this->config.getEntry("connection")->getInt("WriteTotalTimeoutConstant", 250);
 
 		if(!SetCommTimeouts(handle, &CommTimeOuts)) {
 			ILOG("COM port parameters setting error");
@@ -319,7 +318,7 @@ namespace CalX {
 	
 		DCB ComDCM;
 	
-		memset(&ComDCM,0,sizeof(ComDCM));
+		memset(&ComDCM, 0, sizeof(ComDCM));
 		ComDCM.DCBlength = sizeof(DCB);
 		GetCommState(handle, &ComDCM);
 		ComDCM.BaudRate = DWORD(baudrate);
