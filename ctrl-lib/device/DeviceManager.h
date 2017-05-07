@@ -52,6 +52,8 @@ namespace CalX {
 			virtual bool canInstrumentConnect(DeviceConnectionType);
 			virtual bool loadConfiguration(std::string, ConfigManager*);
 		protected:
+			virtual void log(std::string);
+		
 			std::vector<std::string> error_queue;
 			std::vector<Motor*> dev;
 			std::vector<Instrument*> instr;

@@ -107,13 +107,16 @@ namespace CalX {
 			return nullptr;
 		}
 		DeviceSerialPortConnectionPrms *prms = (DeviceSerialPortConnectionPrms*) _prms;
+		this->log("Connecting NL300 instrument on COM" + std::to_string(prms->port));
 		NL300Instrument *instr = new NL300Instrument((device_id_t) this->instr.size(), this);
 		if (!instr->connect(prms) || instr->hasErrors()) {
+			this->log("Error during NL300 instrument connection on COM" + std::to_string(prms->port));
 			this->saveInstrumentError();
 			delete instr;
 			return nullptr;
 		}
 		this->instr.push_back(instr);
+		this->log("Connected NL300 instrument on COM" + std::to_string(prms->port));
 		return instr;
 	}
 	

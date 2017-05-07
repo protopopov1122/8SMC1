@@ -259,14 +259,13 @@ namespace CalX {
 			this->instr->writeMessage(cmd);
 		}
 	}
-	
-	#define ILOG(msg) LOG_INSTR(this->getID(), msg)
-	
+		
 	NL300Instrument::NL300Instrument(device_id_t id, StandartDeviceManager *devman)
 		: Instrument::Instrument() {
 		this->dev = id;
 		this->devman = devman;
 		this->state = false;
+		this->log("NL300 instrument constructor");
 	}
 	
 	NL300Instrument::~NL300Instrument() {
@@ -276,27 +275,31 @@ namespace CalX {
 		if (this->handle != INVALID_HANDLE_VALUE) {
 			CloseHandle(handle);
 		}
-		ILOG("Instrument closed");
+		this->log("Instrument closed");
 	}
 
 	bool NL300Instrument::connect(DeviceSerialPortConnectionPrms *prms) {
+		this->log("NL300 instrument connecting: COM" + std::to_string(prms->port) +
+			"; baud rate: " + std::to_string(prms->speed) + "; parity: " + std::to_string(static_cast<int>(prms->parity)));
 		this->listener = nullptr;
 		getDeviceManager()->loadConfiguration("NL300.ini", &this->config);
 		memcpy(&this->prms, prms, sizeof(DeviceSerialPortConnectionPrms));
+		this->log("Configuration sucessfully loaded");
 		
 		int baudrate = prms->speed;
-		ILOG("Init on COM" + std::to_string(prms->port) + ", baudrate: " + std::to_string(prms->speed) +
+		this->log("Init on COM" + std::to_string(prms->port) + ", baudrate: " + std::to_string(prms->speed) +
 			", parity: " + std::to_string(static_cast<int>(prms->parity)));
 		this->handle = CreateFile(("COM" + std::to_string(prms->port)).c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL,
 			OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 		if (this->handle == INVALID_HANDLE_VALUE) {
-			ILOG("COM port opening error");
+			this->log("COM port opening error");
 			this->errors.push_back("Error opening COM" + std::to_string(prms->port));
 			this->handle = INVALID_HANDLE_VALUE;
 			return false;
 		}
+		this->log("COM" + std::to_string(prms->port) + " opened");
 		
-		ILOG("Setting COM port parameters");
+		this->log("Setting COM port parameters");
 		
 		SetCommMask(handle, EV_RXCHAR);
 		SetupComm(handle, 1500, 1500);
@@ -309,12 +312,13 @@ namespace CalX {
 		CommTimeOuts.WriteTotalTimeoutConstant = this->config.getEntry("connection")->getInt("WriteTotalTimeoutConstant", 250);
 
 		if(!SetCommTimeouts(handle, &CommTimeOuts)) {
-			ILOG("COM port parameters setting error");
+			this->log("COM port parameters setting error");
 			CloseHandle(handle);
 			this->handle = INVALID_HANDLE_VALUE;
 			this->errors.push_back("Error configuring COM" + std::to_string(prms->port));
 			return false;
 		}
+		this->log("Connection timeout parameters set up");
 	
 		DCB ComDCM;
 	
@@ -325,23 +329,25 @@ namespace CalX {
 		ComDCM.Parity = static_cast<BYTE>(prms->parity);
 
 		if(!SetCommState(handle, &ComDCM)) {
-			ILOG("COM port parameters setting error");
+			this->log("COM port parameters setting error");
 			CloseHandle(handle);
 			this->handle = INVALID_HANDLE_VALUE;
 			this->errors.push_back("Error configuring COM" + std::to_string(prms->port));
 		}
+		this->log("Connection parameters set up");
 		
 		
-		ILOG("Initializing instrument state");
+		this->log("Initializing instrument state");
 		NL300GeneralCommand cmd(NL300_LASER_NAME, 'E', 0, NL300GeneralAction::Set, new NL300IntegerParameter(0), NL300_PC_NAME);
 		if (!writeMessage(cmd)) {
-			ILOG("Instrument state setting error");
+			this->log("Instrument state setting error");
 			this->errors.push_back("Error configuring COM" + std::to_string(prms->port));
 			CloseHandle(this->handle);
 			this->handle = INVALID_HANDLE_VALUE;
 			return false;
 		}
 		this->mode = InstrumentMode::Off;
+		this->log("Instrument mode switched to off");
 
 		this->listener = new NL300ConfigEventListener(this);
 		this->config.addEventListener(this->listener);
@@ -355,8 +361,8 @@ namespace CalX {
 		
 		this->hardwareInfo = getSystemCommandResponse("VER", "");
 		this->softwareInfo = getSystemCommandResponse("SN", "");
+		this->log("Instrument ready");
 		
-		ILOG("Instrument ready");
 		return true;
 	}
 	
@@ -366,22 +372,22 @@ namespace CalX {
 	
 	bool NL300Instrument::enable(bool en) {
 		if (handle == INVALID_HANDLE_VALUE) {
-			ILOG("Enable error: instrument closed");
+			this->log("Enable error: instrument closed");
 			return false;
 		}
 		if (en == enabled()) {
-			ILOG("Enable: state not changed");
+			this->log("Enable: state not changed");
 			return true;
 		}
 		
-		ILOG("Changing instrument state to " + std::string(en ? "enabled" : "disabled"));
+		this->log("Changing instrument state to " + std::string(en ? "enabled" : "disabled"));
 		bool status = en ? start() : stop();
 		if (!status) {
 			return false;
 		}
 		
 		state = en;
-		ILOG("Instrument state changed to " + std::string(en ? "enabled" : "disabled"));
+		this->log("Instrument state changed to " + std::string(en ? "enabled" : "disabled"));
 		return true;
 	}
 
@@ -446,7 +452,7 @@ namespace CalX {
 	
 	bool NL300Instrument::setMode(InstrumentMode mode) {
 		if (handle == INVALID_HANDLE_VALUE) {
-			ILOG("Set mode error: instrument closed");
+			this->log("Set mode error: instrument closed");
 			return false;
 		}
 		if (this->mode == mode) {
@@ -454,7 +460,7 @@ namespace CalX {
 		}
 		
 		int imode = mode == InstrumentMode::Off ? 0 : (mode == InstrumentMode::Prepare? 1 : 2);
-		ILOG("Changing instrument mode to " + std::to_string(imode));
+		this->log("Changing instrument mode to " + std::to_string(imode));
 		NL300GeneralCommand cmd(NL300_LASER_NAME, 'E', 0, NL300GeneralAction::Set, new NL300IntegerParameter(imode), NL300_PC_NAME);
 		if (!writeMessage(cmd)) {
 			return false;
@@ -472,7 +478,7 @@ namespace CalX {
 		}
 		
 		this->mode = mode;
-		ILOG("Mode changed to " + std::to_string(imode));
+		this->log("Mode changed to " + std::to_string(imode));
 		return true;
 	}
 	
@@ -495,6 +501,7 @@ namespace CalX {
 			mesg[offset++] = chr;
 		} while (chr != ']' && offset < MAX_LEN - 1);
 		mesg[offset] = '\0';
+		this->log("Received message: " + std::string(mesg));
 		if (strlen(mesg) < 2 ||
 			mesg[0] != '[' ||
 			mesg[strlen(mesg) - 1] != ']') {
@@ -619,16 +626,17 @@ namespace CalX {
 			}
 			out = new NL300SystemCommand(recv, command, parameter, sender);
 		}
+		this->log("Parsed message: " + out->toCommand());
 
 		return out;
 	}
 	
 	bool NL300Instrument::writeSerial(std::string stdStr) {
 		if (this->handle == INVALID_HANDLE_VALUE) {
-			ILOG("COM port write error: port closed");
+			this->log("COM port write error: port closed");
 			return false;
 		}
-		ILOG("Writing to COM" + std::to_string(prms.port) + ": '" + stdStr + "'");
+		this->log("Writing to COM" + std::to_string(prms.port) + ": '" + stdStr + "'");
 		const char *data = stdStr.c_str();
 		DWORD feedback;
 		if(!WriteFile(handle, data, (DWORD) strlen(data), &feedback, 0) || feedback != (DWORD) strlen(data)) {
@@ -638,7 +646,7 @@ namespace CalX {
 			this->devman->saveInstrumentError();
 			return false;
 		}
-		ILOG("Write finished");
+		this->log("Write finished");
 		return true;
 	}
 

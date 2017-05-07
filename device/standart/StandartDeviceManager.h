@@ -13,7 +13,8 @@
 /* Device manager initialise existing controllers and keep track of usable devices */
 
 namespace CalX {
-
+	
+	
 	class StandartDeviceManager : public DeviceManager {
 		public:
 			StandartDeviceManager();

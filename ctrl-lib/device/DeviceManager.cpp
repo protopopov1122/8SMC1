@@ -93,4 +93,8 @@ namespace CalX {
 		return true;
 	}
 	
+	void DeviceManager::log(std::string msg) {
+		LOG("DevMan", msg);
+	}
+	
 }

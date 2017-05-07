@@ -96,6 +96,8 @@ namespace CalX {
 			virtual std::string getDeviceInfo() = 0;
 			virtual std::string getRuntimeInfo() = 0;
 		protected:
+			virtual void log(std::string);
+			
 			device_id_t dev;
 			ConfigManager config;
 			std::vector<std::string> errors;

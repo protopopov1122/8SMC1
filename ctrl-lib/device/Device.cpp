@@ -57,6 +57,10 @@ namespace CalX {
 		return err;
 	}
 	
+	void Device::log(std::string msg) {
+		LOG_INSTR(this->getID(), msg);
+	}
+	
 	Motor::Motor()
 		: Device::Device(DeviceType::Motor) {
 			

@@ -18,6 +18,7 @@
 */
 
 #include "logger.h"
+#include <iostream>
 
 std::ostream *__ERRORS = nullptr;
 std::ostream *__WARNINGS = nullptr;

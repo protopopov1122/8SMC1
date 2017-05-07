@@ -64,8 +64,8 @@ NL300Instrument.o:
 StandartDeviceManager.o:
 	$(CC) $(CFLAGS_LIB) $(CFLAGS) -Ires -c device/standart/StandartDeviceManager.cpp
 
-devapi_standart: 8SMC1Device.o NL300Instrument.o StandartDeviceManager.o Stub.o  $(OUTPUT_LIB)
-	$(CC) -shared 8SMC1Device.o NL300Instrument.o StandartDeviceManager.o Stub.o   -o $(BUILD)/dev_standart.dll -Wl,-Bdynamic,--library-path=$(BUILD) -lUSMCDLL  -Wl,--out-implib,$(BUILD)/\dev_standart.a $(LDFLAGS) $(LDFLAGS_LIB) -Wl,--library-path=$(BUILD) -lcalx
+devapi_standart: 8SMC1Device.o NL300Instrument.o StandartDeviceManager.o  $(OUTPUT_LIB)
+	$(CC) -shared 8SMC1Device.o NL300Instrument.o StandartDeviceManager.o   -o $(BUILD)/dev_standart.dll -Wl,-Bdynamic,--library-path=$(BUILD) -lUSMCDLL  -Wl,--out-implib,$(BUILD)/dev_standart.a $(LDFLAGS) $(LDFLAGS_LIB) -Wl,--library-path=$(BUILD) -lcalx
 EmuDeviceManager.o:
 	$(CC) $(CFLAGS_LIB) $(CFLAGS)  -c device/emulated/EmuDeviceManager.cpp
 
