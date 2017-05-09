@@ -58,7 +58,7 @@ namespace CalX {
 	}
 	
 	void Device::log(std::string msg) {
-		LOG_INSTR(this->getID(), msg);
+		LOG("Device #" + std::to_string(this->getID()), msg);
 	}
 	
 	Motor::Motor()
@@ -76,5 +76,9 @@ namespace CalX {
 	
 	Instrument::~Instrument() {
 		
+	}
+	
+	void Instrument::log(std::string msg) {
+		LOG_INSTR(this->getID(), msg);
 	}
 }

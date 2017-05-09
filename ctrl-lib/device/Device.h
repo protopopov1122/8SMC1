@@ -129,6 +129,8 @@ namespace CalX {
 			virtual bool enabled() = 0;
 			virtual InstrumentMode getMode() = 0;
 			virtual bool setMode(InstrumentMode) = 0;
+		protected:
+			virtual void log(std::string);
 	};
 }
 

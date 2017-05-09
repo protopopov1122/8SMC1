@@ -58,14 +58,23 @@ LDFLAGS=$(LDFLAGS_$(PLATFORM))
 8SMC1Device.o:
 	$(CC) $(CFLAGS_LIB) $(CFLAGS) -Ires -c device/standart/8SMC1Device.cpp
 
+NL300Command.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -Ires -c device/standart/NL300Command.cpp
+
+NL300Config.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -Ires -c device/standart/NL300Config.cpp
+
 NL300Instrument.o:
 	$(CC) $(CFLAGS_LIB) $(CFLAGS) -Ires -c device/standart/NL300Instrument.cpp
+
+NL300Message.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -Ires -c device/standart/NL300Message.cpp
 
 StandartDeviceManager.o:
 	$(CC) $(CFLAGS_LIB) $(CFLAGS) -Ires -c device/standart/StandartDeviceManager.cpp
 
-devapi_standart: 8SMC1Device.o NL300Instrument.o StandartDeviceManager.o  $(OUTPUT_LIB)
-	$(CC) -shared 8SMC1Device.o NL300Instrument.o StandartDeviceManager.o   -o $(BUILD)/dev_standart.dll -Wl,-Bdynamic,--library-path=$(BUILD) -lUSMCDLL  -Wl,--out-implib,$(BUILD)/dev_standart.a $(LDFLAGS) $(LDFLAGS_LIB) -Wl,--library-path=$(BUILD) -lcalx
+devapi_standart: 8SMC1Device.o NL300Command.o NL300Config.o NL300Instrument.o NL300Message.o StandartDeviceManager.o  $(OUTPUT_LIB)
+	$(CC) -shared 8SMC1Device.o NL300Command.o NL300Config.o NL300Instrument.o NL300Message.o StandartDeviceManager.o   -o $(BUILD)/dev_standart.dll -Wl,-Bdynamic,--library-path=$(BUILD) -lUSMCDLL  -Wl,--out-implib,$(BUILD)/dev_standart.a $(LDFLAGS) $(LDFLAGS_LIB) -Wl,--library-path=$(BUILD) -lcalx
 EmuDeviceManager.o:
 	$(CC) $(CFLAGS_LIB) $(CFLAGS)  -c device/emulated/EmuDeviceManager.cpp
 

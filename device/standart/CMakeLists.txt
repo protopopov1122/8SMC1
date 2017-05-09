@@ -22,7 +22,7 @@ if (WIN32)
 	
 	
 	include_directories(${CMAKE_SOURCE_DIR})
-	add_library(dev_standart SHARED 8SMC1Device.cpp NL300Instrument.cpp StandartDeviceManager.cpp)
+	add_library(dev_standart SHARED 8SMC1Device.cpp NL300Instrument.cpp NL300Config.cpp NL300Command.cpp NL300Message.cpp StandartDeviceManager.cpp)
 	target_link_libraries(dev_standart calx USMCDLL)
 	add_custom_command(TARGET dev_standart POST_BUILD
     	COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:dev_standart> ${build_directory}

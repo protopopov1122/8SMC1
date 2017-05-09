@@ -26,6 +26,9 @@
 #include <cinttypes>
 #include "ctrl-lib/device/Device.h"
 #include "ctrl-lib/device/DeviceManager.h"
+#include "NL300Message.h"
+#include "NL300Command.h"
+#include "NL300Config.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -36,155 +39,6 @@ namespace CalX {
 	
 	enum class NL300InstrumentMode {
 		Adjustment = 0, FullPower = 1
-	};
-	
-	enum class NL300MessageType {
-		System, General
-	};
-	
-	class NL300Message {
-		public:
-			// Arguments: receiver, message, sender
-			NL300Message(NL300MessageType, std::string, std::string, std::string);
-			virtual ~NL300Message();
-			NL300MessageType getType();
-			std::string getReceiver();
-			std::string getMessage();
-			std::string getSender();
-			virtual std::string toCommand();
-		private:
-			NL300MessageType type;
-			std::string receiver;
-			std::string message;
-			std::string sender;
-	};
-	
-	enum class NL300ParameterType {
-		None, Integer, Real, String
-	};
-	
-	class NL300Parameter {
-		public:
-			NL300Parameter(NL300ParameterType);
-			virtual ~NL300Parameter();
-			NL300ParameterType getType();
-			virtual std::string getString() = 0;
-			int64_t getInt(int64_t);
-			double getReal(double);
-			std::string getString(std::string);
-		private:
-			NL300ParameterType type;
-	};
-	
-	class NL300IntegerParameter : public NL300Parameter {
-		public:
-			NL300IntegerParameter(int64_t);
-			virtual ~NL300IntegerParameter();
-			int64_t getValue();
-			virtual std::string getString();
-		private:
-			int64_t value;
-	};
-	
-	class NL300RealParameter : public NL300Parameter {
-		public:
-			NL300RealParameter(double);
-			virtual ~NL300RealParameter();
-			double getValue();
-			virtual std::string getString();
-		private:
-			double value;
-	};
-	
-	class NL300StringParameter : public NL300Parameter {
-		public:
-			NL300StringParameter(std::string);
-			virtual ~NL300StringParameter();
-			std::string getValue();
-			virtual std::string getString();
-		private:
-			std::string value;
-	};
-	
-	class NL300NoneParameter : public NL300Parameter {
-		public:
-			NL300NoneParameter();
-			virtual ~NL300NoneParameter();
-			virtual std::string getString();
-	};
-
-	class NL300SystemCommand : public NL300Message {
-		public:
-			// Arguments: receiver, command, parameter, sender
-			NL300SystemCommand(std::string, std::string, std::string, std::string);
-			virtual ~NL300SystemCommand();
-			std::string getCommand();
-			std::string getParameter();
-		private:
-			std::string command;
-			std::string parameter;
-	};
-	
-	enum class NL300GeneralAction {
-		Set = 'S', Add = 'A', Program = 'P', Inquiry = '?'
-	};
-	
-	class NL300GeneralCommand : public NL300Message {
-		public:
-			// Arguments: receiver, array, index, action, parameter, sender
-			NL300GeneralCommand(std::string, char, uint16_t, NL300GeneralAction, NL300Parameter*, std::string);
-			virtual ~NL300GeneralCommand();
-			char getArray();
-			uint16_t getIndex();
-			NL300GeneralAction getAction();
-			NL300Parameter *getParameter();
-		private:
-			char array;
-			uint16_t index;
-			NL300GeneralAction action;
-			NL300Parameter *parameter;
-	};
-	
-	#define NL300_LASER_NAME "NL"
-	#define NL300_PC_NAME "PC"
-	#define NL300_ENTRY_NAME "instrument"
-	#define NL300_CORE_NAME "core"
-	#define NL300_PACK_PULSES "pack_pulses"
-	#define NL300_MAX_OUTPUT_DELAY "max_output_delay"
-	#define NL300_ADJ_OUTPUT_DELAY "adj_output_delay"
-	#define NL300_SYNC_OUT_DELAY "sync_out_delay"
-	#define NL300_REPETITION_RATE_DIV "repetition_rate_div"
-
-	#define NL300_CORE_MODE "mode"
-	#define NL300_MODE_CHANGE_DELAY "mode_change_delay"
-	#define NL300_CORE_ENABLE_DELAY "enable_delay"
-	#define NL300_CORE_DISABLE_DELAY "disable_delay"
-	#define NL300_CORE_OFF_DELAY "off_mode_delay"
-	#define NL300_CORE_ADJ_DELAY "adj_mode_delay"
-	#define NL300_CORE_MAX_DELAY "max_mode_delay"
-	#define NL300_CORE_ENABLE_OFF_DELAY "enable_off_delay"
-	#define NL300_CORE_ENABLE_ADJ_DELAY "enable_adj_delay"
-	#define NL300_CORE_ENABLE_MAX_DELAY "enable_max_delay"
-	#define NL300_CORE_DISABLE_OFF_DELAY "disable_off_delay"
-	#define NL300_CORE_DISABLE_ADJ_DELAY "disable_adj_delay"
-	#define NL300_CORE_DISABLE_MAX_DELAY "disable_max_delay"
-
-	
-	class NL300Instrument; // Forward referencing
-
-	class NL300ConfigEventListener : public ConfigEventListener {
-		public:
-			NL300ConfigEventListener(NL300Instrument*);
-			virtual ~NL300ConfigEventListener();
-			virtual void entryAdded(ConfigManager*, std::string);
-			virtual void entryRemoved(ConfigManager*, std::string);
-			virtual void keyAdded(ConfigManager*, ConfigEntry*, std::string);
-			virtual void keyRemoved(ConfigManager*, ConfigEntry*, std::string);
-			virtual void keyChanged(ConfigManager*, ConfigEntry*, std::string);
-		private:
-			void process(ConfigManager*, ConfigEntry*, std::string);
-		
-			NL300Instrument *instr;
 	};
 	
 	class NL300Instrument : public Instrument {

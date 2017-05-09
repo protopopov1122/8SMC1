@@ -24,241 +24,6 @@
 #include "StandartDeviceManager.h"
 
 namespace CalX {
-	
-	NL300Message::NL300Message(NL300MessageType type, std::string recv, std::string msg, std::string snd) {
-		this->type = type;
-		this->receiver = recv;
-		this->message = msg;
-		this->sender = snd;
-	}
-	
-	NL300Message::~NL300Message() {
-		
-	}
-	
-	NL300MessageType NL300Message::getType() {
-		return this->type;
-	}
-	
-	std::string NL300Message::getReceiver() {
-		return this->receiver;
-	}
-	
-	std::string NL300Message::getMessage() {
-		return this->message;
-	}
-	
-	std::string NL300Message::getSender() {
-		return this->sender;
-	}
-	
-	std::string NL300Message::toCommand() {
-		return "[" + this->receiver + ":" + this->message + "\\" + this->sender + "]";
-	}
-	
-	NL300Parameter::NL300Parameter(NL300ParameterType t) {
-		this->type = t;
-	}
-	
-	NL300Parameter::~NL300Parameter() {
-		
-	}
-	
-	NL300ParameterType NL300Parameter::getType() {
-		return this->type;
-	}
-	
-	int64_t NL300Parameter::getInt(int64_t def) {
-		if (this->type == NL300ParameterType::Integer) {
-			return ((NL300IntegerParameter*) this)->getValue();
-		} else {
-			return def;
-		}
-	}
-	
-	double NL300Parameter::getReal(double def) {
-		if (this->type == NL300ParameterType::Real) {
-			return ((NL300RealParameter*) this)->getValue();
-		} else {
-			return def;
-		}
-	}
-	
-	std::string NL300Parameter::getString(std::string def) {
-		if (this->type == NL300ParameterType::String) {
-			return ((NL300StringParameter*) this)->getValue();
-		} else {
-			return def;
-		}
-	}
-	
-	NL300IntegerParameter::NL300IntegerParameter(int64_t v)
-		: NL300Parameter::NL300Parameter(NL300ParameterType::Integer) {
-		this->value = v;
-	}
-	
-	NL300IntegerParameter::~NL300IntegerParameter() {
-		
-	}
-	
-	int64_t NL300IntegerParameter::getValue() {
-		return this->value;
-	}
-	
-	std::string NL300IntegerParameter::getString() {
-		return std::to_string(this->value);
-	}
-	
-	NL300RealParameter::NL300RealParameter(double v)
-		: NL300Parameter::NL300Parameter(NL300ParameterType::Real) {
-		this->value = v;
-	}
-	
-	NL300RealParameter::~NL300RealParameter() {
-		
-	}
-	
-	double NL300RealParameter::getValue() {
-		return this->value;
-	}
-	
-	std::string NL300RealParameter::getString() {
-		return std::to_string(this->value);
-	}
-	
-	NL300StringParameter::NL300StringParameter(std::string v)
-		: NL300Parameter::NL300Parameter(NL300ParameterType::String) {
-		this->value = v;	
-	}
-	
-	NL300StringParameter::~NL300StringParameter() {
-		
-	}
-	
-	std::string NL300StringParameter::getValue() {
-		return this->value;
-	}
-	
-	std::string NL300StringParameter::getString() {
-		return "=" + this->value;
-	}
-	
-	NL300NoneParameter::NL300NoneParameter()
-		: NL300Parameter::NL300Parameter(NL300ParameterType::None) {
-			
-	}
-	
-	NL300NoneParameter::~NL300NoneParameter() {
-		
-	}
-	
-	std::string NL300NoneParameter::getString() {
-		return "";
-	}
-
-	NL300SystemCommand::NL300SystemCommand(std::string recv, std::string com, std::string parm, std::string send)
-		: NL300Message::NL300Message(NL300MessageType::System, recv, com + (parm.empty() ? "" :  "=" + parm), send) {
-		this->command = com;
-		this->parameter = parm;
-	}
-	
-	NL300SystemCommand::~NL300SystemCommand() {
-		
-	}
-
-	std::string NL300SystemCommand::getCommand() {
-		return this->command;
-	}
-
-	std::string NL300SystemCommand::getParameter() {
-		return this->parameter;
-	}
-	
-	NL300GeneralCommand::NL300GeneralCommand(std::string recv, char array, uint16_t index,
-		NL300GeneralAction action, NL300Parameter *parm, std::string send)
-		: NL300Message::NL300Message(NL300MessageType::General, recv, array + std::to_string(index) + '/' +
-			static_cast<char>(action) + parm->getString(), send) {
-				
-		this->array = array;
-		this->index = index;
-		this->action = action;
-		this->parameter = parm;
-	}
-	
-	NL300GeneralCommand::~NL300GeneralCommand() {
-		delete this->parameter;
-	}
-	
-	char NL300GeneralCommand::getArray() {
-		return this->array;
-	}
-	
-	uint16_t NL300GeneralCommand::getIndex() {
-		return this->index;
-	}
-	
-	NL300GeneralAction NL300GeneralCommand::getAction() {
-		return this->action;
-	}
-	
-	NL300Parameter *NL300GeneralCommand::getParameter() {
-		return this->parameter;
-	}
-	
-	NL300ConfigEventListener::NL300ConfigEventListener(NL300Instrument *i) {
-		this->instr = i;
-	}
-	
-	NL300ConfigEventListener::~NL300ConfigEventListener() {
-		
-	}
-	
-	void NL300ConfigEventListener::entryAdded(ConfigManager *conf, std::string id) {
-		
-	}
-	
-	void NL300ConfigEventListener::entryRemoved(ConfigManager *conf, std::string id) {
-		
-	}
-	
-	void NL300ConfigEventListener::keyAdded(ConfigManager *conf, ConfigEntry *entry, std::string key) {
-		process(conf, entry, key);
-	}
-	
-	void NL300ConfigEventListener::keyRemoved(ConfigManager *conf, ConfigEntry *entry, std::string key) {
-		
-	}
-	
-	void NL300ConfigEventListener::keyChanged(ConfigManager *conf, ConfigEntry *entry, std::string key) {
-		process(conf, entry, key);
-	}
-	
-	void NL300ConfigEventListener::process(ConfigManager *conf, ConfigEntry *entry, std::string key) {
-		if (entry->getEntryName().compare(NL300_ENTRY_NAME) != 0) {
-			return;
-		}
-		if (key.compare(NL300_PACK_PULSES) == 0) {
-			int_conf_t value = entry->getInt(key, 1);
-			NL300GeneralCommand cmd(NL300_LASER_NAME, 'P', 0, NL300GeneralAction::Set, new NL300IntegerParameter(value), NL300_PC_NAME);
-			this->instr->writeMessage(cmd);
-		} else if (key.compare(NL300_MAX_OUTPUT_DELAY) == 0) {
-			int_conf_t value = entry->getInt(key, 1);
-			NL300GeneralCommand cmd(NL300_LASER_NAME, 'D', 0, NL300GeneralAction::Set, new NL300IntegerParameter(value), NL300_PC_NAME);
-			this->instr->writeMessage(cmd);
-		} else if (key.compare(NL300_ADJ_OUTPUT_DELAY) == 0) {
-			int_conf_t value = entry->getInt(key, 1);
-			NL300GeneralCommand cmd(NL300_LASER_NAME, 'D', 1, NL300GeneralAction::Set, new NL300IntegerParameter(value), NL300_PC_NAME);
-			this->instr->writeMessage(cmd);
-		} else if (key.compare(NL300_SYNC_OUT_DELAY) == 0) {
-			int_conf_t value = entry->getInt(key, 1);
-			NL300GeneralCommand cmd(NL300_LASER_NAME, 'D', 2, NL300GeneralAction::Set, new NL300IntegerParameter(value), NL300_PC_NAME);
-			this->instr->writeMessage(cmd);
-		} else if (key.compare(NL300_REPETITION_RATE_DIV) == 0) {
-			int_conf_t value = entry->getInt(key, 1);
-			NL300GeneralCommand cmd(NL300_LASER_NAME, 'F', 0, NL300GeneralAction::Set, new NL300IntegerParameter(value), NL300_PC_NAME);
-			this->instr->writeMessage(cmd);
-		}
-	}
 		
 	NL300Instrument::NL300Instrument(device_id_t id, StandartDeviceManager *devman)
 		: Instrument::Instrument() {
@@ -383,6 +148,7 @@ namespace CalX {
 		this->log("Changing instrument state to " + std::string(en ? "enabled" : "disabled"));
 		bool status = en ? start() : stop();
 		if (!status) {
+			this->log("Instrument state change failed");
 			return false;
 		}
 		
@@ -456,6 +222,7 @@ namespace CalX {
 			return false;
 		}
 		if (this->mode == mode) {
+			this->log("Mode was not changed to the same");
 			return true;
 		}
 		
@@ -463,6 +230,7 @@ namespace CalX {
 		this->log("Changing instrument mode to " + std::to_string(imode));
 		NL300GeneralCommand cmd(NL300_LASER_NAME, 'E', 0, NL300GeneralAction::Set, new NL300IntegerParameter(imode), NL300_PC_NAME);
 		if (!writeMessage(cmd)) {
+			this->log("Instrument mode change command failed");
 			return false;
 		}
 		if (getCoreEntry()->getBool(NL300_MODE_CHANGE_DELAY, true)) {
@@ -474,6 +242,7 @@ namespace CalX {
 			} else {
 				syncDelay = getCoreEntry()->getInt(NL300_CORE_OFF_DELAY, 400);
 			}
+			this->log("Mode change delay sleep " + std::to_string(syncDelay) + " ms");
 			Sleep(syncDelay);
 		}
 		
@@ -639,7 +408,8 @@ namespace CalX {
 		this->log("Writing to COM" + std::to_string(prms.port) + ": '" + stdStr + "'");
 		const char *data = stdStr.c_str();
 		DWORD feedback;
-		if(!WriteFile(handle, data, (DWORD) strlen(data), &feedback, 0) || feedback != (DWORD) strlen(data)) {
+		if(!WriteFile(handle, data, (DWORD) strlen(data), &feedback, 0)) {
+			this->log("Write to COM" + std::to_string(prms.port) + " failed: '" + stdStr + "'");
 			CloseHandle(handle);
 			handle = INVALID_HANDLE_VALUE;
 			this->errors.push_back("Error writing to COM" + std::to_string(prms.port));
@@ -651,19 +421,22 @@ namespace CalX {
 	}
 
 	int NL300Instrument::readSerial() {
+		this->log("Reading from COM" + std::to_string(prms.port));
 		if (this->handle == INVALID_HANDLE_VALUE) {
 			return EOF;
 		}
 
 		int chr;
 		DWORD feedback;
-		if (!ReadFile(this->handle, &chr, 1, &feedback, NULL) || feedback != (DWORD) 1) {
+		if (!ReadFile(this->handle, &chr, 1, &feedback, NULL)) {
+			this->log("Reading from to COM" + std::to_string(prms.port) + " failed");
 			CloseHandle(handle);
 			handle = INVALID_HANDLE_VALUE;
 			this->errors.push_back("Error reading from COM" + std::to_string(prms.port));
 			this->devman->saveInstrumentError();
 			return EOF;
 		}
+		this->log("Reading from to COM" + std::to_string(prms.port) + ": " + ((char) chr));
 		return chr;
 	}
 	
@@ -706,25 +479,31 @@ namespace CalX {
 	}
 	
 	std::pair<std::string, std::string> NL300Instrument::getSystemCommandResponse(NL300SystemCommand &syscom) {
+		this->log("Sending system command: " + syscom.toCommand());
 		bool b = writeMessage(syscom);
 		if (!b) {
+		this->log("Sending general command: " + syscom.toCommand());
 			return std::make_pair("", "");
 		}
 		NL300Message *res = readMessage();
 		if (res == nullptr) {
+			this->log("System command sending error");
 			return std::make_pair("", "");
 		}
+		this->log("System command response: " + res->toCommand());
 		if (res->getType() != NL300MessageType::System) {
 			delete res;
 			return std::make_pair("", "");
 		}
 		NL300SystemCommand *sysres = (NL300SystemCommand*) res;
 		std::pair<std::string, std::string> out = make_pair(sysres->getCommand(), sysres->getParameter());
+		this->log("System command response: <" + out.first + ", " + out.second + ">");
 		delete sysres;
 		return out;
 	}
 	
 	std::string NL300Instrument::getSystemCommandResponse(std::string cmd, std::string def) {
+		this->log("Sending system command: " + cmd + "; " + def);
 		NL300SystemCommand syscom(NL300_LASER_NAME, cmd, "", NL300_PC_NAME);
 		std::pair<std::string, std::string> res = getSystemCommandResponse(syscom);
 		if (res.first.compare(cmd) == 0) {
@@ -736,12 +515,15 @@ namespace CalX {
 	
 	NL300GeneralCommand *NL300Instrument::inquireGeneralParameter(char array, uint16_t index) {
 		NL300GeneralCommand cmd(NL300_LASER_NAME, array, index, NL300GeneralAction::Inquiry, new NL300NoneParameter(), NL300_PC_NAME);
+		this->log("Sending general command: " + cmd.toCommand());
 		bool b = writeMessage(cmd);
 		if (!b) {
+			this->log("General command sending error");	
 			return nullptr;
 		}
 		NL300Message *res = readMessage();
 		if (res == nullptr) {	
+			this->log("General command sending error");	
 			return nullptr;
 		}
 		if (res->getType() != NL300MessageType::General) {
@@ -749,6 +531,7 @@ namespace CalX {
 			return nullptr;
 		}
 		NL300GeneralCommand *gencom = (NL300GeneralCommand*) res;
+		this->log("Received general command response: " + gencom->toCommand());
 		if (gencom->getArray() != array ||
 			gencom->getIndex() != index ||
 			gencom->getAction() != NL300GeneralAction::Set) {
