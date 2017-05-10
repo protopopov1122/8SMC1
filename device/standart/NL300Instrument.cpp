@@ -408,13 +408,14 @@ namespace CalX {
 		this->log("Writing to COM" + std::to_string(prms.port) + ": '" + stdStr + "'");
 		const char *data = stdStr.c_str();
 		DWORD feedback;
-		if(!WriteFile(handle, data, (DWORD) strlen(data), &feedback, 0)) {
-			this->log("Write to COM" + std::to_string(prms.port) + " failed: '" + stdStr + "'");
+		if(!WriteFile(handle, data, (DWORD) strlen(data), &feedback, 0) || feedback != strlen(data)) {
+			/* this->log("Write to COM" + std::to_string(prms.port) + " failed: '" + stdStr + "'");
 			CloseHandle(handle);
 			handle = INVALID_HANDLE_VALUE;
 			this->errors.push_back("Error writing to COM" + std::to_string(prms.port));
 			this->devman->saveInstrumentError();
-			return false;
+			return false;*/
+			this->log("COM" + std::to_string(prms.port) + " write error, feedback: " + std::to_string(feedback));
 		}
 		this->log("Write finished");
 		return true;
@@ -428,13 +429,14 @@ namespace CalX {
 
 		int chr;
 		DWORD feedback;
-		if (!ReadFile(this->handle, &chr, 1, &feedback, NULL)) {
-			this->log("Reading from to COM" + std::to_string(prms.port) + " failed");
+		if (!ReadFile(this->handle, &chr, 1, &feedback, NULL) || feedback != 1) {
+			/*this->log("Reading from to COM" + std::to_string(prms.port) + " failed");
 			CloseHandle(handle);
 			handle = INVALID_HANDLE_VALUE;
 			this->errors.push_back("Error reading from COM" + std::to_string(prms.port));
 			this->devman->saveInstrumentError();
-			return EOF;
+			return EOF;*/
+			this->log("COM" + std::to_string(prms.port) + " read error, feedback: " + std::to_string(feedback));
 		}
 		this->log("Reading from to COM" + std::to_string(prms.port) + ": " + ((char) chr));
 		return chr;
