@@ -159,7 +159,7 @@ namespace CalX {
 
 	bool NL300Instrument::start() {
 		std::string res = getSystemCommandResponse("START", "error");
-		if (!res.empty()) {
+		if (!res.empty()&& res.compare("0") != 0) {
 			if (res.compare("1") == 0) {
 				this->errors.push_back("NL300 start error: laser not ready");
 			} else if (res.compare("2") == 0) {
@@ -192,8 +192,8 @@ namespace CalX {
 
 	bool NL300Instrument::stop() {
 		NL300SystemCommand syscom(NL300_LASER_NAME, "STOP", "", NL300_PC_NAME);
-		std::pair<std::string, std::string> res = getSystemCommandResponse(syscom);
-		bool result = !res.first.empty();
+		writeMessage(syscom);
+		std::pair<std::string, std::string> res = std::make_pair("NOTREADY", "");
 		while (res.first.compare("NOTREADY") == 0) {
 			if (getCoreEntry()->getBool(NL300_CORE_DISABLE_DELAY, true)) {
 				int syncDelay = 0;
@@ -206,10 +206,10 @@ namespace CalX {
 				}
 				Sleep(syncDelay);
 			}
-			NL300SystemCommand syscom2(NL300_LASER_NAME, "SAY", "", NL300_PC_NAME);
-			res = getSystemCommandResponse(syscom2);
+			NL300SystemCommand syscom3(NL300_LASER_NAME, "SAY", "", NL300_PC_NAME);
+			res = getSystemCommandResponse(syscom3);
 		}
-		return result;
+		return true;
 	}
 	
 	InstrumentMode NL300Instrument::getMode() {
@@ -422,7 +422,6 @@ namespace CalX {
 	}
 
 	int NL300Instrument::readSerial() {
-		this->log("Reading from COM" + std::to_string(prms.port));
 		if (this->handle == INVALID_HANDLE_VALUE) {
 			return EOF;
 		}
@@ -438,7 +437,6 @@ namespace CalX {
 			return EOF;*/
 			this->log("COM" + std::to_string(prms.port) + " read error, feedback: " + std::to_string(feedback));
 		}
-		this->log("Reading from to COM" + std::to_string(prms.port) + ": " + ((char) chr));
 		return chr;
 	}
 	
