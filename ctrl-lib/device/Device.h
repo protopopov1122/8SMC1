@@ -24,6 +24,7 @@
 #include "ctrl-lib/CtrlCore.h"
 #include "ctrl-lib/ConfigManager.h"
 #include <cinttypes>
+#include <mutex>
 #include <string>
 
 /* This file contains definitions of Device and Instrument classes.
@@ -88,6 +89,9 @@ namespace CalX {
 			Device(DeviceType);
 			virtual ~Device();
 			DeviceType getType();
+			void lock();
+			void unlock();
+			bool tryLock();
 			virtual device_id_t getID();
 			virtual bool hasErrors();
 			virtual std::string pollError();
@@ -103,6 +107,7 @@ namespace CalX {
 			std::vector<std::string> errors;
 		private:
 			DeviceType type;
+			std::mutex dev_mutex;
 	};
 	
 	class Motor : public Device {

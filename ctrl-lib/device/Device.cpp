@@ -29,7 +29,6 @@ namespace CalX {
 	}
 	
 	Device::~Device() {
-		
 	}
 	
 	DeviceType Device::getType() {
@@ -59,6 +58,16 @@ namespace CalX {
 	
 	void Device::log(std::string msg) {
 		LOG("Device #" + std::to_string(this->getID()), msg);
+	}
+	
+	void Device::lock() {
+	}
+	
+	void Device::unlock() {
+	}
+	
+	bool Device::tryLock() {
+		return true;
 	}
 	
 	Motor::Motor()

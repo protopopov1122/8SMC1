@@ -136,12 +136,15 @@ namespace CalX {
 	}
 	
 	bool NL300Instrument::enable(bool en) {
+		lock();
 		if (handle == INVALID_HANDLE_VALUE) {
 			this->log("Enable error: instrument closed");
+			unlock();
 			return false;
 		}
 		if (en == enabled()) {
 			this->log("Enable: state not changed");
+			unlock();
 			return true;
 		}
 		
@@ -149,11 +152,13 @@ namespace CalX {
 		bool status = en ? start() : stop();
 		if (!status) {
 			this->log("Instrument state change failed");
+			unlock();
 			return false;
 		}
 		
 		state = en;
 		this->log("Instrument state changed to " + std::string(en ? "enabled" : "disabled"));
+		unlock();
 		return true;
 	}
 
@@ -217,12 +222,15 @@ namespace CalX {
 	}
 	
 	bool NL300Instrument::setMode(InstrumentMode mode) {
+		lock();
 		if (handle == INVALID_HANDLE_VALUE) {
 			this->log("Set mode error: instrument closed");
+			unlock();
 			return false;
 		}
 		if (this->mode == mode) {
 			this->log("Mode was not changed to the same");
+			unlock();
 			return true;
 		}
 		
@@ -231,6 +239,7 @@ namespace CalX {
 		NL300GeneralCommand cmd(NL300_LASER_NAME, 'E', 0, NL300GeneralAction::Set, new NL300IntegerParameter(imode), NL300_PC_NAME);
 		if (!writeMessage(cmd)) {
 			this->log("Instrument mode change command failed");
+			unlock();
 			return false;
 		}
 		if (getCoreEntry()->getBool(NL300_MODE_CHANGE_DELAY, true)) {
@@ -248,6 +257,7 @@ namespace CalX {
 		
 		this->mode = mode;
 		this->log("Mode changed to " + std::to_string(imode));
+		unlock();
 		return true;
 	}
 	

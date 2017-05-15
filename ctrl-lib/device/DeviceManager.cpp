@@ -97,4 +97,14 @@ namespace CalX {
 		LOG("DevMan", msg);
 	}
 	
+	void DeviceManager::lock() {
+	}
+	
+	void DeviceManager::unlock() {
+	}
+	
+	bool DeviceManager::tryLock() {
+		return true;
+	}
+	
 }

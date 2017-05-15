@@ -26,6 +26,7 @@
 #include <vector>
 #include <string>
 #include <cinttypes>
+#include <mutex>
 #include "platform.h"
 #include "Device.h"
 
@@ -51,6 +52,9 @@ namespace CalX {
 			virtual bool canMotorConnect(DeviceConnectionType);
 			virtual bool canInstrumentConnect(DeviceConnectionType);
 			virtual bool loadConfiguration(std::string, ConfigManager*);
+			void lock();
+			void unlock();
+			bool tryLock();
 		protected:
 			virtual void log(std::string);
 		
@@ -60,6 +64,8 @@ namespace CalX {
 			
 			std::vector<DeviceConnectionType> devConType;
 			std::vector<DeviceConnectionType> instrConType;
+		private:
+			std::mutex devman_mutex;
 	};
 	
 	/* Used as exported function in Device API implementations.*/

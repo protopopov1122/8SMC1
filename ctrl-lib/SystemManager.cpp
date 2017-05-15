@@ -180,7 +180,6 @@ namespace CalX {
 		if (i == nullptr) {
 			return nullptr;
 		}
-		devman->refresh();
 		InstrumentController *ctrl = new InstrumentController(i);
 		this->instr.push_back(ctrl);
 		LOG(SYSMAN_TAG, "Connected new instrument #" + std::to_string(this->instr.size() - 1));

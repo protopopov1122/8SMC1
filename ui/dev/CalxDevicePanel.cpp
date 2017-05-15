@@ -30,6 +30,8 @@
 namespace CalXUI {
 	
 	wxDEFINE_EVENT(wxEVT_DEVICE_PANEL_UPDATE, wxThreadEvent);
+	wxDEFINE_EVENT(wxEVT_DEVICE_PANEL_MOTOR_APPEND, wxThreadEvent);
+	wxDEFINE_EVENT(wxEVT_DEVICE_PANEL_INSTR_APPEND, wxThreadEvent);
 	
 	class CalxInstrumentSerialConnectProvider : public RequestProvider {
 		public:
@@ -179,7 +181,7 @@ namespace CalXUI {
 					wxMessageBox(__("Motor can't be connected"),
 						__("Connection error"), wxICON_WARNING);
 				} else {
-					panel->requestUpdate();
+					panel->requestAppend(ctrl);
 				}
 			}
 			
@@ -206,7 +208,7 @@ namespace CalXUI {
 					wxMessageBox(__("Instrument can't be connected"),
 						__("Connection error"), wxICON_WARNING);
 				} else {
-					panel->requestUpdate();
+					panel->requestAppend(ctrl);
 				}
 			}
 			
@@ -255,11 +257,13 @@ namespace CalXUI {
 		
 		this->SetSizer(sizer);
 		
-		updateUI();
+		fullUpdate();
 		Layout();
         	this->SetScrollRate(5, 5);
 		Bind(wxEVT_CLOSE_WINDOW, &CalxDevicePanel::OnExit, this);
 		Bind(wxEVT_DEVICE_PANEL_UPDATE, &CalxDevicePanel::OnDevicePanelUpdate, this);
+		Bind(wxEVT_DEVICE_PANEL_MOTOR_APPEND, &CalxDevicePanel::OnDevicePanelMotorAppend, this);
+		Bind(wxEVT_DEVICE_PANEL_INSTR_APPEND, &CalxDevicePanel::OnDevicePanelInstrAppend, this);
 		this->queue->Run();
 	}
 	
@@ -295,7 +299,7 @@ namespace CalXUI {
 		return false;
 	}
 	
-	void CalxDevicePanel::updateUI() {
+	void CalxDevicePanel::fullUpdate() {
 		for (const auto& dev : devs) {
 			dev->stop();
 			dev->Close(true);
@@ -327,8 +331,36 @@ namespace CalXUI {
 		Layout();
 	}
 	
+	void CalxDevicePanel::updateUI() {
+		Layout();
+	}
+	
+	void CalxDevicePanel::append(MotorController *_ctrl) {
+		CalxMotorCtrl *ctrl = new CalxMotorCtrl(this, wxID_ANY, _ctrl);
+		devs.push_back(ctrl);
+		GetSizer()->Add(ctrl, 0, wxEXPAND | wxALL, 10);
+	}
+	
+	void CalxDevicePanel::append(InstrumentController *_ctrl) {
+		CalxInstrumentCtrl *ctrl = new CalxInstrumentCtrl(this, wxID_ANY, _ctrl);
+		instrs.push_back(ctrl);
+		GetSizer()->Add(ctrl, 0, wxEXPAND | wxALL, 10);
+	}
+	
 	void CalxDevicePanel::requestUpdate() {
 		wxThreadEvent evt(wxEVT_DEVICE_PANEL_UPDATE);
+		wxPostEvent(this, evt);
+	}
+	
+	void CalxDevicePanel::requestAppend(MotorController *ctrl) {
+		wxThreadEvent evt(wxEVT_DEVICE_PANEL_MOTOR_APPEND);
+		evt.SetPayload(ctrl);
+		wxPostEvent(this, evt);
+	}
+	
+	void CalxDevicePanel::requestAppend(InstrumentController *ctrl) {
+		wxThreadEvent evt(wxEVT_DEVICE_PANEL_INSTR_APPEND);
+		evt.SetPayload(ctrl);
 		wxPostEvent(this, evt);
 	}
 	
@@ -367,6 +399,20 @@ namespace CalXUI {
 	}
 	
 	void CalxDevicePanel::OnDevicePanelUpdate(wxThreadEvent &evt) {
+		updateUI();
+		Refresh();
+	}
+	
+	void CalxDevicePanel::OnDevicePanelMotorAppend(wxThreadEvent &evt) {
+		MotorController *ctrl = evt.GetPayload<MotorController*>();
+		append(ctrl);
+		updateUI();
+		Refresh();
+	}
+	
+	void CalxDevicePanel::OnDevicePanelInstrAppend(wxThreadEvent &evt) {
+		InstrumentController *ctrl = evt.GetPayload<InstrumentController*>();
+		append(ctrl);
 		updateUI();
 		Refresh();
 	}
