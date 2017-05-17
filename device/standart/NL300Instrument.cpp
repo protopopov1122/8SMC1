@@ -163,8 +163,14 @@ namespace CalX {
 	}
 
 	bool NL300Instrument::start() {
-		std::string res = getSystemCommandResponse("START", "error");
-		if (!res.empty()&& res.compare("0") != 0) {
+		// std::string res = getSystemCommandResponse("START", "error");
+		NL300SystemCommand syscom(NL300_LASER_NAME, "START", "", NL300_PC_NAME);
+		std::pair<std::string, std::string> response = getSystemCommandResponse(syscom);
+		std::string res = response.second;
+		std::string rescom = response.first;
+		if (!res.empty()&& res.compare("0") != 0 &&
+			rescom.compare("START") != 0 &&
+			rescom.compare("READY") != 0) {
 			if (res.compare("1") == 0) {
 				this->errors.push_back("NL300 start error: laser not ready");
 			} else if (res.compare("2") == 0) {
