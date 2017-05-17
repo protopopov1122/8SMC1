@@ -90,6 +90,7 @@ namespace CalXUI {
 	}
 			
 	void CalxCoordMoveAction::perform(SystemManager *sysman) {
+		handle->open_session();
 		this->ctrl->setMaster(true);
 		if (relative) {
 			wxGetApp().getErrorHandler()->handle(handle->relativeMove(dest, speed, div, jump));
@@ -97,6 +98,7 @@ namespace CalXUI {
 			wxGetApp().getErrorHandler()->handle(handle->move(dest, speed, div, jump));
 		}
 		this->ctrl->setMaster(false);
+		handle->close_session();
 	}
 			
 	void CalxCoordMoveAction::stop() {
@@ -122,6 +124,7 @@ namespace CalXUI {
 	}
 			
 	void CalxCoordArcAction::perform(SystemManager *sysman) {
+		handle->open_session();
 		ctrl->setMaster(true);
 		if (relative) {
 			wxGetApp().getErrorHandler()->handle(handle->relativeArc(dest, cen, splitter, speed, div, clockwise));
@@ -129,6 +132,7 @@ namespace CalXUI {
 			wxGetApp().getErrorHandler()->handle(handle->arc(dest, cen, splitter, speed, div, clockwise));
 		}
 		ctrl->setMaster(false);
+		handle->close_session();
 	}
 			
 	void CalxCoordArcAction::stop() {
@@ -148,9 +152,11 @@ namespace CalXUI {
 	}
 			
 	void CalxCoordGraphAction::perform(SystemManager *sysman) {
+		handle->open_session();
 		ctrl->setMaster(true);
 		wxGetApp().getErrorHandler()->handle(builder->build(sysman, handle, translator, speed, &state));
 		ctrl->setMaster(false);
+		handle->close_session();
 	}
 			
 	void CalxCoordGraphAction::stop() {
@@ -192,9 +198,11 @@ namespace CalXUI {
 	}
 			
 	void CalxCoordCalibrateAction::perform(SystemManager *sysman) {
+		handle->open_session();
 		this->ctrl->setMaster(true);
 		wxGetApp().getErrorHandler()->handle(handle->calibrate(trailer));
 		this->ctrl->setMaster(false);
+		handle->close_session();
 	}
 			
 	void CalxCoordCalibrateAction::stop() {
@@ -212,9 +220,11 @@ namespace CalXUI {
 	}
 			
 	void CalxCoordMeasureAction::perform(SystemManager *sysman) {
+		handle->open_session();
 		this->ctrl->setMaster(true);
 		wxGetApp().getErrorHandler()->handle(handle->getController()->measure(trailer));
 		this->ctrl->setMaster(false);
+		handle->close_session();
 	}
 			
 	void CalxCoordMeasureAction::stop() {

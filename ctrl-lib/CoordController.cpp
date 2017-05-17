@@ -120,7 +120,7 @@ namespace CalX {
 		
 		if (this->instr != nullptr && sync) {
 			this->instr->use();
-			ErrorCode errcode = this->instr->enable(true);
+			ErrorCode errcode = this->instr->enable(sync);
 			if (errcode != ErrorCode::NoError) {
 				xAxis->unuse();
 				yAxis->unuse();
@@ -162,7 +162,6 @@ namespace CalX {
 					yAxis->stop();
 		
 					if (this->instr != nullptr && sync) {
-						this->instr->enable(false);
 						this->instr->unuse();
 					}
 					
@@ -184,7 +183,6 @@ namespace CalX {
 					yAxis->stop();
 		
 					if (this->instr != nullptr && sync) {
-						this->instr->enable(false);
 						this->instr->unuse();
 					}
 					
@@ -203,7 +201,6 @@ namespace CalX {
 		
 		ErrorCode errcode = ErrorCode::NoError;
 		if (this->instr != nullptr && sync) {
-			errcode = this->instr->enable(false);
 			this->instr->unuse();
 		}
 		xAxis->sendMovedEvent(xmevt);
@@ -540,5 +537,22 @@ namespace CalX {
 	
 	CoordPlane *CoordController::clone(CoordPlane *base) {
 		return new CoordController(this->xAxis, this->yAxis, this->config, this->instr);
-	}	
+	}
+	
+	ErrorCode CoordController::open_session() {
+		use();
+		std::cout << "Open session" << std::endl;
+		return ErrorCode::NoError;
+	}
+	
+	ErrorCode CoordController::close_session() {
+		ErrorCode err = ErrorCode::NoError;
+		std::cout << "Close session" << std::endl;
+		if (this->instr != nullptr &&
+			this->instr->isEnabled()) {
+			err = this->instr->enable(false);
+		}
+		unuse();
+		return err;
+	}
 }

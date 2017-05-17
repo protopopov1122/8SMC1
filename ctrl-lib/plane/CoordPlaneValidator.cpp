@@ -135,4 +135,12 @@ namespace CalX {
 	CoordPlane *CoordPlaneValidator::clone(CoordPlane *base) {
 		return new CoordPlaneValidator(this->min, this->max, this->max_speed, base);
 	}
+	
+	ErrorCode CoordPlaneValidator::open_session() {
+		return this->plane->open_session();
+	}
+	
+	ErrorCode CoordPlaneValidator::close_session() {
+		return this->plane->close_session();
+	}
 }

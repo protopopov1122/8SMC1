@@ -46,9 +46,11 @@ namespace CalXUI {
 			}
 			
 			virtual void perform(SystemManager *sysman) {
+				handle->open_session();
 				panel->setEnabled(false);
 				wxGetApp().getErrorHandler()->handle(task->perform(handle, prms, sysman, &state));
 				panel->setEnabled(true);
+				handle->close_session();
 			}
 			
 			virtual void stop() {

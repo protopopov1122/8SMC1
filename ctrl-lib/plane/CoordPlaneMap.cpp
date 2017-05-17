@@ -135,4 +135,12 @@ namespace CalX {
 	CoordPlane *CoordPlaneMap::clone(CoordPlane *base) {
 		return new CoordPlaneMap(this->offset, this->scale, this->speedScale, base);
 	}
+	
+	ErrorCode CoordPlaneMap::open_session() {
+		return this->plane->open_session();
+	}
+	
+	ErrorCode CoordPlaneMap::close_session() {
+		return this->plane->close_session();
+	}
 }

@@ -58,6 +58,8 @@ namespace CalX {
 			virtual void stop() = 0;
 			virtual void dump(std::ostream&) = 0;
 			virtual CoordPlane *clone(CoordPlane*) = 0;
+			virtual ErrorCode open_session() {return ErrorCode::NoError;}
+			virtual ErrorCode close_session() {return ErrorCode::NoError;}
 	};
 		
 	struct TaskState {
@@ -89,6 +91,8 @@ namespace CalX {
 			virtual void stop();
 			virtual void dump(std::ostream&);
 			virtual CoordPlane *clone(CoordPlane*);
+			virtual ErrorCode open_session();
+			virtual ErrorCode close_session();
 		private:
 			CoordPlane *base;
 			bool work;
@@ -115,6 +119,8 @@ namespace CalX {
 			void kill();
 			virtual void dump(std::ostream&);
 			virtual CoordPlane *clone(CoordPlane*);
+			virtual ErrorCode open_session();
+			virtual ErrorCode close_session();
 			
 			void addEventListener(CoordEventListener*);
 			void removeEventListener(CoordEventListener*);
@@ -165,6 +171,8 @@ namespace CalX {
 			virtual void stop();
 			virtual void dump(std::ostream&);
 			virtual CoordPlane *clone(CoordPlane*);
+			virtual ErrorCode open_session();
+			virtual ErrorCode close_session();
 		private:
 			CoordPlane *plane;
 			std::ostream *out;
@@ -198,6 +206,8 @@ namespace CalX {
 			virtual void stop();
 			virtual void dump(std::ostream&);
 			virtual CoordPlane *clone(CoordPlane*);
+			virtual ErrorCode open_session();
+			virtual ErrorCode close_session();
 		private:
 			CoordPlane* plane;
 			motor_point_t offset;
@@ -230,6 +240,8 @@ namespace CalX {
 			virtual void stop();
 			virtual void dump(std::ostream&);
 			virtual CoordPlane *clone(CoordPlane*);
+			virtual ErrorCode open_session();
+			virtual ErrorCode close_session();
 		private:
 			CoordPlane *plane;
 			motor_point_t min;
@@ -260,6 +272,8 @@ namespace CalX {
 			virtual void stop();
 			virtual void dump(std::ostream&);
 			virtual CoordPlaneStack *clone(CoordPlane*);
+			virtual ErrorCode open_session();
+			virtual ErrorCode close_session();
 		private:
 			std::vector<CoordPlane*> stack;
 	};
@@ -278,6 +292,8 @@ namespace CalX {
 			virtual motor_rect_t getSize();
 			virtual bool isMeasured();
 			virtual CoordPlane *clone(CoordPlane*) = 0;
+			virtual ErrorCode open_session();
+			virtual ErrorCode close_session();
 			
 			virtual void use();
 			virtual void unuse();

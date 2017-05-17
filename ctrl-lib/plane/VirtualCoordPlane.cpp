@@ -124,4 +124,12 @@ namespace CalX {
 	
 	void VirtualCoordPlane::stop() {
 	}
+	
+	ErrorCode VirtualCoordPlane::open_session() {
+		return ErrorCode::NoError;
+	}
+	
+	ErrorCode VirtualCoordPlane::close_session() {
+		return ErrorCode::NoError;
+	}
 }

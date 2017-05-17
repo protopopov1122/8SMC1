@@ -114,4 +114,12 @@ namespace CalX {
 		}
 		return stack;
 	}
+	
+	ErrorCode CoordPlaneStack::open_session() {
+		return this->peekPlane()->open_session();
+	}
+	
+	ErrorCode CoordPlaneStack::close_session() {
+		return this->peekPlane()->close_session();
+	}
 }

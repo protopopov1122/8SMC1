@@ -56,6 +56,7 @@ namespace CalX {
             delete this->dev.at((size_t) d);
 		}
 		delete this->conf;
+		LOG(SYSMAN_TAG, "Sysman exited");
 		DESTROY_LOG("SystemManager");
 	}
 
