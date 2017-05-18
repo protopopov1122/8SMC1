@@ -541,18 +541,18 @@ namespace CalX {
 	
 	ErrorCode CoordController::open_session() {
 		use();
-		std::cout << "Open session" << std::endl;
+		LOG("CoordController", "Session opened");
 		return ErrorCode::NoError;
 	}
 	
 	ErrorCode CoordController::close_session() {
 		ErrorCode err = ErrorCode::NoError;
-		std::cout << "Close session" << std::endl;
 		if (this->instr != nullptr &&
 			this->instr->isEnabled()) {
 			err = this->instr->enable(false);
 		}
 		unuse();
+		LOG("CoordController", "Session closed");
 		return err;
 	}
 }
