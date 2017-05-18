@@ -58,7 +58,7 @@ namespace CalX {
 			NL300Message *readMessage();
 		private:
 			bool writeSerial(std::string);
-			int readSerial();
+			int readSerial(bool*);
 			bool start();
 			bool stop();
 			

@@ -118,7 +118,7 @@ namespace CalX {
 		yAxis->use();
 		
 		
-		if (this->instr != nullptr && sync) {
+		if (this->instr != nullptr) {
 			this->instr->use();
 			ErrorCode errcode = this->instr->enable(sync);
 			if (errcode != ErrorCode::NoError) {
@@ -200,7 +200,7 @@ namespace CalX {
 		}
 		
 		ErrorCode errcode = ErrorCode::NoError;
-		if (this->instr != nullptr && sync) {
+		if (this->instr != nullptr) {
 			this->instr->unuse();
 		}
 		xAxis->sendMovedEvent(xmevt);

@@ -209,6 +209,8 @@ namespace CalX {
 	bool NL300Instrument::stop() {
 		NL300SystemCommand syscom(NL300_LASER_NAME, "STOP", "", NL300_PC_NAME);
 		writeMessage(syscom);
+		NL300Message *msg = readMessage();
+		delete msg;
 		std::pair<std::string, std::string> res = std::make_pair("NOTREADY", "");
 		while (res.first.compare("NOTREADY") == 0) {
 			if (getCoreEntry()->getBool(NL300_CORE_DISABLE_DELAY, true)) {
@@ -283,8 +285,13 @@ namespace CalX {
 		char mesg[MAX_LEN];
 		size_t offset = 0;
 		char chr;
+		bool timeout;
 		do {
-			chr = readSerial();
+			timeout = false;
+			chr = readSerial(&timeout);
+			if (timeout) {
+				return nullptr;
+			}
 			if (chr == EOF) {
 				return nullptr;
 			}
@@ -442,7 +449,7 @@ namespace CalX {
 		return true;
 	}
 
-	int NL300Instrument::readSerial() {
+	int NL300Instrument::readSerial(bool *timeout) {
 		if (this->handle == INVALID_HANDLE_VALUE) {
 			return EOF;
 		}
@@ -457,6 +464,7 @@ namespace CalX {
 			this->devman->saveInstrumentError();
 			return EOF;*/
 			this->log("COM" + std::to_string(prms.port) + " read error, feedback: " + std::to_string(feedback));
+			*timeout = true;
 		}
 		return chr;
 	}
