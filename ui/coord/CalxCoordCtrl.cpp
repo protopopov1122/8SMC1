@@ -450,4 +450,20 @@ namespace CalXUI {
 		setEnabled(evt.GetPayload<bool>());
 		wxGetApp().getMainFrame()->getPanel()->getTasks()->updateUI();
 	}
+	
+	void CalxCoordCtrl::OnPositionChangeClick(wxCommandEvent &evt) {
+		CalxCoordPositionCtrl *posCtrl = this->otherCtrl->getPositionController();
+		if (!this->ctrl->isMeasured()) {
+			wxMessageBox(__("Plane need to be measured before relative position change"), __("Warning"), wxICON_WARNING);
+			return;
+		}
+		
+		motor_rect_t size = this->ctrl->getSize();
+		motor_coord_t x = (motor_coord_t) (((double) size.w) * posCtrl->getXPosition()) + size.x;
+		motor_coord_t y = (motor_coord_t) (((double) size.h) * posCtrl->getYPosition()) + size.y;
+		int speed = posCtrl->getSpeed();
+		int div = posCtrl->getDivisor();
+		motor_point_t dest = {x, y};
+		this->queue->addAction(new CalxCoordMoveAction(this, ctrl, false, false, dest, speed, div));
+	}
 }

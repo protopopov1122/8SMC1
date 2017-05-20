@@ -63,6 +63,16 @@ namespace CalXUI {
 		measureTrailer->SetSelection(0);
 		measureSizer->Add(measureTrailer, 0, wxALL);
 		
+		wxCollapsiblePane  *posCollPane = new wxCollapsiblePane(this, wxID_ANY, __("Position"));
+		wxWindow *posPane = posCollPane->GetPane();
+		sizer->Add(posCollPane, 0, wxALL | wxEXPAND);
+		wxBoxSizer *posSizer = new wxBoxSizer(wxVERTICAL);
+		posPane->SetSizer(posSizer);
+		posCollPane->Bind(wxEVT_COLLAPSIBLEPANE_CHANGED, &CalxCoordCtrl::OnInterfaceUpdate, ctrl);
+		this->posCtrl = new CalxCoordPositionCtrl(posPane, wxID_ANY);
+		posSizer->Add(this->posCtrl);
+		this->posCtrl->getMoveButton()->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnPositionChangeClick, ctrl);
+		
 		wxCollapsiblePane  *filtersCollPane = new wxCollapsiblePane(this, wxID_ANY, __("Filters"));
 		wxWindow *filtersPane = filtersCollPane->GetPane();
 		sizer->Add(filtersCollPane, 1, wxALL | wxEXPAND);

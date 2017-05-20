@@ -30,6 +30,7 @@
 #include <wx/collpane.h>
 #include "CalxActionQueue.h"
 #include "CalxFrame.h"
+#include "CalxCoordPositionCtrl.h"
 
 using namespace CalX;
 
@@ -82,6 +83,7 @@ namespace CalXUI {
 			int getMaxX() {return maxx->GetValue();}
 			int getMaxY() {return maxy->GetValue();}
 			int getSpeed() {return speed->GetValue();}
+			CalxCoordPositionCtrl *getPositionController() {return this->posCtrl;}
 		private:
 			void init();
 			CalxCoordCtrl *ctrl;
@@ -99,6 +101,7 @@ namespace CalXUI {
 			wxSpinCtrl *maxx;
 			wxSpinCtrl *maxy;
 			wxSpinCtrl *speed;
+			CalxCoordPositionCtrl *posCtrl;
 	};
 	
 }

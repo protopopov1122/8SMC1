@@ -66,6 +66,7 @@ namespace CalXUI {
 			void OnUpdateFiltersClick(wxCommandEvent&);
 			void OnInstrumentEnableClick(wxCommandEvent&);
 			void OnInterfaceUpdate(wxCollapsiblePaneEvent&);
+			void OnPositionChangeClick(wxCommandEvent&);
 			void use();
 			void unuse();
 			bool isUsed();
