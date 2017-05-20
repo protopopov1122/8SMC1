@@ -25,6 +25,8 @@
 
 namespace CalXUI {
 	
+	wxDEFINE_EVENT(wxEVT_WATCHER_APPEND_POINT, wxThreadEvent);
+	
 	CalxCoordPlaneWatcherTimer::CalxCoordPlaneWatcherTimer(CalxCoordPlaneWatcher *watcher, CoordHandle *handle)
 		: wxTimer::wxTimer() {
 		this->watcher = watcher;
@@ -32,7 +34,11 @@ namespace CalXUI {
 	}
 	
 	void CalxCoordPlaneWatcherTimer::Notify() {
-		watcher->add(handle->getController()->getPosition(), true);
+		std::pair<motor_point_t, bool> pair = std::make_pair(handle->getController()->getPosition(), true);
+		wxThreadEvent evt(wxEVT_WATCHER_APPEND_POINT);
+		evt.SetPayload(pair);
+		wxPostEvent(watcher, evt);
+		watcher->Refresh();
 	}
 	
 	CalxCoordPlaneWatcherEvent::CalxCoordPlaneWatcherEvent(CalxCoordPlaneWatcher *w) {
@@ -43,8 +49,11 @@ namespace CalXUI {
 		
 	}
 	
-	void CalxCoordPlaneWatcherEvent::moved(CoordMoveEvent &evt) {
-		this->watcher->add(evt.destination, evt.synchrone);
+	void CalxCoordPlaneWatcherEvent::moved(CoordMoveEvent &evnt) {      
+		std::pair<motor_point_t, bool> pair = std::make_pair(evnt.destination, evnt.synchrone);
+		wxThreadEvent evt(wxEVT_WATCHER_APPEND_POINT);
+		evt.SetPayload(pair);
+		wxPostEvent(watcher, evt);
 	}
 	
 	CalxCoordPlaneWatcher::CalxCoordPlaneWatcher(wxWindow *win, wxWindowID id, wxSize min, CoordHandle *handle)
@@ -58,10 +67,11 @@ namespace CalXUI {
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxCoordPlaneWatcher::OnExit, this);
 		this->Bind(wxEVT_PAINT, &CalxCoordPlaneWatcher::OnPaintEvent, this);
 		this->Bind(wxEVT_SIZE, &CalxCoordPlaneWatcher::OnResizeEvent, this);
+		this->Bind(wxEVT_WATCHER_APPEND_POINT, &CalxCoordPlaneWatcher::OnAppendEvent, this);
 		
 		this->history.push_back(std::make_pair(this->handle->getController()->getPosition(), false));
 		
-		int_conf_t interval = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getInt("watcher_interval", 500);
+		int_conf_t interval = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getInt("watcher_interval", 5);
 		if (interval != -1) {
 			this->timer = new CalxCoordPlaneWatcherTimer(this, this->handle);
             this->timer->Start((int) interval);
@@ -88,7 +98,6 @@ namespace CalXUI {
 			}
 		}
 		this->history.push_back(std::make_pair(point, sync));
-		Refresh();
 	}
 
 	void CalxCoordPlaneWatcher::OnPaintEvent(wxPaintEvent &evt) {
@@ -110,29 +119,34 @@ namespace CalXUI {
 		Destroy();
 	}
 	
+	void CalxCoordPlaneWatcher::OnAppendEvent(wxThreadEvent &evt) {
+		std::pair<motor_point_t, bool> pair = evt.GetPayload<std::pair<motor_point_t, bool>>();
+		this->add(pair.first, pair.second);
+	}
+	
 	void CalxCoordPlaneWatcher::render(wxDC &dc) {
 		dc.SetBackground(*wxWHITE_BRUSH);
 		dc.Clear();
 		
 		wxSize real_size = GetSize();
+		motor_rect_t plane_size = this->handle->getSize();
+		double scaleX, scaleY;
+		scaleX = ((double) real_size.x) / plane_size.w;
+		scaleY = ((double) real_size.y) / plane_size.h;
 		dc.SetPen(*wxBLUE_PEN);
-		dc.DrawLine(0, real_size.y / 2, real_size.x, real_size.y / 2);
-		dc.DrawLine(real_size.x / 2, 0, real_size.x / 2, real_size.y);
+		dc.DrawLine(0, (wxCoord) ((-plane_size.y) * scaleY) + 1, real_size.x, (wxCoord) ((-plane_size.y) * scaleY) + 1);
+		dc.DrawLine((wxCoord) ((-plane_size.x) * scaleX) + 1, 0, (wxCoord) ((-plane_size.x) * scaleX) + 1, real_size.y);
 		
 		dc.SetPen(*wxBLACK_PEN);
 		dc.SetBrush(*wxBLACK_BRUSH);
 		double lastX = 0, lastY = 0;
 		std::vector<std::pair<motor_point_t, bool>> *path = &this->history;
-		motor_rect_t plane_size = this->handle->getController()->getSize();
-		double scaleX, scaleY;
-		scaleX = ((double) real_size.x) / plane_size.w;
-		scaleY = ((double) real_size.y) / plane_size.h;
 		for (size_t i = 0; i < path->size(); i++) {
 			motor_point_t point = path->at(i).first;
 			bool move = path->at(i).second;
 			double x = ((double) (point.x - plane_size.x)) * scaleX;
 			double y = real_size.y - ((double) (point.y - plane_size.y)) * scaleY;
-			dc.DrawRectangle((int) x, (int) y, 2, 2);
+			dc.DrawRectangle((int) x - 1, (int) y - 1, 2, 2);
 			if (move) {
                 dc.DrawLine(static_cast<wxCoord>(lastX), static_cast<wxCoord>(lastY),
                             static_cast<wxCoord>(x), static_cast<wxCoord>(y));
@@ -150,6 +164,13 @@ namespace CalXUI {
 		dc.DrawText(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(plane_size.y + plane_size.h)), real_size.x / 2 - x / 2, 0);
 		dc.GetMultiLineTextExtent(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(plane_size.y)), &x, &y);
 		dc.DrawText(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(plane_size.y)), real_size.x / 2 - x / 2, real_size.y - y);
+		
+		dc.SetPen(*wxRED_PEN);
+		dc.SetBrush(*wxRED_BRUSH);
+		motor_point_t point = this->handle->getPosition();
+		double _x = ((double) (point.x - plane_size.x)) * scaleX;
+		double _y = real_size.y - ((double) (point.y - plane_size.y)) * scaleY;
+		dc.DrawRectangle((int) _x - 2, (int) _y - 2, 4, 4);
 	}
 	
 	CalxCoordPlaneWatcherDialog::CalxCoordPlaneWatcherDialog(wxWindow *win, wxWindowID id, CoordHandle *handle)

@@ -28,6 +28,8 @@ namespace CalXUI {
 	
 	class CalxCoordPlaneWatcher; // Forward referencing
 	
+	wxDECLARE_EVENT(wxEVT_WATCHER_APPEND_POINT, wxThreadEvent);
+	
 	class CalxCoordPlaneWatcherTimer : public wxTimer {
 		public:
 			CalxCoordPlaneWatcherTimer(CalxCoordPlaneWatcher*, CoordHandle*);
@@ -50,12 +52,13 @@ namespace CalXUI {
 		public:
 			CalxCoordPlaneWatcher(wxWindow*, wxWindowID, wxSize, CoordHandle*);
 			void clear();
-			void add(motor_point_t, bool);
 		private:
+			void add(motor_point_t, bool);
 			void render(wxDC&);
 			void OnExit(wxCloseEvent&);
 			void OnPaintEvent(wxPaintEvent&);
 			void OnResizeEvent(wxSizeEvent&);
+			void OnAppendEvent(wxThreadEvent&);
 			CoordHandle *handle;
 			CalxCoordPlaneWatcherTimer *timer;
 			std::vector<std::pair<motor_point_t, bool>> history;
