@@ -238,6 +238,16 @@ namespace CalXUI {
 		taskList->Append(FORMAT(__("Task #%s"), std::to_string(list.size())));
 		mainPanel->GetSizer()->Add(handle, 1, wxALL | wxEXPAND, 5);
         taskList->SetSelection((int) list.size() - 1);
+		
+		if (taskList->GetSelection() != wxNOT_FOUND
+			&& plane->GetSelection() != wxNOT_FOUND) {
+            CoordHandle *handler = wxGetApp().getMainFrame()->getPanel()->getCoords()->getCoord((size_t) plane->GetSelection());
+			if (handler->isMeasured()) {
+				handle->setRectangle(handler->getSize());
+			}
+		}
+		
+		
 		Layout();
 		updateUI();
 	}

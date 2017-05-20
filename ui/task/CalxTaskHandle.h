@@ -166,6 +166,7 @@ namespace CalXUI {
 			virtual CoordTask *getTask();
 			virtual ComplexCoordTranslator *getTranslator();
 			virtual void update();
+			void setRectangle(motor_rect_t);
 		private:
 			void OnFieldChange(wxCommandEvent&);
 			void OnExit(wxCloseEvent&);

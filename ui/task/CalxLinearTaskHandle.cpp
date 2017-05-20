@@ -98,6 +98,14 @@ namespace CalXUI {
 		this->task->setVertical(vert);
 	}
 	
+	void CalxLinearTaskHandle::setRectangle(motor_rect_t rect) {
+		this->task->setRectangle(rect);
+		this->xCoord->SetValue(rect.x);
+		this->yCoord->SetValue(rect.y);
+		this->wDim->SetValue(rect.w);
+		this->hDim->SetValue(rect.h);
+	}
+	
 	void CalxLinearTaskHandle::OnFieldChange(wxCommandEvent &evt) {
 		update();
 	}
