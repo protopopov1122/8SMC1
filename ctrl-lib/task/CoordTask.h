@@ -142,8 +142,8 @@ namespace CalX {
 			bool rel;
 	};
 
-	enum CoordTaskType {
-		ProgrammedTask, GraphTask, WrapperTask, GCodeTask
+	enum class CoordTaskType {
+		ProgrammedTask, GraphTask, WrapperTask, GCodeTask, LinearTask
 	};
 	
 	class CoordTask : public TaskStep {
@@ -154,6 +154,24 @@ namespace CalX {
 			virtual ErrorCode perform(CoordPlane*, TaskParameters&, SystemManager*, TaskState*) = 0;
 		private:
 			CoordTaskType type;
+	};
+	
+	class LinearCoordTask : public CoordTask {
+		public:
+			LinearCoordTask(motor_rect_t, motor_coord_t, bool = true);
+			virtual ~LinearCoordTask();
+			virtual ErrorCode perform(CoordPlane*, TaskParameters&, SystemManager*, TaskState*);
+			
+			motor_rect_t getRectangle();
+			void setRectangle(motor_rect_t);
+			motor_coord_t getSpacing();
+			void setSpacing(motor_coord_t);
+			bool isVertical();
+			void setVertical(bool);
+		private:
+			motor_rect_t square;
+			motor_coord_t spacing;
+			bool vertical;
 	};
 	
 	class ProgrammedCoordTask : public CoordTask {

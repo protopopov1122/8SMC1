@@ -34,8 +34,8 @@ using namespace CalX;
 
 namespace CalXUI {
 	
-	enum CalxTaskType {
-		CalxGcode, CalxProgrammed
+	enum class CalxTaskType {
+		CalxGcode, CalxProgrammed, CalxLinear
 	};
 	
 	class CalxTaskHandle : public wxScrolledWindow {
@@ -158,6 +158,25 @@ namespace CalXUI {
 			wxButton *moveUpButton;
 			wxButton *moveDownButton;
 			ComplexCoordTranslator *trans;
+	};
+	
+	class CalxLinearTaskHandle : public CalxTaskHandle {
+		public:
+			CalxLinearTaskHandle(wxWindow*, wxWindowID);
+			virtual CoordTask *getTask();
+			virtual ComplexCoordTranslator *getTranslator();
+			virtual void update();
+		private:
+			void OnFieldChange(wxCommandEvent&);
+			void OnExit(wxCloseEvent&);
+			LinearCoordTask *task;
+			ComplexCoordTranslator *trans;
+			wxSpinCtrl *xCoord;
+			wxSpinCtrl *yCoord;
+			wxSpinCtrl *wDim;
+			wxSpinCtrl *hDim;
+			wxSpinCtrl *spacing;
+			wxCheckBox *vertical;
 	};
 }
 

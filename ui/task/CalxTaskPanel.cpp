@@ -110,10 +110,13 @@ namespace CalXUI {
 		taskSizer->Add(newGcodeButton, 0, wxALL | wxEXPAND);
 		wxButton *newProgrammedeButton = new wxButton(taskPanel, wxID_ANY, __("New Programmed"));
 		taskSizer->Add(newProgrammedeButton, 0, wxALL | wxEXPAND);
+		wxButton *newLinearButton = new wxButton(taskPanel, wxID_ANY, __("New Linear"));
+		taskSizer->Add(newLinearButton, 0, wxALL | wxEXPAND);
 		wxButton *removeButton = new wxButton(taskPanel, wxID_ANY, __("Remove"));
 		taskSizer->Add(removeButton, 0, wxALL | wxEXPAND);
 		newGcodeButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnNewGcodeClick, this);
 		newProgrammedeButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnNewProgrammedClick, this);
+		newLinearButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnNewLinearClick, this);
 		removeButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnRemoveClick, this);
 		
 		this->mainPanel = new wxPanel(splitter, wxID_ANY);
@@ -221,6 +224,16 @@ namespace CalXUI {
 	
 	void CalxTaskPanel::OnNewProgrammedClick(wxCommandEvent &evt) {
 		CalxProgrammedTaskHandle *handle = new CalxProgrammedTaskHandle(mainPanel, wxID_ANY);
+		list.push_back(handle);
+		taskList->Append(FORMAT(__("Task #%s"), std::to_string(list.size())));
+		mainPanel->GetSizer()->Add(handle, 1, wxALL | wxEXPAND, 5);
+        taskList->SetSelection((int) list.size() - 1);
+		Layout();
+		updateUI();
+	}
+	
+	void CalxTaskPanel::OnNewLinearClick(wxCommandEvent &evt) {
+		CalxLinearTaskHandle *handle = new CalxLinearTaskHandle(mainPanel, wxID_ANY);
 		list.push_back(handle);
 		taskList->Append(FORMAT(__("Task #%s"), std::to_string(list.size())));
 		mainPanel->GetSizer()->Add(handle, 1, wxALL | wxEXPAND, 5);

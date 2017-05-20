@@ -49,6 +49,7 @@ namespace CalXUI {
 			void OnExit(wxCloseEvent&);
 			void OnNewGcodeClick(wxCommandEvent&);
 			void OnNewProgrammedClick(wxCommandEvent&);
+			void OnNewLinearClick(wxCommandEvent&);
 			void OnRemoveClick(wxCommandEvent&);
 			void OnListClick(wxCommandEvent&);
 			void OnBuildClick(wxCommandEvent&);
