@@ -78,7 +78,7 @@ namespace CalX {
 			out.x = pow(this->scale.x, out.x);
 		}
 		if (this->scale.y != 0) {
-			out.y = pow(this->scale.x, out.y);
+			out.y = pow(this->scale.y, out.y);
 		}
 		return out;
 	}

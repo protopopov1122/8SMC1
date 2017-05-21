@@ -390,6 +390,7 @@ namespace CalX {
 						}
 					}
 					if (integer) {
+						delete pr;
 						if (fp) {
 							pr = new NL300RealParameter(std::stod(parameter));
 						} else {

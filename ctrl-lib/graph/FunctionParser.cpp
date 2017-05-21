@@ -132,6 +132,7 @@ namespace CalX {
 						for (const auto& nd : *args) {
 							delete nd;
 						}
+						delete args;
 						return nullptr;
 					}
 				}
