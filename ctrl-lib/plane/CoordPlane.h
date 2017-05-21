@@ -40,6 +40,7 @@
 
 namespace CalX {
 	
+	
 	// Main interface
 	class CoordPlane {
 		public:

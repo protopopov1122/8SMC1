@@ -83,6 +83,15 @@ namespace CalX {
 			this->yAxis->getPowerState() == Power::NoPower) {
 			return ErrorCode::PowerOff;
 		}
+		
+		if (!sync) {
+			float maxspeed = this->config->getEntry("core")->getReal("jump_speed", 0.0f);
+			if (maxspeed > 0 &&
+				speed < maxspeed) {
+				LOG("CoordController", "Changing jump speed from " + std::to_string(speed) + " to " + std::to_string(maxspeed) + " steps/sec");
+				speed = maxspeed;
+			}
+		}
 
 		// Calculate x and y axis speed v=sqrt(vx^2 + vy^2); vy = n*vx
 
