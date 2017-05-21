@@ -153,7 +153,8 @@ namespace CalXUI {
 		delete this->error_handler;
 		delete this->sysman;
 		delete this->devman;
-		delete this->dynlib;
+		this->dynlib->Detach();
+		this->dynlib->Unload();
 		
 		
 		#ifdef OS_WIN

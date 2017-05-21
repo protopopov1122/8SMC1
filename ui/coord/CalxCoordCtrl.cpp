@@ -150,7 +150,7 @@ namespace CalXUI {
 		
 		this->Layout();
 		this->setEnabled(true);
-        	this->SetScrollRate(5, 5);
+        this->SetScrollRate(5, 5);
 		
 		this->timer.setCtrl(this);
 		timer.Start(100);
@@ -399,9 +399,8 @@ namespace CalXUI {
 	}
 	
 	void CalxCoordCtrl::OnExit(wxCloseEvent &evt) {
-		stop();
-		
-		for (const auto& w : this->watchers) {
+		while (this->watchers.size() > 0) {
+			const auto& w = this->watchers.at(0);
 			w->Close(true);
 		}
 		

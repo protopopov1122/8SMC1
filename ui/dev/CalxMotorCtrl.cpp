@@ -257,6 +257,7 @@ namespace CalXUI {
 	}
 	
 	void CalxMotorCtrl::stop() {
+		this->timer.Stop();
 		this->queue->stop();
 	}
 	
@@ -290,7 +291,6 @@ namespace CalXUI {
 	}
 	
 	void CalxMotorCtrl::OnExit(wxCloseEvent &evt) {
-		this->timer.Stop();
 		this->dev->removeEventListener(this->listener);
 		this->dev->stop();
 		Destroy();

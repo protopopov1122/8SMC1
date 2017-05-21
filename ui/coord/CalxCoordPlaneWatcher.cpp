@@ -110,11 +110,10 @@ namespace CalXUI {
 	}
 	
 	void CalxCoordPlaneWatcher::OnExit(wxCloseEvent &evt) {
-        wxGetApp().getMainFrame()->getPanel()->getCoords()->unbindWatcher((device_id_t) handle->getID(), this);
 		if (this->timer != nullptr) {
 			this->timer->Stop();
-			delete this->timer;
 		}
+        wxGetApp().getMainFrame()->getPanel()->getCoords()->unbindWatcher((device_id_t) handle->getID(), this);
 		this->handle->removeEventListener(this->listener);
 		Destroy();
 	}
