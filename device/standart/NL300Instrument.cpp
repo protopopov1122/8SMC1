@@ -142,7 +142,7 @@ namespace CalX {
 			unlock();
 			return false;
 		}
-		if (en == enabled()) {
+		if (en && en == enabled()) {
 			this->log("Enable: state not changed");
 			unlock();
 			return true;
@@ -190,6 +190,8 @@ namespace CalX {
 				this->errors.push_back("NL300 start error: unknown");
 			}
 			devman->saveInstrumentError();
+			NL300SystemCommand stopSyscom(NL300_LASER_NAME, "STOP", "", NL300_PC_NAME);
+			writeMessage(stopSyscom);
 			return false;
 		}
 		if (getCoreEntry()->getBool(NL300_CORE_ENABLE_DELAY, true)) {
