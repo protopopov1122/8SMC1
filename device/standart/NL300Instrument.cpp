@@ -101,6 +101,11 @@ namespace CalX {
 		}
 		this->log("Connection parameters set up");
 		
+		this->log("Initial command to laser");
+		NL300SystemCommand syscom(NL300_LASER_NAME, "SAY", "", NL300_PC_NAME);
+		getSystemCommandResponse(syscom);
+		
+		
 		
 		this->log("Initializing instrument state");
 		NL300GeneralCommand cmd(NL300_LASER_NAME, 'E', 0, NL300GeneralAction::Set, new NL300IntegerParameter(0), NL300_PC_NAME);
