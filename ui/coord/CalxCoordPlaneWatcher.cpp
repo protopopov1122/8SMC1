@@ -128,13 +128,16 @@ namespace CalXUI {
 		dc.Clear();
 		
 		wxSize real_size = GetSize();
-		motor_rect_t plane_size = this->handle->getSize();
-		double scaleX, scaleY;
+		motor_rect_t plane_size = this->handle->getController()->getSize();
+		motor_rect_t top_plane_size = this->handle->getSize();
+		double scaleX, scaleY, top_scaleX, top_scaleY;
 		scaleX = ((double) real_size.x) / plane_size.w;
 		scaleY = ((double) real_size.y) / plane_size.h;
+		top_scaleX = ((double) real_size.x) / top_plane_size.w;
+		top_scaleY = ((double) real_size.y) / top_plane_size.h;
 		dc.SetPen(*wxBLUE_PEN);
-		dc.DrawLine(0, (wxCoord) ((-plane_size.y) * scaleY) + 1, real_size.x, (wxCoord) ((-plane_size.y) * scaleY) + 1);
-		dc.DrawLine((wxCoord) ((-plane_size.x) * scaleX) + 1, 0, (wxCoord) ((-plane_size.x) * scaleX) + 1, real_size.y);
+		dc.DrawLine(0, (wxCoord) ((top_plane_size.h + top_plane_size.y) * top_scaleY), real_size.x, (wxCoord) ((top_plane_size.h + top_plane_size.y) * top_scaleY));
+		dc.DrawLine((wxCoord) ((-top_plane_size.x) * top_scaleX), 0, (wxCoord) ((-top_plane_size.x) * top_scaleX), real_size.y);
 		
 		dc.SetPen(*wxBLACK_PEN);
 		dc.SetBrush(*wxBLACK_BRUSH);
@@ -143,9 +146,9 @@ namespace CalXUI {
 		for (size_t i = 0; i < path->size(); i++) {
 			motor_point_t point = path->at(i).first;
 			bool move = path->at(i).second;
-			double x = ((double) (point.x - plane_size.x)) * scaleX;
-			double y = real_size.y - ((double) (point.y - plane_size.y)) * scaleY;
-			dc.DrawRectangle((int) x - 1, (int) y - 1, 2, 2);
+			double x = ((double) (point.x - plane_size.x) * scaleX);
+			double y = ((double) (plane_size.h + plane_size.y - point.y) * scaleY);
+			dc.DrawRectangle((wxCoord) x - 1, (wxCoord) y - 1, 2, 2);
 			if (move) {
                 dc.DrawLine(static_cast<wxCoord>(lastX), static_cast<wxCoord>(lastY),
                             static_cast<wxCoord>(x), static_cast<wxCoord>(y));
@@ -156,19 +159,19 @@ namespace CalXUI {
 		
 		dc.SetPen(*wxBLACK_PEN);
 		wxCoord x, y;
-		dc.DrawText(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(plane_size.x)), 0, real_size.y / 2);
-		dc.GetMultiLineTextExtent(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(plane_size.x + plane_size.w)), &x, &y);
-		dc.DrawText(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(plane_size.x + plane_size.w)), real_size.x - x, real_size.y / 2);
-		dc.GetMultiLineTextExtent(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(plane_size.y + plane_size.h)), &x, &y);
-		dc.DrawText(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(plane_size.y + plane_size.h)), real_size.x / 2 - x / 2, 0);
-		dc.GetMultiLineTextExtent(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(plane_size.y)), &x, &y);
-		dc.DrawText(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(plane_size.y)), real_size.x / 2 - x / 2, real_size.y - y);
+		dc.DrawText(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(top_plane_size.x)), 0, (wxCoord) ((top_plane_size.h + top_plane_size.y) * top_scaleY));
+		dc.GetMultiLineTextExtent(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(top_plane_size.x + top_plane_size.w)), &x, &y);
+		dc.DrawText(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(top_plane_size.x + top_plane_size.w)), real_size.x - x, (wxCoord) ((top_plane_size.h + top_plane_size.y) * top_scaleY));
+		dc.GetMultiLineTextExtent(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(-(top_plane_size.y + top_plane_size.h))), &x, &y);
+		dc.DrawText(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(top_plane_size.y)), (wxCoord) ((-top_plane_size.x) * top_scaleX) - x / 2, real_size.y - y);
+		dc.GetMultiLineTextExtent(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(-top_plane_size.y)), &x, &y);
+		dc.DrawText(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(top_plane_size.y + top_plane_size.h)), (wxCoord) ((-top_plane_size.x) * top_scaleX) - x / 2, 0);
 		
 		dc.SetPen(*wxRED_PEN);
 		dc.SetBrush(*wxRED_BRUSH);
-		motor_point_t point = this->handle->getPosition();
-		double _x = ((double) (point.x - plane_size.x)) * scaleX;
-		double _y = real_size.y - ((double) (point.y - plane_size.y)) * scaleY;
+		motor_point_t point = this->handle->getController()->getPosition();
+		double _x = ((double) (point.x - plane_size.x) * scaleX);
+		double _y = ((double) (plane_size.h + plane_size.y - point.y) * scaleY);
 		dc.DrawRectangle((int) _x - 2, (int) _y - 2, 4, 4);
 	}
 	
@@ -215,7 +218,7 @@ namespace CalXUI {
 			this->mouseCoords->SetLabel("");
 		}
 		wxSize real_size = this->watcher->GetSize();
-		motor_rect_t plane_size = this->handle->getController()->getSize();
+		motor_rect_t plane_size = this->handle->getSize();
 		wxPoint mouse = this->watcher->ScreenToClient(wxGetMousePosition());
 		if (mouse.x >= 0 &&
 			mouse.y >= 0 &&
