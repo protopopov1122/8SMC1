@@ -177,6 +177,25 @@ namespace CalXUI {
 			CoordHandle *handle;
 			TrailerId trailer;
 	};
+			
+	
+	class CalxCoordConfigureAction : public CalxAction {
+		public:
+			CalxCoordConfigureAction(CalxCoordCtrl*, CoordHandle*, bool, bool, motor_point_t, float, int);
+			virtual ~CalxCoordConfigureAction();
+			
+			virtual void perform(SystemManager*);
+			virtual void stop();
+		private:
+			bool work;
+			CalxCoordCtrl *ctrl;
+			CoordHandle *handle;
+			bool jump;
+			bool relative;
+			motor_point_t dest;
+			float speed;
+			int div;
+	};
 }
 
 #endif

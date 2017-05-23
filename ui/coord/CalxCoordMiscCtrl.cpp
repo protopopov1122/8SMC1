@@ -230,4 +230,47 @@ namespace CalXUI {
 	void CalxCoordMeasureAction::stop() {
 		handle->stop();
 	}
+	
+		
+	CalxCoordConfigureAction::CalxCoordConfigureAction(CalxCoordCtrl *ctrl, CoordHandle *handle, bool jump, bool relative, motor_point_t dest, float speed, int div) {
+		this->ctrl = ctrl;
+		this->handle = handle;
+		this->jump = jump;
+		this->relative = relative;
+		this->dest = dest;
+		this->speed = speed;
+		this->div = div;
+		this->work = false;
+	}
+	
+	CalxCoordConfigureAction::~CalxCoordConfigureAction() {
+		
+	}
+			
+	void CalxCoordConfigureAction::perform(SystemManager *sysman) {
+		handle->open_session();
+		this->work = true;
+		this->ctrl->setMaster(true);
+		ErrorCode errcode = this->handle->measure(TrailerId::Trailer1);
+		if (errcode != ErrorCode::NoError) {
+			wxGetApp().getErrorHandler()->handle(errcode);
+			work = false;
+		}
+		if (relative && work) {
+			errcode = handle->relativeMove(dest, speed, div, jump);
+		} else if (work) {
+			errcode = handle->move(dest, speed, div, jump);
+		}
+		wxGetApp().getErrorHandler()->handle(errcode);
+		if (work && errcode == ErrorCode::NoError) {
+			ctrl->setPlaneOffset(handle->getController()->getPosition());
+		}
+		this->ctrl->setMaster(false);
+		handle->close_session();
+	}
+			
+	void CalxCoordConfigureAction::stop() {
+		this->work = false;
+		handle->stop();
+	}
 }

@@ -44,6 +44,7 @@ namespace CalXUI {
 		this->divisor->Append("8");
 		this->divisor->SetSelection(3);
 		this->moveButton = new wxButton(this, wxID_ANY, __("Move"));
+		this->configureButton = new wxButton(this, wxID_ANY, __("Configure"));
 		
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Destination") + std::string(":")));
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
@@ -51,11 +52,11 @@ namespace CalXUI {
 		sizer->Add(xPos, 0, wxALL | wxEXPAND);
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("y") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		sizer->Add(yPos, 0, wxALL | wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("Speed") + std::string(":")));
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Speed") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		sizer->Add(speed, 0, wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("Divisor") + std::string(":")));
+		sizer->Add(new wxStaticText(this, wxID_ANY, __("Divisor") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		sizer->Add(divisor);
 		sizer->Add(moveButton);
-		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
+		sizer->Add(configureButton);
 	}
 }

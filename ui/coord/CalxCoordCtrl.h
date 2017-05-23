@@ -67,6 +67,7 @@ namespace CalXUI {
 			void OnInstrumentEnableClick(wxCommandEvent&);
 			void OnInterfaceUpdate(wxCollapsiblePaneEvent&);
 			void OnPositionChangeClick(wxCommandEvent&);
+			void OnConfigureClick(wxCommandEvent&);
 			void use();
 			void unuse();
 			bool isUsed();
@@ -78,6 +79,7 @@ namespace CalXUI {
 			bool isBusy() {
 				return !queue->isEmpty();
 			}
+			void setPlaneOffset(motor_point_t);
 			
 			// Request synchronizing with interface
 			void requestMeasure(TrailerId);

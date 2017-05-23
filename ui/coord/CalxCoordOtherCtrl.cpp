@@ -72,6 +72,7 @@ namespace CalXUI {
 		this->posCtrl = new CalxCoordPositionCtrl(posPane, wxID_ANY);
 		posSizer->Add(this->posCtrl);
 		this->posCtrl->getMoveButton()->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnPositionChangeClick, ctrl);
+		this->posCtrl->getConfigureButton()->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnConfigureClick, ctrl);
 		
 		wxCollapsiblePane  *filtersCollPane = new wxCollapsiblePane(this, wxID_ANY, __("Filters"));
 		wxWindow *filtersPane = filtersCollPane->GetPane();
