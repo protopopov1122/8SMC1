@@ -94,6 +94,7 @@ namespace CalXUI {
 	
 	CalxTaskPanel::CalxTaskPanel(wxWindow *win, wxWindowID id)
 		: wxScrolledWindow::wxScrolledWindow(win, id) {
+		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
 		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
 		this->queue->Run();
 		wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
@@ -140,6 +141,7 @@ namespace CalXUI {
 		execSizer->Add(plane, 0, wxALL, 5);
 		execSizer->Add(new wxStaticText(execPanel, wxID_ANY, __("with speed")), 0, wxLEFT | wxRIGHT | wxALIGN_CENTER, 5);
 		execSizer->Add(speed, 0, wxALL, 5);
+		execSizer->Add(new wxStaticText(execPanel, wxID_ANY, units.empty() ? "" : units + __("/sec")), 0, wxLEFT | wxRIGHT | wxALIGN_CENTER, 5);
 		this->stopButton = new wxButton(execPanel, wxID_ANY, __("Stop"));
 		execSizer->Add(stopButton);
 		wxButton *previewButton = new wxButton(execPanel, wxID_ANY, __("Preview"));

@@ -26,6 +26,7 @@ namespace CalXUI {
 
 	CalxLinearTaskHandle::CalxLinearTaskHandle(wxWindow *win, wxWindowID id)
 		: CalxTaskHandle(win, id, CalxTaskType::CalxLinear) {
+		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
 		
 		motor_rect_t rect = {0, 0, 1, 1};
 		motor_coord_t spac = 1;
@@ -52,19 +53,24 @@ namespace CalXUI {
 		this->vertical = new wxCheckBox(this, wxID_ANY, __("Vertical"));
 		this->vertical->SetValue(vert);
 		
-		wxFlexGridSizer *sizer = new wxFlexGridSizer(2);
+		wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 		this->SetSizer(sizer);
 		
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("x") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(xCoord);
+		sizer->Add(new wxStaticText(this, wxID_ANY, units));
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("y") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(yCoord);
+		sizer->Add(new wxStaticText(this, wxID_ANY, units));
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Width") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(wDim);
+		sizer->Add(new wxStaticText(this, wxID_ANY, units));
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Height") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(hDim);
+		sizer->Add(new wxStaticText(this, wxID_ANY, units));
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Spacing") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(spacing);
+		sizer->Add(new wxStaticText(this, wxID_ANY, units));
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(vertical);
 		
