@@ -47,11 +47,11 @@ namespace CalX {
 		ErrorCode errcode = ErrorCode::NoError;
 		for (motor_coord_t i = this->square.x; i < end && state->work; i += this->spacing) {
 			if (vertical) {
-				first = {i, start};
-				second = {i, end};
+				first = {i, top};
+				second = {i, bottom};
 			} else {
-				first = {start, i};
-				second = {end, i};
+				first = {top, i};
+				second = {bottom, i};
 			}
 			errcode = plane->move(first, speed, 8, false);
 			if (errcode != ErrorCode::NoError) {
