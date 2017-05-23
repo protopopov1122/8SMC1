@@ -103,7 +103,18 @@ namespace CalX {
 		
 		this->log("Initial command to laser");
 		NL300SystemCommand syscom(NL300_LASER_NAME, "SAY", "", NL300_PC_NAME);
-		getSystemCommandResponse(syscom);
+		std::pair<std::string, std::string> say_response = getSystemCommandResponse(syscom);
+		size_t index = 0;
+		const size_t MAX_SAY = getCoreEntry()->getInt("start_say_count", 10);
+		const int SAY_SLEEP = getCoreEntry()->getInt("start_say_sleep", 1000);
+		while (say_response.first.compare("READY") != 0 && index < MAX_SAY) {
+			index++;
+			say_response = getSystemCommandResponse(syscom);
+			Sleep(SAY_SLEEP);
+		}
+		if (say_response.first.compare("READY") != 0) {
+			this->log("Laser SAY check failed");
+		}
 		
 		
 		
