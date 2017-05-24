@@ -92,6 +92,7 @@ namespace CalX {
 		GetCommState(handle, &ComDCM);
 		ComDCM.BaudRate = DWORD(baudrate);
 		ComDCM.Parity = static_cast<BYTE>(prms->parity);
+		ComDCM.ByteSize = 8;
 
 		if(!SetCommState(handle, &ComDCM)) {
 			this->log("COM port parameters setting error");
