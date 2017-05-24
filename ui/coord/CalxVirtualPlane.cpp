@@ -22,6 +22,7 @@
 #include "ui/CalxUnitProcessor.h"
 #include <wx/sizer.h>
 #include <wx/utils.h>
+#include <wx/dcbuffer.h>
 
 namespace CalXUI {
 	
@@ -76,7 +77,8 @@ namespace CalXUI {
 	
 	void CalxVirtualPlane::OnPaintEvent(wxPaintEvent &evt) {
 		wxPaintDC dc(this);
-		render(dc);
+		wxBufferedDC buf(&dc, this->GetSize());
+		render(buf);
 	}
 	
 	void CalxVirtualPlane::OnResizeEvent(wxSizeEvent &evt) {
@@ -85,7 +87,8 @@ namespace CalXUI {
 	
 	void CalxVirtualPlane::repaint() {
 		wxClientDC dc(this);
-		render(dc);
+		wxBufferedDC buf(&dc, this->GetSize());
+		render(buf);
 	}
 	
 	void CalxVirtualPlane::render(wxDC &dc) {
