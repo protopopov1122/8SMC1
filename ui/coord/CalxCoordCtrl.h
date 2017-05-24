@@ -122,6 +122,7 @@ namespace CalXUI {
 			CoordPlaneLog *log;
 			CoordPlaneMap *map;
 			CoordPlaneValidator *validator;
+			CoordPlaneMap *unit_map;
 			
 	};
 }

@@ -242,8 +242,7 @@ namespace CalXUI {
 	
 	
 	void CalxMotorCtrl::updateUI() {
-		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
-		std::string pos = __("Position") + std::string(": ") + std::to_string(this->dev->getPosition()) + " " + units;
+		std::string pos = __("Position") + std::string(": ") + std::to_string(this->dev->getPosition());
 		std::string pwr = __("Power") + std::string(": ") + std::string(dev->getMotor()->getPowerState() == Power::FullPower ?
 								__("full") : (dev->getMotor()->getPowerState() == Power::HalfPower ?
 								__("half") : __("no")));

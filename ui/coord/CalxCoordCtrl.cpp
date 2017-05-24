@@ -45,6 +45,15 @@ namespace CalXUI {
 		this->used = 0;
 		this->master = false;
 		
+		motor_point_t unit_offset = {0, 0};
+		motor_scale_t unit_scale = {
+			wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("unit_scale", 1.0f),
+			wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("unit_scale", 1.0f)
+		};
+		float speed_scale = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("speed_scale", 1.0f);
+		this->unit_map = new CoordPlaneMap(unit_offset, unit_scale, speed_scale, ctrl->peekPlane());
+		ctrl->pushPlane(this->unit_map);
+		std::cout << unit_scale.x << "x" << unit_scale.y << " " << speed_scale << std::endl;
 		motor_point_t validateMin = {INT_MIN, INT_MIN};
 		motor_point_t validateMax = {INT_MAX, INT_MAX};
 		this->validator = new CoordPlaneValidator(validateMin, validateMax, wxGetApp().getSystemManager()->getConfiguration()->getEntry("core")->getInt("maxspeed", 4000), ctrl->peekPlane());
@@ -253,20 +262,20 @@ namespace CalXUI {
 	}
 	
 	void CalxCoordCtrl::updateUI() {
+		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
 		std::string general = FORMAT(__("Name: Coordinate plane #%s"), std::to_string(ctrl->getID())) + "\n" +
 							  FORMAT(__("Devices: #%s #%s"), std::to_string(ctrl->getController()->getXAxis()->getID()),
 									std::to_string(ctrl->getController()->getYAxis()->getID())) + "\n" +
 							  (ctrl->getController()->getInstrument() != nullptr ?
 								FORMAT(__("Instrument #%s"), std::to_string(ctrl->getController()->getInstrument()->getID())) :
 								__("Instrument: no")) + "\n" +
-							  FORMAT(__("Position: %sx%s %s"), std::string(wxGetApp().getUnitProcessor()->toUnitsStr(ctrl->getPosition().x)),
-									std::string(wxGetApp().getUnitProcessor()->toUnitsStr(ctrl->getPosition().y)),
-										wxGetApp().getUnitProcessor()->getSuffix()) + "\n" +
-							  (ctrl->isMeasured() ? FORMAT(__("Start: %sx%s %s"), std::string(wxGetApp().getUnitProcessor()->toUnitsStr(ctrl->getSize().x)),
-							                                                   std::string(wxGetApp().getUnitProcessor()->toUnitsStr(ctrl->getSize().y)), wxGetApp().getUnitProcessor()->getSuffix()) :
+							  FORMAT(__("Position: %sx%s %s"), std::to_string(ctrl->getPosition().x),
+										std::to_string(ctrl->getPosition().y), units) + "\n" +
+							  (ctrl->isMeasured() ? FORMAT(__("Start: %sx%s %s"), std::to_string(ctrl->getSize().x),
+							                                                   std::to_string(ctrl->getSize().y), units) :
 													__("Start: Not measured")) + "\n" +
-							  (ctrl->isMeasured() ? FORMAT(__("Size: %sx%s %s"), std::string(wxGetApp().getUnitProcessor()->toUnitsStr(ctrl->getSize().w)),
-							                                                   std::string(wxGetApp().getUnitProcessor()->toUnitsStr(ctrl->getSize().h)), wxGetApp().getUnitProcessor()->getSuffix()) :
+							  (ctrl->isMeasured() ? FORMAT(__("Size: %sx%s %s"), std::to_string(ctrl->getSize().w),
+							                                                   std::to_string(ctrl->getSize().h), units) :
 													__("Size: Not measured"));
 		this->generalInfoText->SetLabel(general);
 		Layout();
