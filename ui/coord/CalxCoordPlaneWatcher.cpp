@@ -22,6 +22,7 @@
 #include "coord/CalxCoordPanel.h"
 #include "ui/CalxUnitProcessor.h"
 #include <wx/sizer.h>
+#include <wx/dcbuffer.h>
 
 namespace CalXUI {
 	
@@ -39,6 +40,17 @@ namespace CalXUI {
 		evt.SetPayload(pair);
 		wxPostEvent(watcher, evt);
 		watcher->Refresh();
+	}
+	
+	CalxCoordPlaneWatcherRepaintTimer::CalxCoordPlaneWatcherRepaintTimer(CalxCoordPlaneWatcher *watcher)
+		: wxTimer::wxTimer() {
+		this->watcher = watcher;
+	}
+	
+	void CalxCoordPlaneWatcherRepaintTimer::Notify() {
+		if (!this->watcher->isRendering() && this->watcher->hasUpdates()) {
+			this->watcher->Refresh();
+		}
 	}
 	
 	CalxCoordPlaneWatcherEvent::CalxCoordPlaneWatcherEvent(CalxCoordPlaneWatcher *w) {
@@ -71,14 +83,24 @@ namespace CalXUI {
 		
 		this->history.push_back(std::make_pair(this->handle->getController()->getPosition(), false));
 		
-		int_conf_t interval = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getInt("watcher_interval", 5);
+		int_conf_t interval = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getInt("watcher_append_interval", 500);
 		if (interval != -1) {
 			this->timer = new CalxCoordPlaneWatcherTimer(this, this->handle);
             this->timer->Start((int) interval);
 		} else {
 			this->timer = nullptr;
 		}
+		
+		interval = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getInt("watcher_render_interval", 50);
+		if (interval != -1) {
+			this->repaint_timer = new CalxCoordPlaneWatcherRepaintTimer(this);
+            this->repaint_timer->Start((int) interval);
+		} else {
+			this->repaint_timer = nullptr;
+		}
 
+		this->rendering = false;
+		this->has_updates = true;
 		this->listener = new CalxCoordPlaneWatcherEvent(this);
 		this->handle->addEventListener(this->listener);
 	}
@@ -86,7 +108,16 @@ namespace CalXUI {
 	void CalxCoordPlaneWatcher::clear() {
 		this->history.clear();
 		this->history.push_back(std::make_pair(this->handle->getController()->getPosition(), false));
+		this->has_updates = true;
 		Refresh();
+	}
+	
+	bool CalxCoordPlaneWatcher::isRendering() {
+		return this->rendering;
+	}
+	
+	bool CalxCoordPlaneWatcher::hasUpdates() {
+		return this->has_updates;
 	}
 	
 	void CalxCoordPlaneWatcher::add(motor_point_t point, bool sync) {
@@ -97,12 +128,17 @@ namespace CalXUI {
 				return;	
 			}
 		}
+		this->has_updates = true;
 		this->history.push_back(std::make_pair(point, sync));
 	}
 
 	void CalxCoordPlaneWatcher::OnPaintEvent(wxPaintEvent &evt) {
+		this->has_updates = false;
+		this->rendering = true;
 		wxPaintDC dc(this);
-		render(dc);
+		wxBufferedDC buf(&dc, this->GetSize());
+		render(buf);
+		this->rendering = false;
 	}
 	
 	void CalxCoordPlaneWatcher::OnResizeEvent(wxSizeEvent &evt) {
@@ -112,6 +148,9 @@ namespace CalXUI {
 	void CalxCoordPlaneWatcher::OnExit(wxCloseEvent &evt) {
 		if (this->timer != nullptr) {
 			this->timer->Stop();
+		}
+		if (this->repaint_timer) {
+			this->repaint_timer->Stop();
 		}
         wxGetApp().getMainFrame()->getPanel()->getCoords()->unbindWatcher((device_id_t) handle->getID(), this);
 		this->handle->removeEventListener(this->listener);
