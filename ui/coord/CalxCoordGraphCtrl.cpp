@@ -24,13 +24,14 @@ namespace CalXUI {
 	
 	
 	void CalxCoordGraphCtrl::init() {
+		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
 		wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 		SetSizer(sizer);
 		
 		
 		wxPanel *graphPanel = new wxPanel(this, wxID_ANY);
 		sizer->Add(graphPanel, 0, wxRIGHT, 10);
-		wxFlexGridSizer *graphSizer = new wxFlexGridSizer(2);
+		wxFlexGridSizer *graphSizer = new wxFlexGridSizer(3);
 		graphPanel->SetSizer(graphSizer);
 		
 		this->expr = new wxTextCtrl(graphPanel, wxID_ANY, "x");
@@ -54,22 +55,31 @@ namespace CalXUI {
 		
 		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, __("Function ")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		graphSizer->Add(expr, 0, wxEXPAND);
+		graphSizer->Add(new wxStaticText(this, wxID_ANY, ""));
 		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, __("X axis range") + std::string(":")));
 		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, ""));
+		graphSizer->Add(new wxStaticText(this, wxID_ANY, ""));
 		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, __("min")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		graphSizer->Add(xmin, 0, wxEXPAND);
+		graphSizer->Add(new wxStaticText(this, wxID_ANY, ""));
 		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, __("max")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		graphSizer->Add(xmax, 0, wxEXPAND);
+		graphSizer->Add(new wxStaticText(this, wxID_ANY, ""));
 		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, __("Y axis range") + std::string(":")));
 		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, ""));
+		graphSizer->Add(new wxStaticText(this, wxID_ANY, ""));
 		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, __("min")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		graphSizer->Add(ymin, 0, wxEXPAND);
+		graphSizer->Add(new wxStaticText(this, wxID_ANY, ""));
 		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, __("max")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		graphSizer->Add(ymax, 0, wxEXPAND);
+		graphSizer->Add(new wxStaticText(this, wxID_ANY, ""));
 		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, __("X axis step")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		graphSizer->Add(step, 0, wxEXPAND);
+		graphSizer->Add(new wxStaticText(this, wxID_ANY, ""));
 		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, __("Build speed")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		graphSizer->Add(speed, 0, wxEXPAND);
+		graphSizer->Add(new wxStaticText(this, wxID_ANY, units.empty() ? "" : units + __("/sec")));
 		graphSizer->Add(buildButton);
 		graphSizer->Add(previewButton);
 		

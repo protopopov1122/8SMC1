@@ -242,7 +242,8 @@ namespace CalXUI {
 	
 	
 	void CalxMotorCtrl::updateUI() {
-		std::string pos = __("Position") + std::string(": ") + std::to_string(this->dev->getPosition());
+		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
+		std::string pos = __("Position") + std::string(": ") + std::to_string(this->dev->getPosition()) + " " + units;
 		std::string pwr = __("Power") + std::string(": ") + std::string(dev->getMotor()->getPowerState() == Power::FullPower ?
 								__("full") : (dev->getMotor()->getPowerState() == Power::HalfPower ?
 								__("half") : __("no")));
@@ -254,6 +255,7 @@ namespace CalXUI {
 		this->state->SetLabel(stat);
 		this->trailer1->SetLabel(tra1);
 		this->trailer2->SetLabel(tra2);
+		Layout();
 	}
 	
 	void CalxMotorCtrl::stop() {

@@ -26,11 +26,12 @@ namespace CalXUI {
 	
 	CalxTaskLinearStepHandle::CalxTaskLinearStepHandle(wxWindow *win, wxWindowID id)
 		: CalxTaskStepHandle::CalxTaskStepHandle(win, id) {
+		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
 		
 		motor_point_t pos = {0, 0};
 		this->step = new MoveTaskStep(pos, 1, false);
 		
-		wxFlexGridSizer *sizer = new wxFlexGridSizer(2);
+		wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 		SetSizer(sizer);
 		
         this->xCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
@@ -43,12 +44,16 @@ namespace CalXUI {
 		
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Destination") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("x") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(xCoord);
+		sizer->Add(new wxStaticText(this, wxID_ANY, units));
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("y") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(yCoord);
+		sizer->Add(new wxStaticText(this, wxID_ANY, units));
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Speed") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(speed);
+		sizer->Add(new wxStaticText(this, wxID_ANY, units.empty() ? "" : units + __("/sec")));
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(relative);
 		
@@ -78,11 +83,12 @@ namespace CalXUI {
 	
 	CalxTaskLinearJumpStepHandle::CalxTaskLinearJumpStepHandle(wxWindow *win, wxWindowID id)
 		: CalxTaskStepHandle::CalxTaskStepHandle(win, id) {
+		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
 		
 		motor_point_t pos = {0, 0};
 		this->step = new JumpTaskStep(pos, 1, false);
 		
-		wxFlexGridSizer *sizer = new wxFlexGridSizer(2);
+		wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 		SetSizer(sizer);
 		
         this->xCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
@@ -96,12 +102,16 @@ namespace CalXUI {
 		
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Destination") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("x") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(xCoord);
+		sizer->Add(new wxStaticText(this, wxID_ANY, units));
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("y") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(yCoord);
+		sizer->Add(new wxStaticText(this, wxID_ANY, units));
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Speed") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(speed);
+		sizer->Add(new wxStaticText(this, wxID_ANY, units.empty() ? "" : units + __("/sec")));
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(relative);
 		
@@ -131,11 +141,12 @@ namespace CalXUI {
 	
 	CalxTaskArcStepHandle::CalxTaskArcStepHandle(wxWindow *win, wxWindowID id)
 		: CalxTaskStepHandle::CalxTaskStepHandle(win, id) {
+		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
 			
 		motor_point_t pnt = {0, 0};
 		this->step = new ArcTaskStep(pnt, pnt, 200, 1.0f, false);
 		
-		wxFlexGridSizer *sizer = new wxFlexGridSizer(2);
+		wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 		SetSizer(sizer);
 		
         this->destXCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
@@ -156,20 +167,28 @@ namespace CalXUI {
 		
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Destination") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("x") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(destXCoord);
+		sizer->Add(new wxStaticText(this, wxID_ANY, units));
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("y") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(destYCoord);
+		sizer->Add(new wxStaticText(this, wxID_ANY, units));
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Center") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""), 0, wxALIGN_RIGHT | wxRIGHT, 5);
+		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("x") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(cenXCoord);
+		sizer->Add(new wxStaticText(this, wxID_ANY, units));
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("y") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(cenYCoord);
+		sizer->Add(new wxStaticText(this, wxID_ANY, units));
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Speed") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(speed);
+		sizer->Add(new wxStaticText(this, wxID_ANY, units.empty() ? "" : units + __("/sec")));
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Splitter") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(splitter);
+		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
 		sizer->Add(clockwise);
 		sizer->Add(relative);		
 		
