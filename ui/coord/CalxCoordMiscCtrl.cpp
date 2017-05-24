@@ -253,7 +253,6 @@ namespace CalXUI {
 		this->ctrl->setMaster(true);
 		ErrorCode errcode = this->handle->measure(TrailerId::Trailer1);
 		if (errcode != ErrorCode::NoError) {
-			wxGetApp().getErrorHandler()->handle(errcode);
 			work = false;
 		}
 		if (relative && work) {
@@ -261,10 +260,10 @@ namespace CalXUI {
 		} else if (work) {
 			errcode = handle->move(dest, speed, div, jump);
 		}
-		wxGetApp().getErrorHandler()->handle(errcode);
 		if (work && errcode == ErrorCode::NoError) {
 			ctrl->setPlaneOffset(handle->getController()->getPosition());
 		}
+		wxGetApp().getErrorHandler()->handle(errcode);
 		this->ctrl->setMaster(false);
 		handle->close_session();
 	}
