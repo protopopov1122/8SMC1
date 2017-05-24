@@ -28,9 +28,13 @@ namespace CalXUI {
 		: CalxTaskHandle(win, id, CalxTaskType::CalxLinear) {
 		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
 		
-		motor_rect_t rect = {0, 0, 1, 1};
-		motor_coord_t spac = 1;
-		bool vert = true;
+		ConfigEntry *confEntry = wxGetApp().getSystemManager()->getConfiguration()->getEntry("linear_task");
+		motor_rect_t rect = {confEntry->getInt("x_start", 0),
+		                     confEntry->getInt("y_start", 0),
+							 confEntry->getInt("width", 10000),
+							 confEntry->getInt("height", 10000)};
+		motor_coord_t spac = confEntry->getInt("spacing", 1000);
+		bool vert = confEntry->getBool("vertical", true);
 		this->task = new LinearCoordTask(rect, spac, vert);
 		
 		ConfigManager *conf = wxGetApp().getSystemManager()->getConfiguration();
