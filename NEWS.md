@@ -132,3 +132,6 @@ By and large, system is finished. Ctrl-lib and Calx UI works well, all device dr
 
 ##### 14/04/2017
 Project mostly ported on Linux and some refractoring was performed. TODO: retest all functions.
+
+##### 25/05/2017
+Project is fully functional and working.

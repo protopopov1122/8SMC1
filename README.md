@@ -1,7 +1,7 @@
 CalX Stepper motor tools.
 ===================
 
-CalX is project of creating high level control application and library for stepper motors and instruments for them. Project codebase is device and platform independent, so may be adopted to any kind of motor controllers, only requirement is implementation of some interfaces for them(called Device API). During development and testing are used Standa 8SMC1 stepper motor controllers and EKSPLA NL300 lasers, so so CalX already contains Device API implementation for them. By 17/05/2017 several integral tests were performed and system is working fully, however some enhancements are planned.
+CalX is project of creating high level control application and library for stepper motors and instruments for them. Project codebase is device and platform independent, so may be adopted to any kind of motor controllers, only requirement is implementation of some interfaces for them(called Device API). During development and testing are used Standa 8SMC1 stepper motor controllers and EKSPLA NL300 lasers, so so CalX already contains Device API implementation for them. By 25/05/2017 system is fully functional and ready to production.
 
 Project consists of several parts:
 * Device API - the only code which directly interacts with motor controller/drivers and instruments, it is platform dependent. Its components are stored in device subdirectory. Device API defines abstract intefaces so that other code uses only them and is device-independent. To add new device class support to system, you must implement these interfaces(they are tiny) and patch some files(two lines per cli/main.cpp and ui/CalxApp.cpp) to use them. Reference Device API implementation is wrappers for Standa 8SMC1 controllers(located in device/8smc1 directory), but they have a lot of extra code that isn't necessary.
@@ -15,14 +15,14 @@ For more info see READMEs in subdirectories(read this README before).
 
 Motivation
 ===================
-This project started with goal to create two-axis moving laser using existing stepper motor and controller for physics lab for educational purposes. Currently it is more universal and has more features. After first version release, there may added also other device types and functions.
+This project started with goal to create two-axis moving laser using existing stepper motor and controller for physics lab for educational purposes. Currently it is more universal and has more features. After first version release, there also may be added other device types and functions.
 
 Known issues
 ===================
 Project started as simple Standa 8SMC1 motor control interface, however during development it extended with features that wasn't necessary at start, so there is some consequences:
 * Not all text files that describe project is up-to-date. Development is quite fast and focused on new function implementation, so not all textual descriptions are actual.
 * Currently CalX has possibility to use any stepper motors, however the only hardware controller we have is Standa 8SMC1 - all functionality is tested with them.
-* Project is portable and has versions for Windows and Linux. Main development version is Windows version, Linux version currently is unstable.
+* Project is portable and has versions for Windows and Linux. Main development version is Windows version, Linux version currently may be unstable.
 
 Disclaimer
 ===================
