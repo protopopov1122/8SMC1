@@ -58,7 +58,7 @@ namespace CalXUI {
 		motor_point_t validateMax = {INT_MAX, INT_MAX};
 		this->validator = new CoordPlaneValidator(validateMin, validateMax, wxGetApp().getSystemManager()->getConfiguration()->getEntry("core")->getInt("maxspeed", 4000), ctrl->peekPlane());
 		ctrl->pushPlane(this->validator);
-		this->log = new CoordPlaneLog(ctrl->peekPlane(), &std::cout, "Plane #" + std::to_string(ctrl->getID()) + ": ");
+		this->log = new CoordPlaneLog(ctrl->peekPlane(), &std::cout, "Plane #" + std::to_string(ctrl->getID()) + ": ", false);
 		ctrl->pushPlane(this->log);
 		motor_point_t mapOffset = {0, 0};
 		motor_scale_t mapScale = {1.0f, 1.0f};
