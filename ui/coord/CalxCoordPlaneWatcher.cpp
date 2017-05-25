@@ -23,6 +23,7 @@
 #include "ui/CalxUnitProcessor.h"
 #include <wx/sizer.h>
 #include <wx/dcbuffer.h>
+#include <wx/dcmemory.h>
 
 namespace CalXUI {
 	
@@ -99,6 +100,7 @@ namespace CalXUI {
 			this->repaint_timer = nullptr;
 		}
 
+		this->bitmap.Create(GetSize().x, GetSize().y);
 		this->rendering = false;
 		this->has_updates = true;
 		this->listener = new CalxCoordPlaneWatcherEvent(this);
@@ -109,6 +111,7 @@ namespace CalXUI {
 		this->history.clear();
 		this->history.push_back(std::make_pair(this->handle->getController()->getPosition(), false));
 		this->has_updates = true;
+		renderBitmap();
 		Refresh();
 	}
 	
@@ -121,6 +124,7 @@ namespace CalXUI {
 	}
 	
 	void CalxCoordPlaneWatcher::add(motor_point_t point, bool sync) {
+		// Append point to path
 		if (!this->history.empty()) {
 			motor_point_t last = this->history.at(this->history.size() - 1).first;
 			if (last.x == point.x &&
@@ -130,18 +134,51 @@ namespace CalXUI {
 		}
 		this->has_updates = true;
 		this->history.push_back(std::make_pair(point, sync));
+		// Draw it on bitmap
+		motor_point_t last_point = this->history.at(this->history.size() - 2).first;
+		wxMemoryDC dc;
+		dc.SelectObject(this->bitmap);
+		dc.SetPen(*wxBLACK_PEN);
+		dc.SetBrush(*wxBLACK_BRUSH);
+		wxSize real_size = GetSize();
+		motor_rect_t plane_size = this->handle->getController()->getSize();
+		double scaleX, scaleY;
+		scaleX = ((double) real_size.x) / plane_size.w;
+		scaleY = ((double) real_size.y) / plane_size.h;
+		double x = ((double) (point.x - plane_size.x) * scaleX);
+		double y = ((double) (plane_size.h + plane_size.y - point.y) * scaleY);
+		double lastX = ((double) (last_point.x - plane_size.x) * scaleX);
+		double lastY = ((double) (plane_size.h + plane_size.y - last_point.y) * scaleY);
+		dc.DrawRectangle((wxCoord) x - 1, (wxCoord) y - 1, 2, 2);
+		if (sync) {
+			dc.DrawLine(static_cast<wxCoord>(lastX), static_cast<wxCoord>(lastY),
+                        static_cast<wxCoord>(x), static_cast<wxCoord>(y));
+		}
 	}
 
 	void CalxCoordPlaneWatcher::OnPaintEvent(wxPaintEvent &evt) {
 		this->has_updates = false;
-		this->rendering = true;
+		// Render plane
 		wxPaintDC dc(this);
-		wxBufferedDC buf(&dc, this->GetSize());
-		render(buf);
-		this->rendering = false;
+		dc.DrawBitmap(this->bitmap, 0, 0);
+		
+		// Draw current position
+		dc.SetPen(*wxRED_PEN);
+		dc.SetBrush(*wxRED_BRUSH);
+		wxSize real_size = GetSize();
+		motor_rect_t plane_size = this->handle->getController()->getSize();
+		double scaleX, scaleY;
+		scaleX = ((double) real_size.x) / plane_size.w;
+		scaleY = ((double) real_size.y) / plane_size.h;
+		motor_point_t point = this->handle->getController()->getPosition();
+		double _x = ((double) (point.x - plane_size.x) * scaleX);
+		double _y = ((double) (plane_size.h + plane_size.y - point.y) * scaleY);
+		dc.DrawRectangle((int) _x - 2, (int) _y - 2, 4, 4);
 	}
 	
 	void CalxCoordPlaneWatcher::OnResizeEvent(wxSizeEvent &evt) {
+		this->bitmap.Create(GetSize().x, GetSize().y);
+		renderBitmap();
 		Refresh();
 	}
 	
@@ -162,7 +199,15 @@ namespace CalXUI {
 		this->add(pair.first, pair.second);
 	}
 	
+	void CalxCoordPlaneWatcher::renderBitmap() {
+		wxMemoryDC dc;
+		dc.SelectObject(this->bitmap);
+		render(dc);		
+	}
+	
 	void CalxCoordPlaneWatcher::render(wxDC &dc) {
+		this->rendering = true;
+		
 		dc.SetBackground(*wxWHITE_BRUSH);
 		dc.Clear();
 		
@@ -206,12 +251,7 @@ namespace CalXUI {
 		dc.GetMultiLineTextExtent(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(-top_plane_size.y)), &x, &y);
 		dc.DrawText(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(top_plane_size.y + top_plane_size.h)), (wxCoord) ((-top_plane_size.x) * top_scaleX) - x / 2, 0);
 		
-		dc.SetPen(*wxRED_PEN);
-		dc.SetBrush(*wxRED_BRUSH);
-		motor_point_t point = this->handle->getController()->getPosition();
-		double _x = ((double) (point.x - plane_size.x) * scaleX);
-		double _y = ((double) (plane_size.h + plane_size.y - point.y) * scaleY);
-		dc.DrawRectangle((int) _x - 2, (int) _y - 2, 4, 4);
+		this->rendering = false;
 	}
 	
 	CalxCoordPlaneWatcherDialog::CalxCoordPlaneWatcherDialog(wxWindow *win, wxWindowID id, CoordHandle *handle)

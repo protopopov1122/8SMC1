@@ -23,6 +23,7 @@
 
 #include "CalxApp.h"
 #include <wx/stattext.h>
+#include <wx/bitmap.h>
 
 namespace CalXUI {
 	
@@ -65,6 +66,7 @@ namespace CalXUI {
 		private:
 			void add(motor_point_t, bool);
 			void render(wxDC&);
+			void renderBitmap();
 			void OnExit(wxCloseEvent&);
 			void OnPaintEvent(wxPaintEvent&);
 			void OnResizeEvent(wxSizeEvent&);
@@ -77,6 +79,8 @@ namespace CalXUI {
 			CalxCoordPlaneWatcherEvent *listener;
 			bool rendering;
 			bool has_updates;
+			
+			wxBitmap bitmap;
 	};
 	
 	class CalxCoordPlaneWatcherDialog : public wxDialog {
