@@ -57,6 +57,7 @@ namespace CalXUI {
 		
 			CalxPlaneTracker *tracker;
 			CoordPlaneStack *stack;
+			CoordHandle *base;
 	};
 	
 	class CalxVirtualPlaneDialog : public wxDialog {
