@@ -144,15 +144,15 @@ namespace CalX {
 			return node;
 		} else if (expectOperator(OperatorType::PLUS)) {
 			nextToken();
-			return nextFactor();
+			return nextAddsub();
 		} else if (expectOperator(OperatorType::MINUS)) {
 			nextToken();
-			Node *node = nextFactor();
+			Node *node = nextAddsub();
 			return new InvertNode(node);
 		} else if (expectOperator(OperatorType::OPENING_PARENTHESE)) {
 			nextToken();
 			Node *node = nextAddsub();
-			if (!expectOperator(OperatorType::OPENING_PARENTHESE)) {
+			if (!expectOperator(OperatorType::CLOSING_PARENTHESE)) {
 				delete node;
 				return nullptr;
 			}
