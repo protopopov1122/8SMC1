@@ -29,6 +29,7 @@
 #include "ui/coord/CalxCoordPanel.h"
 #include "ui/CalxAutoconfDialog.h"
 #include "ui/CalxUnitProcessor.h"
+#include "ui/CalxConfigLoader.h"
 
 #include <fstream>
 #include "ctrl-lib/ConfigManager.h"
@@ -60,9 +61,17 @@ namespace CalXUI {
 	};
 	
 	bool CalxApp::OnInit() {	
+		CalxConfigLoader *confLoader = new CalxConfigLoader(nullptr, wxID_ANY);
+		confLoader->load();
+		if (confLoader->isExiting()) {
+			confLoader->Destroy();
+			return false;
+		}
+		std::string path = confLoader->getFileName();
+		confLoader->Destroy();
 
         ConfigManager *conf = nullptr;
-        std::ifstream cnf("config.ini");
+        std::ifstream cnf(path);
         if (!cnf.good()) {
             wxMessageBox(__("Can't open configuration. Using default values."), __("Warning"), wxICON_WARNING);
             conf = new ConfigManager();

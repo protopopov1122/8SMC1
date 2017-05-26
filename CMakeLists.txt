@@ -6,7 +6,8 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 set(build_directory ${CMAKE_BINARY_DIR}/build CACHE INTERNAL "")
 add_custom_target(make-build-directory ALL COMMAND ${CMAKE_COMMAND} -E make_directory ${build_directory})
 add_custom_target(copy-config ALL
-	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/config.ini ${build_directory}
+	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/main.conf.ini ${build_directory}
+	# COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/emu.conf.ini ${build_directory}
 	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/auto.conf ${build_directory}
 	DEPENDS make-build-directory
 )
@@ -15,12 +16,13 @@ add_subdirectory(device)
 add_subdirectory(ctrl-lib)
 add_subdirectory(cli)
 add_subdirectory(ui)
-configure_file(${CMAKE_SOURCE_DIR}/misc/config.ini ${CMAKE_BINARY_DIR}/config.ini COPYONLY)
+configure_file(${CMAKE_SOURCE_DIR}/misc/main.conf.ini ${CMAKE_BINARY_DIR}/main.conf.ini COPYONLY)
+# configure_file(${CMAKE_SOURCE_DIR}/misc/emu.conf.ini ${CMAKE_BINARY_DIR}/emu.conf.ini COPYONLY)
 configure_file(${CMAKE_SOURCE_DIR}/misc/auto.conf ${CMAKE_BINARY_DIR}/auto.conf COPYONLY)
 if (WIN32)
-	install(FILES ${CMAKE_BINARY_DIR}/config.ini ${CMAKE_BINARY_DIR}/auto.conf DESTINATION / COMPONENT config)
+	install(FILES ${CMAKE_BINARY_DIR}/main.conf.ini ${CMAKE_BINARY_DIR}/auto.conf DESTINATION / COMPONENT config)
 else (WIN32)
-	install(FILES ${CMAKE_BINARY_DIR}/config.ini ${CMAKE_BINARY_DIR}/auto.conf DESTINATION /etc/calx COMPONENT config)
+	install(FILES ${CMAKE_BINARY_DIR}/main.conf.ini ${CMAKE_BINARY_DIR}/auto.conf DESTINATION /etc/calx COMPONENT config)
 endif (WIN32)
 set(CPACK_COMPONENT_CONFIG_DISPLAY_NAME "Configuration files" CACHE INTERNAL "")
 set(CPACK_COMPONENT_CONFIG_DESCRIPTION "Set of default configuration files" CACHE INTERNAL "")

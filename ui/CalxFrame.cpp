@@ -55,7 +55,7 @@ namespace CalXUI {
 		this->aboutMenu = new wxMenu();
 		wxMenuItem *aboutItem = new wxMenuItem(this->aboutMenu, wxID_ABOUT, __("About"));
 		this->aboutMenu->Append(aboutItem);
-		Bind( wxEVT_COMMAND_MENU_SELECTED, &CalxFrame::OnAboutMenuClick, this, 
+		Bind(wxEVT_COMMAND_MENU_SELECTED, &CalxFrame::OnAboutMenuClick, this, 
             wxID_ABOUT);
 		this->menuBar->Append(this->aboutMenu, __("About"));
 		SetMenuBar(this->menuBar);
