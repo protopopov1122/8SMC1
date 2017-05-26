@@ -27,9 +27,7 @@
 #include <mutex>
 #include <string>
 
-/* This file contains definitions of Device and Instrument classes.
-   They are main Device API abstractions that represent different
-   types of motors and cutting instruments. */
+/* This file contains Device API interfaces. */
 
 namespace CalX {
 
@@ -65,7 +63,6 @@ namespace CalX {
 	typedef int64_t device_id_t;
 	#define DEVICE_ID_FMT PRId64
 
-	// Device power indicator
 	enum class Power {
 		NoPower, HalfPower, FullPower
 	};
@@ -73,12 +70,6 @@ namespace CalX {
 	enum class InstrumentMode {
 		Off, Prepare, Full
 	};
-	
-	/* Abstract device.
-	   It contains two method types:
-	       * methods that are actually performing some actions or return useful information - Functional.
-		   * methods that are optional and may return fake values - Optional.
-	*/
 	
 	enum class DeviceType {
 		Motor, Instrument
@@ -114,18 +105,17 @@ namespace CalX {
 		public:
 			Motor();
 			virtual ~Motor();
-            virtual motor_coord_t getPosition() = 0;		// Functional. Returns motor position in motor steps.
-			virtual bool isTrailerPressed(int) = 0;	// Functional. Provides info about device trailers.
-			virtual bool isRunning() = 0;		// Functional. Provides info about device state.
-			virtual Power getPowerState() = 0;	// Functional. Provides info about device power state.
+            virtual motor_coord_t getPosition() = 0;
+			virtual bool isTrailerPressed(int) = 0;
+			virtual bool isRunning() = 0;
+			virtual Power getPowerState() = 0;
             virtual bool start(motor_coord_t, float,
-					unsigned char, bool  = false) = 0;	// Functional. Controls device movement.
-			virtual bool stop() = 0;			// Functional. Controls device movement.
-			virtual bool enablePower(bool) = 0;		// Functional. Controls device power.
+					unsigned char, bool  = false) = 0;
+			virtual bool stop() = 0;
+			virtual bool enablePower(bool) = 0;
 	};
 
-	/* Abstract instrument.
-	   Has few methods to enable/disable and check state. They all are functional. */
+	
 	class Instrument : public Device {
 		public:
 			Instrument();
