@@ -3,14 +3,7 @@ CalX Stepper motor tools.
 
 CalX is project of creating high level control application and library for stepper motors and instruments for them. Project codebase is device and platform independent, so may be adopted to any kind of motor controllers, only requirement is implementation of some interfaces for them(called Device API). During development and testing are used Standa 8SMC1 stepper motor controllers and EKSPLA NL300 lasers, so so CalX already contains Device API implementation for them. By 25/05/2017 system is fully functional and ready to production.
 
-Project consists of several parts:
-* Device API - the only code which directly interacts with motor controller/drivers and instruments, it is platform dependent. Its components are stored in device subdirectory. Device API defines abstract intefaces so that other code uses only them and is device-independent. To add new device class support to system, you must implement these interfaces(they are tiny) and patch some files(two lines per cli/main.cpp and ui/CalxApp.cpp) to use them. Reference Device API implementation is wrappers for Standa 8SMC1 controllers(located in device/8smc1 directory), but they have a lot of extra code that isn't necessary.
-* Ctrl-lib - main and central component of project. Is offers different actions and abstractions that are used for complex stepper motor control. It uses only Device API created abstractions, so Ctrl-lib is platform-independent and may be used with any compatible controller/motor. Basically it is project functional core, on top of it works GUI and command line interface.
-* CLI(command line interface) - interface that was used during Ctrl-lib development and testing. It doesn't cover all Ctrl-lib possibilities(however most of them) and has complex commands and parameters, however it can be useful.
-* UI(graphical user interface) - wxWidgets based graphical application that uses Ctrl-lib to provide convinient device control and cover its functions. Ctrl-lib has big variety of features, so UI itself may be not very user-friendly. Ctrl-lib is extended to needs of UI.
-
-Track NEWS.md to view recent changes.
-For more info see READMEs in subdirectories(read this README before).
+To see info about building and user manual view [documentation](https://github.com/protopopov1122/CalX/tree/master/docs)
 
 
 Motivation
@@ -30,22 +23,6 @@ Project is not fully tested, it may contain some bugs.
 
 The only Device API implementation is written for Standa controllers and EKSPLA laser, other device support may be added later. 8SMC1 devices have own standart packages for similar purposes, but they require additional licenses and are discontinued by manufacter.
 
-Building
-===================
-Project uses CMake as a build system, it also includes CPack build commands so installer can be generated easialy(althrough you need NSIS installed). Main system dependencies are Visual C++ library and wxWidgets library, so you should download, unpack and compile(unicode shared monolithic library) it in some top-level directory(project uses standart FindwxWidgets module, see it documentation). Project builds on both Windows and Linux, however Linux installator is not configured yet. General instructions:
-```bash
-mkdir build
-cd build	# Build out-of-source
-cmake ..	# Generate build files
-msbuild CalX.sln /p:Configuration=Release /m	# On Windows
-make	# On Linux
-cpack
-```
-Project also contains MinGW build files, that should be used for Windows XP:
-```bash
-./misc/old-build/old-build.sh build "-jN" [WX] [WX_LIB] # Where N - build process count, WX - path to wxWidgets, WX_LIB - path to wxWidgets unicode release monolithic dynamic library relatively to WX.
-```
-It produces full system build in build/old-build directory, however system installer not available. Resulting executables are linked statically to runtime.
 
 Authors and Contributions
 ===================
