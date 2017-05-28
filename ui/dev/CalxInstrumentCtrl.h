@@ -42,7 +42,6 @@ namespace CalXUI {
 			}
 		private:
 			void OnExit(wxCloseEvent&);
-			void OnStateButton(wxCommandEvent&);
 			void OnEnableButton(wxCommandEvent&);
 			void OnModeClick(wxCommandEvent&);
 			void OnConfClick(wxCommandEvent&);

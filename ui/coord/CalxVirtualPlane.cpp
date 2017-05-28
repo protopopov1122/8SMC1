@@ -138,7 +138,7 @@ namespace CalXUI {
 		
 		dc.SetPen(*wxRED_PEN);
 		dc.SetBrush(*wxRED_BRUSH);
-		motor_point_t point = this->base->getPosition();
+		motor_point_t point = this->base->getController()->getPosition();
 		double _x = ((double) (point.x - plane_size.x) * scaleX);
 		double _y = ((double) (plane_size.h + plane_size.y - point.y) * scaleY);
 		dc.DrawRectangle((int) _x - 2, (int) _y - 2, 4, 4);

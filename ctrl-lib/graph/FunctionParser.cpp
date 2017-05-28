@@ -148,7 +148,7 @@ namespace CalX {
 		} else if (expectOperator(OperatorType::MINUS)) {
 			nextToken();
 			Node *node = nextAddsub();
-			return new InvertNode(node);
+			return node != nullptr ? new InvertNode(node) : nullptr;
 		} else if (expectOperator(OperatorType::OPENING_PARENTHESE)) {
 			nextToken();
 			Node *node = nextAddsub();

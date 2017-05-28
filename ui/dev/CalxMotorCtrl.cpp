@@ -21,6 +21,7 @@
 #include "CalxApp.h"
 #include "CalxErrorHandler.h"
 #include "CalxMotorCtrl.h"
+#include "CalxConfigEditor.h"
 #include "ctrl-lib/SystemManager.h"
 #include "ctrl-lib/device/DeviceManager.h"
 #include <wx/statbox.h>
@@ -145,6 +146,10 @@ namespace CalXUI {
 		infoSizer->Add(trailer1);
 		this->trailer2 = new wxStaticText(infoPanel, wxID_ANY, __("Trailer 2") + std::string(": "));
 		infoSizer->Add(trailer2);
+		this->hardwareInfo = new wxStaticText(infoPanel, wxID_ANY, __("Hardware info") + std::string(": "));
+		infoSizer->Add(hardwareInfo);
+		this->runtimeInfo = new wxStaticText(infoPanel, wxID_ANY, __("Runtime info") + std::string(": "));
+		infoSizer->Add(runtimeInfo);
 		infoPanel->SetSizer(infoSizer);
 		sizer->Add(infoPanel, 0, wxALL, 10);
 		
@@ -214,6 +219,10 @@ namespace CalXUI {
 		stopButton->Bind(wxEVT_BUTTON, &CalxMotorCtrl::stopClick, this);
 		actionSizer->Add(stopButton, 1, wxEXPAND);
 		
+		wxButton *configButton = new wxButton(actionPanel, wxID_ANY, __("Configure"));
+		configButton->Bind(wxEVT_BUTTON, &CalxMotorCtrl::OnConfigEvent, this);
+		actionSizer->Add(configButton, 1, wxEXPAND);
+		
 		actionPanel->SetSizer(actionSizer);
 		sizer->Add(actionPanel, 0, wxALL, 10);
 
@@ -249,11 +258,15 @@ namespace CalXUI {
 		std::string stat = __("State") + std::string(": ") + std::string(dev->getMotor()->isRunning() ? __("Running") : __("Not running"));
 		std::string tra1 = __("Trailer 1") + std::string(": ") + std::string(dev->getMotor()->isTrailerPressed(1) ? __("Pushed") : __("Unpushed"));
 		std::string tra2 = __("Trailer 2") + std::string(": ") + std::string(dev->getMotor()->isTrailerPressed(2) ? __("Pushed") : __("Unpushed"));
+		std::string hwinf = dev->getMotor()->getDeviceInfo();
+		std::string rtinf = dev->getMotor()->getRuntimeInfo();
 		this->position->SetLabel(pos);
 		this->power->SetLabel(pwr);
 		this->state->SetLabel(stat);
 		this->trailer1->SetLabel(tra1);
 		this->trailer2->SetLabel(tra2);
+		this->hardwareInfo->SetLabel(hwinf);
+		this->runtimeInfo->SetLabel(rtinf);
 		Layout();
 	}
 	
@@ -306,5 +319,13 @@ namespace CalXUI {
 			}
 		}
 		this->stopButton->Enable(!e && this->master);
+	}
+	
+	void CalxMotorCtrl::OnConfigEvent(wxCommandEvent &evt) {
+		CalxConfigDialog *editor = new CalxConfigDialog(this, wxID_ANY, this->dev->getMotor()->getConfiguration());
+		if (editor->ShowModal() == wxID_OK) {
+			
+		}
+		delete editor;
 	}
 }

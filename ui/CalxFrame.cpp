@@ -28,7 +28,6 @@
 #include "task/CalxTaskPanel.h"
 #include "coord/CalxCoordPanel.h"
 #include "dev/CalxDevicePanel.h"
-#include "CalxConsoleWidget.h"
 
 namespace CalXUI {
 	CalxFrame::CalxFrame(std::string title)
@@ -37,17 +36,11 @@ namespace CalXUI {
 		this->CreateStatusBar(1);
 		this->SetStatusText(__("CalX UI"), 0);
 		
-		wxSplitterWindow *mainPanel = new wxSplitterWindow(this, wxID_ANY);
+		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
+		this->SetSizer(sizer);
+		this->panel = new CalxPanel(this, wxID_ANY);
+		sizer->Add(this->panel, 1, wxEXPAND | wxALL);
 		
-		this->panel = new CalxPanel(mainPanel, wxID_ANY);
-		CalxConsoleWidget *console = new CalxConsoleWidget(mainPanel, wxID_ANY);
-		panel->Show(true);
-		console->Show(true);
-		mainPanel->Initialize(panel);
-		mainPanel->SplitHorizontally(panel, console);
-		mainPanel->SetSashGravity(1.0f);	
-		
-		this->console = new std::ostream(console);
 		
 		Bind(wxEVT_CLOSE_WINDOW, &CalxFrame::OnClose, this);
 		
@@ -66,10 +59,6 @@ namespace CalXUI {
 	
 	CalxPanel *CalxFrame::getPanel() {
 		return this->panel;
-	}
-	
-	std::ostream *CalxFrame::getConsole() {
-		return this->console;
 	}
 
 	void CalxFrame::OnClose(wxCloseEvent &evt) {

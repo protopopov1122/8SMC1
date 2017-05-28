@@ -78,6 +78,7 @@ namespace CalXUI {
 			void threadUpdate(wxThreadEvent&);
 			void OnExit(wxCloseEvent&);
 			void OnEnableEvent(wxThreadEvent&);
+			void OnConfigEvent(wxCommandEvent&);
 		
 			CalX::MotorController *dev;
 			CalxActionQueue *queue;
@@ -100,6 +101,8 @@ namespace CalXUI {
 			wxStaticText *state;
 			wxStaticText *trailer1;
 			wxStaticText *trailer2;
+			wxStaticText *hardwareInfo;
+			wxStaticText *runtimeInfo;
 	};	
 }
 

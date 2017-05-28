@@ -274,6 +274,7 @@ namespace CalXUI {
 		this->integerSpin = new wxSpinCtrl(this->integerEditor, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
 		integerSizer->Add(this->integerSpin, 0, wxALIGN_CENTER);
 		this->integerSpin->Bind(wxEVT_SPINCTRL, &CalxConfigEditor::OnIntegerEdit, this);
+		this->integerSpin->Bind(wxEVT_TEXT, &CalxConfigEditor::OnIntegerEdit, this);
 		
 		this->realEditor = new wxPanel(editorPanel, wxID_ANY);
 		editorSizer->Add(this->realEditor, 0, wxEXPAND | wxALL);

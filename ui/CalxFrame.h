@@ -32,7 +32,6 @@ namespace CalXUI {
 	class CalxFrame : public wxFrame {
 		public:
 			CalxFrame(std::string);
-			std::ostream *getConsole();
 			CalxPanel *getPanel();
 		private:
 			void OnClose(wxCloseEvent&);
@@ -41,7 +40,6 @@ namespace CalXUI {
 			wxMenuBar *menuBar;
 			wxMenu *aboutMenu;
 			
-			std::ostream *console;
 			CalxPanel *panel;
 	};
 }
