@@ -8,3 +8,5 @@ This guide is trying to explain essential concepts of the system and give practi
 * [Installation and building](https://github.com/protopopov1122/CalX/blob/master/docs/install.md)
 * [Used concepts](https://github.com/protopopov1122/CalX/blob/master/docs/concepts.md)
 * [Graphical User Interface](https://github.com/protopopov1122/CalX/blob/master/docs/gui.md)
+* [Math engine](https://github.com/protopopov1122/CalX/blob/master/docs/math.md)
+* [Error codes](https://github.com/protopopov1122/CalX/blob/master/docs/error.md)
