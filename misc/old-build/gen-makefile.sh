@@ -17,6 +17,15 @@ function GenDevAPI {
 GenDevAPI "standart" "Stub.cpp" "-Ires" " -o \$(BUILD)/dev_standart.dll -Wl,-Bdynamic,--library-path=\$(BUILD) -lUSMCDLL  -Wl,--out-implib,\$(BUILD)/dev_standart.a"
 GenDevAPI "emulated" "" "" " -o \$(BUILD)/libdev_emulated.so"
 
+function GenExtEng {
+	find ext/$1 -name "*.cpp" -and -not -name "$2" -not -iwholename "$5" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o:\n\t$(CC) $(CFLAGS_LIB) $(CFLAGS) '$3' -c "$0"\n"}'
+	OBJS=`find ext/$1 -name "*.cpp" -and -not -name "$2" -not -iwholename "$5" | awk -F/ '{split($NF, arr, "\\."); print arr[1]".o"}' | tr '\n' ' '`
+	printf "exteng_$1: $OBJS \$(OUTPUT_LIB)\n\t\$(CC) -shared $OBJS $4 \$(LDFLAGS) \$(LDFLAGS_LIB) -Wl,--library-path=\$(BUILD) -lcalx\n"
+	ALL=$ALL"\t\$(MAKE) -f ./misc/old-build/Makefile exteng_$1 BUILD=\$(BUILD)\n"
+}
+
+GenExtEng "sample" "" "" " -o \$(BUILD)/ext_sample.dll" ""
+
 ALL=$ALL'\t$(MAKE) -f ./misc/old-build/Makefile $(OUTPUT) BUILD=$(BUILD)\n\t$(MAKE) -f ./misc/old-build/Makefile $(OUTPUT_LIB) $(OUTPUT_UI) BUILD=$(BUILD)\n'
 
 # Generate library, stub and cli object file build targets

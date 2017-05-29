@@ -86,6 +86,11 @@ EmuMotor.o:
 
 devapi_emulated: EmuDeviceManager.o EmuInstrument.o EmuMotor.o  $(OUTPUT_LIB)
 	$(CC) -shared EmuDeviceManager.o EmuInstrument.o EmuMotor.o   -o $(BUILD)/libdev_emulated.so $(LDFLAGS) $(LDFLAGS_LIB) -Wl,--library-path=$(BUILD) -lcalx
+ext_sample_main.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS)  -c ext/sample/ext_sample_main.cpp
+
+exteng_sample: ext_sample_main.o  $(OUTPUT_LIB)
+	$(CC) -shared ext_sample_main.o   -o $(BUILD)/ext_sample.dll $(LDFLAGS) $(LDFLAGS_LIB) -Wl,--library-path=$(BUILD) -lcalx
 
 Stub.o:
 	$(CC) $(CFLAGS_LIB) $(CFLAGS) -Ires -c device/standart/Stub.cpp
@@ -223,9 +228,6 @@ CalxConfigEditor.o:
 CalxConfigLoader.o:
 	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/CalxConfigLoader.cpp
 
-CalxConsoleWidget.o:
-	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/CalxConsoleWidget.cpp
-
 CalxDebugConsole.o:
 	$(CC) $(CFLAGS) -I ui `$(WX)/wx-config --cxxflags` -c ui/CalxDebugConsole.cpp
 
@@ -318,18 +320,19 @@ $(OUTPUT_LIB): ConfigManager.o ConfigValidator.o CoordController.o CoordHandle.o
 	@mkdir -p $(BUILD)
 	$(CC) -shared -o $(BUILD)/$(OUTPUT_LIB) ConfigManager.o ConfigValidator.o CoordController.o CoordHandle.o Device.o DeviceManager.o AST.o DefaultFunctions.o FunctionEngine.o FunctionLexer.o FunctionParser.o InstrumentController.o logger.o CircleGenerator.o GCodeParser.o GCodeWriter.o GraphBuilder.o MotorController.o CoordPlaneLinearizer.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordPlaneValidator.o VirtualCoordPlane.o RequestResolver.o StandartRequestResolvers.o SystemManager.o CoordTask.o CoordTaskWrapper.o GCodeCoordTask.o LinearCoordTask.o BasicCoordTranslator.o ComplexCoordTranslator.o LinearCoordTranslator.o LogarithmicCoordTranslator.o PolarCoordTranslator.o  $(LDFLAGS) $(LDFLAGS_LIB)
 
-$(OUTPUT_UI): CalxActionQueue.o CalxApp.o CalxAutoconfDialog.o CalxConfigEditor.o CalxConfigLoader.o CalxConsoleWidget.o CalxDebugConsole.o CalxErrorHandler.o CalxFrame.o CalxPanel.o CalxUnitProcessor.o CalxCoordArcCtrl.o CalxCoordCtrl.o CalxCoordDialog.o CalxCoordFilter.o CalxCoordGraphCtrl.o CalxCoordLinearCtrl.o CalxCoordMiscCtrl.o CalxCoordOtherCtrl.o CalxCoordPanel.o CalxCoordPlaneWatcher.o CalxCoordPositionCtrl.o CalxVirtualPlane.o CalxCOMSelectDialog.o CalxDevicePanel.o CalxInstrumentCtrl.o CalxMotorCtrl.o CalxGcodeHandle.o CalxGcodeLoader.o CalxLinearTaskHandle.o CalxProgrammedTaskHandle.o CalxTaskPanel.o CalxTaskStepHandle.o CLI.o DevCLI.o
+$(OUTPUT_UI): CalxActionQueue.o CalxApp.o CalxAutoconfDialog.o CalxConfigEditor.o CalxConfigLoader.o CalxDebugConsole.o CalxErrorHandler.o CalxFrame.o CalxPanel.o CalxUnitProcessor.o CalxCoordArcCtrl.o CalxCoordCtrl.o CalxCoordDialog.o CalxCoordFilter.o CalxCoordGraphCtrl.o CalxCoordLinearCtrl.o CalxCoordMiscCtrl.o CalxCoordOtherCtrl.o CalxCoordPanel.o CalxCoordPlaneWatcher.o CalxCoordPositionCtrl.o CalxVirtualPlane.o CalxCOMSelectDialog.o CalxDevicePanel.o CalxInstrumentCtrl.o CalxMotorCtrl.o CalxGcodeHandle.o CalxGcodeLoader.o CalxLinearTaskHandle.o CalxProgrammedTaskHandle.o CalxTaskPanel.o CalxTaskStepHandle.o CLI.o DevCLI.o
 	@mkdir -p $(BUILD)
 ifneq ($(WXLIB),)
 	cp $(WX)/$(WXLIB) $(BUILD)
 endif
 	$(MAKE) -f ./misc/old-build/Makefile icon BUILD=$(BUILD)
-	$(CC) -o $(BUILD)/$(OUTPUT_UI) CalxActionQueue.o CalxApp.o CalxAutoconfDialog.o CalxConfigEditor.o CalxConfigLoader.o CalxConsoleWidget.o CalxDebugConsole.o CalxErrorHandler.o CalxFrame.o CalxPanel.o CalxUnitProcessor.o CalxCoordArcCtrl.o CalxCoordCtrl.o CalxCoordDialog.o CalxCoordFilter.o CalxCoordGraphCtrl.o CalxCoordLinearCtrl.o CalxCoordMiscCtrl.o CalxCoordOtherCtrl.o CalxCoordPanel.o CalxCoordPlaneWatcher.o CalxCoordPositionCtrl.o CalxVirtualPlane.o CalxCOMSelectDialog.o CalxDevicePanel.o CalxInstrumentCtrl.o CalxMotorCtrl.o CalxGcodeHandle.o CalxGcodeLoader.o CalxLinearTaskHandle.o CalxProgrammedTaskHandle.o CalxTaskPanel.o CalxTaskStepHandle.o CLI.o DevCLI.o  $(ICON_RES) $(LDFLAGS) -Wl,--library-path=\$(BUILD) -l$(NAME) `$(WX)/wx-config --libs`
+	$(CC) -o $(BUILD)/$(OUTPUT_UI) CalxActionQueue.o CalxApp.o CalxAutoconfDialog.o CalxConfigEditor.o CalxConfigLoader.o CalxDebugConsole.o CalxErrorHandler.o CalxFrame.o CalxPanel.o CalxUnitProcessor.o CalxCoordArcCtrl.o CalxCoordCtrl.o CalxCoordDialog.o CalxCoordFilter.o CalxCoordGraphCtrl.o CalxCoordLinearCtrl.o CalxCoordMiscCtrl.o CalxCoordOtherCtrl.o CalxCoordPanel.o CalxCoordPlaneWatcher.o CalxCoordPositionCtrl.o CalxVirtualPlane.o CalxCOMSelectDialog.o CalxDevicePanel.o CalxInstrumentCtrl.o CalxMotorCtrl.o CalxGcodeHandle.o CalxGcodeLoader.o CalxLinearTaskHandle.o CalxProgrammedTaskHandle.o CalxTaskPanel.o CalxTaskStepHandle.o CLI.o DevCLI.o  $(ICON_RES) $(LDFLAGS) -Wl,--library-path=\$(BUILD) -l$(NAME) `$(WX)/wx-config --libs`
 
 all:
 	$(MAKE) -f ./misc/old-build/Makefile $(OUTPUT_LIB) BUILD=$(BUILD)
 	$(MAKE) -f ./misc/old-build/Makefile devapi_standart BUILD=$(BUILD)
 	$(MAKE) -f ./misc/old-build/Makefile devapi_emulated BUILD=$(BUILD)
+	$(MAKE) -f ./misc/old-build/Makefile exteng_sample BUILD=$(BUILD)
 	$(MAKE) -f ./misc/old-build/Makefile $(OUTPUT) BUILD=$(BUILD)
 	$(MAKE) -f ./misc/old-build/Makefile $(OUTPUT_LIB) $(OUTPUT_UI) BUILD=$(BUILD)
 	$(MAKE) -f ./misc/old-build/Makefile copy BUILD=$(BUILD)

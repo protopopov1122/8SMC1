@@ -1,0 +1,20 @@
+cmake_minimum_required(VERSION 3.1)
+project(CalX)
+
+set (CMAKE_CXX_STANDARD 11)
+include_directories(${CMAKE_SOURCE_DIR})
+file(GLOB SRC *.cpp)
+add_library(ext_sample SHARED ${SRC})
+target_link_libraries(ext_sample calx)
+add_custom_command(TARGET ext_sample POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:ext_sample> ${build_directory}
+)
+if (WIN32)
+	install(TARGETS ext_sample DESTINATION / COMPONENT exteng_sample)
+else (WIN32)
+	install(TARGETS ext_sample DESTINATION lib/calx_ext COMPONENT exteng_sample)
+endif (WIN32)
+set(CPACK_COMPONENT_EXTENG_SAMPLE_DISPLAY_NAME "Sample extension engine" CACHE INTERNAL "")
+set(CPACK_COMPONENT_EXTENG_SAMPLE_DEPENDS calx_ctrl_lib CACHE INTERNAL "")
+set(CPACK_COMPONENT_EXTENG_SAMPLE_GROUP "Extensions" CACHE INTERNAL "")
+set(CPACK_COMPONENT_EXTENG_SAMPLE_DESCRIPTION "Sample extension engine implementation" CACHE INTERNAL "")

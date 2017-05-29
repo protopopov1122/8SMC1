@@ -128,9 +128,29 @@ namespace CalXUI {
 		SETUP_LOG(instruments_log, "instruments", INSTRUMENTS)
 
 		#undef SETUP_LOG
+		
+		std::string ext_addr = conf->getEntry("ext")->getString("engine", "");
+		ExtEngine *ext = nullptr;
+		if (!ext_addr.empty()) {
+			this->extLib = new wxDynamicLibrary(wxDynamicLibrary::CanonicalizeName(ext_addr), wxDL_DEFAULT | wxDL_QUIET);
+			if (!this->extLib->IsLoaded()) {
+				wxMessageBox(__("Extension engine can't be loaded"), __("Warning"), wxOK | wxICON_WARNING);
+			} else {
+				bool ext_suc;
+				void *ext_raw_getter = extLib->GetSymbol("getExtEngine", &ext_suc);
+				if (!ext_suc) {
+					wxMessageBox(__("Extension engine can't be loaded"), __("Warning"), wxOK | wxICON_WARNING);
+				} else {
+					ExtEngine_getter ext_getter = *((ExtEngine_getter*) &ext_raw_getter);
+					ext = ext_getter();
+				}
+			}
+		} else {
+			this->extLib = nullptr;
+		}
 	
 		this->devman = getter();
-		this->sysman = new SystemManager(this->devman, conf);
+		this->sysman = new SystemManager(this->devman, conf, ext);
 		this->error_handler = new CalxErrorHandler(this->sysman);
 		double unit_scale = conf->getEntry("ui")->getReal("unit_scale", 1);
 		std::string unit_suffix = conf->getEntry("ui")->getString("unit_suffix", "");
@@ -164,6 +184,10 @@ namespace CalXUI {
 		delete this->devman;
 		this->dynlib->Detach();
 		this->dynlib->Unload();
+		if (this->extLib != nullptr) {
+			this->extLib->Detach();
+			this->extLib->Unload();
+		}
 		
 		
 		#ifdef OS_WIN

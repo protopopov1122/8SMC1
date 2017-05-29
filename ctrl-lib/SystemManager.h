@@ -30,6 +30,7 @@
 #include "misc/GraphBuilder.h"
 #include "graph/FunctionEngine.h"
 #include "RequestResolver.h"
+#include "ExtEngine.h"
 
 /* SystemManager is component that store and control most system 
    objects. System manager was made to use with command line, so
@@ -40,7 +41,7 @@ namespace CalX {
 
 	class SystemManager {
 		public:
-			SystemManager(DeviceManager*, ConfigManager*);
+			SystemManager(DeviceManager*, ConfigManager*, ExtEngine* = nullptr);
 			virtual ~SystemManager();
 			DeviceManager *getDeviceManager();
 			ConfigManager *getConfiguration();
@@ -50,6 +51,7 @@ namespace CalX {
 			size_t getInstrumentCount();
 			FunctionEngine *getFunctionEngine();
 			RequestResolver *getRequestResolver();
+			ExtEngine *getExtEngine();
 			// Tasks control
 			size_t getTaskCount();
 			CoordTask *getTask(size_t);
@@ -73,6 +75,7 @@ namespace CalX {
 			std::vector<CoordHandle*> coords;
 			FunctionEngine engine;
 			RequestResolver *resolver;
+			ExtEngine *ext_engine;
 
 	};
 

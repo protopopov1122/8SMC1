@@ -63,6 +63,7 @@ namespace CalXUI {
 		
 			CalxFrame *frame;
             wxDynamicLibrary *dynlib;
+			wxDynamicLibrary *extLib;
 			DeviceManager *devman;
 			SystemManager *sysman;
 			

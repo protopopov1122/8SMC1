@@ -24,9 +24,10 @@ namespace CalX {
 
 	const char *SYSMAN_TAG = "SysMan";
 
-	SystemManager::SystemManager(DeviceManager *devman, ConfigManager *conf) {
+	SystemManager::SystemManager(DeviceManager *devman, ConfigManager *conf, ExtEngine *ext_eng) {
 		this->devman = devman;
 		this->conf = conf;
+		this->ext_engine = ext_eng;
         for (device_id_t d = 0; d < (device_id_t) devman->getMotorCount(); d++) {
 			this->dev.push_back(new MotorController(devman->getMotor(d), this->conf));
 		}
@@ -37,11 +38,18 @@ namespace CalX {
 		FunctionEngine_add_default_functions(&this->engine);
 		this->resolver = new RequestResolver(this);
 		RequestResolver_init_standart_providers(this->resolver);
+		if (this->ext_engine != nullptr) {
+			this->ext_engine->init(this);
+		}
 		INIT_LOG("SystemManager");
 	}
 
 	SystemManager::~SystemManager() {
 		LOG(SYSMAN_TAG, "System exiting");
+		if (this->ext_engine != nullptr) {
+			this->ext_engine->destroy();
+			delete this->ext_engine;
+		}
 		delete this->resolver;
 		for (size_t i = 0; i < this->tasks.size(); i++) {
 			delete this->tasks.at(i);
@@ -66,6 +74,10 @@ namespace CalX {
 	
 	ConfigManager *SystemManager::getConfiguration() {
 		return this->conf;
+	}
+	
+	ExtEngine *SystemManager::getExtEngine() {
+		return this->ext_engine;
 	}
 
 	MotorController *SystemManager::getMotorController(device_id_t d) {
