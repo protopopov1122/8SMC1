@@ -23,58 +23,58 @@
 #include "CalxCoordCtrl.h"
 
 namespace CalXUI {
-	
+
 	void CalxCoordTimer::Notify() {
 		ctrl->updateUI();
 	}
-	
+
 	CalxCoordEventListener::CalxCoordEventListener(CalxCoordCtrl *ctrl) {
 		this->ctrl = ctrl;
 	}
-	
+
 	CalxCoordEventListener::~CalxCoordEventListener() {
 	}
-	
+
 	void CalxCoordEventListener::use() {
 		ctrl->use();
 	}
-	
+
 	void CalxCoordEventListener::unuse() {
 		ctrl->unuse();
 	}
-	
+
 	CalxCoordMotorListener::CalxCoordMotorListener(CalxCoordCtrl *ctrl) {
 		this->ctrl = ctrl;
 	}
-	
+
 	CalxCoordMotorListener::~CalxCoordMotorListener() {
 	}
-	
+
 	void CalxCoordMotorListener::use() {
 		ctrl->use();
 	}
-	
+
 	void CalxCoordMotorListener::unuse() {
 		ctrl->unuse();
 	}
-	
+
 	CalxCoordInstrumentListener::CalxCoordInstrumentListener(CalxCoordCtrl *ctrl) {
 		this->ctrl = ctrl;
 	}
-	
+
 	CalxCoordInstrumentListener::~CalxCoordInstrumentListener() {
-		
+
 	}
-	
+
 	void CalxCoordInstrumentListener::use() {
 		ctrl->use();
 	}
-	
+
 	void CalxCoordInstrumentListener::unuse() {
 		ctrl->unuse();
 	}
-		
-	
+
+
 	CalxCoordMoveAction::CalxCoordMoveAction(CalxCoordCtrl *ctrl, CoordHandle *handle, bool jump, bool relative, motor_point_t dest, float speed, int div) {
 		this->ctrl = ctrl;
 		this->handle = handle;
@@ -84,11 +84,11 @@ namespace CalXUI {
 		this->speed = speed;
 		this->div = div;
 	}
-	
+
 	CalxCoordMoveAction::~CalxCoordMoveAction() {
-		
+
 	}
-			
+
 	void CalxCoordMoveAction::perform(SystemManager *sysman) {
 		handle->open_session();
 		this->ctrl->setMaster(true);
@@ -100,13 +100,13 @@ namespace CalXUI {
 		this->ctrl->setMaster(false);
 		handle->close_session();
 	}
-			
+
 	void CalxCoordMoveAction::stop() {
 		handle->stop();
 	}
-	
-	
-	
+
+
+
 	CalxCoordArcAction::CalxCoordArcAction(CalxCoordCtrl *ctrl, CoordHandle *handle, bool relative, motor_point_t dest, motor_point_t cen, int splitter, float speed, int div, bool clockwise) {
 		this->ctrl = ctrl;
 		this->handle = handle;
@@ -118,11 +118,11 @@ namespace CalXUI {
 		this->div = div;
 		this->clockwise = clockwise;
 	}
-	
+
 	CalxCoordArcAction::~CalxCoordArcAction() {
-		
+
 	}
-			
+
 	void CalxCoordArcAction::perform(SystemManager *sysman) {
 		handle->open_session();
 		ctrl->setMaster(true);
@@ -134,11 +134,11 @@ namespace CalXUI {
 		ctrl->setMaster(false);
 		handle->close_session();
 	}
-			
+
 	void CalxCoordArcAction::stop() {
 		handle->stop();
 	}
-	
+
 	CalxCoordGraphAction::CalxCoordGraphAction(CalxCoordCtrl *ctrl, CoordHandle *handle, CoordTranslator *trans, GraphBuilder *builder, float speed) {
 		this->ctrl = ctrl;
 		this->handle = handle;
@@ -146,11 +146,11 @@ namespace CalXUI {
 		this->builder = builder;
 		this->speed = speed;
 	}
-	
+
 	CalxCoordGraphAction::~CalxCoordGraphAction() {
-		delete this->builder;	
+		delete this->builder;
 	}
-			
+
 	void CalxCoordGraphAction::perform(SystemManager *sysman) {
 		handle->open_session();
 		ctrl->setMaster(true);
@@ -158,11 +158,11 @@ namespace CalXUI {
 		ctrl->setMaster(false);
 		handle->close_session();
 	}
-			
+
 	void CalxCoordGraphAction::stop() {
 		state.stop();
 	}
-	
+
 	CalxCoordPreviewAction::CalxCoordPreviewAction(CalxCoordCtrl *ctrl, CalxVirtualPlaneDialog *dialog, CoordTranslator *trans, GraphBuilder *builder, float speed) {
 		this->ctrl = ctrl;
 		this->dialog = dialog;
@@ -170,33 +170,34 @@ namespace CalXUI {
 		this->builder = builder;
 		this->speed = speed;
 	}
-	
+
 	CalxCoordPreviewAction::~CalxCoordPreviewAction() {
-		delete this->builder;	
+		delete this->builder;
 	}
-			
+
 	void CalxCoordPreviewAction::perform(SystemManager *sysman) {
 		ctrl->setMaster(true);
+		dialog->Enable(false);
 		wxGetApp().getErrorHandler()->handle(builder->build(sysman, dialog->getPlane(), translator, speed, &state));
 		dialog->Refresh();
 		dialog->Enable(true);
 		ctrl->setMaster(false);
 	}
-			
+
 	void CalxCoordPreviewAction::stop() {
 		state.stop();
 	}
-	
+
 	CalxCoordCalibrateAction::CalxCoordCalibrateAction(CalxCoordCtrl *ctrl, CoordHandle *handle, TrailerId tr) {
 		this->ctrl = ctrl;
 		this->handle = handle;
 		this->trailer = tr;
 	}
-	
+
 	CalxCoordCalibrateAction::~CalxCoordCalibrateAction() {
-		
+
 	}
-			
+
 	void CalxCoordCalibrateAction::perform(SystemManager *sysman) {
 		handle->open_session();
 		this->ctrl->setMaster(true);
@@ -204,21 +205,21 @@ namespace CalXUI {
 		this->ctrl->setMaster(false);
 		handle->close_session();
 	}
-			
+
 	void CalxCoordCalibrateAction::stop() {
 		handle->stop();
 	}
-	
+
 	CalxCoordMeasureAction::CalxCoordMeasureAction(CalxCoordCtrl *ctrl, CoordHandle *handle, TrailerId tr) {
 		this->ctrl = ctrl;
 		this->handle = handle;
 		this->trailer = tr;
 	}
-	
+
 	CalxCoordMeasureAction::~CalxCoordMeasureAction() {
-		
+
 	}
-			
+
 	void CalxCoordMeasureAction::perform(SystemManager *sysman) {
 		handle->open_session();
 		this->ctrl->setMaster(true);
@@ -226,12 +227,12 @@ namespace CalXUI {
 		this->ctrl->setMaster(false);
 		handle->close_session();
 	}
-			
+
 	void CalxCoordMeasureAction::stop() {
 		handle->stop();
 	}
-	
-		
+
+
 	CalxCoordConfigureAction::CalxCoordConfigureAction(CalxCoordCtrl *ctrl, CoordHandle *handle, bool jump, bool relative, motor_point_t dest, float speed, int div) {
 		this->ctrl = ctrl;
 		this->handle = handle;
@@ -242,11 +243,11 @@ namespace CalXUI {
 		this->div = div;
 		this->work = false;
 	}
-	
+
 	CalxCoordConfigureAction::~CalxCoordConfigureAction() {
-		
+
 	}
-			
+
 	void CalxCoordConfigureAction::perform(SystemManager *sysman) {
 		handle->open_session();
 		this->work = true;
@@ -267,7 +268,7 @@ namespace CalXUI {
 		this->ctrl->setMaster(false);
 		handle->close_session();
 	}
-			
+
 	void CalxCoordConfigureAction::stop() {
 		this->work = false;
 		handle->stop();

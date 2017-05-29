@@ -35,7 +35,7 @@
 namespace CalXUI {
 
 	wxDEFINE_EVENT(wxEVT_TASK_PANEL_ENABLE, wxThreadEvent);
-	
+
 	class CalxTaskAction : public CalxAction {
 		public:
 			CalxTaskAction(CalxTaskPanel *panel, CoordPlane *handle, CoordTask *task, TaskParameters prms) {
@@ -44,7 +44,7 @@ namespace CalXUI {
 				this->task = task;
 				this->prms = prms;
 			}
-			
+
 			virtual void perform(SystemManager *sysman) {
 				handle->open_session();
 				panel->setEnabled(false);
@@ -52,7 +52,7 @@ namespace CalXUI {
 				panel->setEnabled(true);
 				handle->close_session();
 			}
-			
+
 			virtual void stop() {
 				state.stop();
 			}
@@ -63,7 +63,7 @@ namespace CalXUI {
 			TaskParameters prms;
 			TaskState state;
 	};
-	
+
 	class CalxPreviewAction : public CalxAction {
 		public:
 			CalxPreviewAction(CalxTaskPanel *panel, CalxVirtualPlaneDialog *dialog, CoordTask *task, TaskParameters prms) {
@@ -72,15 +72,16 @@ namespace CalXUI {
 				this->task = task;
 				this->prms = prms;
 			}
-			
+
 			virtual void perform(SystemManager *sysman) {
 				panel->setEnabled(false);
+				dialog->Enable(false);
 				wxGetApp().getErrorHandler()->handle(task->perform(dialog->getPlane(), prms, sysman, &state));
 				dialog->Refresh();
 				dialog->Enable(true);
 				panel->setEnabled(true);
 			}
-			
+
 			virtual void stop() {
 				state.stop();
 			}
@@ -91,7 +92,7 @@ namespace CalXUI {
 			TaskParameters prms;
 			TaskState state;
 	};
-	
+
 	CalxTaskPanel::CalxTaskPanel(wxWindow *win, wxWindowID id)
 		: wxScrolledWindow::wxScrolledWindow(win, id) {
 		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
@@ -101,7 +102,7 @@ namespace CalXUI {
 		SetSizer(sizer);
 		wxSplitterWindow *splitter = new wxSplitterWindow(this, wxID_ANY);
 		sizer->Add(splitter, 1, wxALL | wxEXPAND);
-		
+
 		this->taskPanel = new wxPanel(splitter, wxID_ANY);
 		wxBoxSizer *taskSizer = new wxBoxSizer(wxVERTICAL);
 		taskPanel->SetSizer(taskSizer);
@@ -119,11 +120,11 @@ namespace CalXUI {
 		newProgrammedeButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnNewProgrammedClick, this);
 		newLinearButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnNewLinearClick, this);
 		removeButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnRemoveClick, this);
-		
+
 		this->mainPanel = new wxPanel(splitter, wxID_ANY);
 		wxBoxSizer *mainSizer = new wxBoxSizer(wxVERTICAL);
 		mainPanel->SetSizer(mainSizer);
-		
+
 		this->execPanel = new wxPanel(this->mainPanel, wxID_ANY);
 		mainSizer->Add(execPanel, 0, wxALL | wxEXPAND, 5);
 		wxBoxSizer *execSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -152,25 +153,25 @@ namespace CalXUI {
 		stopButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnStopClick, this);
 		previewButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnPreviewClick, this);
 		linearizeButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnLinearizeClick, this);
-		
+
 		splitter->Initialize(mainPanel);
 		splitter->SplitVertically(taskPanel, mainPanel);
 		splitter->SetSashGravity(0.1f);
-		
+
 		Layout();
 		setEnabled(true);
 	    this->SetScrollRate(5, 5);
 		this->gcode_loader_runs = false;
-		
-		taskList->Bind(wxEVT_LISTBOX, &CalxTaskPanel::OnListClick, this);		
+
+		taskList->Bind(wxEVT_LISTBOX, &CalxTaskPanel::OnListClick, this);
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxTaskPanel::OnExit, this);
 		this->Bind(wxEVT_TASK_PANEL_ENABLE, &CalxTaskPanel::OnEnableEvent, this);
 	}
-	
+
 	void CalxTaskPanel::stop() {
 		this->queue->stop();
 	}
-	
+
 	void CalxTaskPanel::updateUI() {
 		for (const auto& t : this->list) {
 			t->Show(false);
@@ -193,20 +194,20 @@ namespace CalXUI {
 		this->mainPanel->Layout();
 		Layout();
 	}
-	
+
 	void CalxTaskPanel::setEnabled(bool e) {
 		wxThreadEvent evt(wxEVT_TASK_PANEL_ENABLE);
 		evt.SetPayload(e);
 		wxPostEvent(this, evt);
 	}
-	
+
 	void CalxTaskPanel::OnExit(wxCloseEvent &evt) {
 		for (const auto& h : list) {
 			h->Close(true);
 		}
 		Destroy();
 	}
-	
+
 	void CalxTaskPanel::OnNewGcodeClick(wxCommandEvent &evt) {
 		if (this->gcode_loader_runs) {
 			return;
@@ -218,7 +219,7 @@ namespace CalXUI {
 			std::fstream is(loader->getPath());
 			CalxGcodeHandle *handle = new CalxGcodeHandle(mainPanel, wxID_ANY, loader->getPath(), &is, loader->getTranslator());
 			is.close();
-			
+
 			list.push_back(handle);
 			taskList->Append(handle->getId());
 			mainPanel->GetSizer()->Add(handle, 1, wxALL | wxEXPAND, 5);
@@ -229,7 +230,7 @@ namespace CalXUI {
 		loader->Destroy();
 		updateUI();
 	}
-	
+
 	void CalxTaskPanel::OnNewProgrammedClick(wxCommandEvent &evt) {
 		CalxProgrammedTaskHandle *handle = new CalxProgrammedTaskHandle(mainPanel, wxID_ANY);
 		list.push_back(handle);
@@ -239,14 +240,14 @@ namespace CalXUI {
 		Layout();
 		updateUI();
 	}
-	
+
 	void CalxTaskPanel::OnNewLinearClick(wxCommandEvent &evt) {
 		CalxLinearTaskHandle *handle = new CalxLinearTaskHandle(mainPanel, wxID_ANY);
 		list.push_back(handle);
 		taskList->Append(FORMAT(__("Task #%s"), std::to_string(list.size())));
 		mainPanel->GetSizer()->Add(handle, 1, wxALL | wxEXPAND, 5);
         taskList->SetSelection((int) list.size() - 1);
-		
+
 		if (taskList->GetSelection() != wxNOT_FOUND
 			&& plane->GetSelection() != wxNOT_FOUND) {
             CoordHandle *handler = wxGetApp().getMainFrame()->getPanel()->getCoords()->getCoord((size_t) plane->GetSelection());
@@ -254,12 +255,12 @@ namespace CalXUI {
 				handle->setRectangle(handler->getSize());
 			}
 		}
-		
-		
+
+
 		Layout();
 		updateUI();
 	}
-	
+
 	void CalxTaskPanel::OnRemoveClick(wxCommandEvent &evt) {
 		if (taskList->GetSelection() != wxNOT_FOUND) {
             size_t sel = (size_t) taskList->GetSelection();
@@ -274,11 +275,11 @@ namespace CalXUI {
 			dialog->Destroy();
 		}
 	}
-	
+
 	void CalxTaskPanel::OnListClick(wxCommandEvent &evt) {
 		updateUI();
 	}
-	
+
 	void CalxTaskPanel::OnBuildClick(wxCommandEvent &evt) {
 		if (taskList->GetSelection() != wxNOT_FOUND
 			&& plane->GetSelection() != wxNOT_FOUND) {
@@ -299,7 +300,7 @@ namespace CalXUI {
 			dialog->Destroy();
 		}
 	}
-	
+
 	void CalxTaskPanel::OnPreviewClick(wxCommandEvent &evt) {
 		if (taskList->GetSelection() != wxNOT_FOUND
 			&& plane->GetSelection() != wxNOT_FOUND) {
@@ -313,7 +314,6 @@ namespace CalXUI {
 			TaskParameters prms = {(float) this->speed->GetValue()};
 			CalxVirtualPlaneDialog *dialog = new CalxVirtualPlaneDialog(this, wxID_ANY, handle, wxSize(500, 500));
 			queue->addAction(new CalxPreviewAction(this, dialog, task, prms));
-			dialog->Enable(false);
 			dialog->ShowModal();
 			delete dialog;
 		} else {
@@ -353,7 +353,7 @@ namespace CalXUI {
 
 
 
-			
+
 			wxFileDialog *dialog = new wxFileDialog(this, __("Export linearized GCode"), "", "",
                        "", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 			if (dialog->ShowModal() == wxID_OK) {
@@ -369,7 +369,7 @@ namespace CalXUI {
                                                                &ss,
                                                                list.at((size_t) taskList->GetSelection())->
                                                                     getTranslator()->clone(nullptr));
-			
+
 			list.push_back(gcodeHandle);
 			taskList->Append(gcodeHandle->getId());
 			mainPanel->GetSizer()->Add(gcodeHandle, 1, wxALL | wxEXPAND, 5);
@@ -387,13 +387,13 @@ namespace CalXUI {
 			dialog->Destroy();
 		}
 	}
-	
+
 	void CalxTaskPanel::OnStopClick(wxCommandEvent &evt) {
 		this->queue->stopCurrent();
 	}
 
 	void CalxTaskPanel::OnEnableEvent(wxThreadEvent &evt) {
-		bool e = evt.GetPayload<bool>();	
+		bool e = evt.GetPayload<bool>();
 		for (const auto& h : list) {
 			h->Enable(e);
 		}
