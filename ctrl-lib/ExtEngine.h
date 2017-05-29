@@ -26,17 +26,28 @@
 #include "CtrlCore.h"
 
 namespace CalX {
-	
+
+	class MotorController; // Forward referencing
+	class InstrumentController; // Forward referencing
+	class CoordTask; // Forward referencing
+	class CoordHandle; // Forward referencing
 	class SystemManager; // Forward referencing
-	
+
 	class ExtEngine {
 		public:
 			ExtEngine() {}
 			virtual ~ExtEngine() {}
 			virtual bool init(SystemManager*) = 0;
 			virtual bool destroy() = 0;
+
+			virtual void taskAdded(CoordTask *task) {}
+			virtual void taskRemoving(size_t id) {}
+			virtual void coordAdded(CoordHandle *handle) {}
+			virtual void coordRemoving(size_t id) {}
+			virtual void motorConnected(MotorController *ctrl) {}
+			virtual void instrumentConnected(InstrumentController *ctrl) {}
 	};
-	
+
 	typedef ExtEngine *(*ExtEngine_getter)();
 	extern "C" LIBEXPORT ExtEngine *getExtEngine();
 }
