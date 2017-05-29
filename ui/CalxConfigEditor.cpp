@@ -328,6 +328,13 @@ namespace CalXUI {
 	
 	void CalxConfigEditor::OnRemoveEntryClick(wxCommandEvent &evt) {
 		if (this->entryList->GetSelection() != wxNOT_FOUND) {
+			this->integerEditor->Hide();
+			this->realEditor->Hide();
+			this->booleanEditor->Hide();
+			this->stringEditor->Hide();
+			this->editorPanel->Layout();
+			this->valuePanel->Layout();
+			this->currentValue = nullptr;
 			std::string name = this->entryList->GetStringSelection().ToStdString();
 			this->config->removeEntry(name);
 		} else {
@@ -435,6 +442,13 @@ namespace CalXUI {
 	void CalxConfigEditor::OnRemoveKeyClick(wxCommandEvent &evt) {
 		if (this->entryList->GetSelection() != wxNOT_FOUND &&
 			this->valueList->GetSelectedRow() != wxNOT_FOUND) {
+			this->integerEditor->Hide();
+			this->realEditor->Hide();
+			this->booleanEditor->Hide();
+			this->stringEditor->Hide();
+			this->editorPanel->Layout();
+			this->valuePanel->Layout();
+			this->currentValue = nullptr;
 			ConfigEntry *entry = this->config->getEntry(this->entryList->GetStringSelection().ToStdString());
 			wxVariant vrt;
             this->valueList->GetValue(vrt, (unsigned int) this->valueList->GetSelectedRow(), 0);

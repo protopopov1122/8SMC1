@@ -159,7 +159,8 @@ namespace CalXUI {
 		
 		Layout();
 		setEnabled(true);
-	        this->SetScrollRate(5, 5);
+	    this->SetScrollRate(5, 5);
+		this->gcode_loader_runs = false;
 		
 		taskList->Bind(wxEVT_LISTBOX, &CalxTaskPanel::OnListClick, this);		
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxTaskPanel::OnExit, this);
@@ -207,6 +208,10 @@ namespace CalXUI {
 	}
 	
 	void CalxTaskPanel::OnNewGcodeClick(wxCommandEvent &evt) {
+		if (this->gcode_loader_runs) {
+			return;
+		}
+		this->gcode_loader_runs = true;
 		CalxGcodeLoader *loader = new CalxGcodeLoader(this, wxID_ANY);
 		loader->ShowModal();
 		if (loader->isLoaded()) {
@@ -220,6 +225,7 @@ namespace CalXUI {
             taskList->SetSelection((int) list.size() - 1);
 			Layout();
 		}
+		this->gcode_loader_runs = false;
 		loader->Destroy();
 		updateUI();
 	}

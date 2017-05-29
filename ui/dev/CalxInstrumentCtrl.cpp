@@ -173,7 +173,7 @@ namespace CalXUI {
 		this->modeChoice = new wxChoice(modePanel, wxID_ANY);
 		modeSizer->Add(this->modeChoice, 0, wxALIGN_CENTER);
 		this->modeChoice->Append(__("Off"));
-		this->modeChoice->Append(__("Prepare"));
+		this->modeChoice->Append(__("Adjustment"));
 		this->modeChoice->Append(__("Maximal"));
 		this->modeChoice->SetSelection(this->ctrl->getMode() == InstrumentMode::Off ? 0 : 
 			(this->ctrl->getMode() == InstrumentMode::Prepare ? 1 : 2));

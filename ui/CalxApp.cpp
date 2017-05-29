@@ -60,7 +60,7 @@ namespace CalXUI {
 			CalxAutoconfDialog *waitDialog;
 	};
 	
-	bool CalxApp::OnInit() {	
+	bool CalxApp::OnInit() {
 		CalxConfigLoader *confLoader = new CalxConfigLoader(nullptr, wxID_ANY);
 		confLoader->load();
 		if (confLoader->isExiting()) {

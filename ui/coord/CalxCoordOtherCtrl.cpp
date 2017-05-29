@@ -71,6 +71,7 @@ namespace CalXUI {
 		posCollPane->Bind(wxEVT_COLLAPSIBLEPANE_CHANGED, &CalxCoordCtrl::OnInterfaceUpdate, ctrl);
 		this->posCtrl = new CalxCoordPositionCtrl(posPane, wxID_ANY);
 		posSizer->Add(this->posCtrl);
+		posCollPane->Collapse(false);
 		this->posCtrl->getMoveButton()->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnPositionChangeClick, ctrl);
 		this->posCtrl->getConfigureButton()->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnConfigureClick, ctrl);
 		
