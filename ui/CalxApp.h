@@ -27,6 +27,7 @@
 #include <wx/dynlib.h>
 #include <wx/intl.h>
 #include "CalxFrame.h"
+#include "UIExtEngine.h"
 
 using namespace CalX;
 
@@ -40,14 +41,14 @@ using namespace CalX;
 #define FORMAT(str, ...) (wxString::Format(str, __VA_ARGS__).ToStdString())
 
 namespace CalXUI {
-	
+
 	class CalxDebugConsole; // Forward referencing
 	class CalxErrorHandler; // Forward referencing
 	class CalxUnitProcessor; // Forward referencing
 
 	wxDECLARE_EVENT(wxEVT_APP_ERROR, wxThreadEvent);
 	wxDECLARE_EVENT(wxEVT_APP_AUTOCONF, wxThreadEvent);
-	
+
 	class CalxApp : public wxApp {
 		public:
 			virtual bool OnInit();
@@ -60,13 +61,13 @@ namespace CalXUI {
 			CalxFrame *getMainFrame();
 		private:
 			void loadDevicesPlugin();
-		
+
 			CalxFrame *frame;
-            wxDynamicLibrary *dynlib;
+      wxDynamicLibrary *dynlib;
 			wxDynamicLibrary *extLib;
 			DeviceManager *devman;
 			SystemManager *sysman;
-			
+
 			bool debug_mode;
 			CalxDebugConsole *debug_console;
 			CalxErrorHandler *error_handler;
@@ -79,7 +80,7 @@ namespace CalXUI {
 			std::ofstream *resources_log;
 			std::ofstream *instruments_log;
 	};
-	
+
 }
 wxDECLARE_APP(CalXUI::CalxApp);
 

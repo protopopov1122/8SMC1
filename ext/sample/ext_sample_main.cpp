@@ -34,6 +34,7 @@ class SampleExtEngine : public ExtEngine {
 
 bool SampleExtEngine::init(SystemManager *sysman) {
 	std::cout << "Sample extension engine init" << std::endl;
+	this->sysman = sysman;
 	return true;
 }
 
@@ -41,7 +42,6 @@ bool SampleExtEngine::destroy() {
 	std::cout << "Sample extension engine destroy" << std::endl;
 	return true;
 }
-
 
 extern "C" LIBEXPORT ExtEngine *getExtEngine() {
 	return new SampleExtEngine();
