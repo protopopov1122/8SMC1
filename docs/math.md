@@ -2,7 +2,7 @@
 CalX system contains simple mathematical engine that allows parsing mathematical expressions and evaluating them.
 Engine supports:
 * direct floating-point and integer constants
-* mathematical operations - +, -, *, /, ^
+* mathematical operations - +, -, \*, /, ^
 * predefined variable referencing
 * predefined function calling
 By default, only 'x' variable is predefined and may be safely used. Some C library math functions are predefined:

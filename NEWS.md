@@ -1,5 +1,5 @@
 ## NEWS
-This file contains log of development process(testing results, achieved goals, current state)
+This file contains log of development process(testing results, achieved goals, current state).
 
 ##### 06/02/2017
 First program test on real controllers. System contains simple CLI, most significant USMC API wrappers, USMC API stub implementaion.
@@ -100,7 +100,7 @@ Conclusion: project functional core is mostly implemented, however laser support
 Added MSVC compiler support. TODO: test its executables on real controllers.
 
 ##### 26/02/2017
-Started implementing UI based on WxWidgets(require version 3.10), currently added only compilation support and stub. 
+Started implementing UI based on WxWidgets(require version 3.10), currently added only compilation support and stub.
 
 ##### 03/03/2017
 Latest tests were performed on 02/03/2017, all CLI functions work, wxWidgets compiles and runs on WinXP properly. Next task is writing GUI. By now part of GUI to control separate devices is almost implemented.

@@ -14,3 +14,4 @@ This guide is trying to explain essential concepts of the system and give practi
 * [Other notes](other.md)
 * [Compatibility](compat.md)
 * [Programming](prog.md)
+* [Device API manual](devapi.md)
