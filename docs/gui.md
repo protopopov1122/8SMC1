@@ -25,3 +25,22 @@ On the right frame side is located coordinate plane settings. There you may temp
 
 ##### Task tab
 Third application tab is task manager. It consists of task list and loader, task building plane and area for specific task controlling(its content depends on task type).
+
+On the right tab side you can see opened task list, add or remove them, selected task parameters will appear in the central area. On the top are located common task functions:
+* build - you can build selected task on any available coordinate plane with base speed. Base speed is maximal speed that motors will reach during task execution(however they may be faster during jumps if specified in config).
+* preview - you can view, how selected task will look on any available coordinate plane. This coordinate plane should be measured first. Preview building is not momental and may take some time.
+* linearization - each task may be transformed into simple GCode that consists only of linear movements and jumps. After linearization GCode is saved as new task and may be exported.
+
+Currently, three task types are accesible:
+* GCode tasks - main task type. You can load any valid GCode(that uses only supported operations) and execute it on any plane. On the centeral plane you will see loaded GCode and can change coordinate translators to adjust code position and scale on plane. You should change translation scale carefully and simultaneously, also preview before building is recomended.
+* Linear task - you are able to create vertical or horizontal lines on given rectangle and with given space between them. On the central area you can change rectangle coordinates, space between lines and their direction.
+* Programmed task - you can program any elementar movement(jump, move, arc) sequence. You will see action sequence as a list in central area, change action sequence and add/remove them by pressing buttons below. Each action type has own parameters that will be displayed by clicking on action.
+
+##### Configuration
+CalX system has own configuration system, read its description. UI contains component that manages given configuration and gives possibility to add/remove/change parameters, add/remove entries. Application contains different configurations for different subsystems, so the same component will apear in many UI parts. Main application configuration is located in the fourth tab. Component is quite intuitive: on the left you will see entry list, add or remove them, on the right you will see selected entry key-value pair list. You can add new key-value pair, remove and change selected pair.
+
+##### Debug-mode console
+If debug-mode is enabled in the configuration, on Windows you will see second application window with CLI console and logging(if logging is enabled). On Linux logging and CLI will be on the main console. You can work with CLI in debug-mode, however GUI and CLI are not synchronized and you should be careful.
+
+##### Configuration-selection dialog
+Main application configuration is stored in app root directory and have extension \*.conf.ini. If no configuration is provided, application will tell you about it and use built-in settings and constants. If multiple configuration are present, application will show dialog with existing configuration paths, names and descriptions(if defined) and you will be able to select preferred configuration.
