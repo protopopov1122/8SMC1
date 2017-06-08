@@ -1,7 +1,7 @@
 ## CalX system programming
 This section discusses Ctrl-lib architecture and use in third-party software.
 #### Abstract
-CalX Ctrl-lib is functional core of whole system and it offers many possibilities that can't be accessed from the general user interface. Obviously sometimes may be easier writing own interface for Ctrl-lib. Ctrl-lib license is GNU LGLPv3 so it can be used in any other projects if you don't change Ctrl-lib code. This manual written to help discovering Ctrl-lib code so without constant code reading it may seem incomplete. Currently this section is not finished.
+CalX Ctrl-lib is functional core of whole system and it offers many possibilities that can't be accessed from the general user interface. Obviously sometimes may be easier writing own interface for Ctrl-lib. Ctrl-lib license is GNU LGLPv3 so it can be used in any other projects if you don't change Ctrl-lib code. This manual written to help discovering Ctrl-lib code so without constant code reading it may seem incomplete.
 #### Ctrl-lib Architecture
 Firstly you need to read [used concepts](concepts.md) section, because it just locates abstractions that are used while projecting Ctrl-lib in the file tree.
 * Top level abstractions and facades are located directly in the Ctrl-lib directory

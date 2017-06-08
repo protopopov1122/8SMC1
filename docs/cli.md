@@ -1,9 +1,9 @@
 ## CalX CLI
-CalX system implementation includes command line interface. It wasn't development goal and it was used only for testing and on early development stages, so currently it doesn't represent full CalX functionality. It still can be usable in some circumstances and in future it may be developed further, so there CLI command manual.
+CalX system implementation includes command line interface. It wasn't development goal and it was used only for testing and on early development stages, so currently it doesn't represent full CalX functionality. It still can be usable in some circumstances and in future it may be developed further, so there is short CLI command manual.
 
 * help - help command stub(currently prints reference to this document).
 * echo ... - print arguments as is(used to test cli).
-* ls - list command. Used to view different system compoenet state. Subcommands:
+* ls - list command. Used to view different system component state. Subcommands:
 	* ls - list all connected devices.
 	* ls state [id] - view device [id] state(uses low-level Device wrapper API).
 	* ls mode [id] - view device [id] mode(uses low-level Device wrapper API).
@@ -13,7 +13,7 @@ CalX system implementation includes command line interface. It wasn't developmen
 * dev - control device. Mostly uses low-level Device wrapper API. Subcommands:
 	* dev roll [id] [trailer] - roll device [id] to the [trailer](1 or 2).
 	* dev move [id] [x] [y] [speed] [div] - move device to (x; y) with speed [speed] steps/sec and step divisor [div].
-	* dev rmove [id] [x] [y] [speed] [div] - relative to current position move device to (x + current.x; y + current.y) with speed [speed] steps/sec and step divisor [div].
+	* dev rmove [id] [x] [y] [speed] [div] - relatively to the current position move device to (x + current.x; y + current.y) with speed [speed] steps/sec and step divisor [div].
 	* dev stop [id] - stop device movement.
 	* dev power [id]+ - turn on/off(switch) power on devices [id1], [id2]...
 * coord - operate with coordinate plane. Represents high-level API. Subcommands:

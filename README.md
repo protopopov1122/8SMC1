@@ -18,7 +18,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 
 ### Authors and Contributions
-Author: Jevgēnijs Protopopovs <protopopov1122@yandex.ru>.
+Author: Jevgēnijs Protopopovs <jprotopopov1122@gmail.com>.
 
 Testing is performed in command, all contributions are welcome.
 

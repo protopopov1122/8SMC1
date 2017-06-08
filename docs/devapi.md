@@ -32,8 +32,8 @@ Now about each device type separately:
 	* bool enabled() - indicates instrument state.
 	* InstrumentMode getMode() - returns current instrument mode. Currently system defines such modes: Off, Prepare, Full. See InstrumentMode enum in 'Device.h'
 	* bool setMode(InstrumentMode) - change instrument mode.  Should return false if error occured.
-	
-	
+
+
 And Device Manager which brings all the things together. Most DeviceManager operations are semi-common for all Device APIs - public interface is already implemented, but inner part is implementation-dependent:
 * Motor and Instrument holding - DeviceManager already is able to hold Motor and Instrument objects and provide it to users by getters DeviceManager::getMotor(device_id_t), DeviceManager::getMotorCount(), DeviceManager::getInstrument(device_id_t) and DeviceManager::getInstrumentCount(). However **each implementation must take care of:** adding devices to DeviceManager::dev and DeviceManager::instr arrays(std::vector) depending on their connection type, refreshing(implement DeviceManager::refresh method) and resource destroying on exit.
 * Error handling - DeviceManager contains array of errors and methods similar to Device, but **filling this array and redirecting Device errors is implementation specific.**

@@ -32,31 +32,31 @@
 namespace CalXUI {
 	CalxFrame::CalxFrame(std::string title)
 		: wxFrame::wxFrame(nullptr, wxID_ANY, title) {
-		
+
 		this->CreateStatusBar(1);
 		this->SetStatusText(__("CalX UI"), 0);
-		
+
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		this->SetSizer(sizer);
 		this->panel = new CalxPanel(this, wxID_ANY);
 		sizer->Add(this->panel, 1, wxEXPAND | wxALL);
-		
-		
+
+
 		Bind(wxEVT_CLOSE_WINDOW, &CalxFrame::OnClose, this);
-		
+
 		this->menuBar = new wxMenuBar();
 		this->aboutMenu = new wxMenu();
 		wxMenuItem *aboutItem = new wxMenuItem(this->aboutMenu, wxID_ABOUT, __("About"));
 		this->aboutMenu->Append(aboutItem);
-		Bind(wxEVT_COMMAND_MENU_SELECTED, &CalxFrame::OnAboutMenuClick, this, 
+		Bind(wxEVT_COMMAND_MENU_SELECTED, &CalxFrame::OnAboutMenuClick, this,
             wxID_ABOUT);
 		this->menuBar->Append(this->aboutMenu, __("About"));
 		SetMenuBar(this->menuBar);
-		
+
 		Layout();
 		Fit();
 	}
-	
+
 	CalxPanel *CalxFrame::getPanel() {
 		return this->panel;
 	}
@@ -72,9 +72,9 @@ namespace CalXUI {
 			}
 		}
 		this->panel->Close(true);
-		Destroy();		
+		Destroy();
 	}
-	
+
 	void CalxFrame::OnAboutMenuClick(wxCommandEvent &evt) {
 		wxAboutDialogInfo about;
 		std::string LICENSE = "CalX is free software: you can redistribute it and/or modify\n"
@@ -87,14 +87,14 @@ namespace CalXUI {
 		                      "GNU Lesser General Public License for more details.\n"
 		                      "You should have received a copy of the GNU Lesser General Public License\n"
 		                      "along with CalX.  If not, see <http://www.gnu.org/licenses/>.";
-		 
+
 		 about.SetName(__("CalX"));
 		 about.AddDeveloper(__("Jevgenijs Protopopovs"));
 		 about.SetDescription(__("CalX - stepped motor and instrument control UI and library."));
 		 about.SetCopyright(__("(C) 2017 Jevgenijs Protopopovs"));
 		 about.SetWebSite("https://github.com/protopopov1122/CalX");
 		 about.SetLicense(LICENSE);
-		 
+
 		 wxAboutBox(about);
 	}
 }
