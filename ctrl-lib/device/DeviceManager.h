@@ -45,7 +45,7 @@ namespace CalX {
 			virtual Instrument *getInstrument(device_id_t);	// Get instrument by id
 			virtual bool hasError();				// Check errors
 			virtual std::string pollError();		// Return error from queue
-			
+
 			virtual Motor *connectMotor(DeviceConnectionPrms*) = 0;
 			virtual Instrument *connectInstrument(DeviceConnectionPrms*) = 0;
 			virtual void getConnectionTypes(std::vector<DeviceConnectionType>&, std::vector<DeviceConnectionType>&);
@@ -57,17 +57,17 @@ namespace CalX {
 			bool tryLock();
 		protected:
 			virtual void log(std::string);
-		
+
 			std::vector<std::string> error_queue;
-			std::vector<Motor*> dev;
-			std::vector<Instrument*> instr;
-			
-			std::vector<DeviceConnectionType> devConType;
-			std::vector<DeviceConnectionType> instrConType;
+			std::vector<Motor*> motors;
+			std::vector<Instrument*> instruments;
+
+			std::vector<DeviceConnectionType> motorConnectionType;
+			std::vector<DeviceConnectionType> instrumentConnectionType;
 		private:
 			std::mutex devman_mutex;
 	};
-	
+
 	/* Used as exported function in Device API implementations.*/
 	extern "C" LIBEXPORT DeviceManager *getDeviceManager();
 	typedef DeviceManager* (*DeviceManager_getter)();

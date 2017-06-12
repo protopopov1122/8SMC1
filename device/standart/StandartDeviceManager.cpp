@@ -25,25 +25,26 @@
 
 
 namespace CalX {
-	
+
 	StandartDeviceManager::StandartDeviceManager()
 		: DeviceManager::DeviceManager() {
 		this->refresh();
 		for (size_t i = 0; i < devs.NOD; i++) {
-			this->dev.push_back(new _8SMC1Motor((device_id_t) i, this));
+			this->motors.push_back(new _8SMC1Motor((device_id_t) i, this));
 		}
-		
-		this->instrConType.push_back(DeviceConnectionType::SerialPort);
+
+		this->instrumentConnectionType.push_back(DeviceConnectionType::SerialPort);
 	}
 
 	StandartDeviceManager::~StandartDeviceManager() {
 		for (size_t i = 0; i < this->dev.size(); i++) {
-			delete this->dev.at(i);
+			delete this->motors.at(i);
 		}
 		for (size_t i = 0; i < this->instr.size(); i++) {
-			delete this->instr.at(i);
+			delete this->instruments.at(i);
 		}
-		this->dev.clear();
+		this->instruments.clear();
+		this->motors.clear();
 		if (USMC_Close()) {
 			saveMotorError();
 		}
@@ -64,20 +65,20 @@ namespace CalX {
 				this->error_queue.push_back(std::string(er));
 			}
 		} while (strlen(er) > 0);
-		
-		for (size_t i = 0; i < this->dev.size(); i++) {
-			Motor *m = this->dev.at(i);
+
+		for (size_t i = 0; i < this->motors.size(); i++) {
+			Motor *m = this->motors.at(i);
 			while (m->hasErrors()) {
 				this->error_queue.push_back(m->pollError());
 			}
 		}
-		
+
 	}
-	
-	
+
+
 	void StandartDeviceManager::saveInstrumentError() {
-		for (size_t i = 0; i < this->instr.size(); i++) {
-			Instrument *ins = this->instr.at(i);
+		for (size_t i = 0; i < this->instruments.size(); i++) {
+			Instrument *ins = this->instruments.at(i);
 			while (ins->hasErrors()) {
 				this->error_queue.push_back(ins->pollError());
 			}
@@ -97,11 +98,11 @@ namespace CalX {
 		}
 		return std::string(this->devs.Version[id]);
 	}
-	
+
 	Motor *StandartDeviceManager::connectMotor(DeviceConnectionPrms *prms) {
 		return nullptr;
 	}
-	
+
 	Instrument *StandartDeviceManager::connectInstrument(DeviceConnectionPrms *_prms) {
 		if (_prms->type != DeviceConnectionType::SerialPort) {
 			return nullptr;
@@ -115,11 +116,11 @@ namespace CalX {
 			delete instr;
 			return nullptr;
 		}
-		this->instr.push_back(instr);
+		this->instruments.push_back(instr);
 		this->log("Connected NL300 instrument on COM" + std::to_string(prms->port));
 		return instr;
 	}
-	
+
 	extern "C" LIBEXPORT DeviceManager *getDeviceManager() {
 		return new StandartDeviceManager();
 	}

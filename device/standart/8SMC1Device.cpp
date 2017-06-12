@@ -23,9 +23,9 @@
 #include "StandartDeviceManager.h"
 
 namespace CalX {
-	
-	_8SMC1Motor::_8SMC1Motor(device_id_t dev, StandartDeviceManager *devman) {
-		this->dev = dev;
+
+	_8SMC1Motor::_8SMC1Motor(device_id_t id, StandartDeviceManager *devman)
+	 	: Motor::Motor(id) {
 		this->devman = devman;
 		this->speed = 1500;
 		this->slow_start = false;
@@ -39,7 +39,7 @@ namespace CalX {
 
 	_8SMC1Motor::~_8SMC1Motor() {
 	}
-	
+
 	DeviceManager *_8SMC1Motor::getDeviceManager() {
 		return this->devman;
 	}
@@ -48,19 +48,19 @@ namespace CalX {
 		return "Serial: " + this->devman->getMotorSerial(this->dev) +
 			"; Version: " + this->devman->getMotorVersion(this->dev);
 	}
-	
+
 	std::string _8SMC1Motor::getRuntimeInfo() {
 		return "Temperature: " + std::to_string(this->getTemperature()) +
 			"; Voltage: " + std::to_string(this->getVoltage());
 	}
-	
+
 	bool _8SMC1Motor::enablePower(bool power) {
 		Power pwr = getPowerState();
 		if ((pwr == Power::NoPower &&
 				power) ||
 			(pwr != Power::NoPower &&
 				!power)) {
-			return flipPower();		
+			return flipPower();
 		}
 		return true;
 	}
@@ -165,7 +165,7 @@ namespace CalX {
 			return Power::NoPower;
 		}
 	}
-	
+
 	bool _8SMC1Motor::isRunning() {
 		this->updateState();
 		return this->state.RUN;
@@ -324,7 +324,7 @@ namespace CalX {
 
 	void _8SMC1Motor::waitForSync(bool ws) {
 		this->waitSync = ws;
-	
+
 	}
 
 	int _8SMC1Motor::getEncoderPosition() {

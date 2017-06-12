@@ -22,34 +22,34 @@
 #include "EmuDeviceManager.h"
 
 namespace CalX {
-	
-	EmuMotor::EmuMotor(device_id_t dev, EmuDeviceManager *devman) {
-		this->dev = dev;
+
+	EmuMotor::EmuMotor(device_id_t id, EmuDeviceManager *devman)
+	:	Motor::Motor(id) {
 		this->devman = devman;
 		this->pos = 0;
 		this->power = Power::NoPower;
 	}
-	
+
 	EmuMotor::~EmuMotor() {
-		
+
 	}
-	
+
 	DeviceManager *EmuMotor::getDeviceManager() {
 		return this->devman;
 	}
-	
+
 	std::string EmuMotor::getDeviceInfo() {
 		return "";
 	}
-	
+
 	std::string EmuMotor::getRuntimeInfo() {
 		return "";
 	}
-	
+
     motor_coord_t EmuMotor::getPosition() {
 		return this->pos;
 	}
-	
+
 	bool EmuMotor::isTrailerPressed(int tr) {
 		if (tr == 1) {
 			return this->pos <= -EMU_MOTOR_SIZE / 2;
@@ -59,15 +59,15 @@ namespace CalX {
 			return false;
 		}
 	}
-	
+
 	bool EmuMotor::isRunning() {
 		return false;
 	}
-	
+
 	Power EmuMotor::getPowerState() {
 		return this->power;
 	}
-	
+
     bool EmuMotor::start(motor_coord_t dest, float speed, unsigned char div, bool sync) {
 		if (this->power == Power::NoPower) {
 			return true;
@@ -81,11 +81,11 @@ namespace CalX {
 		}
 		return true;
 	}
-	
+
 	bool EmuMotor::stop() {
 		return true;
 	}
-	
+
 	bool EmuMotor::enablePower(bool p) {
 		this->power = p ? Power::HalfPower : Power::NoPower;
 		return true;

@@ -27,13 +27,13 @@
 
 namespace CalX {
 	DeviceManager::~DeviceManager() {
-		
+
 	}
-	
+
 	bool DeviceManager::hasError() {
 		return !this->error_queue.empty();
 	}
-	
+
 	std::string DeviceManager::pollError() {
 		if (!hasError()) {
 			return "";
@@ -42,69 +42,69 @@ namespace CalX {
 		this->error_queue.erase(this->error_queue.begin());
 		return err;
 	}
-	
+
 	Motor *DeviceManager::getMotor(device_id_t d) {
-        if (d >= (device_id_t) this->dev.size() || d < 0) {
+        if (d >= (device_id_t) this->motors.size() || d < 0) {
 			return nullptr;
 		}
-        return this->dev.at((size_t) d);
+        return this->motors.at((size_t) d);
 	}
 
 	size_t DeviceManager::getMotorCount() {
-		return this->dev.size();
+		return this->motors.size();
 	}
-	
+
 	size_t DeviceManager::getInstrumentCount() {
-		return this->instr.size();
+		return this->instruments.size();
 	}
-	
+
 	Instrument *DeviceManager::getInstrument(device_id_t id) {
-        if (id >= (device_id_t) this->instr.size() || id < 0) {
+        if (id >= (device_id_t) this->instruments.size() || id < 0) {
 			return nullptr;
 		}
-        return this->instr.at((size_t) id);
+        return this->instruments.at((size_t) id);
 	}
-	
+
 	void DeviceManager::getConnectionTypes(std::vector<DeviceConnectionType> &dev, std::vector<DeviceConnectionType> &instr) {
-		for (const auto& d : this->devConType) {
+		for (const auto& d : this->motorConnectionType) {
 			dev.push_back(d);
 		}
-		for (const auto& i : this->instrConType) {
+		for (const auto& i : this->instrumentConnectionType) {
 			instr.push_back(i);
 		}
 	}
-	
+
 	bool DeviceManager::canMotorConnect(DeviceConnectionType d) {
-		return std::find(devConType.begin(), devConType.end(), d) != devConType.end();
+		return std::find(motorConnectionType.begin(), motorConnectionType.end(), d) != motorConnectionType.end();
 	}
-	
+
 	bool DeviceManager::canInstrumentConnect(DeviceConnectionType d) {
-		return std::find(instrConType.begin(), instrConType.end(), d) != instrConType.end();
+		return std::find(instrumentConnectionType.begin(), instrumentConnectionType.end(), d) != instrumentConnectionType.end();
 	}
 
 	bool DeviceManager::loadConfiguration(std::string path, ConfigManager *conf) {
-        std::ifstream cnf(path);
-        if (!cnf.good()) {
+		std::ifstream cnf(path);
+    if (!cnf.good()) {
 			return false;
-        } else {
-            ConfigManager::load(&cnf, &std::cout, conf);
-        }
-        cnf.close();
+		} else {
+    	ConfigManager::load(&cnf, &std::cout, conf);
+    }
+    cnf.close();
 		return true;
 	}
-	
+
 	void DeviceManager::log(std::string msg) {
 		LOG("DevMan", msg);
 	}
-	
+
 	void DeviceManager::lock() {
 	}
-	
+
 	void DeviceManager::unlock() {
 	}
-	
+
 	bool DeviceManager::tryLock() {
 		return true;
 	}
-	
+
 }

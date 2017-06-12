@@ -23,30 +23,31 @@
 /* Implementations of API wrappers */
 
 namespace CalX {
-	
-	Device::Device(DeviceType t) {
+
+	Device::Device(DeviceType t, device_id_t id) {
 		this->type = t;
+		this->id = id;
 	}
-	
+
 	Device::~Device() {
 	}
-	
+
 	DeviceType Device::getType() {
 		return this->type;
 	}
-	
+
 	device_id_t Device::getID() {
-		return this->dev;
+		return this->id;
 	}
-	
+
 	ConfigManager *Device::getConfiguration() {
 		return &this->config;
 	}
-	
+
 	bool Device::hasErrors() {
 		return !this->errors.empty();
 	}
-	
+
 	std::string Device::pollError() {
 		if (this->errors.empty()) {
 			return "";
@@ -55,38 +56,37 @@ namespace CalX {
 		this->errors.erase(this->errors.begin());
 		return err;
 	}
-	
+
 	void Device::log(std::string msg) {
 		LOG("Device #" + std::to_string(this->getID()), msg);
 	}
-	
+
 	void Device::lock() {
 	}
-	
+
 	void Device::unlock() {
 	}
-	
+
 	bool Device::tryLock() {
 		return true;
 	}
-	
-	Motor::Motor()
-		: Device::Device(DeviceType::Motor) {
-			
+
+	Motor::Motor(device_id_t id)
+		: Device::Device(DeviceType::Motor, id) {
 	}
 
 	Motor::~Motor() {
-		
+
 	}
-	
-	Instrument::Instrument()
-		: Device::Device(DeviceType::Instrument) {
+
+	Instrument::Instrument(device_id_t id)
+		: Device::Device(DeviceType::Instrument, id) {
 	}
-	
+
 	Instrument::~Instrument() {
-		
+
 	}
-	
+
 	void Instrument::log(std::string msg) {
 		LOG_INSTR(this->getID(), msg);
 	}

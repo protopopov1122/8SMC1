@@ -36,48 +36,48 @@ namespace CalX {
 	enum class DeviceConnectionType {
 		SerialPort
 	};
-	
+
 	struct DeviceConnectionPrms {
 		public:
 			DeviceConnectionPrms(DeviceConnectionType t) {this->type = t;}
-			
+
 			DeviceConnectionType type;
 	};
-	
+
 	enum class SerialPortParity {
 		No = 0, Odd = 1,
 		Even = 2, Mark = 3,
 		Space = 4
 	};
-	
+
 	struct DeviceSerialPortConnectionPrms : public DeviceConnectionPrms {
 		public:
 			DeviceSerialPortConnectionPrms() :
 				DeviceConnectionPrms::DeviceConnectionPrms(DeviceConnectionType::SerialPort) {}
-				
+
 			uint8_t port;
 			uint32_t speed;
 			SerialPortParity parity;
 	};
-	
+
 	typedef int64_t device_id_t;
 	#define DEVICE_ID_FMT PRId64
 
 	enum class Power {
 		NoPower, HalfPower, FullPower
 	};
-	
+
 	enum class InstrumentMode {
 		Off, Prepare, Full
 	};
-	
+
 	enum class DeviceType {
 		Motor, Instrument
 	};
-	
+
 	class Device {
 		public:
-			Device(DeviceType);
+			Device(DeviceType, device_id_t);
 			virtual ~Device();
 			DeviceType getType();
 			void lock();
@@ -92,18 +92,18 @@ namespace CalX {
 			virtual std::string getRuntimeInfo() = 0;
 		protected:
 			virtual void log(std::string);
-			
-			device_id_t dev;
+
 			ConfigManager config;
 			std::vector<std::string> errors;
 		private:
+			device_id_t id;
 			DeviceType type;
 			std::mutex dev_mutex;
 	};
-	
+
 	class Motor : public Device {
 		public:
-			Motor();
+			Motor(device_id_t);
 			virtual ~Motor();
             virtual motor_coord_t getPosition() = 0;
 			virtual bool isTrailerPressed(int) = 0;
@@ -115,10 +115,10 @@ namespace CalX {
 			virtual bool enablePower(bool) = 0;
 	};
 
-	
+
 	class Instrument : public Device {
 		public:
-			Instrument();
+			Instrument(device_id_t);
 			virtual ~Instrument();
 			virtual bool enable(bool) = 0;
 			virtual bool enabled() = 0;

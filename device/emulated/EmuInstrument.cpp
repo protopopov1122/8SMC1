@@ -22,44 +22,44 @@
 #include "EmuDeviceManager.h"
 
 namespace CalX {
-	
-	EmuInstrument::EmuInstrument(device_id_t dev, EmuDeviceManager *devman) {
-		this->dev = dev;
+
+	EmuInstrument::EmuInstrument(device_id_t id, EmuDeviceManager *devman)
+		: Instrument::Instrument(id) {
 		this->devman = devman;
 		this->en = false;
 		this->mode = InstrumentMode::Off;
 	}
-	
+
 	EmuInstrument::~EmuInstrument() {
-		
+
 	}
-	
+
 	DeviceManager *EmuInstrument::getDeviceManager() {
 		return this->devman;
 	}
-	
+
 	std::string EmuInstrument::getDeviceInfo() {
 		return "";
 	}
-	
+
 	std::string EmuInstrument::getRuntimeInfo() {
 		return "";
 	}
-	
+
 	bool EmuInstrument::enable(bool e) {
 		this->en = e;
 		return true;
 	}
-	
+
 	bool EmuInstrument::enabled() {
 		return this->en;
 	}
-	
+
 	bool EmuInstrument::setMode(InstrumentMode m) {
 		this->mode = m;
 		return true;
 	}
-	
+
 	InstrumentMode EmuInstrument::getMode() {
 		return this->mode;
 	}
