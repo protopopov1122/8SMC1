@@ -93,10 +93,10 @@ namespace CalX {
 		protected:
 			virtual void log(std::string);
 
+			device_id_t id;
 			ConfigManager config;
 			std::vector<std::string> errors;
 		private:
-			device_id_t id;
 			DeviceType type;
 			std::mutex dev_mutex;
 	};

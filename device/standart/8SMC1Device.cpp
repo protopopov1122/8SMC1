@@ -45,8 +45,8 @@ namespace CalX {
 	}
 
 	std::string _8SMC1Motor::getDeviceInfo() {
-		return "Serial: " + this->devman->getMotorSerial(this->dev) +
-			"; Version: " + this->devman->getMotorVersion(this->dev);
+		return "Serial: " + this->devman->getMotorSerial(this->id) +
+			"; Version: " + this->devman->getMotorVersion(this->id);
 	}
 
 	std::string _8SMC1Motor::getRuntimeInfo() {
@@ -75,12 +75,12 @@ namespace CalX {
 
 	bool _8SMC1Motor::flush() {
 		lock();
-		if (USMC_SetMode((DWORD) dev, mode)) {
+		if (USMC_SetMode((DWORD) id, mode)) {
 			devman->saveMotorError();
 			unlock();
 			return false;
 		}
-		if (USMC_SetParameters((DWORD) dev, prms)) {
+		if (USMC_SetParameters((DWORD) id, prms)) {
 			devman->saveMotorError();
 			unlock();
 			return false;
@@ -91,7 +91,7 @@ namespace CalX {
 
 	bool _8SMC1Motor::setCurrentPosition(int pos) {
 		lock();
-		if (USMC_SetCurrentPosition((DWORD) dev, pos)) {
+		if (USMC_SetCurrentPosition((DWORD) id, pos)) {
 			devman->saveMotorError();
 			unlock();
 			return false;
@@ -102,7 +102,7 @@ namespace CalX {
 
 	bool _8SMC1Motor::updateMode() {
 		lock();
-		if (USMC_GetMode((DWORD) dev, mode)) {
+		if (USMC_GetMode((DWORD) id, mode)) {
 			devman->saveMotorError();
 			unlock();
 			return false;
@@ -113,7 +113,7 @@ namespace CalX {
 
 	void _8SMC1Motor::updateState() {
 		lock();
-		if (USMC_GetState((DWORD) dev, state)) {
+		if (USMC_GetState((DWORD) id, state)) {
 			devman->saveMotorError();
 		}
 		unlock();
@@ -184,13 +184,13 @@ namespace CalX {
 	bool _8SMC1Motor::flipPower() {
 		lock();
 		bool current = this->getPowerState() != Power::NoPower;
-		if (USMC_GetMode((DWORD) dev, mode)) {
+		if (USMC_GetMode((DWORD) id, mode)) {
 			this->devman->saveMotorError();
 			unlock();
 			return false;
 		}
 		this->mode.ResetD = current;
-		if (USMC_SetMode((DWORD) dev, mode)) {
+		if (USMC_SetMode((DWORD) id, mode)) {
 			this->devman->saveMotorError();
 			unlock();
 			return false;
@@ -201,13 +201,13 @@ namespace CalX {
 
 	bool _8SMC1Motor::revertStart() {
 		lock();
-		if(USMC_GetParameters((DWORD) dev, prms)) {
+		if(USMC_GetParameters((DWORD) id, prms)) {
 			devman->saveMotorError();
 			unlock();
 			return false;
 		}
 		prms.StartPos = 0;
-		if(USMC_SetParameters((DWORD) dev, prms)) {
+		if(USMC_SetParameters((DWORD) id, prms)) {
 			devman->saveMotorError();
 			unlock();
 			return false;
@@ -218,7 +218,7 @@ namespace CalX {
 
 	bool _8SMC1Motor::saveToFlash() {
 		lock();
-		if (USMC_SaveParametersToFlash((DWORD) dev)) {
+		if (USMC_SaveParametersToFlash((DWORD) id)) {
 			devman->saveMotorError();
 			unlock();
 			return false;
@@ -230,7 +230,7 @@ namespace CalX {
 	bool _8SMC1Motor::start(motor_coord_t dest, float speed,
 			unsigned char divisor, bool syncIn) {
 		lock();
-		if (USMC_GetStartParameters((DWORD) dev, startPrms)) {
+		if (USMC_GetStartParameters((DWORD) id, startPrms)) {
 			devman->saveMotorError();
 			unlock();
 			return false;
@@ -238,7 +238,7 @@ namespace CalX {
 		startPrms.WSyncIN = syncIn;
 		startPrms.SDivisor = divisor;
 		startPrms.SlStart = this->slow_start;
-		if (USMC_Start((DWORD) dev, (int) dest, speed, startPrms)) {
+		if (USMC_Start((DWORD) id, (int) dest, speed, startPrms)) {
 			devman->saveMotorError();
 			unlock();
 			return false;
@@ -249,13 +249,13 @@ namespace CalX {
 
 	bool _8SMC1Motor::start(int dest, float speed) {
 		lock();
-		if (USMC_GetStartParameters((DWORD) dev, startPrms)) {
+		if (USMC_GetStartParameters((DWORD) id, startPrms)) {
 			devman->saveMotorError();
 			unlock();
 			return false;
 		}
 		startPrms.SlStart = this->slow_start;
-		if (USMC_Start((DWORD) dev, dest, speed, startPrms)) {
+		if (USMC_Start((DWORD) id, dest, speed, startPrms)) {
 			devman->saveMotorError();
 			unlock();
 			return false;
@@ -270,7 +270,7 @@ namespace CalX {
 
 	bool _8SMC1Motor::stop() {
 		lock();
-		if (USMC_Stop((DWORD) dev)) {
+		if (USMC_Stop((DWORD) id)) {
 			devman->saveMotorError();
 			unlock();
 			return false;
@@ -297,7 +297,7 @@ namespace CalX {
 
 	void _8SMC1Motor::updateParameters() {
 		lock();
-		if(USMC_GetParameters((DWORD) dev, prms)) {
+		if(USMC_GetParameters((DWORD) id, prms)) {
 			devman->saveMotorError();
 		}
 		unlock();
@@ -329,7 +329,7 @@ namespace CalX {
 
 	int _8SMC1Motor::getEncoderPosition() {
 		lock();
-		if (USMC_GetEncoderState((DWORD) dev, encState)) {
+		if (USMC_GetEncoderState((DWORD) id, encState)) {
 			devman->saveMotorError();
 		}
 		unlock();
@@ -338,7 +338,7 @@ namespace CalX {
 
 	int _8SMC1Motor::getEncoderSyncPosition() {
 		lock();
-		if (USMC_GetEncoderState((DWORD) dev, encState)) {
+		if (USMC_GetEncoderState((DWORD) id, encState)) {
 			devman->saveMotorError();
 		}
 		unlock();
@@ -347,13 +347,13 @@ namespace CalX {
 
 	void _8SMC1Motor::resetSyncCounter() {
 		lock();
-		if (USMC_GetMode((DWORD) dev, mode)) {
+		if (USMC_GetMode((DWORD) id, mode)) {
 			devman->saveMotorError();
 			unlock();
 			return;
 		}
 		mode.SyncOUTR = true;
-		if (USMC_SetMode((DWORD) dev, mode)) {
+		if (USMC_SetMode((DWORD) id, mode)) {
 			devman->saveMotorError();
 		}
 		unlock();
@@ -362,7 +362,7 @@ namespace CalX {
 	#define MODE_ACCESS(n1, n2, prop)\
 	bool _8SMC1Motor::n1() {\
 		lock();\
-		if (this->autoSaveConfig && USMC_GetMode((DWORD) dev, mode)) {\
+		if (this->autoSaveConfig && USMC_GetMode((DWORD) id, mode)) {\
 			devman->saveMotorError();\
 		}\
 		unlock();\
@@ -371,13 +371,13 @@ namespace CalX {
 \
 	void _8SMC1Motor::n2(bool sync) {\
 		lock();\
-		if (this->autoSaveConfig && USMC_GetMode((DWORD) dev, mode)) {\
+		if (this->autoSaveConfig && USMC_GetMode((DWORD) id, mode)) {\
 			devman->saveMotorError();\
 			unlock();\
 			return;\
 		}\
 		mode.prop = sync;\
-		if (this->autoSaveConfig && USMC_SetMode((DWORD) dev, mode)) {\
+		if (this->autoSaveConfig && USMC_SetMode((DWORD) id, mode)) {\
 			devman->saveMotorError();\
 		}\
 		unlock();\

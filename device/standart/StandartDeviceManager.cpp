@@ -37,10 +37,10 @@ namespace CalX {
 	}
 
 	StandartDeviceManager::~StandartDeviceManager() {
-		for (size_t i = 0; i < this->dev.size(); i++) {
+		for (size_t i = 0; i < this->motors.size(); i++) {
 			delete this->motors.at(i);
 		}
-		for (size_t i = 0; i < this->instr.size(); i++) {
+		for (size_t i = 0; i < this->instruments.size(); i++) {
 			delete this->instruments.at(i);
 		}
 		this->instruments.clear();
@@ -109,7 +109,7 @@ namespace CalX {
 		}
 		DeviceSerialPortConnectionPrms *prms = (DeviceSerialPortConnectionPrms*) _prms;
 		this->log("Connecting NL300 instrument on COM" + std::to_string(prms->port));
-		NL300Instrument *instr = new NL300Instrument((device_id_t) this->instr.size(), this);
+		NL300Instrument *instr = new NL300Instrument((device_id_t) this->instruments.size(), this);
 		if (!instr->connect(prms) || instr->hasErrors()) {
 			this->log("Error during NL300 instrument connection on COM" + std::to_string(prms->port));
 			this->saveInstrumentError();
