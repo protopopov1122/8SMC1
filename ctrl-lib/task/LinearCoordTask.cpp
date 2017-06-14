@@ -43,7 +43,8 @@ namespace CalX {
 		motor_coord_t top = this->vertical ? this->square.y : this->square.x;
 		motor_coord_t bottom = top + (this->vertical ? this->square.h : this->square.w);
 		
-		motor_point_t first, second;
+		bool on_top = true;
+		motor_point_t first, second, temp;
 		ErrorCode errcode = ErrorCode::NoError;
 		for (motor_coord_t i = this->square.x; i < end && state->work; i += this->spacing) {
 			if (vertical) {
@@ -52,6 +53,12 @@ namespace CalX {
 			} else {
 				first = {top, i};
 				second = {bottom, i};
+			}
+			on_top = !on_top;
+			if (on_top) {
+				temp = first;
+				first = second;
+				second = temp;
 			}
 			errcode = plane->move(first, speed, 8, false);
 			if (errcode != ErrorCode::NoError) {
