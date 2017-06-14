@@ -3,6 +3,7 @@ CalX is an open source tool set for managing different types of stepper motors a
 
 This guide is trying to explain essential concepts of the system and give practical examples of system use from the point of user and programmer.
 
+* [Quickstart](quick.md)
 * [General description](general.md)
 * [Installation and building](install.md)
 * [Used concepts](concepts.md)
