@@ -2,7 +2,7 @@
 TARGET=debug
 PLATFORM=win
 NAME=calx
-UINAME=calxui
+UINAME=calx_ui
 BUILD=./build
 WXLIB=
 EXTRA=
