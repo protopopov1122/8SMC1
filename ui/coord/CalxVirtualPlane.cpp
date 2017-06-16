@@ -19,7 +19,6 @@
 
 
 #include "CalxVirtualPlane.h"
-#include "ui/CalxUnitProcessor.h"
 #include <wx/sizer.h>
 #include <wx/utils.h>
 #include <wx/dcbuffer.h>

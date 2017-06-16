@@ -199,33 +199,6 @@ namespace CalX {
 			float scale;
 	};
 	
-	class CoordTaskWrapper : public CoordTask {
-		public:
-			CoordTaskWrapper(CoordTask*);
-			virtual ~CoordTaskWrapper();
-			virtual ErrorCode perform(CoordPlane*, TaskParameters&, SystemManager*, TaskState*);
-			
-			void setCalibration(TrailerId);
-			void setValidation(motor_point_t, motor_point_t, float);
-			void setMap(motor_point_t, motor_scale_t, float);
-		private:
-			CoordTask *task;
-			// Wrapper options
-			bool cal_tr; // Calibrate trailers
-			bool coord_map;	// Coordinate plane map
-			bool coord_val;	// Coordinate plane validate
-			// Wrapper values
-			TrailerId tr;	// Calibration
-			// Map
-			motor_point_t coord_offset;
-			motor_scale_t coord_scale;
-			float coord_speed_scale;
-			// Validate
-			motor_point_t val_min;
-			motor_point_t val_max;
-			float val_speed;
-	};
-	
 	class GCodeCoordTask : public CoordTask {
 		public:
 			GCodeCoordTask(std::istream*, CoordTranslator*);

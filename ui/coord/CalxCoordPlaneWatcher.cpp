@@ -20,7 +20,6 @@
 
 #include "CalxCoordPlaneWatcher.h"
 #include "coord/CalxCoordPanel.h"
-#include "ui/CalxUnitProcessor.h"
 #include <wx/sizer.h>
 #include <wx/dcbuffer.h>
 #include <wx/dcmemory.h>

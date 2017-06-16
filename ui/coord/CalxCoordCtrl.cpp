@@ -32,7 +32,6 @@
 #include "CalxCoordCtrl.h"
 #include "task/CalxTaskPanel.h"
 #include "CalxCoordPlaneWatcher.h"
-#include "ui/CalxUnitProcessor.h"
 
 namespace CalXUI {
 
