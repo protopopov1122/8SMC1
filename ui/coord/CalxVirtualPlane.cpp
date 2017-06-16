@@ -127,14 +127,18 @@ namespace CalXUI {
 		}
 		
 		dc.SetPen(*wxBLACK_PEN);
+		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
+		if (!units.empty()) {
+			units = " " + units;
+		}
 		wxCoord x, y;
-		dc.DrawText(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(top_plane_size.x)), 0, (wxCoord) ((top_plane_size.h + top_plane_size.y) * top_scaleY));
-		dc.GetMultiLineTextExtent(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(top_plane_size.x + top_plane_size.w)), &x, &y);
-		dc.DrawText(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(top_plane_size.x + top_plane_size.w)), real_size.x - x, (wxCoord) ((top_plane_size.h + top_plane_size.y) * top_scaleY));
-		dc.GetMultiLineTextExtent(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(-(top_plane_size.y + top_plane_size.h))), &x, &y);
-		dc.DrawText(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(top_plane_size.y)), (wxCoord) ((-top_plane_size.x) * top_scaleX) - x / 2, real_size.y - y);
-		dc.GetMultiLineTextExtent(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(-top_plane_size.y)), &x, &y);
-		dc.DrawText(std::string(wxGetApp().getUnitProcessor()->toUnitsStr(top_plane_size.y + top_plane_size.h)), (wxCoord) ((-top_plane_size.x) * top_scaleX) - x / 2, 0);
+		dc.DrawText(FORMAT("%s%s", std::to_string(top_plane_size.x), units), 0, (wxCoord) ((top_plane_size.h + top_plane_size.y) * top_scaleY));
+		dc.GetMultiLineTextExtent(FORMAT("%s%s", std::to_string(top_plane_size.x + top_plane_size.w), units), &x, &y);
+		dc.DrawText(FORMAT("%s%s", std::to_string(top_plane_size.x + top_plane_size.w), units), real_size.x - x, (wxCoord) ((top_plane_size.h + top_plane_size.y) * top_scaleY));
+		dc.GetMultiLineTextExtent(FORMAT("%s%s", std::to_string(-(top_plane_size.y + top_plane_size.h)), units), &x, &y);
+		dc.DrawText(FORMAT("%s%s", std::to_string(top_plane_size.y), units), (wxCoord) ((-top_plane_size.x) * top_scaleX) - x / 2, real_size.y - y);
+		dc.GetMultiLineTextExtent(FORMAT("%s%s", std::to_string(-top_plane_size.y), units), &x, &y);
+		dc.DrawText(FORMAT("%s%s", std::to_string(top_plane_size.y + top_plane_size.h), units), (wxCoord) ((-top_plane_size.x) * top_scaleX) - x / 2, 0);
 		
 		dc.SetPen(*wxRED_PEN);
 		dc.SetBrush(*wxRED_BRUSH);
@@ -185,10 +189,14 @@ namespace CalXUI {
 			mouse.y >= 0 &&
 			mouse.x < real_size.x &&
 			mouse.y < real_size.y) {
+			std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
+			if (!units.empty()) {
+				units = " " + units;
+			}
 			motor_coord_t rx = (motor_coord_t) mouse.x * plane_size.w / real_size.x + plane_size.x;
 			motor_coord_t ry = (motor_coord_t) plane_size.h - mouse.y * plane_size.h / real_size.y + plane_size.y;
-			std::string res = FORMAT(__("x: %s; y: %s"), wxGetApp().getUnitProcessor()->toTextUnits(rx),
-				wxGetApp().getUnitProcessor()->toTextUnits(ry));
+			std::string res = FORMAT(__("x: %s%s; y: %s%s"), std::to_string(rx), units,
+				std::to_string(ry), units);
 			this->mouseCoords->SetLabel(res);
 		}
 	}

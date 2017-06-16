@@ -255,9 +255,9 @@ namespace CalXUI {
 		dc.GetMultiLineTextExtent(FORMAT("%s%s", std::to_string(top_plane_size.x + top_plane_size.w), units), &x, &y);
 		dc.DrawText(FORMAT("%s%s", std::to_string(top_plane_size.x + top_plane_size.w), units), real_size.x - x, (wxCoord) ((top_plane_size.h + top_plane_size.y) * top_scaleY));
 		dc.GetMultiLineTextExtent(FORMAT("%s%s", std::to_string(-(top_plane_size.y + top_plane_size.h)), units), &x, &y);
-		dc.DrawText(FORMAT("%s%s", std::to_string(-(top_plane_size.y + top_plane_size.h)), units), (wxCoord) ((-top_plane_size.x) * top_scaleX) - x / 2, real_size.y - y);
+		dc.DrawText(FORMAT("%s%s", std::to_string(top_plane_size.y), units), (wxCoord) ((-top_plane_size.x) * top_scaleX) - x / 2, real_size.y - y);
 		dc.GetMultiLineTextExtent(FORMAT("%s%s", std::to_string(-top_plane_size.y), units), &x, &y);
-		dc.DrawText(FORMAT("%s%s", std::to_string(-top_plane_size.y), units), (wxCoord) ((-top_plane_size.x) * top_scaleX) - x / 2, 0);
+		dc.DrawText(FORMAT("%s%s", std::to_string(top_plane_size.y + top_plane_size.h), units), (wxCoord) ((-top_plane_size.x) * top_scaleX) - x / 2, 0);
 		
 		this->rendering = false;
 	}
