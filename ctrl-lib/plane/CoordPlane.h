@@ -47,8 +47,8 @@ namespace CalX {
 			virtual ~CoordPlane() {}
 			virtual ErrorCode move(motor_point_t, float, int, bool) = 0;
 			virtual ErrorCode relativeMove(motor_point_t, float, int, bool);
-			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false) = 0;
-			virtual ErrorCode relativeArc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
+			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, float = 1.0f, bool = false) = 0;
+			virtual ErrorCode relativeArc(motor_point_t, motor_point_t, int, float, int, bool, float = 1.0f, bool = false);
 			virtual ErrorCode calibrate(TrailerId) = 0;
 			virtual ErrorCode measure(TrailerId) = 0;
 			virtual motor_point_t getPosition() = 0;
@@ -81,7 +81,7 @@ namespace CalX {
 			CoordPlane *getBase();
 			
 			virtual ErrorCode move(motor_point_t, float, int, bool);
-			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
+			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, float = 1.0f, bool = false);
 			virtual ErrorCode calibrate(TrailerId);
 			virtual ErrorCode measure(TrailerId);
 			virtual motor_point_t getPosition();
@@ -110,7 +110,7 @@ namespace CalX {
 			InstrumentController *getInstrument();
 			
                         virtual ErrorCode move(motor_point_t, float, int, bool);
-			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
+			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, float = 1.0f, bool = false);
 			virtual ErrorCode calibrate(TrailerId);
 			virtual ErrorCode measure(TrailerId);
 			virtual motor_point_t getPosition();
@@ -161,7 +161,7 @@ namespace CalX {
 			void setLoggingErrors(bool);
 			
 			virtual ErrorCode move(motor_point_t, float, int, bool);
-			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
+			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, float = 1.0f, bool = false);
 			virtual ErrorCode calibrate(TrailerId);
 			virtual ErrorCode measure(TrailerId);
 			virtual motor_point_t getPosition();
@@ -196,7 +196,7 @@ namespace CalX {
 			void setSpeedScale(float);
 						
 			virtual ErrorCode move(motor_point_t, float, int, bool);
-			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
+			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, float = 1.0f, bool = false);
 			virtual ErrorCode calibrate(TrailerId);
 			virtual ErrorCode measure(TrailerId);
 			virtual motor_point_t getPosition();
@@ -230,7 +230,7 @@ namespace CalX {
 			void setMaxSpeed(float);
 						
 			virtual ErrorCode move(motor_point_t, float, int, bool);
-			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
+			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, float = 1.0f, bool = false);
 			virtual ErrorCode calibrate(TrailerId);
 			virtual ErrorCode measure(TrailerId);
 			virtual motor_point_t getPosition();
@@ -262,7 +262,7 @@ namespace CalX {
 			CoordPlane *getBase();
 			
 			virtual ErrorCode move(motor_point_t, float, int, bool);
-			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
+			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, float = 1.0f, bool = false);
 			virtual ErrorCode calibrate(TrailerId);
 			virtual ErrorCode measure(TrailerId);
 			virtual motor_point_t getPosition();
@@ -286,7 +286,7 @@ namespace CalX {
 			virtual ~VirtualCoordPlane();
 			
 			virtual ErrorCode move(motor_point_t, float, int, bool);
-			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, bool = false);
+			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, float = 1.0f, bool = false);
 			virtual ErrorCode calibrate(TrailerId);
 			virtual ErrorCode measure(TrailerId);
 			virtual motor_point_t getPosition();

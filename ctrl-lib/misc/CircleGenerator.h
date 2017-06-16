@@ -36,7 +36,7 @@ namespace CalX {
 
 	class Circle {
 		public:
-			Circle(motor_point_t, int64_t, bool);
+			Circle(motor_point_t, int64_t, bool, float);
 			virtual ~Circle();
             int64_t getRadius();
 			motor_point_t getCenter();
@@ -47,6 +47,7 @@ namespace CalX {
 
 			motor_point_t center;
 			int64_t radius;
+			float scale;
 
 			int64_t curx;
 			int64_t cury;

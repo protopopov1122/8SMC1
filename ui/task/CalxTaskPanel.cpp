@@ -287,7 +287,6 @@ namespace CalXUI {
             CoordTask *task = list.at((size_t) taskList->GetSelection())->getTask();
             CoordHandle *handle = wxGetApp().getMainFrame()->getPanel()->getCoords()->getCoord((size_t) plane->GetSelection());
 			float speed = (float) this->speed->GetValue();
-			speed *= wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("speed_scale", 1);
             TaskParameters prms = {(float) speed};
 			queue->addAction(new CalxTaskAction(this, handle, task, prms));
 		} else {

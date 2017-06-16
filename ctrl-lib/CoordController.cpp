@@ -357,7 +357,7 @@ namespace CalX {
 	}
 
 	ErrorCode CoordController::arc(motor_point_t dest, motor_point_t center, int spl,
-				float speed, int div, bool clockwise, bool strict) {
+				float speed, int div, bool clockwise, float scale, bool strict) {
 		if (this->xAxis->getPowerState() == Power::NoPower ||
 			this->yAxis->getPowerState() == Power::NoPower) {
 			return ErrorCode::PowerOff;
@@ -367,7 +367,7 @@ namespace CalX {
 			     pow(src.y - center.y, 2);
 		double r2 = pow(dest.x - center.x, 2) +
 			     pow(dest.y - center.y, 2);
-		if (fabs(sqrt(r1) - sqrt(r2)) >= COMPARISON_RADIUS) {
+		if (fabs(sqrt(r1) - sqrt(r2)) / scale >= COMPARISON_RADIUS) {
 				return ErrorCode::ArcError;
 		}
 		double fullCircle = 2 * M_PI * sqrt(r1);
@@ -375,7 +375,7 @@ namespace CalX {
 		if (splitter == 0) {
 			splitter = 1;
 		}
-		Circle cir(center, (int64_t) sqrt(r1), clockwise);
+		Circle cir(center, (int64_t) sqrt(r1), clockwise, scale);
 		if (!cir.skip(src)) {
 			return ErrorCode::ArcError;
 		}
@@ -413,8 +413,8 @@ namespace CalX {
 				}
 				pnt = getPosition();
 			}
-		} while (abs(dest.x - pnt.x) > COMPARISON_RADIUS ||
-			abs(dest.y - pnt.y) > COMPARISON_RADIUS);
+		} while (abs(dest.x - pnt.x) / scale > COMPARISON_RADIUS ||
+			abs(dest.y - pnt.y) / scale > COMPARISON_RADIUS);
 		if (this->instr != nullptr) {
 			this->instr->unuse();
 		}
@@ -429,14 +429,14 @@ namespace CalX {
 	}
 
 	ErrorCode CoordPlane::relativeArc(motor_point_t reldest, motor_point_t relcenter, int splitter,
-				float speed, int div, bool clockwise, bool strict) {
+				float speed, int div, bool clockwise, float scale, bool strict) {
 		motor_point_t dest = getPosition();
 		motor_point_t center = getPosition();
 		dest.x += reldest.x;
 		dest.y += reldest.y;
 		center.x += relcenter.x;
 		center.y += relcenter.y;
-		return arc(dest, center, splitter, speed, div, clockwise, strict);
+		return arc(dest, center, splitter, speed, div, clockwise, scale, strict);
 	}
 	
 	motor_rect_t CoordController::getSize() {

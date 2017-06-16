@@ -65,13 +65,13 @@ namespace CalX {
 	}
 
 	ErrorCode VirtualCoordPlane::arc(motor_point_t dest, motor_point_t center, int spl,
-				float speed, int div, bool clockwise, bool strict) {
+				float speed, int div, bool clockwise, float scale, bool strict) {
 		motor_point_t src = this->getPosition();
 		double r1 = pow(src.x - center.x, 2) +
 			     pow(src.y - center.y, 2);
 		double r2 = pow(dest.x - center.x, 2) +
 			     pow(dest.y - center.y, 2);
-		if (fabs(sqrt(r1) - sqrt(r2)) >= COMPARISON_RADIUS) {
+		if (fabs(sqrt(r1) - sqrt(r2)) / scale >= COMPARISON_RADIUS) {
 				return ErrorCode::ArcError;
 		}
 		double fullCircle = 2 * M_PI * sqrt(r1);
@@ -79,7 +79,7 @@ namespace CalX {
 		if (splitter == 0) {
 			splitter = 1;
 		}
-		Circle cir(center, (int64_t) sqrt(r1), clockwise);
+		Circle cir(center, (int64_t) sqrt(r1), clockwise, scale);
 		if (!cir.skip(src)) {
 			return ErrorCode::ArcError;
 		}
@@ -98,8 +98,8 @@ namespace CalX {
 				}
 				pnt = getPosition();
 			}
-		} while (abs(dest.x - pnt.x) > COMPARISON_RADIUS ||
-			abs(dest.y - pnt.y) > COMPARISON_RADIUS);
+		} while (abs(dest.x - pnt.x) / scale > COMPARISON_RADIUS ||
+			abs(dest.y - pnt.y) / scale > COMPARISON_RADIUS);
 		return this->move(dest, speed, div, true);
 	}
 	

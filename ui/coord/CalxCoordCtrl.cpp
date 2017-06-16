@@ -53,7 +53,6 @@ namespace CalXUI {
 		float speed_scale = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("speed_scale", 1.0f);
 		this->unit_map = new CoordPlaneMap(unit_offset, unit_scale, speed_scale, ctrl->peekPlane());
 		ctrl->pushPlane(this->unit_map);
-		std::cout << unit_scale.x << "x" << unit_scale.y << " " << speed_scale << std::endl;
 		motor_point_t validateMin = {INT_MIN, INT_MIN};
 		motor_point_t validateMax = {INT_MAX, INT_MAX};
 		this->validator = new CoordPlaneValidator(validateMin, validateMax, wxGetApp().getSystemManager()->getConfiguration()->getEntry("core")->getInt("maxspeed", 4000), ctrl->peekPlane());
@@ -305,7 +304,6 @@ namespace CalXUI {
 	void CalxCoordCtrl::OnLinearJumpClick(wxCommandEvent &evt) {
 		motor_point_t dest = {linear->getCoordX(), linear->getCoordY()};
 		float speed = linear->getSpeed();
-		speed *= wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("speed_scale", 1);
 		this->queue->addAction(new CalxCoordMoveAction(this, ctrl, false, linear->isRelative(), dest, speed, linear->getDivisor()));
 	}
 
@@ -313,7 +311,6 @@ namespace CalXUI {
 		motor_point_t dest = {arc->getCoordX(), arc->getCoordY()};
 		motor_point_t cen = {arc->getCenterCoordX(), arc->getCenterCoordY()};
 		float speed = arc->getSpeed();
-		speed *= wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("speed_scale", 1);
 		this->queue->addAction(new CalxCoordArcAction(this, ctrl, arc->isRelative(), dest, cen, arc->getSplitter(), speed, arc->getDivisor(), arc->isClockwise()));
 	}
 
@@ -332,7 +329,6 @@ namespace CalXUI {
 		double maxy = graphCtrl->getYMax();
 		double step = graphCtrl->getStep();
 		float speed = graphCtrl->getSpeed();
-		speed *= wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("speed_scale", 1);
 		CoordTranslator *trans = graphCtrl->getCoordTranslator();
 		coord_point_t min = {minx, miny};
 		coord_point_t max = {maxx, maxy};

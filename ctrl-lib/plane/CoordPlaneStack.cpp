@@ -62,8 +62,8 @@ namespace CalX {
 		return this->peekPlane()->move(dest, speed, div, sync);
 	}
 	
-	ErrorCode CoordPlaneStack::arc(motor_point_t dest, motor_point_t center, int splitter, float speed, int div, bool clockwise, bool strict) {
-		return this->peekPlane()->arc(dest, center, splitter, speed, div, clockwise, strict);
+	ErrorCode CoordPlaneStack::arc(motor_point_t dest, motor_point_t center, int splitter, float speed, int div, bool clockwise, float scale, bool strict) {
+		return this->peekPlane()->arc(dest, center, splitter, speed, div, clockwise, scale, strict);
 	}
 	
 	ErrorCode CoordPlaneStack::calibrate(TrailerId tr) {

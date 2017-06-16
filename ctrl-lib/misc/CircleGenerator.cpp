@@ -25,9 +25,10 @@
 
 namespace CalX {
 
-	Circle::Circle(motor_point_t cen, int64_t rad, bool cw) {
+	Circle::Circle(motor_point_t cen, int64_t rad, bool cw, float scale) {
 		this->center = cen;
 		this->radius = rad;
+		this->scale = scale;
 		this->curx = rad;
 		this->cury = 0;
 		this->curerr = 0;
@@ -159,8 +160,8 @@ namespace CalX {
 			if (cur.x == start.x && cur.y == start.y) {
 				break;
 			}
-		} while (abs(cur.x - pnt.x) > COMPARISON_RADIUS ||
-				abs(cur.y - pnt.y) > COMPARISON_RADIUS);
+		} while (abs(cur.x - pnt.x) / this->scale > COMPARISON_RADIUS ||
+				abs(cur.y - pnt.y) / this->scale > COMPARISON_RADIUS);
 		if (cur.x == start.x && cur.y == start.y) {
 			return false;
 		}
