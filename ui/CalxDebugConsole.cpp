@@ -38,24 +38,23 @@ class HelpCMD : public CLICommand  {
 	}
 	
 	void *CalxDebugConsole::Entry() {
-		
-	CLI cli(std::cout, std::cin);
-	cli.addCommand("echo", new EchoCMD());
-	cli.addCommand("ls", new LsCommand(sysman));
-	cli.addCommand("x", new HaltCommand(sysman));
-	cli.addCommand("dev", new MotorCommand(sysman));
-	cli.addCommand("coord", new CoordCommand(sysman));
-	cli.addCommand("refresh", new RefreshCommand(sysman));
-	cli.addCommand("task", new TaskCommand(sysman));
-	cli.addCommand("help", new HelpCMD());
-	do {
-		if (devman->hasError()) {
-			std::cout << "Errors occured during execution" << std::endl;
-			while (devman->hasError()) {
-				std::cout << "Error: " << devman->pollError() << std::endl;
+		CLI cli(std::cout, std::cin);
+		cli.addCommand("echo", new EchoCMD());
+		cli.addCommand("ls", new LsCommand(sysman));
+		cli.addCommand("x", new HaltCommand(sysman));
+		cli.addCommand("dev", new MotorCommand(sysman));
+		cli.addCommand("coord", new CoordCommand(sysman));
+		cli.addCommand("refresh", new RefreshCommand(sysman));
+		cli.addCommand("task", new TaskCommand(sysman));
+		cli.addCommand("help", new HelpCMD());
+		do {
+			if (devman->hasError()) {
+				std::cout << "Errors occured during execution" << std::endl;
+				while (devman->hasError()) {
+					std::cout << "Error: " << devman->pollError() << std::endl;
+				}
 			}
-		}
-	} while (cli.shell());
-	return nullptr;
+		} while (cli.shell());
+		return nullptr;
 	}
 }

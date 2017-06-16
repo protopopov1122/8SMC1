@@ -121,8 +121,12 @@ namespace CalX {
 			return true;
 		}
 
-		CLICommand *cmd = this->commands[command];
-		cmd->execute(this, args);
+		try {
+			CLICommand *cmd = this->commands[command];
+			cmd->execute(this, args);
+		} catch (...) {
+			std::cout << "Command execution error" << std::endl;
+		}
 
 		
 		return true;
