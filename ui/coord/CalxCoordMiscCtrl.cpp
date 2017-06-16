@@ -269,6 +269,7 @@ namespace CalXUI {
 		}
 		if (work && errcode == ErrorCode::NoError) {
 			ctrl->setPlaneOffset(handle->getPosition());
+			ctrl->updateWatchers();
 		}
 		wxGetApp().getErrorHandler()->handle(errcode);
 		this->ctrl->setMaster(false);

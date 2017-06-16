@@ -186,6 +186,12 @@ namespace CalXUI {
 		Refresh();
 	}
 	
+	void CalxCoordPlaneWatcher::update() {
+		this->bitmap.Create(GetSize().x, GetSize().y);
+		renderBitmap();
+		Refresh();
+	}
+	
 	void CalxCoordPlaneWatcher::OnExit(wxCloseEvent &evt) {
 		if (this->timer != nullptr) {
 			this->timer->Stop();

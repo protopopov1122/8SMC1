@@ -75,6 +75,7 @@ namespace CalXUI {
 			void setEnabled(bool);
 			void bindWatcher(CalxCoordPlaneWatcher*);
 			void unbindWatcher(CalxCoordPlaneWatcher*);
+			void updateWatchers();
 			bool hasWatchers();
 			bool isBusy() {
 				return !queue->isEmpty();

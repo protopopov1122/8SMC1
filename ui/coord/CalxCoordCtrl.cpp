@@ -200,6 +200,12 @@ namespace CalXUI {
 		this->otherCtrl->setYOffset(offset.y);
 		this->map->setOffset(offset);
 	}
+	
+	void CalxCoordCtrl::updateWatchers() {
+		for (const auto& w : this->watchers) {
+			w->update();
+		}
+	}
 
 	void CalxCoordCtrl::bindWatcher(CalxCoordPlaneWatcher *w) {
 		this->watchers.push_back(w);

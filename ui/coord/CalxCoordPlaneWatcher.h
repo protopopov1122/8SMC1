@@ -64,6 +64,7 @@ namespace CalXUI {
 			bool isRendering();
 			bool hasUpdates();
 			CoordHandle *getHandle();
+			void update();
 		private:
 			void add(motor_point_t, bool);
 			void render(wxDC&);
