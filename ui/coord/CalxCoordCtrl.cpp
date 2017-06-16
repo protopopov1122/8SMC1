@@ -482,12 +482,9 @@ namespace CalXUI {
 
 	void CalxCoordCtrl::OnConfigureClick(wxCommandEvent &evt) {
 		CalxCoordPositionCtrl *posCtrl = this->otherCtrl->getPositionController();
-		motor_rect_t size = this->ctrl->getSize();
-		motor_coord_t x = (motor_coord_t) (((double) size.w) * posCtrl->getXPosition()) + size.x;
-		motor_coord_t y = (motor_coord_t) (((double) size.h) * posCtrl->getYPosition()) + size.y;
 		int speed = posCtrl->getSpeed();
 		int div = posCtrl->getDivisor();
-		motor_point_t dest = {x, y};
+		coord_point_t dest = {posCtrl->getXPosition(), posCtrl->getYPosition()};
 		this->queue->addAction(new CalxCoordConfigureAction(this, ctrl, false, false, dest, speed, div));
 	}
 }

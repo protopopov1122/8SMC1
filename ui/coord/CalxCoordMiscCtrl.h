@@ -181,7 +181,7 @@ namespace CalXUI {
 	
 	class CalxCoordConfigureAction : public CalxAction {
 		public:
-			CalxCoordConfigureAction(CalxCoordCtrl*, CoordHandle*, bool, bool, motor_point_t, float, int);
+			CalxCoordConfigureAction(CalxCoordCtrl*, CoordHandle*, bool, bool, coord_point_t, float, int);
 			virtual ~CalxCoordConfigureAction();
 			
 			virtual void perform(SystemManager*);
@@ -192,7 +192,7 @@ namespace CalXUI {
 			CoordHandle *handle;
 			bool jump;
 			bool relative;
-			motor_point_t dest;
+			coord_point_t dest;
 			float speed;
 			int div;
 	};

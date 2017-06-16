@@ -233,7 +233,7 @@ namespace CalXUI {
 	}
 
 
-	CalxCoordConfigureAction::CalxCoordConfigureAction(CalxCoordCtrl *ctrl, CoordHandle *handle, bool jump, bool relative, motor_point_t dest, float speed, int div) {
+	CalxCoordConfigureAction::CalxCoordConfigureAction(CalxCoordCtrl *ctrl, CoordHandle *handle, bool jump, bool relative, coord_point_t dest, float speed, int div) {
 		this->ctrl = ctrl;
 		this->handle = handle;
 		this->jump = jump;
@@ -256,6 +256,10 @@ namespace CalXUI {
 		if (errcode != ErrorCode::NoError) {
 			work = false;
 		}
+		motor_rect_t size = this->handle->getSize();
+		motor_coord_t x = (motor_coord_t) (((double) size.w) * this->dest.x) + size.x;
+		motor_coord_t y = (motor_coord_t) (((double) size.h) * this->dest.y) + size.y;
+		motor_point_t dest = {x, y};
 		if (relative && work) {
 			errcode = handle->relativeMove(dest, speed, div, jump);
 		} else if (work) {
