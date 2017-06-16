@@ -97,6 +97,7 @@ namespace CalXUI {
 			void OnRemoveKeyClick(wxCommandEvent&);
 			void OnNewEntryClick(wxCommandEvent&);
 			void OnRemoveEntryClick(wxCommandEvent&);
+			void OnExportClick(wxCommandEvent&);
 			void OnExit(wxCloseEvent&);
 			wxButton *okButton;
 			wxListBox *entryList;

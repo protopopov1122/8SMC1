@@ -233,8 +233,11 @@ namespace CalXUI {
 		entrySizer->Add(newEntryButton, 0, wxEXPAND | wxALL);
 		wxButton *removeEntryButton = new wxButton(entryPanel, wxID_ANY, __("Remove"));
 		entrySizer->Add(removeEntryButton, 0, wxEXPAND | wxALL);
+		wxButton *exportButton = new wxButton(entryPanel, wxID_ANY, __("Export configuration"));
+		entrySizer->Add(exportButton, 0, wxEXPAND | wxALL);
 		newEntryButton->Bind(wxEVT_BUTTON, &CalxConfigEditor::OnNewEntryClick, this);
 		removeEntryButton->Bind(wxEVT_BUTTON, &CalxConfigEditor::OnRemoveEntryClick, this);
+		exportButton->Bind(wxEVT_BUTTON, &CalxConfigEditor::OnExportClick, this);
 		
 		this->valuePanel = new wxPanel(mainPanel, wxID_ANY);
 		wxBoxSizer *valueSizer = new wxBoxSizer(wxVERTICAL);
@@ -578,6 +581,18 @@ namespace CalXUI {
 				break;
 			}
 		}
+	}
+	
+	void CalxConfigEditor::OnExportClick(wxCommandEvent &evt) {
+		wxFileDialog *dialog = new wxFileDialog(this, __("Export linearized GCode"), "", "",
+                       "", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+		if (dialog->ShowModal() == wxID_OK) {
+			std::string path = dialog->GetPath().ToStdString();
+			std::ofstream out(path);
+			this->config->store(&out);
+			out.close();
+		}
+		dialog->Destroy();
 	}
 	
 	CalxConfigDialog::CalxConfigDialog(wxWindow *win, wxWindowID id, ConfigManager *conf)
