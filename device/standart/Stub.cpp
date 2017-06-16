@@ -23,11 +23,19 @@
 #include "USMCDLL.h"
 #include <stdio.h>
 #include <iostream>
+#include <stdlib.h>
+#include <time.h>
 
-const int MIN_POS = -150000;
-const int MAX_POS = 150000;
-int POS[] = {0, 0};
-int POWER[] = {0, 0};
+const int LENGTH = 150000;
+struct {
+	int start;
+	int finish;
+	int position;
+	int power;
+} MOTORS[2] = {
+	{-LENGTH, LENGTH, 0, 0},
+	{-LENGTH, LENGTH, 0, 0}
+};
 
 char SER01[] = "01";
 char SER02[] = "02";
@@ -37,6 +45,17 @@ char *Serials[] = {
 };
 
 DWORD USMC_Init(USMC_Devices &devs) {
+	time_t t;
+	srand((unsigned) time(&t));
+	int r1, r2;
+	r1 = (rand() % (MOTORS[0].finish * 2)) - MOTORS[0].finish;
+	r2 = (rand() % (MOTORS[1].finish * 2)) - MOTORS[1].finish;
+	MOTORS[0].start -= r1;
+	MOTORS[0].finish -= r1;
+	MOTORS[0].position -= r1;
+	MOTORS[1].start -= r2;
+	MOTORS[1].finish -= r2;
+	MOTORS[1].position -= r2;
 	devs.NOD = 2;
 	devs.Serial = Serials;
 	devs.Version = Serials;
@@ -48,11 +67,11 @@ DWORD USMC_Close() {
 }
 
 DWORD USMC_GetState(DWORD dev, USMC_State &state) {
-	state.CurPos = POS[dev];
-	state.Trailer1 = POS[dev] < MIN_POS;
-	state.Trailer2 = POS[dev] > MAX_POS;
-	state.Power = POWER[dev] > 0;
-	state.FullPower = POWER[dev] > 1;
+	state.CurPos = MOTORS[dev].position;
+	state.Trailer1 = MOTORS[dev].position <= MOTORS[dev].start;
+	state.Trailer2 = MOTORS[dev].position >= MOTORS[dev].finish;
+	state.Power = MOTORS[dev].power > 0;
+	state.FullPower = MOTORS[dev].power > 1;
 	return FALSE;
 }
 
@@ -61,11 +80,11 @@ DWORD USMC_SetCurrentPosition(DWORD dev, int pos) {
 }
 
 DWORD USMC_Start(DWORD dev, int DestPos, float &Speed, USMC_StartParameters &Str) {
-	if (POWER[dev] == 0) {
+	if (MOTORS[dev].power == 0) {
 		return FALSE;
 	}
-	POWER[dev] = 2;
-	POS[dev] = DestPos;
+	MOTORS[dev].power = 2;
+	MOTORS[dev].position = DestPos;
 	return FALSE;
 }
 
@@ -78,7 +97,7 @@ DWORD USMC_GetMode(DWORD dev, USMC_Mode &mod) {
 }
 
 DWORD USMC_SetMode(DWORD dev, USMC_Mode &Str) {
-	POWER[dev] = Str.ResetD ? 0 : 1;
+	MOTORS[dev].power = Str.ResetD ? 0 : 1;
 	return FALSE;
 }
 
