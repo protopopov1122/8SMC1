@@ -7,10 +7,10 @@ add_executable(calx_cli DevCLI.cpp CLI.cpp main.cpp)
 set(CPACK_COMPONENT_CALX_CLI_DEPENDS calx_ctrl_lib CACHE INTERNAL "")
 if (TARGET dev_standart)
 	target_link_libraries(calx_cli calx dev_standart)
-	set(CPACK_COMPONENT_CALX_CLI_DEPENDS ${CPACK_COMPONENT_CALXCLI_DEPENDS} devapi_standart CACHE INTERNAL "")
+	set(CPACK_COMPONENT_CALX_CLI_DEPENDS ${CPACK_COMPONENT_CALX_CLI_DEPENDS} devapi_standart CACHE INTERNAL "")
 else (TARGET dev_standart)
 	target_link_libraries(calx_cli calx dev_emulated)
-	set(CPACK_COMPONENT_CALX_CLI_DEPENDS ${CPACK_COMPONENT_CALXCLI_DEPENDS} devapi_emulated CACHE INTERNAL "")
+	set(CPACK_COMPONENT_CALX_CLI_DEPENDS ${CPACK_COMPONENT_CALX_CLI_DEPENDS} devapi_emulated CACHE INTERNAL "")
 endif (TARGET dev_standart)
 add_custom_command(TARGET calx_cli POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:calx_cli> ${build_directory}
