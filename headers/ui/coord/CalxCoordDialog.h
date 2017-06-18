@@ -22,15 +22,15 @@
 #define CALX_UI_CALX_COORD_DIALOG_H_
 
 #include <string>
-#include "CalxApp.h"
+#include "ui/CalxApp.h"
 #include <wx/choice.h>
 
 using namespace CalX;
 
 namespace CalXUI {
-	
+
 	extern std::string ABOUT_TEXT;
-	
+
 	class CalxCoordDialog : public wxDialog {
 		public:
 			CalxCoordDialog(wxWindow*, wxWindowID, SystemManager*);
@@ -38,11 +38,11 @@ namespace CalXUI {
 		private:
 			void OnOkButtonClick(wxCommandEvent&);
 			void OnCancelButtonClick(wxCommandEvent&);
-		
+
 			wxChoice *xChoice;
 			wxChoice *yChoice;
 			wxChoice *instrChoice;
-		
+
 			SystemManager *sysman;
 			CoordHandle *ctrl;
 	};

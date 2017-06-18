@@ -19,13 +19,13 @@
 
 
 #include <iostream>
-#include "CalxActionQueue.h"
+#include "ui/CalxActionQueue.h"
 #include <wx/event.h>
 
 wxDEFINE_EVENT(wxEVT_COMMAND_QUEUE_UPDATE, wxThreadEvent);
 
 namespace CalXUI {
-	
+
 	CalxActionQueue::CalxActionQueue(SystemManager *sysman, wxEvtHandler *handle)
 		: wxThread::wxThread(wxTHREAD_DETACHED) {
 		this->mutex = new wxMutex();
@@ -35,7 +35,7 @@ namespace CalXUI {
 		this->sysman = sysman;
 		this->current = nullptr;
 	}
-	
+
 	CalxActionQueue::~CalxActionQueue() {
 		delete this->mutex;
 		delete this->cond;
@@ -49,7 +49,7 @@ namespace CalXUI {
 			}
 		}
 	}
-	
+
 	void CalxActionQueue::addAction(CalxAction *act, bool *flag) {
 		this->mutex->Lock();
 		this->queue.push_back(std::make_pair(act, flag));
@@ -57,11 +57,11 @@ namespace CalXUI {
 		wxQueueEvent(handle, new wxThreadEvent(wxEVT_COMMAND_QUEUE_UPDATE));
 		cond->Broadcast();
 	}
-	
+
 	bool CalxActionQueue::isEmpty() {
 		return this->queue.empty();
 	}
-	
+
 	void CalxActionQueue::stop() {
 		finished = false;
 		this->work = false;
@@ -70,13 +70,13 @@ namespace CalXUI {
 		}
 		cond->Broadcast();
 	}
-	
+
 	void CalxActionQueue::stopCurrent() {
 		if (this->current != nullptr) {
 			current->stop();
 		}
 	}
-	
+
 	void *CalxActionQueue::Entry() {
 		while (work) {
 			while (!this->queue.empty() && work) {

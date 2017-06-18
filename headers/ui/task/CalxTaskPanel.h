@@ -22,23 +22,23 @@
 #define CALX_UI_CALX_TASK_PANEL_H_
 
 #include <vector>
-#include "CalxApp.h"
+#include "ui/CalxApp.h"
 #include <wx/listbox.h>
 #include <wx/spinctrl.h>
 #include <wx/choice.h>
 #include "CalxTaskHandle.h"
-#include "CalxActionQueue.h"
+#include "ui/CalxActionQueue.h"
 
 namespace CalXUI {
-	
+
 	class CalxTaskHandle; // Forward referencing
 
 	wxDECLARE_EVENT(wxEVT_TASK_PANEL_ENABLE, wxThreadEvent);
-	
+
 	class CalxTaskPanel : public wxScrolledWindow {
 		public:
 			CalxTaskPanel(wxWindow*, wxWindowID);
-			
+
 			void updateUI();
 			void stop();
 			void setEnabled(bool);
@@ -58,7 +58,7 @@ namespace CalXUI {
 			void OnQueueUpdate(wxThreadEvent&);
 			void OnStopClick(wxCommandEvent&);
 			void OnEnableEvent(wxThreadEvent&);
-			
+
 			wxListBox *taskList;
 			wxPanel *mainPanel;
 			wxPanel *taskPanel;

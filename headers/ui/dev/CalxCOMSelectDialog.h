@@ -18,30 +18,31 @@
 */
 
 
-#ifndef CALX_UI_CALX_COORD_POSITION_CTRL_H_
-#define CALX_UI_CALX_COORD_POSITION_CTRL_H_
+#ifndef _CALX_UI_CALX_COM_SELECT_DIALOG_H_
+#define _CALX_UI_CALX_COM_SELECT_DIALOG_H_
 
-#include "CalxApp.h"
+#include "ui/CalxApp.h"
 #include <wx/spinctrl.h>
+#include <wx/choice.h>
 
 namespace CalXUI {
 
-	class CalxCoordPositionCtrl : public wxPanel {
+	class CalxCOMSelectDialog : public wxDialog {
 		public:
-			CalxCoordPositionCtrl(wxWindow*, wxWindowID);
-			double getXPosition() {return this->xPos->GetValue();}
-			double getYPosition() {return this->yPos->GetValue();}
-			wxButton *getMoveButton() {return this->moveButton;}
-			wxButton *getConfigureButton() {return this->configureButton;}
-			int getSpeed() {return speed->GetValue();}
-			int getDivisor() {return 1 << divisor->GetSelection();}
+			CalxCOMSelectDialog(wxWindow*, wxWindowID);
+			int16_t getPort();
+			int32_t getSpeed();
+			SerialPortParity getParity();
 		private:
-			wxSpinCtrlDouble *xPos;
-			wxSpinCtrlDouble *yPos;
-			wxSpinCtrl *speed;
-			wxChoice *divisor;
-			wxButton *moveButton;
-			wxButton *configureButton;
+			void OnOkClick(wxCommandEvent&);
+			void OnCancelClick(wxCommandEvent&);
+
+			wxSpinCtrl *portSpin;
+			wxSpinCtrl *speedSpin;
+			wxChoice *parityCh;
+			int16_t port;
+			int32_t speed;
+			SerialPortParity parity;
 	};
 }
 

@@ -21,30 +21,30 @@
 #ifndef CALX_UI_CALX_DEVICE_CTRL_H_
 #define CALX_UI_CALX_DEVICE_CTRL_H_
 
-#include "calx.h"
+#include "ui/calx.h"
 #include <wx/stattext.h>
 #include <wx/spinctrl.h>
 #include <wx/timer.h>
-#include "CalxActionQueue.h"
+#include "ui/CalxActionQueue.h"
 
 namespace CalXUI {
-	
+
 	class CalxMotorCtrl; // Forward reference
 	wxDECLARE_EVENT(wxEVT_MOTOR_CTRL_ENABLE, wxThreadEvent);
-	
+
 	class CalxMotorEventListener : public MotorEventListener {
 		public:
 			CalxMotorEventListener(CalxMotorCtrl*);
 			virtual ~CalxMotorEventListener();
-			
+
 			virtual void use();
 			virtual void unuse();
 		private:
 			CalxMotorCtrl *dev;
 			int used;
 	};
-	
-	
+
+
 	class CalxMotorTimer : public wxTimer {
 		public:
 			CalxMotorTimer() : wxTimer::wxTimer() {
@@ -55,12 +55,12 @@ namespace CalXUI {
 		private:
 			CalxMotorCtrl *ctrl;
 	};
-	
+
 	class CalxMotorCtrl : public wxPanel {
 		public:
 			friend class CalxMotorEventListener;
 			CalxMotorCtrl(wxWindow*, wxWindowID, CalX::MotorController*);
-			
+
 			void updateUI();
 			void stop();
 			void setEnabled(bool);
@@ -79,22 +79,22 @@ namespace CalXUI {
 			void OnExit(wxCloseEvent&);
 			void OnEnableEvent(wxThreadEvent&);
 			void OnConfigEvent(wxCommandEvent&);
-		
+
 			CalX::MotorController *dev;
 			CalxActionQueue *queue;
 			MotorEventListener *listener;
 			CalxMotorTimer timer;
 			bool master;
-			
+
 			wxPanel *infoPanel;
 			wxPanel *movePanel;
 			wxPanel *actionPanel;
 			wxButton *stopButton;
-			
+
 			// Value windows
 			wxSpinCtrl *moveSpin;
 			wxSpinCtrl *moveSpeedSpin;
-			
+
 			// Info texts
 			wxStaticText *position;
 			wxStaticText *power;
@@ -103,7 +103,7 @@ namespace CalXUI {
 			wxStaticText *trailer2;
 			wxStaticText *hardwareInfo;
 			wxStaticText *runtimeInfo;
-	};	
+	};
 }
 
 #endif

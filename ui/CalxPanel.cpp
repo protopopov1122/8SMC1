@@ -18,17 +18,17 @@
 */
 
 
-#include "CalxPanel.h"
-#include "dev/CalxDevicePanel.h"
-#include "coord/CalxCoordPanel.h"
-#include "task/CalxTaskPanel.h"
-#include "CalxConfigEditor.h"
+#include "ui/CalxPanel.h"
+#include "ui/dev/CalxDevicePanel.h"
+#include "ui/coord/CalxCoordPanel.h"
+#include "ui/task/CalxTaskPanel.h"
+#include "ui/CalxConfigEditor.h"
 
 namespace CalXUI {
-	
+
 	CalxPanel::CalxPanel(wxWindow *win, wxWindowID id)
 		: wxNotebook::wxNotebook(win, id) {
-		
+
 		this->dev = new CalxDevicePanel(this, wxID_ANY);
 		this->AddPage(this->dev, __("Devices"));
 		this->coord = new CalxCoordPanel(this, wxID_ANY);
@@ -37,30 +37,30 @@ namespace CalXUI {
 		this->AddPage(this->task, __("Tasks"));
 		this->conf = new CalxConfigEditor(this, wxID_ANY, wxGetApp().getSystemManager()->getConfiguration());
 		this->AddPage(this->conf, __("Configuration"));
-		
+
 		Bind(wxEVT_CLOSE_WINDOW, &CalxPanel::OnExit, this);
 	}
-	
+
 	void CalxPanel::updateUI() {
 		this->dev->updateUI();
 		this->coord->updateUI();
 		this->task->updateUI();
 	}
-	
+
 	void CalxPanel::OnExit(wxCloseEvent &evt) {
 		getTasks()->stop();
 		getCoords()->stop();
 		getDevices()->stop();
-		
+
 		wxMilliSleep(400);
-		
+
 		while (GetPageCount()) {
 			RemovePage(0);
 		}
 		getCoords()->Close(true);
 		getDevices()->Close(true);
 		getTasks()->Close(true);
-		
+
 		Destroy();
 	}
 }

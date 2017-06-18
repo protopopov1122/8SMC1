@@ -21,18 +21,18 @@
 #ifndef CALX_UI_CALX_DEVICE_PANEL_H_
 #define CALX_UI_CALX_DEVICE_PANEL_H_
 
-#include "CalxApp.h"
-#include "CalxActionQueue.h"
+#include "ui/CalxApp.h"
+#include "ui/CalxActionQueue.h"
 
 namespace CalXUI {
-	
+
 	class CalxMotorCtrl; // Forward referencing
 	class CalxInstrumentCtrl; // Forward referencing
-	
+
 	wxDECLARE_EVENT(wxEVT_DEVICE_PANEL_UPDATE, wxThreadEvent);
 	wxDECLARE_EVENT(wxEVT_DEVICE_PANEL_MOTOR_APPEND, wxThreadEvent);
 	wxDECLARE_EVENT(wxEVT_DEVICE_PANEL_INSTR_APPEND, wxThreadEvent);
-	
+
 	class CalxDevicePanel : public wxScrolledWindow {
 		public:
 			CalxDevicePanel(wxWindow*, wxWindowID);
@@ -52,7 +52,7 @@ namespace CalXUI {
 			void OnDevicePanelUpdate(wxThreadEvent&);
 			void OnDevicePanelMotorAppend(wxThreadEvent&);
 			void OnDevicePanelInstrAppend(wxThreadEvent&);
-			
+
 			std::vector<CalxMotorCtrl*> devs;
 			std::vector<CalxInstrumentCtrl*> instrs;
 			CalxActionQueue *queue;

@@ -21,14 +21,14 @@
 #ifndef CALX_UI_CALX_COORD_CTRL_H_
 #define CALX_UI_CALX_COORD_CTRL_H_
 
-#include "calx.h"
+#include "ui/calx.h"
 #include <wx/stattext.h>
 #include <wx/choice.h>
 #include <wx/checkbox.h>
 #include <wx/spinctrl.h>
 #include <wx/collpane.h>
-#include "CalxActionQueue.h"
-#include "CalxFrame.h"
+#include "ui/CalxActionQueue.h"
+#include "ui/CalxFrame.h"
 #include "CalxCoordLinearCtrl.h"
 #include "CalxCoordArcCtrl.h"
 #include "CalxCoordGraphCtrl.h"
@@ -38,24 +38,24 @@
 using namespace CalX;
 
 namespace CalXUI {
-	
+
 	class CalxCoordPlaneWatcher; // Forward referencing
-	
+
 	wxDECLARE_EVENT(wxEVT_COORD_CTRL_WATCHER, wxThreadEvent);
 	wxDECLARE_EVENT(wxEVT_COORD_CTRL_ENABLE, wxThreadEvent);
-	
+
 	class CalxCoordCtrl : public wxScrolledWindow {
 		public:
 			friend class CalxCoordEventListener;
 			CalxCoordCtrl(wxWindow*, wxWindowID, CoordHandle*);
-			
+
 			void updateUI();
 			void stop();
 			CoordHandle *getHandle() {return this->ctrl;}
 			CoordPlaneLog *getPlaneLog();
 			CoordPlaneMap *getPlaneMap();
 			CoordPlaneValidator *getPlaneValidator();
-			
+
 			void OnLinearMoveClick(wxCommandEvent&);
 			void OnLinearJumpClick(wxCommandEvent&);
 			void OnArcMoveClick(wxCommandEvent&);
@@ -81,7 +81,7 @@ namespace CalXUI {
 				return !queue->isEmpty();
 			}
 			void setPlaneOffset(motor_point_t);
-			
+
 			// Request synchronizing with interface
 			void requestMeasure(TrailerId);
 			void requestPosition(double, double);
@@ -96,7 +96,7 @@ namespace CalXUI {
 			void OnWatcherClick(wxCommandEvent&);
 			void OnWatcherRequest(wxThreadEvent&);
 			void OnEnableEvent(wxThreadEvent&);
-			
+
 			CoordHandle *ctrl;
 			CoordEventListener *listener;
 			CalxCoordMotorListener *xListener;
@@ -106,8 +106,8 @@ namespace CalXUI {
 			int used;
 			bool master;
 			std::vector<CalxCoordPlaneWatcher*> watchers;
-			
-			
+
+
 			// Components
 			wxPanel *generalPanel;
 			wxPanel *actionPanel;
@@ -118,13 +118,13 @@ namespace CalXUI {
 			CalxCoordGraphCtrl *graphCtrl;
 			CalxCoordOtherCtrl *otherCtrl;
 			CalxCoordTimer timer;
-			
+
 			// Filters
 			CoordPlaneLog *log;
 			CoordPlaneMap *map;
 			CoordPlaneValidator *validator;
 			CoordPlaneMap *unit_map;
-			
+
 	};
 }
 

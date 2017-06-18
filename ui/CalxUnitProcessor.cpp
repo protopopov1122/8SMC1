@@ -18,31 +18,31 @@
 */
 
 
-#include "CalxUnitProcessor.h"
+#include "ui/CalxUnitProcessor.h"
 
 namespace CalXUI {
-	
+
 	CalxUnitProcessor::CalxUnitProcessor(std::string suf, double sc) {
 		this->suffix = suf;
 		this->scale = sc;
 	}
-	
+
 	CalxUnitProcessor::~CalxUnitProcessor() {
-		
+
 	}
-	
+
 	std::string CalxUnitProcessor::getSuffix() {
 		return this->suffix;
 	}
-	
+
 	double CalxUnitProcessor::getScale() {
 		return this->scale;
 	}
-	
+
 	double CalxUnitProcessor::toUnits(int64_t i) {
 		return ((double) i) * this->scale;
 	}
-	
+
 	std::string CalxUnitProcessor::toUnitsStr(int64_t i) {
 		double u = toUnits(i);
 		std::string str = std::to_string(u);
@@ -53,14 +53,14 @@ namespace CalXUI {
 		if (str.at(end - 1) == '.') {
 			end--;
 		}
-		
+
 		return str.substr(0, end);
 	}
-	
+
 	int64_t CalxUnitProcessor::toSteps(double u) {
 		return (int64_t) (u / this->scale);
 	}
-	
+
 	std::string CalxUnitProcessor::toTextUnits(int64_t i) {
 		std::string s = std::to_string(toUnits(i));
 		if (!this->suffix.empty()) {

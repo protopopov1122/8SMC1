@@ -23,16 +23,16 @@
 
 #include <vector>
 #include <utility>
-#include "CalxApp.h"
+#include "ui/CalxApp.h"
 #include <wx/stattext.h>
 
 namespace CalXUI {
-	
+
 	class CalxPlaneTracker : public VirtualCoordPlane {
 		public:
 			CalxPlaneTracker(motor_point_t, motor_rect_t);
 			virtual ~CalxPlaneTracker();
-			
+
 			virtual CoordPlane *clone(CoordPlane*);
 			std::vector<std::pair<motor_point_t, bool>>* getPath();
 			void reset();
@@ -41,11 +41,11 @@ namespace CalXUI {
 		private:
 			std::vector<std::pair<motor_point_t, bool>> path;
 	};
-	
+
 	class CalxVirtualPlane : public wxWindow {
 		public:
 			CalxVirtualPlane(wxWindow*, wxWindowID, CoordHandle*, wxSize);
-			
+
 			CoordPlaneStack *getPlane();
 			CalxPlaneTracker *getTracker();
 			void repaint();
@@ -54,16 +54,16 @@ namespace CalXUI {
 			void OnPaintEvent(wxPaintEvent&);
 			void OnResizeEvent(wxSizeEvent&);
 			void render(wxDC&);
-		
+
 			CalxPlaneTracker *tracker;
 			CoordPlaneStack *stack;
 			CoordHandle *base;
 	};
-	
+
 	class CalxVirtualPlaneDialog : public wxDialog {
 		public:
 			CalxVirtualPlaneDialog(wxWindow*, wxWindowID, CoordHandle*, wxSize);
-			
+
 			CoordPlaneStack *getPlane();
 		private:
 			void OnOkClick(wxCommandEvent&);

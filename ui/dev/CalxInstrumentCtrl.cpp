@@ -18,22 +18,22 @@
 */
 
 
-#include "CalxInstrumentCtrl.h"
-#include "CalxErrorHandler.h"
-#include "CalxConfigEditor.h"
+#include "ui/dev/CalxInstrumentCtrl.h"
+#include "ui/CalxErrorHandler.h"
+#include "ui/CalxConfigEditor.h"
 #include <wx/sizer.h>
 
 namespace CalXUI {
 
 	wxDEFINE_EVENT(wxEVT_INSTRUMENT_CTRL_ENABLE, wxThreadEvent);
-	
+
 	class CalxInstrumentEventListener : public InstrumentEventListener  {
 		public:
 			CalxInstrumentEventListener(CalxInstrumentCtrl *ctrl) {
 				this->ctrl = ctrl;
 				this->used = 0;
 			}
-			
+
 			virtual void use() {
 				if (used == 0) {
 					wxThreadEvent evt(wxEVT_INSTRUMENT_CTRL_ENABLE);
@@ -42,7 +42,7 @@ namespace CalXUI {
 				}
 				used++;
 			}
-			
+
 			virtual void unuse() {
 				used--;
 				if (used == 0) {
@@ -55,105 +55,105 @@ namespace CalXUI {
 			CalxInstrumentCtrl *ctrl;
 			int used;
 	};
-	
+
 	class CalxInstrumentTimer : public wxTimer {
 		public:
 			CalxInstrumentTimer(CalxInstrumentCtrl *ctrl) {
 				this->ctrl = ctrl;
 			}
-			
+
 			virtual void Notify() {
 				ctrl->updateUI();
 			}
 		private:
 			CalxInstrumentCtrl *ctrl;
 	};
-	
+
 	class CalxInstrumentEnableAction : public CalxAction {
 		public:
 			CalxInstrumentEnableAction(InstrumentController *ctrl) {
 				this->ctrl = ctrl;
 			}
-			
+
 			virtual void perform(SystemManager *sysman) {
 				ctrl->use();
 				wxGetApp().getErrorHandler()->handle(ctrl->flipState());
 				ctrl->unuse();
 			}
-			
+
 			virtual void stop() {
-				
+
 			}
 		private:
 			InstrumentController *ctrl;
 	};
-	
+
 	class CalxInstrumentStateAction : public CalxAction {
 		public:
 			CalxInstrumentStateAction(InstrumentController *ctrl) {
 				this->ctrl = ctrl;
 			}
-			
+
 			virtual void perform(SystemManager *sysman) {
 				ctrl->use();
 				ctrl->setRunnable(!ctrl->isRunnable());
 				ctrl->unuse();
 			}
-			
+
 			virtual void stop() {
-				
+
 			}
 		private:
 			InstrumentController *ctrl;
 	};
-	
+
 	class CalxInstrumentModeAction : public CalxAction {
 		public:
 			CalxInstrumentModeAction(InstrumentController *ctrl, InstrumentMode m) {
 				this->ctrl = ctrl;
 				this->mode = m;
 			}
-			
+
 			virtual void perform(SystemManager *sysman) {
 				ctrl->use();
 				this->ctrl->setMode(this->mode);
 				ctrl->unuse();
 			}
-			
+
 			virtual void stop() {
-				
+
 			}
 		private:
 			InstrumentController *ctrl;
 			InstrumentMode mode;
 	};
-	
+
 	CalxInstrumentCtrl::CalxInstrumentCtrl(wxWindow *win, wxWindowID id, InstrumentController *ctrl)
 		: wxPanel::wxPanel(win, id) {
-			
+
 		this->ctrl = ctrl;
 		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
 		this->listener = new CalxInstrumentEventListener(this);
-		
+
 		wxStaticBox *box = new wxStaticBox(this, wxID_ANY, FORMAT(__("Instrument #%s"), std::to_string(ctrl->getID())));
 		wxStaticBoxSizer *sizer = new wxStaticBoxSizer(box, wxVERTICAL);
 		SetSizer(sizer);
-		
+
 		this->instrInfoText = new wxStaticText(box, wxID_ANY, ctrl->getInfo());
 		sizer->Add(instrInfoText, 0, wxLEFT | wxTOP, 5);
-		
+
 		wxPanel *mainPanel = new wxPanel(box, wxID_ANY);
 		wxBoxSizer *mainSizer = new wxBoxSizer(wxHORIZONTAL);
 		mainPanel->SetSizer(mainSizer);
 		sizer->Add(mainPanel);
-		
+
 		wxPanel *infoPanel = new wxPanel(mainPanel, wxID_ANY);
 		mainSizer->Add(infoPanel, 0, wxALL, 10);
 		wxBoxSizer *infoSizer = new wxBoxSizer(wxVERTICAL);
 		infoPanel->SetSizer(infoSizer);
 		this->infoText = new wxStaticText(infoPanel, wxID_ANY, "");
 		infoSizer->Add(infoText);
-		
+
 		wxPanel *ctrlPanel = new wxPanel(mainPanel, wxID_ANY);
 		mainSizer->Add(ctrlPanel, 0, wxALL, 10);
 		wxBoxSizer *ctrlSizer = new wxBoxSizer(wxVERTICAL);
@@ -164,7 +164,7 @@ namespace CalXUI {
 		wxButton *confButton = new wxButton(ctrlPanel, wxID_ANY, __("Configuration"));
 		ctrlSizer->Add(confButton, 0, wxALL | wxEXPAND);
 		confButton->Bind(wxEVT_BUTTON, &CalxInstrumentCtrl::OnConfClick, this);
-				
+
 		wxPanel *modePanel = new wxPanel(mainPanel, wxID_ANY);
 		mainSizer->Add(modePanel, 0, wxALL, 10);
 		wxBoxSizer *modeSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -175,13 +175,13 @@ namespace CalXUI {
 		this->modeChoice->Append(__("Off"));
 		this->modeChoice->Append(__("Adjustment"));
 		this->modeChoice->Append(__("Maximal"));
-		this->modeChoice->SetSelection(this->ctrl->getMode() == InstrumentMode::Off ? 0 : 
+		this->modeChoice->SetSelection(this->ctrl->getMode() == InstrumentMode::Off ? 0 :
 			(this->ctrl->getMode() == InstrumentMode::Prepare ? 1 : 2));
 		this->modeChoice->Bind(wxEVT_CHOICE, &CalxInstrumentCtrl::OnModeClick, this);
-		
+
 		updateUI();
 		Layout();
-		
+
 		ctrl->addEventListener(listener);
 		this->queue->Run();
 		this->timer = new CalxInstrumentTimer(this);
@@ -189,35 +189,35 @@ namespace CalXUI {
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxInstrumentCtrl::OnExit, this);
 		this->Bind(wxEVT_INSTRUMENT_CTRL_ENABLE, &CalxInstrumentCtrl::OnEnableEvent, this);
 	}
-	
+
 	void CalxInstrumentCtrl::stop() {
 		timer->Stop();
 		this->queue->stop();
 	}
-	
+
 	void CalxInstrumentCtrl::updateUI() {
 		std::string text = __("Enabled") + std::string(": ") + std::string(ctrl->isEnabled() ? __("true") : __("false"));
 		this->infoText->SetLabel(text);
 		enabledButton->Enable(ctrl->isRunnable());
 	}
-	
+
 	void CalxInstrumentCtrl::OnExit(wxCloseEvent &evt) {
 		ctrl->removeEventListener(listener);
 		Destroy();
 	}
-	
+
 	void CalxInstrumentCtrl::OnEnableButton(wxCommandEvent &evt) {
 		queue->addAction(new CalxInstrumentEnableAction(this->ctrl));
 	}
-	
+
 	void CalxInstrumentCtrl::OnConfClick(wxCommandEvent &evt) {
 		CalxConfigDialog *editor = new CalxConfigDialog(this, wxID_ANY, this->ctrl->getConfiguration());
 		if (editor->ShowModal() == wxID_OK) {
-			
+
 		}
 		delete editor;
 	}
-	
+
 	void CalxInstrumentCtrl::OnModeClick(wxCommandEvent &evt) {
 		if (this->modeChoice->GetSelection() != wxNOT_FOUND) {
 			int sel = this->modeChoice->GetSelection();

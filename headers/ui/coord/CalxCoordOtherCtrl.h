@@ -22,22 +22,22 @@
 #define CALX_UI_CALX_COORD_OTHER_CTRL_H_
 
 #include <math.h>
-#include "calx.h"
+#include "ui/calx.h"
 #include <wx/stattext.h>
 #include <wx/choice.h>
 #include <wx/checkbox.h>
 #include <wx/spinctrl.h>
 #include <wx/collpane.h>
-#include "CalxActionQueue.h"
-#include "CalxFrame.h"
+#include "ui/CalxActionQueue.h"
+#include "ui/CalxFrame.h"
 #include "CalxCoordPositionCtrl.h"
 
 using namespace CalX;
 
 namespace CalXUI {
-	
+
 	class CalxCoordCtrl; // Forward reference
-	
+
 	class CalxCoordOtherCtrl : public wxPanel {
 		public:
 			CalxCoordOtherCtrl(CalxCoordCtrl *ctrl, wxWindow *win, wxWindowID id)
@@ -103,7 +103,7 @@ namespace CalXUI {
 			wxSpinCtrl *speed;
 			CalxCoordPositionCtrl *posCtrl;
 	};
-	
+
 }
-	
+
 #endif

@@ -1,9 +1,9 @@
-#include "CalxDebugConsole.h"
+#include "ui/CalxDebugConsole.h"
 #include "cli/DevCLI.h"
 
 namespace CalXUI {
-	
-	
+
+
 
 class EchoCMD : public CLICommand  {
 	virtual ~EchoCMD() {
@@ -27,18 +27,18 @@ class HelpCMD : public CLICommand  {
 		std::cout << "See cli/README.md in project repo to get CLI manual" << std::endl;
 	}
 };
-	
+
 	CalxDebugConsole::CalxDebugConsole(SystemManager *sysman) {
 		this->sysman = sysman;
 		this->devman = sysman->getDeviceManager();
 	}
-	
+
 	CalxDebugConsole::~CalxDebugConsole() {
-		
+
 	}
-	
+
 	void *CalxDebugConsole::Entry() {
-		
+
 	CLI cli(std::cout, std::cin);
 	cli.addCommand("echo", new EchoCMD());
 	cli.addCommand("ls", new LsCommand(sysman));

@@ -18,13 +18,13 @@
 */
 
 
-#include "CalxApp.h"
+#include "ui/CalxApp.h"
 #ifdef OS_WIN
 	#include <windows.h>
 #endif
 #include <wx/filedlg.h>
-#include "CalxDebugConsole.h"
-#include "CalxErrorHandler.h"
+#include "ui/CalxDebugConsole.h"
+#include "ui/CalxErrorHandler.h"
 #include "ctrl-lib/device/DeviceManager.h"
 #include "ui/coord/CalxCoordPanel.h"
 #include "ui/CalxAutoconfDialog.h"

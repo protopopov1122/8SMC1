@@ -22,19 +22,19 @@
 #define CALX_UI_CALX_COORD_TRANSLATOR_H_
 
 #include <vector>
-#include "CalxApp.h"
+#include "ui/CalxApp.h"
 #include <wx/spinctrl.h>
 #include <wx/listbox.h>
 
 namespace CalXUI {
-	
+
 	class CalxCoordFilter : public wxPanel {
 		public:
 			CalxCoordFilter(wxWindow*, wxWindowID);
 			virtual CoordTranslator *getTranslator() = 0;
 	};
-	
-	
+
+
 	class CalxCoordBasicFilter : public CalxCoordFilter {
 		public:
 			CalxCoordBasicFilter(wxWindow*, wxWindowID, BasicCoordTranslator*);
@@ -47,8 +47,8 @@ namespace CalXUI {
 			wxSpinCtrl *xscale;
 			wxSpinCtrl *yscale;
 	};
-	
-	
+
+
 	class CalxCoordLinearFilter : public CalxCoordFilter {
 		public:
 			CalxCoordLinearFilter(wxWindow*, wxWindowID, LinearCoordTranslator*);
@@ -56,15 +56,15 @@ namespace CalXUI {
 		private:
 			void updateData();
 			void OnFieldChange(wxCommandEvent&);
-			
+
 			LinearCoordTranslator *translator;
 			wxTextCtrl *xoffset;
 			wxTextCtrl *yoffset;
 			wxTextCtrl *xscale;
 			wxTextCtrl *yscale;
 	};
-	
-	
+
+
 	class CalxCoordLogarithmicFilter : public CalxCoordFilter {
 		public:
 			CalxCoordLogarithmicFilter(wxWindow*, wxWindowID, LogarithmicCoordTranslator*);
@@ -72,12 +72,12 @@ namespace CalXUI {
 		private:
 			void updateData();
 			void OnFieldChange(wxCommandEvent&);
-			
+
 			LogarithmicCoordTranslator *translator;
 			wxTextCtrl *xscale;
 			wxTextCtrl *yscale;
 	};
-	
+
 	class CalxCoordPolarFilter : public CalxCoordFilter {
 		public:
 			CalxCoordPolarFilter(wxWindow*, wxWindowID, PolarCoordTranslator*);
@@ -85,26 +85,26 @@ namespace CalXUI {
 		private:
 			PolarCoordTranslator *translator;
 	};
-	
+
 	class CalxCoordFilterCtrl : public CalxCoordFilter {
 		public:
 			CalxCoordFilterCtrl(wxWindow*, wxWindowID, ComplexCoordTranslator* = nullptr);
 			virtual ComplexCoordTranslator *getTranslator();
 			void updateUI();
 		private:
-		
+
 			void OnListClick(wxCommandEvent&);
 			void OnAddLinearClick(wxCommandEvent&);
 			void OnAddLogarithmicClick(wxCommandEvent&);
 			void OnAddPolarClick(wxCommandEvent&);
 			void OnRemoveClick(wxCommandEvent&);
-			
+
 			void addFilter(CoordTranslator*);
-		
+
 			wxPanel *mainPanel;
 			wxListBox *filterList;
 			wxButton *removeButton;
-		
+
 			ComplexCoordTranslator *trans;
 			std::vector<CalxCoordFilter*> filter;
 	};

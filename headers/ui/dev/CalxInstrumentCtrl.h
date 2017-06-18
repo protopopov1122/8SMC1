@@ -21,17 +21,17 @@
 #ifndef CALX_UI_CALX_INSTRUMENT_CTRL_H_
 #define CALX_UI_CALX_INSTRUMENT_CTRL_H_
 
-#include "CalxApp.h"
+#include "ui/CalxApp.h"
 #include <wx/stattext.h>
 #include <wx/timer.h>
 #include <wx/choice.h>
-#include "CalxActionQueue.h"
+#include "ui/CalxActionQueue.h"
 #include <iostream>
 
 namespace CalXUI {
 
 	wxDECLARE_EVENT(wxEVT_INSTRUMENT_CTRL_ENABLE, wxThreadEvent);
-	
+
 	class CalxInstrumentCtrl : public wxPanel {
 		public:
 			CalxInstrumentCtrl(wxWindow*, wxWindowID, InstrumentController*);
@@ -46,12 +46,12 @@ namespace CalXUI {
 			void OnModeClick(wxCommandEvent&);
 			void OnConfClick(wxCommandEvent&);
 			void OnEnableEvent(wxThreadEvent&);
-			
+
 			wxStaticText *infoText;
 			wxStaticText *instrInfoText;
 			wxButton *enabledButton;
 			wxChoice *modeChoice;
-		
+
 			CalxActionQueue *queue;
 			InstrumentController *ctrl;
 			InstrumentEventListener *listener;

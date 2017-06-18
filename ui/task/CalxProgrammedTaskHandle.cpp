@@ -18,25 +18,25 @@
 */
 
 
-#include "CalxTaskHandle.h"
+#include "ui/task/CalxTaskHandle.h"
 #include <wx/stattext.h>
 #include <wx/sizer.h>
 
 namespace CalXUI {
 	CalxProgrammedTaskHandle::CalxProgrammedTaskHandle(wxWindow *win, wxWindowID id)
 		: CalxTaskHandle::CalxTaskHandle(win, id, CalxTaskType::CalxProgrammed) {
-		this->task = new ProgrammedCoordTask();	
-		
+		this->task = new ProgrammedCoordTask();
+
 		ConfigManager *conf = wxGetApp().getSystemManager()->getConfiguration();
 		motor_point_t offset = {conf->getEntry("coords")->getInt("offset_x", 0),
 			conf->getEntry("coords")->getInt("offset_y", 0)};
 		motor_size_t size = {conf->getEntry("coords")->getInt("scale_x", 1),
 			conf->getEntry("coords")->getInt("scale_y", 1)};
 		this->trans = new ComplexCoordTranslator(new BasicCoordTranslator(offset, size));
-		
+
 		wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 		SetSizer(sizer);
-		
+
 		wxPanel *listPanel = new wxPanel(this, wxID_ANY);
 		sizer->Add(listPanel, 0, wxALL | wxEXPAND, 5);
 		wxBoxSizer *listSizer = new wxBoxSizer(wxVERTICAL);
@@ -63,17 +63,17 @@ namespace CalXUI {
 		wxButton *removeButton = new wxButton(listPanel, wxID_ANY, __("Remove step"));
 		listSizer->Add(removeButton, 0, wxALL | wxEXPAND);
 		removeButton->Bind(wxEVT_BUTTON, &CalxProgrammedTaskHandle::OnRemoveClick, this);
-		
+
 		this->mainPanel = new wxPanel(this, wxID_ANY);
 		wxBoxSizer *mainSizer = new wxBoxSizer(wxVERTICAL);
 		mainPanel->SetSizer(mainSizer);
 		sizer->Add(mainPanel, 1, wxALL | wxEXPAND, 5);
-		
-		
-		this->Bind(wxEVT_CLOSE_WINDOW, &CalxProgrammedTaskHandle::OnExit, this);	
+
+
+		this->Bind(wxEVT_CLOSE_WINDOW, &CalxProgrammedTaskHandle::OnExit, this);
 		Layout();
 	}
-	
+
 	CoordTask *CalxProgrammedTaskHandle::getTask() {
 		return this->task;
 	}
@@ -81,13 +81,13 @@ namespace CalXUI {
 	ComplexCoordTranslator *CalxProgrammedTaskHandle::getTranslator() {
 		return this->trans;
 	}
-	
+
 	void CalxProgrammedTaskHandle::update() {
 		for (const auto& s : this->steps) {
 			s->update();
 		}
 	}
-	
+
 	void CalxProgrammedTaskHandle::updateUI() {
 		this->moveUpButton->Enable(false);
 		this->moveDownButton->Enable(false);
@@ -102,11 +102,11 @@ namespace CalXUI {
 		mainPanel->Layout();
 		Layout();
 	}
-	
+
 	void CalxProgrammedTaskHandle::OnListClick(wxCommandEvent &evt) {
 		updateUI();
 	}
-	
+
 	void CalxProgrammedTaskHandle::OnMoveAddClick(wxCommandEvent &evt) {
 		CalxTaskLinearStepHandle *handle = new CalxTaskLinearStepHandle(this->mainPanel, wxID_ANY);
 		this->mainPanel->GetSizer()->Add(handle, 0, wxALL | wxEXPAND, 5);
@@ -116,7 +116,7 @@ namespace CalXUI {
 		task->addStep(handle->getTaskStep());
 		updateUI();
 	}
-	
+
 	void CalxProgrammedTaskHandle::OnJumpAddClick(wxCommandEvent &evt) {
 		CalxTaskLinearJumpStepHandle *handle = new CalxTaskLinearJumpStepHandle(this->mainPanel, wxID_ANY);
 		this->mainPanel->GetSizer()->Add(handle, 0, wxALL | wxEXPAND, 5);
@@ -126,7 +126,7 @@ namespace CalXUI {
 		task->addStep(handle->getTaskStep());
 		updateUI();
 	}
-	
+
 	void CalxProgrammedTaskHandle::OnArcAddClick(wxCommandEvent &evt) {
 		CalxTaskArcStepHandle *handle = new CalxTaskArcStepHandle(this->mainPanel, wxID_ANY);
 		this->mainPanel->GetSizer()->Add(handle, 0, wxALL | wxEXPAND, 5);
@@ -136,47 +136,47 @@ namespace CalXUI {
 		task->addStep(handle->getTaskStep());
 		updateUI();
 	}
-	
+
 	void CalxProgrammedTaskHandle::OnMoveUpClick(wxCommandEvent &evt) {
 		int sel = stepList->GetSelection();
 		if (sel == wxNOT_FOUND || sel == 0) {
 			return;
 		}
-		
+
         TaskStep *step = task->pollStep((size_t) sel);
         task->insertStep((size_t) sel - 1, step);
-		
+
         CalxTaskStepHandle *handle = steps.at((size_t) sel);
 		steps.erase(steps.begin() + sel);
 		steps.insert(steps.begin() + sel - 1, handle);
-		
+
         wxString lbl = stepList->GetString((unsigned int) sel);
         stepList->Delete((unsigned int) sel);
         stepList->Insert(lbl, (unsigned int) sel - 1);
 		stepList->SetSelection(sel - 1);
 		updateUI();
 	}
-	
+
 	void CalxProgrammedTaskHandle::OnMoveDownClick(wxCommandEvent &evt) {
 		int sel = stepList->GetSelection();
 		if (sel == wxNOT_FOUND || sel == (int) (task->getSubCount() - 1)) {
 			return;
 		}
-		
+
         TaskStep *step = task->pollStep((size_t) sel);
         task->insertStep((size_t) sel + 1, step);
-		
+
         CalxTaskStepHandle *handle = steps.at((size_t) sel);
 		steps.erase(steps.begin() + sel);
 		steps.insert(steps.begin() + sel + 1, handle);
-		
+
         wxString lbl = stepList->GetString((unsigned int) sel);
         stepList->Delete((unsigned int) sel);
         stepList->Insert(lbl, (unsigned int) sel + 1);
 		stepList->SetSelection(sel + 1);
 		updateUI();
 	}
-	
+
 	void CalxProgrammedTaskHandle::OnRemoveClick(wxCommandEvent &evt) {
 		if (this->stepList->GetSelection() != wxNOT_FOUND) {
             task->removeStep((size_t) this->stepList->GetSelection());
@@ -186,7 +186,7 @@ namespace CalXUI {
 			updateUI();
 		}
 	}
-	
+
 	void CalxProgrammedTaskHandle::OnExit(wxCloseEvent &evt) {
 		delete this->task;
 		delete this->trans;

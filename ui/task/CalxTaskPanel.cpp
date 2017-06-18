@@ -21,16 +21,16 @@
 #include <sstream>
 #include <iostream>
 #include <fstream>
-#include "CalxApp.h"
-#include "CalxErrorHandler.h"
-#include "CalxTaskPanel.h"
+#include "ui/CalxApp.h"
+#include "ui/CalxErrorHandler.h"
+#include "ui/task/CalxTaskPanel.h"
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/splitter.h>
-#include "coord/CalxCoordPanel.h"
-#include "coord/CalxVirtualPlane.h"
+#include "ui/coord/CalxCoordPanel.h"
+#include "ui/coord/CalxVirtualPlane.h"
 #include "ctrl-lib/misc/GCodeWriter.h"
-#include "CalxGcodeLoader.h"
+#include "ui/task/CalxGcodeLoader.h"
 
 namespace CalXUI {
 

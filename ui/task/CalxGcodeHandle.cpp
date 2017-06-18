@@ -19,18 +19,18 @@
 
 
 #include <sstream>
-#include "CalxTaskHandle.h"
+#include "ui/task/CalxTaskHandle.h"
 #include <wx/sizer.h>
 #include <wx/textctrl.h>
 #include "ctrl-lib/misc/GCodeParser.h"
 
 namespace CalXUI {
-	
+
 	CalxGcodeHandle::CalxGcodeHandle(wxWindow *win, wxWindowID id, std::string sid, std::istream *is, ComplexCoordTranslator *tr)
 		: CalxTaskHandle::CalxTaskHandle(win, id, CalxTaskType::CalxGcode) {
 		this->id = sid;
 		this->translator = tr;
-		
+
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(sizer);
 		wxTextCtrl *codeText = new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxDefaultSize,
@@ -38,31 +38,31 @@ namespace CalXUI {
 		sizer->Add(codeText, 1, wxALL | wxEXPAND, 0);
 		this->filter = new CalxCoordFilterCtrl(this, wxID_ANY, tr);
 		sizer->Add(filter, 0, wxALL, 0);
-		
-		
+
+
 		std::string code;
 		int chr;
 		while ((chr = is->get()) != EOF) {
             code += (char) chr;
 		}
 		codeText->SetValue(code);
-		
+
 		std::stringstream ss(code);
 		this->task = new GCodeCoordTask(&ss, tr);
-		
+
 		Layout();
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxGcodeHandle::OnExit, this);
 	}
-	
+
 	CoordTask *CalxGcodeHandle::getTask() {
 		return this->task;
 	}
-	
+
 	void CalxGcodeHandle::OnExit(wxCloseEvent &evt) {
 		delete this->translator;
 		Destroy();
 	}
-	
+
 	void CalxGcodeHandle::update() {
 		this->filter->getTranslator();
 	}

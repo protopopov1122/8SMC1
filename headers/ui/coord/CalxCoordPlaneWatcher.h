@@ -21,16 +21,16 @@
 #ifndef CALX_UI_COORD_CALX_COORD_PLANE_WATCHER_H_
 #define CALX_UI_COORD_CALX_COORD_PLANE_WATCHER_H_
 
-#include "CalxApp.h"
+#include "ui/CalxApp.h"
 #include <wx/stattext.h>
 #include <wx/bitmap.h>
 
 namespace CalXUI {
-	
+
 	class CalxCoordPlaneWatcher; // Forward referencing
-	
+
 	wxDECLARE_EVENT(wxEVT_WATCHER_APPEND_POINT, wxThreadEvent);
-	
+
 	class CalxCoordPlaneWatcherTimer : public wxTimer {
 		public:
 			CalxCoordPlaneWatcherTimer(CalxCoordPlaneWatcher*, CoordHandle*);
@@ -39,7 +39,7 @@ namespace CalXUI {
 			CalxCoordPlaneWatcher *watcher;
 			CoordHandle *handle;
 	};
-	
+
 	class CalxCoordPlaneWatcherRepaintTimer : public wxTimer {
 		public:
 			CalxCoordPlaneWatcherRepaintTimer(CalxCoordPlaneWatcher*);
@@ -47,7 +47,7 @@ namespace CalXUI {
 		private:
 			CalxCoordPlaneWatcher *watcher;
 	};
-	
+
 	class CalxCoordPlaneWatcherEvent : public CoordEventListener {
 		public:
 			CalxCoordPlaneWatcherEvent(CalxCoordPlaneWatcher*);
@@ -56,7 +56,7 @@ namespace CalXUI {
 		private:
 			CalxCoordPlaneWatcher *watcher;
 	};
-	
+
 	class CalxCoordPlaneWatcher : public wxWindow {
 		public:
 			CalxCoordPlaneWatcher(wxWindow*, wxWindowID, wxSize, CoordHandle*);
@@ -73,7 +73,7 @@ namespace CalXUI {
 			void OnPaintEvent(wxPaintEvent&);
 			void OnResizeEvent(wxSizeEvent&);
 			void OnAppendEvent(wxThreadEvent&);
-			
+
 			CoordHandle *handle;
 			CalxCoordPlaneWatcherTimer *timer;
 			CalxCoordPlaneWatcherRepaintTimer *repaint_timer;
@@ -81,10 +81,10 @@ namespace CalXUI {
 			CalxCoordPlaneWatcherEvent *listener;
 			bool rendering;
 			bool has_updates;
-			
+
 			wxBitmap bitmap;
 	};
-	
+
 	class CalxCoordPlaneWatcherDialog : public wxDialog {
 		public:
 			CalxCoordPlaneWatcherDialog(wxWindow*, wxWindowID, CoordHandle*);

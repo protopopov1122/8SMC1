@@ -18,39 +18,39 @@
 */
 
 
-#include "CalxCoordDialog.h"
+#include "ui/coord/CalxCoordDialog.h"
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 
 namespace CalXUI {
-	
+
 	CalxCoordDialog::CalxCoordDialog(wxWindow* win, wxWindowID id, SystemManager *sysman)
 		: wxDialog::wxDialog(win, id, __("New coordinate plane")) {
 		this->sysman = sysman;
 		this->ctrl = nullptr;
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(sizer);
-		
+
 		wxPanel *mainPanel = new wxPanel(this, wxID_ANY);
 		sizer->Add(mainPanel, 1, wxALL | wxEXPAND, 10);
 		wxFlexGridSizer *mainSizer = new wxFlexGridSizer(2);
 		mainPanel->SetSizer(mainSizer);
-		
+
 		wxStaticText *xText = new wxStaticText(mainPanel, wxID_ANY, __("X Axis") + std::string(": "));
 		this->xChoice = new wxChoice(mainPanel, wxID_ANY);
 		mainSizer->Add(xText, 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		mainSizer->Add(xChoice, 0, wxALL | wxEXPAND);
-		
+
 		wxStaticText *yText = new wxStaticText(mainPanel, wxID_ANY, __("Y Axis") + std::string(": "));
 		this->yChoice = new wxChoice(mainPanel, wxID_ANY);
 		mainSizer->Add(yText, 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		mainSizer->Add(yChoice, 0, wxALL | wxEXPAND);
-		
+
 		wxStaticText *instrText = new wxStaticText(mainPanel, wxID_ANY, __("Instrument") + std::string(": "));
 		this->instrChoice = new wxChoice(mainPanel, wxID_ANY);
 		mainSizer->Add(instrText, 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		mainSizer->Add(instrChoice, 0, wxALL | wxEXPAND);
-		
+
 		wxPanel *buttonPanel = new wxPanel(this, wxID_ANY);
 		sizer->Add(buttonPanel, 0, wxALIGN_CENTER | wxALL, 5);
 		wxBoxSizer *buttonSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -61,32 +61,32 @@ namespace CalXUI {
 		cancelButton->Bind(wxEVT_BUTTON, &CalxCoordDialog::OnCancelButtonClick, this);
 		buttonSizer->Add(okButton);
 		buttonSizer->Add(cancelButton);
-		
-		
+
+
 		for (size_t i = 0; i < sysman->getMotorCount(); i++) {
 			std::string id = FORMAT(__("Device #%s"), std::to_string(i));
 			xChoice->Append(id);
 			yChoice->Append(id);
 		}
-		
+
 		instrChoice->Append(__("No instrument"));
-		
+
 		for (size_t i = 0; i < sysman->getInstrumentCount(); i++) {
 			std::string id = FORMAT(__("Instrument #%s"), std::to_string(i));
 			instrChoice->Append(id);
 		}
-		
+
 		if (sysman->getMotorCount() >= 2) {
 			xChoice->SetSelection(0);
 			yChoice->SetSelection(1);
 		}
-		
+
 		if (sysman->getInstrumentCount() > 0) {
 			instrChoice->SetSelection(1);
 		} else {
 			instrChoice->SetSelection(0);
 		}
-		
+
 		Layout();
 		Fit();
 		#ifdef __WXGTK__
@@ -96,11 +96,11 @@ namespace CalXUI {
 		SetSize(size);
 		#endif
 	}
-	
+
 	CoordHandle *CalxCoordDialog::getCoordPlane() {
 		return this->ctrl;
 	}
-	
+
 	void CalxCoordDialog::OnOkButtonClick(wxCommandEvent &evt) {
 		int x = xChoice->GetSelection();
 		int y = yChoice->GetSelection();
@@ -115,7 +115,7 @@ namespace CalXUI {
 		}
 		Hide();
 	}
-	
+
 	void CalxCoordDialog::OnCancelButtonClick(wxCommandEvent &evt) {
 		Hide();
 	}

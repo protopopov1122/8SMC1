@@ -18,23 +18,23 @@
 */
 
 
-#include "CalxCoordCtrl.h"
+#include "ui/coord/CalxCoordCtrl.h"
 #include <wx/collpane.h>
 
 namespace CalXUI {
-	
-	
+
+
 	void CalxCoordOtherCtrl::init() {
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(sizer);
-		
+
 		if (ctrl->getHandle()->getController()->getInstrument() != nullptr) {
 			this->enableInstrument = new wxCheckBox(this, wxID_ANY, __("Enable instrument"));
 			sizer->Add(enableInstrument, 0, wxALL, 5);
 			enableInstrument->Bind(wxEVT_CHECKBOX, &CalxCoordCtrl::OnInstrumentEnableClick, ctrl);
 			this->enableInstrument->SetValue(ctrl->getHandle()->getController()->getInstrument()->isRunnable());
 		}
-		
+
 		wxPanel *calibratePanel = new wxPanel(this, wxID_ANY);
 		sizer->Add(calibratePanel, 0, wxALL, 5);
 		wxBoxSizer *calibrateSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -48,7 +48,7 @@ namespace CalXUI {
 		trailer->Append(__("trailer 2"));
 		trailer->SetSelection(0);
 		calibrateSizer->Add(trailer, 0, wxALL);
-		
+
 		wxPanel *measurePanel = new wxPanel(this, wxID_ANY);
 		sizer->Add(measurePanel, 0, wxBOTTOM | wxLEFT, 5);
 		wxBoxSizer *measureSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -62,7 +62,7 @@ namespace CalXUI {
 		measureTrailer->Append(__("trailer 2"));
 		measureTrailer->SetSelection(0);
 		measureSizer->Add(measureTrailer, 0, wxALL);
-		
+
 		wxCollapsiblePane  *posCollPane = new wxCollapsiblePane(this, wxID_ANY, __("Position"));
 		wxWindow *posPane = posCollPane->GetPane();
 		sizer->Add(posCollPane, 0, wxALL | wxEXPAND);
@@ -74,24 +74,24 @@ namespace CalXUI {
 		posCollPane->Collapse(false);
 		this->posCtrl->getMoveButton()->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnPositionChangeClick, ctrl);
 		this->posCtrl->getConfigureButton()->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnConfigureClick, ctrl);
-		
+
 		wxCollapsiblePane  *filtersCollPane = new wxCollapsiblePane(this, wxID_ANY, __("Filters"));
 		wxWindow *filtersPane = filtersCollPane->GetPane();
 		sizer->Add(filtersCollPane, 1, wxALL | wxEXPAND);
 		wxBoxSizer *filtersSizer = new wxBoxSizer(wxVERTICAL);
 		filtersPane->SetSizer(filtersSizer);
 		filtersCollPane->Bind(wxEVT_COLLAPSIBLEPANE_CHANGED, &CalxCoordCtrl::OnInterfaceUpdate, ctrl);
-		
-		
+
+
 		wxPanel *logPanel = new wxPanel(filtersPane, wxID_ANY);
 		filtersSizer->Add(logPanel, 0, wxALL | wxEXPAND, 5);
 		wxBoxSizer *logSizer = new wxBoxSizer(wxHORIZONTAL);
 		logPanel->SetSizer(logSizer);
-		this->logActions = new wxCheckBox(logPanel, wxID_ANY, __("Log actions"));		
+		this->logActions = new wxCheckBox(logPanel, wxID_ANY, __("Log actions"));
 		this->logErrors = new wxCheckBox(logPanel, wxID_ANY, __("Log errors"));
 		logSizer->Add(logActions);
 		logSizer->Add(logErrors);
-		
+
 		wxPanel *mapPanel = new wxPanel(filtersPane, wxID_ANY);
 		filtersSizer->Add(mapPanel, 0, wxALL | wxEXPAND, 5);
 		wxFlexGridSizer *mapSizer = new wxFlexGridSizer(2);
@@ -114,7 +114,7 @@ namespace CalXUI {
 		mapSizer->Add(xScale, 0, wxEXPAND);
 		mapSizer->Add(new wxStaticText(mapPanel, wxID_ANY, __("y") + std::string(":")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		mapSizer->Add(yScale, 0, wxEXPAND);
-		
+
 		wxPanel *validatePanel = new wxPanel(filtersPane, wxID_ANY);
 		filtersSizer->Add(validatePanel, 0, wxALL | wxEXPAND, 5);
 		wxFlexGridSizer *validateSizer = new wxFlexGridSizer(2);
@@ -145,7 +145,7 @@ namespace CalXUI {
 		validateSizer->Add(maxy, 0, wxEXPAND);
 		validateSizer->Add(new wxStaticText(validatePanel, wxID_ANY, __("Maximum speed")));
 		validateSizer->Add(speed, 0, wxEXPAND);
-		
+
 		logActions->SetValue(ctrl->getPlaneLog()->isLoggingActions());
 		logErrors->SetValue(ctrl->getPlaneLog()->isLoggingErrors());
         xOffset->SetValue((int) ctrl->getPlaneMap()->getOffset().x);
@@ -157,7 +157,7 @@ namespace CalXUI {
         maxx->SetValue((int) ctrl->getPlaneValidator()->getMaximum().x);
         maxy->SetValue((int) ctrl->getPlaneValidator()->getMaximum().y);
         speed->SetValue(static_cast<int>(ctrl->getPlaneValidator()->getMaxSpeed()));
-		
+
 		logActions->Bind(wxEVT_CHECKBOX, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
 		logErrors->Bind(wxEVT_CHECKBOX, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
 		xOffset->Bind(wxEVT_SPINCTRL, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
@@ -169,7 +169,7 @@ namespace CalXUI {
 		maxx->Bind(wxEVT_SPINCTRL, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
 		maxy->Bind(wxEVT_SPINCTRL, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
 		speed->Bind(wxEVT_SPINCTRL, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
-		
+
 		Layout();
 	}
 }

@@ -21,13 +21,13 @@
 #ifndef CALX_UI_CALX_COORD_MISC_CTRL_H_
 #define CALX_UI_CALX_COORD_MISC_CTRL_H_
 
-#include "calx.h"
+#include "ui/calx.h"
 #include <wx/stattext.h>
 #include <wx/choice.h>
 #include <wx/checkbox.h>
 #include <wx/spinctrl.h>
-#include "CalxActionQueue.h"
-#include "CalxFrame.h"
+#include "ui/CalxActionQueue.h"
+#include "ui/CalxFrame.h"
 #include "CalxCoordLinearCtrl.h"
 #include "CalxCoordArcCtrl.h"
 #include "CalxCoordGraphCtrl.h"
@@ -37,10 +37,10 @@
 using namespace CalX;
 
 namespace CalXUI {
-	
+
 	class CalxCoordCtrl; // Forward reference
-	
-	
+
+
 	class CalxCoordEventListener : public CoordEventListener {
 		public:
 			CalxCoordEventListener(CalxCoordCtrl*);
@@ -50,7 +50,7 @@ namespace CalXUI {
 		private:
 			CalxCoordCtrl *ctrl;
 	};
-	
+
 	class CalxCoordMotorListener : public MotorEventListener {
 		public:
 			CalxCoordMotorListener(CalxCoordCtrl*);
@@ -60,7 +60,7 @@ namespace CalXUI {
 		private:
 			CalxCoordCtrl *ctrl;
 	};
-	
+
 	class CalxCoordInstrumentListener : public InstrumentEventListener {
 		public:
 			CalxCoordInstrumentListener(CalxCoordCtrl*);
@@ -70,8 +70,8 @@ namespace CalXUI {
 		private:
 			CalxCoordCtrl *ctrl;
 	};
-	
-	
+
+
 	class CalxCoordTimer : public wxTimer {
 		public:
 			CalxCoordTimer() : wxTimer::wxTimer() {
@@ -82,13 +82,13 @@ namespace CalXUI {
 		private:
 			CalxCoordCtrl *ctrl;
 	};
-			
-	
+
+
 	class CalxCoordMoveAction : public CalxAction {
 		public:
 			CalxCoordMoveAction(CalxCoordCtrl*, CoordHandle*, bool, bool, motor_point_t, float, int);
 			virtual ~CalxCoordMoveAction();
-			
+
 			virtual void perform(SystemManager*);
 			virtual void stop();
 		private:
@@ -100,12 +100,12 @@ namespace CalXUI {
 			float speed;
 			int div;
 	};
-			
+
 	class CalxCoordArcAction : public CalxAction {
 		public:
 			CalxCoordArcAction(CalxCoordCtrl*, CoordHandle*, bool, motor_point_t, motor_point_t, int, float, int, bool);
 			virtual ~CalxCoordArcAction();
-			
+
 			virtual void perform(SystemManager*);
 			virtual void stop();
 		private:
@@ -119,12 +119,12 @@ namespace CalXUI {
 			int div;
 			bool clockwise;
 	};
-			
+
 	class CalxCoordGraphAction : public CalxAction {
 		public:
 			CalxCoordGraphAction(CalxCoordCtrl*, CoordHandle*, CoordTranslator*, GraphBuilder*, float);
 			virtual ~CalxCoordGraphAction();
-			
+
 			virtual void perform(SystemManager*);
 			virtual void stop();
 		private:
@@ -135,12 +135,12 @@ namespace CalXUI {
 			float speed;
 			TaskState state;
 	};
-			
+
 	class CalxCoordPreviewAction : public CalxAction {
 		public:
 			CalxCoordPreviewAction(CalxCoordCtrl*, CalxVirtualPlaneDialog*, CoordTranslator*, GraphBuilder*, float);
 			virtual ~CalxCoordPreviewAction();
-			
+
 			virtual void perform(SystemManager*);
 			virtual void stop();
 		private:
@@ -151,12 +151,12 @@ namespace CalXUI {
 			float speed;
 			TaskState state;
 	};
-			
+
 	class CalxCoordCalibrateAction : public CalxAction {
 		public:
 			CalxCoordCalibrateAction(CalxCoordCtrl*, CoordHandle*, TrailerId);
 			virtual ~CalxCoordCalibrateAction();
-			
+
 			virtual void perform(SystemManager*);
 			virtual void stop();
 		private:
@@ -164,12 +164,12 @@ namespace CalXUI {
 			CoordHandle *handle;
 			TrailerId trailer;
 	};
-			
+
 	class CalxCoordMeasureAction : public CalxAction {
 		public:
 			CalxCoordMeasureAction(CalxCoordCtrl*, CoordHandle*, TrailerId);
 			virtual ~CalxCoordMeasureAction();
-			
+
 			virtual void perform(SystemManager*);
 			virtual void stop();
 		private:
@@ -177,13 +177,13 @@ namespace CalXUI {
 			CoordHandle *handle;
 			TrailerId trailer;
 	};
-			
-	
+
+
 	class CalxCoordConfigureAction : public CalxAction {
 		public:
 			CalxCoordConfigureAction(CalxCoordCtrl*, CoordHandle*, bool, bool, coord_point_t, float, int);
 			virtual ~CalxCoordConfigureAction();
-			
+
 			virtual void perform(SystemManager*);
 			virtual void stop();
 		private:

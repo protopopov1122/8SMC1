@@ -21,20 +21,20 @@
 #ifndef CALX_UI_CALX_COORD_ARC_CTRL_H_
 #define CALX_UI_CALX_COORD_ARC_CTRL_H_
 
-#include "calx.h"
+#include "ui/calx.h"
 #include <wx/stattext.h>
 #include <wx/choice.h>
 #include <wx/checkbox.h>
 #include <wx/spinctrl.h>
-#include "CalxActionQueue.h"
-#include "CalxFrame.h"
+#include "ui/CalxActionQueue.h"
+#include "ui/CalxFrame.h"
 
 using namespace CalX;
 
 namespace CalXUI {
-	
+
 	class CalxCoordCtrl; // Forward reference
-	
+
 	class CalxCoordArcCtrl : public wxPanel {
 		public:
 			CalxCoordArcCtrl(wxWindow *win, wxWindowID id)
@@ -64,7 +64,7 @@ namespace CalXUI {
 			wxCheckBox *clockwise;
 			wxCheckBox *relative;
 	};
-	
+
 }
-	
+
 #endif

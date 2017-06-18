@@ -23,19 +23,19 @@
 
 #include <cinttypes>
 #include <vector>
-#include "CalxApp.h"
+#include "ui/CalxApp.h"
 #include <wx/listbox.h>
 #include "CalxCoordCtrl.h"
 #include "CalxCoordPlaneWatcher.h"
 
 namespace CalXUI {
-	
+
 	wxDECLARE_EVENT(wxEVT_COORD_PANEL_UPDATE, wxThreadEvent);
-	
+
 	class CalxCoordPanel : public wxPanel {
 		public:
 			CalxCoordPanel(wxWindow*, wxWindowID);
-			
+
 			size_t getCoordCount() {return coords.size();}
 			CoordHandle *getCoord(size_t sz) {return sz < coords.size() ? coords.at(sz)->getHandle() : nullptr;}
 			CalxCoordCtrl *getCoordCtrl(size_t sz) {return sz < coords.size() ? coords.at(sz) : nullptr;}
@@ -62,13 +62,13 @@ namespace CalXUI {
 		private:
 			void addPlane(CoordHandle*);
 			void removePlane(size_t);
-		
+
 			void OnExit(wxCloseEvent&);
 			void OnAddButtonClick(wxCommandEvent&);
 			void OnRemoveButtonClick(wxCommandEvent&);
 			void OnListClick(wxCommandEvent&);
 			void OnCoordPlaneAdd(wxThreadEvent&);
-			
+
 			wxListBox *coordList;
 			std::vector<CalxCoordCtrl*> coords;
 			wxPanel *mainPanel;

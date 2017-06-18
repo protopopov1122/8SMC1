@@ -18,25 +18,25 @@
 */
 
 
-#include "CalxGcodeLoader.h"
+#include "ui/task/CalxGcodeLoader.h"
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
 
 namespace CalXUI {
-	
+
 	CalxGcodeLoader::CalxGcodeLoader(wxWindow *win, wxWindowID id)
 		: wxDialog::wxDialog(win, id, __("Load GCode")) {
 
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(sizer);
-		
+
 		wxPanel *mainPanel = new wxPanel(this, wxID_ANY);
 		sizer->Add(mainPanel, 1, wxALL | wxALIGN_CENTER);
 		wxBoxSizer *mainSizer = new wxBoxSizer(wxVERTICAL);
 		mainPanel->SetSizer(mainSizer);
 		this->state = false;
-		
+
 		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY, __("Choose GCode file") + std::string(":")));
 		wxPanel *gcodePanel = new wxPanel(mainPanel, wxID_ANY);
 		mainSizer->Add(gcodePanel, 0, wxALL | wxEXPAND, 5);
@@ -48,10 +48,10 @@ namespace CalXUI {
 		wxButton *chooseButton = new wxButton(gcodePanel, wxID_ANY, __("Choose"));
 		gcodeSizer->Add(chooseButton, 0, wxALL);
 		chooseButton->Bind(wxEVT_BUTTON, &CalxGcodeLoader::OnChooseClick, this);
-		
+
 		this->translator = new CalxCoordFilterCtrl(mainPanel, wxID_ANY);
 		mainSizer->Add(translator, 0, wxALL | wxEXPAND, 10);
-				
+
 		wxPanel *buttonPanel = new wxPanel(mainPanel, wxID_ANY);
 		mainSizer->Add(buttonPanel, 1, wxALL | wxALIGN_CENTER, 5);
 		wxBoxSizer *buttonSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -63,7 +63,7 @@ namespace CalXUI {
 		okButton->Bind(wxEVT_BUTTON, &CalxGcodeLoader::OnOkClick, this);
 		cancelButton->Bind(wxEVT_BUTTON, &CalxGcodeLoader::OnCancelClick, this);
 		Bind(wxEVT_SHOW, &CalxGcodeLoader::OnShow, this);
-		
+
 		Layout();
 		Fit();
 		#ifdef __WXGTK__
@@ -73,29 +73,29 @@ namespace CalXUI {
 		SetSize(size);
 		#endif
 	}
-	
+
 	bool CalxGcodeLoader::isLoaded() {
 		return this->state;
 	}
-	
+
 	std::string CalxGcodeLoader::getPath() {
 		return this->gcodePath->GetValue().ToStdString();
 	}
-	
+
 	ComplexCoordTranslator *CalxGcodeLoader::getTranslator() {
 		return this->translator->getTranslator();
 	}
-	
+
 	void CalxGcodeLoader::OnOkClick(wxCommandEvent &evt) {
 		this->state = true;
 		Hide();
 	}
-	
+
 	void CalxGcodeLoader::OnCancelClick(wxCommandEvent &evt) {
 		delete this->translator->getTranslator();
 		Hide();
 	}
-	
+
 	void CalxGcodeLoader::OnChooseClick(wxCommandEvent &evt) {
 		wxFileDialog *dialog = new wxFileDialog(this);
 		if (dialog->ShowModal() == wxID_OK) {
@@ -103,7 +103,7 @@ namespace CalXUI {
 		}
 		dialog->Destroy();
 	}
-	
+
 	void CalxGcodeLoader::OnShow(wxShowEvent &evt) {
 		if (evt.IsShown()) {
 			wxFileDialog *dialog = new wxFileDialog(this);
