@@ -2,8 +2,8 @@
 #define CALX_NCLI_CLI_EXCEPTION_H_
 
 
-#include "CLICore.h"
-#include "CLIParameter.h"
+#include "ncli/CLICore.h"
+#include "ncli/CLIParameter.h"
 #include <exception>
 #include <string>
 

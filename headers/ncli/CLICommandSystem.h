@@ -1,7 +1,7 @@
 #ifndef CALX_NCLI_CLI_COMMAND_SYSTEM_H_
 #define CALX_NCLI_CLI_COMMAND_SYSTEM_H_
 
-#include "CLICommand.h"
+#include "ncli/CLICommand.h"
 #include <vector>
 #include <map>
 

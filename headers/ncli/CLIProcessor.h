@@ -1,7 +1,7 @@
 #ifndef CALX_NCLI_CLI_PROCESSOR_H_
 #define CALX_NCLI_CLI_PROCESSOR_H_
 
-#include "CLICommandSystem.h"
+#include "ncli/CLICommandSystem.h"
 #include <iostream>
 
 namespace CalX {

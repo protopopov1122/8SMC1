@@ -1,4 +1,4 @@
-#include "CLIParameter.h"
+#include "ncli/CLIParameter.h"
 #include <regex>
 
 namespace CalX {
@@ -19,6 +19,38 @@ namespace CalX {
 
   NCLIParameterType NCLIParameter::getType() {
     return this->type;
+  }
+
+  int64_t NCLIParameter::as_int() {
+    if (this->getType() == NCLIParameterType::Integer) {
+      return ((NCLIInteger*) this)->getValue();
+    } else {
+      return 0;
+    }
+  }
+
+  double NCLIParameter::as_float() {
+    if (this->getType() == NCLIParameterType::Float) {
+      return ((NCLIFloat*) this)->getValue();
+    } else {
+      return 0.0f;
+    }
+  }
+
+  bool NCLIParameter::as_bool() {
+    if (this->getType() == NCLIParameterType::Boolean) {
+      return ((NCLIBoolean*) this)->getValue();
+    } else {
+      return false;
+    }
+  }
+
+  std::string NCLIParameter::as_string() {
+    if (this->getType() == NCLIParameterType::String) {
+      return ((NCLIString*) this)->getValue();
+    } else {
+      return "";
+    }
   }
 
   NCLIInteger::NCLIInteger(int64_t val)

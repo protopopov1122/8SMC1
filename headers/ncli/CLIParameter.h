@@ -1,7 +1,7 @@
 #ifndef CALX_NCLI_CLI_PARAMETER_H_
 #define CALX_NCLI_CLI_PARAMETER_H_
 
-#include "CLICore.h"
+#include "ncli/CLICore.h"
 #include <string>
 #include <map>
 
@@ -17,6 +17,11 @@ namespace CalX {
     public:
       NCLIParameter(NCLIParameterType);
       virtual ~NCLIParameter();
+
+      int64_t as_int();
+      double as_float();
+      bool as_bool();
+      std::string as_string();
 
       NCLIParameterType getType();
       virtual std::string toString() = 0;

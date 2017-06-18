@@ -1,5 +1,5 @@
-#include "CLICommand.h"
-#include "CLIException.h"
+#include "ncli/CLICommand.h"
+#include "ncli/CLIException.h"
 
 namespace CalX {
 

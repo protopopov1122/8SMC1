@@ -1,8 +1,8 @@
 #ifndef CALX_NCLI_CLI_COMMAND_H_
 #define CALX_NCLI_CLI_COMMAND_H_
 
-#include "CLICore.h"
-#include "CLIParameter.h"
+#include "ncli/CLICore.h"
+#include "ncli/CLIParameter.h"
 #include <string>
 #include <vector>
 #include <map>

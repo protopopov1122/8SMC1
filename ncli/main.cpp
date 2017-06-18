@@ -1,30 +1,29 @@
-#include "CLICommandSystem.h"
-#include "CLIProcessor.h"
+#include "ncli/CLICommandSystem.h"
+#include "ncli/CLIProcessor.h"
+#include "ncli/CLIException.h"
+#include "ncli/processors/CalXNCLI.h"
 #include <iostream>
-#include "CLIException.h"
+#include <fstream>
 
 using namespace CalX;
 
-class EchoCommand : public NCLICommand {
-  public:
-    EchoCommand();
-    virtual void execute(std::map<std::string, NCLIParameter*>&, std::ostream&, std::istream&);
-};
-
-EchoCommand::EchoCommand() : NCLICommand("echo") {
-  this->addParameter("text", NCLIParameterType::String);
-  this->addParameterAlias('t', "text");
-  this->setDefaultValue("text", new NCLIString("Hello, world!"));
-}
-
-void EchoCommand::execute(std::map<std::string, NCLIParameter*> &prms, std::ostream &out, std::istream &in) {
-  out << prms["text"]->toString() << std::endl;
-}
-
 int main(int argc, char **argv) {
+  DeviceManager *devman = getDeviceManager();
+  ConfigManager *conf = nullptr;
+  std::ifstream cnf("main.conf.ini");
+  if (!cnf.good()) {
+      std::cout << "Can't load configuration, using default values." << std::endl;
+      conf = new ConfigManager();
+  } else {
+      conf = ConfigManager::load(&cnf, &std::cout);
+  }
+	cnf.close();
+	SystemManager *sysman = new SystemManager(devman, conf);
+
   NCLICommandSystem cmdsys;
   NCLIProcessor sh(&cmdsys);
-  cmdsys.newCommand(new EchoCommand());
+  cmdsys.newCommand(new MotorSerialConnectorNCLI(sysman));
+  cmdsys.newCommand(new InstrumentSerialConnectorNCLI(sysman));
   bool work = true;
   while (work) {
     try {

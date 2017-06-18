@@ -1,5 +1,5 @@
-#include "CLIProcessor.h"
-#include "CLIException.h"
+#include "ncli/CLIProcessor.h"
+#include "ncli/CLIException.h"
 #include <string>
 #include <string.h>
 
