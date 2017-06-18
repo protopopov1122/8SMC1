@@ -39,6 +39,7 @@ namespace CalX {
 
       NCLICommand *getCommand();
       bool addArgument(NCLIParameter*, std::string = "");
+      void appendArguments(std::vector<std::pair<std::string, NCLIParameter*>>&, std::ostream&, std::istream&);
       void askArguments(std::ostream&, std::istream&);
       void execute(std::ostream&, std::istream&);
     private:

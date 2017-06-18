@@ -116,4 +116,8 @@ namespace CalX {
       return new NCLIString(line);
     }
   }
+
+  bool NCLITypesCompatible(NCLIParameterType t1, NCLIParameterType t2) {
+    return t1 == t2;
+  }
 }

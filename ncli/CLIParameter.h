@@ -82,6 +82,7 @@ namespace CalX {
   };
 
   NCLIParameter *parseNCLIParameter(std::string);
+  bool NCLITypesCompatible(NCLIParameterType, NCLIParameterType);
 }
 
 #endif

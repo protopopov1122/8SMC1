@@ -87,15 +87,41 @@ namespace CalX {
   bool NCLICommandInstance::addArgument(NCLIParameter *value, std::string name) {
     if (name.empty()) {
       name = this->command->getParameterName(this->unnamed_arg_count);
+      this->unnamed_arg_count++;
       if (name.empty()) {
         return false;
       }
     }
-    if (value->getType() != this->command->getParameter(name)) {
+    if (!NCLITypesCompatible(value->getType(), this->command->getParameter(name))) {
       return false;
     }
     this->args.insert(std::make_pair(name, value));
     return true;
+  }
+
+  void NCLICommandInstance::appendArguments(std::vector<std::pair<std::string, NCLIParameter*>> &args,
+    std::ostream &out, std::istream &in) {
+
+    for (const auto& arg : args) {
+      std::string name = arg.first;
+      NCLIParameter *value = arg.second;
+      if (name.empty()) {
+        name = this->command->getParameterName(this->unnamed_arg_count);
+        if (name.empty()) {
+          delete value;
+          continue;
+        }
+        this->unnamed_arg_count++;
+      }
+      if (!NCLITypesCompatible(value->getType(), this->command->getParameter(name))) {
+        out << "Type error: " << name
+          << " must be " << TYPE_STRINGS.at(this->command->getParameter(name))
+          <<" not " << TYPE_STRINGS.at(value->getType()) << std::endl;
+          delete value;
+      } else {
+        this->args.insert(std::make_pair(name, value));
+      }
+    }
   }
 
   void NCLICommandInstance::askArguments(std::ostream& out, std::istream& in) {
@@ -126,9 +152,10 @@ namespace CalX {
       }
       if (!line.empty()) {
         prm = parseNCLIParameter(line);
-        if (prm != nullptr && prm->getType() != this->command->getParameter(name)) {
-          out << "Expected " << TYPE_STRINGS.at(this->command->getParameter(name)) << " got "
-              << TYPE_STRINGS.at(prm->getType()) << std::endl;
+        if (prm != nullptr && !NCLITypesCompatible(prm->getType(), this->command->getParameter(name))) {
+          out << "Type error: " << name
+            << " must be " << TYPE_STRINGS.at(this->command->getParameter(name))
+            <<" not " << TYPE_STRINGS.at(prm->getType()) << std::endl;
           delete prm;
           prm = nullptr;
         }
