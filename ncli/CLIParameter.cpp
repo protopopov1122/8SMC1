@@ -9,6 +9,7 @@ namespace CalX {
     {NCLIParameterType::Boolean, "boolean"},
     {NCLIParameterType::String, "string"},
     {NCLIParameterType::None, "none"},
+    {NCLIParameterType::Any, "any"}
   };
 
   NCLIParameter::NCLIParameter(NCLIParameterType tp)
@@ -110,7 +111,7 @@ namespace CalX {
       return new NCLIFloat(std::stold(line));
     } else if (line.compare("true") == 0 || line.compare("false") == 0) {
       return new NCLIBoolean(line.compare("true") == 0);
-    } else if (line.at(0) == '\'' && line.at(line.size() - 1) == '\'') {
+    } else if (!line.empty() && line.at(0) == '\'' && line.at(line.size() - 1) == '\'') {
       return new NCLIString(line.substr(1, line.size() - 2));
     } else {
       return new NCLIString(line);
@@ -118,6 +119,6 @@ namespace CalX {
   }
 
   bool NCLITypesCompatible(NCLIParameterType t1, NCLIParameterType t2) {
-    return t1 == t2;
+    return t1 == t2 || t2 == NCLIParameterType::Any;
   }
 }

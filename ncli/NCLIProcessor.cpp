@@ -1,4 +1,5 @@
 #include "CLIProcessor.h"
+#include "CLIException.h"
 #include <string>
 #include <string.h>
 
@@ -29,13 +30,18 @@ namespace CalX {
     std::vector<std::pair<std::string, NCLIParameter*>> args;
     std::string cmd = this->parseLine(line, args);
     NCLICommandInstance *command = this->cmdsys->newCommandInstance(cmd);
-    if (command == nullptr) {
-      out << "Unknown command: " << cmd << std::endl;
-    } else {
-      command->appendArguments(args, out, in);
-      command->askArguments(out, in);
-      command->execute(out, in);
+    try {
+      if (command == nullptr) {
+        NCLIUnknownCommandException(cmd).raise();
+      } else {
+        command->appendArguments(args);
+        command->askArguments(out, in);
+        command->execute(out, in);
+        delete command;
+      }
+    } catch(NCLIException &exc) {
       delete command;
+      exc.raise();
     }
     return true;
   }
@@ -49,6 +55,10 @@ namespace CalX {
     size_t offset;
     for (offset = 0; offset < line.size() && !isspace(line.at(offset)); offset++) {
       command.push_back(line.at(offset));
+    }
+    NCLICommand *cmd = this->cmdsys->getCommand(command);
+    if (cmd == nullptr) {
+      return command;
     }
 
     for (; offset < line.size(); offset++) {
@@ -71,15 +81,42 @@ namespace CalX {
       if (str.size() > 2 && str.at(0) == '-' && str.at(1) == '-') {
         std::string name;
         std::string value;
+        NCLIParameter *prm;
         for (offset = 2; offset < str.size() && str.at(offset) != '='; offset++) {
           name.push_back(str.at(offset));
         }
-        offset++;
-        for (;offset < str.size(); offset++) {
-          value.push_back(str.at(offset));
+        bool prm_ex = offset < str.size() && str.at(offset) == '=';
+        if (prm_ex) {
+          offset++;
+          for (;offset < str.size(); offset++) {
+            value.push_back(str.at(offset));
+          }
+          prm = parseNCLIParameter(value);
+        } else {
+          prm = new NCLIBoolean(true);
         }
-        NCLIParameter *prm = value.empty() ? new NCLIBoolean(true) : parseNCLIParameter(value);
         args.push_back(std::make_pair(name, prm));
+      } else if (str.size() > 1 && str.at(0) == '-') {
+        char shprm = str.at(1);
+        if (cmd->hasParameterAlias(shprm)) {
+          std::string name = cmd->getParameterAlias(shprm);
+          std::string value;
+          NCLIParameter *prm;
+          offset = 2;
+          bool prm_ex = offset < str.size() && str.at(offset) == '=';
+          if (prm_ex) {
+            offset++;
+            for (;offset < str.size(); offset++) {
+              value.push_back(str.at(offset));
+            }
+            prm = parseNCLIParameter(value);
+          } else {
+            prm = new NCLIBoolean(true);
+          }
+          args.push_back(std::make_pair(name, prm));
+        } else {
+          NCLIUnknownParameterAliasException(command, shprm).raise();
+        }
       } else {
         NCLIParameter *prm = parseNCLIParameter(str);
         args.push_back(std::make_pair("", prm));

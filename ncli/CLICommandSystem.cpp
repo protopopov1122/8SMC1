@@ -24,4 +24,12 @@ namespace CalX {
       return new NCLICommandInstance(this->commands.at(name));
     }
   }
+
+  NCLICommand *NCLICommandSystem::getCommand(std::string name) {
+    if (this->commands.count(name) == 0) {
+      return nullptr;
+    } else {
+      return this->commands.at(name);
+    }
+  }
 }

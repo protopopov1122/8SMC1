@@ -14,6 +14,7 @@ namespace CalX {
 
       bool newCommand(NCLICommand*);
       NCLICommandInstance *newCommandInstance(std::string);
+      NCLICommand *getCommand(std::string);
     private:
       std::map<std::string, NCLICommand*> commands;
   };

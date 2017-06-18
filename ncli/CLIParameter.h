@@ -8,7 +8,7 @@
 namespace CalX {
 
   enum class NCLIParameterType {
-    Integer, Float, String, Boolean, None
+    Integer, Float, String, Boolean, None, Any
   };
 
   extern std::map<NCLIParameterType, std::string> TYPE_STRINGS;

@@ -24,12 +24,16 @@ namespace CalX {
       bool hasDefaultValue(std::string);
       NCLIParameter *getDefaultValue(std::string);
       void getParameters(std::vector<std::string>&);
+      void addParameterAlias(char, std::string);
+      bool hasParameterAlias(char);
+      std::string getParameterAlias(char);
       virtual void execute(std::map<std::string, NCLIParameter*>&, std::ostream&, std::istream&) = 0;
     private:
       std::string name;
       std::vector<std::pair<std::string, NCLIParameterType>> parameters;
       std::map<std::string, size_t> prms_map;
       std::map<std::string, NCLIParameter*> default_values;
+      std::map<char, std::string> aliases;
   };
 
   class NCLICommandInstance {
@@ -39,7 +43,7 @@ namespace CalX {
 
       NCLICommand *getCommand();
       bool addArgument(NCLIParameter*, std::string = "");
-      void appendArguments(std::vector<std::pair<std::string, NCLIParameter*>>&, std::ostream&, std::istream&);
+      void appendArguments(std::vector<std::pair<std::string, NCLIParameter*>>&);
       void askArguments(std::ostream&, std::istream&);
       void execute(std::ostream&, std::istream&);
     private:

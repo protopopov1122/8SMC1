@@ -1,4 +1,5 @@
 #include "CLICommand.h"
+#include "CLIException.h"
 
 namespace CalX {
 
@@ -69,6 +70,22 @@ namespace CalX {
     }
   }
 
+  void NCLICommand::addParameterAlias(char c, std::string str) {
+    this->aliases.insert(std::make_pair(c, str));
+  }
+
+  bool NCLICommand::hasParameterAlias(char c) {
+    return this->aliases.count(c) != 0;
+  }
+
+  std::string NCLICommand::getParameterAlias(char c) {
+    if (this->aliases.count(c) == 0) {
+      return "";
+    } else {
+      return this->aliases.at(c);
+    }
+  }
+
   NCLICommandInstance::NCLICommandInstance(NCLICommand *cmd) {
     this->command = cmd;
     this->unnamed_arg_count = 0;
@@ -99,28 +116,39 @@ namespace CalX {
     return true;
   }
 
-  void NCLICommandInstance::appendArguments(std::vector<std::pair<std::string, NCLIParameter*>> &args,
-    std::ostream &out, std::istream &in) {
-
+  void NCLICommandInstance::appendArguments(std::vector<std::pair<std::string, NCLIParameter*>> &args) {
+    size_t i = 0;
     for (const auto& arg : args) {
       std::string name = arg.first;
       NCLIParameter *value = arg.second;
       if (name.empty()) {
         name = this->command->getParameterName(this->unnamed_arg_count);
         if (name.empty()) {
-          delete value;
-          continue;
+          for (; i < args.size(); i++) {
+            delete args.at(i).second;
+          }
+          NCLIExcessParameterException(this->command->getName()).raise();
         }
         this->unnamed_arg_count++;
       }
-      if (!NCLITypesCompatible(value->getType(), this->command->getParameter(name))) {
-        out << "Type error: " << name
-          << " must be " << TYPE_STRINGS.at(this->command->getParameter(name))
-          <<" not " << TYPE_STRINGS.at(value->getType()) << std::endl;
-          delete value;
+      if (this->command->hasParameter(name)) {
+        if (!NCLITypesCompatible(value->getType(), this->command->getParameter(name))) {
+            NCLIParameterType recv = value->getType();
+            for (; i < args.size(); i++) {
+              delete args.at(i).second;
+            }
+            NCLIIncompatibleTypeException(this->command->getName(), name,
+              recv, this->command->getParameter(name)).raise();
+        } else {
+          this->args.insert(std::make_pair(name, value));
+        }
       } else {
-        this->args.insert(std::make_pair(name, value));
+        for (; i < args.size(); i++) {
+          delete args.at(i).second;
+        }
+        NCLIUnknownParameterException(this->command->getName(), name).raise();
       }
+      i++;
     }
   }
 
@@ -153,9 +181,11 @@ namespace CalX {
       if (!line.empty()) {
         prm = parseNCLIParameter(line);
         if (prm != nullptr && !NCLITypesCompatible(prm->getType(), this->command->getParameter(name))) {
-          out << "Type error: " << name
-            << " must be " << TYPE_STRINGS.at(this->command->getParameter(name))
-            <<" not " << TYPE_STRINGS.at(prm->getType()) << std::endl;
+          out << "Command \'" << this->command->getName()
+            << "\' parameter \'" << name
+            << "\'  expects " << TYPE_STRINGS.at(this->command->getParameter(name))
+            << "; got " << TYPE_STRINGS.at(prm->getType())
+            << std::endl;
           delete prm;
           prm = nullptr;
         }
