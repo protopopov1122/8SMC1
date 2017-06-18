@@ -20,8 +20,8 @@
 
 #include <string.h>
 #include <string>
-#include "NL300Instrument.h"
-#include "StandartDeviceManager.h"
+#include "device/standart/NL300Instrument.h"
+#include "device/standart/StandartDeviceManager.h"
 
 namespace CalX {
 

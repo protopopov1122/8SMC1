@@ -18,38 +18,38 @@
 */
 
 
-#include "CoordTranslator.h"
+#include "ctrl-lib/translator/CoordTranslator.h"
 
 namespace CalX {
-	
+
 	ComplexCoordTranslator::ComplexCoordTranslator(CoordTranslator *root)
 		: CoordTranslator::CoordTranslator(CoordType::ComplexCoord) {
-		this->list.push_back(root);	
+		this->list.push_back(root);
 		INIT_LOG("ComplexCoordTranslator");
 	}
-	
+
 	ComplexCoordTranslator::~ComplexCoordTranslator() {
 		for (const auto& t : this->list) {
 			delete t;
 		}
 		DESTROY_LOG("ComplexCoordTranslator");
 	}
-	
+
 	size_t ComplexCoordTranslator::getSize() {
 		return this->list.size();
 	}
-	
+
     CoordTranslator *ComplexCoordTranslator::getTranslator(size_t i) {
 		if (i >= this->list.size()) {
 			return nullptr;
 		}
 		return this->list.at(i);
 	}
-	
+
 	void ComplexCoordTranslator::add(CoordTranslator *t) {
 		this->list.push_back(t);
 	}
-	
+
 	bool ComplexCoordTranslator::remove(size_t i) {
 		if (i >= this->list.size()) {
 			return false;
@@ -67,7 +67,7 @@ namespace CalX {
 		}
 		return true;
 	}
-	
+
 	bool ComplexCoordTranslator::insert(size_t i, CoordTranslator *t) {
 		if (i >= this->list.size()) {
 			return false;
@@ -81,22 +81,22 @@ namespace CalX {
 		}
 		return true;
 	}
-	
+
 	motor_point_t ComplexCoordTranslator::get(double x, double y) {
 		return this->list.at(this->list.size() - 1)->get(x, y);
 	}
-	
+
 	coord_point_t ComplexCoordTranslator::get(motor_point_t pnt) {
 		return this->list.at(this->list.size() - 1)->get(pnt);
 	}
-	
+
 	CoordTranslator *ComplexCoordTranslator::getBase() {
 		if (this->list.empty()) {
 			return nullptr;
 		}
 		return this->list.at(0);
 	}
-	
+
 	void ComplexCoordTranslator::setBase(CoordTranslator *t) {
 		remove(0);
 		insert(0, t);

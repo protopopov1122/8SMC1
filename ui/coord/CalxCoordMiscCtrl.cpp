@@ -18,9 +18,9 @@
 */
 
 
-#include "CalxApp.h"
-#include "CalxErrorHandler.h"
-#include "CalxCoordCtrl.h"
+#include "ui/CalxApp.h"
+#include "ui/CalxErrorHandler.h"
+#include "ui/coord/CalxCoordCtrl.h"
 
 namespace CalXUI {
 

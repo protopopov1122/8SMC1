@@ -20,53 +20,53 @@
 
 #include <string>
 #include <string.h>
-#include "RequestResolver.h"
-#include "SystemManager.h"
+#include "ctrl-lib/RequestResolver.h"
+#include "ctrl-lib/SystemManager.h"
 
 namespace CalX {
-	
+
 	Request::Request(std::string provider, std::vector<ConfigValue*> args) {
 		this->provider = provider;
 		this->args = args;
 	}
-	
+
 	Request::~Request() {
 		for (const auto& arg : this->args) {
 			delete arg;
 		}
 		this->args.clear();
 	}
-	
+
 	std::string Request::getProvider() {
 		return this->provider;
 	}
-	
+
 	std::vector<ConfigValue*> &Request::getArguments() {
 		return this->args;
 	}
-	
+
 	RequestProvider::RequestProvider(std::string name) {
 		this->name = name;
 	}
-	
+
 	RequestProvider::~RequestProvider() {
-		
+
 	}
-	
+
 	std::string RequestProvider::getName() {
 		return this->name;
 	}
-	
+
 	RequestResolver::RequestResolver(SystemManager *sysman) {
 		this->sysman = sysman;
 	}
-	
+
 	RequestResolver::~RequestResolver() {
 		for (const auto& kv : this->providers) {
 			delete kv.second;
 		}
 	}
-	
+
 	bool RequestResolver::registerProvider(RequestProvider *p) {
 		if (p == nullptr || this->providers.count(p->getName()) != 0) {
 			return false;
@@ -74,20 +74,20 @@ namespace CalX {
 		this->providers[p->getName()] = p;
 		return true;
 	}
-	
+
 	bool RequestResolver::resolveRequest(Request *req) {
 		if (req == nullptr ||
 			this->providers.count(req->getProvider()) == 0) {
-			return false;	
+			return false;
 		}
 		RequestProvider *prov = this->providers[req->getProvider()];
 		return prov->execute(req, sysman);
 	}
-	
+
 	bool RequestResolver::hasProvider(std::string name) {
 		return this->providers.count(name) != 0;
 	}
-	
+
 	void trimString(std::string &str) {
 		for (size_t i = str.length() - 1; i < str.length(); i--) {
 			if (isspace(str.at(i))) {
@@ -97,7 +97,7 @@ namespace CalX {
 			}
 		}
 	}
-	
+
 	Request *RequestResolver::parseRequest(std::string str) {
 		const char *cstr = str.c_str();
 		/*for (size_t i = 0; i < strlen(cstr); i++) {
@@ -125,7 +125,7 @@ namespace CalX {
 					if (value != nullptr) {
 						args.push_back(value);
 					}
-					arg.clear();	
+					arg.clear();
 				}
 			} else {
 				arg.push_back(*cstr);
@@ -138,14 +138,14 @@ namespace CalX {
 			if (value != nullptr) {
 				args.push_back(value);
 			}
-			arg.clear();	
+			arg.clear();
 		}
 		delete[] cstr;
 		if (provider.empty() && args.empty()) {
 			return nullptr;
 		}
 		return new Request(provider, args);*/
-		
+
 		std::string provider;
 		std::vector<ConfigValue*> args;
 		size_t pos = 0;
@@ -158,7 +158,7 @@ namespace CalX {
 		if (cstr[pos] == ':') {
 				pos++;
 		}
-		
+
 		bool quote = false;
 		std::string arg;
 		for (; pos < strlen(cstr); pos++) {
@@ -190,10 +190,10 @@ namespace CalX {
 		if (provider.empty() && args.empty()) {
 			return nullptr;
 		}
-		
+
 		return new Request(provider, args);
 	}
-	
+
 	void RequestResolver::execute(std::istream *is, RequestResolveWatcher *watcher) {
 		const size_t LINE_LEN = 1024;
 		char line[LINE_LEN];
@@ -207,7 +207,7 @@ namespace CalX {
 				init_code.push_back(req);
 			}
 		}
-		
+
 		for (size_t i = 0; i < init_code.size(); i++) {
 			if (watcher != nullptr) {
 				watcher->resolving(code.at(i), i + 1, init_code.size());
@@ -217,7 +217,7 @@ namespace CalX {
 				break;
 			}
 		}
-		
+
 		for (const auto& req : init_code) {
 			delete req;
 		}

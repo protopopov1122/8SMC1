@@ -18,18 +18,18 @@
 */
 
 
-#include "CalxErrorHandler.h"
+#include "ui/CalxErrorHandler.h"
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 
 namespace CalXUI {
-	
+
 	CalxErrorHandler::CalxErrorHandler(SystemManager *sysman) {
 		this->sysman = sysman;
 	}
-	
+
 	CalxErrorHandler::~CalxErrorHandler() {
-		
+
 	}
 
 	void CalxErrorHandler::handle(ErrorCode code) {
@@ -37,7 +37,7 @@ namespace CalXUI {
 		evt.SetPayload(code);
 		wxPostEvent(&wxGetApp(), evt);
 	}
-	
+
 	void CalxErrorHandler::display(ErrorCode code) {
 		if (code != ErrorCode::NoError) {
 			std::string text = __("Error occured during execution.\nError code") + std::string(": ") + std::to_string(code) + "\n";

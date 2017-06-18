@@ -18,7 +18,7 @@
 */
 
 
-#include "CoordPlane.h"
+#include "ctrl-lib/plane/CoordPlane.h"
 #include "ctrl-lib/misc/CircleGenerator.h"
 #include <iostream>
 #include <stdio.h>
@@ -38,19 +38,19 @@ namespace CalX {
 		this->defWork = true;
 		INIT_LOG("CoordPlaneLinearizer");
 	}
-	
+
 	CoordPlaneLinearizer::~CoordPlaneLinearizer() {
 		DESTROY_LOG("CoordPlaneLinearizer");
 	}
-	
+
 	CoordPlane *CoordPlaneLinearizer::getBase() {
 		return this->base;
 	}
-	
+
 	ErrorCode CoordPlaneLinearizer::move(motor_point_t dest, float speed, int div, bool sync) {
 		return this->base->move(dest, speed, div, sync);
 	}
-	
+
 	ErrorCode CoordPlaneLinearizer::arc(motor_point_t dest, motor_point_t center, int spl, float speed, int div, bool clockwise, float scale, bool strict) {
 		motor_point_t src = this->getPosition();
 		double r1 = pow(src.x - center.x, 2) +
@@ -102,19 +102,19 @@ namespace CalX {
 		}
 		return code;
 	}
-	
+
 	ErrorCode CoordPlaneLinearizer::calibrate(TrailerId tr) {
 		return this->base->calibrate(tr);
 	}
-	
+
 	ErrorCode CoordPlaneLinearizer::measure(TrailerId tr) {
 		return this->base->measure(tr);
 	}
-	
+
 	motor_point_t CoordPlaneLinearizer::getPosition() {
 		return this->base->getPosition();
 	}
-	
+
 	motor_rect_t CoordPlaneLinearizer::getSize() {
 		return this->base->getSize();
 	}
@@ -126,27 +126,27 @@ namespace CalX {
 	void CoordPlaneLinearizer::dump(std::ostream &os) {
 		os << "linearizer";
 	}
-	
+
 	void CoordPlaneLinearizer::use() {
 		this->base->use();
 	}
-	
+
 	void CoordPlaneLinearizer::unuse() {
 		this->base->unuse();
 	}
-	
+
 	void CoordPlaneLinearizer::stop() {
 		this->base->stop();
 	}
-	
+
 	CoordPlane *CoordPlaneLinearizer::clone(CoordPlane *base) {
 		return new CoordPlaneLinearizer(base);
 	}
-	
+
 	ErrorCode CoordPlaneLinearizer::open_session() {
 		return this->base->open_session();
 	}
-	
+
 	ErrorCode CoordPlaneLinearizer::close_session() {
 		return this->base->close_session();
 	}

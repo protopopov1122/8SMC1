@@ -18,11 +18,11 @@
 */
 
 
-#include "CoordTask.h"
+#include "ctrl-lib/task/CoordTask.h"
 #include "ctrl-lib/misc/GCodeParser.h"
 
 namespace CalX {
-	
+
 	GCodeCoordTask::GCodeCoordTask(std::istream *input, CoordTranslator *trans)
 		: CoordTask::CoordTask(CoordTaskType::GCodeTask) {
 		int ch;
@@ -34,26 +34,26 @@ namespace CalX {
 		this->translator = trans;
 		INIT_LOG("GCodeCoordTask");
 	}
-	
+
 	GCodeCoordTask::~GCodeCoordTask() {
 		delete this->translator;
 		DESTROY_LOG("GCodeCoordTask");
 	}
-	
+
 	ErrorCode GCodeCoordTask::perform(CoordPlane *plane, TaskParameters &prms, SystemManager *sysman, TaskState *state) {
 		std::stringstream ss(this->code);
 		GCodeLexer lexer(&ss);
 		GCodeParser parser(&lexer);
 		ProgrammedCoordTask task;
 		gcode_translate(&parser, this->translator, &task, sysman->getConfiguration());
-		
+
 		return task.perform(plane, prms, sysman, state);
 	}
-	
+
 	std::string GCodeCoordTask::getGCode() {
 		return this->code;
 	}
-	
+
 	CoordTranslator *GCodeCoordTask::getTranslator() {
 		return this->translator;
 	}

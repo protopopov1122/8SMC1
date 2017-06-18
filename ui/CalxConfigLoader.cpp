@@ -18,7 +18,7 @@
 */
 
 
-#include "CalxConfigLoader.h"
+#include "ui/CalxConfigLoader.h"
 #include <wx/sizer.h>
 
 namespace CalXUI {
@@ -26,22 +26,22 @@ namespace CalXUI {
 
 	CalxConfigLoader::CalxConfigLoader(wxWindow *win, wxWindowID id, std::string path)
 		: wxDialog::wxDialog(win, id, __("CalX Configuration Loader"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER) {
-			
+
 		this->filename = "";
 		if (!path.empty()) {
 			this->filesys.ChangePathTo(path);
 		}
 		this->exiting = false;
-		
+
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(sizer);
-		
+
 		this->configList = new wxDataViewListCtrl(this, wxID_ANY);
 		this->configList->AppendTextColumn(__("Name"));
 		this->configList->AppendTextColumn(__("Path"));
 		this->configList->AppendTextColumn(__("Description"));
 		sizer->Add(this->configList, 1, wxALL | wxEXPAND, 10);
-		
+
 		wxPanel *buttonPanel = new wxPanel(this, wxID_ANY);
 		sizer->Add(buttonPanel, 0, wxALL | wxALIGN_CENTER, 5);
 		wxBoxSizer* buttonSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -52,11 +52,11 @@ namespace CalXUI {
 		buttonSizer->Add(exitButton);
 		loadButton->Bind(wxEVT_BUTTON, &CalxConfigLoader::OnLoadClick, this);
 		exitButton->Bind(wxEVT_BUTTON, &CalxConfigLoader::OnExitClick, this);
-		
-		this->Bind(wxEVT_CLOSE_WINDOW, &CalxConfigLoader::OnClose, this);		
+
+		this->Bind(wxEVT_CLOSE_WINDOW, &CalxConfigLoader::OnClose, this);
 		Layout();
 	}
-	
+
 	void CalxConfigLoader::load() {
 		std::string fname = this->filesys.FindFirst("*.conf.ini", wxFILE).ToStdString();
 		while (!fname.empty()) {
@@ -74,7 +74,7 @@ namespace CalXUI {
 			}
 			cnf.close();
 			delete conf;
-			
+
 			CalxConfigFile cf;
 			cf.path = path;
 			cf.name = name;
@@ -97,26 +97,26 @@ namespace CalXUI {
 			this->ShowModal();
 		}
 	}
-	
+
 	std::string CalxConfigLoader::getFileName() {
 		return this->filename;
 	}
-	
+
 	bool CalxConfigLoader::isExiting() {
 		return this->exiting;
 	}
-	
+
 	void CalxConfigLoader::OnLoadClick(wxCommandEvent &evt) {
 		this->filename = this->found.at(this->configList->GetSelectedRow() == wxNOT_FOUND ? 0 :
 		                                this->configList->GetSelectedRow()).path;
 		Hide();
 	}
-	
+
 	void CalxConfigLoader::OnExitClick(wxCommandEvent &evt) {
 		this->exiting = true;
 		Hide();
 	}
-	
+
 	void CalxConfigLoader::OnClose(wxCloseEvent &evt) {
 		this->exiting = true;
 		Hide();

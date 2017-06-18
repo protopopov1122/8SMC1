@@ -18,17 +18,17 @@
 */
 
 
-#include "CalxCoordPositionCtrl.h"
+#include "ui/coord/CalxCoordPositionCtrl.h"
 #include "wx/sizer.h"
 
 namespace CalXUI {
-	
+
 	CalxCoordPositionCtrl::CalxCoordPositionCtrl(wxWindow *win, wxWindowID id)
 		: wxPanel::wxPanel(win, id) {
-		
+
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(2);
 		SetSizer(sizer);
-		
+
 		this->xPos = new 	wxSpinCtrlDouble (this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1, 0.5, 0.0001);
 		this->yPos = new 	wxSpinCtrlDouble (this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1, 0.5, 0.0001);
         this->speed = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
@@ -45,7 +45,7 @@ namespace CalXUI {
 		this->divisor->SetSelection(3);
 		this->moveButton = new wxButton(this, wxID_ANY, __("Move"));
 		this->configureButton = new wxButton(this, wxID_ANY, __("Configure"));
-		
+
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Destination") + std::string(":")));
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
 		sizer->Add(new wxStaticText(this, wxID_ANY, _("x") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 10);

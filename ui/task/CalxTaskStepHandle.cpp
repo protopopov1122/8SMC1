@@ -18,22 +18,22 @@
 */
 
 
-#include "CalxTaskHandle.h"
+#include "ui/task/CalxTaskHandle.h"
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 
 namespace CalXUI {
-	
+
 	CalxTaskLinearStepHandle::CalxTaskLinearStepHandle(wxWindow *win, wxWindowID id)
 		: CalxTaskStepHandle::CalxTaskStepHandle(win, id) {
 		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
-		
+
 		motor_point_t pos = {0, 0};
 		this->step = new MoveTaskStep(pos, 1, false);
-		
+
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 		SetSizer(sizer);
-		
+
         this->xCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                       wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, (int) pos.x);
         this->yCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
@@ -41,7 +41,7 @@ namespace CalXUI {
 		this->speed = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1, 1, 0.01);
 		this->relative = new wxCheckBox(this, wxID_ANY, __("Relative"));
 		this->relative->SetValue(step->isRelative());
-		
+
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Destination") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
@@ -56,19 +56,19 @@ namespace CalXUI {
 		sizer->Add(new wxStaticText(this, wxID_ANY, units.empty() ? "" : units + __("/sec")));
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(relative);
-		
+
 		xCoord->Bind(wxEVT_SPINCTRL, &CalxTaskLinearStepHandle::OnFieldChange, this);
 		yCoord->Bind(wxEVT_SPINCTRL, &CalxTaskLinearStepHandle::OnFieldChange, this);
 		speed->Bind(wxEVT_SPINCTRLDOUBLE, &CalxTaskLinearStepHandle::OnFieldChange, this);
 		relative->Bind(wxEVT_CHECKBOX, &CalxTaskLinearStepHandle::OnFieldChange, this);
-		
+
 		Layout();
 	}
-	
+
 	MoveTaskStep *CalxTaskLinearStepHandle::getTaskStep() {
 		return this->step;
 	}
-	
+
 	void CalxTaskLinearStepHandle::update() {
 		motor_point_t pos = {xCoord->GetValue(), yCoord->GetValue()};
 		step->setPosition(pos);
@@ -76,21 +76,21 @@ namespace CalXUI {
 		step->setSpeed((float) speed);
 		step->setRelative(relative->GetValue());
 	}
-	
+
 	void CalxTaskLinearStepHandle::OnFieldChange(wxCommandEvent &evt) {
 		update();
 	}
-	
+
 	CalxTaskLinearJumpStepHandle::CalxTaskLinearJumpStepHandle(wxWindow *win, wxWindowID id)
 		: CalxTaskStepHandle::CalxTaskStepHandle(win, id) {
 		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
-		
+
 		motor_point_t pos = {0, 0};
 		this->step = new JumpTaskStep(pos, 1, false);
-		
+
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 		SetSizer(sizer);
-		
+
         this->xCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                       wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, (int) pos.x);
         this->yCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
@@ -99,7 +99,7 @@ namespace CalXUI {
                                            wxDefaultSize, wxSP_ARROW_KEYS, 0, 1, 1, 0.01);
 		this->relative = new wxCheckBox(this, wxID_ANY, __("Relative"));
 		this->relative->SetValue(step->isRelative());
-		
+
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Destination") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
@@ -114,19 +114,19 @@ namespace CalXUI {
 		sizer->Add(new wxStaticText(this, wxID_ANY, units.empty() ? "" : units + __("/sec")));
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(relative);
-		
+
 		xCoord->Bind(wxEVT_SPINCTRL, &CalxTaskLinearJumpStepHandle::OnFieldChange, this);
 		yCoord->Bind(wxEVT_SPINCTRL, &CalxTaskLinearJumpStepHandle::OnFieldChange, this);
 		speed->Bind(wxEVT_SPINCTRLDOUBLE, &CalxTaskLinearJumpStepHandle::OnFieldChange, this);
 		relative->Bind(wxEVT_CHECKBOX, &CalxTaskLinearJumpStepHandle::OnFieldChange, this);
-		
+
 		Layout();
 	}
-	
+
 	JumpTaskStep *CalxTaskLinearJumpStepHandle::getTaskStep() {
 		return this->step;
 	}
-	
+
 	void CalxTaskLinearJumpStepHandle::update() {
 		motor_point_t pos = {xCoord->GetValue(), yCoord->GetValue()};
 		step->setPosition(pos);
@@ -134,21 +134,21 @@ namespace CalXUI {
 		step->setSpeed((float) speed);
 		step->setRelative(relative->GetValue());
 	}
-	
+
 	void CalxTaskLinearJumpStepHandle::OnFieldChange(wxCommandEvent &evt) {
 		update();
 	}
-	
+
 	CalxTaskArcStepHandle::CalxTaskArcStepHandle(wxWindow *win, wxWindowID id)
 		: CalxTaskStepHandle::CalxTaskStepHandle(win, id) {
 		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
-			
+
 		motor_point_t pnt = {0, 0};
 		this->step = new ArcTaskStep(pnt, pnt, 200, 1.0f, false);
-		
+
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 		SetSizer(sizer);
-		
+
         this->destXCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                           wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, (int) pnt.x);
         this->destYCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
@@ -164,7 +164,7 @@ namespace CalXUI {
 		clockwise->SetValue(step->isClockwise());
 		this->relative = new wxCheckBox(this, wxID_ANY, __("Relative"));
 		relative->SetValue(step->isRelative());
-		
+
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Destination") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
@@ -190,8 +190,8 @@ namespace CalXUI {
 		sizer->Add(splitter);
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
 		sizer->Add(clockwise);
-		sizer->Add(relative);		
-		
+		sizer->Add(relative);
+
 		destXCoord->Bind(wxEVT_SPINCTRL, &CalxTaskArcStepHandle::OnFieldChange, this);
 		destYCoord->Bind(wxEVT_SPINCTRL, &CalxTaskArcStepHandle::OnFieldChange, this);
 		cenXCoord->Bind(wxEVT_SPINCTRL, &CalxTaskArcStepHandle::OnFieldChange, this);
@@ -200,15 +200,15 @@ namespace CalXUI {
 		speed->Bind(wxEVT_SPINCTRLDOUBLE, &CalxTaskArcStepHandle::OnFieldChange, this);
 		clockwise->Bind(wxEVT_CHECKBOX, &CalxTaskArcStepHandle::OnFieldChange, this);
 		relative->Bind(wxEVT_CHECKBOX, &CalxTaskArcStepHandle::OnFieldChange, this);
-		
-		
+
+
 		Layout();
 	}
-	
+
 	ArcTaskStep *CalxTaskArcStepHandle::getTaskStep() {
 		return this->step;
 	}
-	
+
 	void CalxTaskArcStepHandle::update() {
 		motor_point_t dest = {destXCoord->GetValue(), destYCoord->GetValue()};
 		motor_point_t cen = {cenXCoord->GetValue(), cenYCoord->GetValue()};
@@ -216,7 +216,7 @@ namespace CalXUI {
 		int splitter = this->splitter->GetValue();
 		bool cw = this->clockwise->GetValue();
 		bool rel = this->clockwise->GetValue();
-		
+
 		step->setDestination(dest);
 		step->setCenter(cen);
 		step->setSpeed(speed);
@@ -224,7 +224,7 @@ namespace CalXUI {
 		step->setClockwise(cw);
 		step->setRelative(rel);
 	}
-	
+
 	void CalxTaskArcStepHandle::OnFieldChange(wxCommandEvent &evt) {
 		update();
 	}

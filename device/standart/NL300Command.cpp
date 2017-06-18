@@ -20,8 +20,8 @@
 
 #include <string.h>
 #include <string>
-#include "NL300Instrument.h"
-#include "StandartDeviceManager.h"
+#include "device/standart/NL300Instrument.h"
+#include "device/standart/StandartDeviceManager.h"
 
 namespace CalX {
 
@@ -30,9 +30,9 @@ namespace CalX {
 		this->command = com;
 		this->parameter = parm;
 	}
-	
+
 	NL300SystemCommand::~NL300SystemCommand() {
-		
+
 	}
 
 	std::string NL300SystemCommand::getCommand() {
@@ -42,34 +42,34 @@ namespace CalX {
 	std::string NL300SystemCommand::getParameter() {
 		return this->parameter;
 	}
-	
+
 	NL300GeneralCommand::NL300GeneralCommand(std::string recv, char array, uint16_t index,
 		NL300GeneralAction action, NL300Parameter *parm, std::string send)
 		: NL300Message::NL300Message(NL300MessageType::General, recv, array + std::to_string(index) + '/' +
 			static_cast<char>(action) + parm->getString(), send) {
-				
+
 		this->array = array;
 		this->index = index;
 		this->action = action;
 		this->parameter = parm;
 	}
-	
+
 	NL300GeneralCommand::~NL300GeneralCommand() {
 		delete this->parameter;
 	}
-	
+
 	char NL300GeneralCommand::getArray() {
 		return this->array;
 	}
-	
+
 	uint16_t NL300GeneralCommand::getIndex() {
 		return this->index;
 	}
-	
+
 	NL300GeneralAction NL300GeneralCommand::getAction() {
 		return this->action;
 	}
-	
+
 	NL300Parameter *NL300GeneralCommand::getParameter() {
 		return this->parameter;
 	}

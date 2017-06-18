@@ -18,16 +18,16 @@
 */
 
 
-#include "CalxCoordCtrl.h"
+#include "ui/coord/CalxCoordCtrl.h"
 
 namespace CalXUI {
-	
-	
+
+
 	void CalxCoordArcCtrl::init() {
 		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 		SetSizer(sizer);
-		
+
         this->xCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                       wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
         this->yCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
@@ -52,8 +52,8 @@ namespace CalXUI {
 		this->clockwise = new wxCheckBox(this, wxID_ANY, __("Clockwise"));
 		this->relative = new wxCheckBox(this, wxID_ANY, __("Relative"));
 		this->moveButton = new wxButton(this, wxID_ANY, __("Move"));
-		
-		
+
+
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Destination") + std::string(":")));
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
@@ -85,7 +85,7 @@ namespace CalXUI {
 		sizer->Add(relative);
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
 		sizer->Add(moveButton);
-		
-		
+
+
 	}
 }

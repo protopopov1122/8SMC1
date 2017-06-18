@@ -18,48 +18,48 @@
 */
 
 
-#include "CalxAutoconfDialog.h"
+#include "ui/CalxAutoconfDialog.h"
 
 namespace CalXUI {
 
 	wxDEFINE_EVENT(wxEVT_AUTOCONF_RESOLVING, wxThreadEvent);
 	wxDEFINE_EVENT(wxEVT_AUTOCONF_FAILED, wxThreadEvent);
-	
+
 	CalxAutoconfDialog::CalxAutoconfDialog(wxWindow *win, wxWindowID id)
 		: wxDialog::wxDialog(win, id, __("Please wait"), wxDefaultPosition, wxDefaultSize, wxBORDER_NONE) {
-		
+
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(sizer);
-		
+
 		this->text = new wxStaticText(this, wxID_ANY, __("Please wait until initialization finishes"));
 		sizer->Add(text, 0, wxALL | wxALIGN_CENTER, 100);
-		
+
 		Layout();
 		Fit();
 		Bind(wxEVT_CLOSE_WINDOW, &CalxAutoconfDialog::OnExit, this);
 		Bind(wxEVT_AUTOCONF_RESOLVING, &CalxAutoconfDialog::OnResolvingEvent, this);
 		Bind(wxEVT_AUTOCONF_FAILED, &CalxAutoconfDialog::OnFailedEvent, this);
-		
+
 		wxSize parentSize = GetParent()->GetSize();
 		wxSize size = GetSize();
 		SetPosition(wxPoint((parentSize.x - size.x) / 2, (parentSize.y - size.y) / 2));
 		GetParent()->Enable(false);
 	}
-	
+
 	void CalxAutoconfDialog::resolving(std::string code, size_t step, size_t full) {
 		CalxAutoconfInfo info = {code, step, full};
 		wxThreadEvent evt(wxEVT_AUTOCONF_RESOLVING);
 		evt.SetPayload(info);
 		wxPostEvent(this, evt);
 	}
-	
+
 	void CalxAutoconfDialog::failed(std::string code, size_t step, size_t full) {
 		CalxAutoconfInfo info = {code, step, full};
 		wxThreadEvent evt(wxEVT_AUTOCONF_FAILED);
 		evt.SetPayload(info);
 		wxPostEvent(this, evt);
 	}
-	
+
 	void CalxAutoconfDialog::OnExit(wxCloseEvent &evt) {
 		GetParent()->Enable(true);
 		Destroy();

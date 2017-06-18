@@ -18,7 +18,7 @@
 */
 
 
-#include "CalxTaskHandle.h"
+#include "ui/task/CalxTaskHandle.h"
 #include "wx/sizer.h"
 #include "wx/stattext.h"
 
@@ -27,7 +27,7 @@ namespace CalXUI {
 	CalxLinearTaskHandle::CalxLinearTaskHandle(wxWindow *win, wxWindowID id)
 		: CalxTaskHandle(win, id, CalxTaskType::CalxLinear) {
 		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
-		
+
 		ConfigEntry *confEntry = wxGetApp().getSystemManager()->getConfiguration()->getEntry("linear_task");
 		motor_rect_t rect = {confEntry->getInt("x_start", 0),
 		                     confEntry->getInt("y_start", 0),
@@ -36,14 +36,14 @@ namespace CalXUI {
 		motor_coord_t spac = confEntry->getInt("spacing", 1000);
 		bool vert = confEntry->getBool("vertical", true);
 		this->task = new LinearCoordTask(rect, spac, vert);
-		
+
 		ConfigManager *conf = wxGetApp().getSystemManager()->getConfiguration();
 		motor_point_t offset = {conf->getEntry("coords")->getInt("offset_x", 0),
 			conf->getEntry("coords")->getInt("offset_y", 0)};
 		motor_size_t size = {conf->getEntry("coords")->getInt("scale_x", 1),
 			conf->getEntry("coords")->getInt("scale_y", 1)};
 		this->trans = new ComplexCoordTranslator(new BasicCoordTranslator(offset, size));
-		
+
 		this->xCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                       wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, rect.x);
 		this->yCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
@@ -56,10 +56,10 @@ namespace CalXUI {
                                       wxDefaultSize, wxSP_ARROW_KEYS, 1, INT_MAX, spac);
 		this->vertical = new wxCheckBox(this, wxID_ANY, __("Vertical"));
 		this->vertical->SetValue(vert);
-		
+
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 		this->SetSizer(sizer);
-		
+
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("x") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(xCoord);
 		sizer->Add(new wxStaticText(this, wxID_ANY, units));
@@ -77,7 +77,7 @@ namespace CalXUI {
 		sizer->Add(new wxStaticText(this, wxID_ANY, units));
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(vertical);
-		
+
 		this->xCoord->Bind(wxEVT_SPINCTRL, &CalxLinearTaskHandle::OnFieldChange, this);
 		this->yCoord->Bind(wxEVT_SPINCTRL, &CalxLinearTaskHandle::OnFieldChange, this);
 		this->wDim->Bind(wxEVT_SPINCTRL, &CalxLinearTaskHandle::OnFieldChange, this);
@@ -85,29 +85,29 @@ namespace CalXUI {
 		this->spacing->Bind(wxEVT_SPINCTRL, &CalxLinearTaskHandle::OnFieldChange, this);
 		this->vertical->Bind(wxEVT_CHECKBOX, &CalxLinearTaskHandle::OnFieldChange, this);
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxLinearTaskHandle::OnExit, this);
-		
+
 		Layout();
 	}
-	
+
 	CoordTask *CalxLinearTaskHandle::getTask() {
 		return this->task;
 	}
-	
+
 	ComplexCoordTranslator *CalxLinearTaskHandle::getTranslator() {
 		return this->trans;
 	}
-	
+
 	void CalxLinearTaskHandle::update() {
 		motor_rect_t rect = {this->xCoord->GetValue(), this->yCoord->GetValue(),
 		                     this->wDim->GetValue(), this->hDim->GetValue()};
 		motor_coord_t spacing = this->spacing->GetValue();
 		bool vert = this->vertical->GetValue();
-		
+
 		this->task->setRectangle(rect);
 		this->task->setSpacing(spacing);
 		this->task->setVertical(vert);
 	}
-	
+
 	void CalxLinearTaskHandle::setRectangle(motor_rect_t rect) {
 		this->task->setRectangle(rect);
 		this->xCoord->SetValue(rect.x);
@@ -115,11 +115,11 @@ namespace CalXUI {
 		this->wDim->SetValue(rect.w);
 		this->hDim->SetValue(rect.h);
 	}
-	
+
 	void CalxLinearTaskHandle::OnFieldChange(wxCommandEvent &evt) {
 		update();
 	}
-	
+
 	void CalxLinearTaskHandle::OnExit(wxCloseEvent &evt) {
 		delete this->task;
 		delete this->trans;

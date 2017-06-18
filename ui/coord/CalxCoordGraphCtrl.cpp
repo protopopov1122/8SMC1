@@ -18,22 +18,22 @@
 */
 
 
-#include "CalxCoordCtrl.h"
+#include "ui/coord/CalxCoordCtrl.h"
 
 namespace CalXUI {
-	
-	
+
+
 	void CalxCoordGraphCtrl::init() {
 		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
 		wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 		SetSizer(sizer);
-		
-		
+
+
 		wxPanel *graphPanel = new wxPanel(this, wxID_ANY);
 		sizer->Add(graphPanel, 0, wxRIGHT, 10);
 		wxFlexGridSizer *graphSizer = new wxFlexGridSizer(3);
 		graphPanel->SetSizer(graphSizer);
-		
+
 		this->expr = new wxTextCtrl(graphPanel, wxID_ANY, "x");
         this->xmin = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                     wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, -10);
@@ -52,7 +52,7 @@ namespace CalXUI {
                                         getEntry("core")->getInt("maxspeed", 4000));
 		this->buildButton = new wxButton(graphPanel, wxID_ANY, __("Build"));
 		this->previewButton = new wxButton(graphPanel, wxID_ANY, __("Preview"));
-		
+
 		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, __("Function ")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		graphSizer->Add(expr, 0, wxEXPAND);
 		graphSizer->Add(new wxStaticText(this, wxID_ANY, ""));
@@ -82,11 +82,11 @@ namespace CalXUI {
 		graphSizer->Add(new wxStaticText(this, wxID_ANY, units.empty() ? "" : units + __("/sec")));
 		graphSizer->Add(buildButton);
 		graphSizer->Add(previewButton);
-		
+
 		this->translator = new CalxCoordFilterCtrl(this, wxID_ANY);
 		sizer->Add(this->translator, 1, wxALL | wxEXPAND, 5);
 	}
-	
+
 	void CalxCoordGraphCtrl::OnClose(wxCloseEvent &evt) {
 		delete this->translator->getTranslator();
 	}

@@ -24,7 +24,7 @@
 #include "ctrl-lib/SystemManager.h"
 
 namespace CalX {
-	
+
 	GraphBuilder::GraphBuilder(Node *nd, coord_point_t min, coord_point_t max, double step) {
 		this->node = nd;
 		this->min = min;
@@ -32,28 +32,28 @@ namespace CalX {
 		this->step = step;
 		INIT_LOG("GraphBuilder");
 	}
-	
+
 	GraphBuilder::~GraphBuilder() {
 		delete this->node;
 		DESTROY_LOG("GraphBuilder");
 	}
-	
+
 	Node *GraphBuilder::getFunction() {
 		return this->node;
 	}
-	
+
 	coord_point_t GraphBuilder::getMinimum() {
 		return this->min;
 	}
-	
+
 	coord_point_t GraphBuilder::getMaximum() {
 		return this->max;
 	}
-	
+
 	double GraphBuilder::getStep() {
 		return this->step;
 	}
-	
+
 	ErrorCode GraphBuilder::build(SystemManager *sysman, CoordPlane *plane, CoordTranslator *trans, float speed, TaskState *state) {
 		plane->use();
 		FunctionEngine *engine = sysman->getFunctionEngine();

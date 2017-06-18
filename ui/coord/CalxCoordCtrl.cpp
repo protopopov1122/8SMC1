@@ -22,16 +22,16 @@
 #include <math.h>
 #include <sstream>
 #include <algorithm>
-#include "CalxApp.h"
-#include "CalxErrorHandler.h"
+#include "ui/CalxApp.h"
+#include "ui/CalxErrorHandler.h"
 #include <wx/stattext.h>
 #include <wx/sizer.h>
 #include <wx/timer.h>
 #include "ctrl-lib/graph/FunctionParser.h"
 #include "ctrl-lib/graph/FunctionEngine.h"
-#include "CalxCoordCtrl.h"
-#include "task/CalxTaskPanel.h"
-#include "CalxCoordPlaneWatcher.h"
+#include "ui/coord/CalxCoordCtrl.h"
+#include "ui/task/CalxTaskPanel.h"
+#include "ui/coord/CalxCoordPlaneWatcher.h"
 
 namespace CalXUI {
 
@@ -199,7 +199,7 @@ namespace CalXUI {
 		this->otherCtrl->setYOffset(offset.y);
 		this->map->setOffset(offset);
 	}
-	
+
 	void CalxCoordCtrl::updateWatchers() {
 		for (const auto& w : this->watchers) {
 			w->update();

@@ -27,7 +27,7 @@
 #include "ctrl-lib/device/DeviceManager.h"
 #include "ctrl-lib/SystemManager.h"
 #include "ctrl-lib/translator/CoordTranslator.h"
-#include "DevCLI.h"
+#include "cli/DevCLI.h"
 
 /* Creates device manager and runs command line*/
 
@@ -56,7 +56,7 @@ class HelpCMD : public CLICommand  {
 	}
 };
 
-int main(int argc, char **argv) {	
+int main(int argc, char **argv) {
 	DeviceManager *devman = getDeviceManager();
     ConfigManager *conf = nullptr;
     std::ifstream cnf("main.conf.ini");

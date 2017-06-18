@@ -18,7 +18,7 @@
 */
 
 
-#include "CoordTranslator.h"
+#include "ctrl-lib/translator/CoordTranslator.h"
 #include <math.h>
 #include <iostream>
 
@@ -42,11 +42,11 @@ namespace CalX {
 	motor_size_t BasicCoordTranslator::getScale() {
 		return this->scale;
 	}
-	
+
 	void BasicCoordTranslator::setCenter(motor_point_t c) {
 		this->center = c;
 	}
-	
+
 	void BasicCoordTranslator::setScale(motor_size_t s) {
 		this->scale = s;
 	}
@@ -61,7 +61,7 @@ namespace CalX {
 		pnt.y += center.y;
 		return pnt;
 	}
-	
+
 	coord_point_t BasicCoordTranslator::get(motor_point_t pnt) {
 		pnt.x -= center.x;
 		pnt.y -= center.y;

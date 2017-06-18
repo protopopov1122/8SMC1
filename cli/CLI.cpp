@@ -18,7 +18,7 @@
 */
 
 
-#include "CLI.h"
+#include "cli/CLI.h"
 #include <stdio.h>
 #include <string>
 #include <string.h>
@@ -26,7 +26,7 @@
 #include <iostream>
 
 namespace CalX {
-	
+
 	CLI::CLI(std::ostream &os, std::istream &is) {
 		this->in = &is;
 		this->out = &os;
@@ -107,7 +107,7 @@ namespace CalX {
 				}
 			}
 		}
-		
+
 		// Build command object
 		std::string command = args.at(0);
 		args.erase(args.begin());
@@ -128,7 +128,7 @@ namespace CalX {
 			std::cout << "Command execution error" << std::endl;
 		}
 
-		
+
 		return true;
 	}
 }

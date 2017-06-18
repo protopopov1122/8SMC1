@@ -22,7 +22,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include "DevCLI.h"
+#include "cli/DevCLI.h"
 #include "ctrl-lib/misc/CircleGenerator.h"
 #include "ctrl-lib/misc/GCodeParser.h"
 #include "ctrl-lib/misc/GraphBuilder.h"
@@ -67,7 +67,7 @@ namespace CalX {
 				for (size_t i = 0; i < sysman->getCoordCount(); i++) {
 					CoordPlane *plane = sysman->getCoord(i);
 					std::cout << i << "\tPosition: " << plane->getPosition().x << "x" << plane->getPosition().y
-							<< "; Dimension: start=" << plane->getSize().x << "x" << plane->getSize().y 
+							<< "; Dimension: start=" << plane->getSize().x << "x" << plane->getSize().y
 							<< "; size=" << plane->getSize().w << "x" << plane->getSize().h << std::endl;
 					plane->dump(std::cout);
 					std::cout << std::endl;
@@ -120,7 +120,7 @@ namespace CalX {
 				int dest = std::stoi(args.at(1));
 				dev->moveToTrailer(dest);
 			}
-		} else if (com.compare("move") == 0) {	
+		} else if (com.compare("move") == 0) {
 			if (args.empty()) {
 				std::cout << "Provide device id" << std::endl;
 			} else {
@@ -141,7 +141,7 @@ namespace CalX {
 					<< std::endl;
 				dev->startMove(dest, speed, div);
 			}
-		} else if (com.compare("rmove") == 0) {	
+		} else if (com.compare("rmove") == 0) {
 			if (args.empty()) {
 				std::cout << "Provide device id" << std::endl;
 			} else {
@@ -517,7 +517,7 @@ namespace CalX {
 			std::cout << "Wrong command '" << com << "'" << std::endl;
 		}
 	}
-	
+
 	void RefreshCommand::execute(CLI *cli, std::vector<std::string> &args) {
 		sysman->getDeviceManager()->refresh();
 	}

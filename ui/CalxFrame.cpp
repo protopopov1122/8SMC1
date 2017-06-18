@@ -19,15 +19,15 @@
 
 
 #include <iostream>
-#include "CalxFrame.h"
+#include "ui/CalxFrame.h"
 #include <wx/splitter.h>
 #include <wx/textctrl.h>
 #include <wx/app.h>
 #include <wx/aboutdlg.h>
-#include "CalxPanel.h"
-#include "task/CalxTaskPanel.h"
-#include "coord/CalxCoordPanel.h"
-#include "dev/CalxDevicePanel.h"
+#include "ui/CalxPanel.h"
+#include "ui/task/CalxTaskPanel.h"
+#include "ui/coord/CalxCoordPanel.h"
+#include "ui/dev/CalxDevicePanel.h"
 
 namespace CalXUI {
 	CalxFrame::CalxFrame(std::string title)

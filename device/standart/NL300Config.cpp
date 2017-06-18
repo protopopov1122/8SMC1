@@ -20,40 +20,40 @@
 
 #include <string.h>
 #include <string>
-#include "NL300Instrument.h"
-#include "StandartDeviceManager.h"
+#include "device/standart/NL300Instrument.h"
+#include "device/standart/StandartDeviceManager.h"
 
 namespace CalX {
 
-	
+
 	NL300ConfigEventListener::NL300ConfigEventListener(NL300Instrument *i) {
 		this->instr = i;
 	}
-	
+
 	NL300ConfigEventListener::~NL300ConfigEventListener() {
-		
+
 	}
-	
+
 	void NL300ConfigEventListener::entryAdded(ConfigManager *conf, std::string id) {
-		
+
 	}
-	
+
 	void NL300ConfigEventListener::entryRemoved(ConfigManager *conf, std::string id) {
-		
+
 	}
-	
+
 	void NL300ConfigEventListener::keyAdded(ConfigManager *conf, ConfigEntry *entry, std::string key) {
 		process(conf, entry, key);
 	}
-	
+
 	void NL300ConfigEventListener::keyRemoved(ConfigManager *conf, ConfigEntry *entry, std::string key) {
-		
+
 	}
-	
+
 	void NL300ConfigEventListener::keyChanged(ConfigManager *conf, ConfigEntry *entry, std::string key) {
 		process(conf, entry, key);
 	}
-	
+
 	void NL300ConfigEventListener::process(ConfigManager *conf, ConfigEntry *entry, std::string key) {
 		if (entry->getEntryName().compare(NL300_ENTRY_NAME) != 0) {
 			return;
@@ -80,5 +80,5 @@ namespace CalX {
 			this->instr->writeMessage(cmd);
 		}
 	}
-	
+
 }

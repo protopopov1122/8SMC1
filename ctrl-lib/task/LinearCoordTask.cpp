@@ -18,31 +18,31 @@
 */
 
 
-#include "CoordTask.h"
+#include "ctrl-lib/task/CoordTask.h"
 
 namespace CalX {
-	
+
 	LinearCoordTask::LinearCoordTask(motor_rect_t square, motor_coord_t spacing, bool vertical)
 		: CoordTask::CoordTask(CoordTaskType::LinearTask) {
-		
+
 		this->square = square;
 		this->spacing = spacing;
 		this->vertical = vertical;
 	}
-	
+
 	LinearCoordTask::~LinearCoordTask() {
-		
+
 	}
-	
+
 	ErrorCode LinearCoordTask::perform(CoordPlane *plane, TaskParameters &prms, SystemManager *sysman, TaskState *state) {
 		state->work = true;
 		float speed = prms.speed;
-		
+
 		motor_coord_t start = this->vertical ? this->square.x : this->square.y;
 		motor_coord_t end = start + (this->vertical ? this->square.w : this->square.h);
 		motor_coord_t top = this->vertical ? this->square.y : this->square.x;
 		motor_coord_t bottom = top + (this->vertical ? this->square.h : this->square.w);
-		
+
 		bool on_top = true;
 		motor_point_t first, second, temp;
 		ErrorCode errcode = ErrorCode::NoError;
@@ -71,27 +71,27 @@ namespace CalX {
 		}
 		return errcode;
 	}
-	
+
 	motor_rect_t LinearCoordTask::getRectangle() {
 		return this->square;
 	}
-	
+
 	void LinearCoordTask::setRectangle(motor_rect_t sq) {
 		this->square = sq;
 	}
-	
+
 	motor_coord_t LinearCoordTask::getSpacing() {
 		return this->spacing;
 	}
-	
+
 	void LinearCoordTask::setSpacing(motor_coord_t sp) {
 		this->spacing = sp;
 	}
-	
+
 	bool LinearCoordTask::isVertical() {
 		return this->vertical;
 	}
-	
+
 	void LinearCoordTask::setVertical(bool v) {
 		this->vertical = v;
 	}

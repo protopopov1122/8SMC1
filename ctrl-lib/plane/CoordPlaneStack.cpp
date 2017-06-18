@@ -18,15 +18,15 @@
 */
 
 
-#include "CoordPlane.h"
+#include "ctrl-lib/plane/CoordPlane.h"
 
 namespace CalX {
-	
+
 	CoordPlaneStack::CoordPlaneStack(CoordPlane *root) {
 		this->stack.push_back(root);
 		INIT_LOG("CoordPlaneStack");
 	}
-	
+
 	CoordPlaneStack::~CoordPlaneStack() {
 		for (size_t i = 1; i < this->stack.size(); i++) {
 			delete this->stack.at(i);
@@ -34,7 +34,7 @@ namespace CalX {
 		this->stack.clear();
 		DESTROY_LOG("CoordPlaneStack");
 	}
-	
+
 	bool CoordPlaneStack::popPlane() {
 		if (this->stack.size() > 1) {
 			CoordPlane *plane = this->peekPlane();
@@ -45,39 +45,39 @@ namespace CalX {
 			return false;
 		}
 	}
-	
+
 	void CoordPlaneStack::pushPlane(CoordPlane *plane) {
 		this->stack.push_back(plane);
 	}
-	
+
 	CoordPlane *CoordPlaneStack::peekPlane() {
 		return this->stack.at(this->stack.size() - 1);
 	}
-	
+
 	CoordPlane *CoordPlaneStack::getBase() {
 		return this->stack.at(0);
 	}
-	
+
 	ErrorCode CoordPlaneStack::move(motor_point_t dest, float speed, int div, bool sync) {
 		return this->peekPlane()->move(dest, speed, div, sync);
 	}
-	
+
 	ErrorCode CoordPlaneStack::arc(motor_point_t dest, motor_point_t center, int splitter, float speed, int div, bool clockwise, float scale, bool strict) {
 		return this->peekPlane()->arc(dest, center, splitter, speed, div, clockwise, scale, strict);
 	}
-	
+
 	ErrorCode CoordPlaneStack::calibrate(TrailerId tr) {
 		return this->peekPlane()->calibrate(tr);
 	}
-	
+
 	ErrorCode CoordPlaneStack::measure(TrailerId tr) {
 		return this->peekPlane()->measure(tr);
 	}
-	
+
 	motor_point_t CoordPlaneStack::getPosition() {
 			return this->peekPlane()->getPosition();
 	}
-	
+
 	motor_rect_t CoordPlaneStack::getSize() {
 		return this->peekPlane()->getSize();
 	}
@@ -85,7 +85,7 @@ namespace CalX {
 	bool CoordPlaneStack::isMeasured() {
 		return this->peekPlane()->isMeasured();
 	}
-	
+
 	void CoordPlaneStack::dump(std::ostream &os) {
 		for (size_t i = this->stack.size() - 1; i < this->stack.size(); i--) {
 			CoordPlane *plane = this->stack.at(i);
@@ -94,19 +94,19 @@ namespace CalX {
 			os << std::endl;
 		}
 	}
-	
+
 	void CoordPlaneStack::use() {
 		this->peekPlane()->use();
 	}
-	
+
 	void CoordPlaneStack::unuse() {
 		this->peekPlane()->unuse();
 	}
-	
+
 	void CoordPlaneStack::stop() {
 		this->peekPlane()->stop();
 	}
-	
+
 	CoordPlaneStack *CoordPlaneStack::clone(CoordPlane *plane) {
 		CoordPlaneStack *stack = new CoordPlaneStack(plane);
 		for (size_t i = 1; i < this->stack.size(); i++) {
@@ -114,11 +114,11 @@ namespace CalX {
 		}
 		return stack;
 	}
-	
+
 	ErrorCode CoordPlaneStack::open_session() {
 		return this->peekPlane()->open_session();
 	}
-	
+
 	ErrorCode CoordPlaneStack::close_session() {
 		return this->peekPlane()->close_session();
 	}

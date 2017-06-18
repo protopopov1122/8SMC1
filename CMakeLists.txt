@@ -15,6 +15,7 @@ add_custom_target(copy-config ALL
 add_subdirectory(device)
 add_subdirectory(ctrl-lib)
 add_subdirectory(cli)
+add_subdirectory(ncli)
 add_subdirectory(ui)
 add_subdirectory(ext)
 configure_file(${CMAKE_SOURCE_DIR}/misc/main.conf.ini ${CMAKE_BINARY_DIR}/main.conf.ini COPYONLY)
@@ -46,7 +47,7 @@ if (WIN32)
 		set(CPACK_NSIS_MUI_ICON ${CMAKE_BINARY_DIR}/icon.ico)
 		set(CPACK_NSIS_MUI_UNIICON ${CMAKE_BINARY_DIR}/icon.ico)
 	endif (EXISTS ${CMAKE_BINARY_DIR}/icon.ico)
-	
+
 	list(APPEND CPACK_NSIS_EXTRA_INSTALL_COMMANDS "CreateShortCut \\\"$SMPROGRAMS\\\\CalX\\\\CalX.lnk\\\" \\\"$INSTDIR\\\\calxui.exe\\\"")
 	list(APPEND CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "Delete \\\"$SMPROGRAMS\\\\CalX\\\\CalX.lnk\\\"")
 endif (WIN32)

@@ -18,22 +18,22 @@
 */
 
 #include <iostream>
-#include "CalxApp.h"
-#include "CalxCOMSelectDialog.h"
+#include "ui/CalxApp.h"
+#include "ui/dev/CalxCOMSelectDialog.h"
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 
 namespace CalXUI {
-	
+
 	CalxCOMSelectDialog::CalxCOMSelectDialog(wxWindow *win, wxWindowID id)
 		: wxDialog::wxDialog(win, id, __("Select COM Port")) {
-		
+
 		this->port = -1;
 		this->speed = -1;
-		
+
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(sizer);
-		
+
 		wxPanel *mainPanel = new wxPanel(this, wxID_ANY);
 		sizer->Add(mainPanel, 0, wxALL, 10);
 		wxFlexGridSizer *mainSizer = new wxFlexGridSizer(2);
@@ -62,7 +62,7 @@ namespace CalXUI {
         this->parityCh->SetSelection((int) wxGetApp().getSystemManager()->getConfiguration()->
                                          getEntry("serial")->getInt("parity", 0));
 		mainSizer->Add(this->parityCh);
-		
+
 		wxPanel *buttonPanel = new wxPanel(this, wxID_ANY);
 		sizer->Add(buttonPanel, 0, wxALL | wxALIGN_CENTER, 5);
 		wxBoxSizer *buttonSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -73,9 +73,9 @@ namespace CalXUI {
 		buttonSizer->Add(cancelButton);
 		okButton->Bind(wxEVT_BUTTON, &CalxCOMSelectDialog::OnOkClick, this);
 		cancelButton->Bind(wxEVT_BUTTON, &CalxCOMSelectDialog::OnCancelClick, this);
-		
+
 		Layout();
-		Fit();		
+		Fit();
 		#ifdef __WXGTK__
 		wxSize size = GetSize();
 		size.x *= 1.15;
@@ -83,43 +83,43 @@ namespace CalXUI {
 		SetSize(size);
 		#endif
 	}
-	
+
 	int16_t CalxCOMSelectDialog::getPort() {
 		return this->port;
 	}
-	
+
 	int32_t CalxCOMSelectDialog::getSpeed() {
 		return this->speed;
 	}
-	
+
 	SerialPortParity CalxCOMSelectDialog::getParity() {
 		return this->parity;
 	}
-	
+
 	void CalxCOMSelectDialog::OnOkClick(wxCommandEvent &evt) {
         this->port = (int16_t) this->portSpin->GetValue();
 		this->speed = this->speedSpin->GetValue();
 		this->parity = SerialPortParity::No;
 		switch (this->parityCh->GetSelection()) {
 			case 0:
-				this->parity = SerialPortParity::No;			
+				this->parity = SerialPortParity::No;
 			break;
 			case 1:
-				this->parity = SerialPortParity::Odd;			
+				this->parity = SerialPortParity::Odd;
 			break;
 			case 2:
-				this->parity = SerialPortParity::Even;			
+				this->parity = SerialPortParity::Even;
 			break;
 			case 3:
-				this->parity = SerialPortParity::Mark;			
+				this->parity = SerialPortParity::Mark;
 			break;
 			case 4:
-				this->parity = SerialPortParity::Space;			
+				this->parity = SerialPortParity::Space;
 			break;
 		}
 		Hide();
 	}
-	
+
 	void CalxCOMSelectDialog::OnCancelClick(wxCommandEvent &evt) {
 		Hide();
 	}
