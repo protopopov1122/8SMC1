@@ -18,7 +18,7 @@
 */
 
 
-#include "EmuDeviceManager.h"
+#include "device/emulated/EmuDeviceManager.h"
 
 
 namespace CalX {

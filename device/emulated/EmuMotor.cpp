@@ -18,8 +18,8 @@
 */
 
 
-#include "EmuMotor.h"
-#include "EmuDeviceManager.h"
+#include "device/emulated/EmuMotor.h"
+#include "device/emulated/EmuDeviceManager.h"
 
 namespace CalX {
 

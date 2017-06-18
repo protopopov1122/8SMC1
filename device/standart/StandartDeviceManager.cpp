@@ -18,7 +18,7 @@
 */
 
 
-#include "StandartDeviceManager.h"
+#include "device/standart/StandartDeviceManager.h"
 #include <stdio.h>
 #include <string.h>
 #include <iostream>
