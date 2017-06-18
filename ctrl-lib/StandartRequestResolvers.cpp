@@ -18,8 +18,8 @@
 */
 
 
-#include "RequestResolver.h"
-#include "SystemManager.h"
+#include "ctrl-lib/RequestResolver.h"
+#include "ctrl-lib/SystemManager.h"
 
 /* This file contains some standart request provides */
 
@@ -32,8 +32,8 @@ namespace CalX {
 				virtual bool execute(Request*, SystemManager*);\
 		};\
 		bool clname::execute(Request *req, SystemManager *sysman)
-		
-	
+
+
 	PROVIDER(EchoProvider, "echo") {
 		std::vector<ConfigValue*> &args = req->getArguments();
 		for (const auto& arg : args) {
@@ -42,7 +42,7 @@ namespace CalX {
 		std::cout << std::endl;
 		return true;
 	}
-	
+
 	PROVIDER(NullProvider, "") {
 		return true;
 	}

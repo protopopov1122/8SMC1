@@ -19,28 +19,28 @@
 
 
 #include <math.h>
-#include "CoordTranslator.h"
+#include "ctrl-lib/translator/CoordTranslator.h"
 
 namespace CalX {
-	
+
 	PolarCoordTranslator::PolarCoordTranslator(CoordTranslator *base)
 		: CoordTranslator::CoordTranslator(CoordType::PolarCoord) {
 		this->base = base;
 		INIT_LOG("PolarCoordTranslator");
 	}
-	
+
 	PolarCoordTranslator::~PolarCoordTranslator() {
 		DESTROY_LOG("PolarCoordTranslator");
 	}
-	
+
 	CoordTranslator *PolarCoordTranslator::getBase() {
 		return this->base;
 	}
-	
+
 	void PolarCoordTranslator::setBase(CoordTranslator *t) {
 		this->base = t;
 	}
-	
+
 	motor_point_t PolarCoordTranslator::get(double x, double y) {
 		double nx = x * cos(y);
 		double ny = x * sin(y);
@@ -51,7 +51,7 @@ namespace CalX {
 			return this->base->get(nx, ny);
 		}
 	}
-	
+
 	coord_point_t PolarCoordTranslator::get(motor_point_t pnt) {
 		coord_point_t out;
 		if (this->base == nullptr) {

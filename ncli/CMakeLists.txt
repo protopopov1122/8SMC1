@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.1)
 project(CalX)
 
 set (CMAKE_CXX_STANDARD 11)
-include_directories(${CMAKE_SOURCE_DIR}/headers ${CMAKE_SOURCE_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/headers)
 file(GLOB_RECURSE SRCS *.cpp)
 add_executable(calx_ncli ${SRCS})
 set(CPACK_COMPONENT_CALX_NCLI_DEPENDS calx_ctrl_lib CACHE INTERNAL "")

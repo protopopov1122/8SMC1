@@ -18,7 +18,7 @@
 */
 
 
-#include "GCodeParser.h"
+#include "ctrl-lib/misc/GCodeParser.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -43,7 +43,7 @@ namespace CalX {
 	char GCodeCommand::getLetter() {
 		return this->letter;
 	}
-	
+
     int64_t GCodeCommand::getCommand() {
 		return this->command;
 	}
@@ -64,23 +64,23 @@ namespace CalX {
 		this->args[a] = value;
 	}
 
-	
+
 	std::map<char, GCodeValue>::iterator GCodeCommand::argsBegin() {
 		return this->args.begin();
 	}
 	std::map<char, GCodeValue>::iterator GCodeCommand::argsEnd() {
 		return this->args.end();
 	}
-	
+
 	GCodeLexer::GCodeLexer(std::istream *is) {
 		this->is = is;
 		INIT_LOG("GCodeLexer");
 	}
-	
+
 	GCodeLexer::~GCodeLexer() {
 		DESTROY_LOG("GCodeLexer");
 	}
-	
+
 	int GCodeLexer::readChar() {
 		int chr = this->is->get();
 		while (chr == '(') {
@@ -93,7 +93,7 @@ namespace CalX {
 		}
 		return chr;
 	}
-	
+
 	GCodeField *GCodeLexer::nextField() {
 		int chr = readChar();
 		while (isspace(chr) && chr != EOF) {
@@ -136,14 +136,14 @@ namespace CalX {
 		}
 		return fld;
 	}
-	
+
 	GCodeParser::GCodeParser(GCodeLexer *lexer) {
 		this->lexer = lexer;
 		this->queue[0] = lexer->nextField();
 		this->queue[1] = lexer->nextField();
 		this->queue[2] = lexer->nextField();
 		this->queue[3] = lexer->nextField();
-		
+
 		this->PARAMETERS.insert('X');
 		this->PARAMETERS.insert('Y');
 		this->PARAMETERS.insert('Z');
@@ -158,7 +158,7 @@ namespace CalX {
 
 		INIT_LOG("GCodeParser");
 	}
-	
+
 	GCodeParser::~GCodeParser() {
 		for (size_t i = 0; i < 4; i++) {
 			if (this->queue[i] != nullptr) {
@@ -167,7 +167,7 @@ namespace CalX {
 		}
 		DESTROY_LOG("GCodeParser");
 	}
-	
+
 	void GCodeParser::nextField() {
 		if (this->queue[0] != nullptr) {
 			delete this->queue[0];
@@ -177,7 +177,7 @@ namespace CalX {
 		this->queue[2] = this->queue[3];
 		this->queue[3] = this->lexer->nextField();
 	}
-	
+
 	GCodeCommand *GCodeParser::nextCommand() {
 		GCodeCommand *com = nullptr;
 		if (this->queue[0] == nullptr) {
@@ -192,7 +192,7 @@ namespace CalX {
 		}
 		return com;
 	}
-	
+
 	CoordTask *gcode_translate(GCodeParser *parser, CoordTranslator *translator, ProgrammedCoordTask *task, ConfigManager *conf) {
 		motor_point_t offset = translator->get(0, 0);
 		coord_point_t last = {0, 0};
@@ -206,7 +206,7 @@ namespace CalX {
 		GCodeCommand *cmd = nullptr;
         const int_conf_t CHORD_COUNT = conf->getEntry("core")->getInt("chord_count", 100);
 		while ((cmd = parser->nextCommand()) != nullptr) {
-			
+
 			if (cmd->getLetter() == 'G') {
 				double x = cmd->hasArg('X') ? cmd->getArg('X').fractValue() : last.x;
 				double y = cmd->hasArg('Y') ? cmd->getArg('Y').fractValue() : last.y;
@@ -241,11 +241,9 @@ namespace CalX {
 				}
 				last = {x, y};
 			}
-			
+
 			delete cmd;
 		}
 		return task;
 	}
 }
-
-

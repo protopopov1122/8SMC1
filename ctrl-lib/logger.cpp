@@ -17,7 +17,7 @@
     along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "logger.h"
+#include "ctrl-lib/logger.h"
 #include <iostream>
 
 std::ostream *__ERRORS = nullptr;

@@ -18,10 +18,10 @@
 */
 
 
-#include "CoordPlane.h"
+#include "ctrl-lib/plane/CoordPlane.h"
 
 namespace CalX {
-	
+
 	CoordPlaneLog::CoordPlaneLog(CoordPlane *cplane, std::ostream *os, std::string prefix, bool log_act, bool log_err) {
 		this->plane = cplane;
 		this->out = os;
@@ -30,39 +30,39 @@ namespace CalX {
 		this->log_errors = log_err;
 		INIT_LOG("CoordPlaneLog");
 	}
-	
+
 	CoordPlaneLog::~CoordPlaneLog() {
 		DESTROY_LOG("CoordPlaneLog");
 	}
-	
+
 	CoordPlane *CoordPlaneLog::getBase() {
 		return this->plane;
 	}
-	
+
 	std::string CoordPlaneLog::getPrefix() {
 		return this->prefix;
 	}
-	
+
 	bool CoordPlaneLog::isLoggingActions() {
 		return this->log_actions;
 	}
-	
+
 	bool CoordPlaneLog::isLoggingErrors() {
 		return this->log_errors;
 	}
-	
+
 	void CoordPlaneLog::setPrefix(std::string p) {
 		this->prefix = p;
 	}
-	
+
 	void CoordPlaneLog::setLoggingActions(bool l) {
 		this->log_actions = l;
 	}
-	
+
 	void CoordPlaneLog::setLoggingErrors(bool l) {
 		this->log_errors = l;
 	}
-	
+
 	ErrorCode CoordPlaneLog::move(motor_point_t dest, float speed, int div, bool sync) {
 		if (this->log_actions) {
 			*out << this->prefix << "Linear moving to " << dest.x << "x" << dest.y << " with base speed " << speed
@@ -74,7 +74,7 @@ namespace CalX {
 		}
 		return err;
 	}
-	
+
 	ErrorCode CoordPlaneLog::arc(motor_point_t dest, motor_point_t center, int splitter, float speed, int div, bool clockwise, float scale, bool strict) {
 		if (this->log_actions) {
 			*out << this->prefix << (clockwise ? "Clockwise" : "Counter-clockwise" )
@@ -87,7 +87,7 @@ namespace CalX {
 		}
 		return err;
 	}
-	
+
 	ErrorCode CoordPlaneLog::calibrate(TrailerId tr) {
 		if (this->log_actions) {
 			*out << this->prefix << "Calibrating to trailer #" << static_cast<int>(tr) << std::endl;
@@ -98,7 +98,7 @@ namespace CalX {
 		}
 		return err;
 	}
-	
+
 	ErrorCode CoordPlaneLog::measure(TrailerId tr) {
 		if (this->log_actions) {
 			*out << this->prefix << "Measuring to trailer #" << static_cast<int>(tr) << std::endl;
@@ -109,11 +109,11 @@ namespace CalX {
 		}
 		return err;
 	}
-	
+
 	motor_point_t CoordPlaneLog::getPosition() {
 			return this->plane->getPosition();
 	}
-	
+
 	motor_rect_t CoordPlaneLog::getSize() {
 		return this->plane->getSize();
 	}
@@ -126,28 +126,28 @@ namespace CalX {
 		os << "log(prefix=\"" << this->prefix << "\"; log_actions="
 			<< this->log_actions << "; log_errors=" << this->log_errors << ")";
 	}
-	
+
 	void CoordPlaneLog::use() {
 		this->plane->use();
 	}
-	
+
 	void CoordPlaneLog::unuse() {
 		this->plane->unuse();
 	}
-	
+
 	void CoordPlaneLog::stop() {
 		this->plane->stop();
 	}
-	
+
 	CoordPlane *CoordPlaneLog::clone(CoordPlane *base) {
 		CoordPlaneLog *log = new CoordPlaneLog(base, this->out, this->prefix, this->log_actions, this->log_errors);
 		return log;
 	}
-	
+
 	ErrorCode CoordPlaneLog::open_session() {
 		return this->plane->open_session();
 	}
-	
+
 	ErrorCode CoordPlaneLog::close_session() {
 		return this->plane->close_session();
 	}

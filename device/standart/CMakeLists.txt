@@ -4,7 +4,7 @@ project(CalX)
 
 set (CMAKE_CXX_STANDARD 11)
 if (WIN32)
-	
+
 	if (EXISTS ${CMAKE_SOURCE_DIR}/res/USMCDLL.h)
 		include_directories(${CMAKE_SOURCE_DIR}/res)
 		add_library(USMCDLL SHARED stub.cpp)
@@ -19,9 +19,9 @@ if (WIN32)
 	else (EXISTS ${CMAKE_SOURCE_DIR}/res/USMCDLL.h)
 		add_library(USMCDLL SHARED IMPORTED)
 	endif (EXISTS ${CMAKE_SOURCE_DIR}/res/USMCDLL.h)
-	
-	
-	include_directories(${CMAKE_SOURCE_DIR})
+
+
+	include_directories(${CMAKE_SOURCE_DIR}/headers)
 	add_library(dev_standart SHARED 8SMC1Device.cpp NL300Instrument.cpp NL300Config.cpp NL300Command.cpp NL300Message.cpp StandartDeviceManager.cpp)
 	target_link_libraries(dev_standart calx USMCDLL)
 	add_custom_command(TARGET dev_standart POST_BUILD

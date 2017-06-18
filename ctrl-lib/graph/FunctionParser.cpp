@@ -18,11 +18,11 @@
 */
 
 
-#include "FunctionParser.h"
+#include "ctrl-lib/graph/FunctionParser.h"
 #include <iostream>
 
 namespace CalX {
-	
+
 	FunctionParser::FunctionParser(FunctionLexer *lexer) {
 		this->lexer = lexer;
 		this->tokens[0] = this->lexer->lex();
@@ -30,7 +30,7 @@ namespace CalX {
 		this->tokens[2] = this->lexer->lex();
 		INIT_LOG("FunctionParser");
 	}
-	
+
 	FunctionParser::~FunctionParser() {
 		for (size_t i = 0; i < 3; i++) {
 			if (this->tokens[i] != nullptr) {
@@ -39,12 +39,12 @@ namespace CalX {
 		}
 		DESTROY_LOG("FunctionParser");
 	}
-	
+
 	Node *FunctionParser::parse() {
 		Node *node = nextAddsub();
 		return node;
 	}
-	
+
 	Node *FunctionParser::nextAddsub() {
 		Node *node = nextMuldiv();
 		if (node == nullptr) {
@@ -63,7 +63,7 @@ namespace CalX {
 		}
 		return node;
 	}
-	
+
 	Node *FunctionParser::nextMuldiv() {
 		Node *node = nextPower();
 		if (node == nullptr) {
@@ -82,7 +82,7 @@ namespace CalX {
 		}
 		return node;
 	}
-	
+
 	Node *FunctionParser::nextPower() {
 		Node *node = nextFactor();
 		if (node == nullptr) {
@@ -99,7 +99,7 @@ namespace CalX {
 		}
 		return node;
 	}
-	
+
 	Node *FunctionParser::nextFactor() {
 		if (this->tokens[0] != nullptr &&
 			this->tokens[0]->type == TokenType::Integer) {
@@ -127,7 +127,7 @@ namespace CalX {
 					}
 					args->push_back(nextAddsub());
 					if (expectOperator(OperatorType::COMMA)) {
-						nextToken();	
+						nextToken();
 					} else if (!expectOperator(OperatorType::CLOSING_PARENTHESE)) {
 						for (const auto& nd : *args) {
 							delete nd;
@@ -161,7 +161,7 @@ namespace CalX {
 		}
 		return nullptr;
 	}
-	
+
 	Token *FunctionParser::nextToken() {
 		if (this->tokens[0] != nullptr) {
 			delete this->tokens[0];
@@ -171,13 +171,13 @@ namespace CalX {
 		this->tokens[2] = this->lexer->lex();
 		return this->tokens[0];
 	}
-	
+
 	bool FunctionParser::expectOperator(Token *tok, OperatorType op) {
 		return tok != nullptr &&
 				tok->type == TokenType::Operator &&
 				tok->oper == op;
 	}
-	
+
 	bool FunctionParser::expectOperator(OperatorType op) {
 		return expectOperator(this->tokens[0], op);
 	}

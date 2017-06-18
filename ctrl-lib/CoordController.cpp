@@ -18,8 +18,8 @@
 */
 
 
-#include "plane/CoordPlane.h"
-#include "misc/CircleGenerator.h"
+#include "ctrl-lib/plane/CoordPlane.h"
+#include "ctrl-lib/misc/CircleGenerator.h"
 #include <iostream>
 #include <stdio.h>
 #include <algorithm>
@@ -65,7 +65,7 @@ namespace CalX {
 	MotorController *CoordController::getYAxis() {
 		return this->yAxis;
 	}
-	
+
 	InstrumentController *CoordController::getInstrument() {
 		return this->instr;
 	}
@@ -83,7 +83,7 @@ namespace CalX {
 			this->yAxis->getPowerState() == Power::NoPower) {
 			return ErrorCode::PowerOff;
 		}
-		
+
 		if (!sync) {
 			float maxspeed = this->config->getEntry("core")->getReal("jump_speed", 0.0f);
 			if (maxspeed > 0 &&
@@ -117,7 +117,7 @@ namespace CalX {
 		if (!work) {
 			return ErrorCode::NoError;
 		}
-		
+
 		if (xAxis->dev->isRunning() || yAxis->dev->isRunning()) {
 			return ErrorCode::MotorRunning;
 		}
@@ -125,8 +125,8 @@ namespace CalX {
 				MoveType::MoveDown;
 		xAxis->use();
 		yAxis->use();
-		
-		
+
+
 		if (this->instr != nullptr) {
 			this->instr->use();
 			ErrorCode errcode = this->instr->enable(sync);
@@ -145,7 +145,7 @@ namespace CalX {
 			return ErrorCode::LowLevelError;
 		}
 		xAxis->sendMovingEvent(xmevt);
-		
+
 		MotorMoveEvent ymevt = {point.y, y_speed, div};
 		yAxis->dest = point.y > yAxis->dev->getPosition() ? MoveType::MoveUp :
 				MoveType::MoveDown;
@@ -159,7 +159,7 @@ namespace CalX {
 			return ErrorCode::LowLevelError;
 		}
 		yAxis->sendMovingEvent(ymevt);
-		
+
 		CoordMoveEvent evt = {point, speed, div, sync};
 		sendMovingEvent(evt);
 		use();
@@ -169,11 +169,11 @@ namespace CalX {
 				if (code != ErrorCode::NoError) {
 					xAxis->stop();
 					yAxis->stop();
-		
+
 					if (this->instr != nullptr && sync) {
 						this->instr->unuse();
 					}
-					
+
 					MotorErrorEvent merrevt = {code};
 					xAxis->sendStoppedEvent(merrevt);
 					yAxis->sendStoppedEvent(merrevt);
@@ -190,11 +190,11 @@ namespace CalX {
 				if (code != ErrorCode::NoError) {
 					xAxis->stop();
 					yAxis->stop();
-		
+
 					if (this->instr != nullptr && sync) {
 						this->instr->unuse();
 					}
-					
+
 					MotorErrorEvent merrevt = {code};
 					xAxis->sendStoppedEvent(merrevt);
 					yAxis->sendStoppedEvent(merrevt);
@@ -207,7 +207,7 @@ namespace CalX {
 				}
 			}
 		}
-		
+
 		ErrorCode errcode = ErrorCode::NoError;
 		if (this->instr != nullptr) {
 			this->instr->unuse();
@@ -291,7 +291,7 @@ namespace CalX {
 					xAxis->getMotor()->stop();
 				}
 			}
-				
+
 
 			if (!yAxis->getMotor()->isTrailerPressed(static_cast<int>(tr))) {
 				if (!ypr && !yAxis->getMotor()->isRunning()) {
@@ -438,7 +438,7 @@ namespace CalX {
 		center.y += relcenter.y;
 		return arc(dest, center, splitter, speed, div, clockwise, scale, strict);
 	}
-	
+
 	motor_rect_t CoordController::getSize() {
 		return this->size;
 	}
@@ -446,7 +446,7 @@ namespace CalX {
 	bool CoordController::isMeasured() {
 		return this->measured;
 	}
-	
+
 	ErrorCode CoordController::measure(TrailerId tid) {
 		if (this->xAxis->getPowerState() == Power::NoPower ||
 			this->yAxis->getPowerState() == Power::NoPower) {
@@ -469,48 +469,48 @@ namespace CalX {
 		this->measured = true;
 		return errcode;
 	}
-	
+
 	void CoordController::addEventListener(CoordEventListener *l) {
 		this->listeners.push_back(l);
 	}
-	
+
 	void CoordController::removeEventListener(CoordEventListener *l) {
 		this->listeners.erase(
 			std::remove(this->listeners.begin(), this->listeners.end(),
 				l), this->listeners.end());
-		delete l;	
+		delete l;
 	}
-	
+
 	void CoordController::sendMovingEvent(CoordMoveEvent &evt) {
 		for (const auto& l : this->listeners) {
 			l->moving(evt);
 		}
 	}
-	
+
 	void CoordController::sendMovedEvent(CoordMoveEvent &evt) {
 		for (const auto& l : this->listeners) {
 			l->moved(evt);
 		}
 	}
-	
+
 	void CoordController::sendStoppedEvent(CoordErrorEvent &evt) {
 		for (const auto& l : this->listeners) {
 			l->stopped(evt);
 		}
 	}
-	
+
 	void CoordController::sendCalibratingEvent(CoordCalibrateEvent &evt) {
 		for (const auto& l : this->listeners) {
 			l->calibrating(evt);
 		}
 	}
-	
+
 	void CoordController::sendCalibratedEvent(CoordCalibrateEvent &evt) {
 		for (const auto& l : this->listeners) {
 			l->calibrated(evt);
 		}
 	}
-	
+
 	void CoordController::use() {
 		for (const auto& l : this->listeners) {
 			l->use();
@@ -521,7 +521,7 @@ namespace CalX {
 			this->instr->use();
 		}
 	}
-	
+
 	void CoordController::unuse() {
 		for (const auto& l : this->listeners) {
 			l->unuse();
@@ -532,28 +532,28 @@ namespace CalX {
 			this->instr->unuse();
 		}
 	}
-	
+
 	void CoordController::stop() {
 		xAxis->stop();
 		yAxis->stop();
 		work = false;
 	}
-	
+
 	void CoordController::kill() {
 		defWork = false;
 		stop();
 	}
-	
+
 	CoordPlane *CoordController::clone(CoordPlane *base) {
 		return new CoordController(this->xAxis, this->yAxis, this->config, this->instr);
 	}
-	
+
 	ErrorCode CoordController::open_session() {
 		use();
 		LOG("CoordController", "Session opened");
 		return ErrorCode::NoError;
 	}
-	
+
 	ErrorCode CoordController::close_session() {
 		ErrorCode err = ErrorCode::NoError;
 		if (this->instr != nullptr &&

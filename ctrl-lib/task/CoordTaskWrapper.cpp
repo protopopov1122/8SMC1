@@ -19,40 +19,40 @@
 
 
 #include <vector>
-#include "CoordTask.h"
+#include "ctrl-lib/task/CoordTask.h"
 
 namespace CalX {
-	
+
 	CoordTaskWrapper::CoordTaskWrapper(CoordTask *task)
 			: CoordTask::CoordTask(CoordTaskType::WrapperTask) {
 		this->task = task;
 		INIT_LOG("CoordTaskWrapper");
 	}
-	
+
 	CoordTaskWrapper::~CoordTaskWrapper() {
 		delete this->task;
 		DESTROY_LOG("CoordTaskWrapper");
 	}
-	
+
 	void CoordTaskWrapper::setCalibration(TrailerId id) {
 		this->cal_tr = true;
 		this->tr = id;
 	}
-	
+
 	void CoordTaskWrapper::setValidation(motor_point_t min, motor_point_t max, float speed) {
 		this->coord_val = true;
 		this->val_min = min;
 		this->val_max = max;
 		this->val_speed = speed;
 	}
-	
+
 	void CoordTaskWrapper::setMap(motor_point_t offset, motor_scale_t sc, float speed) {
 		this->coord_map = true;
 		this->coord_offset = offset;
 		this->coord_scale = sc;
 		this->coord_speed_scale = speed;
 	}
-	
+
 	ErrorCode CoordTaskWrapper::perform(CoordPlane *plane, TaskParameters &prms, SystemManager *sysman, TaskState *state) {
 		std::vector<CoordPlane*> vec;
 		vec.push_back(plane);

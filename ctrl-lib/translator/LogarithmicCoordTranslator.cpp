@@ -21,37 +21,37 @@
 #include <math.h>
 #include <iostream>
 #include <iomanip>
-#include "CoordTranslator.h"
+#include "ctrl-lib/translator/CoordTranslator.h"
 
 namespace CalX {
-	
+
 	LogarithmicCoordTranslator::LogarithmicCoordTranslator(coord_scale_t scale, CoordTranslator *base)
 		: CoordTranslator::CoordTranslator(CoordType::LogarithmicCoord) {
 		this->base = base;
 		this->scale = scale;
 		INIT_LOG("LogarithmicCoordTranslator");
 	}
-	
+
 	LogarithmicCoordTranslator::~LogarithmicCoordTranslator() {
 		DESTROY_LOG("LogarithmicCoordTranslator");
 	}
-	
+
 	CoordTranslator *LogarithmicCoordTranslator::getBase() {
 		return this->base;
 	}
-	
+
 	void LogarithmicCoordTranslator::setBase(CoordTranslator *t) {
 		this->base = t;
 	}
-	
+
 	coord_scale_t LogarithmicCoordTranslator::getScale() {
 		return this->scale;
 	}
-	
+
 	void LogarithmicCoordTranslator::setScale(coord_scale_t s) {
 		this->scale = s;
 	}
-	
+
 	motor_point_t LogarithmicCoordTranslator::get(double x, double y) {
 		if (this->scale.x > 0) {
 			x = log(x) / log(this->scale.x);
@@ -66,7 +66,7 @@ namespace CalX {
 			return this->base->get(x, y);
 		}
 	}
-	
+
 	coord_point_t LogarithmicCoordTranslator::get(motor_point_t pnt) {
 		coord_point_t out;
 		if (this->base == nullptr) {
@@ -89,5 +89,5 @@ namespace CalX {
 		}
 		return new LogarithmicCoordTranslator(this->scale, base);
 	}
-	
+
 }

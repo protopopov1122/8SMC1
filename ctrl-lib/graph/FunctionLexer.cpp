@@ -18,22 +18,22 @@
 */
 
 
-#include "FunctionParser.h"
+#include "ctrl-lib/graph/FunctionParser.h"
 #include <string.h>
 #include <cinttypes>
 #include <stdio.h>
 
 namespace CalX {
-	
+
 	FunctionLexer::FunctionLexer(std::istream &is) {
 		this->in = &is;
 		INIT_LOG("FunctionLexer");
 	}
-	
+
 	FunctionLexer::~FunctionLexer() {
 		DESTROY_LOG("FunctionLexer");
 	}
-	
+
 	Token *FunctionLexer::lex() {
 		int chr = in->get();
 		while (isspace(chr)) {
@@ -55,7 +55,7 @@ namespace CalX {
 									lexem->type = TokenType::Operator;\
 									return lexem;\
 			                     } break;
-								 
+
 			OPER('+', OperatorType::PLUS)
 			OPER('-', OperatorType::MINUS)
 			OPER('*', OperatorType::STAR)
@@ -94,7 +94,7 @@ namespace CalX {
 		}
 		while (offset + 1 < BUF_SZ) {
             buf[offset++] = (char) chr;
-			
+
 			chr = in->get();
 			if (chr == EOF) {
 				break;

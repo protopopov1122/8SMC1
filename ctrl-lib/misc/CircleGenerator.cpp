@@ -18,7 +18,7 @@
 */
 
 
-#include "CircleGenerator.h"
+#include "ctrl-lib/misc/CircleGenerator.h"
 #include <iostream>
 #include <stdio.h>
 #include <math.h>
@@ -49,7 +49,7 @@ namespace CalX {
 		return this->radius;
 	}
 
-	motor_point_t Circle::getNextElement() {		
+	motor_point_t Circle::getNextElement() {
 		motor_point_t point;
 		if (stage % 4 == 0) {
 			if (curerr <= 0) {
@@ -93,7 +93,7 @@ namespace CalX {
 		return point;
 	}
 
-	motor_point_t Circle::getPrevElement() {		
+	motor_point_t Circle::getPrevElement() {
 		motor_point_t point;
 		// TODO Rewrite code
 		if (stage % 4 == 0) {
@@ -150,7 +150,7 @@ namespace CalX {
 		}
 		motor_point_t  start = {curx, cury};
 		motor_point_t cur = start;
-		
+
 		do {
 			if (!cw) {
 				cur = this->getNextElement();

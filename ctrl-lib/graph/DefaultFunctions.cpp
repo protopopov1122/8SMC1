@@ -18,14 +18,14 @@
 */
 
 
-#include "FunctionEngine.h"
+#include "ctrl-lib/graph/FunctionEngine.h"
 #include <math.h>
 
 /* This file contains implementation of some mathematical functions*
    that can be used with math evaluator.*/
 
 namespace CalX {
-	
+
 #define DefFun1(id, fn)\
 	class id : public EngineFunction {\
 		public:\
@@ -40,7 +40,7 @@ namespace CalX {
 				return res;\
 			}\
 	};
-	
+
 	DefFun1(SinFunction, sin)
 	DefFun1(CosFunction, cos)
 	DefFun1(TanFunction, tan)

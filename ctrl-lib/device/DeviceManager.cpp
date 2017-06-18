@@ -18,7 +18,7 @@
 */
 
 
-#include "DeviceManager.h"
+#include "ctrl-lib/device/DeviceManager.h"
 #include <stdio.h>
 #include <iostream>
 #include <fstream>

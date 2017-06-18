@@ -18,7 +18,7 @@
 */
 
 
-#include "MotorController.h"
+#include "ctrl-lib/MotorController.h"
 #include <algorithm>
 #include <iostream>
 
@@ -41,20 +41,20 @@ namespace CalX {
 	Motor *MotorController::getMotor() {
 		return this->dev;
 	}
-	
+
 	device_id_t MotorController::getID() {
 		return this->dev->getID();
 	}
-	
+
 	Power MotorController::getPowerState() {
 		return this->dev->getPowerState();
 	}
-	
+
 	ErrorCode MotorController::enablePower(bool p) {
 		bool res = this->dev->enablePower(p);
 		return res ? ErrorCode::NoError : ErrorCode::LowLevelError;
 	}
-	
+
 	ErrorCode MotorController::flipPower() {
 		return enablePower(getPowerState() == Power::NoPower);
 	}
@@ -110,7 +110,7 @@ namespace CalX {
         int_conf_t roll_speed = config->getEntry("core")->getInt("roll_speed", ROLL_SPEED);
         unsigned char roll_div = (unsigned char) config->getEntry("core")->getInt("roll_div", ROLL_DIV);
         int_conf_t comeback = config->getEntry("core")->getInt("trailer_comeback", TRAILER_COMEBACK);
-		
+
         int_conf_t dest = (tr == 1 ? -roll_step : roll_step);
 		this->dest = (tr == 1 ? MoveType::RollDown : MoveType::RollUp);
 		MotorRollEvent evt = {tr};
@@ -147,7 +147,7 @@ namespace CalX {
 		this->sendRolledEvent(evt);
 		this->unuse();
 		this->work = false;
-		
+
 		return errcode;
 	}
 
@@ -199,54 +199,54 @@ namespace CalX {
 	motor_coord_t MotorController::getPosition() {
 		return this->dev->getPosition();
 	}
-	
+
 	void MotorController::addEventListener(MotorEventListener *l) {
 		this->listeners.push_back(l);
 	}
-	
+
 	void MotorController::removeEventListener(MotorEventListener *l) {
 		this->listeners.erase(
 			std::remove(this->listeners.begin(), this->listeners.end(),
 				l), this->listeners.end());
 		delete l;
 	}
-	
+
 	void MotorController::sendMovingEvent(MotorMoveEvent &evt) {
 		for (const auto& l : this->listeners) {
 			l->moving(evt);
 		}
 	}
-	
+
 	void MotorController::sendMovedEvent(MotorMoveEvent &evt) {
 		for (const auto& l : this->listeners) {
 			l->moved(evt);
 		}
 	}
-	
+
 	void MotorController::sendStoppedEvent(MotorErrorEvent &evt) {
 		for (const auto& l : this->listeners) {
 			l->stopped(evt);
 		}
 	}
-	
+
 	void MotorController::sendRollingEvent(MotorRollEvent &evt) {
 		for (const auto& l : this->listeners) {
 			l->rolling(evt);
 		}
 	}
-	
+
 	void MotorController::sendRolledEvent(MotorRollEvent &evt) {
 		for (const auto& l : this->listeners) {
 			l->rolled(evt);
 		}
 	}
-	
+
 	void MotorController::use() {
 		for (const auto& l : this->listeners) {
 			l->use();
 		}
 	}
-	
+
 	void MotorController::unuse() {
 		for (const auto& l : this->listeners) {
 			l->unuse();

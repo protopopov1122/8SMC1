@@ -18,13 +18,13 @@
 */
 
 
-#include "GCodeWriter.h"
+#include "ctrl-lib/misc/GCodeWriter.h"
 
 namespace CalX {
 
 	GCodeWriter::GCodeWriter(motor_point_t pos, motor_rect_t size, CoordTranslator *trans, std::ostream *out)
 		: VirtualCoordPlane::VirtualCoordPlane(pos, size) {
-		
+
 		this->trans = trans;
 		this->out = out;
 		*out << "%" << std::endl;

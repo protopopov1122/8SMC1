@@ -18,21 +18,21 @@
 */
 
 
-#include "FunctionEngine.h"
+#include "ctrl-lib/graph/FunctionEngine.h"
 
 namespace CalX {
-	
+
 	EngineScope::EngineScope() {
 		INIT_LOG("EngineScope");
 	}
-	
+
 	EngineScope::~EngineScope() {
 		for (const auto& kv : this->func) {
 			delete kv.second;
 		}
 		DESTROY_LOG("EngineScope");
 	}
-	
+
 	engine_value_t EngineScope::getVariable(std::string id) {
 		engine_value_t val = {0, MathError::MNoError};
 		if (this->vars.count(id) == 0) {
@@ -42,19 +42,19 @@ namespace CalX {
 		val.value = this->vars[id];
 		return val;
 	}
-	
+
 	bool EngineScope::hasVariable(std::string id) {
 		return this->vars.count(id) != 0;
 	}
-	
+
 	void EngineScope::putVariable(std::string id, double val) {
 		this->vars[id] = val;
 	}
-	
+
 	bool EngineScope::hasFunction(std::string id) {
 		return this->func.count(id) != 0;
 	}
-	
+
 	bool EngineScope::addFunction(std::string id, EngineFunction *func) {
 		if (this->func.count(id) != 0) {
 			return false;
@@ -62,7 +62,7 @@ namespace CalX {
 		this->func[id] = func;
 		return true;
 	}
-	
+
 	engine_value_t EngineScope::evalFunction(std::string id, std::vector<double> &args) {
 		if (this->func.count(id) == 0) {
 			engine_value_t val = {0, MathError::MNoFunction};
@@ -71,19 +71,19 @@ namespace CalX {
 		EngineFunction *fun = this->func[id];
 		return fun->eval(args);
 	}
-	
+
 	FunctionEngine::FunctionEngine() {
 		INIT_LOG("FuntionEngine");
 	}
-	
+
 	FunctionEngine::~FunctionEngine() {
 		DESTROY_LOG("FunctionEngine");
 	}
-	
+
 	EngineScope *FunctionEngine::getScope() {
 		return &this->scope;
 	}
-	
+
 	engine_value_t FunctionEngine::eval(Node *node) {
 		return node->eval(this);
 	}

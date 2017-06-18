@@ -18,7 +18,7 @@
 */
 
 
-#include "CoordPlane.h"
+#include "ctrl-lib/plane/CoordPlane.h"
 #include "ctrl-lib/misc/CircleGenerator.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -28,13 +28,13 @@
 #endif
 
 namespace CalX {
-	
+
 	VirtualCoordPlane::VirtualCoordPlane(motor_point_t pos, motor_rect_t size) {
 		this->position = pos;
 		this->size = size;
 		INIT_LOG("VirtualCoordPlane");
 	}
-	
+
 	VirtualCoordPlane::~VirtualCoordPlane() {
 		DESTROY_LOG("VirtualCoordPlane");
 	}
@@ -42,7 +42,7 @@ namespace CalX {
 	void VirtualCoordPlane::dump(std::ostream &os) {
 		os << "virtual_coord";
 	}
-	
+
 	ErrorCode VirtualCoordPlane::move(motor_point_t point, float speed, int div,
 			bool sync) {
 		this->position = point;
@@ -102,7 +102,7 @@ namespace CalX {
 			abs(dest.y - pnt.y) / scale > COMPARISON_RADIUS);
 		return this->move(dest, speed, div, true);
 	}
-	
+
 	motor_rect_t VirtualCoordPlane::getSize() {
 		return this->size;
 	}
@@ -110,25 +110,25 @@ namespace CalX {
 	bool VirtualCoordPlane::isMeasured() {
 		return true;
 	}
-	
+
 	ErrorCode VirtualCoordPlane::measure(TrailerId tid) {
 		return ErrorCode::NoError;
 	}
-	
-	
+
+
 	void VirtualCoordPlane::use() {
 	}
-	
+
 	void VirtualCoordPlane::unuse() {
 	}
-	
+
 	void VirtualCoordPlane::stop() {
 	}
-	
+
 	ErrorCode VirtualCoordPlane::open_session() {
 		return ErrorCode::NoError;
 	}
-	
+
 	ErrorCode VirtualCoordPlane::close_session() {
 		return ErrorCode::NoError;
 	}

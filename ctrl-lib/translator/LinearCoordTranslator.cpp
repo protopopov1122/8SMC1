@@ -18,7 +18,7 @@
 */
 
 
-#include "CoordTranslator.h"
+#include "ctrl-lib/translator/CoordTranslator.h"
 
 namespace CalX {
 
@@ -41,19 +41,19 @@ namespace CalX {
 	coord_scale_t LinearCoordTranslator::getScale() {
 		return this->scale;
 	}
-	
+
 	CoordTranslator *LinearCoordTranslator::getBase() {
 		return this->base;
 	}
-	
+
 	void LinearCoordTranslator::setBase(CoordTranslator *t) {
 		this->base = t;
 	}
-	
+
 	void LinearCoordTranslator::setOffset(coord_point_t o) {
 		this->offset = o;
 	}
-	
+
 	void LinearCoordTranslator::setScale(coord_scale_t s) {
 		this->scale = s;
 	}
@@ -68,7 +68,7 @@ namespace CalX {
 			return this->base->get(nx, ny);
 		}
 	}
-	
+
 	coord_point_t LinearCoordTranslator::get(motor_point_t pnt) {
 		coord_point_t out;
 		if (this->base == nullptr) {

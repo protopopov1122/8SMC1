@@ -19,36 +19,36 @@
 
 
 #include <algorithm>
-#include "InstrumentController.h"
+#include "ctrl-lib/InstrumentController.h"
 
 namespace CalX {
-	
+
 	InstrumentController::InstrumentController(Instrument *instr) {
 		this->instr = instr;
 		this->state = true;
 		INIT_LOG("InstrumentController");
 	}
-	
+
 	InstrumentController::~InstrumentController() {
 		DESTROY_LOG("InstrumentController");
 	}
-	
+
 	Instrument *InstrumentController::getInstrument() {
 		return this->instr;
 	}
-	
+
 	device_id_t InstrumentController::getID() {
 		return this->instr->getID();
 	}
-	
+
 	ConfigManager *InstrumentController::getConfiguration() {
 		return this->instr->getConfiguration();
 	}
-	
+
 	bool InstrumentController::isEnabled() {
 		return this->instr->enabled();
 	}
-	
+
 	ErrorCode InstrumentController::enable(bool e) {
 		if ((e && this->state) != isEnabled()) {
 			if (!this->instr->enable(e && this->state)) {
@@ -58,15 +58,15 @@ namespace CalX {
 		}
 		return ErrorCode::NoError;
 	}
-	
+
 	ErrorCode InstrumentController::flipState() {
 		return enable(!isEnabled());
 	}
-	
+
 	bool InstrumentController::isRunnable() {
 		return this->state;
 	}
-	
+
 	void InstrumentController::setRunnable(bool r) {
 		this->state = r;
 		if (!this->state) {
@@ -74,42 +74,42 @@ namespace CalX {
 		}
 		sendStateChanged();
 	}
-	
+
 	std::string InstrumentController::getInfo() {
 		return this->instr->getDeviceInfo();
 	}
-	
+
 	InstrumentMode InstrumentController::getMode() {
 		return this->instr->getMode();
 	}
-	
+
 	bool InstrumentController::setMode(InstrumentMode m) {
 		return this->instr->setMode(m);
 	}
-	
+
 	void InstrumentController::addEventListener(InstrumentEventListener *l) {
 		this->listeners.push_back(l);
 	}
-	
+
 	void InstrumentController::removeEventListener(InstrumentEventListener *l) {
 		this->listeners.erase(
 			std::remove(this->listeners.begin(), this->listeners.end(),
 				l), this->listeners.end());
 		delete l;
 	}
-	
+
 	void InstrumentController::use() {
 		for (const auto& l : this->listeners) {
 			l->use();
 		}
 	}
-	
+
 	void InstrumentController::unuse() {
 		for (const auto& l : this->listeners) {
 			l->unuse();
 		}
 	}
-	
+
 	void InstrumentController::sendStateChanged() {
 		for (const auto& l : this->listeners) {
 			l->stateChanged(this->isRunnable(), this->isEnabled());
