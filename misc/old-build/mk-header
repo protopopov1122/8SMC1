@@ -16,7 +16,7 @@ CC_linux=g++
 LANG_linux=-std=c++11 -Wall -Wextra -pedantic -Wno-unused-parameter
 DBG_debug_linux=-O0 -DLOGGING
 DBG_release_linux=-O2
-INCLUDES_linux=-I.
+INCLUDES_linux=-I./headers
 CFLAGS_LIB_linux=-fPIC
 LDFLAGS_LIB_linux=
 CFLAGS_linux=$(LANG_linux) $(INCLUDES_linux)
@@ -30,7 +30,7 @@ CC_win=i686-w64-mingw32-g++
 LANG_win=-std=c++11 -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-attributes
 DBG_debug_win=-O0 -DLOGGING
 DBG_release_win=-O2
-INCLUDES_win=-I.
+INCLUDES_win=-I./headers
 CFLAGS_LIB_win=
 LDFLAGS_LIB_win=
 CFLAGS_win=$(LANG_win) $(DBG_win) $(INCLUDES_win)
