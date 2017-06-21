@@ -191,4 +191,23 @@ namespace CalX {
 		};
 		return out;
 	}
+	
+	ErrorCode FloatCoordPlane::relativeMove(coord_point_t relpoint, float speed, int div,
+			bool sync) {
+		coord_point_t point = getFloatPosition();
+		point.x += relpoint.x;
+		point.y += relpoint.y;
+		return move(point, speed, div, sync);
+	}
+
+	ErrorCode FloatCoordPlane::relativeArc(coord_point_t reldest, coord_point_t relcenter, int splitter,
+				float speed, int div, bool clockwise, float scale, bool strict) {
+		coord_point_t dest = getFloatPosition();
+		coord_point_t center = getFloatPosition();
+		dest.x += reldest.x;
+		dest.y += reldest.y;
+		center.x += relcenter.x;
+		center.y += relcenter.y;
+		return arc(dest, center, splitter, speed, div, clockwise, scale, strict);
+	}
 }

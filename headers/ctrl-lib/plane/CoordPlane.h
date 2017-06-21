@@ -340,6 +340,8 @@ namespace CalX {
 			// Floating-point methods
 			virtual ErrorCode move(coord_point_t, double, int, bool);
 			virtual ErrorCode arc(coord_point_t, coord_point_t, int, double, int, bool, float = 1.0f, bool = false);
+			virtual ErrorCode relativeMove(coord_point_t, float, int, bool);
+			virtual ErrorCode relativeArc(coord_point_t, coord_point_t, int, float, int, bool, float = 1.0f, bool = false);
 			virtual coord_point_t getFloatPosition();
 			virtual coord_rect_t getFloatSize();
 		private:
