@@ -26,6 +26,9 @@ namespace CalX {
 			: CoordPlaneStack::CoordPlaneStack(root) {
 			this->id = id;
 			this->root = root;
+			coord_point_t offset = {0.0, 0.0};
+			coord_scale_t scale = {1.0, 1.0};
+			this->floatPlane = new FloatCoordPlane(offset, scale, 1.0, root);
 			INIT_LOG("CoordHandle");
 		}
 
@@ -40,6 +43,24 @@ namespace CalX {
 
 		CoordController *CoordHandle::getController() {
 			return this->root;
+		}
+		
+		FloatCoordPlane *CoordHandle::getFloatPlane() {
+			return this->floatPlane;
+		}
+		
+		bool CoordHandle::popPlane() {
+			if (CoordPlaneStack::popPlane()) {
+				this->floatPlane->setBase(this->peekPlane());
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
+		void CoordHandle::pushPlane(CoordPlane *pl) {
+			CoordPlaneStack::pushPlane(pl);
+			this->floatPlane->setBase(this->peekPlane());
 		}
 
 		void CoordHandle::addEventListener(CoordEventListener *l) {

@@ -256,10 +256,10 @@ namespace CalX {
 			CoordPlaneStack(CoordPlane*);
 			virtual ~CoordPlaneStack();
 			
-			CoordPlane *peekPlane();
-			bool popPlane();
-			void pushPlane(CoordPlane*);
-			CoordPlane *getBase();
+			virtual CoordPlane *peekPlane();
+			virtual bool popPlane();
+			virtual void pushPlane(CoordPlane*);
+			virtual CoordPlane *getBase();
 			
 			virtual ErrorCode move(motor_point_t, float, int, bool);
 			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, float = 1.0f, bool = false);
@@ -317,6 +317,7 @@ namespace CalX {
 			coord_point_t getOffset();
 			coord_scale_t getScale();
 			double getSpeedScale();
+			void setBase(CoordPlane*);
 			void setOffset(coord_point_t);
 			void setScale(coord_scale_t);
 			void setSpeedScale(double);

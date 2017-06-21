@@ -33,12 +33,17 @@ namespace CalX {
 			
 			size_t getID();
 			CoordController *getController();
+			FloatCoordPlane *getFloatPlane();
+			
+			virtual bool popPlane();
+			virtual void pushPlane(CoordPlane*);
 			
 			void addEventListener(CoordEventListener*);
 			void removeEventListener(CoordEventListener*);
 		private:
 			size_t id;
 			CoordController *root;
+			FloatCoordPlane *floatPlane;
 	};
 }
 

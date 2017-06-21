@@ -47,6 +47,10 @@ namespace CalX {
 		return this->speed;
 	}
 	
+	void FloatCoordPlane::setBase(CoordPlane *pl) {
+		this->plane = pl;
+	}
+	
 	void FloatCoordPlane::setOffset(coord_point_t offset) {
 		this->offset = offset;
 	}
