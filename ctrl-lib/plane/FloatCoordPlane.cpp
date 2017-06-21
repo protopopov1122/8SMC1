@@ -168,7 +168,6 @@ namespace CalX {
 			static_cast<motor_coord_t>(round(center.y * this->scale.y + this->offset.y))
 		};
 
-		scale *= (this->scale.x + this->scale.y) / 2;
 		return this->plane->arc(pdest, pcen, splitter, static_cast<float>(speed * this->speed), div, clockwise, scale, strict);
 	}
 	
