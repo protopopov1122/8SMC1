@@ -306,6 +306,47 @@ namespace CalX {
 			motor_point_t position;
 			motor_rect_t size;
 	};
+	
+	// Floating-point coordinate plane
+	class FloatCoordPlane : public CoordPlane {
+		public:
+			FloatCoordPlane(coord_point_t, coord_scale_t, double, CoordPlane*);
+			virtual ~FloatCoordPlane();
+			
+			CoordPlane *getBase();
+			coord_point_t getOffset();
+			coord_scale_t getScale();
+			double getSpeedScale();
+			void setOffset(coord_point_t);
+			void setScale(coord_scale_t);
+			void setSpeedScale(double);
+			
+			// Proxy methods
+			virtual ErrorCode move(motor_point_t, float, int, bool);
+			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, float = 1.0f, bool = false);
+			virtual motor_point_t getPosition();
+			virtual motor_rect_t getSize();
+			virtual ErrorCode calibrate(TrailerId);
+			virtual ErrorCode measure(TrailerId);
+			virtual bool isMeasured();
+			virtual void use();
+			virtual void unuse();
+			virtual void stop();
+			virtual void dump(std::ostream&);
+			virtual CoordPlane *clone(CoordPlane*);
+			virtual ErrorCode open_session();
+			virtual ErrorCode close_session();
+			// Floating-point methods
+			virtual ErrorCode move(coord_point_t, double, int, bool);
+			virtual ErrorCode arc(coord_point_t, coord_point_t, int, double, int, bool, float = 1.0f, bool = false);
+			virtual coord_point_t getFloatPosition();
+			virtual coord_rect_t getFloatSize();
+		private:
+			coord_point_t offset;
+			coord_scale_t scale;
+			double speed;
+			CoordPlane *plane;
+	};
 }
 
 #endif

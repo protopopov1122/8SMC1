@@ -119,7 +119,8 @@ namespace CalX {
 
 	void CoordPlaneMap::dump(std::ostream &os) {
 		os << "map(offset=" << this->offset.x << "x" << this->offset.y
-			<< "; scale=" << this->scale.x << "x" << this->scale.y << ")";
+			<< "; scale=" << this->scale.x << "x" << this->scale.y
+			<< "; speed=" << this->speedScale << ")";
 	}
 
 	void CoordPlaneMap::use() {

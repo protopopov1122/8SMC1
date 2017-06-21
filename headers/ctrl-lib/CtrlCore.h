@@ -93,6 +93,13 @@ namespace CalX {
 		double x;
 		double y;
 	};
+	
+	struct coord_rect_t {
+		double x;
+		double y;
+		double w;
+		double h;
+	};
 }
 
 
