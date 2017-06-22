@@ -43,6 +43,7 @@ namespace CalX {
 			double getStep();
 			
 			ErrorCode build(SystemManager*, CoordPlane*, CoordTranslator*, float, TaskState*);
+			ErrorCode floatBuild(SystemManager*, FloatCoordPlane*, CoordTranslator*, float, TaskState*);
 		private:
 			Node *node;
 			coord_point_t min;
