@@ -24,7 +24,8 @@ namespace CalXUI {
 
 
 	void CalxCoordGraphCtrl::init() {
-		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
+		std::string units = wxGetApp().getUnits();
+		ConfigEntry *graphconf = wxGetApp().getSystemManager()->getConfiguration()->getEntry("graph");
 		wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 		SetSizer(sizer);
 
@@ -35,21 +36,33 @@ namespace CalXUI {
 		graphPanel->SetSizer(graphSizer);
 
 		this->expr = new wxTextCtrl(graphPanel, wxID_ANY, "x");
-        this->xmin = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                    wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, -10);
-        this->xmax = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                    wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 10);
-        this->ymin = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                    wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, -10);
-        this->ymax = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                    wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 10);
-		this->step = new wxTextCtrl(graphPanel, wxID_ANY, "1");
-        this->speed = new wxSpinCtrl(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
+        this->xmin = new wxSpinCtrlDouble(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                    wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX,
+									graphconf->getReal("x_from", -10.0),
+									graphconf->getReal("x_axis_step", 0.001));
+        this->xmax = new wxSpinCtrlDouble(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                    wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX,
+									graphconf->getReal("x_to", 10.0),
+									graphconf->getReal("x_axis_step", 0.001));
+        this->ymin = new wxSpinCtrlDouble(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                    wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX,
+									graphconf->getReal("y_from", -10.0),
+									graphconf->getReal("y_axis_step", 0.001));
+        this->ymax = new wxSpinCtrlDouble(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                    wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX,
+									graphconf->getReal("y_to", 10.0),
+									graphconf->getReal("y_axis_step", 0.001));
+		this->step = new wxSpinCtrlDouble(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                    wxDefaultSize, wxSP_ARROW_KEYS, graphconf->getReal("step_step", 0.001), INT_MAX,
+									graphconf->getReal("step", 0.1),
+									graphconf->getReal("step_step", 0.001));
+        this->speed = new wxSpinCtrlDouble(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                      wxDefaultSize, wxSP_ARROW_KEYS, 0,
-                                     (int) wxGetApp().getSystemManager()->getConfiguration()->
-                                        getEntry("core")->getInt("maxspeed", 4000),
-                                     (int) wxGetApp().getSystemManager()->getConfiguration()->
-                                        getEntry("core")->getInt("maxspeed", 4000));
+                                     wxGetApp().getSystemManager()->getConfiguration()->
+                                        getEntry("ui")->getReal("unit_speed", 4000.0),
+                                     wxGetApp().getSystemManager()->getConfiguration()->
+                                        getEntry("ui")->getReal("unit_speed", 4000.0),
+									 wxGetApp().getSpeedPrecision());
 		this->buildButton = new wxButton(graphPanel, wxID_ANY, __("Build"));
 		this->previewButton = new wxButton(graphPanel, wxID_ANY, __("Preview"));
 
@@ -79,11 +92,19 @@ namespace CalXUI {
 		graphSizer->Add(new wxStaticText(this, wxID_ANY, ""));
 		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, __("Build speed")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		graphSizer->Add(speed, 0, wxEXPAND);
-		graphSizer->Add(new wxStaticText(this, wxID_ANY, units.empty() ? "" : units + __("/sec")));
+		graphSizer->Add(new wxStaticText(this, wxID_ANY, wxGetApp().getSpeedUnits()));
 		graphSizer->Add(buildButton);
 		graphSizer->Add(previewButton);
 
-		this->translator = new CalxCoordFilterCtrl(this, wxID_ANY);
+		
+		ConfigManager *conf = wxGetApp().getSystemManager()->getConfiguration();
+		coord_point_t cen = {conf->getEntry("coords")->getInt("offset_x", 0),
+			conf->getEntry("coords")->getInt("offset_y", 0)};
+		coord_scale_t scl = {conf->getEntry("coords")->getInt("scale_x", 1),
+			conf->getEntry("coords")->getInt("scale_y", 1)};
+		LinearCoordTranslator *basic = new LinearCoordTranslator(cen, scl);
+		this->trans = new ComplexCoordTranslator(basic);
+		this->translator = new CalxCoordFilterCtrl(this, wxID_ANY, this->trans);
 		sizer->Add(this->translator, 1, wxALL | wxEXPAND, 5);
 	}
 

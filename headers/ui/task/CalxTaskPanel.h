@@ -66,7 +66,7 @@ namespace CalXUI {
 			wxPanel *execPanel;
 			wxButton *stopButton;
 			wxChoice *plane;
-			wxSpinCtrl *speed;
+			wxSpinCtrlDouble *speed;
 			CalxActionQueue *queue;
 			bool gcode_loader_runs;
 	};

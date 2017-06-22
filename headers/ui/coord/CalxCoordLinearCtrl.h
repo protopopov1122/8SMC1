@@ -41,9 +41,9 @@ namespace CalXUI {
 				: wxPanel::wxPanel(win, id) {
 				init();
 			}
-			int getCoordX() {return xCoord->GetValue();}
-			int getCoordY() {return yCoord->GetValue();}
-			int getSpeed() {return speed->GetValue();}
+			double getCoordX() {return xCoord->GetValue();}
+			double getCoordY() {return yCoord->GetValue();}
+			double getSpeed() {return speed->GetValue();}
 			int getDivisor() {return 1 << divisor->GetSelection();}
 			bool isRelative() {return relative->GetValue();}
 			wxButton *getMoveButton() {return this->moveButton;}
@@ -52,9 +52,9 @@ namespace CalXUI {
 			void init();
 			wxButton *moveButton;
 			wxButton *jumpButton;
-			wxSpinCtrl *xCoord;
-			wxSpinCtrl *yCoord;
-			wxSpinCtrl *speed;
+			wxSpinCtrlDouble *xCoord;
+			wxSpinCtrlDouble *yCoord;
+			wxSpinCtrlDouble *speed;
 			wxChoice *divisor;
 			wxCheckBox *relative;
 	};

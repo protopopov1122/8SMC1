@@ -57,6 +57,12 @@ namespace CalXUI {
 			SystemManager *getSystemManager();
 			CalxErrorHandler *getErrorHandler();
 			CalxFrame *getMainFrame();
+			
+			std::string formatDouble(double);
+			std::string getUnits();
+			std::string getSpeedUnits();
+			double getUnitPrecision();
+			double getSpeedPrecision();
 		private:
 			void loadDevicesPlugin();
 

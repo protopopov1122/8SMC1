@@ -92,8 +92,8 @@ namespace CalXUI {
 
 			MoveTaskStep *step;
 
-			wxSpinCtrl *xCoord;
-			wxSpinCtrl *yCoord;
+			wxSpinCtrlDouble *xCoord;
+			wxSpinCtrlDouble *yCoord;
 			wxSpinCtrlDouble *speed;
 			wxCheckBox *relative;
 	};
@@ -108,8 +108,8 @@ namespace CalXUI {
 
 			JumpTaskStep *step;
 
-			wxSpinCtrl *xCoord;
-			wxSpinCtrl *yCoord;
+			wxSpinCtrlDouble *xCoord;
+			wxSpinCtrlDouble *yCoord;
 			wxSpinCtrlDouble *speed;
 			wxCheckBox *relative;
 	};
@@ -124,10 +124,10 @@ namespace CalXUI {
 
 			ArcTaskStep *step;
 
-			wxSpinCtrl *destXCoord;
-			wxSpinCtrl *destYCoord;
-			wxSpinCtrl *cenXCoord;
-			wxSpinCtrl *cenYCoord;
+			wxSpinCtrlDouble *destXCoord;
+			wxSpinCtrlDouble *destYCoord;
+			wxSpinCtrlDouble *cenXCoord;
+			wxSpinCtrlDouble *cenYCoord;
 			wxSpinCtrlDouble *speed;
 			wxSpinCtrl *splitter;
 			wxCheckBox *clockwise;
@@ -166,17 +166,17 @@ namespace CalXUI {
 			virtual CoordTask *getTask();
 			virtual ComplexCoordTranslator *getTranslator();
 			virtual void update();
-			void setRectangle(motor_rect_t);
+			void setRectangle(coord_rect_t);
 		private:
 			void OnFieldChange(wxCommandEvent&);
 			void OnExit(wxCloseEvent&);
 			LinearCoordTask *task;
 			ComplexCoordTranslator *trans;
-			wxSpinCtrl *xCoord;
-			wxSpinCtrl *yCoord;
-			wxSpinCtrl *wDim;
-			wxSpinCtrl *hDim;
-			wxSpinCtrl *spacing;
+			wxSpinCtrlDouble *xCoord;
+			wxSpinCtrlDouble *yCoord;
+			wxSpinCtrlDouble *wDim;
+			wxSpinCtrlDouble *hDim;
+			wxSpinCtrlDouble *spacing;
 			wxCheckBox *vertical;
 	};
 }

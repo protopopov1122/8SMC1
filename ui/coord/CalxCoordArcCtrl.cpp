@@ -24,24 +24,24 @@ namespace CalXUI {
 
 
 	void CalxCoordArcCtrl::init() {
-		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
+		std::string units = wxGetApp().getUnits();
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 		SetSizer(sizer);
 
-        this->xCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                      wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
-        this->yCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                      wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
-        this->cxCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                       wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
-        this->cyCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                       wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
-        this->speed = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+        this->xCoord = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                      wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitPrecision());
+        this->yCoord = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                      wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitPrecision());
+        this->cxCoord = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                      wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitPrecision());
+        this->cyCoord = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                      wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitPrecision());
+        this->speed = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                      wxDefaultSize, wxSP_ARROW_KEYS, 0,
                                      (int) wxGetApp().getSystemManager()->getConfiguration()->
-                                        getEntry("core")->getInt("maxspeed", 4000),
+                                        getEntry("ui")->getReal("unit_speed", 4000.0),
                                      (int) wxGetApp().getSystemManager()->getConfiguration()->
-                                        getEntry("core")->getInt("maxspeed", 4000));
+                                        getEntry("ui")->getReal("unit_speed", 4000.0), wxGetApp().getSpeedPrecision());
 		this->divisor = new wxChoice(this, wxID_ANY);
 		this->divisor->Append("1");
 		this->divisor->Append("2");
@@ -74,7 +74,7 @@ namespace CalXUI {
 		sizer->Add(new wxStaticText(this, wxID_ANY, units));
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Speed") + std::string(":")));
 		sizer->Add(speed, 0, wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, units.empty() ? "" : units + __("/sec")));
+		sizer->Add(new wxStaticText(this, wxID_ANY, wxGetApp().getSpeedUnits()));
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Divisor") + std::string(":")));
 		sizer->Add(divisor);
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""));

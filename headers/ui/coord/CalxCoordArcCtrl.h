@@ -41,11 +41,11 @@ namespace CalXUI {
 				: wxPanel::wxPanel(win, id) {
 				init();
 			}
-			int getCoordX() {return xCoord->GetValue();}
-			int getCoordY() {return yCoord->GetValue();}
-			int getCenterCoordX() {return cxCoord->GetValue();}
-			int getCenterCoordY() {return cyCoord->GetValue();}
-			int getSpeed() {return speed->GetValue();}
+			double getCoordX() {return xCoord->GetValue();}
+			double getCoordY() {return yCoord->GetValue();}
+			double getCenterCoordX() {return cxCoord->GetValue();}
+			double getCenterCoordY() {return cyCoord->GetValue();}
+			double getSpeed() {return speed->GetValue();}
 			int getDivisor() {return 1 << divisor->GetSelection();}
 			int getSplitter() {return splitter->GetValue();}
 			bool isClockwise() {return clockwise->GetValue();}
@@ -54,11 +54,11 @@ namespace CalXUI {
 		private:
 			void init();
 			wxButton *moveButton;
-			wxSpinCtrl *xCoord;
-			wxSpinCtrl *yCoord;
-			wxSpinCtrl *cxCoord;
-			wxSpinCtrl *cyCoord;
-			wxSpinCtrl *speed;
+			wxSpinCtrlDouble *xCoord;
+			wxSpinCtrlDouble *yCoord;
+			wxSpinCtrlDouble *cxCoord;
+			wxSpinCtrlDouble *cyCoord;
+			wxSpinCtrlDouble *speed;
 			wxChoice *divisor;
 			wxSpinCtrl *splitter;
 			wxCheckBox *clockwise;

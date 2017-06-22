@@ -34,11 +34,11 @@ namespace CalXUI {
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 		SetSizer(sizer);
 
-        this->xCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                      wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, (int) pos.x);
-        this->yCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                      wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, (int) pos.y);
-		this->speed = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1, 1, 0.01);
+        this->xCoord = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                      wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitPrecision());
+        this->yCoord = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                      wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitPrecision());
+		this->speed = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1, 1, 0.001);
 		this->relative = new wxCheckBox(this, wxID_ANY, __("Relative"));
 		this->relative->SetValue(step->isRelative());
 
@@ -53,7 +53,7 @@ namespace CalXUI {
 		sizer->Add(new wxStaticText(this, wxID_ANY, units));
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Speed") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(speed);
-		sizer->Add(new wxStaticText(this, wxID_ANY, units.empty() ? "" : units + __("/sec")));
+		sizer->Add(new wxStaticText(this, wxID_ANY, wxGetApp().getSpeedUnits()));
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""), 0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(relative);
 
@@ -70,7 +70,9 @@ namespace CalXUI {
 	}
 
 	void CalxTaskLinearStepHandle::update() {
-		motor_point_t pos = {xCoord->GetValue(), yCoord->GetValue()};
+		double scale = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("unit_scale", 1.0);
+		motor_point_t pos = {static_cast<motor_coord_t>(xCoord->GetValue() * scale),
+		                     static_cast<motor_coord_t>(yCoord->GetValue() * scale)};
 		step->setPosition(pos);
 		double speed = this->speed->GetValue();
 		step->setSpeed((float) speed);
@@ -90,13 +92,12 @@ namespace CalXUI {
 
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 		SetSizer(sizer);
-
-        this->xCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                      wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, (int) pos.x);
-        this->yCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                      wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, (int) pos.y);
-        this->speed = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                           wxDefaultSize, wxSP_ARROW_KEYS, 0, 1, 1, 0.01);
+		
+        this->xCoord = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                      wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitPrecision());
+        this->yCoord = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                      wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitPrecision());
+		this->speed = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1, 1, 0.001);
 		this->relative = new wxCheckBox(this, wxID_ANY, __("Relative"));
 		this->relative->SetValue(step->isRelative());
 
@@ -128,7 +129,9 @@ namespace CalXUI {
 	}
 
 	void CalxTaskLinearJumpStepHandle::update() {
-		motor_point_t pos = {xCoord->GetValue(), yCoord->GetValue()};
+		double scale = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("unit_scale", 1.0);
+		motor_point_t pos = {static_cast<motor_coord_t>(xCoord->GetValue() * scale),
+		                     static_cast<motor_coord_t>(yCoord->GetValue() * scale)};
 		step->setPosition(pos);
 		double speed = this->speed->GetValue();
 		step->setSpeed((float) speed);
@@ -149,14 +152,18 @@ namespace CalXUI {
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 		SetSizer(sizer);
 
-        this->destXCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                          wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, (int) pnt.x);
-        this->destYCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                          wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, (int) pnt.y);
-        this->cenXCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                         wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, (int) pnt.x);
-        this->cenYCoord = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                         wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, (int) pnt.y);
+        this->destXCoord = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                          wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0,
+										  wxGetApp().getUnitPrecision());
+        this->destYCoord = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                          wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, (int) pnt.y,
+										  wxGetApp().getUnitPrecision());
+        this->cenXCoord = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                         wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, (int) pnt.x,
+										  wxGetApp().getUnitPrecision());
+        this->cenYCoord = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                         wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, (int) pnt.y,
+										  wxGetApp().getUnitPrecision());
         this->splitter = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                         wxDefaultSize, wxSP_ARROW_KEYS, 0, 1000, step->getSplitter());
 		this->speed = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1, step->getSpeed(), 0.01);
@@ -210,8 +217,11 @@ namespace CalXUI {
 	}
 
 	void CalxTaskArcStepHandle::update() {
-		motor_point_t dest = {destXCoord->GetValue(), destYCoord->GetValue()};
-		motor_point_t cen = {cenXCoord->GetValue(), cenYCoord->GetValue()};
+		double scale = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("unit_scale", 1.0);
+		motor_point_t dest = {static_cast<motor_coord_t>(destXCoord->GetValue() * scale),
+		                     static_cast<motor_coord_t>(destYCoord->GetValue() * scale)};
+		motor_point_t cen = {static_cast<motor_coord_t>(cenXCoord->GetValue() * scale),
+		                     static_cast<motor_coord_t>(cenYCoord->GetValue() * scale)};
         float speed = static_cast<float>(this->speed->GetValue());
 		int splitter = this->splitter->GetValue();
 		bool cw = this->clockwise->GetValue();

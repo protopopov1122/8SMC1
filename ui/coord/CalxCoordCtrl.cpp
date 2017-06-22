@@ -44,13 +44,13 @@ namespace CalXUI {
 		this->used = 0;
 		this->master = false;
 
-		motor_point_t unit_offset = {0, 0};
-		motor_scale_t unit_scale = {
-			wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("unit_scale", 1.0f),
-			wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("unit_scale", 1.0f)
+		motor_point_t plane_offset = {0, 0};
+		motor_scale_t plane_scale = {
+			wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("plane_scale", 1.0f),
+			wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("plane_scale", 1.0f)
 		};
-		float speed_scale = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("speed_scale", 1.0f);
-		this->unit_map = new CoordPlaneMap(unit_offset, unit_scale, speed_scale, ctrl->peekPlane());
+		float plane_speed_scale = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("plane_speed_scale", 1.0f);
+		this->unit_map = new CoordPlaneMap(plane_offset, plane_scale, plane_speed_scale, ctrl->peekPlane());
 		ctrl->pushPlane(this->unit_map);
 		motor_point_t validateMin = {INT_MIN, INT_MIN};
 		motor_point_t validateMax = {INT_MAX, INT_MAX};
@@ -62,6 +62,14 @@ namespace CalXUI {
 		motor_scale_t mapScale = {1.0f, 1.0f};
 		this->map = new CoordPlaneMap(mapOffset, mapScale, 1, ctrl->peekPlane());
 		ctrl->pushPlane(this->map);
+		
+		coord_scale_t unit_scale = {
+			wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("unit_scale", 1.0f),
+			wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("unit_scale", 1.0f)
+		};
+		float unit_speed_scale = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("speed_scale", 1.0f);
+		ctrl->getFloatPlane()->setScale(unit_scale);
+		ctrl->getFloatPlane()->setSpeedScale(unit_speed_scale);
 
 		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
 		this->queue->Run();
@@ -266,20 +274,23 @@ namespace CalXUI {
 	}
 
 	void CalxCoordCtrl::updateUI() {
-		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
+		std::string units = wxGetApp().getUnits();
 		std::string general = FORMAT(__("Name: Coordinate plane #%s"), std::to_string(ctrl->getID())) + "\n" +
 							  FORMAT(__("Devices: #%s #%s"), std::to_string(ctrl->getController()->getXAxis()->getID()),
 									std::to_string(ctrl->getController()->getYAxis()->getID())) + "\n" +
 							  (ctrl->getController()->getInstrument() != nullptr ?
 								FORMAT(__("Instrument #%s"), std::to_string(ctrl->getController()->getInstrument()->getID())) :
 								__("Instrument: no")) + "\n" +
-							  FORMAT(__("Position: %sx%s %s"), std::to_string(ctrl->getPosition().x),
-										std::to_string(ctrl->getPosition().y), units) + "\n" +
-							  (ctrl->isMeasured() ? FORMAT(__("Start: %sx%s %s"), std::to_string(ctrl->getSize().x),
-							                                                   std::to_string(ctrl->getSize().y), units) :
+							  FORMAT(__("Position: %sx%s %s"), wxGetApp().formatDouble(ctrl->getFloatPlane()->getFloatPosition().x),
+										wxGetApp().formatDouble(ctrl->getFloatPlane()->getFloatPosition().y), units) + "\n" +
+							  (ctrl->isMeasured() ? FORMAT(__("Start: %sx%s %s"),
+		                                                                wxGetApp().formatDouble(ctrl->getFloatPlane()->getFloatSize().x),
+							                                            wxGetApp().formatDouble(ctrl->getFloatPlane()->getFloatSize().y), units) :
 													__("Start: Not measured")) + "\n" +
-							  (ctrl->isMeasured() ? FORMAT(__("Size: %sx%s %s"), std::to_string(ctrl->getSize().w),
-							                                                   std::to_string(ctrl->getSize().h), units) :
+							  (ctrl->isMeasured() ? FORMAT(__("Size: %sx%s %s"),
+							                                        wxGetApp().formatDouble(ctrl->getFloatPlane()->getFloatSize().w),
+							                                        wxGetApp().formatDouble(ctrl->getFloatPlane()->getFloatSize().h),
+																	units) :
 													__("Size: Not measured"));
 		this->generalInfoText->SetLabel(general);
 		Layout();
@@ -302,21 +313,21 @@ namespace CalXUI {
 	}
 
 	void CalxCoordCtrl::OnLinearMoveClick(wxCommandEvent &evt) {
-		motor_point_t dest = {linear->getCoordX(), linear->getCoordY()};
-		this->queue->addAction(new CalxCoordMoveAction(this, ctrl, true, linear->isRelative(), dest, linear->getSpeed(), linear->getDivisor()));
+		coord_point_t dest = {linear->getCoordX(), linear->getCoordY()};
+		this->queue->addAction(new CalxCoordFloatMoveAction(this, ctrl, true, linear->isRelative(), dest, linear->getSpeed(), linear->getDivisor()));
 	}
 
 	void CalxCoordCtrl::OnLinearJumpClick(wxCommandEvent &evt) {
-		motor_point_t dest = {linear->getCoordX(), linear->getCoordY()};
-		float speed = linear->getSpeed();
-		this->queue->addAction(new CalxCoordMoveAction(this, ctrl, false, linear->isRelative(), dest, speed, linear->getDivisor()));
+		coord_point_t dest = {linear->getCoordX(), linear->getCoordY()};
+		double speed = linear->getSpeed();
+		this->queue->addAction(new CalxCoordFloatMoveAction(this, ctrl, false, linear->isRelative(), dest, speed, linear->getDivisor()));
 	}
 
 	void CalxCoordCtrl::OnArcMoveClick(wxCommandEvent &evt) {
-		motor_point_t dest = {arc->getCoordX(), arc->getCoordY()};
-		motor_point_t cen = {arc->getCenterCoordX(), arc->getCenterCoordY()};
-		float speed = arc->getSpeed();
-		this->queue->addAction(new CalxCoordArcAction(this, ctrl, arc->isRelative(), dest, cen, arc->getSplitter(), speed, arc->getDivisor(), arc->isClockwise()));
+		coord_point_t dest = {arc->getCoordX(), arc->getCoordY()};
+		coord_point_t cen = {arc->getCenterCoordX(), arc->getCenterCoordY()};
+		double speed = arc->getSpeed();
+		this->queue->addAction(new CalxCoordFloatArcAction(this, ctrl, arc->isRelative(), dest, cen, arc->getSplitter(), speed, arc->getDivisor(), arc->isClockwise()));
 	}
 
 	void CalxCoordCtrl::OnGraphBuildClick(wxCommandEvent &evt) {
@@ -338,7 +349,7 @@ namespace CalXUI {
 		coord_point_t min = {minx, miny};
 		coord_point_t max = {maxx, maxy};
 		GraphBuilder *graph = new GraphBuilder(node, min, max, step);
-		this->queue->addAction(new CalxCoordGraphAction(this, ctrl, trans, graph, speed));
+		this->queue->addAction(new CalxCoordGraphAction(this, ctrl, trans, graph, speed, true));
 	}
 
 	void CalxCoordCtrl::OnGraphPreviewClick(wxCommandEvent &evt) {
@@ -365,7 +376,7 @@ namespace CalXUI {
 		coord_point_t max = {maxx, maxy};
 		GraphBuilder *graph = new GraphBuilder(node, min, max, step);
 		CalxVirtualPlaneDialog *dialog = new CalxVirtualPlaneDialog(this, wxID_ANY, ctrl, wxSize(500, 500));
-		this->queue->addAction(new CalxCoordPreviewAction(this, dialog, trans, graph, speed));
+		this->queue->addAction(new CalxCoordPreviewAction(this, dialog, trans, graph, speed, true));
 		dialog->ShowModal();
 		delete dialog;
 	}
@@ -472,20 +483,20 @@ namespace CalXUI {
 			return;
 		}
 
-		motor_rect_t size = this->ctrl->getSize();
-		motor_coord_t x = (motor_coord_t) (((double) size.w) * posCtrl->getXPosition()) + size.x;
-		motor_coord_t y = (motor_coord_t) (((double) size.h) * posCtrl->getYPosition()) + size.y;
-		int speed = posCtrl->getSpeed();
+		coord_rect_t size = this->ctrl->getFloatPlane()->getFloatSize();
+		double x = (((double) size.w) * posCtrl->getXPosition()) + size.x;
+		double y = (((double) size.h) * posCtrl->getYPosition()) + size.y;
+		double speed = posCtrl->getSpeed();
 		int div = posCtrl->getDivisor();
-		motor_point_t dest = {x, y};
-		this->queue->addAction(new CalxCoordMoveAction(this, ctrl, false, false, dest, speed, div));
+		coord_point_t dest = {x, y};
+		this->queue->addAction(new CalxCoordFloatMoveAction(this, ctrl, false, false, dest, speed, div));
 	}
 
 	void CalxCoordCtrl::OnConfigureClick(wxCommandEvent &evt) {
 		CalxCoordPositionCtrl *posCtrl = this->otherCtrl->getPositionController();
-		int speed = posCtrl->getSpeed();
+		double speed = posCtrl->getSpeed();
 		int div = posCtrl->getDivisor();
 		coord_point_t dest = {posCtrl->getXPosition(), posCtrl->getYPosition()};
-		this->queue->addAction(new CalxCoordConfigureAction(this, ctrl, false, false, dest, speed, div));
+		this->queue->addAction(new CalxCoordConfigureAction(this, ctrl, false, false, dest, speed, div, true));
 	}
 }

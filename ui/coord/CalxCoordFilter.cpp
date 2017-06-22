@@ -83,11 +83,19 @@ namespace CalXUI {
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(2);
 		SetSizer(sizer);
 
-		this->xoffset = new wxTextCtrl(this, wxID_ANY, std::to_string(ctrl->getOffset().x));
-		this->yoffset = new wxTextCtrl(this, wxID_ANY, std::to_string(ctrl->getOffset().y));
-		this->xscale = new wxTextCtrl(this, wxID_ANY, std::to_string(ctrl->getScale().x));
-		this->yscale = new wxTextCtrl(this, wxID_ANY, std::to_string(ctrl->getScale().y));
-
+		this->xoffset = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                      wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, ctrl->getOffset().x,
+									  wxGetApp().getUnitPrecision());
+		this->yoffset = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                      wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, ctrl->getOffset().y,
+									  wxGetApp().getUnitPrecision());
+		this->xscale = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                      wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, ctrl->getScale().x,
+									  wxGetApp().getUnitPrecision());
+		this->yscale = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                      wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, ctrl->getScale().y,
+									  wxGetApp().getUnitPrecision());
+		
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("X offset") + std::string(":")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		sizer->Add(xoffset, 0, wxALL | wxEXPAND);
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Y offset") + std::string(":")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
@@ -97,10 +105,10 @@ namespace CalXUI {
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Y scale") + std::string(":")), 0,wxRIGHT |  wxALIGN_RIGHT, 5);
 		sizer->Add(yscale, 0, wxALL | wxEXPAND);
 
-		xoffset->Bind(wxEVT_TEXT, &CalxCoordLinearFilter::OnFieldChange, this);
-		yoffset->Bind(wxEVT_TEXT, &CalxCoordLinearFilter::OnFieldChange, this);
-		xscale->Bind(wxEVT_TEXT, &CalxCoordLinearFilter::OnFieldChange, this);
-		yscale->Bind(wxEVT_TEXT, &CalxCoordLinearFilter::OnFieldChange, this);
+		xoffset->Bind(wxEVT_SPINCTRL, &CalxCoordLinearFilter::OnFieldChange, this);
+		yoffset->Bind(wxEVT_SPINCTRL, &CalxCoordLinearFilter::OnFieldChange, this);
+		xscale->Bind(wxEVT_SPINCTRL, &CalxCoordLinearFilter::OnFieldChange, this);
+		yscale->Bind(wxEVT_SPINCTRL, &CalxCoordLinearFilter::OnFieldChange, this);
 
 		Layout();
 	}
@@ -112,28 +120,10 @@ namespace CalXUI {
 
 	void CalxCoordLinearFilter::updateData() {
 		double ox, oy, sx, sy;
-		if (!this->xoffset->GetValue().ToDouble(&ox)) {
-			wxMessageBox(__("Enter valid real value"), __("Error"), wxICON_ERROR);
-			this->xoffset->SetValue(std::to_string(translator->getOffset().x));
-			return;
-		}
-
-		if (!this->yoffset->GetValue().ToDouble(&oy)) {
-			wxMessageBox(__("Enter valid real value"), __("Error"), wxICON_ERROR);
-			this->yoffset->SetValue(std::to_string(translator->getOffset().y));
-			return;
-		}
-
-		if (!this->xscale->GetValue().ToDouble(&sx)) {
-			wxMessageBox(__("Enter valid real value"), __("Error"), wxICON_ERROR);
-			this->xscale->SetValue(std::to_string(translator->getScale().x));
-			return;
-		}
-		if (!this->yscale->GetValue().ToDouble(&sy)) {
-			wxMessageBox(__("Enter valid real value"), __("Error"), wxICON_ERROR);
-			this->yscale->SetValue(std::to_string(translator->getScale().y));
-			return;
-		}
+		ox = this->xoffset->GetValue();
+		oy = this->yoffset->GetValue();
+		sx = this->xscale->GetValue();
+		sy = this->yscale->GetValue();
 		coord_point_t offset = {ox, oy};
 		coord_scale_t scale = {sx, sy};
 		this->translator->setOffset(offset);
@@ -152,16 +142,20 @@ namespace CalXUI {
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(2);
 		SetSizer(sizer);
 
-		this->xscale = new wxTextCtrl(this, wxID_ANY, std::to_string(trans->getScale().x));
-		this->yscale = new wxTextCtrl(this, wxID_ANY, std::to_string(trans->getScale().y));
+		this->xscale = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                      wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, trans->getScale().x,
+									  wxGetApp().getUnitPrecision());
+		this->yscale = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                      wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, trans->getScale().x,
+									  wxGetApp().getUnitPrecision());
 
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("X scale") + std::string(":")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		sizer->Add(xscale, 0, wxALL | wxEXPAND);
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Y scale") + std::string(":")), 0,wxRIGHT |  wxALIGN_RIGHT, 5);
 		sizer->Add(yscale, 0, wxALL | wxEXPAND);
 
-		xscale->Bind(wxEVT_TEXT, &CalxCoordLogarithmicFilter::OnFieldChange, this);
-		yscale->Bind(wxEVT_TEXT, &CalxCoordLogarithmicFilter::OnFieldChange, this);
+		xscale->Bind(wxEVT_SPINCTRL, &CalxCoordLogarithmicFilter::OnFieldChange, this);
+		yscale->Bind(wxEVT_SPINCTRL, &CalxCoordLogarithmicFilter::OnFieldChange, this);
 
 		Layout();
 	}
@@ -173,16 +167,8 @@ namespace CalXUI {
 
 	void CalxCoordLogarithmicFilter::updateData() {
 		double sx, sy;
-		if (!this->xscale->GetValue().ToDouble(&sx)) {
-			wxMessageBox(__("Enter valid real value"), __("Error"), wxICON_ERROR);
-			this->xscale->SetValue(std::to_string(translator->getScale().x));
-			return;
-		}
-		if (!this->yscale->GetValue().ToDouble(&sy)) {
-			wxMessageBox(__("Enter valid real value"), __("Error"), wxICON_ERROR);
-			this->yscale->SetValue(std::to_string(translator->getScale().y));
-			return;
-		}
+		sx = this->xscale->GetValue();
+		sy = this->yscale->GetValue();
 		coord_scale_t scale = {sx, sy};
 		this->translator->setScale(scale);
 	}
@@ -240,11 +226,11 @@ namespace CalXUI {
 
 		if (this->trans == nullptr) {
 			ConfigManager *conf = wxGetApp().getSystemManager()->getConfiguration();
-			motor_point_t cen = {conf->getEntry("coords")->getInt("offset_x", 0),
+			coord_point_t cen = {conf->getEntry("coords")->getInt("offset_x", 0),
 				conf->getEntry("coords")->getInt("offset_y", 0)};
-			motor_size_t scl = {conf->getEntry("coords")->getInt("scale_x", 1),
-				conf->getEntry("coords")->getInt("scale_y", 1)};
-			BasicCoordTranslator *basic = new BasicCoordTranslator(cen, scl);
+			coord_scale_t scl = {conf->getEntry("ui")->getReal("unit_scale", 1.0f),
+				conf->getEntry("ui")->getReal("unit_scale", 1.0f)};
+			LinearCoordTranslator *basic = new LinearCoordTranslator(cen, scl);
 			this->trans = new ComplexCoordTranslator(basic);
 			addFilter(basic);
 		} else {

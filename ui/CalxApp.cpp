@@ -30,6 +30,9 @@
 #include "ui/CalxAutoconfDialog.h"
 #include "ui/CalxConfigLoader.h"
 
+#include <cmath>
+#include <sstream>
+#include <string>
 #include <fstream>
 #include "ctrl-lib/ConfigManager.h"
 #include "ctrl-lib/ConfigValidator.h"
@@ -233,6 +236,29 @@ namespace CalXUI {
 
 	CalxErrorHandler *CalxApp::getErrorHandler() {
 		return this->error_handler;
+	}
+		
+	std::string CalxApp::formatDouble(double d) {
+		std::ostringstream os;
+		os << d;
+		return os.str();
+	}
+	
+	std::string CalxApp::getUnits() {
+		return wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
+	}
+	
+	std::string CalxApp::getSpeedUnits() {
+		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
+		return units.empty() ? "" : units + "/sec";
+	}
+	
+	double CalxApp::getUnitPrecision() {
+		return 1.0 / wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("unit_scale", 1.0f);
+	}
+	
+	double CalxApp::getSpeedPrecision() {
+		return 1.0 / wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("speed_scale", 1.0f);
 	}
 	
 	CalxFrame *CalxApp::getMainFrame() {

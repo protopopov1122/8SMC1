@@ -38,11 +38,12 @@ namespace CalXUI {
 
 	class CalxTaskAction : public CalxAction {
 		public:
-			CalxTaskAction(CalxTaskPanel *panel, CoordPlane *handle, CoordTask *task, TaskParameters prms) {
+			CalxTaskAction(CalxTaskPanel *panel, CoordHandle *handle, CoordTask *task, TaskParameters prms) {
 				this->panel = panel;
 				this->handle = handle;
 				this->task = task;
 				this->prms = prms;
+				this->prms.speed *= this->handle->getFloatPlane()->getSpeedScale();
 			}
 
 			virtual void perform(SystemManager *sysman) {
@@ -58,7 +59,7 @@ namespace CalXUI {
 			}
 		private:
 			CalxTaskPanel *panel;
-			CoordPlane *handle;
+			CoordHandle *handle;
 			CoordTask *task;
 			TaskParameters prms;
 			TaskState state;
@@ -71,6 +72,7 @@ namespace CalXUI {
 				this->dialog = dialog;
 				this->task = task;
 				this->prms = prms;
+				this->prms.speed *= dialog->getFloatPlane()->getSpeedScale();
 			}
 
 			virtual void perform(SystemManager *sysman) {
@@ -95,7 +97,7 @@ namespace CalXUI {
 
 	CalxTaskPanel::CalxTaskPanel(wxWindow *win, wxWindowID id)
 		: wxScrolledWindow::wxScrolledWindow(win, id) {
-		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
+		std::string units = wxGetApp().getUnits();
 		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
 		this->queue->Run();
 		wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
@@ -132,17 +134,18 @@ namespace CalXUI {
 		wxButton *buildButton = new wxButton(execPanel, wxID_ANY, __("Build"));
 		execSizer->Add(buildButton, 0, wxALL | wxALIGN_CENTER);
 		this->plane = new wxChoice(execPanel, wxID_ANY);
-        this->speed = new wxSpinCtrl(execPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
+        this->speed = new wxSpinCtrlDouble(execPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                      wxDefaultSize, wxSP_ARROW_KEYS, 0,
-                                     (int) wxGetApp().getSystemManager()->getConfiguration()->
-                                        getEntry("core")->getInt("maxspeed", 4000),
-                                     (int) wxGetApp().getSystemManager()->getConfiguration()->
-                                        getEntry("core")->getInt("maxspeed", 4000));
+                                     wxGetApp().getSystemManager()->getConfiguration()->
+                                        getEntry("ui")->getReal("unit_speed", 4000.0),
+                                     wxGetApp().getSystemManager()->getConfiguration()->
+                                        getEntry("ui")->getReal("unit_speed", 4000.0),
+									 wxGetApp().getSpeedPrecision());
 		execSizer->Add(new wxStaticText(execPanel, wxID_ANY, __("on")), 0, wxLEFT | wxRIGHT | wxALIGN_CENTER, 5);
 		execSizer->Add(plane, 0, wxALL, 5);
 		execSizer->Add(new wxStaticText(execPanel, wxID_ANY, __("with speed")), 0, wxLEFT | wxRIGHT | wxALIGN_CENTER, 5);
 		execSizer->Add(speed, 0, wxALL, 5);
-		execSizer->Add(new wxStaticText(execPanel, wxID_ANY, units.empty() ? "" : units + __("/sec")), 0, wxLEFT | wxRIGHT | wxALIGN_CENTER, 5);
+		execSizer->Add(new wxStaticText(execPanel, wxID_ANY, wxGetApp().getSpeedUnits()), 0, wxLEFT | wxRIGHT | wxALIGN_CENTER, 5);
 		this->stopButton = new wxButton(execPanel, wxID_ANY, __("Stop"));
 		execSizer->Add(stopButton);
 		wxButton *previewButton = new wxButton(execPanel, wxID_ANY, __("Preview"));
@@ -247,12 +250,11 @@ namespace CalXUI {
 		taskList->Append(FORMAT(__("Task #%s"), std::to_string(list.size())));
 		mainPanel->GetSizer()->Add(handle, 1, wxALL | wxEXPAND, 5);
         taskList->SetSelection((int) list.size() - 1);
-
 		if (taskList->GetSelection() != wxNOT_FOUND
 			&& plane->GetSelection() != wxNOT_FOUND) {
             CoordHandle *handler = wxGetApp().getMainFrame()->getPanel()->getCoords()->getCoord((size_t) plane->GetSelection());
 			if (handler->isMeasured()) {
-				handle->setRectangle(handler->getSize());
+				handle->setRectangle(handler->getFloatPlane()->getFloatSize());
 			}
 		}
 
@@ -286,7 +288,7 @@ namespace CalXUI {
             list.at((size_t) taskList->GetSelection())->update();
             CoordTask *task = list.at((size_t) taskList->GetSelection())->getTask();
             CoordHandle *handle = wxGetApp().getMainFrame()->getPanel()->getCoords()->getCoord((size_t) plane->GetSelection());
-			float speed = (float) this->speed->GetValue();
+			float speed = this->speed->GetValue();
             TaskParameters prms = {(float) speed};
 			queue->addAction(new CalxTaskAction(this, handle, task, prms));
 		} else {
@@ -343,14 +345,10 @@ namespace CalXUI {
             GCodeWriter *writer = new GCodeWriter(handle->getBase()->getPosition(),
                                                   handle->getBase()->getSize(),
                                                   list.at((size_t) taskList->GetSelection())->getTranslator(), &ss);
-			CoordPlane *plane = handle->clone(writer);
 			this->setEnabled(false);
-			wxGetApp().getErrorHandler()->handle(task->perform(plane, prms, wxGetApp().getSystemManager(), &state));
+			wxGetApp().getErrorHandler()->handle(task->perform(writer, prms, wxGetApp().getSystemManager(), &state));
 			this->setEnabled(true);
-			delete plane;
 			delete writer;
-
-
 
 
 			wxFileDialog *dialog = new wxFileDialog(this, __("Export linearized GCode"), "", "",
@@ -363,12 +361,14 @@ namespace CalXUI {
 			}
 			ss.seekg(0);
 
+			std::cout << "1" << std::endl;
             CalxGcodeHandle *gcodeHandle = new CalxGcodeHandle(mainPanel, wxID_ANY, __("Linear ") +
                                                                taskList->GetStringSelection().ToStdString(),
                                                                &ss,
                                                                list.at((size_t) taskList->GetSelection())->
                                                                     getTranslator()->clone(nullptr));
-
+														
+														
 			list.push_back(gcodeHandle);
 			taskList->Append(gcodeHandle->getId());
 			mainPanel->GetSizer()->Add(gcodeHandle, 1, wxALL | wxEXPAND, 5);

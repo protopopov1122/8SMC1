@@ -101,6 +101,24 @@ namespace CalXUI {
 			int div;
 	};
 
+
+	class CalxCoordFloatMoveAction : public CalxAction {
+		public:
+			CalxCoordFloatMoveAction(CalxCoordCtrl*, CoordHandle*, bool, bool, coord_point_t, double, int);
+			virtual ~CalxCoordFloatMoveAction();
+
+			virtual void perform(SystemManager*);
+			virtual void stop();
+		private:
+			CalxCoordCtrl *ctrl;
+			CoordHandle *handle;
+			bool jump;
+			bool relative;
+			coord_point_t dest;
+			double speed;
+			int div;
+	};
+
 	class CalxCoordArcAction : public CalxAction {
 		public:
 			CalxCoordArcAction(CalxCoordCtrl*, CoordHandle*, bool, motor_point_t, motor_point_t, int, float, int, bool);
@@ -120,9 +138,28 @@ namespace CalXUI {
 			bool clockwise;
 	};
 
+	class CalxCoordFloatArcAction : public CalxAction {
+		public:
+			CalxCoordFloatArcAction(CalxCoordCtrl*, CoordHandle*, bool, coord_point_t, coord_point_t, int, double, int, bool);
+			virtual ~CalxCoordFloatArcAction();
+
+			virtual void perform(SystemManager*);
+			virtual void stop();
+		private:
+			CalxCoordCtrl *ctrl;
+			CoordHandle *handle;
+			bool relative;
+			coord_point_t dest;
+			coord_point_t cen;
+			int splitter;
+			double speed;
+			int div;
+			bool clockwise;
+	};
+
 	class CalxCoordGraphAction : public CalxAction {
 		public:
-			CalxCoordGraphAction(CalxCoordCtrl*, CoordHandle*, CoordTranslator*, GraphBuilder*, float);
+			CalxCoordGraphAction(CalxCoordCtrl*, CoordHandle*, CoordTranslator*, GraphBuilder*, float, bool = false);
 			virtual ~CalxCoordGraphAction();
 
 			virtual void perform(SystemManager*);
@@ -134,11 +171,12 @@ namespace CalXUI {
 			GraphBuilder *builder;
 			float speed;
 			TaskState state;
+			bool use_float;
 	};
 
 	class CalxCoordPreviewAction : public CalxAction {
 		public:
-			CalxCoordPreviewAction(CalxCoordCtrl*, CalxVirtualPlaneDialog*, CoordTranslator*, GraphBuilder*, float);
+			CalxCoordPreviewAction(CalxCoordCtrl*, CalxVirtualPlaneDialog*, CoordTranslator*, GraphBuilder*, float, bool = false);
 			virtual ~CalxCoordPreviewAction();
 
 			virtual void perform(SystemManager*);
@@ -150,6 +188,7 @@ namespace CalXUI {
 			GraphBuilder *builder;
 			float speed;
 			TaskState state;
+			bool use_float;
 	};
 
 	class CalxCoordCalibrateAction : public CalxAction {
@@ -181,7 +220,7 @@ namespace CalXUI {
 
 	class CalxCoordConfigureAction : public CalxAction {
 		public:
-			CalxCoordConfigureAction(CalxCoordCtrl*, CoordHandle*, bool, bool, coord_point_t, float, int);
+			CalxCoordConfigureAction(CalxCoordCtrl*, CoordHandle*, bool, bool, coord_point_t, float, int, bool = false);
 			virtual ~CalxCoordConfigureAction();
 
 			virtual void perform(SystemManager*);
@@ -195,6 +234,7 @@ namespace CalXUI {
 			coord_point_t dest;
 			float speed;
 			int div;
+			bool use_float;
 	};
 }
 

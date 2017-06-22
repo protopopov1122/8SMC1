@@ -58,10 +58,10 @@ namespace CalXUI {
 			void OnFieldChange(wxCommandEvent&);
 
 			LinearCoordTranslator *translator;
-			wxTextCtrl *xoffset;
-			wxTextCtrl *yoffset;
-			wxTextCtrl *xscale;
-			wxTextCtrl *yscale;
+			wxSpinCtrlDouble *xoffset;
+			wxSpinCtrlDouble *yoffset;
+			wxSpinCtrlDouble *xscale;
+			wxSpinCtrlDouble *yscale;
 	};
 
 
@@ -74,8 +74,8 @@ namespace CalXUI {
 			void OnFieldChange(wxCommandEvent&);
 
 			LogarithmicCoordTranslator *translator;
-			wxTextCtrl *xscale;
-			wxTextCtrl *yscale;
+			wxSpinCtrlDouble *xscale;
+			wxSpinCtrlDouble *yscale;
 	};
 
 	class CalxCoordPolarFilter : public CalxCoordFilter {

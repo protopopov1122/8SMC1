@@ -74,7 +74,6 @@ namespace CalXUI {
 		ctrl->unuse();
 	}
 
-
 	CalxCoordMoveAction::CalxCoordMoveAction(CalxCoordCtrl *ctrl, CoordHandle *handle, bool jump, bool relative, motor_point_t dest, float speed, int div) {
 		this->ctrl = ctrl;
 		this->handle = handle;
@@ -102,6 +101,37 @@ namespace CalXUI {
 	}
 
 	void CalxCoordMoveAction::stop() {
+		handle->stop();
+	}
+
+
+	CalxCoordFloatMoveAction::CalxCoordFloatMoveAction(CalxCoordCtrl *ctrl, CoordHandle *handle, bool jump, bool relative, coord_point_t dest, double speed, int div) {
+		this->ctrl = ctrl;
+		this->handle = handle;
+		this->jump = jump;
+		this->relative = relative;
+		this->dest = dest;
+		this->speed = speed;
+		this->div = div;
+	}
+
+	CalxCoordFloatMoveAction::~CalxCoordFloatMoveAction() {
+
+	}
+
+	void CalxCoordFloatMoveAction::perform(SystemManager *sysman) {
+		handle->open_session();
+		this->ctrl->setMaster(true);
+		if (relative) {
+			wxGetApp().getErrorHandler()->handle(handle->getFloatPlane()->relativeMove(dest, speed, div, jump));
+		} else {
+			wxGetApp().getErrorHandler()->handle(handle->getFloatPlane()->move(dest, speed, div, jump));
+		}
+		this->ctrl->setMaster(false);
+		handle->close_session();
+	}
+
+	void CalxCoordFloatMoveAction::stop() {
 		handle->stop();
 	}
 
@@ -138,13 +168,46 @@ namespace CalXUI {
 	void CalxCoordArcAction::stop() {
 		handle->stop();
 	}
+	
+	CalxCoordFloatArcAction::CalxCoordFloatArcAction(CalxCoordCtrl *ctrl, CoordHandle *handle, bool relative, coord_point_t dest, coord_point_t cen, int splitter, double speed, int div, bool clockwise) {
+		this->ctrl = ctrl;
+		this->handle = handle;
+		this->relative = relative;
+		this->dest = dest;
+		this->cen = cen;
+		this->splitter = splitter;
+		this->speed = speed;
+		this->div = div;
+		this->clockwise = clockwise;
+	}
 
-	CalxCoordGraphAction::CalxCoordGraphAction(CalxCoordCtrl *ctrl, CoordHandle *handle, CoordTranslator *trans, GraphBuilder *builder, float speed) {
+	CalxCoordFloatArcAction::~CalxCoordFloatArcAction() {
+
+	}
+
+	void CalxCoordFloatArcAction::perform(SystemManager *sysman) {
+		handle->open_session();
+		ctrl->setMaster(true);
+		if (relative) {
+			wxGetApp().getErrorHandler()->handle(handle->getFloatPlane()->relativeArc(dest, cen, splitter, speed, div, clockwise));
+		} else {
+			wxGetApp().getErrorHandler()->handle(handle->getFloatPlane()->arc(dest, cen, splitter, speed, div, clockwise));
+		}
+		ctrl->setMaster(false);
+		handle->close_session();
+	}
+
+	void CalxCoordFloatArcAction::stop() {
+		handle->stop();
+	}
+
+	CalxCoordGraphAction::CalxCoordGraphAction(CalxCoordCtrl *ctrl, CoordHandle *handle, CoordTranslator *trans, GraphBuilder *builder, float speed, bool use_float) {
 		this->ctrl = ctrl;
 		this->handle = handle;
 		this->translator = trans;
 		this->builder = builder;
 		this->speed = speed;
+		this->use_float = use_float;
 	}
 
 	CalxCoordGraphAction::~CalxCoordGraphAction() {
@@ -154,7 +217,13 @@ namespace CalXUI {
 	void CalxCoordGraphAction::perform(SystemManager *sysman) {
 		handle->open_session();
 		ctrl->setMaster(true);
-		wxGetApp().getErrorHandler()->handle(builder->build(sysman, handle, translator, speed, &state));
+		if (this->use_float) {
+			wxGetApp().getErrorHandler()->handle(builder->floatBuild(sysman, handle->getFloatPlane(),
+				translator, speed, &state));
+		} else {
+			wxGetApp().getErrorHandler()->handle(builder->build(sysman, handle,
+				translator, speed, &state));
+		}
 		ctrl->setMaster(false);
 		handle->close_session();
 	}
@@ -163,12 +232,13 @@ namespace CalXUI {
 		state.stop();
 	}
 
-	CalxCoordPreviewAction::CalxCoordPreviewAction(CalxCoordCtrl *ctrl, CalxVirtualPlaneDialog *dialog, CoordTranslator *trans, GraphBuilder *builder, float speed) {
+	CalxCoordPreviewAction::CalxCoordPreviewAction(CalxCoordCtrl *ctrl, CalxVirtualPlaneDialog *dialog, CoordTranslator *trans, GraphBuilder *builder, float speed, bool use_float) {
 		this->ctrl = ctrl;
 		this->dialog = dialog;
 		this->translator = trans;
 		this->builder = builder;
 		this->speed = speed;
+		this->use_float = use_float;
 	}
 
 	CalxCoordPreviewAction::~CalxCoordPreviewAction() {
@@ -178,7 +248,13 @@ namespace CalXUI {
 	void CalxCoordPreviewAction::perform(SystemManager *sysman) {
 		ctrl->setMaster(true);
 		dialog->Enable(false);
-		wxGetApp().getErrorHandler()->handle(builder->build(sysman, dialog->getPlane(), translator, speed, &state));
+		if (this->use_float) {
+			wxGetApp().getErrorHandler()->handle(builder->floatBuild(sysman, dialog->getFloatPlane(),
+				translator, speed, &state));
+		} else {
+			wxGetApp().getErrorHandler()->handle(builder->build(sysman, dialog->getPlane(),
+				translator, speed, &state));
+		}
 		dialog->Refresh();
 		dialog->Enable(true);
 		ctrl->setMaster(false);
@@ -233,7 +309,7 @@ namespace CalXUI {
 	}
 
 
-	CalxCoordConfigureAction::CalxCoordConfigureAction(CalxCoordCtrl *ctrl, CoordHandle *handle, bool jump, bool relative, coord_point_t dest, float speed, int div) {
+	CalxCoordConfigureAction::CalxCoordConfigureAction(CalxCoordCtrl *ctrl, CoordHandle *handle, bool jump, bool relative, coord_point_t dest, float speed, int div, bool use_float) {
 		this->ctrl = ctrl;
 		this->handle = handle;
 		this->jump = jump;
@@ -242,6 +318,7 @@ namespace CalXUI {
 		this->speed = speed;
 		this->div = div;
 		this->work = false;
+		this->use_float = use_float;
 	}
 
 	CalxCoordConfigureAction::~CalxCoordConfigureAction() {
@@ -254,24 +331,46 @@ namespace CalXUI {
 		this->ctrl->setMaster(true);
 		motor_point_t offset = {0, 0};
 		ctrl->setPlaneOffset(offset);
-		ErrorCode errcode = this->handle->measure(TrailerId::Trailer1);
-		if (errcode != ErrorCode::NoError) {
-			work = false;
+		if (this->use_float) {
+			ErrorCode errcode = this->handle->measure(TrailerId::Trailer1);
+			if (errcode != ErrorCode::NoError) {
+				work = false;
+			}
+			coord_rect_t size = this->handle->getFloatPlane()->getFloatSize();
+			double x = (((double) size.w) * this->dest.x) + size.x;
+			double y = (((double) size.h) * this->dest.y) + size.y;
+			coord_point_t dest = {x, y};
+			if (relative && work) {
+				errcode = handle->getFloatPlane()->relativeMove(dest, speed, div, jump);
+			} else if (work) {
+				errcode = handle->getFloatPlane()->move(dest, speed, div, jump);
+			}
+			if (work && errcode == ErrorCode::NoError) {
+				ctrl->setPlaneOffset(handle->getPosition());
+				ctrl->updateWatchers();
+			}
+			wxGetApp().getErrorHandler()->handle(errcode);
+
+		} else {
+			ErrorCode errcode = this->handle->measure(TrailerId::Trailer1);
+			if (errcode != ErrorCode::NoError) {
+				work = false;
+			}
+			motor_rect_t size = this->handle->getSize();
+			motor_coord_t x = (motor_coord_t) (((double) size.w) * this->dest.x) + size.x;
+			motor_coord_t y = (motor_coord_t) (((double) size.h) * this->dest.y) + size.y;
+			motor_point_t dest = {x, y};
+			if (relative && work) {
+				errcode = handle->relativeMove(dest, speed, div, jump);
+			} else if (work) {
+				errcode = handle->move(dest, speed, div, jump);
+			}
+			if (work && errcode == ErrorCode::NoError) {
+				ctrl->setPlaneOffset(handle->getPosition());
+				ctrl->updateWatchers();
+			}
+			wxGetApp().getErrorHandler()->handle(errcode);
 		}
-		motor_rect_t size = this->handle->getSize();
-		motor_coord_t x = (motor_coord_t) (((double) size.w) * this->dest.x) + size.x;
-		motor_coord_t y = (motor_coord_t) (((double) size.h) * this->dest.y) + size.y;
-		motor_point_t dest = {x, y};
-		if (relative && work) {
-			errcode = handle->relativeMove(dest, speed, div, jump);
-		} else if (work) {
-			errcode = handle->move(dest, speed, div, jump);
-		}
-		if (work && errcode == ErrorCode::NoError) {
-			ctrl->setPlaneOffset(handle->getPosition());
-			ctrl->updateWatchers();
-		}
-		wxGetApp().getErrorHandler()->handle(errcode);
 		this->ctrl->setMaster(false);
 		handle->close_session();
 	}

@@ -223,6 +223,7 @@ namespace CalXUI {
 		wxSize real_size = GetSize();
 		motor_rect_t plane_size = this->handle->getController()->getSize();
 		motor_rect_t top_plane_size = this->handle->getSize();
+		coord_rect_t float_plane_size = this->handle->getFloatPlane()->getFloatSize();
 		double scaleX, scaleY, top_scaleX, top_scaleY;
 		scaleX = ((double) real_size.x) / plane_size.w;
 		scaleY = ((double) real_size.y) / plane_size.h;
@@ -256,13 +257,13 @@ namespace CalXUI {
 			units = " " + units;
 		}
 		wxCoord x, y;
-		dc.DrawText(FORMAT("%s%s", std::to_string(top_plane_size.x), units), 0, (wxCoord) ((top_plane_size.h + top_plane_size.y) * top_scaleY));
-		dc.GetMultiLineTextExtent(FORMAT("%s%s", std::to_string(top_plane_size.x + top_plane_size.w), units), &x, &y);
-		dc.DrawText(FORMAT("%s%s", std::to_string(top_plane_size.x + top_plane_size.w), units), real_size.x - x, (wxCoord) ((top_plane_size.h + top_plane_size.y) * top_scaleY));
-		dc.GetMultiLineTextExtent(FORMAT("%s%s", std::to_string(-(top_plane_size.y + top_plane_size.h)), units), &x, &y);
-		dc.DrawText(FORMAT("%s%s", std::to_string(top_plane_size.y), units), (wxCoord) ((-top_plane_size.x) * top_scaleX) - x / 2, real_size.y - y);
-		dc.GetMultiLineTextExtent(FORMAT("%s%s", std::to_string(-top_plane_size.y), units), &x, &y);
-		dc.DrawText(FORMAT("%s%s", std::to_string(top_plane_size.y + top_plane_size.h), units), (wxCoord) ((-top_plane_size.x) * top_scaleX) - x / 2, 0);
+		dc.DrawText(FORMAT("%s%s", wxGetApp().formatDouble(float_plane_size.x), units), 0, (wxCoord) ((top_plane_size.h + top_plane_size.y) * top_scaleY));
+		dc.GetMultiLineTextExtent(FORMAT("%s%s", wxGetApp().formatDouble(float_plane_size.x + float_plane_size.w), units), &x, &y);
+		dc.DrawText(FORMAT("%s%s", wxGetApp().formatDouble(float_plane_size.x + float_plane_size.w), units), real_size.x - x, (wxCoord) ((top_plane_size.h + top_plane_size.y) * top_scaleY));
+		dc.GetMultiLineTextExtent(FORMAT("%s%s", wxGetApp().formatDouble(float_plane_size.y), units), &x, &y);
+		dc.DrawText(FORMAT("%s%s", wxGetApp().formatDouble(float_plane_size.y), units), (wxCoord) ((-top_plane_size.x) * top_scaleX) - x / 2, real_size.y - y);
+		dc.GetMultiLineTextExtent(FORMAT("%s%s", wxGetApp().formatDouble(float_plane_size.y + float_plane_size.h), units), &x, &y);
+		dc.DrawText(FORMAT("%s%s", wxGetApp().formatDouble(float_plane_size.y + float_plane_size.h), units), (wxCoord) ((-top_plane_size.x) * top_scaleX) - x / 2, 0);
 
 		this->rendering = false;
 	}
@@ -310,7 +311,7 @@ namespace CalXUI {
 			this->mouseCoords->SetLabel("");
 		}
 		wxSize real_size = this->watcher->GetSize();
-		motor_rect_t plane_size = this->handle->getSize();
+		coord_rect_t plane_size = this->handle->getFloatPlane()->getFloatSize();
 		wxPoint mouse = this->watcher->ScreenToClient(wxGetMousePosition());
 		if (mouse.x >= 0 &&
 			mouse.y >= 0 &&
@@ -320,10 +321,10 @@ namespace CalXUI {
 			if (!units.empty()) {
 				units = " " + units;
 			}
-			motor_coord_t rx = (motor_coord_t) mouse.x * plane_size.w / real_size.x + plane_size.x;
-			motor_coord_t ry = (motor_coord_t) plane_size.h - mouse.y * plane_size.h / real_size.y + plane_size.y;
-			std::string res = FORMAT(__("x: %s%s; y: %s%s"), std::to_string(rx), units,
-				std::to_string(ry), units);
+			double rx = mouse.x * plane_size.w / real_size.x + plane_size.x;
+			double ry = plane_size.h - mouse.y * plane_size.h / real_size.y + plane_size.y;
+			std::string res = FORMAT(__("x: %s%s; y: %s%s"), wxGetApp().formatDouble(rx), units,
+				wxGetApp().formatDouble(ry), units);
 			this->mouseCoords->SetLabel(res);
 		}
 	}

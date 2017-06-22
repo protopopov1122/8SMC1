@@ -90,7 +90,7 @@ namespace CalX {
 	}
 
 	CoordTranslator *PolarCoordTranslator::clone(CoordTranslator *base) {
-		if (base == nullptr) {
+		if (base == nullptr && this->base != nullptr) {
 			base = this->base->clone(nullptr);
 		}
 		return new PolarCoordTranslator(base);

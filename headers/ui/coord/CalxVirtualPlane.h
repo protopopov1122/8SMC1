@@ -48,6 +48,7 @@ namespace CalXUI {
 
 			CoordPlaneStack *getPlane();
 			CalxPlaneTracker *getTracker();
+			FloatCoordPlane *getFloatPlane();
 			void repaint();
 		private:
 			void OnExit(wxCloseEvent&);
@@ -57,6 +58,7 @@ namespace CalXUI {
 
 			CalxPlaneTracker *tracker;
 			CoordPlaneStack *stack;
+			FloatCoordPlane *float_plane;
 			CoordHandle *base;
 	};
 
@@ -65,6 +67,7 @@ namespace CalXUI {
 			CalxVirtualPlaneDialog(wxWindow*, wxWindowID, CoordHandle*, wxSize);
 
 			CoordPlaneStack *getPlane();
+			FloatCoordPlane *getFloatPlane();
 		private:
 			void OnOkClick(wxCommandEvent&);
 			void OnMouseMove(wxMouseEvent&);

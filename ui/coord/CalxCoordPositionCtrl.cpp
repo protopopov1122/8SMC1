@@ -26,17 +26,18 @@ namespace CalXUI {
 	CalxCoordPositionCtrl::CalxCoordPositionCtrl(wxWindow *win, wxWindowID id)
 		: wxPanel::wxPanel(win, id) {
 
-		wxFlexGridSizer *sizer = new wxFlexGridSizer(2);
+		wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 		SetSizer(sizer);
 
-		this->xPos = new 	wxSpinCtrlDouble (this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1, 0.5, 0.0001);
-		this->yPos = new 	wxSpinCtrlDouble (this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1, 0.5, 0.0001);
-        this->speed = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+		this->xPos = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1, 0.5, 0.0001);
+		this->yPos = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1, 0.5, 0.0001);
+        this->speed = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                      wxDefaultSize, wxSP_ARROW_KEYS, 0,
-                                     (int) wxGetApp().getSystemManager()->getConfiguration()->
-                                        getEntry("core")->getInt("maxspeed", 4000),
-                                     (int) wxGetApp().getSystemManager()->getConfiguration()->
-                                        getEntry("core")->getInt("maxspeed", 4000));
+                                     wxGetApp().getSystemManager()->getConfiguration()->
+                                        getEntry("ui")->getReal("unit_speed", 4000.0),
+                                     wxGetApp().getSystemManager()->getConfiguration()->
+                                        getEntry("ui")->getReal("unit_speed", 4000.0),
+									 wxGetApp().getSpeedPrecision());
 		this->divisor = new wxChoice(this, wxID_ANY);
 		this->divisor->Append("1");
 		this->divisor->Append("2");
@@ -48,14 +49,19 @@ namespace CalXUI {
 
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Destination") + std::string(":")));
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
+		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
 		sizer->Add(new wxStaticText(this, wxID_ANY, _("x") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		sizer->Add(xPos, 0, wxALL | wxEXPAND);
+		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("y") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		sizer->Add(yPos, 0, wxALL | wxEXPAND);
+		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Speed") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		sizer->Add(speed, 0, wxEXPAND);
+		sizer->Add(new wxStaticText(this, wxID_ANY, wxGetApp().getSpeedUnits()));
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Divisor") + std::string(":")), 0, wxALIGN_RIGHT | wxRIGHT, 10);
 		sizer->Add(divisor);
+		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
 		sizer->Add(moveButton);
 		sizer->Add(configureButton);
 	}

@@ -43,33 +43,29 @@ namespace CalXUI {
 				init();
 			}
 			std::string getExpression() {return expr->GetValue().ToStdString();}
-			int getXMin() {return xmin->GetValue();}
-			int getXMax() {return xmax->GetValue();}
-			int getYMin() {return ymin->GetValue();}
-			int getYMax() {return ymax->GetValue();}
-			double getStep() {
-				double val;
-				step->GetValue().ToDouble(&val);
-				return val;
-			}
+			double getXMin() {return xmin->GetValue();}
+			double getXMax() {return xmax->GetValue();}
+			double getYMin() {return ymin->GetValue();}
+			double getYMax() {return ymax->GetValue();}
+			double getStep() {return step->GetValue();}
 			CoordTranslator *getCoordTranslator() {
 				return this->translator->getTranslator();
 			}
-			int getSpeed() {return speed->GetValue();}
+			double getSpeed() {return speed->GetValue();}
 			wxButton *getBuildButton() {return this->buildButton;}
 			wxButton *getPreviewButton() {return this->previewButton;}
 			void OnClose(wxCloseEvent&);
 		private:
-
 			void init();
 			wxTextCtrl *expr;
-			wxSpinCtrl *xmin;
-			wxSpinCtrl *xmax;
-			wxSpinCtrl *ymin;
-			wxSpinCtrl *ymax;
-			wxTextCtrl *step;
+			wxSpinCtrlDouble *xmin;
+			wxSpinCtrlDouble *xmax;
+			wxSpinCtrlDouble *ymin;
+			wxSpinCtrlDouble *ymax;
+			wxSpinCtrlDouble *step;
 			CalxCoordFilter *translator;
-			wxSpinCtrl *speed;
+			ComplexCoordTranslator *trans;
+			wxSpinCtrlDouble *speed;
 			wxButton *buildButton;
 			wxButton *previewButton;
 	};
