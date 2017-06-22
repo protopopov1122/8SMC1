@@ -89,6 +89,14 @@ namespace CalX {
 	coord_point_t ComplexCoordTranslator::get(motor_point_t pnt) {
 		return this->list.at(this->list.size() - 1)->get(pnt);
 	}
+	
+	coord_point_t ComplexCoordTranslator::floatGet(double x, double y) {
+		return this->list.at(this->list.size() - 1)->floatGet(x, y);
+	}
+	
+	coord_point_t ComplexCoordTranslator::floatGet(coord_point_t pnt) {
+		return this->list.at(this->list.size() - 1)->floatGet(pnt);
+	}
 
 	CoordTranslator *ComplexCoordTranslator::getBase() {
 		if (this->list.empty()) {

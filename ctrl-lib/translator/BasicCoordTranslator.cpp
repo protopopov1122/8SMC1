@@ -70,6 +70,23 @@ namespace CalX {
 		out.y /= this->scale.h;
 		return out;
 	}
+	
+	coord_point_t BasicCoordTranslator::floatGet(double x, double y) {
+		coord_point_t pnt = {x, y};
+		pnt.x *= this->scale.w;
+		pnt.y *= this->scale.h;
+		pnt.x += this->center.x;
+		pnt.y += this->center.y;
+		return pnt;
+	}
+	
+	coord_point_t BasicCoordTranslator::floatGet(coord_point_t pnt) {
+		pnt.x -= this->center.x;
+		pnt.y -= this->center.y;
+		pnt.x /= this->scale.w;
+		pnt.y /= this->scale.h;
+		return pnt;
+	}
 
 	CoordTranslator *BasicCoordTranslator::clone(CoordTranslator *base) {
 		return new BasicCoordTranslator(this->center, this->scale);

@@ -52,6 +52,8 @@ namespace CalX {
 			virtual motor_point_t get(coord_point_t pnt) {return this->get(pnt.x, pnt.y);}
 			virtual motor_point_t get(double, double) = 0;
 			virtual coord_point_t get(motor_point_t) = 0;
+			virtual coord_point_t floatGet(double, double) = 0;
+			virtual coord_point_t floatGet(coord_point_t) = 0;
 			virtual CoordTranslator *getBase() {return nullptr;}
 			virtual void setBase(CoordTranslator *b) {}
 			virtual CoordTranslator *clone(CoordTranslator*) = 0;
@@ -69,6 +71,8 @@ namespace CalX {
 			void setScale(motor_size_t);
 			virtual motor_point_t get(double, double);
 			virtual coord_point_t get(motor_point_t);
+			virtual coord_point_t floatGet(double, double);
+			virtual coord_point_t floatGet(coord_point_t);
 			virtual CoordTranslator *clone(CoordTranslator*);
 		private:
 			motor_point_t center;
@@ -87,6 +91,8 @@ namespace CalX {
 			void setScale(coord_scale_t);
 			virtual motor_point_t get(double, double);
 			virtual coord_point_t get(motor_point_t);
+			virtual coord_point_t floatGet(double, double);
+			virtual coord_point_t floatGet(coord_point_t);
 			virtual CoordTranslator *clone(CoordTranslator*);
 		private:
 			CoordTranslator *base;
@@ -104,6 +110,8 @@ namespace CalX {
 			void setScale(coord_scale_t);
 			virtual motor_point_t get(double, double);
 			virtual coord_point_t get(motor_point_t);
+			virtual coord_point_t floatGet(double, double);
+			virtual coord_point_t floatGet(coord_point_t);
 			virtual CoordTranslator *clone(CoordTranslator*);
 		private:
 			CoordTranslator *base;
@@ -118,6 +126,8 @@ namespace CalX {
 			virtual void setBase(CoordTranslator*);
 			virtual motor_point_t get(double, double);
 			virtual coord_point_t get(motor_point_t);
+			virtual coord_point_t floatGet(double, double);
+			virtual coord_point_t floatGet(coord_point_t);
 			virtual CoordTranslator *clone(CoordTranslator*);
 		private:
 			CoordTranslator *base;
@@ -129,6 +139,8 @@ namespace CalX {
 			virtual ~ComplexCoordTranslator();
 			virtual motor_point_t get(double, double);
 			virtual coord_point_t get(motor_point_t);
+			virtual coord_point_t floatGet(double, double);
+			virtual coord_point_t floatGet(coord_point_t);
 			size_t getSize();
                         CoordTranslator* getTranslator(size_t);
 			void add(CoordTranslator*);

@@ -64,6 +64,30 @@ namespace CalX {
 		out = {p, f};
 		return out;
 	}
+	
+	coord_point_t PolarCoordTranslator::floatGet(double x, double y) {
+		double nx = x * cos(y);
+		double ny = x * sin(y);
+		if (this->base == nullptr) {
+			coord_point_t pnt = {nx, ny};
+			return pnt;
+		} else {
+			return this->base->floatGet(nx, ny);
+		}
+	}
+	
+	coord_point_t PolarCoordTranslator::floatGet(coord_point_t pnt) {
+		coord_point_t out;
+		if (this->base == nullptr) {
+			out = pnt;
+		} else {
+			out = this->base->floatGet(pnt);
+		}
+		double p = sqrt(pow(out.x, 2) + pow(out.y, 2));
+		double f = atan2(out.y, out.x);
+		out = {p, f};
+		return out;
+	}
 
 	CoordTranslator *PolarCoordTranslator::clone(CoordTranslator *base) {
 		if (base == nullptr) {

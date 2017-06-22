@@ -82,6 +82,37 @@ namespace CalX {
 		}
 		return out;
 	}
+	
+	coord_point_t LogarithmicCoordTranslator::floatGet(double x, double y) {
+		if (this->scale.x > 0) {
+			x = log(x) / log(this->scale.x);
+		}
+		if (this->scale.y > 0) {
+			y = log(y) / log(this->scale.y);
+		}
+		if (this->base == nullptr) {
+			coord_point_t pnt = {x, y};
+			return pnt;
+		} else {
+			return this->base->floatGet(x, y);
+		}
+	}
+	
+	coord_point_t LogarithmicCoordTranslator::floatGet(coord_point_t pnt) {
+		coord_point_t out;
+		if (this->base == nullptr) {
+			out = pnt;
+		} else {
+			out = this->base->floatGet(pnt);
+		}
+		if (this->scale.x != 0) {
+			out.x = pow(this->scale.x, out.x);
+		}
+		if (this->scale.y != 0) {
+			out.y = pow(this->scale.y, out.y);
+		}
+		return out;
+	}
 
 	CoordTranslator *LogarithmicCoordTranslator::clone(CoordTranslator *base) {
 		if (base == nullptr) {

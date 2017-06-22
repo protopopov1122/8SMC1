@@ -82,6 +82,33 @@ namespace CalX {
 		out.y /= this->scale.y;
 		return out;
 	}
+	
+	coord_point_t LinearCoordTranslator::floatGet(double x, double y) {
+		coord_point_t pnt = {x, y};
+		pnt.x *= this->scale.x;
+		pnt.y *= this->scale.y;
+		pnt.x += this->offset.x;
+		pnt.y += this->offset.y;
+		if (this->base == nullptr) {
+			return pnt;
+		} else {
+			return this->base->floatGet(pnt.x, pnt.y);
+		}
+	}
+	
+	coord_point_t LinearCoordTranslator::floatGet(coord_point_t pnt) {
+		coord_point_t out;
+		if (this->base == nullptr) {
+			out = pnt;
+		} else {
+			out = this->base->floatGet(pnt);
+		}
+		out.x -= this->offset.x;
+		out.y -= this->offset.y;
+		out.x /= this->scale.x;
+		out.y /= this->scale.y;
+		return out;
+	}
 
 	CoordTranslator *LinearCoordTranslator::clone(CoordTranslator *base) {
 		if (base == nullptr) {
