@@ -34,6 +34,7 @@ namespace CalX {
 
 		CoordHandle::~CoordHandle() {
 			delete this->root;
+			delete this->floatPlane;
 			DESTROY_LOG("CoordHandle");
 		}
 

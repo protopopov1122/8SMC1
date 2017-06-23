@@ -19,7 +19,8 @@
 
 
 #include "ctrl-lib/task/CoordTask.h"
-#include "ctrl-lib/misc/GCodeParser.h"
+#include "ctrl-lib/gcode/GCodeInterpreter.h"
+#include "ctrl-lib/SystemManager.h"
 
 namespace CalX {
 
@@ -31,23 +32,21 @@ namespace CalX {
 			ss << (char) ch;
 		}
 		this->code = ss.str();
+		ss.seekg(0);
+		this->stream = new GCodeStream(ss);
 		this->translator = trans;
 		INIT_LOG("GCodeCoordTask");
 	}
 
 	GCodeCoordTask::~GCodeCoordTask() {
+		delete this->stream;
 		delete this->translator;
 		DESTROY_LOG("GCodeCoordTask");
 	}
 
 	ErrorCode GCodeCoordTask::perform(CoordPlane *plane, TaskParameters &prms, SystemManager *sysman, TaskState *state) {
-		std::stringstream ss(this->code);
-		GCodeLexer lexer(&ss);
-		GCodeParser parser(&lexer);
-		ProgrammedCoordTask task;
-		gcode_translate(&parser, this->translator, &task, sysman->getConfiguration());
-
-		return task.perform(plane, prms, sysman, state);
+		return GCodeInterpreter::execute(this->stream, plane, this->translator, sysman->getConfiguration(),
+			prms.speed, state);
 	}
 
 	std::string GCodeCoordTask::getGCode() {

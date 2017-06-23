@@ -45,7 +45,9 @@ namespace CalX {
 		
 	enum GCodeOpcode {
 		GCode_Jump = 0, GCode_Move = 1,
-		GCode_Clockwise_Arc = 2, GCode_CounterClockwise_Arc = 3
+		GCode_Clockwise_Arc = 2, GCode_CounterClockwise_Arc = 3,
+		GCode_Inches = 20, GCode_Millimeters = 21,
+		GCode_Home = 28
 	};	
 		
 	struct GCodeValue {

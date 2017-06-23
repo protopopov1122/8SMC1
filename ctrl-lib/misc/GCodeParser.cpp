@@ -55,6 +55,8 @@ namespace CalX {
 	GCodeValue GCodeCommand::getArg(char a) {
 		if (this->args.count(a) == 0) {
 			GCodeValue val;
+			val.fract = false;
+			val.value.integer = 0;
 			return val;
 		}
 		return this->args[a];
@@ -193,7 +195,10 @@ namespace CalX {
 		return com;
 	}
 
-	CoordTask *gcode_translate(GCodeParser *parser, CoordTranslator *translator, ProgrammedCoordTask *task, ConfigManager *conf) {
+	CoordTask *gcode_translate(GCodeParser *parser, CoordTranslator *trans, ProgrammedCoordTask *task, ConfigManager *conf) {
+		coord_point_t troffset = {0, 0};
+		coord_scale_t trscale = {1, 1};
+		LinearCoordTranslator *translator = new LinearCoordTranslator(troffset, trscale, trans);
 		motor_point_t offset = translator->get(0, 0);
 		coord_point_t last = {0, 0};
 		int invert = 1;
@@ -218,7 +223,7 @@ namespace CalX {
 					case GCodeOpcode::GCode_Move:
 						task->addStep(new MoveTaskStep(real, 1.0f));
 					break;
-					case GCodeOpcode::GCode_Clockwise_Arc: {
+					case GCodeOpcode::GCode_Clockwise_Arc: if (cmd->hasArg('I') || cmd->hasArg('J')) {
 						double i = cmd->getArg('I').fractValue();
 						double j = cmd->getArg('J').fractValue();
 						motor_point_t center = translator->get(i, j);
@@ -228,7 +233,7 @@ namespace CalX {
 						step->setClockwise(invert == 1);
 						task->addStep(step);
 					} break;
-					case GCodeOpcode::GCode_CounterClockwise_Arc: {
+					case GCodeOpcode::GCode_CounterClockwise_Arc: if (cmd->hasArg('I') || cmd->hasArg('J')) {
 						double i = cmd->getArg('I').fractValue();
 						double j = cmd->getArg('J').fractValue();
 						motor_point_t center = translator->get(i, j);
@@ -238,12 +243,25 @@ namespace CalX {
 						step->setClockwise(invert != 1);
 						task->addStep(step);
 					} break;
+					case GCodeOpcode::GCode_Inches: {
+						coord_scale_t scale = {25.4, 25.4};
+						translator->setScale(scale);
+					} break;
+					case GCodeOpcode::GCode_Millimeters: {
+						coord_scale_t scale = {1, 1};
+						translator->setScale(scale);
+					} break;
+					case GCodeOpcode::GCode_Home:
+						motor_point_t pnt = {0, 0};
+						task->addStep(new JumpTaskStep(pnt, 1.0f));
+					break;
 				}
 				last = {x, y};
 			}
 
 			delete cmd;
 		}
+		delete translator;
 		return task;
 	}
 }

@@ -28,6 +28,7 @@
 #include "ctrl-lib/translator/CoordTranslator.h"
 #include "ctrl-lib/misc/GraphBuilder.h"
 #include "ctrl-lib/graph/FunctionEngine.h"
+#include "ctrl-lib/gcode/GCodeStream.h"
 
 /* Coordinate task is abstraction that perform actions on coordiate plane
    according to implemenation. These are few implemenations available:
@@ -209,6 +210,7 @@ namespace CalX {
 			CoordTranslator *getTranslator();
 		private:
 			std::string code;
+			GCodeStream *stream;
 			CoordTranslator *translator;
 	};
 }
