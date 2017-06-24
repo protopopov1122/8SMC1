@@ -24,6 +24,19 @@
 
 namespace CalX {
 	
+	std::set<int16_t> GCODE_OPERATIONS = {
+		0,	// Rapid move
+		1,	// Linear move
+		2,	// Clockwise arc
+		3,	// Counter-clockwise arc
+		20, // Switch to inches
+		21, // Switch to millimeters
+		28,	// Go home
+		90, // Absolute positioning
+		91, // Relative positioning
+		92  // Set position
+	};
+	
 	GCodeToken::GCodeToken(char operation, GCodeParameter prm) {
 		this->operation = operation;
 		this->parameter = prm;
@@ -147,10 +160,7 @@ namespace CalX {
 			GCodeToken tk = *it;
 			if (tk.getOperation() == 'G' && tk.getParameter().type == GCodeParameterType::Integer) {
 				int64_t opr = tk.getParameter().value.integer;
-				if ((opr >= 0 && opr <= 3) ||
-					opr == 20 ||
-					opr == 21 ||
-					opr == 28) {
+				if (GCODE_OPERATIONS.find(opr) != GCODE_OPERATIONS.end()) {
 					oper = static_cast<GCodeOperation>(tk.getParameter().value.integer);
 					GCodeCmd cmd(oper);
 					commands.push_back(cmd);

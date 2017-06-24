@@ -26,6 +26,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <set>
 
 namespace CalX {
 	
@@ -46,8 +47,12 @@ namespace CalX {
 		RapidMove = 0, LinearMove = 1,
 		ClockwiseArc = 2, CounterClockwiseArc = 3,
 		SwitchInches = 20, SwitchMillimeters = 21,
-		Home = 28
+		Home = 28,
+		AbsolutePositioning = 90, RelativePositioning = 91,
+		SetPosition = 92
 	};
+	
+	extern std::set<int16_t> GCODE_OPERATIONS;
 	
 	class GCodeCmd {
 		public:
