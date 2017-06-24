@@ -45,6 +45,14 @@ namespace CalX {
 	std::string EmuInstrument::getRuntimeInfo() {
 		return "";
 	}
+	
+	bool EmuInstrument::open_session() {
+		return true;
+	}
+	
+	bool EmuInstrument::close_session() {
+		return true;
+	}
 
 	bool EmuInstrument::enable(bool e) {
 		this->en = e;
@@ -55,12 +63,12 @@ namespace CalX {
 		return this->en;
 	}
 
-	bool EmuInstrument::setMode(InstrumentMode m) {
+	bool EmuInstrument::setWorkingMode(InstrumentMode m) {
 		this->mode = m;
 		return true;
 	}
 
-	InstrumentMode EmuInstrument::getMode() {
+	InstrumentMode EmuInstrument::getWorkingMode() {
 		return this->mode;
 	}
 }

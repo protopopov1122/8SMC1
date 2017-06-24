@@ -120,10 +120,12 @@ namespace CalX {
 		public:
 			Instrument(device_id_t);
 			virtual ~Instrument();
+			virtual bool open_session() = 0;
+			virtual bool close_session() = 0;
 			virtual bool enable(bool) = 0;
 			virtual bool enabled() = 0;
-			virtual InstrumentMode getMode() = 0;
-			virtual bool setMode(InstrumentMode) = 0;
+			virtual InstrumentMode getWorkingMode() = 0;
+			virtual bool setWorkingMode(InstrumentMode) = 0;
 		protected:
 			virtual void log(std::string);
 	};

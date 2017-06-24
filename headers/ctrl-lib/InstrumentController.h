@@ -34,6 +34,9 @@ namespace CalX {
 			virtual ~InstrumentController();
 			Instrument *getInstrument();
 			device_id_t getID();
+			bool isSessionOpened();
+			ErrorCode open_session();
+			ErrorCode close_session();
 			bool isEnabled();
 			ErrorCode enable(bool);
 			ErrorCode flipState();
@@ -56,6 +59,7 @@ namespace CalX {
 			void sendStateChanged();
 		private:
 			Instrument *instr;
+			bool session_state;
 			bool state;
 			std::vector<InstrumentEventListener*> listeners;
 	};

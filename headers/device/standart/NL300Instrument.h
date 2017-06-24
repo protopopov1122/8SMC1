@@ -47,20 +47,21 @@ namespace CalX {
 			virtual ~NL300Instrument();
 			bool connect(DeviceSerialPortConnectionPrms*);
 			virtual DeviceManager *getDeviceManager();
+			virtual bool open_session();
+			virtual bool close_session();
 			virtual bool enable(bool);
 			virtual bool enabled();
 			virtual std::string getDeviceInfo();
 			virtual std::string getRuntimeInfo();
-			virtual bool setMode(InstrumentMode);
-			virtual InstrumentMode getMode();
+			virtual bool setWorkingMode(InstrumentMode);
+			virtual InstrumentMode getWorkingMode();
 			
 			bool writeMessage(NL300Message&);
 			NL300Message *readMessage();
 		private:
+			virtual bool changeMode(InstrumentMode);
 			bool writeSerial(std::string);
 			int readSerial(bool*);
-			bool start();
-			bool stop();
 			
 			std::pair<std::string, std::string> getSystemCommandResponse(NL300SystemCommand&);
 			std::string getSystemCommandResponse(std::string, std::string);
@@ -70,7 +71,7 @@ namespace CalX {
 		
 			StandartDeviceManager *devman;
 			bool state;
-			InstrumentMode mode;
+			InstrumentMode work_mode;
 			HANDLE handle;
 			DeviceSerialPortConnectionPrms prms;
 			NL300ConfigEventListener *listener;

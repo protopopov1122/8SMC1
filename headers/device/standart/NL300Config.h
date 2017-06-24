@@ -51,12 +51,6 @@ namespace CalX {
 	#define NL300_CORE_OFF_DELAY "off_mode_delay"
 	#define NL300_CORE_ADJ_DELAY "adj_mode_delay"
 	#define NL300_CORE_MAX_DELAY "max_mode_delay"
-	#define NL300_CORE_ENABLE_OFF_DELAY "enable_off_delay"
-	#define NL300_CORE_ENABLE_ADJ_DELAY "enable_adj_delay"
-	#define NL300_CORE_ENABLE_MAX_DELAY "enable_max_delay"
-	#define NL300_CORE_DISABLE_OFF_DELAY "disable_off_delay"
-	#define NL300_CORE_DISABLE_ADJ_DELAY "disable_adj_delay"
-	#define NL300_CORE_DISABLE_MAX_DELAY "disable_max_delay"
 
 	
 	class NL300Instrument; // Forward referencing

@@ -38,12 +38,14 @@ namespace CalX {
 			EmuInstrument(device_id_t, EmuDeviceManager*);
 			virtual ~EmuInstrument();
 			virtual DeviceManager *getDeviceManager();
+			virtual bool open_session();
+			virtual bool close_session();
 			virtual bool enable(bool);
 			virtual bool enabled();
 			virtual std::string getDeviceInfo();
 			virtual std::string getRuntimeInfo();
-			virtual bool setMode(InstrumentMode);
-			virtual InstrumentMode getMode();
+			virtual bool setWorkingMode(InstrumentMode);
+			virtual InstrumentMode getWorkingMode();
 		private:
 			EmuDeviceManager *devman;
 			bool en;

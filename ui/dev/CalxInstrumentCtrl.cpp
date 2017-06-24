@@ -87,6 +87,29 @@ namespace CalXUI {
 		private:
 			InstrumentController *ctrl;
 	};
+	
+	class CalxInstrumentSessionAction : public CalxAction {
+		public:
+			CalxInstrumentSessionAction(InstrumentController *ctrl) {
+				this->ctrl = ctrl;
+			}
+
+			virtual void perform(SystemManager *sysman) {
+				ctrl->use();
+				if (ctrl->isSessionOpened()) {
+					wxGetApp().getErrorHandler()->handle(ctrl->close_session());
+				} else {
+					wxGetApp().getErrorHandler()->handle(ctrl->open_session());
+				}
+				ctrl->unuse();
+			}
+
+			virtual void stop() {
+
+			}
+		private:
+			InstrumentController *ctrl;
+	}; 
 
 	class CalxInstrumentStateAction : public CalxAction {
 		public:
@@ -158,6 +181,9 @@ namespace CalXUI {
 		mainSizer->Add(ctrlPanel, 0, wxALL, 10);
 		wxBoxSizer *ctrlSizer = new wxBoxSizer(wxVERTICAL);
 		ctrlPanel->SetSizer(ctrlSizer);
+		sessionButton = new wxButton(ctrlPanel, wxID_ANY, __("Open/Close session"));
+		ctrlSizer->Add(sessionButton, 0, wxALL | wxEXPAND);
+		sessionButton->Bind(wxEVT_BUTTON, &CalxInstrumentCtrl::OnSessionSwitch, this);
 		enabledButton = new wxButton(ctrlPanel, wxID_ANY, __("Enable/Disable"));
 		ctrlSizer->Add(enabledButton, 0, wxALL | wxEXPAND);
 		enabledButton->Bind(wxEVT_BUTTON, &CalxInstrumentCtrl::OnEnableButton, this);
@@ -196,9 +222,13 @@ namespace CalXUI {
 	}
 
 	void CalxInstrumentCtrl::updateUI() {
-		std::string text = __("Enabled") + std::string(": ") + std::string(ctrl->isEnabled() ? __("true") : __("false"));
+		std::string text = __("Session") + std::string(": ") + (this->ctrl->isSessionOpened() ? __("Opened") : __("Closed")) +
+			std::string("\n") +
+			__("Enabled") + std::string(": ") + std::string(ctrl->isEnabled() ? __("true") : __("false"));
 		this->infoText->SetLabel(text);
+		sessionButton->Enable(ctrl->isRunnable());
 		enabledButton->Enable(ctrl->isRunnable());
+		this->Layout();
 	}
 
 	void CalxInstrumentCtrl::OnExit(wxCloseEvent &evt) {
@@ -208,6 +238,10 @@ namespace CalXUI {
 
 	void CalxInstrumentCtrl::OnEnableButton(wxCommandEvent &evt) {
 		queue->addAction(new CalxInstrumentEnableAction(this->ctrl));
+	}
+	
+	void CalxInstrumentCtrl::OnSessionSwitch(wxCommandEvent &evt) {
+		queue->addAction(new CalxInstrumentSessionAction(this->ctrl));
 	}
 
 	void CalxInstrumentCtrl::OnConfClick(wxCommandEvent &evt) {

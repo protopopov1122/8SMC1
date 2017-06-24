@@ -43,12 +43,14 @@ namespace CalXUI {
 		private:
 			void OnExit(wxCloseEvent&);
 			void OnEnableButton(wxCommandEvent&);
+			void OnSessionSwitch(wxCommandEvent&);
 			void OnModeClick(wxCommandEvent&);
 			void OnConfClick(wxCommandEvent&);
 			void OnEnableEvent(wxThreadEvent&);
 
 			wxStaticText *infoText;
 			wxStaticText *instrInfoText;
+			wxButton *sessionButton;
 			wxButton *enabledButton;
 			wxChoice *modeChoice;
 

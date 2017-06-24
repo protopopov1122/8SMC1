@@ -26,6 +26,7 @@ namespace CalX {
 	InstrumentController::InstrumentController(Instrument *instr) {
 		this->instr = instr;
 		this->state = true;
+		this->session_state = false;
 		INIT_LOG("InstrumentController");
 	}
 
@@ -44,6 +45,37 @@ namespace CalX {
 	ConfigManager *InstrumentController::getConfiguration() {
 		return this->instr->getConfiguration();
 	}
+	
+	bool InstrumentController::isSessionOpened() {
+		return this->session_state;
+	}
+	
+	ErrorCode InstrumentController::open_session() {
+		if (!this->session_state) {
+			ErrorCode errcode = this->instr->open_session() ? ErrorCode::NoError : ErrorCode::LowLevelError;
+			if (errcode == ErrorCode::NoError) {
+				this->session_state = true;
+			}
+			return errcode;
+		} else {
+			return ErrorCode::NoError;
+		}
+	}
+	
+	ErrorCode InstrumentController::close_session() {
+		if (this->session_state) {
+			if (this->isEnabled()) {
+				this->enable(false);
+			}
+			ErrorCode errcode = this->instr->close_session() ? ErrorCode::NoError : ErrorCode::LowLevelError;
+			if (errcode == ErrorCode::NoError) {
+				this->session_state = false;
+			}
+			return errcode;
+		} else {
+			return ErrorCode::NoError;
+		}
+	}
 
 	bool InstrumentController::isEnabled() {
 		return this->instr->enabled();
@@ -51,6 +83,12 @@ namespace CalX {
 
 	ErrorCode InstrumentController::enable(bool e) {
 		if ((e && this->state) != isEnabled()) {
+			if (e && this->state && !this->session_state) {
+				ErrorCode errcode = this->open_session();
+				if (errcode != ErrorCode::NoError) {
+					return errcode;
+				}
+			}
 			if (!this->instr->enable(e && this->state)) {
 				return ErrorCode::LowLevelError;
 			}
@@ -80,11 +118,11 @@ namespace CalX {
 	}
 
 	InstrumentMode InstrumentController::getMode() {
-		return this->instr->getMode();
+		return this->instr->getWorkingMode();
 	}
 
 	bool InstrumentController::setMode(InstrumentMode m) {
-		return this->instr->setMode(m);
+		return this->instr->setWorkingMode(m);
 	}
 
 	void InstrumentController::addEventListener(InstrumentEventListener *l) {

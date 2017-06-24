@@ -127,7 +127,7 @@ namespace CalX {
 			this->handle = INVALID_HANDLE_VALUE;
 			return false;
 		}
-		this->mode = InstrumentMode::Off;
+		this->work_mode = InstrumentMode::Off;
 		this->log("Instrument mode switched to off");
 
 		this->listener = new NL300ConfigEventListener(this);
@@ -150,44 +150,15 @@ namespace CalX {
 	DeviceManager *NL300Instrument::getDeviceManager() {
 		return this->devman;
 	}
-
-	bool NL300Instrument::enable(bool en) {
-		lock();
-		if (handle == INVALID_HANDLE_VALUE) {
-			this->log("Enable error: instrument closed");
-			unlock();
+	
+	bool NL300Instrument::open_session() {
+		if (!this->changeMode(InstrumentMode::Off)) {
 			return false;
 		}
-		if (en && en == enabled()) {
-			this->log("Enable: state not changed");
-			unlock();
-			return true;
-		}
-
-		this->log("Changing instrument state to " + std::string(en ? "enabled" : "disabled"));
-		bool status = en ? start() : stop();
-		if (!status) {
-			this->log("Instrument state change failed");
-			unlock();
-			return false;
-		}
-
-		state = en;
-		this->log("Instrument state changed to " + std::string(en ? "enabled" : "disabled"));
-		unlock();
-		return true;
-	}
-
-	bool NL300Instrument::start() {
-		// std::string res = getSystemCommandResponse("START", "error");
 		NL300SystemCommand syscom(NL300_LASER_NAME, "START", "", NL300_PC_NAME);
 		std::pair<std::string, std::string> response = getSystemCommandResponse(syscom);
 		std::string res = response.second;
 		std::string rescom = response.first;
-		/*
-		(!res.empty() && res.compare("0") != 0 &&
-			rescom.compare("START") == 0) &&
-			rescom.compare("READY") != 0*/
 		if ((rescom.compare("READY") != 0 &&
 			rescom.compare("START") != 0) ||
 			(rescom.compare("START") == 0 &&
@@ -208,61 +179,75 @@ namespace CalX {
 			devman->saveInstrumentError();
 			NL300SystemCommand stopSyscom(NL300_LASER_NAME, "STOP", "", NL300_PC_NAME);
 			writeMessage(stopSyscom);
+			NL300Message *msg = readMessage();
+			delete msg;
 			return false;
 		}
-		if (getCoreEntry()->getBool(NL300_CORE_ENABLE_DELAY, true)) {
-			int syncDelay = 0;
-			if (mode == InstrumentMode::Prepare) {
-				syncDelay = getCoreEntry()->getInt(NL300_CORE_ENABLE_ADJ_DELAY, 400);
-			} else if (mode == InstrumentMode::Full) {
-				syncDelay = getCoreEntry()->getInt(NL300_CORE_ENABLE_MAX_DELAY, 400);
-			} else {
-				syncDelay = getCoreEntry()->getInt(NL300_CORE_ENABLE_OFF_DELAY, 400);
-			}
-			Sleep(syncDelay);
-		}
+		Sleep(getCoreEntry()->getInt(NL300_CORE_ENABLE_DELAY, 4000));
 		return true;
 	}
-
-	bool NL300Instrument::stop() {
+	
+	bool NL300Instrument::close_session() {
 		NL300SystemCommand syscom(NL300_LASER_NAME, "STOP", "", NL300_PC_NAME);
 		writeMessage(syscom);
 		NL300Message *msg = readMessage();
 		delete msg;
 		std::pair<std::string, std::string> res = std::make_pair("NOTREADY", "");
 		while (res.first.compare("NOTREADY") == 0) {
-			if (getCoreEntry()->getBool(NL300_CORE_DISABLE_DELAY, true)) {
-				int syncDelay = 0;
-				if (mode == InstrumentMode::Prepare) {
-					syncDelay = getCoreEntry()->getInt(NL300_CORE_DISABLE_ADJ_DELAY, 400);
-				} else if (mode == InstrumentMode::Full) {
-					syncDelay = getCoreEntry()->getInt(NL300_CORE_DISABLE_MAX_DELAY, 400);
-				} else {
-					syncDelay = getCoreEntry()->getInt(NL300_CORE_DISABLE_OFF_DELAY, 400);
-				}
-				Sleep(syncDelay);
-			}
+			Sleep(getCoreEntry()->getInt(NL300_CORE_DISABLE_DELAY, 4000));
 			NL300SystemCommand syscom3(NL300_LASER_NAME, "SAY", "", NL300_PC_NAME);
 			res = getSystemCommandResponse(syscom3);
 		}
 		return true;
 	}
 
-	InstrumentMode NL300Instrument::getMode() {
-		return this->mode;
+	bool NL300Instrument::enable(bool en) {
+		lock();
+		if (handle == INVALID_HANDLE_VALUE) {
+			this->log("Enable error: instrument closed");
+			unlock();
+			return false;
+		}
+		if (en && en == enabled()) {
+			this->log("Enable: state not changed");
+			unlock();
+			return true;
+		}
+
+		this->log("Changing instrument state to " + std::string(en ? "enabled" : "disabled"));
+		bool status = true;
+		if (en) {
+			status = this->changeMode(this->work_mode);
+		} else {
+			status = this->changeMode(InstrumentMode::Off);
+		}
+		if (!status) {
+			this->log("Instrument state change failed");
+			unlock();
+			return false;
+		}
+
+		state = en;
+		this->log("Instrument state changed to " + std::string(en ? "enabled" : "disabled"));
+		unlock();
+		return true;
+	}
+	
+	bool NL300Instrument::setWorkingMode(InstrumentMode mode) {
+		this->work_mode = mode;
+		return true;
 	}
 
-	bool NL300Instrument::setMode(InstrumentMode mode) {
+	InstrumentMode NL300Instrument::getWorkingMode() {
+		return this->work_mode;
+	}
+
+	bool NL300Instrument::changeMode(InstrumentMode mode) {
 		lock();
 		if (handle == INVALID_HANDLE_VALUE) {
 			this->log("Set mode error: instrument closed");
 			unlock();
 			return false;
-		}
-		if (this->mode == mode) {
-			this->log("Mode was not changed to the same");
-			unlock();
-			return true;
 		}
 
 		int imode = mode == InstrumentMode::Off ? 0 : (mode == InstrumentMode::Prepare? 1 : 2);
@@ -286,7 +271,6 @@ namespace CalX {
 			Sleep(syncDelay);
 		}
 
-		this->mode = mode;
 		this->log("Mode changed to " + std::to_string(imode));
 		unlock();
 		return true;
