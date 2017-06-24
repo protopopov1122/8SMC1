@@ -29,7 +29,7 @@
 #include <wx/splitter.h>
 #include "ui/coord/CalxCoordPanel.h"
 #include "ui/coord/CalxVirtualPlane.h"
-#include "ctrl-lib/misc/GCodeWriter.h"
+#include "ctrl-lib/gcode/GCodeWriter.h"
 #include "ui/task/CalxGcodeLoader.h"
 
 namespace CalXUI {

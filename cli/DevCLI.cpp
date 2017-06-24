@@ -24,10 +24,11 @@
 #include <sstream>
 #include "cli/DevCLI.h"
 #include "ctrl-lib/misc/CircleGenerator.h"
-#include "ctrl-lib/misc/GCodeParser.h"
 #include "ctrl-lib/misc/GraphBuilder.h"
 #include "ctrl-lib/graph/FunctionParser.h"
 #include "ctrl-lib/graph/FunctionEngine.h"
+#include "ctrl-lib/gcode/GCodeStream.h"
+#include "ctrl-lib/gcode/GCodeInterpreter.h"
 
 namespace CalX {
 	void LsCommand::execute(CLI *cli, std::vector<std::string> &args) {
@@ -735,12 +736,10 @@ namespace CalX {
 			motor_size_t scale = {
 				std::stoi(args.at(3)), std::stoi(args.at(4))
 			};
-			BasicCoordTranslator trans(center, scale);
+			BasicCoordTranslator *trans = new BasicCoordTranslator(center, scale);
 			std::string path = args.at(5);
 			std::ifstream is(path, std::ifstream::in);
-			GCodeLexer lex(&is);
-			GCodeParser parser(&lex);
-			gcode_translate(&parser, &trans, this->sysman->createProgrammedTask(), this->sysman->getConfiguration());
+			sysman->addTask(new GCodeCoordTask(&is, trans));
 			is.close();
 		} else if (args.at(0).compare("graph") == 0) {
 			if (args.size() < 12) {

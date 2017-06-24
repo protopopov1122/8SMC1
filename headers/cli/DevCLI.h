@@ -23,7 +23,6 @@
 
 #include "CLI.h"
 #include "ctrl-lib/SystemManager.h"
-#include "ctrl-lib/misc/GCodeParser.h"
 
 /* Command line commands are used to test system functionality*
    while GUI is not developed. Most commands are directly mapped

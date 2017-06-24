@@ -22,7 +22,6 @@
 #include "ui/task/CalxTaskHandle.h"
 #include <wx/sizer.h>
 #include <wx/textctrl.h>
-#include "ctrl-lib/misc/GCodeParser.h"
 
 namespace CalXUI {
 
