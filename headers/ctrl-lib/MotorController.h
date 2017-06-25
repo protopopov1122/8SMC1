@@ -23,10 +23,10 @@
 
 #include <cinttypes>
 #include <vector>
-#include "device/DeviceManager.h"
-#include "ConfigManager.h"
-#include "CtrlCore.h"
-#include "EventListener.h"
+#include "ctrl-lib/device/DeviceManager.h"
+#include "ctrl-lib/ConfigManager.h"
+#include "ctrl-lib/CtrlCore.h"
+#include "ctrl-lib/EventListener.h"
 
 /* This file contains definitions of high-level device controller library.
    Library purpose is controlling device state, speed, complex

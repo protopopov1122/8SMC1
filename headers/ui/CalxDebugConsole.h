@@ -21,7 +21,7 @@
 #ifndef CALX_UI_CALX_DEBUG_CONSOLE_H_
 #define CALX_UI_CALX_DEBUG_CONSOLE_H_
 
-#include "CalxApp.h"
+#include "ui/CalxApp.h"
 #include <wx/thread.h>
 
 namespace CalXUI {

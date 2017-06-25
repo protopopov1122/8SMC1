@@ -21,7 +21,7 @@
 #ifndef CALX_UI_CALX_CONFIG_EDITOR_H_
 #define CALX_UI_CALX_CONFIG_EDITOR_H_
 
-#include "CalxApp.h"
+#include "ui/CalxApp.h"
 #include <wx/listbox.h>
 #include <wx/dataview.h>
 #include <wx/spinctrl.h>

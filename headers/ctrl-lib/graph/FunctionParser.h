@@ -25,8 +25,8 @@
 #include <map>
 #include <string>
 #include <cinttypes>
-#include "Lexem.h"
-#include "AST.h"
+#include "ctrl-lib/graph/Lexem.h"
+#include "ctrl-lib/graph/AST.h"
 
 namespace CalX {
 	

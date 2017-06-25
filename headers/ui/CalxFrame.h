@@ -23,9 +23,9 @@
 
 #include <string>
 #include <iostream>
-#include "calx.h"
+#include "ui/calx.h"
 #include <wx/menu.h>
-#include "CalxPanel.h"
+#include "ui/CalxPanel.h"
 
 namespace CalXUI {
 	

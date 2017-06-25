@@ -25,7 +25,7 @@
 #include <vector>
 #include <string>
 #include <cinttypes>
-#include "AST.h"
+#include "ctrl-lib/graph/AST.h"
 #include "ctrl-lib/CtrlCore.h"
 
 /* This file contains definition of function evaluation engine and scope.

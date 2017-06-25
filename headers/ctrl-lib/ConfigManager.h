@@ -26,8 +26,8 @@
 #include <vector>
 #include <cinttypes>
 #include <iostream>
-#include "CtrlCore.h"
-#include "EventListener.h"
+#include "ctrl-lib/CtrlCore.h"
+#include "ctrl-lib/EventListener.h"
 
 /* This file contains configuration manager - configuration parameter storage.
    It represents structure similar to INI file, but all values have types.

@@ -26,9 +26,9 @@
 #include <cinttypes>
 #include "ctrl-lib/device/Device.h"
 #include "ctrl-lib/device/DeviceManager.h"
-#include "NL300Message.h"
-#include "NL300Command.h"
-#include "NL300Config.h"
+#include "device/standart/NL300Message.h"
+#include "device/standart/NL300Command.h"
+#include "device/standart/NL300Config.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>

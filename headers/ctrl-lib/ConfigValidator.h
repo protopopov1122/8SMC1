@@ -23,8 +23,8 @@
 
 #include <vector>
 #include <string>
-#include "CtrlCore.h"
-#include "ConfigManager.h"
+#include "ctrl-lib/CtrlCore.h"
+#include "ctrl-lib/ConfigManager.h"
 
 namespace CalX {
 	

@@ -21,16 +21,16 @@
 #ifndef CALX_CTRL_LIB_SYSTEM_MANAGER_H_
 #define CALX_CTRL_LIB_SYSTEM_MANAGER_H_
 
-#include "device/DeviceManager.h"
-#include "InstrumentController.h"
-#include "ConfigManager.h"
-#include "plane/CoordPlane.h"
-#include "CoordHandle.h"
-#include "task/CoordTask.h"
-#include "misc/GraphBuilder.h"
-#include "graph/FunctionEngine.h"
-#include "RequestResolver.h"
-#include "ExtEngine.h"
+#include "ctrl-lib/device/DeviceManager.h"
+#include "ctrl-lib/InstrumentController.h"
+#include "ctrl-lib/ConfigManager.h"
+#include "ctrl-lib/plane/CoordPlane.h"
+#include "ctrl-lib/CoordHandle.h"
+#include "ctrl-lib/task/CoordTask.h"
+#include "ctrl-lib/misc/GraphBuilder.h"
+#include "ctrl-lib/graph/FunctionEngine.h"
+#include "ctrl-lib/RequestResolver.h"
+#include "ctrl-lib/ExtEngine.h"
 
 /* SystemManager is component that store and control most system 
    objects. System manager was made to use with command line, so

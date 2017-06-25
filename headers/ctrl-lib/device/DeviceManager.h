@@ -28,7 +28,7 @@
 #include <cinttypes>
 #include <mutex>
 #include "platform.h"
-#include "Device.h"
+#include "ctrl-lib/device/Device.h"
 
 /* Device manager initialise existing controllers and keep track of usable devices and instruments.
    Some of device manager functionality are common for all possible managers(however it can be overrided), some is specific.*/

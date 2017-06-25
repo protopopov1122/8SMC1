@@ -21,7 +21,7 @@
 #ifndef CALX_DEVCLI_H_
 #define CALX_DEVCLI_H_
 
-#include "CLI.h"
+#include "cli/CLI.h"
 #include "ctrl-lib/SystemManager.h"
 
 /* Command line commands are used to test system functionality*

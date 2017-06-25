@@ -28,9 +28,11 @@
 	#ifndef __WXMSW__
 		#define __WXMSW__
 	#endif
+	/*
 	#ifndef WXUSINGDLL
 		#define WXUSINGDLL
 	#endif
+	*/
 #endif
 
 #define wxUSE_UNICODE 1

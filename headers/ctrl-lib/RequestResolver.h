@@ -25,8 +25,8 @@
 #include <vector>
 #include <map>
 #include <iostream>
-#include "CtrlCore.h"
-#include "ConfigManager.h"
+#include "ctrl-lib/CtrlCore.h"
+#include "ctrl-lib/ConfigManager.h"
 
 /* Request resolver - simple interface to perform system automatic configuration.
 	Each configuration step should be written as request in format:

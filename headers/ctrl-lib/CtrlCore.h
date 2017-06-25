@@ -23,7 +23,7 @@
 
 #include <cinttypes>
 #include "platform.h"
-#include "logger.h"
+#include "ctrl-lib/logger.h"
 
 /* This file contains basic structures, enums and constants that commonly used by other library parts. */
 

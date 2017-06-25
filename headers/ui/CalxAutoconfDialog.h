@@ -22,7 +22,7 @@
 #define CALX_UI_CALX_AUTOCONF_DIALOG_H_
 
 #include <iostream>
-#include "CalxApp.h"
+#include "ui/CalxApp.h"
 #include <wx/stattext.h>
 #include "ctrl-lib/RequestResolver.h"
 

@@ -23,7 +23,7 @@
 
 
 #include <vector>
-#include "CalxApp.h"
+#include "ui/CalxApp.h"
 #include <wx/filesys.h>
 #include <wx/dataview.h>
 #include <wx/textctrl.h>

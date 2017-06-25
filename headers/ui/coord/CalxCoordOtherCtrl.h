@@ -30,7 +30,7 @@
 #include <wx/collpane.h>
 #include "ui/CalxActionQueue.h"
 #include "ui/CalxFrame.h"
-#include "CalxCoordPositionCtrl.h"
+#include "ui/coord/CalxCoordPositionCtrl.h"
 
 using namespace CalX;
 

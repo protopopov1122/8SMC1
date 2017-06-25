@@ -22,9 +22,9 @@
 #define CALX_CTRL_LIB_INSTRUMENT_CONTROLLER_H_
 
 #include <vector>
-#include "device/DeviceManager.h"
-#include "CtrlCore.h"
-#include "EventListener.h"
+#include "ctrl-lib/device/DeviceManager.h"
+#include "ctrl-lib/CtrlCore.h"
+#include "ctrl-lib/EventListener.h"
 
 namespace CalX {
 	

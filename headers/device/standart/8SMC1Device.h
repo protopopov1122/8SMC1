@@ -25,7 +25,7 @@
 #include <string>
 #include <vector>
 #include "ctrl-lib/device/Device.h"
-#include "NL300Instrument.h"
+#include "device/standart/NL300Instrument.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>

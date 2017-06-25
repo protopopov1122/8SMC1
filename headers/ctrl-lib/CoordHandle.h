@@ -22,7 +22,7 @@
 #define CALX_CTRL_LIB_COORD_HANDLE_H_
 
 #include <cinttypes>
-#include "plane/CoordPlane.h"
+#include "ctrl-lib/plane/CoordPlane.h"
 
 namespace CalX {
 

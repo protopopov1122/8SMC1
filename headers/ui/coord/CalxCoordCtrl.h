@@ -29,11 +29,11 @@
 #include <wx/collpane.h>
 #include "ui/CalxActionQueue.h"
 #include "ui/CalxFrame.h"
-#include "CalxCoordLinearCtrl.h"
-#include "CalxCoordArcCtrl.h"
-#include "CalxCoordGraphCtrl.h"
-#include "CalxCoordOtherCtrl.h"
-#include "CalxCoordMiscCtrl.h"
+#include "ui/coord/CalxCoordLinearCtrl.h"
+#include "ui/coord/CalxCoordArcCtrl.h"
+#include "ui/coord/CalxCoordGraphCtrl.h"
+#include "ui/coord/CalxCoordOtherCtrl.h"
+#include "ui/coord/CalxCoordMiscCtrl.h"
 
 using namespace CalX;
 

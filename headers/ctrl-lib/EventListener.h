@@ -22,7 +22,7 @@
 #define CALX_CTRL_LIB_EVENT_LISTENER_H_
 
 #include <string>
-#include "CtrlCore.h"
+#include "ctrl-lib/CtrlCore.h"
 
 namespace CalX {
 	

@@ -21,7 +21,7 @@
 #ifndef CALX_UI_ERROR_HANDLER_H_
 #define CALX_UI_ERROR_HANDLER_H_
 
-#include "CalxApp.h"
+#include "ui/CalxApp.h"
 
 namespace CalXUI {
 

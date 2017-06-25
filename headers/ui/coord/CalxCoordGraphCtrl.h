@@ -28,7 +28,7 @@
 #include <wx/spinctrl.h>
 #include "ui/CalxActionQueue.h"
 #include "ui/CalxFrame.h"
-#include "CalxCoordFilter.h"
+#include "ui/coord/CalxCoordFilter.h"
 
 using namespace CalX;
 

@@ -22,7 +22,7 @@
 #define CALX_UI_CALX_ACTION_QUEUE_H_
 
 #include <vector>
-#include "calx.h"
+#include "ui/calx.h"
 #include <wx/thread.h>
 #include <wx/event.h>
 

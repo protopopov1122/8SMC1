@@ -23,11 +23,11 @@
 
 #include <iostream>
 #include <fstream>
-#include "calx.h"
+#include "ui/calx.h"
 #include <wx/dynlib.h>
 #include <wx/intl.h>
-#include "CalxFrame.h"
-#include "UIExtEngine.h"
+#include "ui/CalxFrame.h"
+#include "ui/UIExtEngine.h"
 
 using namespace CalX;
 

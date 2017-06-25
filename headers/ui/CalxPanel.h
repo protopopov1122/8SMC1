@@ -21,7 +21,7 @@
 #ifndef CALX_UI_CALX_PANEL_H_
 #define CALX_UI_CALX_PANEL_H_
 
-#include "calx.h"
+#include "ui/calx.h"
 #include <wx/notebook.h>
 
 namespace CalXUI {

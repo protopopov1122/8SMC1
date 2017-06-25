@@ -25,8 +25,8 @@
 #include <vector>
 #include "ui/CalxApp.h"
 #include <wx/listbox.h>
-#include "CalxCoordCtrl.h"
-#include "CalxCoordPlaneWatcher.h"
+#include "ui/coord/CalxCoordCtrl.h"
+#include "ui/coord/CalxCoordPlaneWatcher.h"
 
 namespace CalXUI {
 
