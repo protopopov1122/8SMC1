@@ -20,7 +20,6 @@
 
 #include "ctrl-lib/gcode/GCodeStream.h"
 #include <string.h>
-#include <regex>
 
 namespace CalX {
 	
@@ -185,8 +184,8 @@ namespace CalX {
 	}
 	
 	bool GCodeStream::parse_parameter(GCodeParameter &prm, std::string par) {
-		static std::regex int_regex("[-+]?[0-9]+");
-		static std::regex float_regex("[-+]?[0-9]*\\.?[0-9]+");
+		/*static std::regex int_regex("[-+]?[0-9]+", std::regex_constants::basic);
+		static std::regex float_regex("[-+]?[0-9]*\\.?[0-9]+", std::regex_constants::basic);
 		if (std::regex_match(par, int_regex)) {
 			prm.type = GCodeParameterType::Integer;
 			prm.value.integer = stoll(par);
@@ -196,6 +195,32 @@ namespace CalX {
 		} else {
 			prm.type = GCodeParameterType::Unknown;
 			return false;
+		}
+		return true;*/
+		if (par.empty()) {
+			prm.type = GCodeParameterType::Unknown;
+			return false;
+		}
+		size_t position = 0;
+		uint16_t dot_count = 0;
+		if (par.at(0) == '+' || par.at(0) == '-') {
+			position++;
+		}
+		for (; position < par.size(); position++) {
+			char chr = par.at(position);
+			if (chr == '.' && dot_count == 0) {
+				dot_count++;
+			} else if (!isdigit(chr)) {
+				prm.type = GCodeParameterType::Unknown;
+				return false;
+			}
+		}
+		if (dot_count == 0) {
+			prm.type = GCodeParameterType::Integer;
+			prm.value.integer = stoll(par);
+		} else {
+			prm.type = GCodeParameterType::Real;
+			prm.value.real = stold(par);
 		}
 		return true;
 	}
