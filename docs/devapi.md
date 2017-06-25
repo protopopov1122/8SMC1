@@ -30,6 +30,8 @@ Now about each device type separately:
 * Instrument - representation of of any cutting instruments. It is subclass of Device and also it should implement folowing methods:
 	* bool enable(bool) - enable/disable instrument depending on argument. Should return false if error occured.
 	* bool enabled() - indicates instrument state.
+	* bool open_session() - open instrument session(prepare for further work).
+	* bool close_session() - close instrument session(shutdown it);
 	* InstrumentMode getMode() - returns current instrument mode. Currently system defines such modes: Off, Prepare, Full. See InstrumentMode enum in 'Device.h'
 	* bool setMode(InstrumentMode) - change instrument mode.  Should return false if error occured.
 

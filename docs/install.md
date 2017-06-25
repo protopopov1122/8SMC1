@@ -5,7 +5,8 @@ CalX system supports two build systems. First one is CMake: it is easier to use 
 
 After build with both build systems 'build' directory will be generated. Basically, it includes system that is ready for use.
 #### CMake build
-It's recommended to build out-of-source. I suggest creating separate build directory. You should also have compiled wxWidgets library(project UI uses dynamic monolithic unicode version of it). Commands are similar for Windows and Linux:
+On Windows project uses dynamic runtime, so it depends on Visual C++ Redistributable package on end-user machine.
+It's recommended to build out-of-source. I suggest creating separate build directory. You should also have compiled wxWidgets library(project UI uses static unicode version of it with dynamic runtime). Commands are similar for Windows and Linux:
 ```bash
 mkdir build # Execute from project top directory
 cd build
@@ -16,7 +17,7 @@ Now you have solution for MSVC or Makefile for Linux. Just compile it:
 msbuild CalX.sln /p:Configuration=Release /m # On Windows
 make -jN # On Linux. Replace N with your processor core count
 ```
-CPack installator can be generated for Windows:
+CPack installer can be generated for Windows:
 ```bash
 cpack
 ```
