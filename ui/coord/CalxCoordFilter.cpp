@@ -95,7 +95,7 @@ namespace CalXUI {
 		this->yscale = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                       wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, ctrl->getScale().y,
 									  wxGetApp().getUnitPrecision());
-		
+
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("X offset") + std::string(":")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
 		sizer->Add(xoffset, 0, wxALL | wxEXPAND);
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Y offset") + std::string(":")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
@@ -226,8 +226,8 @@ namespace CalXUI {
 
 		if (this->trans == nullptr) {
 			ConfigManager *conf = wxGetApp().getSystemManager()->getConfiguration();
-			coord_point_t cen = {conf->getEntry("coords")->getInt("offset_x", 0),
-				conf->getEntry("coords")->getInt("offset_y", 0)};
+			coord_point_t cen = {static_cast<double>(conf->getEntry("coords")->getInt("offset_x", 0)),
+				static_cast<double>(conf->getEntry("coords")->getInt("offset_y", 0))};
 			coord_scale_t scl = {conf->getEntry("ui")->getReal("unit_scale", 1.0f),
 				conf->getEntry("ui")->getReal("unit_scale", 1.0f)};
 			LinearCoordTranslator *basic = new LinearCoordTranslator(cen, scl);

@@ -26,14 +26,14 @@ namespace CalX {
 
 	ErrorCode GCodeInterpreter::execute(GCodeStream *input, CoordPlane *plane, CoordTranslator *trans,
 		ConfigManager *config, float speed, TaskState *state) {
-		
+
 		input->reset();
-		
+
 		coord_point_t troffset = {0, 0};
 		coord_scale_t trscale = {1, 1};
 		LinearCoordTranslator unit_trans(troffset, trscale, trans);
 		LinearCoordTranslator translator(troffset, trscale, &unit_trans);
-		
+
 		motor_point_t offset = translator.get(0, 0);
 		coord_point_t last = {0, 0};
 		int invert = 1;
@@ -103,7 +103,7 @@ namespace CalX {
 						cen.y = TO_REAL(prm);
 					}
 					motor_point_t current = plane->getPosition();
-					motor_point_t mdest = translator.get(dest.x, dest.y); 
+					motor_point_t mdest = translator.get(dest.x, dest.y);
 					motor_point_t mcen = translator.get(cen.x, cen.y);
 					mcen.x -= offset.x;
 					mcen.y -= offset.y;
@@ -134,7 +134,7 @@ namespace CalX {
 						cen.y = TO_REAL(prm);
 					}
 					motor_point_t current = plane->getPosition();
-					motor_point_t mdest = translator.get(dest.x, dest.y); 
+					motor_point_t mdest = translator.get(dest.x, dest.y);
 					motor_point_t mcen = translator.get(cen.x, cen.y);
 					mcen.x -= offset.x;
 					mcen.y -= offset.y;
@@ -176,6 +176,8 @@ namespace CalX {
 					}
 					translator.setOffset(offset);
 				} break;
+				default:
+				break;
 			}
 		}
 		return errcode;

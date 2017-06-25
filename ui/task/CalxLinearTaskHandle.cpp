@@ -41,8 +41,8 @@ namespace CalXUI {
 		bool mvert = true;
 		this->task = new LinearCoordTask(mrect, mspac, mvert);
 		ConfigManager *conf = wxGetApp().getSystemManager()->getConfiguration();
-		coord_point_t offset = {conf->getEntry("coords")->getInt("offset_x", 0),
-			conf->getEntry("coords")->getInt("offset_y", 0)};
+		coord_point_t offset = {static_cast<double>(conf->getEntry("coords")->getInt("offset_x", 0)),
+			static_cast<double>(conf->getEntry("coords")->getInt("offset_y", 0))};
 		coord_scale_t size = {conf->getEntry("ui")->getReal("unit_scale", 1.0),
 			conf->getEntry("ui")->getReal("unit_scale", 1.0)};
 		this->trans = new ComplexCoordTranslator(new LinearCoordTranslator(offset, size));
@@ -111,7 +111,7 @@ namespace CalXUI {
 		                     this->wDim->GetValue(), this->hDim->GetValue()};
 		double spacing = this->spacing->GetValue();
 		bool vert = this->vertical->GetValue();
-		
+
 		double scale = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("unit_scale", 1.0);
 		motor_rect_t mrect = {
 			static_cast<motor_coord_t>(rect.x * scale),

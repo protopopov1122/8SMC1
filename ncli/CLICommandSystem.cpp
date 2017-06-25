@@ -15,6 +15,7 @@ namespace CalX {
       return false;
     }
     this->commands.insert(std::make_pair(cmd->getName(), cmd));
+    return true;
   }
 
   NCLICommandInstance *NCLICommandSystem::newCommandInstance(std::string name) {

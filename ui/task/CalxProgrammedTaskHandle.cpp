@@ -28,8 +28,8 @@ namespace CalXUI {
 		this->task = new ProgrammedCoordTask();
 
 		ConfigManager *conf = wxGetApp().getSystemManager()->getConfiguration();
-		coord_point_t offset = {conf->getEntry("coords")->getInt("offset_x", 0),
-			conf->getEntry("coords")->getInt("offset_y", 0)};
+		coord_point_t offset = {static_cast<double>(conf->getEntry("coords")->getInt("offset_x", 0)),
+			static_cast<double>(conf->getEntry("coords")->getInt("offset_y", 0))};
 		coord_scale_t size = {conf->getEntry("ui")->getReal("unit_scale", 1.0),
 			conf->getEntry("ui")->getReal("unit_scale", 1.0)};
 		this->trans = new ComplexCoordTranslator(new LinearCoordTranslator(offset, size));
