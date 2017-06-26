@@ -60,6 +60,10 @@ namespace CalXUI {
 			CoordPlaneStack *stack;
 			FloatCoordPlane *float_plane;
 			CoordHandle *base;
+			
+			wxColour pointer_colour;
+			wxColour jump_colour;
+			wxColour move_colour;
 	};
 
 	class CalxVirtualPlaneDialog : public wxDialog {

@@ -35,7 +35,8 @@ namespace CalXUI {
 	}
 
 	void CalxCoordPlaneWatcherTimer::Notify() {
-		std::pair<motor_point_t, bool> pair = std::make_pair(handle->getController()->getPosition(), true);
+		std::pair<motor_point_t, bool> pair = std::make_pair(handle->getController()->getPosition(),
+			handle->getStatus() == CoordPlaneStatus::Move);
 		wxThreadEvent evt(wxEVT_WATCHER_APPEND_POINT);
 		evt.SetPayload(pair);
 		wxPostEvent(watcher, evt);
@@ -53,8 +54,9 @@ namespace CalXUI {
 		}
 	}
 
-	CalxCoordPlaneWatcherEvent::CalxCoordPlaneWatcherEvent(CalxCoordPlaneWatcher *w) {
+	CalxCoordPlaneWatcherEvent::CalxCoordPlaneWatcherEvent(CalxCoordPlaneWatcher *w, CoordHandle *handle) {
 		this->watcher = w;
+		this->handle = handle;
 	}
 
 	CalxCoordPlaneWatcherEvent::~CalxCoordPlaneWatcherEvent() {
@@ -62,17 +64,32 @@ namespace CalXUI {
 	}
 
 	void CalxCoordPlaneWatcherEvent::moved(CoordMoveEvent &evnt) {
-		std::pair<motor_point_t, bool> pair = std::make_pair(evnt.destination, evnt.synchrone);
+		std::pair<motor_point_t, bool> pair = std::make_pair(handle->getController()->getPosition(), evnt.synchrone);
 		wxThreadEvent evt(wxEVT_WATCHER_APPEND_POINT);
 		evt.SetPayload(pair);
 		wxPostEvent(watcher, evt);
 	}
 
 	CalxCoordPlaneWatcher::CalxCoordPlaneWatcher(wxWindow *win, wxWindowID id, wxSize min, CoordHandle *handle)
-		: wxWindow::wxWindow(win, id) {
+		: wxWindow::wxWindow(win, id), pointer_colour(255, 0, 0),
+			jump_colour(128, 128, 128), move_colour(0, 0, 0) {
 
 		this->handle = handle;
         wxGetApp().getMainFrame()->getPanel()->getCoords()->bindWatcher((device_id_t) handle->getID(), this);
+		
+		ConfigEntry *colourEntry = wxGetApp().getSystemManager()->getConfiguration()->getEntry("watcher_color");
+		this->pointer_colour = wxColour(colourEntry->getInt("pointer_R", 255),
+		                                colourEntry->getInt("pointer_G", 0),
+		                                colourEntry->getInt("pointer_B", 0),
+		                                colourEntry->getInt("pointer_A", 255));
+		this->jump_colour = wxColour(colourEntry->getInt("jump_R", 128),
+		                             colourEntry->getInt("jump_G", 128),
+		                             colourEntry->getInt("jump_B", 128),
+		                             colourEntry->getInt("jump_A", 255));
+		this->move_colour = wxColour(colourEntry->getInt("move_R", 0),
+		                             colourEntry->getInt("move_G", 0),
+		                             colourEntry->getInt("move_B", 0),
+		                             colourEntry->getInt("move_A", 255));
 
 		SetMinSize(min);
 
@@ -102,7 +119,7 @@ namespace CalXUI {
 		this->bitmap.Create(GetSize().x, GetSize().y);
 		this->rendering = false;
 		this->has_updates = true;
-		this->listener = new CalxCoordPlaneWatcherEvent(this);
+		this->listener = new CalxCoordPlaneWatcherEvent(this, this->handle);
 		this->handle->addEventListener(this->listener);
 	}
 
@@ -141,8 +158,17 @@ namespace CalXUI {
 		motor_point_t last_point = this->history.at(this->history.size() - 2).first;
 		wxMemoryDC dc;
 		dc.SelectObject(this->bitmap);
-		dc.SetPen(*wxBLACK_PEN);
-		dc.SetBrush(*wxBLACK_BRUSH);
+		if (sync) {
+			wxPen pen(this->move_colour);
+			wxBrush brush(this->move_colour);
+			dc.SetPen(pen);
+			dc.SetBrush(brush);
+		} else {
+			wxPen pen(this->jump_colour);
+			wxBrush brush(this->jump_colour);
+			dc.SetPen(pen);
+			dc.SetBrush(brush);
+		}
 		wxSize real_size = GetSize();
 		motor_rect_t plane_size = this->handle->getController()->getSize();
 		double scaleX, scaleY;
@@ -166,8 +192,10 @@ namespace CalXUI {
 		dc.DrawBitmap(this->bitmap, 0, 0);
 
 		// Draw current position
-		dc.SetPen(*wxRED_PEN);
-		dc.SetBrush(*wxRED_BRUSH);
+		wxPen pen(this->pointer_colour);
+		wxBrush brush(this->pointer_colour);
+		dc.SetPen(pen);
+		dc.SetBrush(brush);
 		wxSize real_size = GetSize();
 		motor_rect_t plane_size = this->handle->getController()->getSize();
 		double scaleX, scaleY;
@@ -233,13 +261,23 @@ namespace CalXUI {
 		dc.DrawLine(0, (wxCoord) ((top_plane_size.h + top_plane_size.y) * top_scaleY), real_size.x, (wxCoord) ((top_plane_size.h + top_plane_size.y) * top_scaleY));
 		dc.DrawLine((wxCoord) ((-top_plane_size.x) * top_scaleX), 0, (wxCoord) ((-top_plane_size.x) * top_scaleX), real_size.y);
 
-		dc.SetPen(*wxBLACK_PEN);
-		dc.SetBrush(*wxBLACK_BRUSH);
+		
+		wxPen move_pen(this->move_colour);
+		wxBrush move_brush(this->move_colour);
+		wxPen jump_pen(this->jump_colour);
+		wxBrush jump_brush(this->jump_colour);
 		double lastX = 0, lastY = 0;
 		std::vector<std::pair<motor_point_t, bool>> *path = &this->history;
 		for (size_t i = 0; i < path->size(); i++) {
 			motor_point_t point = path->at(i).first;
 			bool move = path->at(i).second;
+			if (move) {
+				dc.SetPen(move_pen);
+				dc.SetBrush(move_brush);
+			} else {
+				dc.SetPen(jump_pen);
+				dc.SetBrush(jump_brush);
+			}
 			double x = ((double) (point.x - plane_size.x) * scaleX);
 			double y = ((double) (plane_size.h + plane_size.y - point.y) * scaleY);
 			dc.DrawRectangle((wxCoord) x - 1, (wxCoord) y - 1, 2, 2);

@@ -51,13 +51,27 @@ namespace CalXUI {
 
 	CalxVirtualPlane::CalxVirtualPlane(wxWindow *win, wxWindowID id,
 		CoordHandle *base, wxSize min)
-		: wxWindow::wxWindow(win, id) {
+		: wxWindow::wxWindow(win, id), pointer_colour(255, 0, 0),
+			jump_colour(128, 128, 128), move_colour(0, 0, 0) {
 
 		this->tracker = new CalxPlaneTracker(base->getBase()->getPosition(), base->getBase()->getSize());
 		this->stack = new CoordPlaneStack(base->clone(this->tracker));
 		this->float_plane = (FloatCoordPlane*) base->getFloatPlane()->clone(stack);
 		this->base = base;
 		SetMinSize(min);
+		ConfigEntry *colourEntry = wxGetApp().getSystemManager()->getConfiguration()->getEntry("watcher_color");
+		this->pointer_colour = wxColour(colourEntry->getInt("pointer_R", 255),
+		                                colourEntry->getInt("pointer_G", 0),
+		                                colourEntry->getInt("pointer_B", 0),
+		                                colourEntry->getInt("pointer_A", 255));
+		this->jump_colour = wxColour(colourEntry->getInt("jump_R", 128),
+		                             colourEntry->getInt("jump_G", 128),
+		                             colourEntry->getInt("jump_B", 128),
+		                             colourEntry->getInt("jump_A", 255));
+		this->move_colour = wxColour(colourEntry->getInt("move_R", 0),
+		                             colourEntry->getInt("move_G", 0),
+		                             colourEntry->getInt("move_B", 0),
+		                             colourEntry->getInt("move_A", 255));
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxVirtualPlane::OnExit, this);
 		this->Bind(wxEVT_PAINT, &CalxVirtualPlane::OnPaintEvent, this);
 		this->Bind(wxEVT_SIZE, &CalxVirtualPlane::OnResizeEvent, this);
@@ -114,13 +128,22 @@ namespace CalXUI {
 		dc.DrawLine(0, (wxCoord) ((top_plane_size.h + top_plane_size.y) * top_scaleY), real_size.x, (wxCoord) ((top_plane_size.h + top_plane_size.y) * top_scaleY));
 		dc.DrawLine((wxCoord) ((-top_plane_size.x) * top_scaleX), 0, (wxCoord) ((-top_plane_size.x) * top_scaleX), real_size.y);
 
-		dc.SetPen(*wxBLACK_PEN);
-		dc.SetBrush(*wxBLACK_BRUSH);
+		wxPen move_pen(this->move_colour);
+		wxBrush move_brush(this->move_colour);
+		wxPen jump_pen(this->jump_colour);
+		wxBrush jump_brush(this->jump_colour);
 		double lastX = 0, lastY = 0;
 		std::vector<std::pair<motor_point_t, bool>> *path = this->tracker->getPath();
 		for (size_t i = 0; i < path->size(); i++) {
 			motor_point_t point = path->at(i).first;
 			bool move = path->at(i).second;
+			if (move) {
+				dc.SetPen(move_pen);
+				dc.SetBrush(move_brush);
+			} else {
+				dc.SetPen(jump_pen);
+				dc.SetBrush(jump_brush);
+			}
 			double x = ((double) (point.x - plane_size.x) * scaleX);
 			double y = ((double) (plane_size.h + plane_size.y - point.y) * scaleY);
 			dc.DrawRectangle((wxCoord) x - 1, (wxCoord) y - 1, 2, 2);
@@ -146,8 +169,10 @@ namespace CalXUI {
 		dc.GetMultiLineTextExtent(FORMAT("%s%s", wxGetApp().formatDouble(float_plane_size.y + float_plane_size.h), units), &x, &y);
 		dc.DrawText(FORMAT("%s%s", wxGetApp().formatDouble(float_plane_size.y + float_plane_size.h), units), (wxCoord) ((-top_plane_size.x) * top_scaleX) - x / 2, 0);
 
-		dc.SetPen(*wxRED_PEN);
-		dc.SetBrush(*wxRED_BRUSH);
+		wxPen pen(this->pointer_colour);
+		wxBrush brush(this->pointer_colour);
+		dc.SetPen(pen);
+		dc.SetBrush(brush);
 		motor_point_t point = this->base->getController()->getPosition();
 		double _x = ((double) (point.x - plane_size.x) * scaleX);
 		double _y = ((double) (plane_size.h + plane_size.y - point.y) * scaleY);

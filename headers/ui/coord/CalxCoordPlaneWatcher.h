@@ -50,11 +50,12 @@ namespace CalXUI {
 
 	class CalxCoordPlaneWatcherEvent : public CoordEventListener {
 		public:
-			CalxCoordPlaneWatcherEvent(CalxCoordPlaneWatcher*);
+			CalxCoordPlaneWatcherEvent(CalxCoordPlaneWatcher*, CoordHandle*);
 			virtual ~CalxCoordPlaneWatcherEvent();
 			virtual void moved(CoordMoveEvent&);
 		private:
 			CalxCoordPlaneWatcher *watcher;
+			CoordHandle *handle;
 	};
 
 	class CalxCoordPlaneWatcher : public wxWindow {
@@ -83,6 +84,10 @@ namespace CalXUI {
 			bool has_updates;
 
 			wxBitmap bitmap;
+			
+			wxColour pointer_colour;
+			wxColour jump_colour;
+			wxColour move_colour;
 	};
 
 	class CalxCoordPlaneWatcherDialog : public wxDialog {
