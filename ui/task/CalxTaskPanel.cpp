@@ -342,8 +342,8 @@ namespace CalXUI {
 
 			std::stringstream ss;
 			TaskState state;
-            GCodeWriter *writer = new GCodeWriter(handle->getBase()->getPosition(),
-                                                  handle->getBase()->getSize(),
+            GCodeWriter *writer = new GCodeWriter(handle->getPosition(),
+                                                  handle->getSize(),
                                                   list.at((size_t) taskList->GetSelection())->getTranslator(), &ss);
 			this->setEnabled(false);
 			wxGetApp().getErrorHandler()->handle(task->perform(writer, prms, wxGetApp().getSystemManager(), &state));
@@ -361,7 +361,6 @@ namespace CalXUI {
 			}
 			ss.seekg(0);
 
-			std::cout << "1" << std::endl;
             CalxGcodeHandle *gcodeHandle = new CalxGcodeHandle(mainPanel, wxID_ANY, __("Linear ") +
                                                                taskList->GetStringSelection().ToStdString(),
                                                                &ss,
