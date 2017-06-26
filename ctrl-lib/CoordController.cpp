@@ -207,7 +207,9 @@ namespace CalX {
 				}
 			}
 		}
-
+		
+		while (xAxis->dev->isRunning() || yAxis->dev->isRunning()) {}
+		
 		ErrorCode errcode = ErrorCode::NoError;
 		if (this->instr != nullptr) {
 			this->instr->unuse();
