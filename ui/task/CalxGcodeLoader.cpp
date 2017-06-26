@@ -49,7 +49,19 @@ namespace CalXUI {
 		gcodeSizer->Add(chooseButton, 0, wxALL);
 		chooseButton->Bind(wxEVT_BUTTON, &CalxGcodeLoader::OnChooseClick, this);
 
-		this->translator = new CalxCoordFilterCtrl(mainPanel, wxID_ANY);
+		ConfigManager *conf = wxGetApp().getSystemManager()->getConfiguration();
+		coord_point_t trans_offset = {static_cast<double>(conf->getEntry("coords")->getInt("offset_x", 0)),
+			static_cast<double>(conf->getEntry("coords")->getInt("offset_y", 0))};
+		coord_scale_t trans_scale = {static_cast<double>(conf->getEntry("coords")->getInt("scale_x", 1)),
+			static_cast<double>(conf->getEntry("coords")->getInt("scale_y", 1))};
+		coord_scale_t unit_scale = {conf->getEntry("ui")->getReal("unit_scale", 1.0f),
+			conf->getEntry("ui")->getReal("unit_scale", 1.0f)};
+		LinearCoordTranslator *unit_trans = new LinearCoordTranslator(trans_offset, unit_scale);
+		LinearCoordTranslator *trans = new LinearCoordTranslator(trans_offset, trans_scale, unit_trans);
+		ComplexCoordTranslator *ctrans = new ComplexCoordTranslator(unit_trans);
+		ctrans->add(trans);		
+		
+		this->translator = new CalxCoordFilterCtrl(mainPanel, wxID_ANY, ctrans);
 		mainSizer->Add(translator, 0, wxALL | wxEXPAND, 10);
 
 		wxPanel *buttonPanel = new wxPanel(mainPanel, wxID_ANY);
