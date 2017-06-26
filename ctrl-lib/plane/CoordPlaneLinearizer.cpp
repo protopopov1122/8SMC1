@@ -142,6 +142,10 @@ namespace CalX {
 	CoordPlane *CoordPlaneLinearizer::clone(CoordPlane *base) {
 		return new CoordPlaneLinearizer(base);
 	}
+	
+	CoordPlaneStatus CoordPlaneLinearizer::getStatus() {
+		return this->base->getStatus();
+	}
 
 	ErrorCode CoordPlaneLinearizer::open_session() {
 		return this->base->open_session();

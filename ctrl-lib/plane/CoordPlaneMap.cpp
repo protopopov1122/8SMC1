@@ -138,6 +138,10 @@ namespace CalX {
 	CoordPlane *CoordPlaneMap::clone(CoordPlane *base) {
 		return new CoordPlaneMap(this->offset, this->scale, this->speedScale, base);
 	}
+	
+	CoordPlaneStatus CoordPlaneMap::getStatus() {
+		return this->plane->getStatus();
+	}
 
 	ErrorCode CoordPlaneMap::open_session() {
 		return this->plane->open_session();

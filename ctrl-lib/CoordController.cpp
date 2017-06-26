@@ -43,6 +43,7 @@ namespace CalX {
 		this->size = {0, 0, 0, 0};
 		this->defWork = true;
 		this->measured = false;
+		this->status = CoordPlaneStatus::Idle;
 		LOG(COORD_CTRL_TAG, "New coordinate controller. X Axis: #" + std::to_string(this->xAxis->getID()) + "; Y Axis: #" + std::to_string(this->yAxis->getID()) + "; instrument: " + std::string(instr != nullptr ? std::to_string(instr->getID()) : "no"));
 		INIT_LOG("CoordController");
 	}
@@ -137,8 +138,11 @@ namespace CalX {
 				return errcode;
 			}
 		}
+		
+		this->status = sync ? CoordPlaneStatus::Move : CoordPlaneStatus::Jump;
 		MotorMoveEvent xmevt = {point.x, x_speed, div};
 		if (!xAxis->dev->start(point.x, x_speed, div, false)) {
+			this->status = CoordPlaneStatus::Idle;
 			xAxis->unuse();
 			yAxis->unuse();
 			xAxis->dest = MoveType::Stop;
@@ -149,7 +153,9 @@ namespace CalX {
 		MotorMoveEvent ymevt = {point.y, y_speed, div};
 		yAxis->dest = point.y > yAxis->dev->getPosition() ? MoveType::MoveUp :
 				MoveType::MoveDown;
+				
 		if (!yAxis->dev->start(point.y, y_speed, div, false)) {
+			this->status = CoordPlaneStatus::Idle;
 			xAxis->unuse();
 			yAxis->unuse();
 			yAxis->dest = MoveType::Stop;
@@ -167,6 +173,7 @@ namespace CalX {
 			if (xDev->isRunning()) {
 				ErrorCode code = xAxis->checkTrailers();
 				if (code != ErrorCode::NoError) {
+					this->status = CoordPlaneStatus::Idle;
 					xAxis->stop();
 					yAxis->stop();
 
@@ -188,6 +195,7 @@ namespace CalX {
 			if (yDev->isRunning()) {
 				ErrorCode code = yAxis->checkTrailers();
 				if (code != ErrorCode::NoError) {
+					this->status = CoordPlaneStatus::Idle;
 					xAxis->stop();
 					yAxis->stop();
 
@@ -209,6 +217,7 @@ namespace CalX {
 		}
 		
 		while (xAxis->dev->isRunning() || yAxis->dev->isRunning()) {}
+		this->status = CoordPlaneStatus::Idle;
 		
 		ErrorCode errcode = ErrorCode::NoError;
 		if (this->instr != nullptr) {
@@ -247,6 +256,7 @@ namespace CalX {
 		if (!work) {
 			return ErrorCode::NoError;
 		}
+		this->status = CoordPlaneStatus::Jump;
         int_conf_t roll_step = config->getEntry("core")->getInt("roll_step", ROLL_STEP);
         int_conf_t roll_speed = config->getEntry("core")->getInt("roll_speed", ROLL_SPEED);
         unsigned char roll_div = (unsigned char) config->getEntry("core")->getInt("roll_div", ROLL_DIV);
@@ -273,6 +283,7 @@ namespace CalX {
 					if (!xAxis->getMotor()->start(
 							xAxis->getMotor()->getPosition() + dest,
 							roll_speed, roll_div)) {
+						this->status = CoordPlaneStatus::Idle;
 						xAxis->stop();
 						yAxis->stop();
 						xAxis->sendRolledEvent(mevt);
@@ -300,6 +311,7 @@ namespace CalX {
 					if (!yAxis->getMotor()->start(
 							yAxis->getMotor()->getPosition() + dest,
 							roll_speed, roll_div)){
+						this->status = CoordPlaneStatus::Idle;
 						xAxis->stop();
 						yAxis->stop();
 						xAxis->sendRolledEvent(mevt);
@@ -339,6 +351,7 @@ namespace CalX {
 			xAxis->waitWhileRunning();
 			yAxis->waitWhileRunning();
 		}
+		this->status = CoordPlaneStatus::Idle;
 		xAxis->sendRolledEvent(mevt);
 		yAxis->sendRolledEvent(mevt);
 		if (this->instr != nullptr) {
@@ -548,6 +561,10 @@ namespace CalX {
 
 	CoordPlane *CoordController::clone(CoordPlane *base) {
 		return new CoordController(this->xAxis, this->yAxis, this->config, this->instr);
+	}
+	
+	CoordPlaneStatus CoordController::getStatus() {
+		return this->status;
 	}
 
 	ErrorCode CoordController::open_session() {

@@ -143,6 +143,10 @@ namespace CalX {
 		CoordPlaneLog *log = new CoordPlaneLog(base, this->out, this->prefix, this->log_actions, this->log_errors);
 		return log;
 	}
+	
+	CoordPlaneStatus CoordPlaneLog::getStatus() {
+		return this->plane->getStatus();
+	}
 
 	ErrorCode CoordPlaneLog::open_session() {
 		return this->plane->open_session();

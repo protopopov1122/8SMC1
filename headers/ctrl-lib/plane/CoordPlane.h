@@ -40,6 +40,9 @@
 
 namespace CalX {
 	
+	enum class CoordPlaneStatus {
+		Idle, Jump, Move
+	};
 	
 	// Main interface
 	class CoordPlane {
@@ -59,6 +62,7 @@ namespace CalX {
 			virtual void stop() = 0;
 			virtual void dump(std::ostream&) = 0;
 			virtual CoordPlane *clone(CoordPlane*) = 0;
+			virtual CoordPlaneStatus getStatus() = 0;
 			virtual ErrorCode open_session() {return ErrorCode::NoError;}
 			virtual ErrorCode close_session() {return ErrorCode::NoError;}
 	};
@@ -92,6 +96,7 @@ namespace CalX {
 			virtual void stop();
 			virtual void dump(std::ostream&);
 			virtual CoordPlane *clone(CoordPlane*);
+			virtual CoordPlaneStatus getStatus();
 			virtual ErrorCode open_session();
 			virtual ErrorCode close_session();
 		private:
@@ -120,6 +125,7 @@ namespace CalX {
 			void kill();
 			virtual void dump(std::ostream&);
 			virtual CoordPlane *clone(CoordPlane*);
+			virtual CoordPlaneStatus getStatus();
 			virtual ErrorCode open_session();
 			virtual ErrorCode close_session();
 			
@@ -134,6 +140,7 @@ namespace CalX {
 			ConfigManager *config;
 			bool work;
 			bool defWork;
+			CoordPlaneStatus status;
 			
 			motor_rect_t size;
 			bool measured;
@@ -172,6 +179,7 @@ namespace CalX {
 			virtual void stop();
 			virtual void dump(std::ostream&);
 			virtual CoordPlane *clone(CoordPlane*);
+			virtual CoordPlaneStatus getStatus();
 			virtual ErrorCode open_session();
 			virtual ErrorCode close_session();
 		private:
@@ -207,6 +215,7 @@ namespace CalX {
 			virtual void stop();
 			virtual void dump(std::ostream&);
 			virtual CoordPlane *clone(CoordPlane*);
+			virtual CoordPlaneStatus getStatus();
 			virtual ErrorCode open_session();
 			virtual ErrorCode close_session();
 		private:
@@ -241,6 +250,7 @@ namespace CalX {
 			virtual void stop();
 			virtual void dump(std::ostream&);
 			virtual CoordPlane *clone(CoordPlane*);
+			virtual CoordPlaneStatus getStatus();
 			virtual ErrorCode open_session();
 			virtual ErrorCode close_session();
 		private:
@@ -273,6 +283,7 @@ namespace CalX {
 			virtual void stop();
 			virtual void dump(std::ostream&);
 			virtual CoordPlaneStack *clone(CoordPlane*);
+			virtual CoordPlaneStatus getStatus();
 			virtual ErrorCode open_session();
 			virtual ErrorCode close_session();
 		private:
@@ -293,6 +304,7 @@ namespace CalX {
 			virtual motor_rect_t getSize();
 			virtual bool isMeasured();
 			virtual CoordPlane *clone(CoordPlane*) = 0;
+			virtual CoordPlaneStatus getStatus();
 			virtual ErrorCode open_session();
 			virtual ErrorCode close_session();
 			
@@ -335,6 +347,7 @@ namespace CalX {
 			virtual void stop();
 			virtual void dump(std::ostream&);
 			virtual CoordPlane *clone(CoordPlane*);
+			virtual CoordPlaneStatus getStatus();
 			virtual ErrorCode open_session();
 			virtual ErrorCode close_session();
 			// Floating-point methods

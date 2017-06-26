@@ -114,6 +114,10 @@ namespace CalX {
 		}
 		return stack;
 	}
+	
+	CoordPlaneStatus CoordPlaneStack::getStatus() {
+		return this->peekPlane()->getStatus();
+	}
 
 	ErrorCode CoordPlaneStack::open_session() {
 		return this->peekPlane()->open_session();

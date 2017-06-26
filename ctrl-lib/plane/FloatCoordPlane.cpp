@@ -140,6 +140,10 @@ namespace CalX {
 	CoordPlane *FloatCoordPlane::clone(CoordPlane *base) {
 		return new FloatCoordPlane(this->offset, this->scale, this->speed, base);
 	}
+	
+	CoordPlaneStatus FloatCoordPlane::getStatus() {
+		return this->plane->getStatus();
+	}
 
 	ErrorCode FloatCoordPlane::open_session() {
 		return this->plane->open_session();
