@@ -45,8 +45,12 @@ namespace CalX {
 	}
 
 	ErrorCode GCodeCoordTask::perform(CoordPlane *plane, TaskParameters &prms, SystemManager *sysman, TaskState *state) {
-		return GCodeInterpreter::execute(this->stream, plane, this->translator, sysman->getConfiguration(),
+		state->plane = plane;
+		state->work = true;
+		ErrorCode errcode = GCodeInterpreter::execute(this->stream, plane, this->translator, sysman->getConfiguration(),
 			prms.speed, state);
+		state->work = false;
+		return errcode;
 	}
 
 	std::string GCodeCoordTask::getGCode() {
