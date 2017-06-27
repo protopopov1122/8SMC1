@@ -15,7 +15,6 @@ add_custom_target(copy-config ALL
 add_subdirectory(device)
 add_subdirectory(ctrl-lib)
 add_subdirectory(cli)
-add_subdirectory(ncli)
 add_subdirectory(ui)
 add_subdirectory(ext)
 configure_file(${CMAKE_SOURCE_DIR}/misc/main.conf.ini ${CMAKE_BINARY_DIR}/main.conf.ini COPYONLY)
