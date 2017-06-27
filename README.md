@@ -20,6 +20,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ### Authors and Contributions
 Author: Jevgēnijs Protopopovs <jprotopopov1122@gmail.com>.
 
-Testing is performed in command, all contributions are welcome.
+Testing, consultatons and support: Mihails Andžans
+
+All contributions are welcome.
 
 Project code is distributed under the terms of GNU LGPLv3. See COPYING and COPYING.LESSER
