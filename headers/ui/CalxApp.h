@@ -63,6 +63,9 @@ namespace CalXUI {
 			std::string getSpeedUnits();
 			double getUnitPrecision();
 			double getSpeedPrecision();
+			double getUnitScale();
+			double getSpeedScale();
+			coord_point_t getUnitOffset();
 		private:
 			void loadDevicesPlugin();
 

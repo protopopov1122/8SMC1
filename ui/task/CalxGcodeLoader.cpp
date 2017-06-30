@@ -50,13 +50,16 @@ namespace CalXUI {
 		chooseButton->Bind(wxEVT_BUTTON, &CalxGcodeLoader::OnChooseClick, this);
 
 		ConfigManager *conf = wxGetApp().getSystemManager()->getConfiguration();
-		coord_point_t trans_offset = {static_cast<double>(conf->getEntry("coords")->getInt("offset_x", 0)),
-			static_cast<double>(conf->getEntry("coords")->getInt("offset_y", 0))};
-		coord_scale_t trans_scale = {static_cast<double>(conf->getEntry("coords")->getInt("scale_x", 1)),
-			static_cast<double>(conf->getEntry("coords")->getInt("scale_y", 1))};
-		coord_scale_t unit_scale = {conf->getEntry("ui")->getReal("unit_scale", 1.0f),
-			conf->getEntry("ui")->getReal("unit_scale", 1.0f)};
-		LinearCoordTranslator *unit_trans = new LinearCoordTranslator(trans_offset, unit_scale);
+		coord_point_t trans_offset = {static_cast<double>(conf->getEntry("coords")->getReal("offset_x", 0.0)),
+			static_cast<double>(conf->getEntry("coords")->getReal("offset_y", 0.0))};
+		coord_scale_t trans_scale = {static_cast<double>(conf->getEntry("coords")->getReal("scale_x", 1.0)),
+			static_cast<double>(conf->getEntry("coords")->getReal("scale_y", 1.0))};
+		coord_point_t unit_offset = wxGetApp().getUnitOffset();
+		coord_scale_t unit_scale = {
+			wxGetApp().getUnitScale(),
+			wxGetApp().getUnitScale()
+		};
+		LinearCoordTranslator *unit_trans = new LinearCoordTranslator(unit_offset, unit_scale);
 		LinearCoordTranslator *trans = new LinearCoordTranslator(trans_offset, trans_scale, unit_trans);
 		ComplexCoordTranslator *ctrans = new ComplexCoordTranslator(unit_trans);
 		ctrans->add(trans);		

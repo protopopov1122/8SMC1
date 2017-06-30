@@ -26,7 +26,7 @@ namespace CalXUI {
 
 	CalxTaskLinearStepHandle::CalxTaskLinearStepHandle(wxWindow *win, wxWindowID id)
 		: CalxTaskStepHandle::CalxTaskStepHandle(win, id) {
-		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
+		std::string units = wxGetApp().getUnits();
 
 		motor_point_t pos = {0, 0};
 		this->step = new MoveTaskStep(pos, 1, false);
@@ -70,7 +70,7 @@ namespace CalXUI {
 	}
 
 	void CalxTaskLinearStepHandle::update() {
-		double scale = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("unit_scale", 1.0);
+		double scale = wxGetApp().getUnitScale();
 		motor_point_t pos = {static_cast<motor_coord_t>(xCoord->GetValue() * scale),
 		                     static_cast<motor_coord_t>(yCoord->GetValue() * scale)};
 		step->setPosition(pos);
@@ -85,7 +85,7 @@ namespace CalXUI {
 
 	CalxTaskLinearJumpStepHandle::CalxTaskLinearJumpStepHandle(wxWindow *win, wxWindowID id)
 		: CalxTaskStepHandle::CalxTaskStepHandle(win, id) {
-		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
+		std::string units = wxGetApp().getUnits();
 
 		motor_point_t pos = {0, 0};
 		this->step = new JumpTaskStep(pos, 1, false);
@@ -129,7 +129,7 @@ namespace CalXUI {
 	}
 
 	void CalxTaskLinearJumpStepHandle::update() {
-		double scale = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("unit_scale", 1.0);
+		double scale = wxGetApp().getUnitScale();
 		motor_point_t pos = {static_cast<motor_coord_t>(xCoord->GetValue() * scale),
 		                     static_cast<motor_coord_t>(yCoord->GetValue() * scale)};
 		step->setPosition(pos);
@@ -144,7 +144,7 @@ namespace CalXUI {
 
 	CalxTaskArcStepHandle::CalxTaskArcStepHandle(wxWindow *win, wxWindowID id)
 		: CalxTaskStepHandle::CalxTaskStepHandle(win, id) {
-		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
+		std::string units = wxGetApp().getUnits();
 
 		motor_point_t pnt = {0, 0};
 		this->step = new ArcTaskStep(pnt, pnt, 200, 1.0f, false);
@@ -217,7 +217,7 @@ namespace CalXUI {
 	}
 
 	void CalxTaskArcStepHandle::update() {
-		double scale = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("unit_scale", 1.0);
+		double scale = wxGetApp().getUnitScale();
 		motor_point_t dest = {static_cast<motor_coord_t>(destXCoord->GetValue() * scale),
 		                     static_cast<motor_coord_t>(destYCoord->GetValue() * scale)};
 		motor_point_t cen = {static_cast<motor_coord_t>(cenXCoord->GetValue() * scale),

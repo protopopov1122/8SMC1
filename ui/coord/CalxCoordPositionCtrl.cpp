@@ -34,9 +34,9 @@ namespace CalXUI {
         this->speed = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                      wxDefaultSize, wxSP_ARROW_KEYS, 0,
                                      wxGetApp().getSystemManager()->getConfiguration()->
-                                        getEntry("ui")->getReal("unit_speed", 4000.0),
+                                        getEntry("units")->getReal("unit_speed", 4000.0),
                                      wxGetApp().getSystemManager()->getConfiguration()->
-                                        getEntry("ui")->getReal("unit_speed", 4000.0),
+                                        getEntry("units")->getReal("unit_speed", 4000.0),
 									 wxGetApp().getSpeedPrecision());
 		this->divisor = new wxChoice(this, wxID_ANY);
 		this->divisor->Append("1");

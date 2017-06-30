@@ -46,10 +46,11 @@ namespace CalXUI {
 
 		motor_point_t plane_offset = {0, 0};
 		motor_scale_t plane_scale = {
-			wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("plane_scale", 1.0f),
-			wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("plane_scale", 1.0f)
+			wxGetApp().getSystemManager()->getConfiguration()->getEntry("units")->getReal("plane_scale", 1.0f),
+			wxGetApp().getSystemManager()->getConfiguration()->getEntry("units")->getReal("plane_scale", 1.0f)
 		};
-		float plane_speed_scale = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("plane_speed_scale", 1.0f);
+		float plane_speed_scale = wxGetApp().getSystemManager()->getConfiguration()->
+			getEntry("units")->getReal("plane_speed_scale", 1.0f);
 		this->unit_map = new CoordPlaneMap(plane_offset, plane_scale, plane_speed_scale, ctrl->peekPlane());
 		ctrl->pushPlane(this->unit_map);
 		motor_point_t validateMin = {INT_MIN, INT_MIN};
@@ -64,10 +65,10 @@ namespace CalXUI {
 		ctrl->pushPlane(this->map);
 		
 		coord_scale_t unit_scale = {
-			wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("unit_scale", 1.0f),
-			wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("unit_scale", 1.0f)
+			wxGetApp().getUnitScale(),
+			wxGetApp().getUnitScale()
 		};
-		float unit_speed_scale = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("speed_scale", 1.0f);
+		float unit_speed_scale = static_cast<float>(wxGetApp().getSpeedScale());
 		ctrl->getFloatPlane()->setScale(unit_scale);
 		ctrl->getFloatPlane()->setSpeedScale(unit_speed_scale);
 

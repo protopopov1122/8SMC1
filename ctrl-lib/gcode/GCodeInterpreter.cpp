@@ -35,7 +35,6 @@ namespace CalX {
 		LinearCoordTranslator translator(troffset, trscale, &unit_trans);
 
 		motor_point_t offset = translator.get(0, 0);
-		coord_point_t last = {0, 0};
 		int invert = 1;
 		if (translator.get(1, 0).x < offset.x) {
 			invert *= -1;

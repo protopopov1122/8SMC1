@@ -59,9 +59,9 @@ namespace CalXUI {
     this->speed = new wxSpinCtrlDouble(graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                      wxDefaultSize, wxSP_ARROW_KEYS, 0,
                                      wxGetApp().getSystemManager()->getConfiguration()->
-                                        getEntry("ui")->getReal("unit_speed", 4000.0),
+                                        getEntry("units")->getReal("unit_speed", 4000.0),
                                      wxGetApp().getSystemManager()->getConfiguration()->
-                                        getEntry("ui")->getReal("unit_speed", 4000.0),
+                                        getEntry("units")->getReal("unit_speed", 4000.0),
 									 wxGetApp().getSpeedPrecision());
 		this->buildButton = new wxButton(graphPanel, wxID_ANY, __("Build"));
 		this->previewButton = new wxButton(graphPanel, wxID_ANY, __("Preview"));
@@ -98,10 +98,10 @@ namespace CalXUI {
 
 
 		ConfigManager *conf = wxGetApp().getSystemManager()->getConfiguration();
-		coord_point_t cen = {static_cast<double>(conf->getEntry("coords")->getInt("offset_x", 0)),
-			static_cast<double>(conf->getEntry("coords")->getInt("offset_y", 0))};
-		coord_scale_t scl = {static_cast<double>(conf->getEntry("coords")->getInt("scale_x", 1)),
-			static_cast<double>(conf->getEntry("coords")->getInt("scale_y", 1))};
+		coord_point_t cen = {static_cast<double>(conf->getEntry("coords")->getReal("offset_x", 0.0)),
+			static_cast<double>(conf->getEntry("coords")->getReal("offset_y", 0.0))};
+		coord_scale_t scl = {static_cast<double>(conf->getEntry("coords")->getReal("scale_x", 1.0)),
+			static_cast<double>(conf->getEntry("coords")->getReal("scale_y", 1.0))};
 		LinearCoordTranslator *basic = new LinearCoordTranslator(cen, scl);
 		this->trans = new ComplexCoordTranslator(basic);
 		this->translator = new CalxCoordFilterCtrl(this, wxID_ANY, this->trans);

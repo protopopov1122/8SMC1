@@ -26,13 +26,15 @@ namespace CalXUI {
 
 	CalxLinearTaskHandle::CalxLinearTaskHandle(wxWindow *win, wxWindowID id)
 		: CalxTaskHandle(win, id, CalxTaskType::CalxLinear) {
-		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
+		std::string units = wxGetApp().getUnits();
 
 		ConfigEntry *confEntry = wxGetApp().getSystemManager()->getConfiguration()->getEntry("linear_task");
-		coord_rect_t rect = {confEntry->getReal("x_start", 0.0),
-		                     confEntry->getReal("y_start", 0.0),
-							 confEntry->getReal("width", 1000.0),
-							 confEntry->getReal("height", 1000.0)};
+		coord_rect_t rect = {
+			confEntry->getReal("x_start", 0.0),
+			confEntry->getReal("y_start", 0.0),
+			confEntry->getReal("width", 1000.0),
+			confEntry->getReal("height", 1000.0)
+		};
 		double spac = confEntry->getReal("spacing", 1.0);
 		bool vert = confEntry->getBool("vertical", true);
 
@@ -40,11 +42,11 @@ namespace CalXUI {
 		motor_coord_t mspac = 0;
 		bool mvert = true;
 		this->task = new LinearCoordTask(mrect, mspac, mvert);
-		ConfigManager *conf = wxGetApp().getSystemManager()->getConfiguration();
-		coord_point_t offset = {static_cast<double>(conf->getEntry("coords")->getInt("offset_x", 0)),
-			static_cast<double>(conf->getEntry("coords")->getInt("offset_y", 0))};
-		coord_scale_t size = {conf->getEntry("ui")->getReal("unit_scale", 1.0),
-			conf->getEntry("ui")->getReal("unit_scale", 1.0)};
+		coord_point_t offset = wxGetApp().getUnitOffset();
+		coord_scale_t size = {
+			wxGetApp().getUnitScale(),
+			wxGetApp().getUnitScale()
+		};
 		this->trans = new ComplexCoordTranslator(new LinearCoordTranslator(offset, size));
 
 		this->xCoord = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
@@ -112,7 +114,7 @@ namespace CalXUI {
 		double spacing = this->spacing->GetValue();
 		bool vert = this->vertical->GetValue();
 
-		double scale = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("unit_scale", 1.0);
+		double scale = wxGetApp().getUnitScale();
 		motor_rect_t mrect = {
 			static_cast<motor_coord_t>(rect.x * scale),
 			static_cast<motor_coord_t>(rect.y * scale),
@@ -127,7 +129,7 @@ namespace CalXUI {
 	}
 
 	void CalxLinearTaskHandle::setRectangle(coord_rect_t rect) {
-		double scale = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("unit_scale", 1.0);
+		double scale = wxGetApp().getUnitScale();
 		motor_rect_t mrect = {
 			static_cast<motor_coord_t>(rect.x * scale),
 			static_cast<motor_coord_t>(rect.y * scale),

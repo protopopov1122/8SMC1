@@ -137,9 +137,9 @@ namespace CalXUI {
         this->speed = new wxSpinCtrlDouble(execPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                      wxDefaultSize, wxSP_ARROW_KEYS, 0,
                                      wxGetApp().getSystemManager()->getConfiguration()->
-                                        getEntry("ui")->getReal("unit_speed", 4000.0),
+                                        getEntry("units")->getReal("unit_speed", 4000.0),
                                      wxGetApp().getSystemManager()->getConfiguration()->
-                                        getEntry("ui")->getReal("unit_speed", 4000.0),
+                                        getEntry("units")->getReal("unit_speed", 4000.0),
 									 wxGetApp().getSpeedPrecision());
 		execSizer->Add(new wxStaticText(execPanel, wxID_ANY, __("on")), 0, wxLEFT | wxRIGHT | wxALIGN_CENTER, 5);
 		execSizer->Add(plane, 0, wxALL, 5);

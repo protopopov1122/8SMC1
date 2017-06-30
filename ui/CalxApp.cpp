@@ -245,20 +245,37 @@ namespace CalXUI {
 	}
 	
 	std::string CalxApp::getUnits() {
-		return wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
+		return wxGetApp().getSystemManager()->getConfiguration()->getEntry("units")->getString("unit_suffix", "");
 	}
 	
 	std::string CalxApp::getSpeedUnits() {
-		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
-		return units.empty() ? "" : units + "/sec";
+		std::string units = this->getUnits();
+		std::string timing = wxGetApp().getSystemManager()->getConfiguration()->getEntry("units")->getString("timing", "");
+		return units.empty() ? "" : units + timing;
 	}
 	
 	double CalxApp::getUnitPrecision() {
-		return 1.0 / wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("unit_scale", 1.0f);
+		return 1.0 / this->getUnitScale();
 	}
 	
 	double CalxApp::getSpeedPrecision() {
-		return 1.0 / wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getReal("speed_scale", 1.0f);
+		return 1.0 / this->getSpeedScale();
+	}
+	
+	double CalxApp::getUnitScale() {
+		return wxGetApp().getSystemManager()->getConfiguration()->getEntry("units")->getReal("unit_scale", 1.0f);
+	}
+	
+	double CalxApp::getSpeedScale() {
+		return wxGetApp().getSystemManager()->getConfiguration()->getEntry("units")->getReal("speed_scale", 1.0f);
+	}
+	
+	coord_point_t CalxApp::getUnitOffset() {
+		coord_point_t offset = {
+			wxGetApp().getSystemManager()->getConfiguration()->getEntry("units")->getReal("unit_offset_x", 0.0f),
+			wxGetApp().getSystemManager()->getConfiguration()->getEntry("units")->getReal("unit_offset_y", 0.0f)
+		};
+		return offset;
 	}
 	
 	CalxFrame *CalxApp::getMainFrame() {

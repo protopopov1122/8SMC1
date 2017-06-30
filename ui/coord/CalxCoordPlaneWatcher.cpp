@@ -80,16 +80,13 @@ namespace CalXUI {
 		ConfigEntry *colourEntry = wxGetApp().getSystemManager()->getConfiguration()->getEntry("watcher_color");
 		this->pointer_colour = wxColour(colourEntry->getInt("pointer_R", 255),
 		                                colourEntry->getInt("pointer_G", 0),
-		                                colourEntry->getInt("pointer_B", 0),
-		                                colourEntry->getInt("pointer_A", 255));
+		                                colourEntry->getInt("pointer_B", 0));
 		this->jump_colour = wxColour(colourEntry->getInt("jump_R", 128),
 		                             colourEntry->getInt("jump_G", 128),
-		                             colourEntry->getInt("jump_B", 128),
-		                             colourEntry->getInt("jump_A", 255));
+		                             colourEntry->getInt("jump_B", 128));
 		this->move_colour = wxColour(colourEntry->getInt("move_R", 0),
 		                             colourEntry->getInt("move_G", 0),
-		                             colourEntry->getInt("move_B", 0),
-		                             colourEntry->getInt("move_A", 255));
+		                             colourEntry->getInt("move_B", 0));
 
 		SetMinSize(min);
 
@@ -290,7 +287,7 @@ namespace CalXUI {
 		}
 
 		dc.SetPen(*wxBLACK_PEN);
-		std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
+		std::string units = wxGetApp().getUnits();
 		if (!units.empty()) {
 			units = " " + units;
 		}
@@ -355,7 +352,7 @@ namespace CalXUI {
 			mouse.y >= 0 &&
 			mouse.x < real_size.x &&
 			mouse.y < real_size.y) {
-			std::string units = wxGetApp().getSystemManager()->getConfiguration()->getEntry("ui")->getString("unit_suffix", "");
+			std::string units = wxGetApp().getUnits();
 			if (!units.empty()) {
 				units = " " + units;
 			}

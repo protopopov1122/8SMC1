@@ -32,7 +32,7 @@ namespace CalX {
 		public:
 			static ErrorCode execute(GCodeStream*, CoordPlane*, CoordTranslator*, ConfigManager*, float, TaskState*);
 	};
-};
+}
 
 
 #endif

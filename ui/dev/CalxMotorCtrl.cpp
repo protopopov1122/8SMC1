@@ -174,9 +174,9 @@ namespace CalXUI {
         this->moveSpeedSpin = new wxSpinCtrl(moveSpeedPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                              wxDefaultSize, wxSP_ARROW_KEYS, 0,
                                              (int) wxGetApp().getSystemManager()->getConfiguration()->
-                                                getEntry("core")->getInt("maxspeed", 4000),
+                                                getEntry("core")->getInt("dev_speed", 4000),
                                              (int) wxGetApp().getSystemManager()->getConfiguration()->
-                                                getEntry("core")->getInt("maxspeed", 4000));
+                                                getEntry("core")->getInt("dev_speed", 4000));
 		moveSpeedSizer->Add(moveSpeedSpin, 1, wxEXPAND);
 		moveSpeedPanel->SetSizer(moveSpeedSizer);
 		moveSizer->Add(moveSpeedPanel, 1, wxEXPAND);

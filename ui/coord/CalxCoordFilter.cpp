@@ -225,11 +225,11 @@ namespace CalXUI {
 		this->trans = tr;
 
 		if (this->trans == nullptr) {
-			ConfigManager *conf = wxGetApp().getSystemManager()->getConfiguration();
-			coord_point_t cen = {static_cast<double>(conf->getEntry("coords")->getInt("offset_x", 0)),
-				static_cast<double>(conf->getEntry("coords")->getInt("offset_y", 0))};
-			coord_scale_t scl = {conf->getEntry("ui")->getReal("unit_scale", 1.0f),
-				conf->getEntry("ui")->getReal("unit_scale", 1.0f)};
+			coord_point_t cen = wxGetApp().getUnitOffset();
+			coord_scale_t scl = {
+				wxGetApp().getUnitScale(),
+				wxGetApp().getUnitScale()
+			};
 			LinearCoordTranslator *basic = new LinearCoordTranslator(cen, scl);
 			this->trans = new ComplexCoordTranslator(basic);
 			addFilter(basic);
