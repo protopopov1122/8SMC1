@@ -76,12 +76,12 @@ namespace CalXUI {
 			}
 
 			virtual void perform(SystemManager *sysman) {
+				dialog->setEnabled(false);
 				panel->setEnabled(false);
-				dialog->Enable(false);
 				wxGetApp().getErrorHandler()->handle(task->perform(dialog->getPlane(), prms, sysman, &state));
-				dialog->Refresh();
-				dialog->Enable(true);
 				panel->setEnabled(true);
+				dialog->setEnabled(true);
+				dialog->Refresh();
 			}
 
 			virtual void stop() {

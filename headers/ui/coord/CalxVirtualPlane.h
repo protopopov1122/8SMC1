@@ -72,11 +72,13 @@ namespace CalXUI {
 
 			CoordPlaneStack *getPlane();
 			FloatCoordPlane *getFloatPlane();
+			void setEnabled(bool);
 		private:
 			void OnOkClick(wxCommandEvent&);
 			void OnMouseMove(wxMouseEvent&);
 			CalxVirtualPlane *plane;
 			wxStaticText *mouseCoords;
+			wxButton *okButton;
 	};
 }
 

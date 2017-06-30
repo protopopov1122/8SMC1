@@ -189,7 +189,7 @@ namespace CalXUI {
 		this->plane = new CalxVirtualPlane(this, wxID_ANY, base, min);
 		sizer->Add(this->plane, 1, wxALL | wxEXPAND, 5);
 
-		wxButton *okButton = new wxButton(this, wxID_OK, __("OK"));
+		okButton = new wxButton(this, wxID_OK, __("OK"));
 		sizer->Add(okButton, 0, wxALL | wxALIGN_CENTER);
 		okButton->Bind(wxEVT_BUTTON, &CalxVirtualPlaneDialog::OnOkClick, this);
 		this->plane->Bind(wxEVT_MOTION, &CalxVirtualPlaneDialog::OnMouseMove, this);
@@ -204,6 +204,10 @@ namespace CalXUI {
 	
 	FloatCoordPlane *CalxVirtualPlaneDialog::getFloatPlane() {
 		return this->plane->getFloatPlane();
+	}
+	
+	void CalxVirtualPlaneDialog::setEnabled(bool en) {
+		this->okButton->Enable(en);
 	}
 
 	void CalxVirtualPlaneDialog::OnOkClick(wxCommandEvent &evt) {
