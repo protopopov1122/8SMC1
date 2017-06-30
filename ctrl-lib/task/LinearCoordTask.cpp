@@ -35,6 +35,7 @@ namespace CalX {
 	}
 
 	ErrorCode LinearCoordTask::perform(CoordPlane *plane, TaskParameters &prms, SystemManager *sysman, TaskState *state) {
+		state->plane = plane;
 		state->work = true;
 		float speed = prms.speed;
 
@@ -60,15 +61,22 @@ namespace CalX {
 				first = second;
 				second = temp;
 			}
-			errcode = plane->move(first, speed, 8, false);
-			if (errcode != ErrorCode::NoError) {
-				return errcode;
+			if (state->work) {
+				errcode = plane->move(first, speed, 8, false);
+				if (errcode != ErrorCode::NoError) {
+					state->work = false;
+					return errcode;
+				}
 			}
-			errcode = plane->move(second, speed, 8, true);
-			if (errcode != ErrorCode::NoError) {
-				return errcode;
+			if (state->work) {
+				errcode = plane->move(second, speed, 8, true);
+				if (errcode != ErrorCode::NoError) {
+					state->work = false;
+					return errcode;
+				}
 			}
 		}
+		state->work = false;
 		return errcode;
 	}
 
