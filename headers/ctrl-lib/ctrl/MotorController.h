@@ -24,7 +24,7 @@
 #include <cinttypes>
 #include <vector>
 #include "ctrl-lib/device/DeviceManager.h"
-#include "ctrl-lib/ConfigManager.h"
+#include "ctrl-lib/conf/ConfigManager.h"
 #include "ctrl-lib/CtrlCore.h"
 #include "ctrl-lib/EventListener.h"
 

@@ -22,7 +22,7 @@
 #define CALX_DEVICE_H_
 
 #include "ctrl-lib/CtrlCore.h"
-#include "ctrl-lib/ConfigManager.h"
+#include "ctrl-lib/conf/ConfigManager.h"
 #include <cinttypes>
 #include <mutex>
 #include <string>

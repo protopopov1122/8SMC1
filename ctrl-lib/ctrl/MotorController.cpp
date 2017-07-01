@@ -18,7 +18,7 @@
 */
 
 
-#include "ctrl-lib/MotorController.h"
+#include "ctrl-lib/ctrl/MotorController.h"
 #include <algorithm>
 #include <iostream>
 

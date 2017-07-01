@@ -19,7 +19,7 @@
 
 
 #include <algorithm>
-#include "ctrl-lib/InstrumentController.h"
+#include "ctrl-lib/ctrl/InstrumentController.h"
 
 namespace CalX {
 
@@ -45,11 +45,11 @@ namespace CalX {
 	ConfigManager *InstrumentController::getConfiguration() {
 		return this->instr->getConfiguration();
 	}
-	
+
 	bool InstrumentController::isSessionOpened() {
 		return this->session_state;
 	}
-	
+
 	ErrorCode InstrumentController::open_session() {
 		if (!this->session_state) {
 			ErrorCode errcode = this->instr->open_session() ? ErrorCode::NoError : ErrorCode::LowLevelError;
@@ -61,7 +61,7 @@ namespace CalX {
 			return ErrorCode::NoError;
 		}
 	}
-	
+
 	ErrorCode InstrumentController::close_session() {
 		if (this->session_state) {
 			if (this->isEnabled()) {

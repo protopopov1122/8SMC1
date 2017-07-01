@@ -24,7 +24,7 @@
 #include <iostream>
 #include "ui/CalxApp.h"
 #include <wx/stattext.h>
-#include "ctrl-lib/RequestResolver.h"
+#include "ctrl-lib/conf/RequestResolver.h"
 
 
 namespace CalXUI {

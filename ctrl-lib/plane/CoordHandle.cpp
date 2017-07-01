@@ -18,7 +18,7 @@
 */
 
 
-#include "ctrl-lib/CoordHandle.h"
+#include "ctrl-lib/plane/CoordHandle.h"
 
 namespace CalX {
 

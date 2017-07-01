@@ -18,7 +18,7 @@
 */
 
 
-#include "ctrl-lib/RequestResolver.h"
+#include "ctrl-lib/conf/RequestResolver.h"
 #include "ctrl-lib/SystemManager.h"
 
 /* This file contains some standart request provides */

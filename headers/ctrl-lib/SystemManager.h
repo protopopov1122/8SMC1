@@ -22,14 +22,14 @@
 #define CALX_CTRL_LIB_SYSTEM_MANAGER_H_
 
 #include "ctrl-lib/device/DeviceManager.h"
-#include "ctrl-lib/InstrumentController.h"
-#include "ctrl-lib/ConfigManager.h"
+#include "ctrl-lib/ctrl/InstrumentController.h"
+#include "ctrl-lib/conf/ConfigManager.h"
 #include "ctrl-lib/plane/CoordPlane.h"
-#include "ctrl-lib/CoordHandle.h"
+#include "ctrl-lib/plane/CoordHandle.h"
 #include "ctrl-lib/task/CoordTask.h"
 #include "ctrl-lib/misc/GraphBuilder.h"
 #include "ctrl-lib/graph/FunctionEngine.h"
-#include "ctrl-lib/RequestResolver.h"
+#include "ctrl-lib/conf/RequestResolver.h"
 #include "ctrl-lib/ExtEngine.h"
 
 /* SystemManager is component that store and control most system 

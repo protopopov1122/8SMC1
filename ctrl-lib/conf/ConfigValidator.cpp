@@ -18,7 +18,7 @@
 */
 
 
-#include "ctrl-lib/ConfigValidator.h"
+#include "ctrl-lib/conf/ConfigValidator.h"
 
 namespace CalX {
 

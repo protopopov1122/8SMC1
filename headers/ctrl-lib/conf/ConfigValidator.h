@@ -24,10 +24,10 @@
 #include <vector>
 #include <string>
 #include "ctrl-lib/CtrlCore.h"
-#include "ctrl-lib/ConfigManager.h"
+#include "ctrl-lib/conf/ConfigManager.h"
 
 namespace CalX {
-	
+
 	class AbstractValidator {
 		public:
 			AbstractValidator(bool);
@@ -36,7 +36,7 @@ namespace CalX {
 		protected:
 			bool optional;
 	};
-	
+
 	class ConfigValueValidator : public AbstractValidator {
 		public:
 			ConfigValueValidator(ConfigValueType, bool = false);
@@ -46,7 +46,7 @@ namespace CalX {
 		private:
 			ConfigValueType type;
 	};
-	
+
 	class ConfigKeyValidator : public AbstractValidator {
 		public:
 			ConfigKeyValidator(std::string, ConfigValueValidator*, bool = false);
@@ -58,7 +58,7 @@ namespace CalX {
 			std::string key;
 			ConfigValueValidator *value;
 	};
-	
+
 	class ConfigEntryValidator : public AbstractValidator {
 		public:
 			ConfigEntryValidator(std::string, bool = false);
@@ -70,7 +70,7 @@ namespace CalX {
 			std::string name;
 			std::vector<ConfigKeyValidator*> keys;
 	};
-	
+
 	class ConfigValidator : public AbstractValidator {
 		public:
 			ConfigValidator(bool = true);

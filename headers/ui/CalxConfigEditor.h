@@ -27,7 +27,7 @@
 #include <wx/spinctrl.h>
 #include <wx/textctrl.h>
 #include <wx/checkbox.h>
-#include "ctrl-lib/ConfigManager.h"
+#include "ctrl-lib/conf/ConfigManager.h"
 
 namespace CalXUI {
 	

@@ -18,21 +18,43 @@
 */
 
 
-#ifndef CALX_CTRL_LIB_GCODE_GCODE_INTERPRETER_H_
-#define CALX_CTRL_LIB_GCODE_GCODE_INTERPRETER_H_
+#ifndef CALX_CTRL_LIB_TASK_ABSTRACT_COORD_TASK_H_
+#define CALX_CTRL_LIB_TASK_ABSTRACT_COORD_TASK_H_
 
-#include "ctrl-lib/CtrlCore.h"
-#include "ctrl-lib/gcode/GCodeStream.h"
+
+#include <vector>
+#include <iostream>
+#include <sstream>
 #include "ctrl-lib/plane/CoordPlane.h"
-#include "ctrl-lib/conf/ConfigManager.h"
 #include "ctrl-lib/translator/CoordTranslator.h"
 
 namespace CalX {
-	class GCodeInterpreter {
+
+	class SystemManager; // Forward referencing
+
+	struct TaskParameters {
+		float speed;
+	};
+
+	class TaskStep {
 		public:
-			static ErrorCode execute(GCodeStream*, CoordPlane*, CoordTranslator*, ConfigManager*, float, TaskState*);
+			virtual ~TaskStep() {};
+			virtual ErrorCode perform(CoordPlane*, TaskParameters&, SystemManager*, TaskState*) = 0;
+	};
+
+	enum class CoordTaskType {
+		ProgrammedTask, GraphTask, WrapperTask, GCodeTask, LinearTask
+	};
+
+	class CoordTask : public TaskStep {
+		public:
+			CoordTask(CoordTaskType tp) {this->type = tp;}
+			virtual ~CoordTask() {}
+			CoordTaskType getType() {return this->type;}
+			virtual ErrorCode perform(CoordPlane*, TaskParameters&, SystemManager*, TaskState*) = 0;
+		private:
+			CoordTaskType type;
 	};
 }
-
 
 #endif

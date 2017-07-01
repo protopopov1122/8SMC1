@@ -26,7 +26,7 @@
 #include <map>
 #include <iostream>
 #include "ctrl-lib/CtrlCore.h"
-#include "ctrl-lib/ConfigManager.h"
+#include "ctrl-lib/conf/ConfigManager.h"
 
 /* Request resolver - simple interface to perform system automatic configuration.
 	Each configuration step should be written as request in format:
@@ -35,7 +35,7 @@
 
 namespace CalX {
 	class SystemManager; // Forward referencing
-	
+
 	class Request {
 		public:
 			Request(std::string, std::vector<ConfigValue*>);
@@ -46,7 +46,7 @@ namespace CalX {
 			std::string provider;
 			std::vector<ConfigValue*> args;
 	};
-	
+
 	class RequestProvider {
 		public:
 			RequestProvider(std::string);
@@ -56,7 +56,7 @@ namespace CalX {
 		private:
 			std::string name;
 	};
-	
+
 	class RequestResolveWatcher {
 		public:
 			RequestResolveWatcher() {}
@@ -64,25 +64,25 @@ namespace CalX {
 			virtual void resolving(std::string, size_t, size_t) {}
 			virtual void failed(std::string, size_t, size_t) {}
 	};
-	
+
 	class RequestResolver {
 		public:
 			RequestResolver(SystemManager*);
 			virtual ~RequestResolver();
-			
+
 			bool registerProvider(RequestProvider*);
 			bool resolveRequest(Request*);
 			bool hasProvider(std::string);
 			void execute(std::istream*, RequestResolveWatcher* = nullptr);
-			
+
 			static Request *parseRequest(std::string);
 		private:
 			SystemManager *sysman;
 			std::map<std::string, RequestProvider*> providers;
 	};
-	
+
 	void RequestResolver_init_standart_providers(RequestResolver*);
-	
+
 	#define PROVIDER_ARGC(req, count)\
 		if (req->getArguments().size() != count) {\
 			return false;\

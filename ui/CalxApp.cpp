@@ -34,8 +34,8 @@
 #include <sstream>
 #include <string>
 #include <fstream>
-#include "ctrl-lib/ConfigManager.h"
-#include "ctrl-lib/ConfigValidator.h"
+#include "ctrl-lib/conf/ConfigManager.h"
+#include "ctrl-lib/conf/ConfigValidator.h"
 
 namespace CalXUI {
 

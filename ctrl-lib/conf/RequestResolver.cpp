@@ -20,7 +20,7 @@
 
 #include <string>
 #include <string.h>
-#include "ctrl-lib/RequestResolver.h"
+#include "ctrl-lib/conf/RequestResolver.h"
 #include "ctrl-lib/SystemManager.h"
 
 namespace CalX {

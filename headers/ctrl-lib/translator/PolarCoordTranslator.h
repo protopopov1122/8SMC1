@@ -18,21 +18,27 @@
 */
 
 
-#ifndef CALX_CTRL_LIB_GCODE_GCODE_INTERPRETER_H_
-#define CALX_CTRL_LIB_GCODE_GCODE_INTERPRETER_H_
+#ifndef CALX_CTRL_LIB_TRANSLATOR_POLAR_COORD_TRANSLATOR_H_
+#define CALX_CTRL_LIB_TRANSLATOR_POLAR_COORD_TRANSLATOR_H_
 
-#include "ctrl-lib/CtrlCore.h"
-#include "ctrl-lib/gcode/GCodeStream.h"
-#include "ctrl-lib/plane/CoordPlane.h"
-#include "ctrl-lib/conf/ConfigManager.h"
-#include "ctrl-lib/translator/CoordTranslator.h"
+#include "ctrl-lib/translator/AbstractCoordTranslator.h"
 
 namespace CalX {
-	class GCodeInterpreter {
+
+	class PolarCoordTranslator : public CoordTranslator {
 		public:
-			static ErrorCode execute(GCodeStream*, CoordPlane*, CoordTranslator*, ConfigManager*, float, TaskState*);
+			PolarCoordTranslator(CoordTranslator* = nullptr);
+			virtual ~PolarCoordTranslator();
+			virtual CoordTranslator *getBase();
+			virtual void setBase(CoordTranslator*);
+			virtual motor_point_t get(double, double);
+			virtual coord_point_t get(motor_point_t);
+			virtual coord_point_t floatGet(double, double);
+			virtual coord_point_t floatGet(coord_point_t);
+			virtual CoordTranslator *clone(CoordTranslator*);
+		private:
+			CoordTranslator *base;
 	};
 }
-
 
 #endif

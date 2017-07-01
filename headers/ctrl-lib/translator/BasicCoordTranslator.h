@@ -18,32 +18,29 @@
 */
 
 
-#ifndef CALX_CTRL_LIB_COORD_HANDLE_H_
-#define CALX_CTRL_LIB_COORD_HANDLE_H_
+#ifndef CALX_CTRL_LIB_TRANSLATOR_BASIC_COORD_TRANSLATOR_H_
+#define CALX_CTRL_LIB_TRANSLATOR_BASIC_COORD_TRANSLATOR_H_
 
-#include <cinttypes>
-#include "ctrl-lib/plane/CoordPlane.h"
+#include "ctrl-lib/translator/AbstractCoordTranslator.h"
 
 namespace CalX {
 
-	class CoordHandle : public CoordPlaneStack {
+	class BasicCoordTranslator : public CoordTranslator {
 		public:
-			CoordHandle(size_t, CoordController*);
-			virtual ~CoordHandle();
-			
-			size_t getID();
-			CoordController *getController();
-			FloatCoordPlane *getFloatPlane();
-			
-			virtual bool popPlane();
-			virtual void pushPlane(CoordPlane*);
-			
-			void addEventListener(CoordEventListener*);
-			void removeEventListener(CoordEventListener*);
+			BasicCoordTranslator(motor_point_t, motor_size_t);
+			virtual ~BasicCoordTranslator();
+			motor_point_t getCenter();
+			motor_size_t getScale();
+			void setCenter(motor_point_t);
+			void setScale(motor_size_t);
+			virtual motor_point_t get(double, double);
+			virtual coord_point_t get(motor_point_t);
+			virtual coord_point_t floatGet(double, double);
+			virtual coord_point_t floatGet(coord_point_t);
+			virtual CoordTranslator *clone(CoordTranslator*);
 		private:
-			size_t id;
-			CoordController *root;
-			FloatCoordPlane *floatPlane;
+			motor_point_t center;
+			motor_size_t scale;
 	};
 }
 

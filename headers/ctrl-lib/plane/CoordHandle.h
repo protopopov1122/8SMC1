@@ -18,21 +18,33 @@
 */
 
 
-#ifndef CALX_CTRL_LIB_GCODE_GCODE_INTERPRETER_H_
-#define CALX_CTRL_LIB_GCODE_GCODE_INTERPRETER_H_
+#ifndef CALX_CTRL_LIB_PLANE_COORD_HANDLE_H_
+#define CALX_CTRL_LIB_PLANE_COORD_HANDLE_H_
 
-#include "ctrl-lib/CtrlCore.h"
-#include "ctrl-lib/gcode/GCodeStream.h"
+#include <cinttypes>
 #include "ctrl-lib/plane/CoordPlane.h"
-#include "ctrl-lib/conf/ConfigManager.h"
-#include "ctrl-lib/translator/CoordTranslator.h"
 
 namespace CalX {
-	class GCodeInterpreter {
+
+	class CoordHandle : public CoordPlaneStack {
 		public:
-			static ErrorCode execute(GCodeStream*, CoordPlane*, CoordTranslator*, ConfigManager*, float, TaskState*);
+			CoordHandle(size_t, CoordController*);
+			virtual ~CoordHandle();
+
+			size_t getID();
+			CoordController *getController();
+			FloatCoordPlane *getFloatPlane();
+
+			virtual bool popPlane();
+			virtual void pushPlane(CoordPlane*);
+
+			void addEventListener(CoordEventListener*);
+			void removeEventListener(CoordEventListener*);
+		private:
+			size_t id;
+			CoordController *root;
+			FloatCoordPlane *floatPlane;
 	};
 }
-
 
 #endif
