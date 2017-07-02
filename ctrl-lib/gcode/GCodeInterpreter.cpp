@@ -65,7 +65,7 @@ namespace CalX {
 					motor_point_t mdest = translator.get(dest.x, dest.y);
 					mdest.x += rel_offset.x;
 					mdest.y += rel_offset.y;
-					errcode = plane->move(mdest, speed, 8, false);
+					errcode = plane->move(mdest, speed, false);
 				} break;
 				case GCodeOperation::LinearMove: {
 					coord_point_t dest = translator.get(plane->getPosition());
@@ -80,7 +80,7 @@ namespace CalX {
 					motor_point_t mdest = translator.get(dest.x, dest.y);
 					mdest.x += rel_offset.x;
 					mdest.y += rel_offset.y;
-					errcode = plane->move(mdest, speed, 8, true);
+					errcode = plane->move(mdest, speed, true);
 				} break;
 				case GCodeOperation::ClockwiseArc: if (cmd.hasArgument('I') || cmd.hasArgument('J')) {
 					coord_point_t dest = translator.get(plane->getPosition());
@@ -111,7 +111,7 @@ namespace CalX {
 					mdest.x += rel_offset.x;
 					mdest.y += rel_offset.y;
 					errcode = plane->arc(mdest, mcen,
-						CHORD_COUNT, speed, 8, invert == 1);
+						CHORD_COUNT, speed, invert == 1);
 				} break;
 				case GCodeOperation::CounterClockwiseArc: if (cmd.hasArgument('I') || cmd.hasArgument('J')) {
 					coord_point_t dest = translator.get(plane->getPosition());
@@ -142,7 +142,7 @@ namespace CalX {
 					mdest.x += rel_offset.x;
 					mdest.y += rel_offset.y;
 					errcode = plane->arc(mdest, mcen,
-						CHORD_COUNT, speed, 8, invert != 1);
+						CHORD_COUNT, speed, invert != 1);
 				} break;
 				case GCodeOperation::SwitchInches: {
 					coord_scale_t scale = {25.4, 25.4};
@@ -154,7 +154,7 @@ namespace CalX {
 				} break;
 				case GCodeOperation::Home: {
 					coord_point_t dest = {0, 0};
-					errcode = plane->move(translator.get(dest.x, dest.y), speed, 8, false);
+					errcode = plane->move(translator.get(dest.x, dest.y), speed, false);
 				} break;
 				case GCodeOperation::AbsolutePositioning: {
 					relative_pos = false;

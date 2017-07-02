@@ -37,10 +37,10 @@ namespace CalX {
 	class CoordPlane {
 		public:
 			virtual ~CoordPlane() {}
-			virtual ErrorCode move(motor_point_t, float, int, bool) = 0;
-			virtual ErrorCode relativeMove(motor_point_t, float, int, bool);
-			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, float = 1.0f) = 0;
-			virtual ErrorCode relativeArc(motor_point_t, motor_point_t, int, float, int, bool, float = 1.0f);
+			virtual ErrorCode move(motor_point_t, float, bool) = 0;
+			virtual ErrorCode relativeMove(motor_point_t, float, bool);
+			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, bool, float = 1.0f) = 0;
+			virtual ErrorCode relativeArc(motor_point_t, motor_point_t, int, float, bool, float = 1.0f);
 			virtual ErrorCode calibrate(TrailerId) = 0;
 			virtual ErrorCode measure(TrailerId) = 0;
 			virtual motor_point_t getPosition() = 0;

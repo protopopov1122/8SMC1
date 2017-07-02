@@ -47,11 +47,13 @@ namespace CalX {
 		return this->base;
 	}
 
-	ErrorCode CoordPlaneLinearizer::move(motor_point_t dest, float speed, int div, bool sync) {
-		return this->base->move(dest, speed, div, sync);
+	ErrorCode CoordPlaneLinearizer::move(motor_point_t dest, float speed, bool sync) {
+		return this->base->move(dest, speed, sync);
 	}
 
-	ErrorCode CoordPlaneLinearizer::arc(motor_point_t dest, motor_point_t center, int spl, float speed, int div, bool clockwise, float scale) {
+	ErrorCode CoordPlaneLinearizer::arc(motor_point_t dest, motor_point_t center, int spl,
+		float speed, bool clockwise, float scale) {
+		
 		motor_point_t src = this->getPosition();
 		double r1 = pow(src.x - center.x, 2) +
 			     pow(src.y - center.y, 2);
@@ -86,7 +88,7 @@ namespace CalX {
 				pnt = cir.getNextElement();
 			}
 			if (count++ % splitter == 0) {
-				ErrorCode err = this->move(pnt, speed, div, true);
+				ErrorCode err = this->move(pnt, speed, true);
 				if (err != ErrorCode::NoError) {
 					unuse();
 					return err;
@@ -98,7 +100,7 @@ namespace CalX {
 		unuse();
 		ErrorCode code = ErrorCode::NoError;
 		if (work) {
-			code = this->move(dest, speed, div, true);
+			code = this->move(dest, speed, true);
 		}
 		return code;
 	}

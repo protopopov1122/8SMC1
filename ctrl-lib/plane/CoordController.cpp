@@ -71,9 +71,8 @@ namespace CalX {
 		return this->instr;
 	}
 
-    ErrorCode CoordController::move(motor_point_t point, float speed, int idiv,
-			bool sync) {
-        unsigned char div = (unsigned char) idiv;
+    ErrorCode CoordController::move(motor_point_t point, float speed, bool sync) {
+        unsigned char div = 8; // TODO
 
 		// TODO Enable proper motor syncing
 		Motor *xDev = this->xAxis->getMotor();
@@ -364,7 +363,7 @@ namespace CalX {
 	}
 
 	ErrorCode CoordController::arc(motor_point_t dest, motor_point_t center, int spl,
-				float speed, int div, bool clockwise, float scale) {
+				float speed, bool clockwise, float scale) {
 		if (this->xAxis->getPowerState() == Power::NoPower ||
 			this->yAxis->getPowerState() == Power::NoPower) {
 			return ErrorCode::PowerOff;
@@ -408,7 +407,7 @@ namespace CalX {
 				pnt = cir.getNextElement();
 			}
 			if (count++ % splitter == 0) {
-				ErrorCode err = this->move(pnt, speed, div, true);
+				ErrorCode err = this->move(pnt, speed, true);
 				if (err != ErrorCode::NoError) {
 					if (this->instr != nullptr) {
 						this->instr->unuse();
@@ -430,7 +429,7 @@ namespace CalX {
 		unuse();
 		ErrorCode code = ErrorCode::NoError;
 		if (work) {
-			code = this->move(dest, speed, div, true);
+			code = this->move(dest, speed, true);
 		}
 		return code;
 	}

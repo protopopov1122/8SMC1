@@ -90,9 +90,9 @@ namespace CalX {
 			}
 			motor_point_t pnt = trans->get(x, y);
 			if (isnan(last)) {
-				errcode = plane->move(pnt, speed, 8, false);
+				errcode = plane->move(pnt, speed, false);
 			} else {
-				errcode = plane->move(pnt, speed, 8, true);
+				errcode = plane->move(pnt, speed, true);
 			}
 			if (errcode != ErrorCode::NoError) {
 				plane->unuse();
@@ -144,9 +144,9 @@ namespace CalX {
 			}
 			coord_point_t pnt = trans->floatGet(x, y);
 			if (isnan(last)) {
-				errcode = plane->move(pnt, speed, 8, false);
+				errcode = plane->move(pnt, speed, false);
 			} else {
-				errcode = plane->move(pnt, speed, 8, true);
+				errcode = plane->move(pnt, speed, true);
 			}
 			if (errcode != ErrorCode::NoError) {
 				plane->unuse();

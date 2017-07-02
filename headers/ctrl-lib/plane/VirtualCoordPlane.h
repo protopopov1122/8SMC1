@@ -31,8 +31,8 @@ namespace CalX {
 			VirtualCoordPlane(motor_point_t, motor_rect_t);
 			virtual ~VirtualCoordPlane();
 
-			virtual ErrorCode move(motor_point_t, float, int, bool);
-			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, float = 1.0f);
+			virtual ErrorCode move(motor_point_t, float, bool);
+			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, bool, float = 1.0f);
 			virtual ErrorCode calibrate(TrailerId);
 			virtual ErrorCode measure(TrailerId);
 			virtual motor_point_t getPosition();

@@ -285,7 +285,7 @@ namespace CalX {
 					std::cout << "\tStarted coord #" << args.at(0) << " to " << x << "x" << y
 						<< " with base speed " << speed << " steps/sec and " << div << " step divisor"
 						<< std::endl;
-					ctrl->move(point, speed, div, true);
+					ctrl->move(point, speed, true);
 				}
 			}
 		} else if (com.compare("rmove") == 0) {
@@ -304,7 +304,7 @@ namespace CalX {
 					std::cout << "\tStarted relative coord #" << args.at(0) << " to " << x << "x" << y
 						<< " with base speed " << speed << " steps/sec and " << div << " step divisor"
 						<< std::endl;
-					ctrl->relativeMove(point, speed, div, true);
+					ctrl->relativeMove(point, speed, true);
 				}
 			}
 		} else if (com.compare("jump") == 0) {
@@ -323,7 +323,7 @@ namespace CalX {
 					std::cout << "\tStarted coord # jump " << args.at(0) << " to " << x << "x" << y
 						<< " with base speed " << speed << " steps/sec and " << div << " step divisor"
 						<< std::endl;
-					ctrl->move(point, speed, div, false);
+					ctrl->move(point, speed, false);
 				}
 			}
 		}  else if (com.compare("rjump") == 0) {
@@ -342,7 +342,7 @@ namespace CalX {
 					std::cout << "\tStarted relative coord # jump " << args.at(0) << " to " << x << "x" << y
 						<< " with base speed " << speed << " steps/sec and " << div << " step divisor"
 						<< std::endl;
-					ctrl->relativeMove(point, speed, div, false);
+					ctrl->relativeMove(point, speed, false);
 				}
 			}
 		} else if (com.compare("arc") == 0) {
@@ -365,7 +365,7 @@ namespace CalX {
 					std::cout << "\tStarted coord arc #" << args.at(0) << " to " << x << "x" << y
 						<< " with base speed " << speed << " steps/sec and " << div << " step divisor"
 						<< std::endl;
-					if (ctrl->arc(point, center, sp, speed, div, true) != ErrorCode::NoError) {
+					if (ctrl->arc(point, center, sp, speed, true) != ErrorCode::NoError) {
 						std::cout << "Arc error" << std::endl;
 					}
 				}
@@ -390,7 +390,7 @@ namespace CalX {
 					std::cout << "\tStarted coord arc #" << args.at(0) << " to " << x << "x" << y
 						<< " with base speed " << speed << " steps/sec and " << div << " step divisor"
 						<< std::endl;
-					if (ctrl->arc(point, center, sp, speed, div, false) != ErrorCode::NoError) {
+					if (ctrl->arc(point, center, sp, speed, false) != ErrorCode::NoError) {
 						std::cout << "Arc error" << std::endl;
 					}
 				}
@@ -440,7 +440,7 @@ namespace CalX {
 					std::cout << "\tStarted relative coord arc #" << args.at(0) << " to " << x << "x" << y
 						<< " with base speed " << speed << " steps/sec and " << div << " step divisor"
 						<< std::endl;
-					if (ctrl->relativeArc(point, center, sp, speed, div, false) != ErrorCode::NoError) {
+					if (ctrl->relativeArc(point, center, sp, speed, false) != ErrorCode::NoError) {
 						std::cout << "Arc error" << std::endl;
 					}
 				}

@@ -43,8 +43,7 @@ namespace CalX {
 		os << "virtual_coord";
 	}
 
-	ErrorCode VirtualCoordPlane::move(motor_point_t point, float speed, int div,
-			bool sync) {
+	ErrorCode VirtualCoordPlane::move(motor_point_t point, float speed, bool sync) {
 		this->position = point;
 		this->jump(point, sync);
 		return ErrorCode::NoError;
@@ -65,7 +64,8 @@ namespace CalX {
 	}
 
 	ErrorCode VirtualCoordPlane::arc(motor_point_t dest, motor_point_t center, int spl,
-				float speed, int div, bool clockwise, float scale) {
+		float speed, bool clockwise, float scale) {
+		
 		motor_point_t src = this->getPosition();
 		double r1 = pow(src.x - center.x, 2) +
 			     pow(src.y - center.y, 2);
@@ -92,7 +92,7 @@ namespace CalX {
 				pnt = cir.getNextElement();
 			}
 			if (count++ % splitter == 0) {
-				ErrorCode err = this->move(pnt, speed, div, true);
+				ErrorCode err = this->move(pnt, speed, true);
 				if (err != ErrorCode::NoError) {
 					return err;
 				}
@@ -100,7 +100,7 @@ namespace CalX {
 			}
 		} while (abs(dest.x - pnt.x) / scale > COMPARISON_RADIUS ||
 			abs(dest.y - pnt.y) / scale > COMPARISON_RADIUS);
-		return this->move(dest, speed, div, true);
+		return this->move(dest, speed, true);
 	}
 
 	motor_rect_t VirtualCoordPlane::getSize() {

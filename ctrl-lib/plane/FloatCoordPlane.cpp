@@ -64,15 +64,17 @@ namespace CalX {
 		this->speed = s;
 	}
 
-	ErrorCode FloatCoordPlane::move(motor_point_t dest, float speed, int div, bool sync) {
+	ErrorCode FloatCoordPlane::move(motor_point_t dest, float speed, bool sync) {
 		dest.x *= this->scale.x;
 		dest.y *= this->scale.y;
 		dest.x += this->offset.x;
 		dest.y += this->offset.y;
-		return this->plane->move(dest, speed * this->speed, div, sync);
+		return this->plane->move(dest, speed * this->speed, sync);
 	}
 
-	ErrorCode FloatCoordPlane::arc(motor_point_t dest, motor_point_t center, int splitter, float speed, int div, bool clockwise, float scale) {
+	ErrorCode FloatCoordPlane::arc(motor_point_t dest, motor_point_t center, int splitter,
+		float speed, bool clockwise, float scale) {
+		
 		dest.x *= this->scale.x;
 		dest.y *= this->scale.y;
 		dest.x += this->offset.x;
@@ -84,7 +86,7 @@ namespace CalX {
 		center.y += this->offset.y;
 
 		scale *= (this->scale.x + this->scale.y) / 2;
-		return this->plane->arc(dest, center, splitter, speed * this->speed, div, clockwise, scale);
+		return this->plane->arc(dest, center, splitter, speed * this->speed, clockwise, scale);
 	}
 
 	ErrorCode FloatCoordPlane::calibrate(TrailerId tr) {
@@ -153,15 +155,16 @@ namespace CalX {
 		return this->plane->close_session();
 	}
 
-	ErrorCode FloatCoordPlane::move(coord_point_t dest, double speed, int div, bool sync) {
+	ErrorCode FloatCoordPlane::move(coord_point_t dest, double speed, bool sync) {
 		motor_point_t pdest = {
 			static_cast<motor_coord_t>(round(dest.x * this->scale.x + this->offset.x)),
 			static_cast<motor_coord_t>(round(dest.y * this->scale.y + this->offset.y))
 		};
-		return this->plane->move(pdest, static_cast<float>(speed * this->speed), div, sync);
+		return this->plane->move(pdest, static_cast<float>(speed * this->speed), sync);
 	}
 
-	ErrorCode FloatCoordPlane::arc(coord_point_t dest, coord_point_t center, int splitter, double speed, int div, bool clockwise, float scale) {
+	ErrorCode FloatCoordPlane::arc(coord_point_t dest, coord_point_t center, int splitter,
+		double speed, bool clockwise, float scale) {
 
 		motor_point_t pdest = {
 			static_cast<motor_coord_t>(round(dest.x * this->scale.x + this->offset.x)),
@@ -173,7 +176,7 @@ namespace CalX {
 			static_cast<motor_coord_t>(round(center.y * this->scale.y + this->offset.y))
 		};
 
-		return this->plane->arc(pdest, pcen, splitter, static_cast<float>(speed * this->speed), div, clockwise, scale);
+		return this->plane->arc(pdest, pcen, splitter, static_cast<float>(speed * this->speed), clockwise, scale);
 	}
 
 	coord_point_t FloatCoordPlane::getFloatPosition() {
@@ -196,22 +199,22 @@ namespace CalX {
 		return out;
 	}
 
-	ErrorCode FloatCoordPlane::relativeMove(coord_point_t relpoint, float speed, int div,
-			bool sync) {
+	ErrorCode FloatCoordPlane::relativeMove(coord_point_t relpoint, float speed, bool sync) {
 		coord_point_t point = getFloatPosition();
 		point.x += relpoint.x;
 		point.y += relpoint.y;
-		return move(point, speed, div, sync);
+		return move(point, speed, sync);
 	}
 
 	ErrorCode FloatCoordPlane::relativeArc(coord_point_t reldest, coord_point_t relcenter, int splitter,
-				float speed, int div, bool clockwise, float scale) {
+		float speed, bool clockwise, float scale) {
+		
 		coord_point_t dest = getFloatPosition();
 		coord_point_t center = getFloatPosition();
 		dest.x += reldest.x;
 		dest.y += reldest.y;
 		center.x += relcenter.x;
 		center.y += relcenter.y;
-		return arc(dest, center, splitter, speed, div, clockwise, scale);
+		return arc(dest, center, splitter, speed, clockwise, scale);
 	}
 }

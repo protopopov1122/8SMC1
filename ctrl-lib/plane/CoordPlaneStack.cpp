@@ -58,12 +58,14 @@ namespace CalX {
 		return this->stack.at(0);
 	}
 
-	ErrorCode CoordPlaneStack::move(motor_point_t dest, float speed, int div, bool sync) {
-		return this->peekPlane()->move(dest, speed, div, sync);
+	ErrorCode CoordPlaneStack::move(motor_point_t dest, float speed, bool sync) {
+		return this->peekPlane()->move(dest, speed, sync);
 	}
 
-	ErrorCode CoordPlaneStack::arc(motor_point_t dest, motor_point_t center, int splitter, float speed, int div, bool clockwise, float scale) {
-		return this->peekPlane()->arc(dest, center, splitter, speed, div, clockwise, scale);
+	ErrorCode CoordPlaneStack::arc(motor_point_t dest, motor_point_t center, int splitter,
+		float speed, bool clockwise, float scale) {
+		
+		return this->peekPlane()->arc(dest, center, splitter, speed, clockwise, scale);
 	}
 
 	ErrorCode CoordPlaneStack::calibrate(TrailerId tr) {

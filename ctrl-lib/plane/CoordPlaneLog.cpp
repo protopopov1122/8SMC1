@@ -63,25 +63,25 @@ namespace CalX {
 		this->log_errors = l;
 	}
 
-	ErrorCode CoordPlaneLog::move(motor_point_t dest, float speed, int div, bool sync) {
+	ErrorCode CoordPlaneLog::move(motor_point_t dest, float speed, bool sync) {
 		if (this->log_actions) {
 			*out << this->prefix << "Linear moving to " << dest.x << "x" << dest.y << " with base speed " << speed
-				<< "; step divisor " << div << "; synchrone movement is " << (sync ? "on." : "off.") << std::endl;
+				<< "; synchrone movement is " << (sync ? "on." : "off.") << std::endl;
 		}
-		ErrorCode err = this->plane->move(dest, speed, div, sync);
+		ErrorCode err = this->plane->move(dest, speed, sync);
 		if (this->log_errors && err != ErrorCode::NoError) {
 			*out << this->prefix << "Error occured(" << err << ")" << std::endl;
 		}
 		return err;
 	}
 
-	ErrorCode CoordPlaneLog::arc(motor_point_t dest, motor_point_t center, int splitter, float speed, int div, bool clockwise, float scale) {
+	ErrorCode CoordPlaneLog::arc(motor_point_t dest, motor_point_t center, int splitter, float speed, bool clockwise, float scale) {
 		if (this->log_actions) {
 			*out << this->prefix << (clockwise ? "Clockwise" : "Counter-clockwise" )
 				<< " arc moving to " << dest.x << "x" << dest.y << "; center " << center.x << "x" << center.y << " with base speed " << speed
-				<< "; splitter " << splitter << "; step divisor " << div << "." << std::endl;
+				<< "; splitter " << splitter << "." << std::endl;
 		}
-		ErrorCode err = this->plane->arc(dest, center, splitter, speed, div, clockwise, scale);
+		ErrorCode err = this->plane->arc(dest, center, splitter, speed, clockwise, scale);
 		if (this->log_errors && err != ErrorCode::NoError) {
 			*out << this->prefix << "Error occured(" << err << ")" << std::endl;
 		}

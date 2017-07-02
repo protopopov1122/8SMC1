@@ -92,9 +92,9 @@ namespace CalXUI {
 		handle->open_session();
 		this->ctrl->setMaster(true);
 		if (relative) {
-			wxGetApp().getErrorHandler()->handle(handle->relativeMove(dest, speed, div, jump));
+			wxGetApp().getErrorHandler()->handle(handle->relativeMove(dest, speed, jump));
 		} else {
-			wxGetApp().getErrorHandler()->handle(handle->move(dest, speed, div, jump));
+			wxGetApp().getErrorHandler()->handle(handle->move(dest, speed, jump));
 		}
 		this->ctrl->setMaster(false);
 		handle->close_session();
@@ -123,9 +123,9 @@ namespace CalXUI {
 		handle->open_session();
 		this->ctrl->setMaster(true);
 		if (relative) {
-			wxGetApp().getErrorHandler()->handle(handle->getFloatPlane()->relativeMove(dest, speed, div, jump));
+			wxGetApp().getErrorHandler()->handle(handle->getFloatPlane()->relativeMove(dest, speed, jump));
 		} else {
-			wxGetApp().getErrorHandler()->handle(handle->getFloatPlane()->move(dest, speed, div, jump));
+			wxGetApp().getErrorHandler()->handle(handle->getFloatPlane()->move(dest, speed, jump));
 		}
 		this->ctrl->setMaster(false);
 		handle->close_session();
@@ -157,9 +157,9 @@ namespace CalXUI {
 		handle->open_session();
 		ctrl->setMaster(true);
 		if (relative) {
-			wxGetApp().getErrorHandler()->handle(handle->relativeArc(dest, cen, splitter, speed, div, clockwise));
+			wxGetApp().getErrorHandler()->handle(handle->relativeArc(dest, cen, splitter, speed, clockwise));
 		} else {
-			wxGetApp().getErrorHandler()->handle(handle->arc(dest, cen, splitter, speed, div, clockwise));
+			wxGetApp().getErrorHandler()->handle(handle->arc(dest, cen, splitter, speed, clockwise));
 		}
 		ctrl->setMaster(false);
 		handle->close_session();
@@ -189,9 +189,9 @@ namespace CalXUI {
 		handle->open_session();
 		ctrl->setMaster(true);
 		if (relative) {
-			wxGetApp().getErrorHandler()->handle(handle->getFloatPlane()->relativeArc(dest, cen, splitter, speed, div, clockwise));
+			wxGetApp().getErrorHandler()->handle(handle->getFloatPlane()->relativeArc(dest, cen, splitter, speed, clockwise));
 		} else {
-			wxGetApp().getErrorHandler()->handle(handle->getFloatPlane()->arc(dest, cen, splitter, speed, div, clockwise));
+			wxGetApp().getErrorHandler()->handle(handle->getFloatPlane()->arc(dest, cen, splitter, speed, clockwise));
 		}
 		ctrl->setMaster(false);
 		handle->close_session();
@@ -341,9 +341,9 @@ namespace CalXUI {
 			double y = (((double) size.h) * this->dest.y) + size.y;
 			coord_point_t dest = {x, y};
 			if (relative && work) {
-				errcode = handle->getFloatPlane()->relativeMove(dest, speed, div, jump);
+				errcode = handle->getFloatPlane()->relativeMove(dest, speed, jump);
 			} else if (work) {
-				errcode = handle->getFloatPlane()->move(dest, speed, div, jump);
+				errcode = handle->getFloatPlane()->move(dest, speed, jump);
 			}
 			if (work && errcode == ErrorCode::NoError) {
 				ctrl->setPlaneOffset(handle->getPosition());
@@ -361,9 +361,9 @@ namespace CalXUI {
 			motor_coord_t y = (motor_coord_t) (((double) size.h) * this->dest.y) + size.y;
 			motor_point_t dest = {x, y};
 			if (relative && work) {
-				errcode = handle->relativeMove(dest, speed, div, jump);
+				errcode = handle->relativeMove(dest, speed, jump);
 			} else if (work) {
-				errcode = handle->move(dest, speed, div, jump);
+				errcode = handle->move(dest, speed, jump);
 			}
 			if (work && errcode == ErrorCode::NoError) {
 				ctrl->setPlaneOffset(handle->getPosition());

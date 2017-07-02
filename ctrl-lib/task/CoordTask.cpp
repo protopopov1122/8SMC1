@@ -112,9 +112,9 @@ namespace CalX {
 		state->work = true;
 		state->plane = ctrl;
 		if (this->rel) {
-			code = ctrl->relativeMove(this->pos, this->speed_coef * prms.speed, 8, true);
+			code = ctrl->relativeMove(this->pos, this->speed_coef * prms.speed, true);
 		} else {
-			code = ctrl->move(this->pos, this->speed_coef * prms.speed, 8, true);
+			code = ctrl->move(this->pos, this->speed_coef * prms.speed, true);
 		}
 		state->work = false;
 		return code;
@@ -160,9 +160,9 @@ namespace CalX {
 		state->plane = ctrl;
 		state->work = true;
 		if (this->rel) {
-			code = ctrl->relativeMove(this->pos, this->speed_coef * prms.speed, 8, false);
+			code = ctrl->relativeMove(this->pos, this->speed_coef * prms.speed, false);
 		} else {
-			code = ctrl->move(this->pos, this->speed_coef * prms.speed, 8, false);
+			code = ctrl->move(this->pos, this->speed_coef * prms.speed, false);
 		}
 		state->work = false;
 		return code;
@@ -228,9 +228,9 @@ namespace CalX {
 		state->plane = ctrl;
 		state->work = true;
 		if (this->rel) {
-			code = ctrl->relativeArc(dest, center, splitter, this->speed * prms.speed, 8, this->clockwise);
+			code = ctrl->relativeArc(dest, center, splitter, this->speed * prms.speed, this->clockwise);
 		} else {
-			code = ctrl->arc(dest, center, splitter, this->speed * prms.speed, 8, this->clockwise);
+			code = ctrl->arc(dest, center, splitter, this->speed * prms.speed, this->clockwise);
 		}
 		state->work = false;
 		return code;
@@ -306,9 +306,9 @@ namespace CalX {
 		state->plane = ctrl;
 		state->work = true;
 		if (this->rel) {
-			code = ctrl->relativeArc(dest, cen, splitter, this->speed * prms.speed, 8, this->clockwise);
+			code = ctrl->relativeArc(dest, cen, splitter, this->speed * prms.speed, this->clockwise);
 		} else {
-			code = ctrl->arc(dest, cen, splitter, this->speed * prms.speed, 8, this->clockwise);
+			code = ctrl->arc(dest, cen, splitter, this->speed * prms.speed, this->clockwise);
 		}
 		state->work = false;
 		return code;

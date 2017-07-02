@@ -62,14 +62,14 @@ namespace CalX {
 				second = temp;
 			}
 			if (state->work) {
-				errcode = plane->move(first, speed, 8, false);
+				errcode = plane->move(first, speed, false);
 				if (errcode != ErrorCode::NoError) {
 					state->work = false;
 					return errcode;
 				}
 			}
 			if (state->work) {
-				errcode = plane->move(second, speed, 8, true);
+				errcode = plane->move(second, speed, true);
 				if (errcode != ErrorCode::NoError) {
 					state->work = false;
 					return errcode;
