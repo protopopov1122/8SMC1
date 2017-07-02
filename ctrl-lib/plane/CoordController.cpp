@@ -555,7 +555,10 @@ namespace CalX {
 			if (this->instr->isEnabled()) {
 				err = this->instr->enable(false);
 			}
-			err = this->instr->close_session();
+			ErrorCode errcode = this->instr->close_session();
+			if (err == ErrorCode::NoError) {
+				err = errcode;
+			}
 		}
 		unuse();
 		LOG("CoordController", "Session closed");

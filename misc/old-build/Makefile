@@ -372,7 +372,7 @@ clean:
 	@rm -f *.log
 	
 copy:
-	zip -r $(BUILD)/src.zip *.md Makefile platform.h config.ini device ctrl-lib ui winbuild misc cli tests COPYING COPYING.LESSER NOTICE auto.conf
+	zip -r $(BUILD)/src.zip *.md cli ctrl-lib device docs ext headers misc tests ui CMakeLists.txt COPYING COPYING.LESSER NOTICE
 	cp misc/main.conf.ini $(BUILD)
 	cp device/standart/NL300.ini $(BUILD)
 	cp device/standart/8SMC1.ini $(BUILD)

@@ -46,7 +46,7 @@ namespace CalX {
 	NL300GeneralCommand::NL300GeneralCommand(std::string recv, char array, uint16_t index,
 		NL300GeneralAction action, NL300Parameter *parm, std::string send)
 		: NL300Message::NL300Message(NL300MessageType::General, recv, array + std::to_string(index) + '/' +
-			static_cast<char>(action) + parm->getString(), send) {
+			static_cast<char>(action) + (parm != nullptr ? parm->getString() : ""), send) {
 
 		this->array = array;
 		this->index = index;
