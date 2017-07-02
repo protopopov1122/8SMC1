@@ -109,8 +109,7 @@ namespace CalX {
 			virtual bool isTrailerPressed(int) = 0;
 			virtual bool isRunning() = 0;
 			virtual Power getPowerState() = 0;
-            virtual bool start(motor_coord_t, float,
-					unsigned char, bool  = false) = 0;
+            virtual bool start(motor_coord_t, float, bool  = false) = 0;
 			virtual bool stop() = 0;
 			virtual bool enablePower(bool) = 0;
 	};

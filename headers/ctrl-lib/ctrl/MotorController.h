@@ -39,7 +39,6 @@ namespace CalX {
 
 #define ROLL_STEP 30000
 #define ROLL_SPEED 4000.0f
-#define ROLL_DIV 8
 #define TRAILER_COMEBACK 800
 
 	
@@ -57,8 +56,8 @@ namespace CalX {
 			ErrorCode flipPower();
 			
 			ErrorCode moveToTrailer(int);
-			ErrorCode startMove(motor_coord_t, float, int, bool = false);
-			ErrorCode startRelativeMove(motor_coord_t, float, int, bool = false);
+			ErrorCode startMove(motor_coord_t, float, bool = false);
+			ErrorCode startRelativeMove(motor_coord_t, float, bool = false);
 			void stop();
 
 			motor_coord_t getPosition();

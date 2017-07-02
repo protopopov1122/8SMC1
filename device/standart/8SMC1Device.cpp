@@ -64,6 +64,10 @@ namespace CalX {
 		}
 		return true;
 	}
+	
+	bool _8SMC1Motor::start(motor_coord_t dest, float speed, bool syncIn) {
+		return this->_start(dest, speed, syncIn);		
+	}
 
 	bool _8SMC1Motor::isAutoSaving() {
 		return this->autoSaveConfig;
@@ -227,7 +231,7 @@ namespace CalX {
 		return true;
 	}
 
-	bool _8SMC1Motor::start(motor_coord_t dest, float speed,
+	bool _8SMC1Motor::_start(motor_coord_t dest, float speed,
 			unsigned char divisor, bool syncIn) {
 		lock();
 		if (USMC_GetStartParameters((DWORD) id, startPrms)) {

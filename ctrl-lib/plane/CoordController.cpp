@@ -72,9 +72,6 @@ namespace CalX {
 	}
 
     ErrorCode CoordController::move(motor_point_t point, float speed, bool sync) {
-        unsigned char div = 8; // TODO
-
-		// TODO Enable proper motor syncing
 		Motor *xDev = this->xAxis->getMotor();
 		Motor *yDev = this->yAxis->getMotor();
 		motor_coord_t dx = point.x - xDev->getPosition();
@@ -139,8 +136,8 @@ namespace CalX {
 		}
 
 		this->status = sync ? CoordPlaneStatus::Move : CoordPlaneStatus::Jump;
-		MotorMoveEvent xmevt = {point.x, x_speed, div};
-		if (!xAxis->dev->start(point.x, x_speed, div, false)) {
+		MotorMoveEvent xmevt = {point.x, x_speed};
+		if (!xAxis->dev->start(point.x, x_speed, false)) {
 			this->status = CoordPlaneStatus::Idle;
 			xAxis->unuse();
 			yAxis->unuse();
@@ -149,11 +146,11 @@ namespace CalX {
 		}
 		xAxis->sendMovingEvent(xmevt);
 
-		MotorMoveEvent ymevt = {point.y, y_speed, div};
+		MotorMoveEvent ymevt = {point.y, y_speed};
 		yAxis->dest = point.y > yAxis->dev->getPosition() ? MoveType::MoveUp :
 				MoveType::MoveDown;
 
-		if (!yAxis->dev->start(point.y, y_speed, div, false)) {
+		if (!yAxis->dev->start(point.y, y_speed, false)) {
 			this->status = CoordPlaneStatus::Idle;
 			xAxis->unuse();
 			yAxis->unuse();
@@ -165,7 +162,7 @@ namespace CalX {
 		}
 		yAxis->sendMovingEvent(ymevt);
 
-		CoordMoveEvent evt = {point, speed, div, sync};
+		CoordMoveEvent evt = {point, speed, sync};
 		sendMovingEvent(evt);
 		use();
 		while (xDev->isRunning() || yDev->isRunning()) {
@@ -250,7 +247,6 @@ namespace CalX {
 		this->status = CoordPlaneStatus::Jump;
         int_conf_t roll_step = config->getEntry("core")->getInt("roll_step", ROLL_STEP);
         int_conf_t roll_speed = config->getEntry("core")->getInt("roll_speed", ROLL_SPEED);
-        unsigned char roll_div = (unsigned char) config->getEntry("core")->getInt("roll_div", ROLL_DIV);
         int_conf_t comeback = config->getEntry("core")->getInt("trailer_comeback", TRAILER_COMEBACK);
         int_conf_t dest = (tr == TrailerId::Trailer1 ? -roll_step : roll_step);
 		xAxis->dest = (tr == TrailerId::Trailer1 ? MoveType::RollDown : MoveType::RollUp);
@@ -273,7 +269,7 @@ namespace CalX {
 				if (!xpr && !xAxis->getMotor()->isRunning()) {
 					if (!xAxis->getMotor()->start(
 							xAxis->getMotor()->getPosition() + dest,
-							roll_speed, roll_div)) {
+							roll_speed)) {
 						this->status = CoordPlaneStatus::Idle;
 						xAxis->stop();
 						yAxis->stop();
@@ -301,7 +297,7 @@ namespace CalX {
 				if (!ypr && !yAxis->getMotor()->isRunning()) {
 					if (!yAxis->getMotor()->start(
 							yAxis->getMotor()->getPosition() + dest,
-							roll_speed, roll_div)){
+							roll_speed)){
 						this->status = CoordPlaneStatus::Idle;
 						xAxis->stop();
 						yAxis->stop();
@@ -337,8 +333,8 @@ namespace CalX {
 			comeback *= -1;
 		}
 		if (work) {
-			xAxis->startMove(xAxis->getMotor()->getPosition() + comeback, roll_speed, roll_div);
-			yAxis->startMove(yAxis->getMotor()->getPosition() + comeback, roll_speed, roll_div);
+			xAxis->startMove(xAxis->getMotor()->getPosition() + comeback, roll_speed);
+			yAxis->startMove(yAxis->getMotor()->getPosition() + comeback, roll_speed);
 			xAxis->waitWhileRunning();
 			yAxis->waitWhileRunning();
 		}

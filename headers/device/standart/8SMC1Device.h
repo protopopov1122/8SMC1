@@ -50,12 +50,12 @@ namespace CalX {
 			virtual Power getPowerState();		// Power & FullPower
 			virtual bool isRunning();		// RUN
 			virtual bool isTrailerPressed(int);	// Trailer1 & Trailer2
-			virtual bool start(motor_coord_t, float,
-					unsigned char, bool  = false);	// Specify location, speed, divisor
+			virtual bool start(motor_coord_t, float, bool  = false);	// Specify location, speed
 			virtual bool stop();				// Stop motor
 			virtual bool enablePower(bool);		// Power control
 			
 			/* Some misc methods */
+			virtual bool _start(motor_coord_t, float, unsigned char, bool  = false);	// Specify location, speed
 			void setAutoSave(bool);
 			bool isAutoSaving();
 			bool flush();	// Send mode and parameters to device

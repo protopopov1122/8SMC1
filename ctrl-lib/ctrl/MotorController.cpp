@@ -108,7 +108,6 @@ namespace CalX {
 		this->work = true;
         int_conf_t roll_step = config->getEntry("core")->getInt("roll_step", ROLL_STEP);
         int_conf_t roll_speed = config->getEntry("core")->getInt("roll_speed", ROLL_SPEED);
-        unsigned char roll_div = (unsigned char) config->getEntry("core")->getInt("roll_div", ROLL_DIV);
         int_conf_t comeback = config->getEntry("core")->getInt("trailer_comeback", TRAILER_COMEBACK);
 
         int_conf_t dest = (tr == 1 ? -roll_step : roll_step);
@@ -118,7 +117,7 @@ namespace CalX {
 		this->sendRollingEvent(evt);
 		while (!dev->isTrailerPressed(tr) && work) {
 			if (!this->dev->isRunning()) {
-				if (!this->dev->start(this->dev->getPosition() + dest, roll_speed, roll_div)) {
+				if (!this->dev->start(this->dev->getPosition() + dest, roll_speed)) {
 					this->sendRolledEvent(evt);
 					this->unuse();
 					this->dest = MoveType::Stop;
@@ -142,7 +141,7 @@ namespace CalX {
 		}
 		ErrorCode errcode = ErrorCode::NoError;
 		if (work) {
-			errcode = this->startMove(this->dev->getPosition() + comeback, roll_speed, roll_div);
+			errcode = this->startMove(this->dev->getPosition() + comeback, roll_speed);
 		}
 		this->sendRolledEvent(evt);
 		this->unuse();
@@ -151,9 +150,7 @@ namespace CalX {
 		return errcode;
 	}
 
-	ErrorCode MotorController::startMove(motor_coord_t dest,
-            float speed, int idiv, bool syncIn) {
-        unsigned char div = (unsigned char) idiv;
+	ErrorCode MotorController::startMove(motor_coord_t dest, float speed, bool syncIn) {
 		if (this->dev->isRunning()) {
 			return ErrorCode::MotorRunning;
 		}
@@ -163,11 +160,11 @@ namespace CalX {
 		this->work = true;
 		this->dest = dest > this->dev->getPosition() ? MoveType::MoveUp :
 				MoveType::MoveDown;
-		MotorMoveEvent evt = {dest, speed, div};
+		MotorMoveEvent evt = {dest, speed};
 		this->use();
 		this->sendMovingEvent(evt);
 		ErrorCode errcode = ErrorCode::NoError;
-		if (!this->dev->start(dest, speed, div, syncIn)) {
+		if (!this->dev->start(dest, speed, syncIn)) {
 			errcode = ErrorCode::LowLevelError;
 		}
         if (errcode != ErrorCode::NoError) {
@@ -184,10 +181,9 @@ namespace CalX {
 		return errcode;
 	}
 
-	ErrorCode MotorController::startRelativeMove(motor_coord_t reldest,
-			float speed, int div, bool syncIn) {
+	ErrorCode MotorController::startRelativeMove(motor_coord_t reldest, float speed, bool syncIn) {
 		motor_coord_t dest = getPosition() + reldest;
-		return startMove(dest, speed, div, syncIn);
+		return startMove(dest, speed, syncIn);
 	}
 
 	void MotorController::stop() {

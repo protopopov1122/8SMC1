@@ -32,7 +32,6 @@ namespace CalX {
 	struct MotorMoveEvent {
 		motor_coord_t destination;
 		float speed;
-		int divisor;
 	};
 	
 	struct MotorErrorEvent {
@@ -68,7 +67,6 @@ namespace CalX {
 	struct CoordMoveEvent {
 		motor_point_t destination;
 		float speed;
-		int divisor;
 		bool synchrone;
 	};
 	
