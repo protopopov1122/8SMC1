@@ -51,7 +51,7 @@ namespace CalX {
 		return this->base->move(dest, speed, div, sync);
 	}
 
-	ErrorCode CoordPlaneLinearizer::arc(motor_point_t dest, motor_point_t center, int spl, float speed, int div, bool clockwise, float scale, bool strict) {
+	ErrorCode CoordPlaneLinearizer::arc(motor_point_t dest, motor_point_t center, int spl, float speed, int div, bool clockwise, float scale) {
 		motor_point_t src = this->getPosition();
 		double r1 = pow(src.x - center.x, 2) +
 			     pow(src.y - center.y, 2);
@@ -142,7 +142,7 @@ namespace CalX {
 	CoordPlane *CoordPlaneLinearizer::clone(CoordPlane *base) {
 		return new CoordPlaneLinearizer(base);
 	}
-	
+
 	CoordPlaneStatus CoordPlaneLinearizer::getStatus() {
 		return this->base->getStatus();
 	}

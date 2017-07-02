@@ -39,8 +39,8 @@ namespace CalX {
 			virtual ~CoordPlane() {}
 			virtual ErrorCode move(motor_point_t, float, int, bool) = 0;
 			virtual ErrorCode relativeMove(motor_point_t, float, int, bool);
-			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, float = 1.0f, bool = false) = 0;
-			virtual ErrorCode relativeArc(motor_point_t, motor_point_t, int, float, int, bool, float = 1.0f, bool = false);
+			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, float = 1.0f) = 0;
+			virtual ErrorCode relativeArc(motor_point_t, motor_point_t, int, float, int, bool, float = 1.0f);
 			virtual ErrorCode calibrate(TrailerId) = 0;
 			virtual ErrorCode measure(TrailerId) = 0;
 			virtual motor_point_t getPosition() = 0;
@@ -52,18 +52,15 @@ namespace CalX {
 			virtual void dump(std::ostream&) = 0;
 			virtual CoordPlane *clone(CoordPlane*) = 0;
 			virtual CoordPlaneStatus getStatus() = 0;
-			virtual ErrorCode open_session() {return ErrorCode::NoError;}
-			virtual ErrorCode close_session() {return ErrorCode::NoError;}
+			virtual ErrorCode open_session();
+			virtual ErrorCode close_session();
 	};
 
 	struct TaskState {
 		CoordPlane *plane;
 		bool work;
 
-		void stop() {
-			plane->stop();
-			work = false;
-		}
+		void stop();
 	};
 }
 

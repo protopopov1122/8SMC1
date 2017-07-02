@@ -138,7 +138,7 @@ namespace CalX {
 				return errcode;
 			}
 		}
-		
+
 		this->status = sync ? CoordPlaneStatus::Move : CoordPlaneStatus::Jump;
 		MotorMoveEvent xmevt = {point.x, x_speed, div};
 		if (!xAxis->dev->start(point.x, x_speed, div, false)) {
@@ -153,7 +153,7 @@ namespace CalX {
 		MotorMoveEvent ymevt = {point.y, y_speed, div};
 		yAxis->dest = point.y > yAxis->dev->getPosition() ? MoveType::MoveUp :
 				MoveType::MoveDown;
-				
+
 		if (!yAxis->dev->start(point.y, y_speed, div, false)) {
 			this->status = CoordPlaneStatus::Idle;
 			xAxis->unuse();
@@ -215,10 +215,10 @@ namespace CalX {
 				}
 			}
 		}
-		
+
 		while (xAxis->dev->isRunning() || yAxis->dev->isRunning()) {}
 		this->status = CoordPlaneStatus::Idle;
-		
+
 		ErrorCode errcode = ErrorCode::NoError;
 		if (this->instr != nullptr) {
 			this->instr->unuse();
@@ -230,14 +230,6 @@ namespace CalX {
 		yAxis->unuse();
 		unuse();
 		return errcode;
-	}
-
-	ErrorCode CoordPlane::relativeMove(motor_point_t relpoint, float speed, int div,
-			bool sync) {
-		motor_point_t point = getPosition();
-		point.x += relpoint.x;
-		point.y += relpoint.y;
-		return move(point, speed, div, sync);
 	}
 
 	ErrorCode CoordController::calibrate(TrailerId tr) {
@@ -372,7 +364,7 @@ namespace CalX {
 	}
 
 	ErrorCode CoordController::arc(motor_point_t dest, motor_point_t center, int spl,
-				float speed, int div, bool clockwise, float scale, bool strict) {
+				float speed, int div, bool clockwise, float scale) {
 		if (this->xAxis->getPowerState() == Power::NoPower ||
 			this->yAxis->getPowerState() == Power::NoPower) {
 			return ErrorCode::PowerOff;
@@ -441,17 +433,6 @@ namespace CalX {
 			code = this->move(dest, speed, div, true);
 		}
 		return code;
-	}
-
-	ErrorCode CoordPlane::relativeArc(motor_point_t reldest, motor_point_t relcenter, int splitter,
-				float speed, int div, bool clockwise, float scale, bool strict) {
-		motor_point_t dest = getPosition();
-		motor_point_t center = getPosition();
-		dest.x += reldest.x;
-		dest.y += reldest.y;
-		center.x += relcenter.x;
-		center.y += relcenter.y;
-		return arc(dest, center, splitter, speed, div, clockwise, scale, strict);
 	}
 
 	motor_rect_t CoordController::getSize() {
@@ -562,7 +543,7 @@ namespace CalX {
 	CoordPlane *CoordController::clone(CoordPlane *base) {
 		return new CoordController(this->xAxis, this->yAxis, this->config, this->instr);
 	}
-	
+
 	CoordPlaneStatus CoordController::getStatus() {
 		return this->status;
 	}

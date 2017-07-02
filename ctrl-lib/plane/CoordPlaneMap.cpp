@@ -70,7 +70,7 @@ namespace CalX {
 		return this->plane->move(dest, speed * this->speedScale, div, sync);
 	}
 
-	ErrorCode CoordPlaneMap::arc(motor_point_t dest, motor_point_t center, int splitter, float speed, int div, bool clockwise, float scale, bool strict) {
+	ErrorCode CoordPlaneMap::arc(motor_point_t dest, motor_point_t center, int splitter, float speed, int div, bool clockwise, float scale) {
 		dest.x *= this->scale.x;
 		dest.y *= this->scale.y;
 		dest.x += this->offset.x;
@@ -82,7 +82,7 @@ namespace CalX {
 		center.y += this->offset.y;
 
 		scale *= (this->scale.x + this->scale.y) / 2;
-		return this->plane->arc(dest, center, splitter, speed * this->speedScale, div, clockwise, scale, strict);
+		return this->plane->arc(dest, center, splitter, speed * this->speedScale, div, clockwise, scale);
 	}
 
 	ErrorCode CoordPlaneMap::calibrate(TrailerId tr) {
@@ -138,7 +138,7 @@ namespace CalX {
 	CoordPlane *CoordPlaneMap::clone(CoordPlane *base) {
 		return new CoordPlaneMap(this->offset, this->scale, this->speedScale, base);
 	}
-	
+
 	CoordPlaneStatus CoordPlaneMap::getStatus() {
 		return this->plane->getStatus();
 	}

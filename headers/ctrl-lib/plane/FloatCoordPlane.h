@@ -41,7 +41,7 @@ namespace CalX {
 
 			// Proxy methods
 			virtual ErrorCode move(motor_point_t, float, int, bool);
-			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, float = 1.0f, bool = false);
+			virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, float = 1.0f);
 			virtual motor_point_t getPosition();
 			virtual motor_rect_t getSize();
 			virtual ErrorCode calibrate(TrailerId);
@@ -57,9 +57,9 @@ namespace CalX {
 			virtual ErrorCode close_session();
 			// Floating-point methods
 			virtual ErrorCode move(coord_point_t, double, int, bool);
-			virtual ErrorCode arc(coord_point_t, coord_point_t, int, double, int, bool, float = 1.0f, bool = false);
+			virtual ErrorCode arc(coord_point_t, coord_point_t, int, double, int, bool, float = 1.0f);
 			virtual ErrorCode relativeMove(coord_point_t, float, int, bool);
-			virtual ErrorCode relativeArc(coord_point_t, coord_point_t, int, float, int, bool, float = 1.0f, bool = false);
+			virtual ErrorCode relativeArc(coord_point_t, coord_point_t, int, float, int, bool, float = 1.0f);
 			virtual coord_point_t getFloatPosition();
 			virtual coord_rect_t getFloatSize();
 		private:

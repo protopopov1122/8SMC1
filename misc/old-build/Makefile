@@ -176,6 +176,9 @@ StandartRequestResolvers.o:
 ConfigManager.o:
 	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/conf/ConfigManager.cpp
 
+CoordPlane.o:
+	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/plane/CoordPlane.cpp
+
 FloatCoordPlane.o:
 	$(CC) $(CFLAGS_LIB) $(CFLAGS) -c ctrl-lib/plane/FloatCoordPlane.cpp
 
@@ -316,9 +319,9 @@ $(OUTPUT): $(OUTPUT_LIB) devapi_$(DEVAPI) DevCLI.o main.o CLI.o
 	@mkdir -p $(BUILD)
 	$(CC) -o $(BUILD)/$(OUTPUT) DevCLI.o main.o CLI.o  $(LDFLAGS) -Wl,--library-path=$(BUILD) -ldev_$(DEVAPI) -l$(NAME)
 
-$(OUTPUT_LIB): CoordTask.o LinearCoordTask.o GCodeCoordTask.o LogarithmicCoordTranslator.o PolarCoordTranslator.o LinearCoordTranslator.o BasicCoordTranslator.o ComplexCoordTranslator.o GraphBuilder.o CircleGenerator.o Device.o DeviceManager.o DefaultFunctions.o FunctionLexer.o FunctionEngine.o AST.o FunctionParser.o logger.o MotorController.o InstrumentController.o GCodeWriter.o GCodeStream.o GCodeInterpreter.o ConfigValidator.o RequestResolver.o StandartRequestResolvers.o ConfigManager.o FloatCoordPlane.o CoordHandle.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordController.o VirtualCoordPlane.o CoordPlaneValidator.o CoordPlaneLinearizer.o SystemManager.o
+$(OUTPUT_LIB): CoordTask.o LinearCoordTask.o GCodeCoordTask.o LogarithmicCoordTranslator.o PolarCoordTranslator.o LinearCoordTranslator.o BasicCoordTranslator.o ComplexCoordTranslator.o GraphBuilder.o CircleGenerator.o Device.o DeviceManager.o DefaultFunctions.o FunctionLexer.o FunctionEngine.o AST.o FunctionParser.o logger.o MotorController.o InstrumentController.o GCodeWriter.o GCodeStream.o GCodeInterpreter.o ConfigValidator.o RequestResolver.o StandartRequestResolvers.o ConfigManager.o CoordPlane.o FloatCoordPlane.o CoordHandle.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordController.o VirtualCoordPlane.o CoordPlaneValidator.o CoordPlaneLinearizer.o SystemManager.o
 	@mkdir -p $(BUILD)
-	$(CC) -shared -o $(BUILD)/$(OUTPUT_LIB) CoordTask.o LinearCoordTask.o GCodeCoordTask.o LogarithmicCoordTranslator.o PolarCoordTranslator.o LinearCoordTranslator.o BasicCoordTranslator.o ComplexCoordTranslator.o GraphBuilder.o CircleGenerator.o Device.o DeviceManager.o DefaultFunctions.o FunctionLexer.o FunctionEngine.o AST.o FunctionParser.o logger.o MotorController.o InstrumentController.o GCodeWriter.o GCodeStream.o GCodeInterpreter.o ConfigValidator.o RequestResolver.o StandartRequestResolvers.o ConfigManager.o FloatCoordPlane.o CoordHandle.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordController.o VirtualCoordPlane.o CoordPlaneValidator.o CoordPlaneLinearizer.o SystemManager.o  $(LDFLAGS) $(LDFLAGS_LIB)
+	$(CC) -shared -o $(BUILD)/$(OUTPUT_LIB) CoordTask.o LinearCoordTask.o GCodeCoordTask.o LogarithmicCoordTranslator.o PolarCoordTranslator.o LinearCoordTranslator.o BasicCoordTranslator.o ComplexCoordTranslator.o GraphBuilder.o CircleGenerator.o Device.o DeviceManager.o DefaultFunctions.o FunctionLexer.o FunctionEngine.o AST.o FunctionParser.o logger.o MotorController.o InstrumentController.o GCodeWriter.o GCodeStream.o GCodeInterpreter.o ConfigValidator.o RequestResolver.o StandartRequestResolvers.o ConfigManager.o CoordPlane.o FloatCoordPlane.o CoordHandle.o CoordPlaneLog.o CoordPlaneMap.o CoordPlaneStack.o CoordController.o VirtualCoordPlane.o CoordPlaneValidator.o CoordPlaneLinearizer.o SystemManager.o  $(LDFLAGS) $(LDFLAGS_LIB)
 
 $(OUTPUT_UI): CalxGcodeLoader.o CalxLinearTaskHandle.o CalxProgrammedTaskHandle.o CalxTaskPanel.o CalxGcodeHandle.o CalxTaskStepHandle.o CalxDebugConsole.o CalxActionQueue.o CalxFrame.o CalxCoordArcCtrl.o CalxCoordCtrl.o CalxCoordFilter.o CalxCoordOtherCtrl.o CalxCoordDialog.o CalxCoordMiscCtrl.o CalxCoordPlaneWatcher.o CalxCoordGraphCtrl.o CalxVirtualPlane.o CalxCoordPositionCtrl.o CalxCoordPanel.o CalxCoordLinearCtrl.o CalxConfigLoader.o CalxPanel.o CalxDevicePanel.o CalxCOMSelectDialog.o CalxInstrumentCtrl.o CalxMotorCtrl.o CalxConfigEditor.o CalxErrorHandler.o CalxApp.o CalxAutoconfDialog.o DevCLI.o CLI.o
 	@mkdir -p $(BUILD)

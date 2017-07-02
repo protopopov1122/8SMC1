@@ -68,17 +68,12 @@ namespace CalX {
 		return this->power;
 	}
 
-    bool EmuMotor::start(motor_coord_t dest, float speed, unsigned char div, bool sync) {
+  bool EmuMotor::start(motor_coord_t dest, float speed, unsigned char div, bool sync) {
 		if (this->power == Power::NoPower) {
 			return true;
 		}
 		this->power = Power::FullPower;
 		this->pos = dest;
-		if (this->pos > EMU_MOTOR_SIZE / 2) {
-			this->pos = EMU_MOTOR_SIZE / 2;
-		} else if (this->pos < -EMU_MOTOR_SIZE / 2) {
-			this->pos = -EMU_MOTOR_SIZE / 2;
-		}
 		return true;
 	}
 

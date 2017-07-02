@@ -27,7 +27,7 @@
 #include "ctrl-lib/plane/AbstractCoordPlane.h"
 
 namespace CalX {
-  
+
   class CoordController : public CoordPlane {
   	public:
   		CoordController(MotorController*, MotorController*, ConfigManager*, InstrumentController* = nullptr);
@@ -36,8 +36,8 @@ namespace CalX {
   		MotorController *getYAxis();
   		InstrumentController *getInstrument();
 
-                        virtual ErrorCode move(motor_point_t, float, int, bool);
-  		virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, float = 1.0f, bool = false);
+      virtual ErrorCode move(motor_point_t, float, int, bool);
+  		virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, int, bool, float = 1.0f);
   		virtual ErrorCode calibrate(TrailerId);
   		virtual ErrorCode measure(TrailerId);
   		virtual motor_point_t getPosition();

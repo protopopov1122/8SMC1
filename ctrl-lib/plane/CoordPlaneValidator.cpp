@@ -75,7 +75,7 @@ namespace CalX {
 		return this->plane->move(dest, speed, div, sync);
 	}
 
-	ErrorCode CoordPlaneValidator::arc(motor_point_t dest, motor_point_t center, int splitter, float speed, int div, bool clockwise, float scale, bool strict) {
+	ErrorCode CoordPlaneValidator::arc(motor_point_t dest, motor_point_t center, int splitter, float speed, int div, bool clockwise, float scale) {
 		if (speed < 0 || speed > this->max_speed) {
 			return ErrorCode::InvalidSpeed;
 		}
@@ -91,7 +91,7 @@ namespace CalX {
 			center.y >= this->max.y) {
 			return ErrorCode::InvalidCoordinates;
 		}
-		return this->plane->arc(dest, center, splitter, speed, div, clockwise, scale, strict);
+		return this->plane->arc(dest, center, splitter, speed, div, clockwise, scale);
 	}
 
 	ErrorCode CoordPlaneValidator::calibrate(TrailerId tr) {
@@ -135,7 +135,7 @@ namespace CalX {
 	CoordPlane *CoordPlaneValidator::clone(CoordPlane *base) {
 		return new CoordPlaneValidator(this->min, this->max, this->max_speed, base);
 	}
-	
+
 	CoordPlaneStatus CoordPlaneValidator::getStatus() {
 		return this->plane->getStatus();
 	}

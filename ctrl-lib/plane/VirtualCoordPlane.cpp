@@ -65,7 +65,7 @@ namespace CalX {
 	}
 
 	ErrorCode VirtualCoordPlane::arc(motor_point_t dest, motor_point_t center, int spl,
-				float speed, int div, bool clockwise, float scale, bool strict) {
+				float speed, int div, bool clockwise, float scale) {
 		motor_point_t src = this->getPosition();
 		double r1 = pow(src.x - center.x, 2) +
 			     pow(src.y - center.y, 2);
@@ -124,7 +124,7 @@ namespace CalX {
 
 	void VirtualCoordPlane::stop() {
 	}
-	
+
 	CoordPlaneStatus VirtualCoordPlane::getStatus() {
 		return CoordPlaneStatus::Idle;
 	}

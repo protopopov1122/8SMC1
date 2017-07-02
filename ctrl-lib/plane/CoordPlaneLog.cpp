@@ -75,13 +75,13 @@ namespace CalX {
 		return err;
 	}
 
-	ErrorCode CoordPlaneLog::arc(motor_point_t dest, motor_point_t center, int splitter, float speed, int div, bool clockwise, float scale, bool strict) {
+	ErrorCode CoordPlaneLog::arc(motor_point_t dest, motor_point_t center, int splitter, float speed, int div, bool clockwise, float scale) {
 		if (this->log_actions) {
 			*out << this->prefix << (clockwise ? "Clockwise" : "Counter-clockwise" )
 				<< " arc moving to " << dest.x << "x" << dest.y << "; center " << center.x << "x" << center.y << " with base speed " << speed
 				<< "; splitter " << splitter << "; step divisor " << div << "." << std::endl;
 		}
-		ErrorCode err = this->plane->arc(dest, center, splitter, speed, div, clockwise, scale, strict);
+		ErrorCode err = this->plane->arc(dest, center, splitter, speed, div, clockwise, scale);
 		if (this->log_errors && err != ErrorCode::NoError) {
 			*out << this->prefix << "Error occured(" << err << ")" << std::endl;
 		}
@@ -143,7 +143,7 @@ namespace CalX {
 		CoordPlaneLog *log = new CoordPlaneLog(base, this->out, this->prefix, this->log_actions, this->log_errors);
 		return log;
 	}
-	
+
 	CoordPlaneStatus CoordPlaneLog::getStatus() {
 		return this->plane->getStatus();
 	}
