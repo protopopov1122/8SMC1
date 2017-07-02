@@ -46,7 +46,6 @@ namespace CalXUI {
 			double getCenterCoordX() {return cxCoord->GetValue();}
 			double getCenterCoordY() {return cyCoord->GetValue();}
 			double getSpeed() {return speed->GetValue();}
-			int getDivisor() {return 1 << divisor->GetSelection();}
 			int getSplitter() {return splitter->GetValue();}
 			bool isClockwise() {return clockwise->GetValue();}
 			bool isRelative() {return relative->GetValue();}
@@ -59,7 +58,6 @@ namespace CalXUI {
 			wxSpinCtrlDouble *cxCoord;
 			wxSpinCtrlDouble *cyCoord;
 			wxSpinCtrlDouble *speed;
-			wxChoice *divisor;
 			wxSpinCtrl *splitter;
 			wxCheckBox *clockwise;
 			wxCheckBox *relative;

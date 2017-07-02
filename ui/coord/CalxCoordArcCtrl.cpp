@@ -42,12 +42,6 @@ namespace CalXUI {
                                         getEntry("units")->getReal("unit_speed", 4000.0),
                                      wxGetApp().getSystemManager()->getConfiguration()->
                                         getEntry("units")->getReal("unit_speed", 4000.0), wxGetApp().getSpeedPrecision());
-		this->divisor = new wxChoice(this, wxID_ANY);
-		this->divisor->Append("1");
-		this->divisor->Append("2");
-		this->divisor->Append("4");
-		this->divisor->Append("8");
-		this->divisor->SetSelection(3);
 		this->splitter = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1000, 200);
 		this->clockwise = new wxCheckBox(this, wxID_ANY, __("Clockwise"));
 		this->relative = new wxCheckBox(this, wxID_ANY, __("Relative"));
@@ -75,9 +69,6 @@ namespace CalXUI {
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Speed") + std::string(":")));
 		sizer->Add(speed, 0, wxEXPAND);
 		sizer->Add(new wxStaticText(this, wxID_ANY, wxGetApp().getSpeedUnits()));
-		sizer->Add(new wxStaticText(this, wxID_ANY, __("Divisor") + std::string(":")));
-		sizer->Add(divisor);
-		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Splitter") + std::string(":")));
 		sizer->Add(splitter, 0, wxEXPAND);
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""));

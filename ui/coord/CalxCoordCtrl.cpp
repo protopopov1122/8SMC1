@@ -238,18 +238,16 @@ namespace CalXUI {
 		motor_point_t dest = {(motor_coord_t) (sz.x + sz.w * x), (motor_coord_t) (sz.y + sz.h * y)};
 		ConfigManager *config = wxGetApp().getSystemManager()->getConfiguration();
         int_conf_t speed = config->getEntry("core")->getInt("roll_speed", ROLL_SPEED);
-        int div = 8;
 		bool ready = false;
-		this->queue->addAction(new CalxCoordMoveAction(this, ctrl, false, false, dest, speed, div), &ready);
+		this->queue->addAction(new CalxCoordMoveAction(this, ctrl, false, false, dest, speed), &ready);
 		while (!ready) {wxThread::Yield();}
 	}
 
 	void CalxCoordCtrl::requestPositionAbs(motor_point_t dest) {
 		ConfigManager *config = wxGetApp().getSystemManager()->getConfiguration();
         int_conf_t speed = config->getEntry("core")->getInt("roll_speed", ROLL_SPEED);
-        int div = 8;
 		bool ready = false;
-		this->queue->addAction(new CalxCoordMoveAction(this, ctrl, false, false, dest, speed, div), &ready);
+		this->queue->addAction(new CalxCoordMoveAction(this, ctrl, false, false, dest, speed), &ready);
 		while (!ready) {wxThread::Yield();}
 	}
 
@@ -315,20 +313,20 @@ namespace CalXUI {
 
 	void CalxCoordCtrl::OnLinearMoveClick(wxCommandEvent &evt) {
 		coord_point_t dest = {linear->getCoordX(), linear->getCoordY()};
-		this->queue->addAction(new CalxCoordFloatMoveAction(this, ctrl, true, linear->isRelative(), dest, linear->getSpeed(), linear->getDivisor()));
+		this->queue->addAction(new CalxCoordFloatMoveAction(this, ctrl, true, linear->isRelative(), dest, linear->getSpeed()));
 	}
 
 	void CalxCoordCtrl::OnLinearJumpClick(wxCommandEvent &evt) {
 		coord_point_t dest = {linear->getCoordX(), linear->getCoordY()};
 		double speed = linear->getSpeed();
-		this->queue->addAction(new CalxCoordFloatMoveAction(this, ctrl, false, linear->isRelative(), dest, speed, linear->getDivisor()));
+		this->queue->addAction(new CalxCoordFloatMoveAction(this, ctrl, false, linear->isRelative(), dest, speed));
 	}
 
 	void CalxCoordCtrl::OnArcMoveClick(wxCommandEvent &evt) {
 		coord_point_t dest = {arc->getCoordX(), arc->getCoordY()};
 		coord_point_t cen = {arc->getCenterCoordX(), arc->getCenterCoordY()};
 		double speed = arc->getSpeed();
-		this->queue->addAction(new CalxCoordFloatArcAction(this, ctrl, arc->isRelative(), dest, cen, arc->getSplitter(), speed, arc->getDivisor(), arc->isClockwise()));
+		this->queue->addAction(new CalxCoordFloatArcAction(this, ctrl, arc->isRelative(), dest, cen, arc->getSplitter(), speed, arc->isClockwise()));
 	}
 
 	void CalxCoordCtrl::OnGraphBuildClick(wxCommandEvent &evt) {
@@ -488,16 +486,14 @@ namespace CalXUI {
 		double x = (((double) size.w) * posCtrl->getXPosition()) + size.x;
 		double y = (((double) size.h) * posCtrl->getYPosition()) + size.y;
 		double speed = posCtrl->getSpeed();
-		int div = posCtrl->getDivisor();
 		coord_point_t dest = {x, y};
-		this->queue->addAction(new CalxCoordFloatMoveAction(this, ctrl, false, false, dest, speed, div));
+		this->queue->addAction(new CalxCoordFloatMoveAction(this, ctrl, false, false, dest, speed));
 	}
 
 	void CalxCoordCtrl::OnConfigureClick(wxCommandEvent &evt) {
 		CalxCoordPositionCtrl *posCtrl = this->otherCtrl->getPositionController();
 		double speed = posCtrl->getSpeed();
-		int div = posCtrl->getDivisor();
 		coord_point_t dest = {posCtrl->getXPosition(), posCtrl->getYPosition()};
-		this->queue->addAction(new CalxCoordConfigureAction(this, ctrl, false, false, dest, speed, div, true));
+		this->queue->addAction(new CalxCoordConfigureAction(this, ctrl, false, false, dest, speed, true));
 	}
 }

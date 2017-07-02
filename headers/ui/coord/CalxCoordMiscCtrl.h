@@ -86,7 +86,7 @@ namespace CalXUI {
 
 	class CalxCoordMoveAction : public CalxAction {
 		public:
-			CalxCoordMoveAction(CalxCoordCtrl*, CoordHandle*, bool, bool, motor_point_t, float, int);
+			CalxCoordMoveAction(CalxCoordCtrl*, CoordHandle*, bool, bool, motor_point_t, float);
 			virtual ~CalxCoordMoveAction();
 
 			virtual void perform(SystemManager*);
@@ -98,13 +98,12 @@ namespace CalXUI {
 			bool relative;
 			motor_point_t dest;
 			float speed;
-			int div;
 	};
 
 
 	class CalxCoordFloatMoveAction : public CalxAction {
 		public:
-			CalxCoordFloatMoveAction(CalxCoordCtrl*, CoordHandle*, bool, bool, coord_point_t, double, int);
+			CalxCoordFloatMoveAction(CalxCoordCtrl*, CoordHandle*, bool, bool, coord_point_t, double);
 			virtual ~CalxCoordFloatMoveAction();
 
 			virtual void perform(SystemManager*);
@@ -116,12 +115,11 @@ namespace CalXUI {
 			bool relative;
 			coord_point_t dest;
 			double speed;
-			int div;
 	};
 
 	class CalxCoordArcAction : public CalxAction {
 		public:
-			CalxCoordArcAction(CalxCoordCtrl*, CoordHandle*, bool, motor_point_t, motor_point_t, int, float, int, bool);
+			CalxCoordArcAction(CalxCoordCtrl*, CoordHandle*, bool, motor_point_t, motor_point_t, int, float, bool);
 			virtual ~CalxCoordArcAction();
 
 			virtual void perform(SystemManager*);
@@ -134,13 +132,12 @@ namespace CalXUI {
 			motor_point_t cen;
 			int splitter;
 			float speed;
-			int div;
 			bool clockwise;
 	};
 
 	class CalxCoordFloatArcAction : public CalxAction {
 		public:
-			CalxCoordFloatArcAction(CalxCoordCtrl*, CoordHandle*, bool, coord_point_t, coord_point_t, int, double, int, bool);
+			CalxCoordFloatArcAction(CalxCoordCtrl*, CoordHandle*, bool, coord_point_t, coord_point_t, int, double, bool);
 			virtual ~CalxCoordFloatArcAction();
 
 			virtual void perform(SystemManager*);
@@ -153,7 +150,6 @@ namespace CalXUI {
 			coord_point_t cen;
 			int splitter;
 			double speed;
-			int div;
 			bool clockwise;
 	};
 
@@ -220,7 +216,7 @@ namespace CalXUI {
 
 	class CalxCoordConfigureAction : public CalxAction {
 		public:
-			CalxCoordConfigureAction(CalxCoordCtrl*, CoordHandle*, bool, bool, coord_point_t, float, int, bool = false);
+			CalxCoordConfigureAction(CalxCoordCtrl*, CoordHandle*, bool, bool, coord_point_t, float, bool = false);
 			virtual ~CalxCoordConfigureAction();
 
 			virtual void perform(SystemManager*);
@@ -233,7 +229,6 @@ namespace CalXUI {
 			bool relative;
 			coord_point_t dest;
 			float speed;
-			int div;
 			bool use_float;
 	};
 }

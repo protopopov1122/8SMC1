@@ -44,7 +44,6 @@ namespace CalXUI {
 			double getCoordX() {return xCoord->GetValue();}
 			double getCoordY() {return yCoord->GetValue();}
 			double getSpeed() {return speed->GetValue();}
-			int getDivisor() {return 1 << divisor->GetSelection();}
 			bool isRelative() {return relative->GetValue();}
 			wxButton *getMoveButton() {return this->moveButton;}
 			wxButton *getJumpButton() {return this->jumpButton;}
@@ -55,7 +54,6 @@ namespace CalXUI {
 			wxSpinCtrlDouble *xCoord;
 			wxSpinCtrlDouble *yCoord;
 			wxSpinCtrlDouble *speed;
-			wxChoice *divisor;
 			wxCheckBox *relative;
 	};
 

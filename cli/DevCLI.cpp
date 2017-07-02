@@ -125,7 +125,7 @@ namespace CalX {
 			if (args.empty()) {
 				std::cout << "Provide device id" << std::endl;
 			} else {
-				if (args.size() < 4) {
+				if (args.size() < 3) {
 					std::cout << "Provide arguments" << std::endl;
 					return;
 				}
@@ -136,17 +136,15 @@ namespace CalX {
 				}
 				int dest = std::stoi(args.at(1));
                 float speed = static_cast<float>(std::stod(args.at(2)));
-				int div = std::stoi(args.at(3));
 				std::cout << "\tStarted device #" << dev->getMotor()->getID() << " to " << dest
-					<< " with speed " << speed << " steps/sec and " << div << " step divisor"
-					<< std::endl;
-				dev->startMove(dest, speed, div);
+					<< " with speed " << speed << " steps/sec and " << std::endl;
+				dev->startMove(dest, speed);
 			}
 		} else if (com.compare("rmove") == 0) {
 			if (args.empty()) {
 				std::cout << "Provide device id" << std::endl;
 			} else {
-				if (args.size() < 4) {
+				if (args.size() < 3) {
 					std::cout << "Provide arguments" << std::endl;
 					return;
 				}
@@ -157,11 +155,9 @@ namespace CalX {
 				}
 				int dest = std::stoi(args.at(1));
                 float speed = static_cast<float>(std::stod(args.at(2)));
-				int div = std::stoi(args.at(3));
 				std::cout << "\tStarted device #" << dev->getMotor()->getID() << " to " << dest
-					<< " with speed " << speed << " steps/sec and " << div << " step divisor"
-					<< std::endl;
-				dev->startRelativeMove(dest, speed, div);
+					<< " with speed " << speed << " steps/sec and " << std::endl;
+				dev->startRelativeMove(dest, speed);
 			}
 		} else if (com.compare("stop") == 0) {
 			if (args.empty()) {
@@ -270,83 +266,75 @@ namespace CalX {
             float speed = static_cast<float>(std::stod(args.at(5)));
 			ctrl->pushPlane(new CoordPlaneValidator(min, max, speed, ctrl->peekPlane()));
 		} else if (com.compare("move") == 0) {
-			if (args.size() < 5) {
+			if (args.size() < 4) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
                 CoordPlaneStack *ctrl = sysman->getCoord((size_t) std::stoul(args.at(0)));
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
                 float speed = static_cast<float>(std::stod(args.at(3)));
-                int div = std::stoi(args.at(4));
 				if (ctrl == nullptr) {
 					std::cout << "Wrong coord id" << std::endl;
 				} else {
 					motor_point_t point = {x, y};
 					std::cout << "\tStarted coord #" << args.at(0) << " to " << x << "x" << y
-						<< " with base speed " << speed << " steps/sec and " << div << " step divisor"
-						<< std::endl;
+						<< " with base speed " << speed << " steps/sec and " << std::endl;
 					ctrl->move(point, speed, true);
 				}
 			}
 		} else if (com.compare("rmove") == 0) {
-			if (args.size() < 5) {
+			if (args.size() < 4) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
                 CoordPlaneStack *ctrl = sysman->getCoord((size_t) std::stoul(args.at(0)));
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
                 float speed = static_cast<float>(std::stod(args.at(3)));
-                int div = std::stoi(args.at(4));
 				if (ctrl == nullptr) {
 					std::cout << "Wrong coord id" << std::endl;
 				} else {
 					motor_point_t point = {x, y};
 					std::cout << "\tStarted relative coord #" << args.at(0) << " to " << x << "x" << y
-						<< " with base speed " << speed << " steps/sec and " << div << " step divisor"
-						<< std::endl;
+						<< " with base speed " << speed << " steps/sec and " << std::endl;
 					ctrl->relativeMove(point, speed, true);
 				}
 			}
 		} else if (com.compare("jump") == 0) {
-			if (args.size() < 5) {
+			if (args.size() < 4) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
                 CoordPlaneStack *ctrl = sysman->getCoord((size_t) std::stoul(args.at(0)));
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
                 float speed = static_cast<float>(std::stod(args.at(3)));
-                int div = std::stoi(args.at(4));
 				if (ctrl == nullptr) {
 					std::cout << "Wrong coord id" << std::endl;
 				} else {
 					motor_point_t point = {x, y};
 					std::cout << "\tStarted coord # jump " << args.at(0) << " to " << x << "x" << y
-						<< " with base speed " << speed << " steps/sec and " << div << " step divisor"
-						<< std::endl;
+						<< " with base speed " << speed << " steps/sec and " << std::endl;
 					ctrl->move(point, speed, false);
 				}
 			}
 		}  else if (com.compare("rjump") == 0) {
-			if (args.size() < 5) {
+			if (args.size() < 4) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
                 CoordPlaneStack *ctrl = sysman->getCoord((size_t) std::stoul(args.at(0)));
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
                 float speed = static_cast<float>(std::stod(args.at(3)));
-                int div = std::stoi(args.at(4));
 				if (ctrl == nullptr) {
 					std::cout << "Wrong coord id" << std::endl;
 				} else {
 					motor_point_t point = {x, y};
 					std::cout << "\tStarted relative coord # jump " << args.at(0) << " to " << x << "x" << y
-						<< " with base speed " << speed << " steps/sec and " << div << " step divisor"
-						<< std::endl;
+						<< " with base speed " << speed << " steps/sec and " << std::endl;
 					ctrl->relativeMove(point, speed, false);
 				}
 			}
 		} else if (com.compare("arc") == 0) {
-			if (args.size() < 8) {
+			if (args.size() < 7) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
                 CoordPlaneStack *ctrl = sysman->getCoord((size_t) std::stoul(args.at(0)));
@@ -356,22 +344,20 @@ namespace CalX {
 				int cy = std::stoi(args.at(4));
 				int sp = std::stoi(args.at(5));
                 float speed = static_cast<float>(std::stod(args.at(6)));
-                int div = std::stoi(args.at(7));
 				if (ctrl == nullptr) {
 					std::cout << "Wrong coord id" << std::endl;
 				} else {
 					motor_point_t point = {x, y};
 					motor_point_t center = {cx, cy};
 					std::cout << "\tStarted coord arc #" << args.at(0) << " to " << x << "x" << y
-						<< " with base speed " << speed << " steps/sec and " << div << " step divisor"
-						<< std::endl;
+						<< " with base speed " << speed << " steps/sec and " << std::endl;
 					if (ctrl->arc(point, center, sp, speed, true) != ErrorCode::NoError) {
 						std::cout << "Arc error" << std::endl;
 					}
 				}
 			}
 		} else if (com.compare("carc") == 0) {
-			if (args.size() < 8) {
+			if (args.size() < 7) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
                 CoordPlaneStack *ctrl = sysman->getCoord((size_t) std::stoi(args.at(0)));
@@ -381,22 +367,20 @@ namespace CalX {
 				int cy = std::stoi(args.at(4));
 				int sp = std::stoi(args.at(5));
                 float speed = static_cast<float>(std::stod(args.at(6)));
-                int div = std::stoi(args.at(7));
 				if (ctrl == nullptr) {
 					std::cout << "Wrong coord id" << std::endl;
 				} else {
 					motor_point_t point = {x, y};
 					motor_point_t center = {cx, cy};
 					std::cout << "\tStarted coord arc #" << args.at(0) << " to " << x << "x" << y
-						<< " with base speed " << speed << " steps/sec and " << div << " step divisor"
-						<< std::endl;
+						<< " with base speed " << speed << " steps/sec and " << std::endl;
 					if (ctrl->arc(point, center, sp, speed, false) != ErrorCode::NoError) {
 						std::cout << "Arc error" << std::endl;
 					}
 				}
 			}
 		} else if (com.compare("rarc") == 0) {
-			if (args.size() < 8) {
+			if (args.size() < 7) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
                 CoordPlaneStack *ctrl = sysman->getCoord((size_t) std::stoul(args.at(0)));
@@ -406,22 +390,20 @@ namespace CalX {
 				int cy = std::stoi(args.at(4));
 				int sp = std::stoi(args.at(5));
                 float speed = static_cast<float>(std::stod(args.at(6)));
-                int div = std::stoi(args.at(7));
 				if (ctrl == nullptr) {
 					std::cout << "Wrong coord id" << std::endl;
 				} else {
 					motor_point_t point = {x, y};
 					motor_point_t center = {cx, cy};
 					std::cout << "\tStarted relative coord arc #" << args.at(0) << " to " << x << "x" << y
-						<< " with base speed " << speed << " steps/sec and " << div << " step divisor"
-						<< std::endl;
-					if (ctrl->relativeArc(point, center, sp, speed, div, true) != ErrorCode::NoError) {
+						<< " with base speed " << speed << " steps/sec and " << std::endl;
+					if (ctrl->relativeArc(point, center, sp, speed, true) != ErrorCode::NoError) {
 						std::cout << "Arc error" << std::endl;
 					}
 				}
 			}
 		} else if (com.compare("rcarc") == 0) {
-			if (args.size() < 8) {
+			if (args.size() < 7) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
                 CoordPlaneStack *ctrl = sysman->getCoord((size_t) std::stoul(args.at(0)));
@@ -431,15 +413,13 @@ namespace CalX {
 				int cy = std::stoi(args.at(4));
 				int sp = std::stoi(args.at(5));
                 float speed = static_cast<float>(std::stod(args.at(6)));
-                int div = std::stoi(args.at(7));
 				if (ctrl == nullptr) {
 					std::cout << "Wrong coord id" << std::endl;
 				} else {
 					motor_point_t point = {x, y};
 					motor_point_t center = {cx, cy};
 					std::cout << "\tStarted relative coord arc #" << args.at(0) << " to " << x << "x" << y
-						<< " with base speed " << speed << " steps/sec and " << div << " step divisor"
-						<< std::endl;
+						<< " with base speed " << speed << " steps/sec and " << std::endl;
 					if (ctrl->relativeArc(point, center, sp, speed, false) != ErrorCode::NoError) {
 						std::cout << "Arc error" << std::endl;
 					}

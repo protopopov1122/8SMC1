@@ -74,14 +74,13 @@ namespace CalXUI {
 		ctrl->unuse();
 	}
 
-	CalxCoordMoveAction::CalxCoordMoveAction(CalxCoordCtrl *ctrl, CoordHandle *handle, bool jump, bool relative, motor_point_t dest, float speed, int div) {
+	CalxCoordMoveAction::CalxCoordMoveAction(CalxCoordCtrl *ctrl, CoordHandle *handle, bool jump, bool relative, motor_point_t dest, float speed) {
 		this->ctrl = ctrl;
 		this->handle = handle;
 		this->jump = jump;
 		this->relative = relative;
 		this->dest = dest;
 		this->speed = speed;
-		this->div = div;
 	}
 
 	CalxCoordMoveAction::~CalxCoordMoveAction() {
@@ -105,14 +104,13 @@ namespace CalXUI {
 	}
 
 
-	CalxCoordFloatMoveAction::CalxCoordFloatMoveAction(CalxCoordCtrl *ctrl, CoordHandle *handle, bool jump, bool relative, coord_point_t dest, double speed, int div) {
+	CalxCoordFloatMoveAction::CalxCoordFloatMoveAction(CalxCoordCtrl *ctrl, CoordHandle *handle, bool jump, bool relative, coord_point_t dest, double speed) {
 		this->ctrl = ctrl;
 		this->handle = handle;
 		this->jump = jump;
 		this->relative = relative;
 		this->dest = dest;
 		this->speed = speed;
-		this->div = div;
 	}
 
 	CalxCoordFloatMoveAction::~CalxCoordFloatMoveAction() {
@@ -137,7 +135,7 @@ namespace CalXUI {
 
 
 
-	CalxCoordArcAction::CalxCoordArcAction(CalxCoordCtrl *ctrl, CoordHandle *handle, bool relative, motor_point_t dest, motor_point_t cen, int splitter, float speed, int div, bool clockwise) {
+	CalxCoordArcAction::CalxCoordArcAction(CalxCoordCtrl *ctrl, CoordHandle *handle, bool relative, motor_point_t dest, motor_point_t cen, int splitter, float speed, bool clockwise) {
 		this->ctrl = ctrl;
 		this->handle = handle;
 		this->relative = relative;
@@ -145,7 +143,6 @@ namespace CalXUI {
 		this->cen = cen;
 		this->splitter = splitter;
 		this->speed = speed;
-		this->div = div;
 		this->clockwise = clockwise;
 	}
 
@@ -169,7 +166,7 @@ namespace CalXUI {
 		handle->stop();
 	}
 	
-	CalxCoordFloatArcAction::CalxCoordFloatArcAction(CalxCoordCtrl *ctrl, CoordHandle *handle, bool relative, coord_point_t dest, coord_point_t cen, int splitter, double speed, int div, bool clockwise) {
+	CalxCoordFloatArcAction::CalxCoordFloatArcAction(CalxCoordCtrl *ctrl, CoordHandle *handle, bool relative, coord_point_t dest, coord_point_t cen, int splitter, double speed, bool clockwise) {
 		this->ctrl = ctrl;
 		this->handle = handle;
 		this->relative = relative;
@@ -177,7 +174,6 @@ namespace CalXUI {
 		this->cen = cen;
 		this->splitter = splitter;
 		this->speed = speed;
-		this->div = div;
 		this->clockwise = clockwise;
 	}
 
@@ -309,14 +305,13 @@ namespace CalXUI {
 	}
 
 
-	CalxCoordConfigureAction::CalxCoordConfigureAction(CalxCoordCtrl *ctrl, CoordHandle *handle, bool jump, bool relative, coord_point_t dest, float speed, int div, bool use_float) {
+	CalxCoordConfigureAction::CalxCoordConfigureAction(CalxCoordCtrl *ctrl, CoordHandle *handle, bool jump, bool relative, coord_point_t dest, float speed, bool use_float) {
 		this->ctrl = ctrl;
 		this->handle = handle;
 		this->jump = jump;
 		this->relative = relative;
 		this->dest = dest;
 		this->speed = speed;
-		this->div = div;
 		this->work = false;
 		this->use_float = use_float;
 	}

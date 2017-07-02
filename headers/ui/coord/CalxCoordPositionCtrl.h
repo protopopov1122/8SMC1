@@ -34,12 +34,10 @@ namespace CalXUI {
 			wxButton *getMoveButton() {return this->moveButton;}
 			wxButton *getConfigureButton() {return this->configureButton;}
 			double getSpeed() {return speed->GetValue();}
-			int getDivisor() {return 1 << divisor->GetSelection();}
 		private:
 			wxSpinCtrlDouble *xPos;
 			wxSpinCtrlDouble *yPos;
 			wxSpinCtrlDouble *speed;
-			wxChoice *divisor;
 			wxButton *moveButton;
 			wxButton *configureButton;
 	};
