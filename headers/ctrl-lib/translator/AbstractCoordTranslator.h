@@ -22,6 +22,8 @@
 #define CALX_CTRL_LIB_TRANSLATOR_ABSTRACT_COORD_TRANSLATOR_H_
 
 #include "ctrl-lib/CtrlCore.h"
+#include <iostream>
+#include <string>
 
 namespace CalX {
 
