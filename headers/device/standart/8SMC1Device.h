@@ -50,12 +50,12 @@ namespace CalX {
 			virtual Power getPowerState();		// Power & FullPower
 			virtual bool isRunning();		// RUN
 			virtual bool isTrailerPressed(int);	// Trailer1 & Trailer2
-			virtual bool start(motor_coord_t, float, bool  = false);	// Specify location, speed
+			virtual bool start(motor_coord_t, float);	// Specify location, speed
 			virtual bool stop();				// Stop motor
 			virtual bool enablePower(bool);		// Power control
 			
 			/* Some misc methods */
-			virtual bool _start(motor_coord_t, float, unsigned char, bool  = false);	// Specify location, speed
+			virtual bool _start(motor_coord_t, float, unsigned char, bool = false);	// Specify location, speed
 			void setAutoSave(bool);
 			bool isAutoSaving();
 			bool flush();	// Send mode and parameters to device
@@ -107,10 +107,6 @@ namespace CalX {
 			bool revertStart();		// StartPos
 			bool setCurrentPosition(int);	// USMC_SetCurrentPosition
 			bool saveToFlash();		// USMC_SaveParametersToFlash
-			// Motor moving
-			/* Accept movement parameters or use presaved */
-			bool start(int, float);			// Specify location and speed
-			bool start(int);			// Specify only location
 			// Other
 			/* Do not directly interact with USMC API but affect start parameters */
 			float getSpeed();		// Default motor speed
@@ -134,6 +130,7 @@ namespace CalX {
 			bool slow_start;
 			float speed;
 			bool waitSync;
+			int divisor;
 	};
 }
 

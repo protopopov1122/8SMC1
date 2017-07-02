@@ -68,7 +68,7 @@ namespace CalX {
 		return this->power;
 	}
 
-  bool EmuMotor::start(motor_coord_t dest, float speed, bool sync) {
+  bool EmuMotor::start(motor_coord_t dest, float speed) {
 		if (this->power == Power::NoPower) {
 			return true;
 		}

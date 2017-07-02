@@ -375,6 +375,7 @@ copy:
 	zip -r $(BUILD)/src.zip *.md Makefile platform.h config.ini device ctrl-lib ui winbuild misc cli tests COPYING COPYING.LESSER NOTICE auto.conf
 	cp misc/main.conf.ini $(BUILD)
 	cp device/standart/NL300.ini $(BUILD)
+	cp device/standart/8SMC1.ini $(BUILD)
 	cp COPYING $(BUILD)
 	cp COPYING.LESSER $(BUILD)
 	cp NOTICE $(BUILD)

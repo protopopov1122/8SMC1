@@ -77,9 +77,9 @@ namespace CalXUI {
 			virtual void perform(SystemManager *sysman) {
 				ctrl->setMaster(true);
 				if (rel) {
-					wxGetApp().getErrorHandler()->handle(dev->startRelativeMove(dest, speed, 8));
+					wxGetApp().getErrorHandler()->handle(dev->startRelativeMove(dest, speed));
 				} else {
-					wxGetApp().getErrorHandler()->handle(dev->startMove(dest, speed, 8));
+					wxGetApp().getErrorHandler()->handle(dev->startMove(dest, speed));
 				}
 				ctrl->setMaster(false);
 			}

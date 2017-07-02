@@ -46,7 +46,7 @@ namespace CalX {
 			virtual bool isTrailerPressed(int);
 			virtual bool isRunning();
 			virtual Power getPowerState();
-            virtual bool start(motor_coord_t, float, bool  = false);
+            virtual bool start(motor_coord_t, float);
 			virtual bool stop();
 			virtual bool enablePower(bool);
 		private:

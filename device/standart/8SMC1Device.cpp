@@ -35,6 +35,8 @@ namespace CalX {
 		this->updateState();
 		this->updateMode();
 		this->updateParameters();
+		getDeviceManager()->loadConfiguration("8SMC1.ini", &this->config);
+		this->divisor = this->config.getEntry("motor")->getInt("divisor", 8);
 	}
 
 	_8SMC1Motor::~_8SMC1Motor() {
@@ -65,8 +67,8 @@ namespace CalX {
 		return true;
 	}
 	
-	bool _8SMC1Motor::start(motor_coord_t dest, float speed, bool syncIn) {
-		return this->_start(dest, speed, syncIn);		
+	bool _8SMC1Motor::start(motor_coord_t dest, float speed) {
+		return this->_start(dest, speed, this->divisor);		
 	}
 
 	bool _8SMC1Motor::isAutoSaving() {
@@ -249,27 +251,6 @@ namespace CalX {
 		}
 		unlock();
 		return true;
-	}
-
-	bool _8SMC1Motor::start(int dest, float speed) {
-		lock();
-		if (USMC_GetStartParameters((DWORD) id, startPrms)) {
-			devman->saveMotorError();
-			unlock();
-			return false;
-		}
-		startPrms.SlStart = this->slow_start;
-		if (USMC_Start((DWORD) id, dest, speed, startPrms)) {
-			devman->saveMotorError();
-			unlock();
-			return false;
-		}
-		unlock();
-		return true;
-	}
-
-	bool _8SMC1Motor::start(int dest) {
-		return this->start(dest, this->speed);
 	}
 
 	bool _8SMC1Motor::stop() {

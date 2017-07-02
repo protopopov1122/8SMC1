@@ -150,7 +150,7 @@ namespace CalX {
 		return errcode;
 	}
 
-	ErrorCode MotorController::startMove(motor_coord_t dest, float speed, bool syncIn) {
+	ErrorCode MotorController::startMove(motor_coord_t dest, float speed) {
 		if (this->dev->isRunning()) {
 			return ErrorCode::MotorRunning;
 		}
@@ -164,7 +164,7 @@ namespace CalX {
 		this->use();
 		this->sendMovingEvent(evt);
 		ErrorCode errcode = ErrorCode::NoError;
-		if (!this->dev->start(dest, speed, syncIn)) {
+		if (!this->dev->start(dest, speed)) {
 			errcode = ErrorCode::LowLevelError;
 		}
         if (errcode != ErrorCode::NoError) {
@@ -181,9 +181,9 @@ namespace CalX {
 		return errcode;
 	}
 
-	ErrorCode MotorController::startRelativeMove(motor_coord_t reldest, float speed, bool syncIn) {
+	ErrorCode MotorController::startRelativeMove(motor_coord_t reldest, float speed) {
 		motor_coord_t dest = getPosition() + reldest;
-		return startMove(dest, speed, syncIn);
+		return startMove(dest, speed);
 	}
 
 	void MotorController::stop() {

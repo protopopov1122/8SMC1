@@ -137,7 +137,7 @@ namespace CalX {
 
 		this->status = sync ? CoordPlaneStatus::Move : CoordPlaneStatus::Jump;
 		MotorMoveEvent xmevt = {point.x, x_speed};
-		if (!xAxis->dev->start(point.x, x_speed, false)) {
+		if (!xAxis->dev->start(point.x, x_speed)) {
 			this->status = CoordPlaneStatus::Idle;
 			xAxis->unuse();
 			yAxis->unuse();
@@ -150,7 +150,7 @@ namespace CalX {
 		yAxis->dest = point.y > yAxis->dev->getPosition() ? MoveType::MoveUp :
 				MoveType::MoveDown;
 
-		if (!yAxis->dev->start(point.y, y_speed, false)) {
+		if (!yAxis->dev->start(point.y, y_speed)) {
 			this->status = CoordPlaneStatus::Idle;
 			xAxis->unuse();
 			yAxis->unuse();
