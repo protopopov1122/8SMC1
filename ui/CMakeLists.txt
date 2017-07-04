@@ -3,6 +3,7 @@ project(CalX)
 
 set (CMAKE_CXX_STANDARD 11)
 
+
 set(wxWidgets_USE_LIBS)
 if (WIN32)
 	if (CMAKE_BUILD_TYPE EQUAL DEBUG)
@@ -18,7 +19,7 @@ else (WIN32)
 		set(wxWidgets_USE_DEBUG OFF)
 	endif ()
 endif (WIN32)
-find_package(wxWidgets COMPONENTS base core adv)
+find_package(wxWidgets COMPONENTS adv core base)
 
 if (wxWidgets_FOUND)
 	include(${wxWidgets_USE_FILE})
@@ -31,9 +32,9 @@ if (wxWidgets_FOUND)
 		set(SRCS ${SRCS} calxui.rc)
 	endif (EXISTS ${CMAKE_SOURCE_DIR}/misc/icon.ico)
 	add_executable(calx_ui ${SRCS})
-	if(WIN32)
+	if(MSVC)
 		set_target_properties(calx_ui PROPERTIES LINK_FLAGS "/SUBSYSTEM:WINDOWS")
-	endif(WIN32)
+	endif (MSVC)
 	target_link_libraries(calx_ui ${wxWidgets_LIBRARIES} calx)
 	add_custom_command(TARGET calx_ui POST_BUILD
     	COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:calx_ui> ${build_directory}

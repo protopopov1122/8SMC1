@@ -8,6 +8,9 @@ if (WIN32)
 	if (EXISTS ${CMAKE_SOURCE_DIR}/res/USMCDLL.h)
 		include_directories(${CMAKE_SOURCE_DIR}/res)
 		add_library(USMCDLL SHARED stub.cpp)
+		if (MINGW)
+			SET_TARGET_PROPERTIES(USMCDLL PROPERTIES PREFIX "")
+		endif (MINGW)
 		add_custom_command(TARGET USMCDLL POST_BUILD
     		COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:USMCDLL> ${build_directory}
 		)
@@ -24,6 +27,9 @@ if (WIN32)
 	include_directories(${CMAKE_SOURCE_DIR}/headers)
 	add_library(dev_standart SHARED 8SMC1Device.cpp NL300Instrument.cpp NL300Config.cpp NL300Command.cpp NL300Message.cpp StandartDeviceManager.cpp)
 	target_link_libraries(dev_standart calx USMCDLL)
+	if (MINGW)
+		SET_TARGET_PROPERTIES(dev_standart PROPERTIES PREFIX "")
+	endif (MINGW)
 	add_custom_command(TARGET dev_standart POST_BUILD
     	COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:dev_standart> ${build_directory}
     	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/NL300.ini ${build_directory}

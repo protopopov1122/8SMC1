@@ -5,6 +5,9 @@ set (CMAKE_CXX_STANDARD 11)
 include_directories(${CMAKE_SOURCE_DIR}/headers)
 add_library(dev_emulated SHARED EmuMotor.cpp EmuInstrument.cpp EmuDeviceManager.cpp)
 target_link_libraries(dev_emulated calx)
+if (MINGW)
+	SET_TARGET_PROPERTIES(dev_emulated PROPERTIES PREFIX "")
+endif (MINGW)
 add_custom_command(TARGET dev_emulated POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:dev_emulated> ${build_directory}
 )

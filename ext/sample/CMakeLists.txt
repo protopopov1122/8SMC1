@@ -6,6 +6,9 @@ include_directories(${CMAKE_SOURCE_DIR}/headers)
 file(GLOB SRC *.cpp)
 add_library(ext_sample SHARED ${SRC})
 target_link_libraries(ext_sample calx)
+if (MINGW)
+	SET_TARGET_PROPERTIES(ext_sample PROPERTIES PREFIX "")
+endif (MINGW)
 add_custom_command(TARGET ext_sample POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:ext_sample> ${build_directory}
 )

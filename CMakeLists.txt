@@ -3,6 +3,14 @@ project(CalX)
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
+if (MINGW AND MINGW_STATIC_LINKAGE)
+	set(STATIC_LINKAGE "-static-libgcc -static-libstdc++ -Wl,-Bstatic,--whole-archive -Wl,--exclude-symbols,_Unwind_Resume -lwinpthread -Wl,-Bdynamic,--no-whole-archive")
+	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${STATIC_LINKAGE}")
+	set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${STATIC_LINKAGE}")
+	set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS} ${STATIC_LINKAGE}")
+	set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${STATIC_LINKAGE}")
+endif (MINGW AND MINGW_STATIC_LINKAGE)
+
 set(build_directory ${CMAKE_BINARY_DIR}/build CACHE INTERNAL "")
 add_custom_target(make-build-directory ALL COMMAND ${CMAKE_COMMAND} -E make_directory ${build_directory})
 add_custom_target(copy-config ALL
@@ -47,7 +55,7 @@ if (WIN32)
 		set(CPACK_NSIS_MUI_UNIICON ${CMAKE_BINARY_DIR}/icon.ico)
 	endif (EXISTS ${CMAKE_BINARY_DIR}/icon.ico)
 
-	list(APPEND CPACK_NSIS_EXTRA_INSTALL_COMMANDS "CreateShortCut \\\"$SMPROGRAMS\\\\CalX\\\\CalX.lnk\\\" \\\"$INSTDIR\\\\calxui.exe\\\"")
+	list(APPEND CPACK_NSIS_EXTRA_INSTALL_COMMANDS "CreateShortCut \\\"$SMPROGRAMS\\\\CalX\\\\CalX.lnk\\\" \\\"$INSTDIR\\\\calx_ui.exe\\\"")
 	list(APPEND CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "Delete \\\"$SMPROGRAMS\\\\CalX\\\\CalX.lnk\\\"")
 endif (WIN32)
 include(CPack)
