@@ -42,6 +42,7 @@ namespace CalX {
 		this->config = config;
 		this->size = {0, 0, 0, 0};
 		this->defWork = true;
+		this->work = false;
 		this->measured = false;
 		this->status = CoordPlaneStatus::Idle;
 		LOG(COORD_CTRL_TAG, "New coordinate controller. X Axis: #" + std::to_string(this->xAxis->getID()) + "; Y Axis: #" + std::to_string(this->yAxis->getID()) + "; instrument: " + std::string(instr != nullptr ? std::to_string(instr->getID()) : "no"));

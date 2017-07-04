@@ -34,6 +34,7 @@ namespace CalXUI {
 		this->work = true;
 		this->sysman = sysman;
 		this->current = nullptr;
+		this->finished = false;
 	}
 
 	CalxActionQueue::~CalxActionQueue() {

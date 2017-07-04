@@ -28,6 +28,7 @@ namespace CalX {
 		this->dev = dev;
 		this->config = config;
 		this->dest = MoveType::Stop;
+		this->work = false;
 		INIT_LOG("MotorController");
 	}
 

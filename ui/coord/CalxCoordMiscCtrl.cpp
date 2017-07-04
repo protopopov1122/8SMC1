@@ -204,6 +204,8 @@ namespace CalXUI {
 		this->builder = builder;
 		this->speed = speed;
 		this->use_float = use_float;
+		this->state.plane = nullptr;
+		this->state.work = false;
 	}
 
 	CalxCoordGraphAction::~CalxCoordGraphAction() {
@@ -235,6 +237,8 @@ namespace CalXUI {
 		this->builder = builder;
 		this->speed = speed;
 		this->use_float = use_float;
+		this->state.plane = nullptr;
+		this->state.work = false;
 	}
 
 	CalxCoordPreviewAction::~CalxCoordPreviewAction() {

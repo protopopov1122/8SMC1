@@ -216,6 +216,7 @@ namespace CalX {
 		this->splitter = sp;
 		this->speed = speed;
 		this->rel = rel;
+		this->clockwise = false;
 		INIT_LOG("ArcTaskStep");
 	}
 
@@ -291,6 +292,7 @@ namespace CalX {
 		this->splitter = sp;
 		this->speed = speed;
 		this->rel = rel;
+		this->clockwise = false;
 		INIT_LOG("RelArcTaskStep");
 	}
 

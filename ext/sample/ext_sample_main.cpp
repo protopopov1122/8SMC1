@@ -24,7 +24,7 @@ using namespace CalX;
 
 class SampleExtEngine : public ExtEngine {
 	public:
-		SampleExtEngine() {}
+		SampleExtEngine() : sysman(nullptr) {}
 		virtual ~SampleExtEngine() {}
 		virtual bool init(SystemManager*);
 		virtual bool destroy();

@@ -47,8 +47,7 @@ namespace CalXUI {
 
 	class CalxMotorTimer : public wxTimer {
 		public:
-			CalxMotorTimer() : wxTimer::wxTimer() {
-			}
+			CalxMotorTimer() : wxTimer::wxTimer(), ctrl(nullptr) {}
 			~CalxMotorTimer() {}
 			void setCtrl(CalxMotorCtrl *d) {this->ctrl = d;}
 			virtual void Notify();

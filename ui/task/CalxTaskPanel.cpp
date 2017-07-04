@@ -44,6 +44,8 @@ namespace CalXUI {
 				this->task = task;
 				this->prms = prms;
 				this->prms.speed *= this->handle->getFloatPlane()->getSpeedScale();
+				this->state.plane = nullptr;
+				this->state.work = false;
 			}
 
 			virtual void perform(SystemManager *sysman) {
@@ -73,6 +75,8 @@ namespace CalXUI {
 				this->task = task;
 				this->prms = prms;
 				this->prms.speed *= dialog->getFloatPlane()->getSpeedScale();
+				this->state.plane = nullptr;
+				this->state.work = false;
 			}
 
 			virtual void perform(SystemManager *sysman) {

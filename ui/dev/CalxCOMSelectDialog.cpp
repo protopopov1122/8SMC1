@@ -30,6 +30,7 @@ namespace CalXUI {
 
 		this->port = -1;
 		this->speed = -1;
+		this->parity = SerialPortParity::No;
 
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(sizer);

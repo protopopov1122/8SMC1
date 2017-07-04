@@ -29,6 +29,9 @@ namespace CalX {
 		: Instrument::Instrument(id) {
 		this->devman = devman;
 		this->state = false;
+		this->handle = INVALID_HANDLE_VALUE;
+		this->listener = nullptr;
+		this->work_mode = InstrumentMode::Off;
 		this->log("NL300 instrument constructor");
 	}
 

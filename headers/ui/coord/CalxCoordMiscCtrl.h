@@ -74,8 +74,7 @@ namespace CalXUI {
 
 	class CalxCoordTimer : public wxTimer {
 		public:
-			CalxCoordTimer() : wxTimer::wxTimer() {
-			}
+			CalxCoordTimer() : wxTimer::wxTimer(), ctrl(nullptr) {}
 			~CalxCoordTimer() {}
 			void setCtrl(CalxCoordCtrl *c) {this->ctrl = c;}
 			virtual void Notify();
