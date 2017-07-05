@@ -1,4 +1,4 @@
 #define wxUSE_NO_MANIFEST 0
 #include "wx/msw/wx.rc"
 
-id ICON "build/icon.ico"
+id ICON "misc/icon.ico"

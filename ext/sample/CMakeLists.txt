@@ -12,6 +12,7 @@ endif (MINGW)
 add_custom_command(TARGET ext_sample POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:ext_sample> ${build_directory}
 )
+add_dependencies(ext_sample calx-init-target)
 if (WIN32)
 	install(TARGETS ext_sample DESTINATION / COMPONENT exteng_sample)
 else (WIN32)

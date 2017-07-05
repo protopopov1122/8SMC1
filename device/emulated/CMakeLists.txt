@@ -11,6 +11,7 @@ endif (MINGW)
 add_custom_command(TARGET dev_emulated POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:dev_emulated> ${build_directory}
 )
+add_dependencies(dev_emulated calx-init-target)
 if (WIN32)
 	install(TARGETS dev_emulated DESTINATION / COMPONENT devapi_emulated)
 else (WIN32)

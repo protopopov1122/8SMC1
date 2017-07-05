@@ -20,6 +20,7 @@ endif (TARGET dev_standart)
 add_custom_command(TARGET calx_cli POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:calx_cli> ${build_directory}
 )
+add_dependencies(calx_cli calx-init-target)
 if (WIN32)
 	install(TARGETS calx_cli DESTINATION / COMPONENT calx_cli)
 else (WIN32)
