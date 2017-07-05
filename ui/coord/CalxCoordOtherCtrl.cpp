@@ -34,6 +34,10 @@ namespace CalXUI {
 			enableInstrument->Bind(wxEVT_CHECKBOX, &CalxCoordCtrl::OnInstrumentEnableClick, ctrl);
 			this->enableInstrument->SetValue(ctrl->getHandle()->getController()->getInstrument()->isRunnable());
 		}
+		
+		wxButton *curPosZero = new wxButton(this, wxID_ANY, __("Current position as 0"));
+		sizer->Add(curPosZero, 0, wxALL, 5);
+		curPosZero->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnAdjustPositionClick, ctrl);
 
 		wxPanel *calibratePanel = new wxPanel(this, wxID_ANY);
 		sizer->Add(calibratePanel, 0, wxALL, 5);

@@ -510,4 +510,11 @@ namespace CalXUI {
 		dialog->ShowModal();
 		delete dialog;
 	}
+	
+	void CalxCoordCtrl::OnAdjustPositionClick(wxCommandEvent &evt) {
+		motor_point_t offset = this->ctrl->getPosition();
+		offset.x += this->map->getOffset().x;
+		offset.y += this->map->getOffset().y;
+		setPlaneOffset(offset);
+	}
 }

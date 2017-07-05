@@ -68,6 +68,7 @@ namespace CalXUI {
 			void OnInterfaceUpdate(wxCollapsiblePaneEvent&);
 			void OnPositionChangeClick(wxCommandEvent&);
 			void OnConfigureClick(wxCommandEvent&);
+			void OnAdjustPositionClick(wxCommandEvent&);
 			void use();
 			void unuse();
 			bool isUsed();
