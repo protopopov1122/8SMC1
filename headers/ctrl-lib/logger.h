@@ -25,7 +25,7 @@
 	* SET_LOGGER(ptr) - set log output
 	* WRITE_LOG(output, tag, message) - log some debug info with tag
 	* INIT_LOG & DESTROY_LOG - track resource allocation and destroy with tag "resource"
-	
+
 	To enable loggins define LOGGING macro */
 
 #include "platform.h"
@@ -44,13 +44,15 @@ void SET_LOGGER(std::string, std::ostream*);
 
 #ifdef LOGGING
 #define WRITE_LOG(__output, tag, msg) do { const char *__file = __FILE__; int __line = __LINE__;\
-								std::ostream **output = getStreamPtr(__output);\
-                                if (output != nullptr && *output != nullptr) {\
-                                    **(output) << __file << ':' << __line\
-                                                   << '(' << __DATE__ << ' ' << __TIME__ << ')'\
-								                   << ' ' << (tag) << ": " << (msg) << std::endl;\
-                                }\
-                            } while (false)
+                                          std::ostream **output = getStreamPtr(__output);\
+                                          if (output != nullptr && *output != nullptr) {\
+																						try {\
+                                              **(output) << __file << ':' << __line\
+                                                         << '(' << __DATE__ << ' ' << __TIME__ << ')'\
+								                                         << ' ' << (tag) << ": " << (msg) << std::endl;\
+																						} catch (...) {}\
+                                          }\
+                                      } while (false)
 #else
 #define WRITE_LOG(output, tag, msg)
 #endif
