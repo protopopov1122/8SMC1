@@ -93,6 +93,7 @@ namespace CalXUI {
 			void OnExit(wxCloseEvent&);
 			void OnQueueUpdate(wxThreadEvent&);
 			void OnStopClick(wxCommandEvent&);
+			void OnAdjusterClick(wxCommandEvent&);
 			void OnWatcherClick(wxCommandEvent&);
 			void OnWatcherRequest(wxThreadEvent&);
 			void OnEnableEvent(wxThreadEvent&);

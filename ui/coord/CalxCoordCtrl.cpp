@@ -32,6 +32,7 @@
 #include "ui/coord/CalxCoordCtrl.h"
 #include "ui/task/CalxTaskPanel.h"
 #include "ui/coord/CalxCoordPlaneWatcher.h"
+#include "ui/coord/CalxCoordAdjuster.h"
 
 namespace CalXUI {
 
@@ -97,10 +98,13 @@ namespace CalXUI {
 		generalButtonPanel->SetSizer(generalButtonSizer);
 		wxButton *watcherButton = new wxButton(generalButtonPanel, wxID_ANY, __("Watcher"));
 		watcherButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnWatcherClick, this);
+		wxButton *adjusterButton = new wxButton(generalButtonPanel, wxID_ANY, __("Adjuster"));
+		adjusterButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnAdjusterClick, this);
 		this->stopButton = new wxButton(generalButtonPanel, wxID_ANY, __("Stop"));
 		generalSizer->Add(this->generalInfoText, 0, wxTOP | wxEXPAND, 5);
 		generalSizer->Add(generalButtonPanel, 0, wxALL, 10);
 		generalButtonSizer->Add(watcherButton, 0, wxALL);
+		generalButtonSizer->Add(adjusterButton, 0, wxALL);
 		generalButtonSizer->Add(this->stopButton, 0, wxALL);
 		this->stopButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnStopClick, this);
 		sizer->Add(generalPanel, 0, wxALL | wxEXPAND, 0);
@@ -495,5 +499,15 @@ namespace CalXUI {
 		double speed = posCtrl->getSpeed();
 		coord_point_t dest = {posCtrl->getXPosition(), posCtrl->getYPosition()};
 		this->queue->addAction(new CalxCoordConfigureAction(this, ctrl, false, false, dest, speed, true));
+	}
+	
+	void CalxCoordCtrl::OnAdjusterClick(wxCommandEvent &evt) {
+		if (!this->ctrl->isMeasured()) {
+			wxMessageBox(__("Plane need to be measured before adjustement"), __("Warning"), wxICON_WARNING);
+			return;
+		}
+		CalxCoordAdjustDialog *dialog = new CalxCoordAdjustDialog(this, wxID_ANY, this->ctrl);
+		dialog->ShowModal();
+		delete dialog;
 	}
 }
