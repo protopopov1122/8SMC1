@@ -162,6 +162,10 @@ namespace CalX {
 			this->getMotorController(d2), this->conf, this->getInstrumentController(instr));
 		CoordHandle *handle = new CoordHandle(this->coords.size(), ctrl);
 		this->coords.push_back(handle);
+		if (getConfiguration()->getEntry("core")->getBool("auto_power_motors", false)) {
+			ctrl->getXAxis()->enablePower(true);
+			ctrl->getYAxis()->enablePower(true);
+		}
 		if (this->ext_engine != nullptr) {
 			this->ext_engine->coordAdded(handle);
 		}
