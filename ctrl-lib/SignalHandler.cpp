@@ -39,11 +39,13 @@ extern "C" void signal_handle(int signum) {
   exit(-1);
 }
 
+#ifdef OS_WIN
 LONG WINAPI windows_exception_handler(EXCEPTION_POINTERS *ExceptionInfo) {
   calx_terminate();
   exit(-1);
   return EXCEPTION_EXECUTE_HANDLER;
 }
+#endif
 
 namespace CalX {
 
