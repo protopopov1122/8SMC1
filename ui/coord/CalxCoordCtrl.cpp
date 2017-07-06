@@ -208,9 +208,13 @@ namespace CalXUI {
 	}
 
 	void CalxCoordCtrl::setPlaneOffset(motor_point_t offset) {
+		motor_scale_t scale = this->map->getScale();
+		offset.x *= scale.x;
+		offset.y *= scale.y;
 		this->otherCtrl->setXOffset(offset.x);
 		this->otherCtrl->setYOffset(offset.y);
 		this->map->setOffset(offset);
+		updateWatchers();
 	}
 
 	void CalxCoordCtrl::updateWatchers() {
@@ -513,8 +517,9 @@ namespace CalXUI {
 	
 	void CalxCoordCtrl::OnAdjustPositionClick(wxCommandEvent &evt) {
 		motor_point_t offset = this->ctrl->getPosition();
-		offset.x += this->map->getOffset().x;
-		offset.y += this->map->getOffset().y;
+		motor_scale_t scale = this->map->getScale();
+		offset.x += this->map->getOffset().x / scale.x;
+		offset.y += this->map->getOffset().y / scale.y;
 		setPlaneOffset(offset);
 	}
 }
