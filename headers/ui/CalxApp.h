@@ -51,7 +51,9 @@ namespace CalXUI {
 	class CalxApp : public wxApp {
 		public:
 			virtual bool OnInit();
-			virtual int OnExit();
+			virtual int OnExit();	
+			virtual void OnUnhandledException();	
+			virtual void OnFatalException();
 			void OnErrorEvent(wxThreadEvent&);
 			void OnAutoconfEvent(wxThreadEvent&);
 			SystemManager *getSystemManager();

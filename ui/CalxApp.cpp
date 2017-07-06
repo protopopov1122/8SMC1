@@ -36,6 +36,7 @@
 #include <fstream>
 #include "ctrl-lib/conf/ConfigManager.h"
 #include "ctrl-lib/conf/ConfigValidator.h"
+#include "ctrl-lib/SignalHandler.h"
 
 namespace CalXUI {
 
@@ -181,6 +182,7 @@ namespace CalXUI {
 		this->Bind(wxEVT_APP_AUTOCONF, &CalxApp::OnAutoconfEvent, this);
 		wxThreadEvent evt(wxEVT_APP_AUTOCONF);
 		wxPostEvent(this, evt);
+		setup_signals(this->sysman);
 
 		return true;
 	}
@@ -212,6 +214,16 @@ namespace CalXUI {
 			delete this->resources_log;
 		}
 		return 0;
+	}
+	
+	void CalxApp::OnUnhandledException() {
+		calx_terminate();
+		exit(-1);
+	}
+	
+	void CalxApp::OnFatalException() {
+		calx_terminate();
+		exit(-1);
 	}
 
 	void CalxApp::OnAutoconfEvent(wxThreadEvent &evt) {

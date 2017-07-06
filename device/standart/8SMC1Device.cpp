@@ -31,6 +31,7 @@ namespace CalX {
 		this->slow_start = false;
 		this->autoSaveConfig = true;
 		this->waitSync = false;
+		this->aborting = false;
 		memset((void*) &this->state, (int) 0, (unsigned int) sizeof(USMC_State));
 		memset((void*) &this->startPrms, (int) 0, (unsigned int) sizeof(USMC_StartParameters));
 		memset((void*) &this->encState, (int) 0, (unsigned int) sizeof(USMC_EncoderState));
@@ -46,6 +47,11 @@ namespace CalX {
 
 	DeviceManager *_8SMC1Motor::getDeviceManager() {
 		return this->devman;
+	}
+	
+	void _8SMC1Motor::terminate() {
+		this->aborting = true;
+		USMC_Stop((DWORD) id);
 	}
 
 	std::string _8SMC1Motor::getDeviceInfo() {
@@ -237,6 +243,9 @@ namespace CalX {
 
 	bool _8SMC1Motor::_start(motor_coord_t dest, float speed,
 			unsigned char divisor, bool syncIn) {
+		if (this->aborting) {
+			return false;
+		}
 		lock();
 		if (USMC_GetStartParameters((DWORD) id, startPrms)) {
 			devman->saveMotorError();

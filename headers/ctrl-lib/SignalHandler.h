@@ -18,36 +18,22 @@
 */
 
 
-#ifndef CALX_PLATFORM_H_
-#define CALX_PLATFORM_H_
-
-/* This file contains platform-specific macros to make other code portable */
+#ifndef CALX_CTRL_LIB_SIGNAL_HANDLER_H_
+#define CALX_CTRL_LIB_SIGNAL_HANDLER_H_
 
 
-// Target platform
-#if defined (__WIN32) | defined(_WIN32) | defined (__WIN32__)
-	#define OS_WIN32
-	#define OS_WIN
-#elif defined (_WIN64)
-	#define OS_WIN64
-#elif defined (__linux__)
-	#define OS_LINUX
-#else
-	#define OS_UNKNOWN
-#endif
-
-// Library export/import defines
-#ifdef OS_WIN
-	#define LIBEXPORT  __declspec(dllexport)
-	#define LIBIMPORT  __declspec(dllimport)
-#else
-	#define LIBEXPORT
-	#define LIBIMPORT
-#endif
-
-#define TMP_STRINGIZE(x) #x
-#define STRINGIZE(x) TMP_STRINGIZE(x)
+#include "ctrl-lib/CtrlCore.h"
+#include "ctrl-lib/SystemManager.h"
 
 
+	
+extern CalX::SystemManager *SYSMAN;
+
+extern "C" void calx_terminate();
+
+namespace CalX {
+	
+	void setup_signals(SystemManager*);
+};
 
 #endif

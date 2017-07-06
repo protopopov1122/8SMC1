@@ -71,4 +71,8 @@ namespace CalX {
 	InstrumentMode EmuInstrument::getWorkingMode() {
 		return this->mode;
 	}
+	
+	void EmuInstrument::terminate() {
+		
+	}
 }

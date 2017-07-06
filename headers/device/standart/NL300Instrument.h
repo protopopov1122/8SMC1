@@ -45,6 +45,7 @@ namespace CalX {
 		public:
 			NL300Instrument(device_id_t, StandartDeviceManager*);
 			virtual ~NL300Instrument();
+			virtual void terminate();
 			bool connect(DeviceSerialPortConnectionPrms*);
 			virtual DeviceManager *getDeviceManager();
 			virtual bool open_session();
@@ -69,6 +70,7 @@ namespace CalX {
 			int64_t inquireIntegerParameter(char, uint16_t, int64_t);
 			ConfigEntry *getCoreEntry();
 		
+			bool aborting;
 			StandartDeviceManager *devman;
 			bool state;
 			InstrumentMode work_mode;

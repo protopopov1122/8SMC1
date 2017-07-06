@@ -41,6 +41,7 @@ namespace CalX {
 			virtual DeviceManager *getDeviceManager();
 			virtual std::string getDeviceInfo();
 			virtual std::string getRuntimeInfo();
+			virtual void terminate();
 			
             virtual motor_coord_t getPosition();
 			virtual bool isTrailerPressed(int);

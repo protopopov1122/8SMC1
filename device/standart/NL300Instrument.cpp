@@ -32,6 +32,7 @@ namespace CalX {
 		this->handle = INVALID_HANDLE_VALUE;
 		this->listener = nullptr;
 		this->work_mode = InstrumentMode::Off;
+		this->aborting = false;
 		this->log("NL300 instrument constructor");
 	}
 
@@ -43,6 +44,15 @@ namespace CalX {
 			CloseHandle(handle);
 		}
 		this->log("Instrument closed");
+	}
+	
+	void NL300Instrument::terminate() {
+		this->aborting = true;
+		const char *data = "[NL:STOP\\PC]";
+		DWORD feedback;
+		WriteFile(handle, data, (DWORD) strlen(data), &feedback, 0);
+		data = "[NL:E0/S0\\PC]";
+		WriteFile(handle, data, (DWORD) strlen(data), &feedback, 0);
 	}
 
 	bool NL300Instrument::connect(DeviceSerialPortConnectionPrms *prms) {
@@ -435,6 +445,9 @@ namespace CalX {
 	}
 
 	bool NL300Instrument::writeSerial(std::string stdStr) {
+		if (this->aborting) {
+			return false;
+		}
 		if (this->handle == INVALID_HANDLE_VALUE) {
 			this->log("COM port write error: port closed");
 			return false;
@@ -443,12 +456,6 @@ namespace CalX {
 		const char *data = stdStr.c_str();
 		DWORD feedback;
 		if(!WriteFile(handle, data, (DWORD) strlen(data), &feedback, 0) || feedback != strlen(data)) {
-			/* this->log("Write to COM" + std::to_string(prms.port) + " failed: '" + stdStr + "'");
-			CloseHandle(handle);
-			handle = INVALID_HANDLE_VALUE;
-			this->errors.push_back("Error writing to COM" + std::to_string(prms.port));
-			this->devman->saveInstrumentError();
-			return false;*/
 			this->log("COM" + std::to_string(prms.port) + " write error, feedback: " + std::to_string(feedback));
 		}
 		this->log("Write finished");
@@ -456,7 +463,7 @@ namespace CalX {
 	}
 
 	int NL300Instrument::readSerial(bool *timeout) {
-		if (this->handle == INVALID_HANDLE_VALUE) {
+		if (this->handle == INVALID_HANDLE_VALUE || this->aborting) {
 			return EOF;
 		}
 

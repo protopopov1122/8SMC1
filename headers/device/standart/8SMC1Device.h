@@ -42,6 +42,7 @@ namespace CalX {
 		public:
 			_8SMC1Motor(device_id_t, StandartDeviceManager*);
 			virtual ~_8SMC1Motor();
+			virtual void terminate();
 			virtual DeviceManager *getDeviceManager();
 			virtual std::string getDeviceInfo();
 			virtual std::string getRuntimeInfo();
@@ -116,6 +117,7 @@ namespace CalX {
 			bool waitsForSync();		// Motor wait for sync
 			void waitForSync(bool);
 		private:
+			bool aborting;
 			StandartDeviceManager *devman;
 			// USMC API structures
 			USMC_State state;

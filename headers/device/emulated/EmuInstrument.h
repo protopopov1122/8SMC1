@@ -42,6 +42,7 @@ namespace CalX {
 			virtual bool close_session();
 			virtual bool enable(bool);
 			virtual bool enabled();
+			virtual void terminate();
 			virtual std::string getDeviceInfo();
 			virtual std::string getRuntimeInfo();
 			virtual bool setWorkingMode(InstrumentMode);

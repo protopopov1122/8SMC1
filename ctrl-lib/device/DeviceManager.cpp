@@ -106,5 +106,13 @@ namespace CalX {
 	bool DeviceManager::tryLock() {
 		return true;
 	}
-
+	
+	void DeviceManager::terminate() {
+		for (const auto &instr : this->instruments) {
+			instr->terminate();
+		}
+		for (const auto &motor : this->motors) {
+			motor->terminate();
+		}
+	}
 }

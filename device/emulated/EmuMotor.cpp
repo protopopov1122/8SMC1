@@ -85,4 +85,8 @@ namespace CalX {
 		this->power = p ? Power::HalfPower : Power::NoPower;
 		return true;
 	}
+	
+	void EmuMotor::terminate() {
+		
+	}
 }

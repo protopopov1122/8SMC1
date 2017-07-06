@@ -46,6 +46,7 @@ namespace CalX {
 			virtual bool hasError();				// Check errors
 			virtual std::string pollError();		// Return error from queue
 
+			virtual void terminate();
 			virtual Motor *connectMotor(DeviceConnectionPrms*) = 0;
 			virtual Instrument *connectInstrument(DeviceConnectionPrms*) = 0;
 			virtual void getConnectionTypes(std::vector<DeviceConnectionType>&, std::vector<DeviceConnectionType>&);

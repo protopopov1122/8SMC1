@@ -91,6 +91,7 @@ namespace CalX {
 			virtual DeviceManager *getDeviceManager() = 0;
 			virtual std::string getDeviceInfo() = 0;
 			virtual std::string getRuntimeInfo() = 0;
+			virtual void terminate() = 0;
 		protected:
 			virtual void log(std::string);
 

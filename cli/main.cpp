@@ -27,6 +27,7 @@
 #include "ctrl-lib/device/DeviceManager.h"
 #include "ctrl-lib/SystemManager.h"
 #include "ctrl-lib/translator/CoordTranslator.h"
+#include "ctrl-lib/SignalHandler.h"
 #include "cli/DevCLI.h"
 
 /* Creates device manager and runs command line*/
@@ -68,6 +69,7 @@ int main(int argc, char **argv) {
     }
 	cnf.close();
 	SystemManager *sysman = new SystemManager(devman, conf);
+	setup_signals(sysman);
 	CLI cli(std::cout, std::cin);
 	cli.addCommand("echo", new EchoCMD());
 	cli.addCommand("ls", new LsCommand(sysman));

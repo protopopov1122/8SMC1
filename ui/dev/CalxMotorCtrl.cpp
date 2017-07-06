@@ -27,6 +27,7 @@
 #include <wx/statbox.h>
 #include <limits.h>
 #include <iostream>
+#include <signal.h>
 
 using namespace CalX;
 
