@@ -29,8 +29,11 @@ namespace CalXUI {
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 		SetSizer(sizer);
 
-		this->xPos = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1, 0.5, 0.0001);
-		this->yPos = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1, 0.5, 0.0001);
+		ConfigEntry *confEntry = wxGetApp().getSystemManager()->getConfiguration()->getEntry("relative_pos");
+		this->xPos = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1,
+			confEntry->getReal("x", 0.5), confEntry->getReal("x_prec", 0.0001));
+		this->yPos = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1,
+			confEntry->getReal("y", 0.5), confEntry->getReal("y_prec", 0.0001));
         this->speed = new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                      wxDefaultSize, wxSP_ARROW_KEYS, 0,
                                      wxGetApp().getSystemManager()->getConfiguration()->
