@@ -59,24 +59,16 @@ namespace CalXUI {
                 yOffset->SetValue((int) y);
 			}
 			double getXScale() {
-				double val;
-				if (!xScale->GetValue().ToDouble(&val)) {
-					return nan("");
-				}
-				return val;
+				return xScale->GetValue();
 			}
 			double getYScale() {
-				double val;
-				if (!yScale->GetValue().ToDouble(&val)) {
-					return nan("");
-				}
-				return val;
+				return yScale->GetValue();
 			}
 			void setXScale(double xs) {
-				xScale->SetValue(std::to_string(xs));
+				xScale->SetValue(xs);
 			}
-			void setYScale(double xs) {
-				yScale->SetValue(std::to_string(xs));
+			void setYScale(double ys) {
+				yScale->SetValue(ys);
 			}
 			int getMinX() {return minx->GetValue();}
 			int getMinY() {return miny->GetValue();}
@@ -94,8 +86,8 @@ namespace CalXUI {
 			wxCheckBox *logErrors;
 			wxSpinCtrl *xOffset;
 			wxSpinCtrl *yOffset;
-			wxTextCtrl *xScale;
-			wxTextCtrl *yScale;
+			wxSpinCtrlDouble *xScale;
+			wxSpinCtrlDouble *yScale;
 			wxSpinCtrl *minx;
 			wxSpinCtrl *miny;
 			wxSpinCtrl *maxx;

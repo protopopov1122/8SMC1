@@ -100,12 +100,15 @@ namespace CalXUI {
 		filtersSizer->Add(mapPanel, 0, wxALL | wxEXPAND, 5);
 		wxFlexGridSizer *mapSizer = new wxFlexGridSizer(2);
 		mapPanel->SetSizer(mapSizer);
+		double scale_prec = 0.00001;
         this->xOffset = new wxSpinCtrl(mapPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                        wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
         this->yOffset = new wxSpinCtrl(mapPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                        wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0);
-		this->xScale = new wxTextCtrl(mapPanel, wxID_ANY, "1");
-		this->yScale = new wxTextCtrl(mapPanel, wxID_ANY, "1");
+		this->xScale = new wxSpinCtrlDouble(mapPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                       wxDefaultSize, wxSP_ARROW_KEYS, scale_prec, INT_MAX, 1, scale_prec);
+		this->yScale = new wxSpinCtrlDouble(mapPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                       wxDefaultSize, wxSP_ARROW_KEYS, scale_prec, INT_MAX, 1, scale_prec);
 		mapSizer->Add(new wxStaticText(mapPanel, wxID_ANY, __("Coordinate offset") + std::string(":")));
 		mapSizer->Add(new wxStaticText(mapPanel, wxID_ANY, ""));
 		mapSizer->Add(new wxStaticText(mapPanel, wxID_ANY, __("x") + std::string(":")), 0, wxRIGHT | wxALIGN_RIGHT, 5);
