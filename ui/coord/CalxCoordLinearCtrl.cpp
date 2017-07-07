@@ -21,7 +21,8 @@
 
 namespace CalXUI {
 
-  void CalxCoordLinearCtrl::init() {
+  CalxCoordLinearCtrl::CalxCoordLinearCtrl(wxWindow *win, wxWindowID id, CalxCoordController *controller)
+	: wxPanel::wxPanel(win, id), controller(controller) {
 	std::string units = wxGetApp().getUnits();
 	wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 	SetSizer(sizer);
@@ -47,8 +48,8 @@ namespace CalXUI {
 								 ->getReal("unit_speed", 4000.0),
 							 wxGetApp().getSpeedPrecision());
 	this->relative = new wxCheckBox(this, wxID_ANY, __("Relative"));
-	this->moveButton = new wxButton(this, wxID_ANY, __("Move"));
-	this->jumpButton = new wxButton(this, wxID_ANY, __("Jump"));
+	wxButton *moveButton = new wxButton(this, wxID_ANY, __("Move"));
+	wxButton *jumpButton = new wxButton(this, wxID_ANY, __("Jump"));
 
 	sizer->Add(
 		new wxStaticText(this, wxID_ANY, __("Destination") + std::string(":")));
@@ -71,5 +72,18 @@ namespace CalXUI {
 	sizer->Add(new wxStaticText(this, wxID_ANY, ""));
 	sizer->Add(moveButton);
 	sizer->Add(jumpButton);
+	
+	moveButton->Bind(wxEVT_BUTTON, &CalxCoordLinearCtrl::OnMoveClick, this);
+	jumpButton->Bind(wxEVT_BUTTON, &CalxCoordLinearCtrl::OnJumpClick, this);
+  }
+  
+  void CalxCoordLinearCtrl::OnMoveClick(wxCommandEvent &evt) {
+	coord_point_t dest = { this->xCoord->GetValue(), this->yCoord->GetValue() };
+	this->controller->move(dest, this->speed->GetValue(), true, this->relative->GetValue());
+  }
+  
+  void CalxCoordLinearCtrl::OnJumpClick(wxCommandEvent &evt) {
+	coord_point_t dest = { this->xCoord->GetValue(), this->yCoord->GetValue() };
+	this->controller->move(dest, this->speed->GetValue(), false, this->relative->GetValue());
   }
 }

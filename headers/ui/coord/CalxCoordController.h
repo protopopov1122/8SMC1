@@ -32,6 +32,7 @@ namespace CalXUI {
 			CalxCoordController(CoordHandle*, CalxLockableComponent*, CalxFilterController*, CalxActionQueue*);
 			virtual ~CalxCoordController();
 			
+			CoordHandle *getHandle();
 			CoordPlaneLog *getLogFilter();
 			CoordPlaneMap *getMapFilter();
 			CoordPlaneValidator *getValidateFilter();

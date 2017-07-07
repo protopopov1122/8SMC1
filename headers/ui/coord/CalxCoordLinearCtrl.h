@@ -27,46 +27,26 @@
 #include <wx/spinctrl.h>
 #include "ui/CalxActionQueue.h"
 #include "ui/CalxFrame.h"
+#include "ui/coord/CalxCoordController.h"
 
 using namespace CalX;
 
 namespace CalXUI {
 
-  class CalxCoordCtrl;  // Forward reference
-
   class CalxCoordLinearCtrl : public wxPanel {
    public:
-	CalxCoordLinearCtrl(wxWindow *win, wxWindowID id)
-		: wxPanel::wxPanel(win, id) {
-	  init();
-	}
-	double getCoordX() {
-	  return xCoord->GetValue();
-	}
-	double getCoordY() {
-	  return yCoord->GetValue();
-	}
-	double getSpeed() {
-	  return speed->GetValue();
-	}
-	bool isRelative() {
-	  return relative->GetValue();
-	}
-	wxButton *getMoveButton() {
-	  return this->moveButton;
-	}
-	wxButton *getJumpButton() {
-	  return this->jumpButton;
-	}
+	CalxCoordLinearCtrl(wxWindow*, wxWindowID, CalxCoordController*);
 
    private:
-	void init();
-	wxButton *moveButton;
-	wxButton *jumpButton;
+	void OnMoveClick(wxCommandEvent&);
+	void OnJumpClick(wxCommandEvent&);
+	
 	wxSpinCtrlDouble *xCoord;
 	wxSpinCtrlDouble *yCoord;
 	wxSpinCtrlDouble *speed;
 	wxCheckBox *relative;
+	
+	CalxCoordController *controller;
   };
 }
 

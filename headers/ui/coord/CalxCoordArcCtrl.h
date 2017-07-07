@@ -27,49 +27,19 @@
 #include <wx/spinctrl.h>
 #include "ui/CalxActionQueue.h"
 #include "ui/CalxFrame.h"
+#include "ui/coord/CalxCoordController.h"
 
 using namespace CalX;
 
 namespace CalXUI {
 
-  class CalxCoordCtrl;  // Forward reference
-
   class CalxCoordArcCtrl : public wxPanel {
    public:
-	CalxCoordArcCtrl(wxWindow *win, wxWindowID id) : wxPanel::wxPanel(win, id) {
-	  init();
-	}
-	double getCoordX() {
-	  return xCoord->GetValue();
-	}
-	double getCoordY() {
-	  return yCoord->GetValue();
-	}
-	double getCenterCoordX() {
-	  return cxCoord->GetValue();
-	}
-	double getCenterCoordY() {
-	  return cyCoord->GetValue();
-	}
-	double getSpeed() {
-	  return speed->GetValue();
-	}
-	int getSplitter() {
-	  return splitter->GetValue();
-	}
-	bool isClockwise() {
-	  return clockwise->GetValue();
-	}
-	bool isRelative() {
-	  return relative->GetValue();
-	}
-	wxButton *getMoveButton() {
-	  return this->moveButton;
-	}
+	CalxCoordArcCtrl(wxWindow*, wxWindowID, CalxCoordController*);
 
    private:
-	void init();
-	wxButton *moveButton;
+	void OnMoveClick(wxCommandEvent&);
+	
 	wxSpinCtrlDouble *xCoord;
 	wxSpinCtrlDouble *yCoord;
 	wxSpinCtrlDouble *cxCoord;
@@ -78,6 +48,8 @@ namespace CalXUI {
 	wxSpinCtrl *splitter;
 	wxCheckBox *clockwise;
 	wxCheckBox *relative;
+	
+	CalxCoordController *controller;
   };
 }
 

@@ -30,83 +30,32 @@
 #include "ui/CalxActionQueue.h"
 #include "ui/CalxFrame.h"
 #include "ui/coord/CalxCoordPositionCtrl.h"
+#include "ui/coord/CalxCoordController.h"
+#include "ui/coord/CalxFilterController.h"
 
 using namespace CalX;
 
 namespace CalXUI {
 
-  class CalxCoordCtrl;  // Forward reference
-
   class CalxCoordOtherCtrl : public wxPanel {
    public:
-	CalxCoordOtherCtrl(CalxCoordCtrl *ctrl, wxWindow *win, wxWindowID id)
-		: wxPanel::wxPanel(win, id) {
-	  this->ctrl = ctrl;
-	  init();
-	}
-	bool isInstrumentEnabled() {
-	  return enableInstrument->GetValue();
-	}
-	TrailerId getTrailer() {
-	  return trailer->GetSelection() == 0 ? TrailerId::Trailer1
-										  : TrailerId::Trailer2;
-	}
-	TrailerId getMeasureTrailer() {
-	  return measureTrailer->GetSelection() == 0 ? TrailerId::Trailer1
-												 : TrailerId::Trailer2;
-	}
-	bool isLoggingActions() {
-	  return logActions->GetValue();
-	}
-	bool isLoggingErrors() {
-	  return logActions->GetValue();
-	}
-	int getXOffset() {
-	  return xOffset->GetValue();
-	}
-	int getYOffset() {
-	  return yOffset->GetValue();
-	}
-	void setXOffset(motor_coord_t x) {
-	  xOffset->SetValue((int) x);
-	}
-	void setYOffset(motor_coord_t y) {
-	  yOffset->SetValue((int) y);
-	}
-	double getXScale() {
-	  return xScale->GetValue();
-	}
-	double getYScale() {
-	  return yScale->GetValue();
-	}
-	void setXScale(double xs) {
-	  xScale->SetValue(xs);
-	}
-	void setYScale(double ys) {
-	  yScale->SetValue(ys);
-	}
-	int getMinX() {
-	  return minx->GetValue();
-	}
-	int getMinY() {
-	  return miny->GetValue();
-	}
-	int getMaxX() {
-	  return maxx->GetValue();
-	}
-	int getMaxY() {
-	  return maxy->GetValue();
-	}
-	int getSpeed() {
-	  return speed->GetValue();
-	}
-	CalxCoordPositionCtrl *getPositionController() {
-	  return this->posCtrl;
-	}
+	CalxCoordOtherCtrl(wxWindow*, wxWindowID, CalxCoordController*, CalxFilterController*);
+	
+	wxCollapsiblePane *getPositionPane();
+	wxCollapsiblePane *getFiltersPane();
+	
+	void setOffset(motor_point_t);
+	void setScale(motor_scale_t);
 
    private:
-	void init();
-	CalxCoordCtrl *ctrl;
+	void OnInstrumentEnableClick(wxCommandEvent&);
+	void OnAdjustPositionClick(wxCommandEvent&);
+	void OnCalibrateClick(wxCommandEvent&);
+	void OnMeasureClick(wxCommandEvent&);
+	void OnFiltersUpdate(wxCommandEvent&);
+   
+    wxCollapsiblePane *posCollPane;
+	wxCollapsiblePane *filtersCollPane;
 	wxCheckBox *enableInstrument;
 	wxChoice *trailer;
 	wxChoice *measureTrailer;
@@ -121,7 +70,10 @@ namespace CalXUI {
 	wxSpinCtrl *maxx;
 	wxSpinCtrl *maxy;
 	wxSpinCtrl *speed;
+	
 	CalxCoordPositionCtrl *posCtrl;
+	CalxCoordController *controller;
+	CalxFilterController *filters;
   };
 }
 

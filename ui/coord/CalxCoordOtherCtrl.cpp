@@ -22,24 +22,26 @@
 
 namespace CalXUI {
 
-  void CalxCoordOtherCtrl::init() {
+  CalxCoordOtherCtrl::CalxCoordOtherCtrl(wxWindow *win, wxWindowID id,
+	CalxCoordController *controller, CalxFilterController *filters)
+	: wxPanel::wxPanel(win, id), controller(controller), filters(filters) {
 	wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 	SetSizer(sizer);
 
-	if (ctrl->getHandle()->getController()->getInstrument() != nullptr) {
+	if (controller->getHandle()->getController()->getInstrument() != nullptr) {
 	  this->enableInstrument =
 		  new wxCheckBox(this, wxID_ANY, __("Enable instrument"));
 	  sizer->Add(enableInstrument, 0, wxALL, 5);
 	  enableInstrument->Bind(wxEVT_CHECKBOX,
-							 &CalxCoordCtrl::OnInstrumentEnableClick, ctrl);
+							 &CalxCoordOtherCtrl::OnInstrumentEnableClick, this);
 	  this->enableInstrument->SetValue(
-		  ctrl->getHandle()->getController()->getInstrument()->isRunnable());
+		  controller->getHandle()->getController()->getInstrument()->isRunnable());
 	}
 
 	wxButton *curPosZero =
 		new wxButton(this, wxID_ANY, __("Current position as 0"));
 	sizer->Add(curPosZero, 0, wxALL, 5);
-	curPosZero->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnAdjustPositionClick, ctrl);
+	curPosZero->Bind(wxEVT_BUTTON, &CalxCoordOtherCtrl::OnAdjustPositionClick, this);
 
 	wxPanel *calibratePanel = new wxPanel(this, wxID_ANY);
 	sizer->Add(calibratePanel, 0, wxALL, 5);
@@ -47,7 +49,7 @@ namespace CalXUI {
 	calibratePanel->SetSizer(calibrateSizer);
 	wxButton *calibrateButton =
 		new wxButton(calibratePanel, wxID_ANY, __("Calibrate"));
-	calibrateButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnCalibrateClick, ctrl);
+	calibrateButton->Bind(wxEVT_BUTTON, &CalxCoordOtherCtrl::OnCalibrateClick, this);
 	calibrateSizer->Add(calibrateButton);
 	calibrateSizer->Add(new wxStaticText(calibratePanel, wxID_ANY, __("to")), 0,
 						wxLEFT | wxRIGHT | wxALIGN_CENTER, 5);
@@ -63,7 +65,7 @@ namespace CalXUI {
 	measurePanel->SetSizer(measureSizer);
 	wxButton *measureButton =
 		new wxButton(measurePanel, wxID_ANY, __("Measure"));
-	measureButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnMeasureClick, ctrl);
+	measureButton->Bind(wxEVT_BUTTON, &CalxCoordOtherCtrl::OnMeasureClick, this);
 	measureSizer->Add(measureButton);
 	measureSizer->Add(new wxStaticText(measurePanel, wxID_ANY, __("to")), 0,
 					  wxLEFT | wxRIGHT | wxALIGN_CENTER, 5);
@@ -73,30 +75,22 @@ namespace CalXUI {
 	measureTrailer->SetSelection(0);
 	measureSizer->Add(measureTrailer, 0, wxALL);
 
-	wxCollapsiblePane *posCollPane =
+	posCollPane =
 		new wxCollapsiblePane(this, wxID_ANY, __("Position"));
 	wxWindow *posPane = posCollPane->GetPane();
 	sizer->Add(posCollPane, 0, wxALL | wxEXPAND);
 	wxBoxSizer *posSizer = new wxBoxSizer(wxVERTICAL);
 	posPane->SetSizer(posSizer);
-	posCollPane->Bind(wxEVT_COLLAPSIBLEPANE_CHANGED,
-					  &CalxCoordCtrl::OnInterfaceUpdate, ctrl);
-	this->posCtrl = new CalxCoordPositionCtrl(posPane, wxID_ANY);
+	this->posCtrl = new CalxCoordPositionCtrl(posPane, wxID_ANY, this->controller);
 	posSizer->Add(this->posCtrl);
 	posCollPane->Collapse(false);
-	this->posCtrl->getMoveButton()->Bind(
-		wxEVT_BUTTON, &CalxCoordCtrl::OnPositionChangeClick, ctrl);
-	this->posCtrl->getConfigureButton()->Bind(
-		wxEVT_BUTTON, &CalxCoordCtrl::OnConfigureClick, ctrl);
 
-	wxCollapsiblePane *filtersCollPane =
+	filtersCollPane =
 		new wxCollapsiblePane(this, wxID_ANY, __("Filters"));
 	wxWindow *filtersPane = filtersCollPane->GetPane();
 	sizer->Add(filtersCollPane, 1, wxALL | wxEXPAND);
 	wxBoxSizer *filtersSizer = new wxBoxSizer(wxVERTICAL);
 	filtersPane->SetSizer(filtersSizer);
-	filtersCollPane->Bind(wxEVT_COLLAPSIBLEPANE_CHANGED,
-						  &CalxCoordCtrl::OnInterfaceUpdate, ctrl);
 
 	wxPanel *logPanel = new wxPanel(filtersPane, wxID_ANY);
 	filtersSizer->Add(logPanel, 0, wxALL | wxEXPAND, 5);
@@ -200,31 +194,86 @@ namespace CalXUI {
 		new wxStaticText(validatePanel, wxID_ANY, __("Maximum speed")));
 	validateSizer->Add(speed, 0, wxEXPAND);
 
-	logActions->SetValue(ctrl->getPlaneLog()->isLoggingActions());
-	logErrors->SetValue(ctrl->getPlaneLog()->isLoggingErrors());
-	xOffset->SetValue((int) ctrl->getPlaneMap()->getOffset().x);
-	yOffset->SetValue((int) ctrl->getPlaneMap()->getOffset().y);
-	xScale->SetValue(std::to_string((float) ctrl->getPlaneMap()->getScale().x));
-	yScale->SetValue(std::to_string((float) ctrl->getPlaneMap()->getScale().y));
-	minx->SetValue((int) ctrl->getPlaneValidator()->getMinimum().x);
-	miny->SetValue((int) ctrl->getPlaneValidator()->getMinimum().y);
-	maxx->SetValue((int) ctrl->getPlaneValidator()->getMaximum().x);
-	maxy->SetValue((int) ctrl->getPlaneValidator()->getMaximum().y);
-	speed->SetValue(static_cast<int>(ctrl->getPlaneValidator()->getMaxSpeed()));
+	logActions->SetValue(controller->getLogFilter()->isLoggingActions());
+	logErrors->SetValue(controller->getLogFilter()->isLoggingErrors());
+	xOffset->SetValue((int) controller->getMapFilter()->getOffset().x);
+	yOffset->SetValue((int) controller->getMapFilter()->getOffset().y);
+	xScale->SetValue(std::to_string((float) controller->getMapFilter()->getScale().x));
+	yScale->SetValue(std::to_string((float) controller->getMapFilter()->getScale().y));
+	minx->SetValue((int) controller->getValidateFilter()->getMinimum().x);
+	miny->SetValue((int) controller->getValidateFilter()->getMinimum().y);
+	maxx->SetValue((int) controller->getValidateFilter()->getMaximum().x);
+	maxy->SetValue((int) controller->getValidateFilter()->getMaximum().y);
+	speed->SetValue(static_cast<int>(controller->getValidateFilter()->getMaxSpeed()));
 
-	logActions->Bind(wxEVT_CHECKBOX, &CalxCoordCtrl::OnUpdateFiltersClick,
-					 ctrl);
-	logErrors->Bind(wxEVT_CHECKBOX, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
-	xOffset->Bind(wxEVT_SPINCTRL, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
-	yOffset->Bind(wxEVT_SPINCTRL, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
-	xScale->Bind(wxEVT_TEXT, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
-	yScale->Bind(wxEVT_TEXT, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
-	minx->Bind(wxEVT_SPINCTRL, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
-	miny->Bind(wxEVT_SPINCTRL, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
-	maxx->Bind(wxEVT_SPINCTRL, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
-	maxy->Bind(wxEVT_SPINCTRL, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
-	speed->Bind(wxEVT_SPINCTRL, &CalxCoordCtrl::OnUpdateFiltersClick, ctrl);
+	logActions->Bind(wxEVT_CHECKBOX, &CalxCoordOtherCtrl::OnFiltersUpdate, this);
+	logErrors->Bind(wxEVT_CHECKBOX, &CalxCoordOtherCtrl::OnFiltersUpdate, this);
+	xOffset->Bind(wxEVT_SPINCTRL, &CalxCoordOtherCtrl::OnFiltersUpdate, this);
+	yOffset->Bind(wxEVT_SPINCTRL, &CalxCoordOtherCtrl::OnFiltersUpdate, this);
+	xScale->Bind(wxEVT_TEXT, &CalxCoordOtherCtrl::OnFiltersUpdate, this);
+	yScale->Bind(wxEVT_TEXT, &CalxCoordOtherCtrl::OnFiltersUpdate, this);
+	minx->Bind(wxEVT_SPINCTRL, &CalxCoordOtherCtrl::OnFiltersUpdate, this);
+	miny->Bind(wxEVT_SPINCTRL, &CalxCoordOtherCtrl::OnFiltersUpdate, this);
+	maxx->Bind(wxEVT_SPINCTRL, &CalxCoordOtherCtrl::OnFiltersUpdate, this);
+	maxy->Bind(wxEVT_SPINCTRL, &CalxCoordOtherCtrl::OnFiltersUpdate, this);
+	speed->Bind(wxEVT_SPINCTRL, &CalxCoordOtherCtrl::OnFiltersUpdate, this);
 
 	Layout();
+  }
+  
+  wxCollapsiblePane *CalxCoordOtherCtrl::getPositionPane() {
+	return this->posCollPane;
+  }
+  
+  wxCollapsiblePane *CalxCoordOtherCtrl::getFiltersPane() {
+	return this->filtersCollPane;
+  }
+  
+  void CalxCoordOtherCtrl::setOffset(motor_point_t offset) {
+	this->xOffset->SetValue(offset.x);
+	this->yOffset->SetValue(offset.y);
+  }
+  
+  void CalxCoordOtherCtrl::setScale(motor_scale_t scale) {
+	this->xScale->SetValue(scale.x);
+	this->yScale->SetValue(scale.y);
+  }
+  
+  void CalxCoordOtherCtrl::OnInstrumentEnableClick(wxCommandEvent &evt) {
+	this->controller->getHandle()->getController()->getInstrument()->setRunnable(
+		this->enableInstrument->GetValue());
+  }
+  
+  void CalxCoordOtherCtrl::OnAdjustPositionClick(wxCommandEvent &evt) {
+	motor_point_t offset = this->controller->getHandle()->getPosition();
+	motor_scale_t scale = this->controller->getMapFilter()->getScale();
+	offset.x += this->controller->getMapFilter()->getOffset().x / scale.x;
+	offset.y += this->controller->getMapFilter()->getOffset().y / scale.y;
+	filters->setOffset(offset);
+  }
+  
+  void CalxCoordOtherCtrl::OnCalibrateClick(wxCommandEvent &evt) {
+	TrailerId tr = this->trailer->GetSelection() == 0 ? TrailerId::Trailer1 : TrailerId::Trailer2;
+	this->controller->calibrate(tr);
+  }
+  
+  void CalxCoordOtherCtrl::OnMeasureClick(wxCommandEvent &evt) {
+	TrailerId tr = this->trailer->GetSelection() == 0 ? TrailerId::Trailer1 : TrailerId::Trailer2;
+	this->controller->measure(tr);
+  }
+  
+  void CalxCoordOtherCtrl::OnFiltersUpdate(wxCommandEvent &evt) {
+	controller->getLogFilter()->setLoggingActions(logActions->GetValue());
+	controller->getLogFilter()->setLoggingErrors(logErrors->GetValue());
+	motor_point_t moffset = { xOffset->GetValue(),
+							  yOffset->GetValue() };
+	motor_scale_t mscale = { xScale->GetValue(), yScale->GetValue() };
+	controller->getMapFilter()->setOffset(moffset);
+	controller->getMapFilter()->setScale(mscale);
+	motor_point_t min = { minx->GetValue(), miny->GetValue() };
+	motor_point_t max = { maxx->GetValue(), maxy->GetValue() };
+	controller->getValidateFilter()->setMinimum(min);
+	controller->getValidateFilter()->setMaximum(max);
+	controller->getValidateFilter()->setMaxSpeed(speed->GetValue());
   }
 }

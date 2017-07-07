@@ -21,35 +21,24 @@
 #define CALX_UI_CALX_COORD_POSITION_CTRL_H_
 
 #include "ui/CalxApp.h"
+#include "ui/coord/CalxCoordController.h"
 #include <wx/spinctrl.h>
 
 namespace CalXUI {
 
   class CalxCoordPositionCtrl : public wxPanel {
    public:
-	CalxCoordPositionCtrl(wxWindow *, wxWindowID);
-	double getXPosition() {
-	  return this->xPos->GetValue();
-	}
-	double getYPosition() {
-	  return this->yPos->GetValue();
-	}
-	wxButton *getMoveButton() {
-	  return this->moveButton;
-	}
-	wxButton *getConfigureButton() {
-	  return this->configureButton;
-	}
-	double getSpeed() {
-	  return speed->GetValue();
-	}
+	CalxCoordPositionCtrl(wxWindow *, wxWindowID, CalxCoordController*);
 
    private:
+	void OnMoveClick(wxCommandEvent&);
+	void OnConfigureClick(wxCommandEvent&);
+   
 	wxSpinCtrlDouble *xPos;
 	wxSpinCtrlDouble *yPos;
 	wxSpinCtrlDouble *speed;
-	wxButton *moveButton;
-	wxButton *configureButton;
+	
+	CalxCoordController *controller;
   };
 }
 

@@ -55,27 +55,16 @@ namespace CalXUI {
 	CoordHandle *getHandle() {
 	  return this->ctrl;
 	}
-	CoordPlaneLog *getPlaneLog();
-	CoordPlaneMap *getPlaneMap();
-	CoordPlaneValidator *getPlaneValidator();
 
-	void OnLinearMoveClick(wxCommandEvent &);
-	void OnLinearJumpClick(wxCommandEvent &);
-	void OnArcMoveClick(wxCommandEvent &);
 	void OnGraphBuildClick(wxCommandEvent &);
 	void OnGraphPreviewClick(wxCommandEvent &);
-	void OnCalibrateClick(wxCommandEvent &);
-	void OnMeasureClick(wxCommandEvent &);
-	void OnUpdateFiltersClick(wxCommandEvent &);
-	void OnInstrumentEnableClick(wxCommandEvent &);
 	void OnInterfaceUpdate(wxCollapsiblePaneEvent &);
-	void OnPositionChangeClick(wxCommandEvent &);
-	void OnConfigureClick(wxCommandEvent &);
-	void OnAdjustPositionClick(wxCommandEvent &);
+	
 	void use();
 	void unuse();
 	bool isUsed();
 	virtual void setMaster(bool);
+	virtual void setOffset(motor_point_t);
 	void setEnabled(bool);
 	void bindWatcher(CalxCoordPlaneWatcher *);
 	void unbindWatcher(CalxCoordPlaneWatcher *);
@@ -84,7 +73,6 @@ namespace CalXUI {
 	bool isBusy() {
 	  return !queue->isEmpty();
 	}
-	virtual void setOffset(motor_point_t);
 
 	// Request synchronizing with interface
 	void requestMeasure(TrailerId);
@@ -96,7 +84,6 @@ namespace CalXUI {
 
    private:
 	void OnExit(wxCloseEvent &);
-	void OnQueueUpdate(wxThreadEvent &);
 	void OnStopClick(wxCommandEvent &);
 	void OnAdjusterClick(wxCommandEvent &);
 	void OnWatcherClick(wxCommandEvent &);

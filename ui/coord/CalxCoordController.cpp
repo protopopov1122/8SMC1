@@ -71,6 +71,10 @@ namespace CalXUI {
 	
 	CalxCoordController::~CalxCoordController() {}
 	
+	CoordHandle *CalxCoordController::getHandle() {
+		return this->handle;
+	}
+	
 	CoordPlaneLog *CalxCoordController::getLogFilter() {
 		return this->log;
 	}
