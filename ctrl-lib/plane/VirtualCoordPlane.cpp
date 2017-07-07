@@ -131,4 +131,8 @@ namespace CalX {
   ErrorCode VirtualCoordPlane::close_session() {
 	return ErrorCode::NoError;
   }
+  
+  bool VirtualCoordPlane::isUsed() {
+	 return false;
+  }
 }

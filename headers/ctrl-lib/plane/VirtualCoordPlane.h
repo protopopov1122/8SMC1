@@ -41,6 +41,7 @@ namespace CalX {
 	virtual CoordPlaneStatus getStatus();
 	virtual ErrorCode open_session();
 	virtual ErrorCode close_session();
+	virtual bool isUsed();
 
 	virtual void use();
 	virtual void unuse();

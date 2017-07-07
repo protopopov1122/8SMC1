@@ -154,4 +154,8 @@ namespace CalX {
   ErrorCode CoordPlaneLinearizer::close_session() {
 	return this->base->close_session();
   }
+  
+  bool CoordPlaneLinearizer::isUsed() {
+	 return this->base->isUsed();
+  }
 }

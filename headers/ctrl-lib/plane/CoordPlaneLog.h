@@ -53,6 +53,7 @@ namespace CalX {
 	virtual CoordPlaneStatus getStatus();
 	virtual ErrorCode open_session();
 	virtual ErrorCode close_session();
+	virtual bool isUsed();
 
    private:
 	CoordPlane *plane;

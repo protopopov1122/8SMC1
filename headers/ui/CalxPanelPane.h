@@ -17,16 +17,20 @@
 	along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CALX_UI_LOCKABLE_COMPONENT_H_
-#define CALX_UI_LOCKABLE_COMPONENT_H_
+#ifndef CALX_UI_CALX_PANEL_PANE_H_
+#define CALX_UI_CALX_PANEL_PANE_H_
 
 #include "ui/calx.h"
 
 namespace CalXUI {
-
-	class CalxLockableComponent {
+	
+	class CalxPanelPane : public wxScrolledWindow {
 		public:
-			virtual void setMaster(bool) = 0;
+			CalxPanelPane(wxWindow *win, wxWindowID id)
+				: wxScrolledWindow::wxScrolledWindow(win, id) {}
+			virtual bool isBusy() = 0;
+			virtual void shutdown() = 0;
+			virtual void updateUI() = 0;
 	};
 }
 

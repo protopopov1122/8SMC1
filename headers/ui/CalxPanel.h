@@ -21,30 +21,22 @@
 #define CALX_UI_CALX_PANEL_H_
 
 #include "ui/calx.h"
+#include "ui/CalxPanelPane.h"
 #include <wx/notebook.h>
 
 namespace CalXUI {
-
-  class CalxDevicePanel;   // Forward referencing
-  class CalxCoordPanel;    // Forward referencing
-  class CalxTaskPanel;     // Forward referencing
-  class CalxConfigEditor;  // Forward referencing
-
+	
   class CalxPanel : public wxNotebook {
    public:
 	CalxPanel(wxWindow *, wxWindowID);
-	CalxDevicePanel *getDevices();
-	CalxCoordPanel *getCoords();
-	CalxTaskPanel *getTasks();
+	void addPane(std::string, CalxPanelPane*);
 	void updateUI();
+	bool isBusy();
 
    private:
 	void OnExit(wxCloseEvent &);
 
-	CalxDevicePanel *dev;
-	CalxCoordPanel *coord;
-	CalxTaskPanel *task;
-	CalxConfigEditor *conf;
+	std::vector<CalxPanelPane*> panes;
   };
 }
 

@@ -42,12 +42,11 @@ namespace CalXUI {
 	  : wxScrolledWindow::wxScrolledWindow(win, id) {
 	this->ctrl = ctrl;
 	this->used = 0;
-	this->master = false;
 
 	this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
 	this->queue->Run();
 	
-	this->controller = new CalxCoordController(this->ctrl, this, this, this->queue);
+	this->controller = new CalxCoordController(this->ctrl, this, this->queue);
 	this->watchers = new CalxWatcherPool(this, this->ctrl);
 	
 	this->listener = new CalxCoordEventListener(this);
@@ -169,7 +168,7 @@ namespace CalXUI {
   }
   
   bool CalxCoordCtrl::isBusy() {
-	return !queue->isEmpty();
+	return this->queue->isBusy();
   }
 
   void CalxCoordCtrl::use() {
@@ -194,13 +193,9 @@ namespace CalXUI {
 	return this->used != 0;
   }
 
-  void CalxCoordCtrl::setMaster(bool m) {
-	this->master = m;
-  }
-
   void CalxCoordCtrl::setEnabled(bool e) {
 	actionPanel->Enable(e);
-	stopButton->Enable(!e && this->master);
+	stopButton->Enable(!e && this->queue->isBusy());
   }
 
   void CalxCoordCtrl::setOffset(motor_point_t offset) {
@@ -311,7 +306,7 @@ namespace CalXUI {
 
   void CalxCoordCtrl::OnEnableEvent(wxThreadEvent &evt) {
 	setEnabled(evt.GetPayload<bool>());
-	wxGetApp().getMainFrame()->getPanel()->getTasks()->updateUI();
+	wxGetApp().getMainFrame()->getPanel()->updateUI();
   }
 
   void CalxCoordCtrl::OnAdjusterClick(wxCommandEvent &evt) {

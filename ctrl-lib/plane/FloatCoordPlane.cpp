@@ -155,6 +155,10 @@ namespace CalX {
   ErrorCode FloatCoordPlane::close_session() {
 	return this->plane->close_session();
   }
+  
+  bool FloatCoordPlane::isUsed() {
+	 return this->plane->isUsed();
+  }
 
   ErrorCode FloatCoordPlane::move(coord_point_t dest, double speed, bool sync) {
 	motor_point_t pdest = {

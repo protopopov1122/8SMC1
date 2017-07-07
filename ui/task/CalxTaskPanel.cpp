@@ -105,7 +105,7 @@ namespace CalXUI {
   };
 
   CalxTaskPanel::CalxTaskPanel(wxWindow *win, wxWindowID id)
-	  : wxScrolledWindow::wxScrolledWindow(win, id) {
+	  : CalxPanelPane::CalxPanelPane(win, id) {
 	std::string units = wxGetApp().getUnits();
 	this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
 	this->queue->Run();
@@ -199,6 +199,10 @@ namespace CalXUI {
   void CalxTaskPanel::shutdown() {
 	this->queue->stop();
   }
+  
+  bool CalxTaskPanel::isBusy() {
+	return queue->isBusy();
+  }
 
   void CalxTaskPanel::updateUI() {
 	for (const auto &t : this->list) {
@@ -209,14 +213,14 @@ namespace CalXUI {
 	}
 	plane->Clear();
 	CalxPanel *calxPanel = wxGetApp().getMainFrame()->getPanel();
-	for (size_t i = 0; i < calxPanel->getCoords()->getCoordCount(); i++) {
-	  if (calxPanel->getCoords()->getCoordCtrl(i)->isUsed()) {
+	for (size_t i = 0; i < wxGetApp().getSystemManager()->getCoordCount(); i++) {
+	  if (wxGetApp().getSystemManager()->getCoord(i)->isUsed()) {
 		continue;
 	  }
-	  CoordHandle *handle = calxPanel->getCoords()->getCoord(i);
+	  CoordHandle *handle = wxGetApp().getSystemManager()->getCoord(i);
 	  plane->Append("Plane #" + std::to_string(handle->getID()));
 	}
-	if (calxPanel->getCoords()->getCoordCount() > 0) {
+	if (wxGetApp().getSystemManager()->getCoordCount() > 0) {
 	  plane->SetSelection(0);
 	}
 	this->mainPanel->Layout();
@@ -281,7 +285,7 @@ namespace CalXUI {
 	if (taskList->GetSelection() != wxNOT_FOUND &&
 		plane->GetSelection() != wxNOT_FOUND) {
 	  CoordHandle *handler =
-		  wxGetApp().getMainFrame()->getPanel()->getCoords()->getCoord(
+		  wxGetApp().getSystemManager()->getCoord(
 			  (size_t) plane->GetSelection());
 	  if (handler->isMeasured()) {
 		handle->setRectangle(handler->getFloatPlane()->getFloatSize());
@@ -318,7 +322,7 @@ namespace CalXUI {
 	  list.at((size_t) taskList->GetSelection())->update();
 	  CoordTask *task = list.at((size_t) taskList->GetSelection())->getTask();
 	  CoordHandle *handle =
-		  wxGetApp().getMainFrame()->getPanel()->getCoords()->getCoord(
+		  wxGetApp().getSystemManager()->getCoord(
 			  (size_t) plane->GetSelection());
 	  float speed = this->speed->GetValue();
 	  TaskParameters prms = { (float) speed };
@@ -341,7 +345,7 @@ namespace CalXUI {
 	  list.at((size_t) taskList->GetSelection())->update();
 	  CoordTask *task = list.at((size_t) taskList->GetSelection())->getTask();
 	  CoordHandle *handle =
-		  wxGetApp().getMainFrame()->getPanel()->getCoords()->getCoord(
+		  wxGetApp().getSystemManager()->getCoord(
 			  (size_t) plane->GetSelection());
 	  if (!handle->isMeasured()) {
 		wxMessageBox(__("Plane need to be measured before preview"),
@@ -372,7 +376,7 @@ namespace CalXUI {
 	  list.at((size_t) taskList->GetSelection())->update();
 	  CoordTask *task = list.at((size_t) taskList->GetSelection())->getTask();
 	  CoordHandle *handle =
-		  wxGetApp().getMainFrame()->getPanel()->getCoords()->getCoord(
+		  wxGetApp().getSystemManager()->getCoord(
 			  (size_t) plane->GetSelection());
 	  if (!handle->isMeasured()) {
 		wxMessageBox(__("Plane need to be measured to linearize"),

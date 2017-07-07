@@ -53,6 +53,7 @@ namespace CalX {
 
 	void addEventListener(CoordEventListener *);
 	void removeEventListener(CoordEventListener *);
+	virtual bool isUsed();
 	virtual void use();
 	virtual void unuse();
 
@@ -63,6 +64,7 @@ namespace CalX {
 	ConfigManager *config;
 	bool work;
 	bool defWork;
+	bool session_opened;
 	CoordPlaneStatus status;
 
 	motor_rect_t size;

@@ -153,4 +153,8 @@ namespace CalX {
   ErrorCode CoordPlaneMap::close_session() {
 	return this->plane->close_session();
   }
+  
+  bool CoordPlaneMap::isUsed() {
+	 return this->plane->isUsed();
+  }
 }

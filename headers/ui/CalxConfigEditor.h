@@ -27,8 +27,11 @@
 #include <wx/textctrl.h>
 #include <wx/checkbox.h>
 #include "ctrl-lib/conf/ConfigManager.h"
+#include "ui/CalxPanelPane.h"
 
 namespace CalXUI {
+	
+  class CalxConfigEditor; // Forward referencing
 
   class CalxNewKeyDialog : public wxDialog {
    public:
@@ -78,11 +81,15 @@ namespace CalXUI {
 	CalxConfigEditor *editor;
   };
 
-  class CalxConfigEditor : public wxScrolledWindow {
+  class CalxConfigEditor : public CalxPanelPane {
    public:
 	CalxConfigEditor(wxWindow *, wxWindowID, ConfigManager *);
 	ConfigManager *getConfiguration();
 	wxButton *getOkButton();
+	
+	virtual bool isBusy();
+	virtual void shutdown();
+	virtual void updateUI();
 
 	void updateEntries();
 	void updateEntry();

@@ -4,13 +4,12 @@
 
 namespace CalXUI {
 	
-	CalxCoordActionMove::CalxCoordActionMove(CalxLockableComponent *lockable, CoordHandle *handle,
+	CalxCoordActionMove::CalxCoordActionMove(CoordHandle *handle,
 		coord_point_t dest, double speed, bool jump, bool relative)
-		: lockable(lockable), handle(handle), dest(dest), speed(speed), jump(jump), relative(relative) {}
+		: handle(handle), dest(dest), speed(speed), jump(jump), relative(relative) {}
 	
 	void CalxCoordActionMove::perform(SystemManager *sysman) {
 		handle->open_session();
-		lockable->setMaster(true);
 		if (relative) {
 		  wxGetApp().getErrorHandler()->handle(
 			  handle->getFloatPlane()->relativeMove(dest, speed, jump));
@@ -18,7 +17,6 @@ namespace CalXUI {
 		  wxGetApp().getErrorHandler()->handle(
 			  handle->getFloatPlane()->move(dest, speed, jump));
 		}
-		lockable->setMaster(false);
 		handle->close_session();	
 	}
 	
@@ -26,14 +24,13 @@ namespace CalXUI {
 		handle->stop();
 	}
 	
-	CalxCoordActionArc::CalxCoordActionArc(CalxLockableComponent *lockable, CoordHandle *handle,
+	CalxCoordActionArc::CalxCoordActionArc(CoordHandle *handle,
 		coord_point_t dest, coord_point_t cen, int splitter, double speed, bool clockwise, bool relative)
-		: lockable(lockable), handle(handle), dest(dest), cen(cen), splitter(splitter),
+		: handle(handle), dest(dest), cen(cen), splitter(splitter),
 			speed(speed), clockwise(clockwise), relative(relative) {}
 			
 	void CalxCoordActionArc::perform(SystemManager *sysman) {
 		handle->open_session();
-		lockable->setMaster(true);
 		if (relative) {
 		  wxGetApp().getErrorHandler()->handle(
 			  handle->getFloatPlane()->relativeArc(dest, cen, splitter, speed, clockwise));
@@ -41,7 +38,6 @@ namespace CalXUI {
 		  wxGetApp().getErrorHandler()->handle(
 			  handle->getFloatPlane()->arc(dest, cen, splitter, speed, clockwise));
 		}
-		lockable->setMaster(false);
 		handle->close_session();
 	}
 	
@@ -49,42 +45,37 @@ namespace CalXUI {
 		handle->stop();
 	}
 	
-	CalxCoordActionCalibrate::CalxCoordActionCalibrate(CalxLockableComponent *lockable, CoordHandle *handle, TrailerId tr)
-		: lockable(lockable), handle(handle), trailer(tr) {}
+	CalxCoordActionCalibrate::CalxCoordActionCalibrate(CoordHandle *handle, TrailerId tr)
+		: handle(handle), trailer(tr) {}
 	
 	void CalxCoordActionCalibrate::perform(SystemManager *sysman) {
 		handle->open_session();
-		lockable->setMaster(true);
 		wxGetApp().getErrorHandler()->handle(handle->calibrate(trailer));
-		lockable->setMaster(false);
 		handle->close_session();	
 	}
 	void CalxCoordActionCalibrate::stop() {
 		this->handle->stop();
 	}
 	
-	CalxCoordActionMeasure::CalxCoordActionMeasure(CalxLockableComponent *lockable, CoordHandle *handle, TrailerId tr)
-		: lockable(lockable), handle(handle), trailer(tr) {}
+	CalxCoordActionMeasure::CalxCoordActionMeasure(CoordHandle *handle, TrailerId tr)
+		: handle(handle), trailer(tr) {}
 	
 	void CalxCoordActionMeasure::perform(SystemManager *sysman) {
 		handle->open_session();
-		lockable->setMaster(true);
 		wxGetApp().getErrorHandler()->handle(handle->measure(trailer));
-		lockable->setMaster(false);
 		handle->close_session();	
 	}
 	void CalxCoordActionMeasure::stop() {
 		this->handle->stop();
 	}
 	
-	CalxCoordActionConfigure::CalxCoordActionConfigure(CalxLockableComponent *lockable, CoordHandle *handle,
+	CalxCoordActionConfigure::CalxCoordActionConfigure(CoordHandle *handle,
 		CalxFilterController *filters, coord_point_t dest, double speed) 
-		: lockable(lockable), handle(handle), filters(filters), dest(dest), speed(speed), work(false) {}
+		: handle(handle), filters(filters), dest(dest), speed(speed), work(false) {}
 	
 	void CalxCoordActionConfigure::perform(SystemManager *sysman) {
 		handle->open_session();
 		work = true;
-		lockable->setMaster(true);
 		motor_point_t offset = { 0, 0 };
 		filters->setOffset(offset);
 		ErrorCode errcode = this->handle->measure(TrailerId::Trailer1);
@@ -104,7 +95,6 @@ namespace CalXUI {
 			filters->setOffset(handle->getPosition());;
 		}
 		wxGetApp().getErrorHandler()->handle(errcode);
-		lockable->setMaster(false);
 		handle->close_session();
 	}
 	
@@ -113,9 +103,9 @@ namespace CalXUI {
 		handle->stop();	
 	}
 	
-	CalxCoordActionGraphBuild::CalxCoordActionGraphBuild(CalxLockableComponent *lockable, CoordHandle *handle,
+	CalxCoordActionGraphBuild::CalxCoordActionGraphBuild(CoordHandle *handle,
 		CoordTranslator *trans, GraphBuilder *builder, double speed)
-		: lockable(lockable), handle(handle), translator(trans), builder(builder), speed(speed) {
+		: handle(handle), translator(trans), builder(builder), speed(speed) {
 		this->state.plane = nullptr;
 		this->state.work = false;
 	}
@@ -126,10 +116,8 @@ namespace CalXUI {
 	
 	void CalxCoordActionGraphBuild::perform(SystemManager *sysman) {
 		handle->open_session();
-		lockable->setMaster(true);
 		wxGetApp().getErrorHandler()->handle(builder->floatBuild(
 			sysman, handle->getFloatPlane(), translator, speed, &state));
-		lockable->setMaster(false);
 		handle->close_session();
 	}
 	

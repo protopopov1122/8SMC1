@@ -44,6 +44,7 @@ namespace CalX {
 	virtual motor_point_t getPosition() = 0;
 	virtual motor_rect_t getSize() = 0;
 	virtual bool isMeasured() = 0;
+	virtual bool isUsed() = 0;
 	virtual void use() = 0;
 	virtual void unuse() = 0;
 	virtual void stop() = 0;

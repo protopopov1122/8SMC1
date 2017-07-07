@@ -55,6 +55,7 @@ namespace CalX {
 	virtual CoordPlaneStatus getStatus();
 	virtual ErrorCode open_session();
 	virtual ErrorCode close_session();
+	virtual bool isUsed();
 	// Floating-point methods
 	virtual ErrorCode move(coord_point_t, double, bool);
 	virtual ErrorCode arc(coord_point_t, coord_point_t, int, double, bool,

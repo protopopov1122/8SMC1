@@ -21,7 +21,6 @@
 #define CALX_UI_COORD_CALX_COORD_CONTROLLER_H_
 
 #include "ui/CalxApp.h"
-#include "ui/CalxLockableComponent.h"
 #include "ui/coord/CalxFilterController.h"
 #include "ui/CalxActionQueue.h"
 #include "ui/coord/CalxVirtualPlane.h"
@@ -30,7 +29,7 @@ namespace CalXUI {
 	
 	class CalxCoordController {
 		public:
-			CalxCoordController(CoordHandle*, CalxLockableComponent*, CalxFilterController*, CalxActionQueue*);
+			CalxCoordController(CoordHandle*, CalxFilterController*, CalxActionQueue*);
 			virtual ~CalxCoordController();
 			
 			CoordHandle *getHandle();
@@ -49,7 +48,6 @@ namespace CalXUI {
 			void preview(CalxVirtualPlaneDialog*, CoordTranslator*, GraphBuilder*, double, bool* = nullptr);
 		private:
 			CoordHandle *handle;
-			CalxLockableComponent *lockable;
 			CalxFilterController *filters;
 			CalxActionQueue *queue;
 			

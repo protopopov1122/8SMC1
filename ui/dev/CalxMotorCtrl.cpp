@@ -72,14 +72,12 @@ namespace CalXUI {
 	virtual ~CalxMotorMoveAction() {}
 
 	virtual void perform(SystemManager *sysman) {
-	  ctrl->setMaster(true);
 	  if (rel) {
 		wxGetApp().getErrorHandler()->handle(
 			dev->startRelativeMove(dest, speed));
 	  } else {
 		wxGetApp().getErrorHandler()->handle(dev->startMove(dest, speed));
 	  }
-	  ctrl->setMaster(false);
 	}
 
 	virtual void stop() {
@@ -106,9 +104,7 @@ namespace CalXUI {
 	virtual ~CalxMotorCalibrationAction() {}
 
 	virtual void perform(SystemManager *sysman) {
-	  ctrl->setMaster(true);
 	  wxGetApp().getErrorHandler()->handle(dev->moveToTrailer(tr));
-	  ctrl->setMaster(false);
 	}
 
 	virtual void stop() {
@@ -127,7 +123,6 @@ namespace CalXUI {
 	this->dev = dev;
 	this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
 	this->listener = new CalxMotorEventListener(this);
-	this->master = false;
 
 	wxStaticBox *box = new wxStaticBox(
 		this, wxID_ANY,
@@ -268,10 +263,6 @@ namespace CalXUI {
 	wxPostEvent(this, evt);
   }
 
-  void CalxMotorCtrl::setMaster(bool m) {
-	this->master = m;
-  }
-
   void CalxMotorCtrl::updateUI() {
 	std::string pos = __("Position") + std::string(": ") +
 					  std::to_string(this->dev->getPosition());
@@ -309,6 +300,10 @@ namespace CalXUI {
   void CalxMotorCtrl::stop() {
 	this->timer.Stop();
 	this->queue->stop();
+  }
+  
+  bool CalxMotorCtrl::isBusy() {
+	return this->queue->isBusy();
   }
 
   void CalxMotorCtrl::switchPowerClick(wxCommandEvent &evt) {
@@ -356,7 +351,7 @@ namespace CalXUI {
 		(*i)->Enable(e);
 	  }
 	}
-	this->stopButton->Enable(!e && this->master);
+	this->stopButton->Enable(!e && this->queue->isBusy());
   }
 
   void CalxMotorCtrl::OnConfigEvent(wxCommandEvent &evt) {

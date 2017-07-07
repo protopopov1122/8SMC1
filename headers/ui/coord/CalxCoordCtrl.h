@@ -20,15 +20,13 @@
 #ifndef CALX_UI_CALX_COORD_CTRL_H_
 #define CALX_UI_CALX_COORD_CTRL_H_
 
-#include "ui/calx.h"
+#include "ui/CalxApp.h"
 #include <wx/stattext.h>
 #include <wx/choice.h>
 #include <wx/checkbox.h>
 #include <wx/spinctrl.h>
 #include <wx/collpane.h>
 #include "ui/CalxActionQueue.h"
-#include "ui/CalxFrame.h"
-#include "ui/CalxLockableComponent.h"
 #include "ui/coord/CalxCoordLinearCtrl.h"
 #include "ui/coord/CalxCoordArcCtrl.h"
 #include "ui/coord/CalxCoordGraphCtrl.h"
@@ -44,7 +42,7 @@ namespace CalXUI {
   wxDECLARE_EVENT(wxEVT_COORD_CTRL_WATCHER, wxThreadEvent);
   wxDECLARE_EVENT(wxEVT_COORD_CTRL_ENABLE, wxThreadEvent);
 
-  class CalxCoordCtrl : public wxScrolledWindow, public CalxLockableComponent, CalxFilterController {
+  class CalxCoordCtrl : public wxScrolledWindow, public CalxFilterController {
    public:
 	CalxCoordCtrl(wxWindow *, wxWindowID, CoordHandle *);
 
@@ -58,7 +56,6 @@ namespace CalXUI {
 	void use();
 	void unuse();
 	bool isUsed();
-	virtual void setMaster(bool);
 	virtual void setOffset(motor_point_t);
 	virtual void setScale(motor_scale_t);
 	void setEnabled(bool);
@@ -82,7 +79,6 @@ namespace CalXUI {
 	CalxActionQueue *queue;
 
 	int used;
-	bool master;
 
 	// Components
 	wxPanel *generalPanel;

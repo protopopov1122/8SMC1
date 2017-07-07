@@ -18,7 +18,6 @@
 */
 
 #include "ui/coord/CalxCoordPlaneWatcher.h"
-#include "ui/coord/CalxCoordPanel.h"
 #include <wx/sizer.h>
 #include <wx/dcbuffer.h>
 #include <wx/dcmemory.h>

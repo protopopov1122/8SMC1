@@ -21,6 +21,7 @@
 #define CALX_UI_CALX_DEVICE_PANEL_H_
 
 #include "ui/CalxApp.h"
+#include "ui/CalxPanelPane.h"
 #include "ui/CalxActionQueue.h"
 
 namespace CalXUI {
@@ -32,17 +33,17 @@ namespace CalXUI {
   wxDECLARE_EVENT(wxEVT_DEVICE_PANEL_MOTOR_APPEND, wxThreadEvent);
   wxDECLARE_EVENT(wxEVT_DEVICE_PANEL_INSTR_APPEND, wxThreadEvent);
 
-  class CalxDevicePanel : public wxScrolledWindow {
+  class CalxDevicePanel : public CalxPanelPane {
    public:
 	CalxDevicePanel(wxWindow *, wxWindowID);
-	void shutdown();
-	bool isBusy();
-	void updateUI();
+	virtual void shutdown();
+	virtual bool isBusy();
+	virtual void updateUI();
+
+   private:
 	void append(MotorController *);
 	void append(InstrumentController *);
 	void fullUpdate();
-
-   private:
 	void OnExit(wxCloseEvent &);
 	void OnCOMConnectMotor(wxCommandEvent &);
 	void OnCOMConnectInstrument(wxCommandEvent &);

@@ -21,9 +21,9 @@
 #include "ui/coord/CalxCoordActions.h"
 
 namespace CalXUI {
-	CalxCoordController::CalxCoordController(CoordHandle *handle, CalxLockableComponent *lockable,
+	CalxCoordController::CalxCoordController(CoordHandle *handle,
 		CalxFilterController *filters, CalxActionQueue *queue)
-		: handle(handle), lockable(lockable), filters(filters), queue(queue) {
+		: handle(handle), filters(filters), queue(queue) {
 		motor_point_t plane_offset = { 0, 0 };
 		motor_scale_t plane_scale = { wxGetApp()
 										  .getSystemManager()
@@ -92,21 +92,21 @@ namespace CalXUI {
 	}
 	
 	void CalxCoordController::move(coord_point_t dest, double speed, bool jump, bool relative, bool *ready) {
-		this->queue->addAction(new CalxCoordActionMove(this->lockable, this->handle, dest, speed, jump, relative), ready);
+		this->queue->addAction(new CalxCoordActionMove(this->handle, dest, speed, jump, relative), ready);
 	}
 	
 	void CalxCoordController::arc(coord_point_t dest, coord_point_t cen, int splitter,
 		double speed, bool clockwise, bool relative, bool *ready) {
-		this->queue->addAction(new CalxCoordActionArc(this->lockable, this->handle,
+		this->queue->addAction(new CalxCoordActionArc(this->handle,
 			dest, cen, splitter, speed, clockwise, relative), ready);
 	}
 	
 	void CalxCoordController::calibrate(TrailerId tr, bool *ready) {
-		this->queue->addAction(new CalxCoordActionCalibrate(this->lockable, this->handle, tr), ready);
+		this->queue->addAction(new CalxCoordActionCalibrate(this->handle, tr), ready);
 	}
 	
 	void CalxCoordController::measure(TrailerId tr, bool *ready) {
-		this->queue->addAction(new CalxCoordActionMeasure(this->lockable, this->handle, tr), ready);
+		this->queue->addAction(new CalxCoordActionMeasure(this->handle, tr), ready);
 	}
 	
 	void CalxCoordController::move(coord_point_t pos, double speed, bool *ready) {
@@ -118,11 +118,11 @@ namespace CalXUI {
 	}
 	
 	void CalxCoordController::configure(coord_point_t pos, double speed, bool *ready) {
-		this->queue->addAction(new CalxCoordActionConfigure(this->lockable, this->handle, this->filters, pos, speed), ready);
+		this->queue->addAction(new CalxCoordActionConfigure(this->handle, this->filters, pos, speed), ready);
 	}
 	
 	void CalxCoordController::build(CoordTranslator *trans, GraphBuilder *builder, double speed, bool *ready) {
-		this->queue->addAction(new CalxCoordActionGraphBuild(this->lockable, this->handle, trans, builder, speed), ready);
+		this->queue->addAction(new CalxCoordActionGraphBuild(this->handle, trans, builder, speed), ready);
 	}
 	
 	void CalxCoordController::preview(CalxVirtualPlaneDialog *dialog, CoordTranslator *trans,

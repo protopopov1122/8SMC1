@@ -45,6 +45,7 @@ namespace CalX {
 	this->defWork = true;
 	this->work = false;
 	this->measured = false;
+	this->session_opened = false;
 	this->status = CoordPlaneStatus::Idle;
 	LOG(COORD_CTRL_TAG,
 		"New coordinate controller. X Axis: #" +
@@ -556,9 +557,14 @@ namespace CalX {
   CoordPlaneStatus CoordController::getStatus() {
 	return this->status;
   }
+  
+  bool CoordController::isUsed() {
+	 return this->session_opened;
+  }
 
   ErrorCode CoordController::open_session() {
 	use();
+	this->session_opened = true;
 	LOG("CoordController", "Session opened");
 	return ErrorCode::NoError;
   }
@@ -575,6 +581,7 @@ namespace CalX {
 	  }
 	}
 	unuse();
+	this->session_opened = false;
 	LOG("CoordController", "Session closed");
 	return err;
   }

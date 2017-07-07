@@ -36,9 +36,7 @@ namespace CalXUI {
 	CalxInstrumentCtrl(wxWindow *, wxWindowID, InstrumentController *);
 	void stop();
 	void updateUI();
-	bool isBusy() {
-	  return !queue->isEmpty() || !IsEnabled();
-	}
+	bool isBusy();
 
    private:
 	void OnExit(wxCloseEvent &);

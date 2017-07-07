@@ -65,10 +65,7 @@ namespace CalXUI {
 	void updateUI();
 	void stop();
 	void setEnabled(bool);
-	void setMaster(bool);
-	bool isBusy() {
-	  return !queue->isEmpty();
-	}
+	bool isBusy();
 
    private:
 	void switchPowerClick(wxCommandEvent &);
@@ -86,7 +83,6 @@ namespace CalXUI {
 	CalxActionQueue *queue;
 	MotorEventListener *listener;
 	CalxMotorTimer timer;
-	bool master;
 
 	wxPanel *infoPanel;
 	wxPanel *movePanel;

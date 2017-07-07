@@ -24,6 +24,7 @@
 #include <vector>
 #include "ui/CalxApp.h"
 #include <wx/listbox.h>
+#include "ui/CalxPanelPane.h"
 #include "ui/coord/CalxCoordCtrl.h"
 #include "ui/coord/CalxCoordPlaneWatcher.h"
 
@@ -31,17 +32,16 @@ namespace CalXUI {
 
   wxDECLARE_EVENT(wxEVT_COORD_PANEL_UPDATE, wxThreadEvent);
 
-  class CalxCoordPanel : public wxPanel {
+  class CalxCoordPanel : public CalxPanelPane {
    public:
 	CalxCoordPanel(wxWindow *, wxWindowID);
 
 	size_t getCoordCount();
-	CoordHandle *getCoord(size_t sz);
 	CalxCoordCtrl *getCoordCtrl(size_t sz);
-	void updateUI();
 	void updateList(CoordHandle *, bool *);
-	void shutdown();
-	bool isBusy();
+	virtual void updateUI();
+	virtual void shutdown();
+	virtual bool isBusy();
 
    private:
 	void addPlane(CoordHandle *);

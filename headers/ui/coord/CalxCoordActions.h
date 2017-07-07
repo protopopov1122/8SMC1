@@ -22,7 +22,6 @@
 
 #include "ui/CalxApp.h"
 #include "ui/CalxActionQueue.h"
-#include "ui/CalxLockableComponent.h"
 #include "ui/coord/CalxFilterController.h"
 #include "ui/coord/CalxVirtualPlane.h"
 
@@ -30,13 +29,12 @@ namespace CalXUI {
 
   class CalxCoordActionMove : public CalxAction {
    public:
-	CalxCoordActionMove(CalxLockableComponent *, CoordHandle *, coord_point_t, double, bool, bool);
+	CalxCoordActionMove(CoordHandle *, coord_point_t, double, bool, bool);
 
 	virtual void perform(SystemManager *);
 	virtual void stop();
 
    private:
-	CalxLockableComponent *lockable;
 	CoordHandle *handle;
 	coord_point_t dest;
 	double speed;
@@ -46,14 +44,13 @@ namespace CalXUI {
 
   class CalxCoordActionArc : public CalxAction {
    public:
-	CalxCoordActionArc(CalxLockableComponent *, CoordHandle *, coord_point_t,
+	CalxCoordActionArc(CoordHandle *, coord_point_t,
 							coord_point_t, int, double, bool, bool);
 
 	virtual void perform(SystemManager *);
 	virtual void stop();
 
    private:
-	CalxLockableComponent *lockable;
 	CoordHandle *handle;
 	coord_point_t dest;
 	coord_point_t cen;
@@ -66,39 +63,36 @@ namespace CalXUI {
 
   class CalxCoordActionCalibrate : public CalxAction {
    public:
-	CalxCoordActionCalibrate(CalxLockableComponent *, CoordHandle *, TrailerId);
+	CalxCoordActionCalibrate(CoordHandle *, TrailerId);
 
 	virtual void perform(SystemManager *);
 	virtual void stop();
 
    private:
-	CalxLockableComponent *lockable;
 	CoordHandle *handle;
 	TrailerId trailer;
   };
 
   class CalxCoordActionMeasure : public CalxAction {
    public:
-	CalxCoordActionMeasure(CalxLockableComponent *, CoordHandle *, TrailerId);
+	CalxCoordActionMeasure(CoordHandle *, TrailerId);
 
 	virtual void perform(SystemManager *);
 	virtual void stop();
 
    private:
-	CalxLockableComponent *lockable;
 	CoordHandle *handle;
 	TrailerId trailer;
   };
 
  class CalxCoordActionConfigure : public CalxAction {
    public:
-	CalxCoordActionConfigure(CalxLockableComponent *, CoordHandle *, CalxFilterController *, coord_point_t, double);
+	CalxCoordActionConfigure(CoordHandle *, CalxFilterController *, coord_point_t, double);
 
 	virtual void perform(SystemManager *);
 	virtual void stop();
 
    private:
-	CalxLockableComponent *lockable;
 	CoordHandle *handle;
 	CalxFilterController *filters;
 	coord_point_t dest;
@@ -108,7 +102,7 @@ namespace CalXUI {
 
   class CalxCoordActionGraphBuild : public CalxAction {
    public:
-	CalxCoordActionGraphBuild(CalxLockableComponent *, CoordHandle *, CoordTranslator *,
+	CalxCoordActionGraphBuild(CoordHandle *, CoordTranslator *,
 						 GraphBuilder *, double);
 	virtual ~CalxCoordActionGraphBuild();
 
@@ -116,7 +110,6 @@ namespace CalXUI {
 	virtual void stop();
 
    private:
-	CalxLockableComponent *lockable;
 	CoordHandle *handle;
 	CoordTranslator *translator;
 	GraphBuilder *builder;

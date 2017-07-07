@@ -44,6 +44,7 @@ namespace CalXUI {
 	virtual ~CalxActionQueue();
 	void addAction(CalxAction *, bool * = nullptr);
 	bool isEmpty();
+	bool isBusy();
 	void stop();
 	void stopCurrent();
 

@@ -228,6 +228,10 @@ namespace CalXUI {
 	timer->Stop();
 	this->queue->stop();
   }
+  
+  bool CalxInstrumentCtrl::isBusy() {
+	return this->queue->isBusy();
+  }
 
   void CalxInstrumentCtrl::updateUI() {
 	std::string text =

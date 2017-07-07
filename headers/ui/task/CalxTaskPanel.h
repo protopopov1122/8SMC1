@@ -25,6 +25,7 @@
 #include <wx/listbox.h>
 #include <wx/spinctrl.h>
 #include <wx/choice.h>
+#include "ui/CalxPanelPane.h"
 #include "ui/task/CalxTaskHandle.h"
 #include "ui/CalxActionQueue.h"
 
@@ -34,16 +35,14 @@ namespace CalXUI {
 
   wxDECLARE_EVENT(wxEVT_TASK_PANEL_ENABLE, wxThreadEvent);
 
-  class CalxTaskPanel : public wxScrolledWindow {
+  class CalxTaskPanel : public CalxPanelPane {
    public:
 	CalxTaskPanel(wxWindow *, wxWindowID);
 
-	void updateUI();
-	void shutdown();
+	virtual void updateUI();
+	virtual void shutdown();
+	virtual bool isBusy();
 	void setEnabled(bool);
-	bool isBusy() {
-	  return !queue->isEmpty();
-	}
 
    private:
 	void OnExit(wxCloseEvent &);

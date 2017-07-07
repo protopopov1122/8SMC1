@@ -27,6 +27,7 @@
 #include "ui/task/CalxTaskPanel.h"
 #include "ui/coord/CalxCoordPanel.h"
 #include "ui/dev/CalxDevicePanel.h"
+#include "ui/CalxConfigEditor.h"
 
 namespace CalXUI {
   CalxFrame::CalxFrame(std::string title)
@@ -49,8 +50,14 @@ namespace CalXUI {
 	Bind(wxEVT_COMMAND_MENU_SELECTED, &CalxFrame::OnAboutMenuClick, this,
 		 wxID_ABOUT);
 	this->menuBar->Append(this->aboutMenu, __("About"));
-	SetMenuBar(this->menuBar);
-
+	SetMenuBar(this->menuBar);		
+		
+	panel->addPane(__("Devices"), new CalxDevicePanel(panel, wxID_ANY));
+	panel->addPane(__("Coordinate planes"), new CalxCoordPanel(panel, wxID_ANY));
+	panel->addPane(__("Tasks"),  new CalxTaskPanel(panel, wxID_ANY));
+	panel->addPane(__("Configuration"), new CalxConfigEditor(
+		panel, wxID_ANY, wxGetApp().getSystemManager()->getConfiguration()));
+	
 	Layout();
 	Fit();
   }
@@ -60,8 +67,7 @@ namespace CalXUI {
   }
 
   void CalxFrame::OnClose(wxCloseEvent &evt) {
-	if (panel->getDevices()->isBusy() || panel->getCoords()->isBusy() ||
-		panel->getTasks()->isBusy()) {
+	if (panel->isBusy()) {
 	  if (wxMessageBox(__("Cancel current and actions and exit"),
 					   __("Actions are performed"),
 					   wxYES_NO | wxICON_QUESTION) == wxNO) {

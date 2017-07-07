@@ -31,7 +31,7 @@ namespace CalXUI {
   wxDEFINE_EVENT(wxEVT_COORD_PANEL_UPDATE, wxThreadEvent);
 
   CalxCoordPanel::CalxCoordPanel(wxWindow *win, wxWindowID id)
-	  : wxPanel::wxPanel(win, id) {
+	  : CalxPanelPane::CalxPanelPane(win, id) {
 
 	wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 	SetSizer(sizer);
@@ -88,10 +88,6 @@ namespace CalXUI {
   
   size_t CalxCoordPanel::getCoordCount() {
 	return coords.size();
-  }
-  
-  CoordHandle *CalxCoordPanel::getCoord(size_t sz) {
-	return sz < coords.size() ? coords.at(sz)->getHandle() : nullptr;
   }
   
   CalxCoordCtrl *CalxCoordPanel::getCoordCtrl(size_t sz) {
