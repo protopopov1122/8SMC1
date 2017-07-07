@@ -48,6 +48,7 @@ namespace CalXUI {
 	this->queue->Run();
 	
 	this->controller = new CalxCoordController(this->ctrl, this, this, this->queue);
+	this->watchers = new CalxWatcherPool(this, this->ctrl);
 	
 	this->listener = new CalxCoordEventListener(this);
 	this->ctrl->addEventListener(this->listener);
@@ -163,6 +164,10 @@ namespace CalXUI {
 	return this->ctrl;
   }
   
+  CalxCoordController *CalxCoordCtrl::getController() {
+	return this->controller;
+  }
+  
   bool CalxCoordCtrl::isBusy() {
 	return !queue->isEmpty();
   }
@@ -204,80 +209,17 @@ namespace CalXUI {
 	offset.y *= scale.y;
 	this->otherCtrl->setOffset(offset);
 	this->controller->getMapFilter()->setOffset(offset);
-	updateWatchers();
+	this->watchers->updateWatchers();
   }
-
-  void CalxCoordCtrl::updateWatchers() {
-	for (const auto &w : this->watchers) {
-	  w->update();
-	}
-  }
-
-  void CalxCoordCtrl::bindWatcher(CalxCoordPlaneWatcher *w) {
-	this->watchers.push_back(w);
-  }
-
-  void CalxCoordCtrl::unbindWatcher(CalxCoordPlaneWatcher *w) {
-	this->watchers.erase(
-		std::remove(this->watchers.begin(), this->watchers.end(), w),
-		this->watchers.end());
-  }
-
-  bool CalxCoordCtrl::hasWatchers() {
-	return !this->watchers.empty();
-  }
-
-  void CalxCoordCtrl::requestMeasure(TrailerId tr) {
-	bool ready = false;
-	this->controller->measure(tr, &ready);
-	while (!ready) {
-	  wxThread::Yield();
-	}
-  }
-
-  void CalxCoordCtrl::requestPosition(double x, double y) {
-	ConfigManager *config = wxGetApp().getSystemManager()->getConfiguration();
-	coord_point_t dest = {x, y};
-	int_conf_t mspeed =
-		config->getEntry("core")->getInt("maxspeed", 125);
-	double speed = ((double) mspeed) / wxGetApp().getSpeedScale();
-	bool ready = false;
-	this->controller->move(dest, speed, &ready);
-	while (!ready) {
-	  wxThread::Yield();
-	}
-  }
-
-  void CalxCoordCtrl::requestPositionAbs(motor_point_t mdest) {
-	ConfigManager *config = wxGetApp().getSystemManager()->getConfiguration();
-	int_conf_t mspeed =
-		config->getEntry("core")->getInt("maxspeed", 125);
-	coord_point_t dest = {mdest.x / wxGetApp().getUnitScale(), mdest.y / wxGetApp().getUnitScale()};
-	double speed = ((double) mspeed) / wxGetApp().getSpeedScale();
-	bool ready = false;
-	this->controller->move(dest, speed, false, false, &ready);
-	while (!ready) {
-	  wxThread::Yield();
-	}
-  }
-
-  void CalxCoordCtrl::requestCenter() {
-	motor_point_t offset = ctrl->getPosition();
-	this->controller->getMapFilter()->setOffset(offset);
-	this->otherCtrl->setOffset(offset);
-  }
-
-  void CalxCoordCtrl::requestInvert() {
-	motor_scale_t scale = controller->getMapFilter()->getScale();
-	scale.x *= -1;
-	scale.y *= -1;
-	this->controller->getMapFilter()->setScale(scale);
+  
+  void CalxCoordCtrl::setScale(motor_scale_t scale) {
 	this->otherCtrl->setScale(scale);
+	this->controller->getMapFilter()->setScale(scale);
+	this->watchers->updateWatchers();
   }
-
-  void CalxCoordCtrl::requestWatcher() {
-	wxThreadEvent evt(wxEVT_COORD_CTRL_WATCHER);
-	wxPostEvent(this, evt);
+  
+  CalxWatcherPool *CalxCoordCtrl::getWatchers() {
+	return this->watchers;
   }
 
   void CalxCoordCtrl::updateUI() {
@@ -321,29 +263,19 @@ namespace CalXUI {
 	Layout();
   }
 
-  void CalxCoordCtrl::stop() {
+  void CalxCoordCtrl::shutdown() {
 	timer.Stop();
 	this->queue->stop();
 	ctrl->getController()->stop();
   }
 
   void CalxCoordCtrl::OnWatcherClick(wxCommandEvent &evt) {
-	if (!this->ctrl->isMeasured()) {
-	  wxMessageBox(__("Plane need to be measured before preview"),
-				   __("Warning"), wxICON_WARNING);
-	  return;
-	}
-	CalxCoordPlaneWatcherDialog *watcher =
-		new CalxCoordPlaneWatcherDialog(this, wxID_ANY, this->ctrl);
-	watcher->Show(true);
+	this->watchers->newWatcher();
   }
 
   void CalxCoordCtrl::OnExit(wxCloseEvent &evt) {
 	delete this->controller;
-	while (this->watchers.size() > 0) {
-	  const auto &w = this->watchers.at(0);
-	  w->Close(true);
-	}
+	delete this->watchers;
 
 	this->ctrl->removeEventListener(this->listener);
 	this->ctrl->getController()->getXAxis()->removeEventListener(
@@ -374,11 +306,7 @@ namespace CalXUI {
   }
 
   void CalxCoordCtrl::OnWatcherRequest(wxThreadEvent &evt) {
-	if (this->ctrl->isMeasured()) {
-	  CalxCoordPlaneWatcherDialog *watcher =
-		  new CalxCoordPlaneWatcherDialog(this, wxID_ANY, this->ctrl);
-	  watcher->Show(true);
-	}
+	this->watchers->newWatcher();
   }
 
   void CalxCoordCtrl::OnEnableEvent(wxThreadEvent &evt) {

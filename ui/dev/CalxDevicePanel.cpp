@@ -25,149 +25,13 @@
 #include "ui/dev/CalxMotorCtrl.h"
 #include "ui/dev/CalxInstrumentCtrl.h"
 #include "ui/dev/CalxCOMSelectDialog.h"
+#include "ui/dev/CalxDeviceProviders.h"
 
 namespace CalXUI {
 
   wxDEFINE_EVENT(wxEVT_DEVICE_PANEL_UPDATE, wxThreadEvent);
   wxDEFINE_EVENT(wxEVT_DEVICE_PANEL_MOTOR_APPEND, wxThreadEvent);
   wxDEFINE_EVENT(wxEVT_DEVICE_PANEL_INSTR_APPEND, wxThreadEvent);
-
-  class CalxInstrumentSerialConnectProvider : public RequestProvider {
-   public:
-	CalxInstrumentSerialConnectProvider(CalxDevicePanel *devpanel)
-		: RequestProvider::RequestProvider("connect.serial.instrument") {
-	  this->devpanel = devpanel;
-	}
-
-	virtual ~CalxInstrumentSerialConnectProvider() {}
-
-	virtual bool execute(Request *req, SystemManager *sysman) {
-	  PROVIDER_ARGC(req, 3)
-	  PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
-	  PROVIDER_ARG_TYPE(req, 1, ConfigValueType::Integer)
-	  PROVIDER_ARG_TYPE(req, 2, ConfigValueType::Integer)
-	  uint8_t port =
-		  (uint8_t)((IntegerConfigValue *) PROVIDER_ARG(req, 0))->getValue();
-	  uint32_t speed =
-		  (uint16_t)((IntegerConfigValue *) PROVIDER_ARG(req, 1))->getValue();
-	  int_conf_t par =
-		  ((IntegerConfigValue *) PROVIDER_ARG(req, 2))->getValue();
-	  SerialPortParity parity = SerialPortParity::No;
-	  switch (par) {
-		case 0:
-		  parity = SerialPortParity::No;
-		  break;
-		case 1:
-		  parity = SerialPortParity::Odd;
-		  break;
-		case 2:
-		  parity = SerialPortParity::Even;
-		  break;
-		case 3:
-		  parity = SerialPortParity::Mark;
-		  break;
-		case 4:
-		  parity = SerialPortParity::Space;
-		  break;
-	  }
-	  DeviceSerialPortConnectionPrms prms;
-	  prms.port = port;
-	  prms.speed = speed;
-	  prms.parity = parity;
-	  InstrumentController *ctrl = sysman->connectInstrument(&prms);
-	  if (ctrl == nullptr) {
-		return false;
-	  }
-	  devpanel->requestUpdate();
-	  return true;
-	}
-
-   private:
-	CalxDevicePanel *devpanel;
-  };
-
-  class CalxMotorSerialConnectProvider : public RequestProvider {
-   public:
-	CalxMotorSerialConnectProvider(CalxDevicePanel *devpanel)
-		: RequestProvider::RequestProvider("connect.serial.motor") {
-	  this->devpanel = devpanel;
-	}
-
-	virtual ~CalxMotorSerialConnectProvider() {}
-
-	virtual bool execute(Request *req, SystemManager *sysman) {
-	  PROVIDER_ARGC(req, 3)
-	  PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
-	  PROVIDER_ARG_TYPE(req, 1, ConfigValueType::Integer)
-	  PROVIDER_ARG_TYPE(req, 2, ConfigValueType::Integer)
-	  uint8_t port =
-		  (uint8_t)((IntegerConfigValue *) PROVIDER_ARG(req, 0))->getValue();
-	  uint32_t speed =
-		  (uint16_t)((IntegerConfigValue *) PROVIDER_ARG(req, 1))->getValue();
-	  int_conf_t par =
-		  ((IntegerConfigValue *) PROVIDER_ARG(req, 2))->getValue();
-	  SerialPortParity parity = SerialPortParity::No;
-	  switch (par) {
-		case 0:
-		  parity = SerialPortParity::No;
-		  break;
-		case 1:
-		  parity = SerialPortParity::Odd;
-		  break;
-		case 2:
-		  parity = SerialPortParity::Even;
-		  break;
-		case 3:
-		  parity = SerialPortParity::Mark;
-		  break;
-		case 4:
-		  parity = SerialPortParity::Space;
-		  break;
-	  }
-	  DeviceSerialPortConnectionPrms prms;
-	  prms.port = port;
-	  prms.speed = speed;
-	  prms.parity = parity;
-	  MotorController *ctrl = sysman->connectMotor(&prms);
-	  if (ctrl == nullptr) {
-		return false;
-	  }
-	  devpanel->requestUpdate();
-	  return true;
-	}
-
-   private:
-	CalxDevicePanel *devpanel;
-  };
-
-  class CalxMotorPowerProvider : public RequestProvider {
-   public:
-	CalxMotorPowerProvider(CalxDevicePanel *devpanel)
-		: RequestProvider::RequestProvider("motor.power") {
-	  this->devpanel = devpanel;
-	}
-
-	virtual ~CalxMotorPowerProvider() {}
-
-	virtual bool execute(Request *req, SystemManager *sysman) {
-	  PROVIDER_ARGC(req, 2)
-	  PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
-	  PROVIDER_ARG_TYPE(req, 1, ConfigValueType::Boolean)
-	  device_id_t devid =
-		  (device_id_t)((IntegerConfigValue *) PROVIDER_ARG(req, 0))
-			  ->getValue();
-	  bool power = ((BoolConfigValue *) PROVIDER_ARG(req, 1))->getValue();
-	  MotorController *ctrl = sysman->getMotorController(devid);
-	  if (ctrl != nullptr) {
-		return ctrl->getMotor()->enablePower(power);
-	  } else {
-		return false;
-	  }
-	}
-
-   private:
-	CalxDevicePanel *devpanel;
-  };
 
   class CalxMotorConnectAction : public CalxAction {
    public:
@@ -185,7 +49,9 @@ namespace CalXUI {
 		wxMessageBox(__("Motor can't be connected"), __("Connection error"),
 					 wxICON_WARNING);
 	  } else {
-		panel->requestAppend(ctrl);
+		wxThreadEvent evt(wxEVT_DEVICE_PANEL_MOTOR_APPEND);
+		evt.SetPayload(ctrl);
+		wxPostEvent(panel, evt);
 	  }
 	}
 
@@ -213,7 +79,9 @@ namespace CalXUI {
 		wxMessageBox(__("Instrument can't be connected"),
 					 __("Connection error"), wxICON_WARNING);
 	  } else {
-		panel->requestAppend(ctrl);
+		wxThreadEvent evt(wxEVT_DEVICE_PANEL_INSTR_APPEND);
+		evt.SetPayload(ctrl);
+		wxPostEvent(panel, evt);
 	  }
 	}
 
@@ -227,13 +95,7 @@ namespace CalXUI {
   CalxDevicePanel::CalxDevicePanel(wxWindow *win, wxWindowID id)
 	  : wxScrolledWindow::wxScrolledWindow(win, id) {
 	CalxApp &app = wxGetApp();
-	app.getSystemManager()->getRequestResolver()->registerProvider(
-		new CalxMotorSerialConnectProvider(this));
-	app.getSystemManager()->getRequestResolver()->registerProvider(
-		new CalxInstrumentSerialConnectProvider(this));
-	app.getSystemManager()->getRequestResolver()->registerProvider(
-		new CalxMotorPowerProvider(this));
-	this->queue = new CalxActionQueue(app.getSystemManager(), this);
+	this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
 	wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 
 	wxPanel *connectPanel = new wxPanel(this, wxID_ANY);
@@ -282,7 +144,7 @@ namespace CalXUI {
 	this->queue->Run();
   }
 
-  void CalxDevicePanel::stop() {
+  void CalxDevicePanel::shutdown() {
 	for (const auto &dev : this->devs) {
 	  dev->stop();
 	}
@@ -362,23 +224,6 @@ namespace CalXUI {
 	CalxInstrumentCtrl *ctrl = new CalxInstrumentCtrl(this, wxID_ANY, _ctrl);
 	instrs.push_back(ctrl);
 	GetSizer()->Add(ctrl, 0, wxEXPAND | wxALL, 10);
-  }
-
-  void CalxDevicePanel::requestUpdate() {
-	wxThreadEvent evt(wxEVT_DEVICE_PANEL_UPDATE);
-	wxPostEvent(this, evt);
-  }
-
-  void CalxDevicePanel::requestAppend(MotorController *ctrl) {
-	wxThreadEvent evt(wxEVT_DEVICE_PANEL_MOTOR_APPEND);
-	evt.SetPayload(ctrl);
-	wxPostEvent(this, evt);
-  }
-
-  void CalxDevicePanel::requestAppend(InstrumentController *ctrl) {
-	wxThreadEvent evt(wxEVT_DEVICE_PANEL_INSTR_APPEND);
-	evt.SetPayload(ctrl);
-	wxPostEvent(this, evt);
   }
 
   void CalxDevicePanel::OnCOMConnectMotor(wxCommandEvent &evt) {

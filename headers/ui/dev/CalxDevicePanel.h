@@ -35,14 +35,11 @@ namespace CalXUI {
   class CalxDevicePanel : public wxScrolledWindow {
    public:
 	CalxDevicePanel(wxWindow *, wxWindowID);
-	void stop();
+	void shutdown();
 	bool isBusy();
 	void updateUI();
 	void append(MotorController *);
 	void append(InstrumentController *);
-	void requestUpdate();
-	void requestAppend(MotorController *);
-	void requestAppend(InstrumentController *);
 	void fullUpdate();
 
    private:

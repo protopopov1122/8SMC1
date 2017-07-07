@@ -23,250 +23,15 @@
 #include <wx/splitter.h>
 #include "ui/coord/CalxCoordPanel.h"
 #include "ui/coord/CalxCoordDialog.h"
+#include "ui/coord/CalxPlaneProviders.h"
 #include "ui/CalxErrorHandler.h"
 
 namespace CalXUI {
 
   wxDEFINE_EVENT(wxEVT_COORD_PANEL_UPDATE, wxThreadEvent);
 
-  class CalxCoordPlaneAddProvider : public RequestProvider {
-   public:
-	CalxCoordPlaneAddProvider(CalxCoordPanel *panel)
-		: RequestProvider::RequestProvider("plane.create") {
-	  this->panel = panel;
-	}
-
-	virtual ~CalxCoordPlaneAddProvider() {}
-
-	virtual bool execute(Request *req, SystemManager *sysman) {
-	  PROVIDER_ARGC(req, 3)
-	  PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
-	  PROVIDER_ARG_TYPE(req, 1, ConfigValueType::Integer)
-	  PROVIDER_ARG_TYPE(req, 2, ConfigValueType::Integer)
-	  device_id_t dev1 =
-		  (device_id_t)((IntegerConfigValue *) PROVIDER_ARG(req, 0))
-			  ->getValue();
-	  device_id_t dev2 =
-		  (device_id_t)((IntegerConfigValue *) PROVIDER_ARG(req, 1))
-			  ->getValue();
-	  device_id_t instr =
-		  (device_id_t)((IntegerConfigValue *) PROVIDER_ARG(req, 2))
-			  ->getValue();
-	  CoordHandle *handle = sysman->createCoord(dev1, dev2, instr);
-	  if (handle == nullptr) {
-		return false;
-	  }
-	  bool ready = false;
-	  panel->updateList(handle, &ready);
-	  while (!ready) {
-		wxThread::Yield();
-	  }
-
-	  return true;
-	}
-
-   private:
-	CalxCoordPanel *panel;
-  };
-
-  class CalxCoordPlaneMeasureProvider : public RequestProvider {
-   public:
-	CalxCoordPlaneMeasureProvider(CalxCoordPanel *panel)
-		: RequestProvider::RequestProvider("plane.measure") {
-	  this->panel = panel;
-	}
-
-	virtual ~CalxCoordPlaneMeasureProvider() {}
-
-	virtual bool execute(Request *req, SystemManager *sysman) {
-	  PROVIDER_ARGC(req, 2)
-	  PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
-	  PROVIDER_ARG_TYPE(req, 1, ConfigValueType::Integer)
-	  device_id_t plid =
-		  (device_id_t)((IntegerConfigValue *) PROVIDER_ARG(req, 0))
-			  ->getValue();
-	  device_id_t tr =
-		  (device_id_t)((IntegerConfigValue *) PROVIDER_ARG(req, 1))
-			  ->getValue() %
-		  2;
-	  TrailerId trailer = tr == 1 ? TrailerId::Trailer1 : TrailerId::Trailer2;
-	  if (sysman->getCoord((size_t) plid) != nullptr) {
-		panel->requestMeasure(plid, trailer);
-		return true;
-	  } else {
-		return false;
-	  }
-	}
-
-   private:
-	CalxCoordPanel *panel;
-  };
-
-  class CalxCoordPlanePositionProvider : public RequestProvider {
-   public:
-	CalxCoordPlanePositionProvider(CalxCoordPanel *panel)
-		: RequestProvider::RequestProvider("plane.position") {
-	  this->panel = panel;
-	}
-
-	virtual ~CalxCoordPlanePositionProvider() {}
-
-	virtual bool execute(Request *req, SystemManager *sysman) {
-	  PROVIDER_ARGC(req, 3)
-	  PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
-	  PROVIDER_ARG_TYPE(req, 1, ConfigValueType::Real)
-	  PROVIDER_ARG_TYPE(req, 2, ConfigValueType::Real)
-	  device_id_t plid =
-		  (device_id_t)((IntegerConfigValue *) PROVIDER_ARG(req, 0))
-			  ->getValue();
-	  double x = ((RealConfigValue *) PROVIDER_ARG(req, 1))->getValue();
-	  double y = ((RealConfigValue *) PROVIDER_ARG(req, 2))->getValue();
-	  if (sysman->getCoord((size_t) plid) != nullptr) {
-		panel->requestPosition(plid, x, y);
-		return true;
-	  } else {
-		return false;
-	  }
-	}
-
-   private:
-	CalxCoordPanel *panel;
-  };
-
-  class CalxCoordPlanePositionAbsProvider : public RequestProvider {
-   public:
-	CalxCoordPlanePositionAbsProvider(CalxCoordPanel *panel)
-		: RequestProvider::RequestProvider("plane.position.abs") {
-	  this->panel = panel;
-	}
-
-	virtual ~CalxCoordPlanePositionAbsProvider() {}
-
-	virtual bool execute(Request *req, SystemManager *sysman) {
-	  PROVIDER_ARGC(req, 3)
-	  PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
-	  PROVIDER_ARG_TYPE(req, 1, ConfigValueType::Integer)
-	  PROVIDER_ARG_TYPE(req, 2, ConfigValueType::Integer)
-	  device_id_t plid =
-		  (device_id_t)((IntegerConfigValue *) PROVIDER_ARG(req, 0))
-			  ->getValue();
-	  motor_coord_t x =
-		  (motor_coord_t)((IntegerConfigValue *) PROVIDER_ARG(req, 1))
-			  ->getValue();
-	  motor_coord_t y =
-		  (motor_coord_t)((IntegerConfigValue *) PROVIDER_ARG(req, 2))
-			  ->getValue();
-	  motor_point_t dest = { x, y };
-	  if (sysman->getCoord((size_t) plid) != nullptr) {
-		panel->requestPositionAbs(plid, dest);
-		return true;
-	  } else {
-		return false;
-	  }
-	}
-
-   private:
-	CalxCoordPanel *panel;
-  };
-
-  class CalxCoordPlaneCenterProvider : public RequestProvider {
-   public:
-	CalxCoordPlaneCenterProvider(CalxCoordPanel *panel)
-		: RequestProvider::RequestProvider("plane.position.center") {
-	  this->panel = panel;
-	}
-
-	virtual ~CalxCoordPlaneCenterProvider() {}
-
-	virtual bool execute(Request *req, SystemManager *sysman) {
-	  PROVIDER_ARGC(req, 1)
-	  PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
-	  device_id_t plid =
-		  (device_id_t)((IntegerConfigValue *) PROVIDER_ARG(req, 0))
-			  ->getValue();
-	  if (sysman->getCoord((size_t) plid) != nullptr) {
-		panel->requestCenter(plid);
-		return true;
-	  } else {
-		return false;
-	  }
-	}
-
-   private:
-	CalxCoordPanel *panel;
-  };
-
-  class CalxCoordPlaneInvertProvider : public RequestProvider {
-   public:
-	CalxCoordPlaneInvertProvider(CalxCoordPanel *panel)
-		: RequestProvider::RequestProvider("plane.axis.invert") {
-	  this->panel = panel;
-	}
-
-	virtual ~CalxCoordPlaneInvertProvider() {}
-
-	virtual bool execute(Request *req, SystemManager *sysman) {
-	  PROVIDER_ARGC(req, 1)
-	  PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
-	  device_id_t plid =
-		  (device_id_t)((IntegerConfigValue *) PROVIDER_ARG(req, 0))
-			  ->getValue();
-	  if (sysman->getCoord((size_t) plid) != nullptr) {
-		panel->requestInvert(plid);
-		return true;
-	  } else {
-		return false;
-	  }
-	}
-
-   private:
-	CalxCoordPanel *panel;
-  };
-
-  class CalxCoordPlaneWatcherProvider : public RequestProvider {
-   public:
-	CalxCoordPlaneWatcherProvider(CalxCoordPanel *panel)
-		: RequestProvider::RequestProvider("plane.watcher") {
-	  this->panel = panel;
-	}
-
-	virtual ~CalxCoordPlaneWatcherProvider() {}
-
-	virtual bool execute(Request *req, SystemManager *sysman) {
-	  PROVIDER_ARGC(req, 1)
-	  PROVIDER_ARG_TYPE(req, 0, ConfigValueType::Integer)
-	  device_id_t plid =
-		  (device_id_t)((IntegerConfigValue *) PROVIDER_ARG(req, 0))
-			  ->getValue();
-	  if (sysman->getCoord((size_t) plid) != nullptr) {
-		panel->requestWatcher(plid);
-		return true;
-	  } else {
-		return false;
-	  }
-	}
-
-   private:
-	CalxCoordPanel *panel;
-  };
-
   CalxCoordPanel::CalxCoordPanel(wxWindow *win, wxWindowID id)
 	  : wxPanel::wxPanel(win, id) {
-	CalxApp &app = wxGetApp();
-	app.getSystemManager()->getRequestResolver()->registerProvider(
-		new CalxCoordPlaneAddProvider(this));
-	app.getSystemManager()->getRequestResolver()->registerProvider(
-		new CalxCoordPlaneMeasureProvider(this));
-	app.getSystemManager()->getRequestResolver()->registerProvider(
-		new CalxCoordPlanePositionProvider(this));
-	app.getSystemManager()->getRequestResolver()->registerProvider(
-		new CalxCoordPlanePositionAbsProvider(this));
-	app.getSystemManager()->getRequestResolver()->registerProvider(
-		new CalxCoordPlaneCenterProvider(this));
-	app.getSystemManager()->getRequestResolver()->registerProvider(
-		new CalxCoordPlaneInvertProvider(this));
-	app.getSystemManager()->getRequestResolver()->registerProvider(
-		new CalxCoordPlaneWatcherProvider(this));
 
 	wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 	SetSizer(sizer);
@@ -310,78 +75,6 @@ namespace CalXUI {
 	wxPostEvent(this, evt);
   }
 
-  void CalxCoordPanel::bindWatcher(device_id_t id, CalxCoordPlaneWatcher *w) {
-	for (const auto &ctrl : this->coords) {
-	  if ((device_id_t) ctrl->getHandle()->getID() == id) {
-		ctrl->bindWatcher(w);
-		break;
-	  }
-	}
-  }
-
-  void CalxCoordPanel::unbindWatcher(device_id_t id, CalxCoordPlaneWatcher *w) {
-	for (const auto &ctrl : this->coords) {
-	  if ((device_id_t) ctrl->getHandle()->getID() == id) {
-		ctrl->unbindWatcher(w);
-		break;
-	  }
-	}
-  }
-
-  void CalxCoordPanel::requestMeasure(device_id_t id, TrailerId tr) {
-	for (const auto &ctrl : this->coords) {
-	  if ((device_id_t) ctrl->getHandle()->getID() == id) {
-		ctrl->requestMeasure(tr);
-		break;
-	  }
-	}
-  }
-
-  void CalxCoordPanel::requestPosition(device_id_t id, double x, double y) {
-	for (const auto &ctrl : this->coords) {
-	  if ((device_id_t) ctrl->getHandle()->getID() == id) {
-		ctrl->requestPosition(x, y);
-		break;
-	  }
-	}
-  }
-
-  void CalxCoordPanel::requestPositionAbs(device_id_t id, motor_point_t dest) {
-	for (const auto &ctrl : this->coords) {
-	  if ((device_id_t) ctrl->getHandle()->getID() == id) {
-		ctrl->requestPositionAbs(dest);
-		break;
-	  }
-	}
-  }
-
-  void CalxCoordPanel::requestCenter(device_id_t id) {
-	for (const auto &ctrl : this->coords) {
-	  if ((device_id_t) ctrl->getHandle()->getID() == id) {
-		ctrl->requestCenter();
-		break;
-	  }
-	}
-  }
-
-  void CalxCoordPanel::requestInvert(device_id_t id) {
-	for (const auto &ctrl : this->coords) {
-	  if ((device_id_t) ctrl->getHandle()->getID() == id) {
-		ctrl->requestInvert();
-		break;
-	  }
-	}
-  }
-
-  void CalxCoordPanel::requestWatcher(device_id_t id) {
-	for (const auto &ctrl : this->coords) {
-	  if ((device_id_t) ctrl->getHandle()->getID() == id) {
-		ctrl->requestWatcher();
-		break;
-	  }
-	}
-  }
-
   void CalxCoordPanel::updateUI() {
 	for (const auto &ctrl : this->coords) {
 	  ctrl->Hide();
@@ -392,10 +85,31 @@ namespace CalXUI {
 	mainPanel->Layout();
 	Layout();
   }
-
-  void CalxCoordPanel::stop() {
+  
+  size_t CalxCoordPanel::getCoordCount() {
+	return coords.size();
+  }
+  
+  CoordHandle *CalxCoordPanel::getCoord(size_t sz) {
+	return sz < coords.size() ? coords.at(sz)->getHandle() : nullptr;
+  }
+  
+  CalxCoordCtrl *CalxCoordPanel::getCoordCtrl(size_t sz) {
+	return sz < coords.size() ? coords.at(sz) : nullptr;
+  }
+  
+  bool CalxCoordPanel::isBusy()  {
+	for (const auto &c : coords) {
+		if (c->isBusy()) {
+			return true;
+		}
+	}
+	return false;
+ }
+  
+  void CalxCoordPanel::shutdown() {
 	for (const auto &ctrl : this->coords) {
-	  ctrl->stop();
+	  ctrl->shutdown();
 	}
   }
 
@@ -409,7 +123,7 @@ namespace CalXUI {
   }
 
   void CalxCoordPanel::removePlane(size_t pl) {
-	if (coords.at(pl)->hasWatchers()) {
+	if (coords.at(pl)->getWatchers()->hasWatchers()) {
 	  wxMessageBox("Watchers are attached to this plane. Detach them first.",
 				   "Error", wxICON_ERROR);
 	  return;

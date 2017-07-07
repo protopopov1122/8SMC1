@@ -39,7 +39,7 @@ namespace CalXUI {
 	CalxTaskPanel(wxWindow *, wxWindowID);
 
 	void updateUI();
-	void stop();
+	void shutdown();
 	void setEnabled(bool);
 	bool isBusy() {
 	  return !queue->isEmpty();

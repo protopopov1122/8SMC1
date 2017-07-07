@@ -35,35 +35,13 @@ namespace CalXUI {
    public:
 	CalxCoordPanel(wxWindow *, wxWindowID);
 
-	size_t getCoordCount() {
-	  return coords.size();
-	}
-	CoordHandle *getCoord(size_t sz) {
-	  return sz < coords.size() ? coords.at(sz)->getHandle() : nullptr;
-	}
-	CalxCoordCtrl *getCoordCtrl(size_t sz) {
-	  return sz < coords.size() ? coords.at(sz) : nullptr;
-	}
+	size_t getCoordCount();
+	CoordHandle *getCoord(size_t sz);
+	CalxCoordCtrl *getCoordCtrl(size_t sz);
 	void updateUI();
 	void updateList(CoordHandle *, bool *);
-	void bindWatcher(device_id_t, CalxCoordPlaneWatcher *);
-	void unbindWatcher(device_id_t, CalxCoordPlaneWatcher *);
-	void stop();
-	bool isBusy() {
-	  for (const auto &c : coords) {
-		if (c->isBusy()) {
-		  return true;
-		}
-	  }
-	  return false;
-	}
-	// Request synchronizing with interface
-	void requestMeasure(device_id_t, TrailerId);
-	void requestPosition(device_id_t, double, double);
-	void requestPositionAbs(device_id_t, motor_point_t);
-	void requestCenter(device_id_t);
-	void requestInvert(device_id_t);
-	void requestWatcher(device_id_t);
+	void shutdown();
+	bool isBusy();
 
    private:
 	void addPlane(CoordHandle *);

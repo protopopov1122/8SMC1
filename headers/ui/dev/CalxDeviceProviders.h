@@ -17,18 +17,14 @@
 	along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CALX_UI_COORD_CALX_FILTER_CONTROLLER_H_
-#define CALX_UI_COORD_CALX_FILTER_CONTROLLER_H_
+#ifndef CALX_UI_DEV_DEVICE_PROVIDERS_H_
+#define CALX_UI_DEV_DEVICE_PROVIDERS_H_
 
-#include "ui/calx.h"
+#include "ui/CalxApp.h"
+#include "ui/dev/CalxDevicePanel.h"
 
 namespace CalXUI {
-	
-	class CalxFilterController {
-		public:
-			virtual void setOffset(motor_point_t) = 0;
-			virtual void setScale(motor_scale_t) = 0;
-	};
+	void calx_init_device_providers(CalxDevicePanel*);
 }
 
 #endif

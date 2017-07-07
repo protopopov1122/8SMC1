@@ -73,14 +73,14 @@ namespace CalXUI {
   }
 
   CalxCoordPlaneWatcher::CalxCoordPlaneWatcher(wxWindow *win, wxWindowID id,
-											   wxSize min, CoordHandle *handle)
+											   wxSize min, CoordHandle *handle, CalxWatcherPool *pool)
 	  : wxWindow::wxWindow(win, id),
 		pointer_colour(255, 0, 0),
 		jump_colour(128, 128, 128),
 		move_colour(0, 0, 0) {
 	this->handle = handle;
-	wxGetApp().getMainFrame()->getPanel()->getCoords()->bindWatcher(
-		(device_id_t) handle->getID(), this);
+	this->pool = pool;
+	pool->bindWatcher(this);
 
 	ConfigEntry *colourEntry =
 		wxGetApp().getSystemManager()->getConfiguration()->getEntry(
@@ -235,14 +235,13 @@ namespace CalXUI {
   }
 
   void CalxCoordPlaneWatcher::OnExit(wxCloseEvent &evt) {
+	this->pool->unbindWatcher(this);
 	if (this->timer != nullptr) {
 	  this->timer->Stop();
 	}
 	if (this->repaint_timer) {
 	  this->repaint_timer->Stop();
 	}
-	wxGetApp().getMainFrame()->getPanel()->getCoords()->unbindWatcher(
-		(device_id_t) handle->getID(), this);
 	this->handle->removeEventListener(this->listener);
 	Destroy();
   }
@@ -352,12 +351,14 @@ namespace CalXUI {
 
   CalxCoordPlaneWatcherDialog::CalxCoordPlaneWatcherDialog(wxWindow *win,
 														   wxWindowID id,
-														   CoordHandle *handle)
+														   CoordHandle *handle,
+														   CalxWatcherPool *pool)
 	  : wxDialog::wxDialog(win, id, FORMAT(__("Coordinate plane #%s Watcher"),
 										   std::to_string(handle->getID())),
 						   wxDefaultPosition, wxDefaultSize,
 						   wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER) {
 	this->handle = handle;
+	this->pool = pool;
 
 	wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 	SetSizer(sizer);
@@ -365,7 +366,7 @@ namespace CalXUI {
 	this->mouseCoords = new wxStaticText(this, wxID_ANY, "");
 	sizer->Add(this->mouseCoords);
 	this->watcher =
-		new CalxCoordPlaneWatcher(this, wxID_ANY, wxSize(500, 500), handle);
+		new CalxCoordPlaneWatcher(this, wxID_ANY, wxSize(500, 500), handle, pool);
 	sizer->Add(this->watcher, 1, wxALL | wxEXPAND, 5);
 
 	wxPanel *buttonPanel = new wxPanel(this, wxID_ANY);

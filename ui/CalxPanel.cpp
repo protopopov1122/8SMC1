@@ -39,6 +39,19 @@ namespace CalXUI {
 
 	Bind(wxEVT_CLOSE_WINDOW, &CalxPanel::OnExit, this);
   }
+  
+  CalxDevicePanel *CalxPanel::getDevices() {
+	return this->dev;
+  }
+  
+  CalxCoordPanel *CalxPanel::getCoords()  {
+	return this->coord;
+  }
+  
+  CalxTaskPanel *CalxPanel::getTasks() {
+	return this->task;
+  }
+
 
   void CalxPanel::updateUI() {
 	this->dev->updateUI();
@@ -47,9 +60,9 @@ namespace CalXUI {
   }
 
   void CalxPanel::OnExit(wxCloseEvent &evt) {
-	getTasks()->stop();
-	getCoords()->stop();
-	getDevices()->stop();
+	getTasks()->shutdown();
+	getCoords()->shutdown();
+	getDevices()->shutdown();
 
 	wxMilliSleep(400);
 

@@ -35,46 +35,33 @@
 #include "ui/coord/CalxCoordOtherCtrl.h"
 #include "ui/coord/CalxCoordMiscCtrl.h"
 #include "ui/coord/CalxCoordController.h"
+#include "ui/coord/CalxWatcherPool.h"
 
 using namespace CalX;
 
 namespace CalXUI {
-
-  class CalxCoordPlaneWatcher;  // Forward referencing
 
   wxDECLARE_EVENT(wxEVT_COORD_CTRL_WATCHER, wxThreadEvent);
   wxDECLARE_EVENT(wxEVT_COORD_CTRL_ENABLE, wxThreadEvent);
 
   class CalxCoordCtrl : public wxScrolledWindow, public CalxLockableComponent, CalxFilterController {
    public:
-	friend class CalxCoordEventListener;
 	CalxCoordCtrl(wxWindow *, wxWindowID, CoordHandle *);
 
 	void updateUI();
-	void stop();
+	void shutdown();
 	CoordHandle *getHandle();
-	bool isBusy();
-
-	void OnInterfaceUpdate(wxCollapsiblePaneEvent &);
+	CalxWatcherPool *getWatchers();
+	CalxCoordController *getController();
 	
+	bool isBusy();
 	void use();
 	void unuse();
 	bool isUsed();
 	virtual void setMaster(bool);
 	virtual void setOffset(motor_point_t);
+	virtual void setScale(motor_scale_t);
 	void setEnabled(bool);
-	void bindWatcher(CalxCoordPlaneWatcher *);
-	void unbindWatcher(CalxCoordPlaneWatcher *);
-	void updateWatchers();
-	bool hasWatchers();
-
-	// Request synchronizing with interface
-	void requestMeasure(TrailerId);
-	void requestPosition(double, double);
-	void requestPositionAbs(motor_point_t);
-	void requestCenter();
-	void requestInvert();
-	void requestWatcher();
 
    private:
 	void OnExit(wxCloseEvent &);
@@ -83,17 +70,19 @@ namespace CalXUI {
 	void OnWatcherClick(wxCommandEvent &);
 	void OnWatcherRequest(wxThreadEvent &);
 	void OnEnableEvent(wxThreadEvent &);
+	void OnInterfaceUpdate(wxCollapsiblePaneEvent &);
 
 	CalxCoordController *controller;
 	CoordHandle *ctrl;
+	CalxWatcherPool *watchers;
 	CoordEventListener *listener;
 	CalxCoordMotorListener *xListener;
 	CalxCoordMotorListener *yListener;
 	CalxCoordInstrumentListener *instrListener;
 	CalxActionQueue *queue;
+
 	int used;
 	bool master;
-	std::vector<CalxCoordPlaneWatcher *> watchers;
 
 	// Components
 	wxPanel *generalPanel;

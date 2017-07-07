@@ -17,17 +17,30 @@
 	along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CALX_UI_COORD_CALX_FILTER_CONTROLLER_H_
-#define CALX_UI_COORD_CALX_FILTER_CONTROLLER_H_
+#ifndef CALX_UI_COORD_CALX_WATCHER_POOL_H_
+#define CALX_UI_COORD_CALX_WATCHER_POOL_H_
 
-#include "ui/calx.h"
+#include "ui/CalxApp.h"
+#include <vector>
 
 namespace CalXUI {
 	
-	class CalxFilterController {
+	class CalxCoordPlaneWatcher; // Forward referencing
+	
+	class CalxWatcherPool {
 		public:
-			virtual void setOffset(motor_point_t) = 0;
-			virtual void setScale(motor_scale_t) = 0;
+			CalxWatcherPool(wxWindow*, CoordHandle*);
+			virtual ~CalxWatcherPool();
+			
+			CalxCoordPlaneWatcher *newWatcher();
+			bool hasWatchers();
+			void updateWatchers();
+			void bindWatcher(CalxCoordPlaneWatcher*);
+			void unbindWatcher(CalxCoordPlaneWatcher*);
+		private:
+			wxWindow *parent;
+			CoordHandle *handle;
+			std::vector<CalxCoordPlaneWatcher*> watchers;
 	};
 }
 

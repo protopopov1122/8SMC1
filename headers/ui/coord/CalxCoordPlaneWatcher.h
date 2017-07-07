@@ -21,6 +21,7 @@
 #define CALX_UI_COORD_CALX_COORD_PLANE_WATCHER_H_
 
 #include "ui/CalxApp.h"
+#include "ui/coord/CalxWatcherPool.h"
 #include <wx/stattext.h>
 #include <wx/bitmap.h>
 
@@ -62,7 +63,7 @@ namespace CalXUI {
 
   class CalxCoordPlaneWatcher : public wxWindow {
    public:
-	CalxCoordPlaneWatcher(wxWindow *, wxWindowID, wxSize, CoordHandle *);
+	CalxCoordPlaneWatcher(wxWindow *, wxWindowID, wxSize, CoordHandle *, CalxWatcherPool *);
 	void clear();
 	bool isRendering();
 	bool hasUpdates();
@@ -79,6 +80,7 @@ namespace CalXUI {
 	void OnAppendEvent(wxThreadEvent &);
 
 	CoordHandle *handle;
+	CalxWatcherPool *pool;
 	CalxCoordPlaneWatcherTimer *timer;
 	CalxCoordPlaneWatcherRepaintTimer *repaint_timer;
 	std::vector<std::pair<motor_point_t, bool>> history;
@@ -95,13 +97,15 @@ namespace CalXUI {
 
   class CalxCoordPlaneWatcherDialog : public wxDialog {
    public:
-	CalxCoordPlaneWatcherDialog(wxWindow *, wxWindowID, CoordHandle *);
+	CalxCoordPlaneWatcherDialog(wxWindow *, wxWindowID, CoordHandle *, CalxWatcherPool *);
 
    private:
 	void OnOkClick(wxCommandEvent &);
 	void OnClearClick(wxCommandEvent &);
 	void OnMouseMove(wxMouseEvent &);
+	
 	CalxCoordPlaneWatcher *watcher;
+	CalxWatcherPool *pool;
 	CoordHandle *handle;
 	wxStaticText *mouseCoords;
   };

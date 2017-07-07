@@ -196,7 +196,7 @@ namespace CalXUI {
 	this->Bind(wxEVT_TASK_PANEL_ENABLE, &CalxTaskPanel::OnEnableEvent, this);
   }
 
-  void CalxTaskPanel::stop() {
+  void CalxTaskPanel::shutdown() {
 	this->queue->stop();
   }
 

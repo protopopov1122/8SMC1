@@ -33,16 +33,9 @@ namespace CalXUI {
   class CalxPanel : public wxNotebook {
    public:
 	CalxPanel(wxWindow *, wxWindowID);
-	CalxDevicePanel *getDevices() {
-	  return this->dev;
-	}
-	CalxCoordPanel *getCoords() {
-	  return this->coord;
-	}
-	CalxTaskPanel *getTasks() {
-	  return this->task;
-	}
-
+	CalxDevicePanel *getDevices();
+	CalxCoordPanel *getCoords();
+	CalxTaskPanel *getTasks();
 	void updateUI();
 
    private:
