@@ -136,4 +136,27 @@ namespace CalXUI {
 	void CalxCoordActionGraphBuild::stop() {
 		this->state.stop();
 	}
+	
+	CalxCoordActionGraphPreview::CalxCoordActionGraphPreview(CalxVirtualPlaneDialog *dialog,
+		CoordTranslator *trans, GraphBuilder *builder, double speed)
+		: dialog(dialog), translator(trans), builder(builder), speed(speed) {
+		this->state.plane = nullptr;
+		this->state.work = false;
+	}
+	
+	CalxCoordActionGraphPreview::~CalxCoordActionGraphPreview() {
+		delete this->builder;
+	}
+	
+	void CalxCoordActionGraphPreview::perform(SystemManager *sysman) {
+		dialog->Enable(false);
+		wxGetApp().getErrorHandler()->handle(builder->floatBuild(
+			sysman, dialog->getFloatPlane(), translator, speed, &state));;
+		dialog->Refresh();
+		dialog->Enable(true);
+	}
+	
+	void CalxCoordActionGraphPreview::stop() {
+		this->state.stop();
+	}
 }

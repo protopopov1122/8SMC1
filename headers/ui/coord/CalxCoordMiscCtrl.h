@@ -84,26 +84,6 @@ namespace CalXUI {
    private:
 	CalxCoordCtrl *ctrl;
   };
-
-  class CalxCoordPreviewAction : public CalxAction {
-   public:
-	CalxCoordPreviewAction(CalxCoordCtrl *, CalxVirtualPlaneDialog *,
-						   CoordTranslator *, GraphBuilder *, float,
-						   bool = false);
-	virtual ~CalxCoordPreviewAction();
-
-	virtual void perform(SystemManager *);
-	virtual void stop();
-
-   private:
-	CalxCoordCtrl *ctrl;
-	CalxVirtualPlaneDialog *dialog;
-	CoordTranslator *translator;
-	GraphBuilder *builder;
-	float speed;
-	TaskState state;
-	bool use_float;
-  };
 }
 
 #endif

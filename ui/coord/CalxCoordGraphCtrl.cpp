@@ -18,10 +18,16 @@
 */
 
 #include "ui/coord/CalxCoordCtrl.h"
+#include "ui/CalxErrorHandler.h"
+#include "ctrl-lib/misc/GraphBuilder.h"
+#include "ctrl-lib/graph/FunctionEngine.h"
+#include "ctrl-lib/graph/FunctionParser.h"
+#include <sstream>
 
 namespace CalXUI {
 
-  void CalxCoordGraphCtrl::init() {
+  CalxCoordGraphCtrl::CalxCoordGraphCtrl(wxWindow *win, wxWindowID id, CalxCoordController *controller)
+	: wxPanel::wxPanel(win, id), controller(controller) {
 	std::string units = wxGetApp().getUnits();
 	ConfigEntry *graphconf =
 		wxGetApp().getSystemManager()->getConfiguration()->getEntry("graph");
@@ -69,8 +75,8 @@ namespace CalXUI {
 										   ->getEntry("units")
 										   ->getReal("unit_speed", 4000.0),
 									   wxGetApp().getSpeedPrecision());
-	this->buildButton = new wxButton(graphPanel, wxID_ANY, __("Build"));
-	this->previewButton = new wxButton(graphPanel, wxID_ANY, __("Preview"));
+	wxButton *buildButton = new wxButton(graphPanel, wxID_ANY, __("Build"));
+	wxButton *previewButton = new wxButton(graphPanel, wxID_ANY, __("Preview"));
 
 	graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, __("Function ")), 0,
 					wxALIGN_RIGHT | wxRIGHT, 10);
@@ -125,9 +131,65 @@ namespace CalXUI {
 	this->trans = new ComplexCoordTranslator(basic);
 	this->translator = new CalxCoordFilterCtrl(this, wxID_ANY, this->trans);
 	sizer->Add(this->translator, 1, wxALL | wxEXPAND, 5);
+	
+	buildButton->Bind(wxEVT_BUTTON, &CalxCoordGraphCtrl::OnBuildClick, this);
+	previewButton->Bind(wxEVT_BUTTON, &CalxCoordGraphCtrl::OnPreviewClick, this);
+	Bind(wxEVT_CLOSE_WINDOW, &CalxCoordGraphCtrl::OnClose, this);
   }
 
   void CalxCoordGraphCtrl::OnClose(wxCloseEvent &evt) {
 	delete this->translator->getTranslator();
+  }
+  
+  void CalxCoordGraphCtrl::OnBuildClick(wxCommandEvent &evt) {
+	std::stringstream ss(this->expr->GetValue().ToStdString());
+	FunctionLexer lexer(ss);
+	FunctionParser parser(&lexer);
+	Node *node = parser.parse();
+	if (node == nullptr) {
+	  wxGetApp().getErrorHandler()->handle(ErrorCode::MathExprError);
+	  return;
+	}
+	double minx = xmin->GetValue();
+	double maxx = xmax->GetValue();
+	double miny = ymin->GetValue();
+	double maxy = ymax->GetValue();
+	double step = this->step->GetValue();
+	double speed = this->speed->GetValue();
+	coord_point_t min = { minx, miny };
+	coord_point_t max = { maxx, maxy };
+	GraphBuilder *graph = new GraphBuilder(node, min, max, step);
+	this->controller->build(this->translator->getTranslator(), graph, speed);  
+  }
+  
+  void CalxCoordGraphCtrl::OnPreviewClick(wxCommandEvent &evt) {
+	if (!this->controller->getHandle()->isMeasured()) {
+	  wxMessageBox(__("Plane need to be measured before preview"),
+				   __("Warning"), wxICON_WARNING);
+	  return;
+	}
+	std::stringstream ss(this->expr->GetValue().ToStdString());
+	FunctionLexer lexer(ss);
+	FunctionParser parser(&lexer);
+	Node *node = parser.parse();
+	if (node == nullptr) {
+	  wxGetApp().getErrorHandler()->handle(ErrorCode::MathExprError);
+	  return;
+	}
+	double minx = xmin->GetValue();
+	double maxx = xmax->GetValue();
+	double miny = ymin->GetValue();
+	double maxy = ymax->GetValue();
+	double step = this->step->GetValue();
+	double speed = this->speed->GetValue();
+	coord_point_t min = { minx, miny };
+	coord_point_t max = { maxx, maxy };
+	GraphBuilder *graph = new GraphBuilder(node, min, max, step);
+	CalxVirtualPlaneDialog *dialog =
+		new CalxVirtualPlaneDialog(this, wxID_ANY, this->controller->getHandle(), wxSize(500, 500));
+	
+	this->controller->preview(dialog, this->translator->getTranslator(), graph, speed); 
+	dialog->ShowModal();
+	delete dialog;  
   }
 }

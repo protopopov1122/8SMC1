@@ -69,42 +69,4 @@ namespace CalXUI {
   void CalxCoordInstrumentListener::unuse() {
 	ctrl->unuse();
   }
-
-  CalxCoordPreviewAction::CalxCoordPreviewAction(CalxCoordCtrl *ctrl,
-												 CalxVirtualPlaneDialog *dialog,
-												 CoordTranslator *trans,
-												 GraphBuilder *builder,
-												 float speed, bool use_float) {
-	this->ctrl = ctrl;
-	this->dialog = dialog;
-	this->translator = trans;
-	this->builder = builder;
-	this->speed = speed;
-	this->use_float = use_float;
-	this->state.plane = nullptr;
-	this->state.work = false;
-  }
-
-  CalxCoordPreviewAction::~CalxCoordPreviewAction() {
-	delete this->builder;
-  }
-
-  void CalxCoordPreviewAction::perform(SystemManager *sysman) {
-	ctrl->setMaster(true);
-	dialog->Enable(false);
-	if (this->use_float) {
-	  wxGetApp().getErrorHandler()->handle(builder->floatBuild(
-		  sysman, dialog->getFloatPlane(), translator, speed, &state));
-	} else {
-	  wxGetApp().getErrorHandler()->handle(builder->build(
-		  sysman, dialog->getPlane(), translator, speed, &state));
-	}
-	dialog->Refresh();
-	dialog->Enable(true);
-	ctrl->setMaster(false);
-  }
-
-  void CalxCoordPreviewAction::stop() {
-	state.stop();
-  }
 }

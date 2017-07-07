@@ -24,6 +24,7 @@
 #include "ui/CalxLockableComponent.h"
 #include "ui/coord/CalxFilterController.h"
 #include "ui/CalxActionQueue.h"
+#include "ui/coord/CalxVirtualPlane.h"
 
 namespace CalXUI {
 	
@@ -45,6 +46,7 @@ namespace CalXUI {
 			void move(coord_point_t, double, bool* = nullptr);
 			void configure(coord_point_t, double, bool* = nullptr);
 			void build(CoordTranslator*, GraphBuilder*, double, bool* = nullptr);
+			void preview(CalxVirtualPlaneDialog*, CoordTranslator*, GraphBuilder*, double, bool* = nullptr);
 		private:
 			CoordHandle *handle;
 			CalxLockableComponent *lockable;

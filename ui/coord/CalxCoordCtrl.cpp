@@ -125,12 +125,8 @@ namespace CalXUI {
 	wxWindow *graphPanel = graphPane->GetPane();
 	wxBoxSizer *graphSizer = new wxBoxSizer(wxHORIZONTAL);
 	graphPanel->SetSizer(graphSizer);
-	this->graphCtrl = new CalxCoordGraphCtrl(graphPanel, wxID_ANY);
+	this->graphCtrl = new CalxCoordGraphCtrl(graphPanel, wxID_ANY, this->controller);
 	graphSizer->Add(graphCtrl, 0, wxALL);
-	graphCtrl->getBuildButton()->Bind(wxEVT_BUTTON,
-									  &CalxCoordCtrl::OnGraphBuildClick, this);
-	graphCtrl->getPreviewButton()->Bind(
-		wxEVT_BUTTON, &CalxCoordCtrl::OnGraphPreviewClick, this);
 	graphPane->Bind(wxEVT_COLLAPSIBLEPANE_CHANGED,
 					&CalxCoordCtrl::OnInterfaceUpdate, this);
 	graphPane->Collapse(false);
@@ -152,8 +148,6 @@ namespace CalXUI {
 	sizer->Add(actionPanel, 0, wxALL | wxEXPAND, 0);
 	Bind(wxEVT_COORD_CTRL_WATCHER, &CalxCoordCtrl::OnWatcherRequest, this);
 	Bind(wxEVT_CLOSE_WINDOW, &CalxCoordCtrl::OnExit, this);
-	graphCtrl->Bind(wxEVT_CLOSE_WINDOW, &CalxCoordGraphCtrl::OnClose,
-					graphCtrl);
 	Bind(wxEVT_COORD_CTRL_ENABLE, &CalxCoordCtrl::OnEnableEvent, this);
 	updateUI();
 
@@ -163,6 +157,14 @@ namespace CalXUI {
 
 	this->timer.setCtrl(this);
 	timer.Start(100);
+  }
+  
+  CoordHandle *CalxCoordCtrl::getHandle() {
+	return this->ctrl;
+  }
+  
+  bool CalxCoordCtrl::isBusy() {
+	return !queue->isEmpty();
   }
 
   void CalxCoordCtrl::use() {
@@ -323,60 +325,6 @@ namespace CalXUI {
 	timer.Stop();
 	this->queue->stop();
 	ctrl->getController()->stop();
-  }
-  
-  void CalxCoordCtrl::OnGraphBuildClick(wxCommandEvent &evt) {
-	std::stringstream ss(graphCtrl->getExpression());
-	FunctionLexer lexer(ss);
-	FunctionParser parser(&lexer);
-	Node *node = parser.parse();
-	if (node == nullptr) {
-	  wxGetApp().getErrorHandler()->handle(ErrorCode::MathExprError);
-	  return;
-	}
-	double minx = graphCtrl->getXMin();
-	double maxx = graphCtrl->getXMax();
-	double miny = graphCtrl->getYMin();
-	double maxy = graphCtrl->getYMax();
-	double step = graphCtrl->getStep();
-	float speed = graphCtrl->getSpeed();
-	CoordTranslator *trans = graphCtrl->getCoordTranslator();
-	coord_point_t min = { minx, miny };
-	coord_point_t max = { maxx, maxy };
-	GraphBuilder *graph = new GraphBuilder(node, min, max, step);
-	this->controller->build(trans, graph, speed);
-  }
-
-  void CalxCoordCtrl::OnGraphPreviewClick(wxCommandEvent &evt) {
-	if (!this->ctrl->isMeasured()) {
-	  wxMessageBox(__("Plane need to be measured before preview"),
-				   __("Warning"), wxICON_WARNING);
-	  return;
-	}
-	std::stringstream ss(graphCtrl->getExpression());
-	FunctionLexer lexer(ss);
-	FunctionParser parser(&lexer);
-	Node *node = parser.parse();
-	if (node == nullptr) {
-	  wxGetApp().getErrorHandler()->handle(ErrorCode::MathExprError);
-	  return;
-	}
-	double minx = graphCtrl->getXMin();
-	double maxx = graphCtrl->getXMax();
-	double miny = graphCtrl->getYMin();
-	double maxy = graphCtrl->getYMax();
-	double step = graphCtrl->getStep();
-	float speed = graphCtrl->getSpeed();
-	CoordTranslator *trans = graphCtrl->getCoordTranslator();
-	coord_point_t min = { minx, miny };
-	coord_point_t max = { maxx, maxy };
-	GraphBuilder *graph = new GraphBuilder(node, min, max, step);
-	CalxVirtualPlaneDialog *dialog =
-		new CalxVirtualPlaneDialog(this, wxID_ANY, ctrl, wxSize(500, 500));
-	this->queue->addAction(
-		new CalxCoordPreviewAction(this, dialog, trans, graph, speed, true));
-	dialog->ShowModal();
-	delete dialog;
   }
 
   void CalxCoordCtrl::OnWatcherClick(wxCommandEvent &evt) {

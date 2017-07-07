@@ -52,12 +52,9 @@ namespace CalXUI {
 
 	void updateUI();
 	void stop();
-	CoordHandle *getHandle() {
-	  return this->ctrl;
-	}
+	CoordHandle *getHandle();
+	bool isBusy();
 
-	void OnGraphBuildClick(wxCommandEvent &);
-	void OnGraphPreviewClick(wxCommandEvent &);
 	void OnInterfaceUpdate(wxCollapsiblePaneEvent &);
 	
 	void use();
@@ -70,9 +67,6 @@ namespace CalXUI {
 	void unbindWatcher(CalxCoordPlaneWatcher *);
 	void updateWatchers();
 	bool hasWatchers();
-	bool isBusy() {
-	  return !queue->isEmpty();
-	}
 
 	// Request synchronizing with interface
 	void requestMeasure(TrailerId);

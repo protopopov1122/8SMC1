@@ -24,6 +24,7 @@
 #include "ui/CalxActionQueue.h"
 #include "ui/CalxLockableComponent.h"
 #include "ui/coord/CalxFilterController.h"
+#include "ui/coord/CalxVirtualPlane.h"
 
 namespace CalXUI {
 
@@ -117,6 +118,23 @@ namespace CalXUI {
    private:
 	CalxLockableComponent *lockable;
 	CoordHandle *handle;
+	CoordTranslator *translator;
+	GraphBuilder *builder;
+	double speed;
+	TaskState state;
+  };
+
+  class CalxCoordActionGraphPreview : public CalxAction {
+   public:
+	CalxCoordActionGraphPreview(CalxVirtualPlaneDialog *, CoordTranslator *,
+						 GraphBuilder *, double);
+	virtual ~CalxCoordActionGraphPreview();
+
+	virtual void perform(SystemManager *);
+	virtual void stop();
+
+   private:
+	CalxVirtualPlaneDialog *dialog;
 	CoordTranslator *translator;
 	GraphBuilder *builder;
 	double speed;

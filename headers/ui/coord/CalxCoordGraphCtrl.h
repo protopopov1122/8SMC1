@@ -28,6 +28,7 @@
 #include "ui/CalxActionQueue.h"
 #include "ui/CalxFrame.h"
 #include "ui/coord/CalxCoordFilter.h"
+#include "ui/coord/CalxCoordController.h"
 
 using namespace CalX;
 
@@ -37,44 +38,13 @@ namespace CalXUI {
 
   class CalxCoordGraphCtrl : public wxPanel {
    public:
-	CalxCoordGraphCtrl(wxWindow *win, wxWindowID id)
-		: wxPanel::wxPanel(win, id) {
-	  init();
-	}
-	std::string getExpression() {
-	  return expr->GetValue().ToStdString();
-	}
-	double getXMin() {
-	  return xmin->GetValue();
-	}
-	double getXMax() {
-	  return xmax->GetValue();
-	}
-	double getYMin() {
-	  return ymin->GetValue();
-	}
-	double getYMax() {
-	  return ymax->GetValue();
-	}
-	double getStep() {
-	  return step->GetValue();
-	}
-	CoordTranslator *getCoordTranslator() {
-	  return this->translator->getTranslator();
-	}
-	double getSpeed() {
-	  return speed->GetValue();
-	}
-	wxButton *getBuildButton() {
-	  return this->buildButton;
-	}
-	wxButton *getPreviewButton() {
-	  return this->previewButton;
-	}
-	void OnClose(wxCloseEvent &);
+	CalxCoordGraphCtrl(wxWindow*, wxWindowID, CalxCoordController*);
 
    private:
-	void init();
+	void OnClose(wxCloseEvent &);
+	void OnBuildClick(wxCommandEvent&);
+	void OnPreviewClick(wxCommandEvent&);
+	
 	wxTextCtrl *expr;
 	wxSpinCtrlDouble *xmin;
 	wxSpinCtrlDouble *xmax;
@@ -84,8 +54,8 @@ namespace CalXUI {
 	CalxCoordFilter *translator;
 	ComplexCoordTranslator *trans;
 	wxSpinCtrlDouble *speed;
-	wxButton *buildButton;
-	wxButton *previewButton;
+	
+	CalxCoordController *controller;
   };
 }
 

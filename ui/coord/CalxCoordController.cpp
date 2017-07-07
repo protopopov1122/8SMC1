@@ -124,4 +124,9 @@ namespace CalXUI {
 	void CalxCoordController::build(CoordTranslator *trans, GraphBuilder *builder, double speed, bool *ready) {
 		this->queue->addAction(new CalxCoordActionGraphBuild(this->lockable, this->handle, trans, builder, speed), ready);
 	}
+	
+	void CalxCoordController::preview(CalxVirtualPlaneDialog *dialog, CoordTranslator *trans,
+		GraphBuilder *builder, double speed, bool *ready) {
+		this->queue->addAction(new CalxCoordActionGraphPreview(dialog, trans, builder, speed), ready);
+	}
 }
