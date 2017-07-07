@@ -28,11 +28,13 @@
 #include <wx/collpane.h>
 #include "ui/CalxActionQueue.h"
 #include "ui/CalxFrame.h"
+#include "ui/CalxLockableComponent.h"
 #include "ui/coord/CalxCoordLinearCtrl.h"
 #include "ui/coord/CalxCoordArcCtrl.h"
 #include "ui/coord/CalxCoordGraphCtrl.h"
 #include "ui/coord/CalxCoordOtherCtrl.h"
 #include "ui/coord/CalxCoordMiscCtrl.h"
+#include "ui/coord/CalxCoordController.h"
 
 using namespace CalX;
 
@@ -43,7 +45,7 @@ namespace CalXUI {
   wxDECLARE_EVENT(wxEVT_COORD_CTRL_WATCHER, wxThreadEvent);
   wxDECLARE_EVENT(wxEVT_COORD_CTRL_ENABLE, wxThreadEvent);
 
-  class CalxCoordCtrl : public wxScrolledWindow {
+  class CalxCoordCtrl : public wxScrolledWindow, public CalxLockableComponent, CalxFilterController {
    public:
 	friend class CalxCoordEventListener;
 	CalxCoordCtrl(wxWindow *, wxWindowID, CoordHandle *);
@@ -73,7 +75,7 @@ namespace CalXUI {
 	void use();
 	void unuse();
 	bool isUsed();
-	void setMaster(bool);
+	virtual void setMaster(bool);
 	void setEnabled(bool);
 	void bindWatcher(CalxCoordPlaneWatcher *);
 	void unbindWatcher(CalxCoordPlaneWatcher *);
@@ -82,7 +84,7 @@ namespace CalXUI {
 	bool isBusy() {
 	  return !queue->isEmpty();
 	}
-	void setPlaneOffset(motor_point_t);
+	virtual void setOffset(motor_point_t);
 
 	// Request synchronizing with interface
 	void requestMeasure(TrailerId);
@@ -101,6 +103,7 @@ namespace CalXUI {
 	void OnWatcherRequest(wxThreadEvent &);
 	void OnEnableEvent(wxThreadEvent &);
 
+	CalxCoordController *controller;
 	CoordHandle *ctrl;
 	CoordEventListener *listener;
 	CalxCoordMotorListener *xListener;
@@ -121,12 +124,6 @@ namespace CalXUI {
 	CalxCoordGraphCtrl *graphCtrl;
 	CalxCoordOtherCtrl *otherCtrl;
 	CalxCoordTimer timer;
-
-	// Filters
-	CoordPlaneLog *log;
-	CoordPlaneMap *map;
-	CoordPlaneValidator *validator;
-	CoordPlaneMap *unit_map;
   };
 }
 

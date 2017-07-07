@@ -44,52 +44,11 @@ namespace CalXUI {
 	this->used = 0;
 	this->master = false;
 
-	motor_point_t plane_offset = { 0, 0 };
-	motor_scale_t plane_scale = { wxGetApp()
-									  .getSystemManager()
-									  ->getConfiguration()
-									  ->getEntry("units")
-									  ->getReal("plane_scale", 1.0f),
-								  wxGetApp()
-									  .getSystemManager()
-									  ->getConfiguration()
-									  ->getEntry("units")
-									  ->getReal("plane_scale", 1.0f) };
-	float plane_speed_scale = wxGetApp()
-								  .getSystemManager()
-								  ->getConfiguration()
-								  ->getEntry("units")
-								  ->getReal("plane_speed_scale", 1.0f);
-	this->unit_map = new CoordPlaneMap(plane_offset, plane_scale,
-									   plane_speed_scale, ctrl->peekPlane());
-	ctrl->pushPlane(this->unit_map);
-	motor_point_t validateMin = { INT_MIN, INT_MIN };
-	motor_point_t validateMax = { INT_MAX, INT_MAX };
-	this->validator = new CoordPlaneValidator(validateMin, validateMax,
-											  wxGetApp()
-												  .getSystemManager()
-												  ->getConfiguration()
-												  ->getEntry("core")
-												  ->getInt("maxspeed", 4000),
-											  ctrl->peekPlane());
-	ctrl->pushPlane(this->validator);
-	this->log = new CoordPlaneLog(
-		ctrl->peekPlane(), &std::cout,
-		"Plane #" + std::to_string(ctrl->getID()) + ": ", false);
-	ctrl->pushPlane(this->log);
-	motor_point_t mapOffset = { 0, 0 };
-	motor_scale_t mapScale = { 1.0f, 1.0f };
-	this->map = new CoordPlaneMap(mapOffset, mapScale, 1, ctrl->peekPlane());
-	ctrl->pushPlane(this->map);
-
-	coord_scale_t unit_scale = { wxGetApp().getUnitScale(),
-								 wxGetApp().getUnitScale() };
-	float unit_speed_scale = static_cast<float>(wxGetApp().getSpeedScale());
-	ctrl->getFloatPlane()->setScale(unit_scale);
-	ctrl->getFloatPlane()->setSpeedScale(unit_speed_scale);
-
 	this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
 	this->queue->Run();
+	
+	this->controller = new CalxCoordController(this->ctrl, this, this, this->queue);
+	
 	this->listener = new CalxCoordEventListener(this);
 	this->ctrl->addEventListener(this->listener);
 	this->xListener = new CalxCoordMotorListener(this);
@@ -239,13 +198,13 @@ namespace CalXUI {
 	stopButton->Enable(!e && this->master);
   }
 
-  void CalxCoordCtrl::setPlaneOffset(motor_point_t offset) {
-	motor_scale_t scale = this->map->getScale();
+  void CalxCoordCtrl::setOffset(motor_point_t offset) {
+	motor_scale_t scale = this->controller->getMapFilter()->getScale();
 	offset.x *= scale.x;
 	offset.y *= scale.y;
 	this->otherCtrl->setXOffset(offset.x);
 	this->otherCtrl->setYOffset(offset.y);
-	this->map->setOffset(offset);
+	this->controller->getMapFilter()->setOffset(offset);
 	updateWatchers();
   }
 
@@ -271,34 +230,33 @@ namespace CalXUI {
 
   void CalxCoordCtrl::requestMeasure(TrailerId tr) {
 	bool ready = false;
-	this->queue->addAction(new CalxCoordMeasureAction(this, ctrl, tr), &ready);
+	this->controller->measure(tr, &ready);
 	while (!ready) {
 	  wxThread::Yield();
 	}
   }
 
   void CalxCoordCtrl::requestPosition(double x, double y) {
-	motor_rect_t sz = ctrl->getSize();
-	motor_point_t dest = { (motor_coord_t)(sz.x + sz.w * x),
-						   (motor_coord_t)(sz.y + sz.h * y) };
 	ConfigManager *config = wxGetApp().getSystemManager()->getConfiguration();
-	int_conf_t speed =
-		config->getEntry("core")->getInt("roll_speed", ROLL_SPEED);
+	coord_point_t dest = {x, y};
+	int_conf_t mspeed =
+		config->getEntry("core")->getInt("maxspeed", 125);
+	double speed = ((double) mspeed) / wxGetApp().getSpeedScale();
 	bool ready = false;
-	this->queue->addAction(
-		new CalxCoordMoveAction(this, ctrl, false, false, dest, speed), &ready);
+	this->controller->move(dest, speed, &ready);
 	while (!ready) {
 	  wxThread::Yield();
 	}
   }
 
-  void CalxCoordCtrl::requestPositionAbs(motor_point_t dest) {
+  void CalxCoordCtrl::requestPositionAbs(motor_point_t mdest) {
 	ConfigManager *config = wxGetApp().getSystemManager()->getConfiguration();
-	int_conf_t speed =
-		config->getEntry("core")->getInt("roll_speed", ROLL_SPEED);
+	int_conf_t mspeed =
+		config->getEntry("core")->getInt("maxspeed", 125);
+	coord_point_t dest = {mdest.x / wxGetApp().getUnitScale(), mdest.y / wxGetApp().getUnitScale()};
+	double speed = ((double) mspeed) / wxGetApp().getSpeedScale();
 	bool ready = false;
-	this->queue->addAction(
-		new CalxCoordMoveAction(this, ctrl, false, false, dest, speed), &ready);
+	this->controller->move(dest, speed, false, false, &ready);
 	while (!ready) {
 	  wxThread::Yield();
 	}
@@ -306,16 +264,16 @@ namespace CalXUI {
 
   void CalxCoordCtrl::requestCenter() {
 	motor_point_t offset = ctrl->getPosition();
-	this->map->setOffset(offset);
+	this->controller->getMapFilter()->setOffset(offset);
 	this->otherCtrl->setXOffset(offset.x);
 	this->otherCtrl->setYOffset(offset.y);
   }
 
   void CalxCoordCtrl::requestInvert() {
-	motor_scale_t scale = map->getScale();
+	motor_scale_t scale = controller->getMapFilter()->getScale();
 	scale.x *= -1;
 	scale.y *= -1;
-	this->map->setScale(scale);
+	this->controller->getMapFilter()->setScale(scale);
 	this->otherCtrl->setXScale(scale.x);
 	this->otherCtrl->setYScale(scale.y);
   }
@@ -373,35 +331,31 @@ namespace CalXUI {
   }
 
   CoordPlaneLog *CalxCoordCtrl::getPlaneLog() {
-	return this->log;
+	return this->controller->getLogFilter();
   }
   CoordPlaneMap *CalxCoordCtrl::getPlaneMap() {
-	return this->map;
+	return this->controller->getMapFilter();
   }
   CoordPlaneValidator *CalxCoordCtrl::getPlaneValidator() {
-	return this->validator;
+	return this->controller->getValidateFilter();
   }
 
   void CalxCoordCtrl::OnLinearMoveClick(wxCommandEvent &evt) {
 	coord_point_t dest = { linear->getCoordX(), linear->getCoordY() };
-	this->queue->addAction(new CalxCoordFloatMoveAction(
-		this, ctrl, true, linear->isRelative(), dest, linear->getSpeed()));
+	this->controller->move(dest, linear->getSpeed(), true, linear->isRelative());
   }
 
   void CalxCoordCtrl::OnLinearJumpClick(wxCommandEvent &evt) {
 	coord_point_t dest = { linear->getCoordX(), linear->getCoordY() };
 	double speed = linear->getSpeed();
-	this->queue->addAction(new CalxCoordFloatMoveAction(
-		this, ctrl, false, linear->isRelative(), dest, speed));
+	this->controller->move(dest, linear->getSpeed(), false, linear->isRelative());
   }
 
   void CalxCoordCtrl::OnArcMoveClick(wxCommandEvent &evt) {
 	coord_point_t dest = { arc->getCoordX(), arc->getCoordY() };
 	coord_point_t cen = { arc->getCenterCoordX(), arc->getCenterCoordY() };
 	double speed = arc->getSpeed();
-	this->queue->addAction(new CalxCoordFloatArcAction(
-		this, ctrl, arc->isRelative(), dest, cen, arc->getSplitter(), speed,
-		arc->isClockwise()));
+	this->controller->arc(dest, cen, arc->getSplitter(), speed, arc->isClockwise(), arc->isRelative());
   }
 
   void CalxCoordCtrl::OnGraphBuildClick(wxCommandEvent &evt) {
@@ -423,8 +377,7 @@ namespace CalXUI {
 	coord_point_t min = { minx, miny };
 	coord_point_t max = { maxx, maxy };
 	GraphBuilder *graph = new GraphBuilder(node, min, max, step);
-	this->queue->addAction(
-		new CalxCoordGraphAction(this, ctrl, trans, graph, speed, true));
+	this->controller->build(trans, graph, speed);
   }
 
   void CalxCoordCtrl::OnGraphPreviewClick(wxCommandEvent &evt) {
@@ -461,37 +414,37 @@ namespace CalXUI {
 
   void CalxCoordCtrl::OnCalibrateClick(wxCommandEvent &evt) {
 	TrailerId tr = otherCtrl->getTrailer();
-	this->queue->addAction(new CalxCoordCalibrateAction(this, ctrl, tr));
+	this->controller->calibrate(tr);
   }
 
   void CalxCoordCtrl::OnMeasureClick(wxCommandEvent &evt) {
 	TrailerId tr = otherCtrl->getMeasureTrailer();
-	this->queue->addAction(new CalxCoordMeasureAction(this, ctrl, tr));
+	this->controller->measure(tr);
   }
 
   void CalxCoordCtrl::OnUpdateFiltersClick(wxCommandEvent &evt) {
-	log->setLoggingActions(otherCtrl->isLoggingActions());
-	log->setLoggingErrors(otherCtrl->isLoggingErrors());
+	controller->getLogFilter()->setLoggingActions(otherCtrl->isLoggingActions());
+	controller->getLogFilter()->setLoggingErrors(otherCtrl->isLoggingErrors());
 	motor_point_t moffset = { otherCtrl->getXOffset(),
 							  otherCtrl->getYOffset() };
 	motor_scale_t mscale = { otherCtrl->getXScale(), otherCtrl->getYScale() };
 	if (std::isnan(mscale.x)) {
 	  wxMessageBox(__("Enter valid real value"), __("Error"), wxICON_ERROR);
-	  otherCtrl->setXScale(map->getScale().x);
+	  otherCtrl->setXScale(controller->getMapFilter()->getScale().x);
 	  return;
 	}
 	if (std::isnan(mscale.y)) {
 	  wxMessageBox(__("Enter valid real value"), __("Error"), wxICON_ERROR);
-	  otherCtrl->setYScale(map->getScale().y);
+	  otherCtrl->setYScale(controller->getMapFilter()->getScale().y);
 	  return;
 	}
-	map->setOffset(moffset);
-	map->setScale(mscale);
+	controller->getMapFilter()->setOffset(moffset);
+	controller->getMapFilter()->setScale(mscale);
 	motor_point_t min = { otherCtrl->getMinX(), otherCtrl->getMinY() };
 	motor_point_t max = { otherCtrl->getMaxX(), otherCtrl->getMaxY() };
-	validator->setMinimum(min);
-	validator->setMaximum(max);
-	validator->setMaxSpeed(otherCtrl->getSpeed());
+	controller->getValidateFilter()->setMinimum(min);
+	controller->getValidateFilter()->setMaximum(max);
+	controller->getValidateFilter()->setMaxSpeed(otherCtrl->getSpeed());
   }
 
   void CalxCoordCtrl::OnWatcherClick(wxCommandEvent &evt) {
@@ -506,6 +459,7 @@ namespace CalXUI {
   }
 
   void CalxCoordCtrl::OnExit(wxCloseEvent &evt) {
+	delete this->controller;
 	while (this->watchers.size() > 0) {
 	  const auto &w = this->watchers.at(0);
 	  w->Close(true);
@@ -568,21 +522,16 @@ namespace CalXUI {
 	  return;
 	}
 
-	coord_rect_t size = this->ctrl->getFloatPlane()->getFloatSize();
-	double x = (((double) size.w) * posCtrl->getXPosition()) + size.x;
-	double y = (((double) size.h) * posCtrl->getYPosition()) + size.y;
+	coord_point_t dest = { posCtrl->getXPosition(), posCtrl->getYPosition() };
 	double speed = posCtrl->getSpeed();
-	coord_point_t dest = { x, y };
-	this->queue->addAction(
-		new CalxCoordFloatMoveAction(this, ctrl, false, false, dest, speed));
+	this->controller->move(dest, speed);
   }
 
   void CalxCoordCtrl::OnConfigureClick(wxCommandEvent &evt) {
 	CalxCoordPositionCtrl *posCtrl = this->otherCtrl->getPositionController();
 	double speed = posCtrl->getSpeed();
 	coord_point_t dest = { posCtrl->getXPosition(), posCtrl->getYPosition() };
-	this->queue->addAction(new CalxCoordConfigureAction(
-		this, ctrl, false, false, dest, speed, true));
+	this->controller->configure(dest, speed);
   }
 
   void CalxCoordCtrl::OnAdjusterClick(wxCommandEvent &evt) {
@@ -599,9 +548,9 @@ namespace CalXUI {
 
   void CalxCoordCtrl::OnAdjustPositionClick(wxCommandEvent &evt) {
 	motor_point_t offset = this->ctrl->getPosition();
-	motor_scale_t scale = this->map->getScale();
-	offset.x += this->map->getOffset().x / scale.x;
-	offset.y += this->map->getOffset().y / scale.y;
-	setPlaneOffset(offset);
+	motor_scale_t scale = this->controller->getMapFilter()->getScale();
+	offset.x += this->controller->getMapFilter()->getOffset().x / scale.x;
+	offset.y += this->controller->getMapFilter()->getOffset().y / scale.y;
+	setOffset(offset);
   }
 }
