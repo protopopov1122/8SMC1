@@ -25,18 +25,19 @@
 #include <wx/timer.h>
 #include <wx/choice.h>
 #include "ui/CalxActionQueue.h"
+#include "ui/dev/CalxDeviceHandle.h"
 #include <iostream>
 
 namespace CalXUI {
 
   wxDECLARE_EVENT(wxEVT_INSTRUMENT_CTRL_ENABLE, wxThreadEvent);
 
-  class CalxInstrumentCtrl : public wxPanel {
+  class CalxInstrumentCtrl : public CalxDeviceHandle {
    public:
 	CalxInstrumentCtrl(wxWindow *, wxWindowID, InstrumentController *);
-	void stop();
-	void updateUI();
-	bool isBusy();
+	virtual void stop();
+	virtual void updateUI();
+	virtual bool isBusy();
 
    private:
 	void OnExit(wxCloseEvent &);

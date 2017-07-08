@@ -31,6 +31,9 @@
 #include "ui/task/CalxGCodeTask.h"
 #include "ui/task/CalxLinearTask.h"
 #include "ui/task/CalxProgrammedTask.h"
+#include "ui/dev/CalxSerialMotor.h"
+#include "ui/dev/CalxSerialInstrument.h"
+#include "ui/dev/CalxDeviceConstructor.h"
 
 namespace CalXUI {
   CalxFrame::CalxFrame(std::string title)
@@ -55,16 +58,47 @@ namespace CalXUI {
 	this->menuBar->Append(this->aboutMenu, __("About"));
 	SetMenuBar(this->menuBar);		
 		
+	CalxDevicePanel *devPanel = new CalxDevicePanel(panel, wxID_ANY);
+	
 	CalxTaskPanel *taskPanel = new CalxTaskPanel(panel, wxID_ANY);
 	taskPanel->attachTaskFactory(__("GCode"), new CalxGCodeTaskFactory());
 	taskPanel->attachTaskFactory(__("Programmed"), new CalxProgrammedTaskFactory());
 	taskPanel->attachTaskFactory(__("Linear"), new CalxLinearTaskFactory());	
 		
-	panel->addPane(__("Devices"), new CalxDevicePanel(panel, wxID_ANY));
+	panel->addPane(__("Devices"), devPanel);
 	panel->addPane(__("Coordinate planes"), new CalxCoordPanel(panel, wxID_ANY));
 	panel->addPane(__("Tasks"),  taskPanel);
 	panel->addPane(__("Configuration"), new CalxConfigEditor(
 		panel, wxID_ANY, wxGetApp().getSystemManager()->getConfiguration()));
+		
+		
+	std::vector<DeviceConnectionType> devConType;
+	std::vector<DeviceConnectionType> instrConType;
+	wxGetApp().getSystemManager()->getDeviceManager()->getConnectionTypes(
+		devConType, instrConType);
+	for (const auto &devCon : devConType) {
+	  switch (devCon) {
+		case DeviceConnectionType::SerialPort: {
+			devPanel->appendDeviceFactory(__("COM Motor"), new CalxSerialMotorFactory());
+		} break;
+	  }
+	}
+	for (const auto &instrCon : instrConType) {
+	  switch (instrCon) {
+		case DeviceConnectionType::SerialPort: {
+			devPanel->appendDeviceFactory(__("COM Instrument"), new CalxSerialInstrumentFactory());
+		} break;
+	  }
+	}
+	
+	for (size_t i = 0; i < wxGetApp().getSystemManager()->getMotorCount(); i++) {
+	  devPanel->appendDevice(new CalxMotorConstructor(devPanel, wxGetApp().getSystemManager()->getMotorController((device_id_t) i)));
+	}
+
+	for (size_t i = 0; i < wxGetApp().getSystemManager()->getInstrumentCount(); i++) {
+	  devPanel->appendDevice(new CalxInstrumentConstructor(devPanel, wxGetApp().getSystemManager()->getInstrumentController((device_id_t) i)));
+	}
+	devPanel->updateUI();
 	
 	Layout();
 	Fit();

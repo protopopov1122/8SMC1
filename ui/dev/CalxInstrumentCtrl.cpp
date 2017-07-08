@@ -150,11 +150,11 @@ namespace CalXUI {
 
   CalxInstrumentCtrl::CalxInstrumentCtrl(wxWindow *win, wxWindowID id,
 										 InstrumentController *ctrl)
-	  : wxPanel::wxPanel(win, id) {
+	  : CalxDeviceHandle::CalxDeviceHandle(win, id) {
 	this->ctrl = ctrl;
 	this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
 	this->listener = new CalxInstrumentEventListener(this);
-
+	 
 	wxStaticBox *box = new wxStaticBox(
 		this, wxID_ANY,
 		FORMAT(__("Instrument #%s"), std::to_string(ctrl->getID())));
@@ -211,7 +211,6 @@ namespace CalXUI {
 			: (this->ctrl->getMode() == InstrumentMode::Prepare ? 1 : 2));
 	this->modeChoice->Bind(wxEVT_CHOICE, &CalxInstrumentCtrl::OnModeClick,
 						   this);
-
 	updateUI();
 	Layout();
 

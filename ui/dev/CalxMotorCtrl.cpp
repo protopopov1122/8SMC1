@@ -119,7 +119,7 @@ namespace CalXUI {
 
   CalxMotorCtrl::CalxMotorCtrl(wxWindow *win, wxWindowID id,
 							   CalX::MotorController *dev)
-	  : wxPanel::wxPanel(win, id) {
+	  : CalxDeviceHandle::CalxDeviceHandle(win, id) {
 	this->dev = dev;
 	this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
 	this->listener = new CalxMotorEventListener(this);

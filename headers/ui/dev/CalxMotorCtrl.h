@@ -25,6 +25,7 @@
 #include <wx/spinctrl.h>
 #include <wx/timer.h>
 #include "ui/CalxActionQueue.h"
+#include "ui/dev/CalxDeviceHandle.h"
 
 namespace CalXUI {
 
@@ -57,15 +58,15 @@ namespace CalXUI {
 	CalxMotorCtrl *ctrl;
   };
 
-  class CalxMotorCtrl : public wxPanel {
+  class CalxMotorCtrl : public CalxDeviceHandle {
    public:
 	friend class CalxMotorEventListener;
 	CalxMotorCtrl(wxWindow *, wxWindowID, CalX::MotorController *);
 
-	void updateUI();
-	void stop();
+	virtual void updateUI();
+	virtual void stop();
+	virtual bool isBusy();
 	void setEnabled(bool);
-	bool isBusy();
 
    private:
 	void switchPowerClick(wxCommandEvent &);

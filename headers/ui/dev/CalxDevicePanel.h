@@ -22,38 +22,34 @@
 
 #include "ui/CalxApp.h"
 #include "ui/CalxPanelPane.h"
+#include "ui/dev/CalxDeviceFactory.h"
 #include "ui/CalxActionQueue.h"
 
 namespace CalXUI {
 
-  class CalxMotorCtrl;       // Forward referencing
-  class CalxInstrumentCtrl;  // Forward referencing
-
   wxDECLARE_EVENT(wxEVT_DEVICE_PANEL_UPDATE, wxThreadEvent);
-  wxDECLARE_EVENT(wxEVT_DEVICE_PANEL_MOTOR_APPEND, wxThreadEvent);
-  wxDECLARE_EVENT(wxEVT_DEVICE_PANEL_INSTR_APPEND, wxThreadEvent);
+  wxDECLARE_EVENT(wxEVT_DEVICE_PANEL_DEVICE_APPEND, wxThreadEvent);
 
-  class CalxDevicePanel : public CalxPanelPane {
+  class CalxDevicePanel : public CalxPanelPane, public CalxDevicePool {
    public:
 	CalxDevicePanel(wxWindow *, wxWindowID);
 	virtual void shutdown();
 	virtual bool isBusy();
 	virtual void updateUI();
+	virtual void appendDevice(CalxDeviceConstructor*);
+	virtual void appendDeviceFactory(std::string, CalxDeviceFactory*);
 
    private:
-	void append(MotorController *);
-	void append(InstrumentController *);
-	void fullUpdate();
 	void OnExit(wxCloseEvent &);
-	void OnCOMConnectMotor(wxCommandEvent &);
-	void OnCOMConnectInstrument(wxCommandEvent &);
+	void OnDeviceConnectClick(wxCommandEvent &);
 	void OnDevicePanelUpdate(wxThreadEvent &);
-	void OnDevicePanelMotorAppend(wxThreadEvent &);
-	void OnDevicePanelInstrAppend(wxThreadEvent &);
-
-	std::vector<CalxMotorCtrl *> devs;
-	std::vector<CalxInstrumentCtrl *> instrs;
+	void OnDeviceAppend(wxThreadEvent &);
+	
+	std::vector<CalxDeviceHandle *> devices;
+	std::map<wxObject*, CalxDeviceFactory*> factories;
 	CalxActionQueue *queue;
+	
+	wxPanel *connectPanel;
   };
 }
 
