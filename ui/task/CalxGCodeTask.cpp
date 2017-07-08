@@ -52,6 +52,10 @@ namespace CalXUI {
 	Layout();
 	this->Bind(wxEVT_CLOSE_WINDOW, &CalxGcodeHandle::OnExit, this);
   }
+  
+  std::string CalxGcodeHandle::getName() {
+	return this->id;
+  }
 
   CoordTask *CalxGcodeHandle::getTask() {
 	return this->task;

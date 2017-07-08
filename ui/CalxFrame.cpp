@@ -28,6 +28,9 @@
 #include "ui/coord/CalxCoordPanel.h"
 #include "ui/dev/CalxDevicePanel.h"
 #include "ui/CalxConfigEditor.h"
+#include "ui/task/CalxGCodeTask.h"
+#include "ui/task/CalxLinearTask.h"
+#include "ui/task/CalxProgrammedTask.h"
 
 namespace CalXUI {
   CalxFrame::CalxFrame(std::string title)
@@ -52,9 +55,14 @@ namespace CalXUI {
 	this->menuBar->Append(this->aboutMenu, __("About"));
 	SetMenuBar(this->menuBar);		
 		
+	CalxTaskPanel *taskPanel = new CalxTaskPanel(panel, wxID_ANY);
+	taskPanel->attachTaskFactory(__("GCode"), new CalxGCodeTaskFactory());
+	taskPanel->attachTaskFactory(__("Programmed"), new CalxProgrammedTaskFactory());
+	taskPanel->attachTaskFactory(__("Linear"), new CalxLinearTaskFactory());	
+		
 	panel->addPane(__("Devices"), new CalxDevicePanel(panel, wxID_ANY));
 	panel->addPane(__("Coordinate planes"), new CalxCoordPanel(panel, wxID_ANY));
-	panel->addPane(__("Tasks"),  new CalxTaskPanel(panel, wxID_ANY));
+	panel->addPane(__("Tasks"),  taskPanel);
 	panel->addPane(__("Configuration"), new CalxConfigEditor(
 		panel, wxID_ANY, wxGetApp().getSystemManager()->getConfiguration()));
 	

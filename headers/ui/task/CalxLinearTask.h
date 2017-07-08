@@ -24,13 +24,16 @@ namespace CalXUI {
   class CalxLinearTaskFactory : public CalxTaskFactory {
    public:
 	virtual CalxTaskHandle *newTask(wxWindow*);
+   private:
+	size_t next_id = 0;
   };
 	
 	
 
   class CalxLinearTaskHandle : public CalxTaskHandle {
    public:
-	CalxLinearTaskHandle(wxWindow *, wxWindowID);
+	CalxLinearTaskHandle(wxWindow *, wxWindowID, size_t);
+	virtual std::string getName();
 	virtual CoordTask *getTask();
 	virtual ComplexCoordTranslator *getTranslator();
 	virtual void update();
@@ -40,6 +43,7 @@ namespace CalXUI {
 	void OnFieldChange(wxCommandEvent &);
 	void OnExit(wxCloseEvent &);
 	LinearCoordTask *task;
+	size_t id;
 	ComplexCoordTranslator *trans;
 	wxSpinCtrlDouble *xCoord;
 	wxSpinCtrlDouble *yCoord;

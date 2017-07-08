@@ -28,11 +28,14 @@ namespace CalXUI {
   class CalxProgrammedTaskFactory : public CalxTaskFactory {
    public:
 	virtual CalxTaskHandle *newTask(wxWindow*);
+   private:
+	size_t next_id = 0;
   };
 
   class CalxProgrammedTaskHandle : public CalxTaskHandle {
    public:
-	CalxProgrammedTaskHandle(wxWindow *, wxWindowID);
+	CalxProgrammedTaskHandle(wxWindow *, wxWindowID, size_t);
+	virtual std::string getName();
 	virtual CoordTask *getTask();
 	virtual ComplexCoordTranslator *getTranslator();
 	virtual void update();
@@ -49,6 +52,7 @@ namespace CalXUI {
 	void OnExit(wxCloseEvent &);
 
 	ProgrammedCoordTask *task;
+	size_t id;
 	std::vector<CalxTaskStepHandle *> steps;
 	wxPanel *mainPanel;
 	wxListBox *stepList;

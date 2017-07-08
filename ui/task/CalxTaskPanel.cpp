@@ -29,9 +29,6 @@
 #include "ui/coord/CalxVirtualPlane.h"
 #include "ctrl-lib/gcode/GCodeWriter.h"
 #include "ui/task/CalxGCodeTask.h"
-#include "ui/task/CalxLinearTask.h"
-#include "ui/task/CalxProgrammedTask.h"
-#include "ui/task/CalxGcodeLoader.h"
 
 namespace CalXUI {
 
@@ -121,21 +118,14 @@ namespace CalXUI {
 	taskPanel->SetSizer(taskSizer);
 	this->taskList = new wxListBox(taskPanel, wxID_ANY);
 	taskSizer->Add(this->taskList, 1, wxALL | wxEXPAND);
-	wxButton *newGcodeButton =
-		new wxButton(taskPanel, wxID_ANY, __("Load GCode"));
-	taskSizer->Add(newGcodeButton, 0, wxALL | wxEXPAND);
-	wxButton *newProgrammedeButton =
-		new wxButton(taskPanel, wxID_ANY, __("New Programmed"));
-	taskSizer->Add(newProgrammedeButton, 0, wxALL | wxEXPAND);
-	wxButton *newLinearButton =
-		new wxButton(taskPanel, wxID_ANY, __("New Linear"));
-	taskSizer->Add(newLinearButton, 0, wxALL | wxEXPAND);
+	
+	this->taskFactoryPanel = new wxPanel(taskPanel, wxID_ANY);
+	taskSizer->Add(this->taskFactoryPanel, 0, wxALL | wxEXPAND);
+	wxBoxSizer *taskFactorySizer = new wxBoxSizer(wxVERTICAL);
+	taskFactoryPanel->SetSizer(taskFactorySizer);
+	
 	wxButton *removeButton = new wxButton(taskPanel, wxID_ANY, __("Remove"));
 	taskSizer->Add(removeButton, 0, wxALL | wxEXPAND);
-	newGcodeButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnNewGcodeClick, this);
-	newProgrammedeButton->Bind(wxEVT_BUTTON,
-							   &CalxTaskPanel::OnNewProgrammedClick, this);
-	newLinearButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnNewLinearClick, this);
 	removeButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnRemoveClick, this);
 
 	this->mainPanel = new wxPanel(splitter, wxID_ANY);
@@ -191,11 +181,18 @@ namespace CalXUI {
 	Layout();
 	setEnabled(true);
 	this->SetScrollRate(5, 5);
-	this->gcode_loader_runs = false;
 
 	taskList->Bind(wxEVT_LISTBOX, &CalxTaskPanel::OnListClick, this);
 	this->Bind(wxEVT_CLOSE_WINDOW, &CalxTaskPanel::OnExit, this);
 	this->Bind(wxEVT_TASK_PANEL_ENABLE, &CalxTaskPanel::OnEnableEvent, this);
+  }
+  
+  void CalxTaskPanel::attachTaskFactory(std::string name, CalxTaskFactory *factory) {
+	wxButton *factButton = new wxButton(this->taskFactoryPanel, wxID_ANY, __("New") +
+		std::string(" ") + name + std::string(" ") + __("task"));
+	this->taskFactoryPanel->GetSizer()->Add(factButton, 0, wxALL | wxEXPAND);
+	factButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnNewTaskClick, this);
+	this->factories[factButton] = factory;
   }
 
   void CalxTaskPanel::shutdown() {
@@ -241,61 +238,20 @@ namespace CalXUI {
 	}
 	Destroy();
   }
-
-  void CalxTaskPanel::OnNewGcodeClick(wxCommandEvent &evt) {
-	if (this->gcode_loader_runs) {
-	  return;
+  
+  void CalxTaskPanel::OnNewTaskClick(wxCommandEvent &evt) {
+	if (this->factories.count(evt.GetEventObject()) != 0) {
+		CalxTaskFactory *fact = this->factories[evt.GetEventObject()];
+		CalxTaskHandle *task = fact->newTask(mainPanel);
+		if (task != nullptr) {
+			list.push_back(task);
+			taskList->Append(task->getName());
+			mainPanel->GetSizer()->Add(task, 1, wxALL | wxEXPAND, 5);
+			taskList->SetSelection((int) list.size() - 1);
+			Layout();
+			updateUI();
+		}
 	}
-	this->gcode_loader_runs = true;
-	CalxGcodeLoader *loader = new CalxGcodeLoader(this, wxID_ANY);
-	loader->ShowModal();
-	if (loader->isLoaded()) {
-	  std::fstream is(loader->getPath());
-	  CalxGcodeHandle *handle = new CalxGcodeHandle(
-		  mainPanel, wxID_ANY, loader->getPath(), &is, loader->getTranslator());
-	  is.close();
-
-	  list.push_back(handle);
-	  taskList->Append(loader->getPath());
-	  mainPanel->GetSizer()->Add(handle, 1, wxALL | wxEXPAND, 5);
-	  taskList->SetSelection((int) list.size() - 1);
-	  Layout();
-	}
-	this->gcode_loader_runs = false;
-	loader->Destroy();
-	updateUI();
-  }
-
-  void CalxTaskPanel::OnNewProgrammedClick(wxCommandEvent &evt) {
-	CalxProgrammedTaskHandle *handle =
-		new CalxProgrammedTaskHandle(mainPanel, wxID_ANY);
-	list.push_back(handle);
-	taskList->Append(FORMAT(__("Task #%s"), std::to_string(list.size())));
-	mainPanel->GetSizer()->Add(handle, 1, wxALL | wxEXPAND, 5);
-	taskList->SetSelection((int) list.size() - 1);
-	Layout();
-	updateUI();
-  }
-
-  void CalxTaskPanel::OnNewLinearClick(wxCommandEvent &evt) {
-	CalxLinearTaskHandle *handle =
-		new CalxLinearTaskHandle(mainPanel, wxID_ANY);
-	list.push_back(handle);
-	taskList->Append(FORMAT(__("Task #%s"), std::to_string(list.size())));
-	mainPanel->GetSizer()->Add(handle, 1, wxALL | wxEXPAND, 5);
-	taskList->SetSelection((int) list.size() - 1);
-	if (taskList->GetSelection() != wxNOT_FOUND &&
-		plane->GetSelection() != wxNOT_FOUND) {
-	  CoordHandle *handler =
-		  wxGetApp().getSystemManager()->getCoord(
-			  (size_t) plane->GetSelection());
-	  if (handler->isMeasured()) {
-		handle->setRectangle(handler->getFloatPlane()->getFloatSize());
-	  }
-	}
-
-	Layout();
-	updateUI();
   }
 
   void CalxTaskPanel::OnRemoveClick(wxCommandEvent &evt) {

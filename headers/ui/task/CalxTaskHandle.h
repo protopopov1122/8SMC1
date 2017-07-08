@@ -39,6 +39,7 @@ namespace CalXUI {
 		: wxScrolledWindow::wxScrolledWindow(win, id) {
 	  this->SetScrollRate(5, 5);
 	}
+	virtual std::string getName() = 0;
 	virtual CoordTask *getTask() = 0;
 	virtual ComplexCoordTranslator *getTranslator() = 0;
 	virtual void update() = 0;

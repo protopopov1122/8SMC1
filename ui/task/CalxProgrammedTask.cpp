@@ -21,9 +21,11 @@
 
 namespace CalXUI {
   CalxProgrammedTaskHandle::CalxProgrammedTaskHandle(wxWindow *win,
-													 wxWindowID id)
+													 wxWindowID id,
+													 size_t tid)
 	  : CalxTaskHandle::CalxTaskHandle(win, id) {
 	this->task = new ProgrammedCoordTask();
+	this->id = tid;
 
 	coord_point_t offset = wxGetApp().getUnitOffset();
 	coord_scale_t size = { wxGetApp().getUnitScale(),
@@ -78,6 +80,10 @@ namespace CalXUI {
 
 	this->Bind(wxEVT_CLOSE_WINDOW, &CalxProgrammedTaskHandle::OnExit, this);
 	Layout();
+  }
+  
+  std::string CalxProgrammedTaskHandle::getName() {
+	return "Programmed Task #" + std::to_string(this->id);
   }
 
   CoordTask *CalxProgrammedTaskHandle::getTask() {
@@ -204,6 +210,6 @@ namespace CalXUI {
   }
   
   CalxTaskHandle *CalxProgrammedTaskFactory::newTask(wxWindow *win) {
-	return new CalxProgrammedTaskHandle(win, wxID_ANY);  
+	return new CalxProgrammedTaskHandle(win, wxID_ANY, ++this->next_id);  
   }
 }

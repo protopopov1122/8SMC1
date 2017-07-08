@@ -26,6 +26,7 @@
 #include <wx/spinctrl.h>
 #include <wx/choice.h>
 #include "ui/CalxPanelPane.h"
+#include "ui/task/CalxTaskFactory.h"
 #include "ui/task/CalxTaskHandle.h"
 #include "ui/CalxActionQueue.h"
 
@@ -43,12 +44,12 @@ namespace CalXUI {
 	virtual void shutdown();
 	virtual bool isBusy();
 	void setEnabled(bool);
+	
+	void attachTaskFactory(std::string, CalxTaskFactory*);
 
    private:
 	void OnExit(wxCloseEvent &);
-	void OnNewGcodeClick(wxCommandEvent &);
-	void OnNewProgrammedClick(wxCommandEvent &);
-	void OnNewLinearClick(wxCommandEvent &);
+	void OnNewTaskClick(wxCommandEvent &);
 	void OnRemoveClick(wxCommandEvent &);
 	void OnListClick(wxCommandEvent &);
 	void OnBuildClick(wxCommandEvent &);
@@ -61,13 +62,14 @@ namespace CalXUI {
 	wxListBox *taskList;
 	wxPanel *mainPanel;
 	wxPanel *taskPanel;
+	wxPanel *taskFactoryPanel;
 	std::vector<CalxTaskHandle *> list;
+	std::map<wxObject*, CalxTaskFactory*> factories;
 	wxPanel *execPanel;
 	wxButton *stopButton;
 	wxChoice *plane;
 	wxSpinCtrlDouble *speed;
 	CalxActionQueue *queue;
-	bool gcode_loader_runs;
   };
 }
 
