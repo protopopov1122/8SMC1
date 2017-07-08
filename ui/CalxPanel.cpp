@@ -18,10 +18,6 @@
 */
 
 #include "ui/CalxPanel.h"
-#include "ui/dev/CalxDevicePanel.h"
-#include "ui/coord/CalxCoordPanel.h"
-#include "ui/task/CalxTaskPanel.h"
-#include "ui/CalxConfigEditor.h"
 
 namespace CalXUI {
 

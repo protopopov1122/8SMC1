@@ -26,9 +26,11 @@
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/splitter.h>
-#include "ui/coord/CalxCoordPanel.h"
 #include "ui/coord/CalxVirtualPlane.h"
 #include "ctrl-lib/gcode/GCodeWriter.h"
+#include "ui/task/CalxGCodeTask.h"
+#include "ui/task/CalxLinearTask.h"
+#include "ui/task/CalxProgrammedTask.h"
 #include "ui/task/CalxGcodeLoader.h"
 
 namespace CalXUI {
@@ -254,7 +256,7 @@ namespace CalXUI {
 	  is.close();
 
 	  list.push_back(handle);
-	  taskList->Append(handle->getId());
+	  taskList->Append(loader->getPath());
 	  mainPanel->GetSizer()->Add(handle, 1, wxALL | wxEXPAND, 5);
 	  taskList->SetSelection((int) list.size() - 1);
 	  Layout();
@@ -415,7 +417,7 @@ namespace CalXUI {
 			  ->clone(nullptr));
 
 	  list.push_back(gcodeHandle);
-	  taskList->Append(gcodeHandle->getId());
+	  taskList->Append(__("Linear ") + taskList->GetStringSelection().ToStdString());
 	  mainPanel->GetSizer()->Add(gcodeHandle, 1, wxALL | wxEXPAND, 5);
 	  taskList->SetSelection((int) list.size() - 1);
 	  Layout();

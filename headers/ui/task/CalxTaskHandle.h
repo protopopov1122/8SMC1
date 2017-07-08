@@ -33,157 +33,15 @@ using namespace CalX;
 
 namespace CalXUI {
 
-  enum class CalxTaskType { CalxGcode, CalxProgrammed, CalxLinear };
-
   class CalxTaskHandle : public wxScrolledWindow {
    public:
-	CalxTaskHandle(wxWindow *win, wxWindowID id, CalxTaskType type)
+	CalxTaskHandle(wxWindow *win, wxWindowID id)
 		: wxScrolledWindow::wxScrolledWindow(win, id) {
 	  this->SetScrollRate(5, 5);
-	  this->type = type;
-	}
-	CalxTaskType getType() {
-	  return this->type;
 	}
 	virtual CoordTask *getTask() = 0;
 	virtual ComplexCoordTranslator *getTranslator() = 0;
 	virtual void update() = 0;
-
-   private:
-	CalxTaskType type;
-  };
-
-  class CalxGcodeHandle : public CalxTaskHandle {
-   public:
-	CalxGcodeHandle(wxWindow *, wxWindowID, std::string, std::istream *,
-					ComplexCoordTranslator *);
-	virtual CoordTask *getTask();
-	virtual void update();
-	std::string getId() {
-	  return this->id;
-	}
-	virtual ComplexCoordTranslator *getTranslator() {
-	  return this->translator;
-	}
-
-   private:
-	void OnExit(wxCloseEvent &);
-
-	std::string id;
-	CalxCoordFilterCtrl *filter;
-	ComplexCoordTranslator *translator;
-
-	CoordTask *task;
-  };
-
-  class CalxTaskStepHandle : public wxPanel {
-   public:
-	CalxTaskStepHandle(wxWindow *win, wxWindowID id)
-		: wxPanel::wxPanel(win, id) {}
-	virtual void update() = 0;
-  };
-
-  class CalxTaskLinearStepHandle : public CalxTaskStepHandle {
-   public:
-	CalxTaskLinearStepHandle(wxWindow *, wxWindowID);
-	MoveTaskStep *getTaskStep();
-	virtual void update();
-
-   private:
-	void OnFieldChange(wxCommandEvent &);
-
-	MoveTaskStep *step;
-
-	wxSpinCtrlDouble *xCoord;
-	wxSpinCtrlDouble *yCoord;
-	wxSpinCtrlDouble *speed;
-	wxCheckBox *relative;
-  };
-
-  class CalxTaskLinearJumpStepHandle : public CalxTaskStepHandle {
-   public:
-	CalxTaskLinearJumpStepHandle(wxWindow *, wxWindowID);
-	JumpTaskStep *getTaskStep();
-	virtual void update();
-
-   private:
-	void OnFieldChange(wxCommandEvent &);
-
-	JumpTaskStep *step;
-
-	wxSpinCtrlDouble *xCoord;
-	wxSpinCtrlDouble *yCoord;
-	wxSpinCtrlDouble *speed;
-	wxCheckBox *relative;
-  };
-
-  class CalxTaskArcStepHandle : public CalxTaskStepHandle {
-   public:
-	CalxTaskArcStepHandle(wxWindow *, wxWindowID);
-	ArcTaskStep *getTaskStep();
-	virtual void update();
-
-   private:
-	void OnFieldChange(wxCommandEvent &);
-
-	ArcTaskStep *step;
-
-	wxSpinCtrlDouble *destXCoord;
-	wxSpinCtrlDouble *destYCoord;
-	wxSpinCtrlDouble *cenXCoord;
-	wxSpinCtrlDouble *cenYCoord;
-	wxSpinCtrlDouble *speed;
-	wxSpinCtrl *splitter;
-	wxCheckBox *clockwise;
-	wxCheckBox *relative;
-  };
-
-  class CalxProgrammedTaskHandle : public CalxTaskHandle {
-   public:
-	CalxProgrammedTaskHandle(wxWindow *, wxWindowID);
-	virtual CoordTask *getTask();
-	virtual ComplexCoordTranslator *getTranslator();
-	virtual void update();
-	void updateUI();
-
-   private:
-	void OnListClick(wxCommandEvent &);
-	void OnMoveAddClick(wxCommandEvent &);
-	void OnJumpAddClick(wxCommandEvent &);
-	void OnArcAddClick(wxCommandEvent &);
-	void OnMoveUpClick(wxCommandEvent &);
-	void OnMoveDownClick(wxCommandEvent &);
-	void OnRemoveClick(wxCommandEvent &);
-	void OnExit(wxCloseEvent &);
-
-	ProgrammedCoordTask *task;
-	std::vector<CalxTaskStepHandle *> steps;
-	wxPanel *mainPanel;
-	wxListBox *stepList;
-	wxButton *moveUpButton;
-	wxButton *moveDownButton;
-	ComplexCoordTranslator *trans;
-  };
-
-  class CalxLinearTaskHandle : public CalxTaskHandle {
-   public:
-	CalxLinearTaskHandle(wxWindow *, wxWindowID);
-	virtual CoordTask *getTask();
-	virtual ComplexCoordTranslator *getTranslator();
-	virtual void update();
-	void setRectangle(coord_rect_t);
-
-   private:
-	void OnFieldChange(wxCommandEvent &);
-	void OnExit(wxCloseEvent &);
-	LinearCoordTask *task;
-	ComplexCoordTranslator *trans;
-	wxSpinCtrlDouble *xCoord;
-	wxSpinCtrlDouble *yCoord;
-	wxSpinCtrlDouble *wDim;
-	wxSpinCtrlDouble *hDim;
-	wxSpinCtrlDouble *spacing;
-	wxCheckBox *vertical;
   };
 }
 

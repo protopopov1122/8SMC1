@@ -29,7 +29,6 @@
 #include "ctrl-lib/graph/FunctionParser.h"
 #include "ctrl-lib/graph/FunctionEngine.h"
 #include "ui/coord/CalxCoordCtrl.h"
-#include "ui/task/CalxTaskPanel.h"
 #include "ui/coord/CalxCoordPlaneWatcher.h"
 #include "ui/coord/CalxCoordAdjuster.h"
 
