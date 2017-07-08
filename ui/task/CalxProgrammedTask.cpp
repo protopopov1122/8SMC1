@@ -30,8 +30,7 @@ namespace CalXUI {
 	coord_point_t offset = wxGetApp().getUnitOffset();
 	coord_scale_t size = { wxGetApp().getUnitScale(),
 						   wxGetApp().getUnitScale() };
-	this->trans =
-		new ComplexCoordTranslator(new LinearCoordTranslator(offset, size));
+	this->trans = new LinearCoordTranslator(offset, size);
 
 	wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 	SetSizer(sizer);
@@ -90,7 +89,7 @@ namespace CalXUI {
 	return this->task;
   }
 
-  ComplexCoordTranslator *CalxProgrammedTaskHandle::getTranslator() {
+  CoordTranslator *CalxProgrammedTaskHandle::getTranslator() {
 	return this->trans;
   }
 

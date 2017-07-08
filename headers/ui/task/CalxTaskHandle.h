@@ -41,7 +41,7 @@ namespace CalXUI {
 	}
 	virtual std::string getName() = 0;
 	virtual CoordTask *getTask() = 0;
-	virtual ComplexCoordTranslator *getTranslator() = 0;
+	virtual CoordTranslator *getTranslator() = 0;
 	virtual void update() = 0;
   };
 }

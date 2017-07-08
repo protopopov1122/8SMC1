@@ -233,6 +233,9 @@ namespace CalXUI {
   }
 
   void CalxTaskPanel::OnExit(wxCloseEvent &evt) {
+	for (const auto &kv : this->factories) {
+	  delete kv.second;
+	}
 	for (const auto &h : list) {
 	  h->Close(true);
 	}
@@ -365,12 +368,13 @@ namespace CalXUI {
 	  }
 	  ss.seekg(0);
 
+	  ComplexCoordTranslator *trans = new ComplexCoordTranslator(list.at((size_t) taskList->GetSelection())
+			  ->getTranslator()
+			  ->clone(nullptr));
 	  CalxGcodeHandle *gcodeHandle = new CalxGcodeHandle(
 		  mainPanel, wxID_ANY,
 		  __("Linear ") + taskList->GetStringSelection().ToStdString(), &ss,
-		  list.at((size_t) taskList->GetSelection())
-			  ->getTranslator()
-			  ->clone(nullptr));
+		  trans);
 
 	  list.push_back(gcodeHandle);
 	  taskList->Append(__("Linear ") + taskList->GetStringSelection().ToStdString());

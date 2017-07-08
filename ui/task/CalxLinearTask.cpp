@@ -43,8 +43,7 @@ namespace CalXUI {
 	coord_point_t offset = wxGetApp().getUnitOffset();
 	coord_scale_t size = { wxGetApp().getUnitScale(),
 						   wxGetApp().getUnitScale() };
-	this->trans =
-		new ComplexCoordTranslator(new LinearCoordTranslator(offset, size));
+	this->trans = new LinearCoordTranslator(offset, size);
 
 	this->xCoord =
 		new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
@@ -122,7 +121,7 @@ namespace CalXUI {
 	return this->task;
   }
 
-  ComplexCoordTranslator *CalxLinearTaskHandle::getTranslator() {
+  CoordTranslator *CalxLinearTaskHandle::getTranslator() {
 	return this->trans;
   }
 

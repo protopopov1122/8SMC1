@@ -35,7 +35,7 @@ namespace CalXUI {
 	CalxLinearTaskHandle(wxWindow *, wxWindowID, size_t);
 	virtual std::string getName();
 	virtual CoordTask *getTask();
-	virtual ComplexCoordTranslator *getTranslator();
+	virtual CoordTranslator *getTranslator();
 	virtual void update();
 	void setRectangle(coord_rect_t);
 
@@ -44,7 +44,7 @@ namespace CalXUI {
 	void OnExit(wxCloseEvent &);
 	LinearCoordTask *task;
 	size_t id;
-	ComplexCoordTranslator *trans;
+	CoordTranslator *trans;
 	wxSpinCtrlDouble *xCoord;
 	wxSpinCtrlDouble *yCoord;
 	wxSpinCtrlDouble *wDim;

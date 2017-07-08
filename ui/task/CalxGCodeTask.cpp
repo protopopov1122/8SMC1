@@ -70,7 +70,7 @@ namespace CalXUI {
 	this->filter->getTranslator();
   }
   
-  ComplexCoordTranslator *CalxGcodeHandle::getTranslator() {
+  CoordTranslator *CalxGcodeHandle::getTranslator() {
 	return this->translator;
   }
   
