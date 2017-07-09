@@ -20,14 +20,12 @@
 #ifndef CALX_UI_CALX_COORD_MISC_CTRL_H_
 #define CALX_UI_CALX_COORD_MISC_CTRL_H_
 
-#include "ui/calx.h"
+#include "ui/CalxApp.h"
 #include <wx/stattext.h>
 #include <wx/choice.h>
 #include <wx/checkbox.h>
 #include <wx/spinctrl.h>
 #include "ui/CalxActionQueue.h"
-#include "ui/CalxFrame.h"
-#include "ui/coord/CalxVirtualPlane.h"
 
 using namespace CalX;
 

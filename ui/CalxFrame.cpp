@@ -42,58 +42,9 @@
 #include "ui/coord/CalxCoordOtherComponent.h"
 
 namespace CalXUI {
-  CalxFrame::CalxFrame(std::string title)
-	  : wxFrame::wxFrame(nullptr, wxID_ANY, title) {
-	this->CreateStatusBar(1);
-	this->SetStatusText(__("CalX UI"), 0);
 
-	wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
-	this->SetSizer(sizer);
-	this->panel = new CalxPanel(this, wxID_ANY);
-	sizer->Add(this->panel, 1, wxEXPAND | wxALL);
-
-	Bind(wxEVT_CLOSE_WINDOW, &CalxFrame::OnClose, this);
-
-	this->menuBar = new wxMenuBar();
-	this->aboutMenu = new wxMenu();
-	wxMenuItem *aboutItem =
-		new wxMenuItem(this->aboutMenu, wxID_ABOUT, __("About"));
-	this->aboutMenu->Append(aboutItem);
-	Bind(wxEVT_COMMAND_MENU_SELECTED, &CalxFrame::OnAboutMenuClick, this,
-		 wxID_ABOUT);
-	this->menuBar->Append(this->aboutMenu, __("About"));
-	SetMenuBar(this->menuBar);
-
-	CalxDevicePanel *devPanel = new CalxDevicePanel(panel, wxID_ANY);
-
-	CalxTaskPanel *taskPanel = new CalxTaskPanel(panel, wxID_ANY);
-	taskPanel->attachTaskFactory(__("GCode"), new CalxGCodeTaskFactory());
-	taskPanel->attachTaskFactory(__("Programmed"),
-								 new CalxProgrammedTaskFactory());
-	taskPanel->attachTaskFactory(__("Linear"), new CalxLinearTaskFactory());
-
-	CalxCoordPanel *coordPanel = new CalxCoordPanel(panel, wxID_ANY, 2);
-	coordPanel->addComponentFactory(__("Linear movement"),
-									new CalxCoordLinearComponentFactory(), 0);
-	coordPanel->addComponentFactory(__("Arc movement"),
-									new CalxCoordArcComponentFactory(), 0);
-	coordPanel->addComponentFactory(
-		__("Function graph"), new CalxCoordGraphComponentFactory(), 0, false);
-	coordPanel->addComponentFactory(
-		__("Other"), new CalxCoordOtherComponentFactory(), 1, false);
-	coordPanel->addComponentFactory(
-		__("Position"), new CalxCoordPositionComponentFactory(), 1, false);
-	coordPanel->addComponentFactory(__("Filters"),
-									new CalxCoordFilterComponentFactory(), 1);
-
-	panel->addPane(__("Devices"), devPanel);
-	panel->addPane(__("Coordinate planes"), coordPanel);
-	panel->addPane(__("Tasks"), taskPanel);
-	panel->addPane(__("Configuration"),
-				   new CalxConfigEditor(
-					   panel, wxID_ANY,
-					   wxGetApp().getSystemManager()->getConfiguration()));
-
+  CalxDevicePanel *newDevicePanel(wxWindow *win) {
+	CalxDevicePanel *devPanel = new CalxDevicePanel(win, wxID_ANY);
 	std::vector<DeviceConnectionType> devConType;
 	std::vector<DeviceConnectionType> instrConType;
 	wxGetApp().getSystemManager()->getDeviceManager()->getConnectionTypes(
@@ -130,6 +81,67 @@ namespace CalXUI {
 			  (device_id_t) i)));
 	}
 	devPanel->updateUI();
+	return devPanel;
+  }
+
+  CalxCoordPanel *newCoordPanel(wxWindow *win) {
+	CalxCoordPanel *coordPanel = new CalxCoordPanel(win, wxID_ANY, 2);
+	coordPanel->addComponentFactory(__("Linear movement"),
+									new CalxCoordLinearComponentFactory(), 0);
+	coordPanel->addComponentFactory(__("Arc movement"),
+									new CalxCoordArcComponentFactory(), 0);
+	coordPanel->addComponentFactory(
+		__("Function graph"), new CalxCoordGraphComponentFactory(), 0, false);
+	coordPanel->addComponentFactory(
+		__("Other"), new CalxCoordOtherComponentFactory(), 1, false);
+	coordPanel->addComponentFactory(
+		__("Position"), new CalxCoordPositionComponentFactory(), 1, false);
+	coordPanel->addComponentFactory(__("Filters"),
+									new CalxCoordFilterComponentFactory(), 1);
+	return coordPanel;
+  }
+
+  CalxTaskPanel *newTaskPanel(wxWindow *win) {
+	CalxTaskPanel *taskPanel = new CalxTaskPanel(win, wxID_ANY);
+	taskPanel->attachTaskFactory(__("GCode"), new CalxGCodeTaskFactory());
+	taskPanel->attachTaskFactory(__("Programmed"),
+								 new CalxProgrammedTaskFactory());
+	taskPanel->attachTaskFactory(__("Linear"), new CalxLinearTaskFactory());
+	return taskPanel;
+  }
+
+  CalxConfigEditor *newConfigPanel(wxWindow *win) {
+	CalxConfigEditor *editor = new CalxConfigEditor(
+		win, wxID_ANY, wxGetApp().getSystemManager()->getConfiguration());
+	return editor;
+  }
+
+  CalxFrame::CalxFrame(std::string title)
+	  : wxFrame::wxFrame(nullptr, wxID_ANY, title) {
+	this->CreateStatusBar(1);
+	this->SetStatusText(__("CalX UI"), 0);
+
+	wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
+	this->SetSizer(sizer);
+	this->panel = new CalxPanel(this, wxID_ANY);
+	sizer->Add(this->panel, 1, wxEXPAND | wxALL);
+
+	Bind(wxEVT_CLOSE_WINDOW, &CalxFrame::OnClose, this);
+
+	this->menuBar = new wxMenuBar();
+	this->aboutMenu = new wxMenu();
+	wxMenuItem *aboutItem =
+		new wxMenuItem(this->aboutMenu, wxID_ABOUT, __("About"));
+	this->aboutMenu->Append(aboutItem);
+	Bind(wxEVT_COMMAND_MENU_SELECTED, &CalxFrame::OnAboutMenuClick, this,
+		 wxID_ABOUT);
+	this->menuBar->Append(this->aboutMenu, __("About"));
+	SetMenuBar(this->menuBar);
+
+	panel->addPane(__("Devices"), newDevicePanel(panel));
+	panel->addPane(__("Coordinate planes"), newCoordPanel(panel));
+	panel->addPane(__("Tasks"), newTaskPanel(panel));
+	panel->addPane(__("Configuration"), newConfigPanel(panel));
 
 	Layout();
 	Fit();

@@ -27,7 +27,7 @@
 #include <wx/spinctrl.h>
 #include <wx/collpane.h>
 #include "ui/CalxActionQueue.h"
-#include "ui/coord/CalxCoordMiscCtrl.h"
+#include "ui/coord/CalxCoordPaneMisc.h"
 #include "ui/coord/CalxCoordController.h"
 #include "ui/coord/CalxCoordComponent.h"
 #include "ui/coord/CalxWatcherPool.h"
