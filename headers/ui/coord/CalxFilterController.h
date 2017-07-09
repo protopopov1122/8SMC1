@@ -23,12 +23,12 @@
 #include "ui/calx.h"
 
 namespace CalXUI {
-	
-	class CalxFilterController {
-		public:
-			virtual void setOffset(motor_point_t) = 0;
-			virtual void setScale(motor_scale_t) = 0;
-	};
+
+  class CalxFilterController {
+   public:
+	virtual void setOffset(motor_point_t) = 0;
+	virtual void setScale(motor_scale_t) = 0;
+  };
 }
 
 #endif

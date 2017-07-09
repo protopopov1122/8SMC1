@@ -22,7 +22,8 @@
 
 namespace CalXUI {
 
-  CalxCoordPositionCtrl::CalxCoordPositionCtrl(wxWindow *win, wxWindowID id, CalxCoordController *controller)
+  CalxCoordPositionCtrl::CalxCoordPositionCtrl(wxWindow *win, wxWindowID id,
+											   CalxCoordController *controller)
 	  : wxPanel::wxPanel(win, id), controller(controller) {
 	wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 	SetSizer(sizer);
@@ -73,9 +74,10 @@ namespace CalXUI {
 	sizer->Add(new wxStaticText(this, wxID_ANY, wxGetApp().getSpeedUnits()));
 	sizer->Add(moveButton);
 	sizer->Add(configureButton);
-	
+
 	moveButton->Bind(wxEVT_BUTTON, &CalxCoordPositionCtrl::OnMoveClick, this);
-	configureButton->Bind(wxEVT_BUTTON, &CalxCoordPositionCtrl::OnConfigureClick, this);
+	configureButton->Bind(wxEVT_BUTTON,
+						  &CalxCoordPositionCtrl::OnConfigureClick, this);
   }
 
   void CalxCoordPositionCtrl::OnMoveClick(wxCommandEvent &evt) {
@@ -90,7 +92,7 @@ namespace CalXUI {
 	double speed = this->speed->GetValue();
 	this->controller->move(dest, speed);
   }
-  
+
   void CalxCoordPositionCtrl::OnConfigureClick(wxCommandEvent &evt) {
 	coord_point_t dest = { this->xPos->GetValue(), this->yPos->GetValue() };
 	double speed = this->speed->GetValue();

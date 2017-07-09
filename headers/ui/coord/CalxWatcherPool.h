@@ -24,24 +24,25 @@
 #include <vector>
 
 namespace CalXUI {
-	
-	class CalxCoordPlaneWatcher; // Forward referencing
-	
-	class CalxWatcherPool {
-		public:
-			CalxWatcherPool(wxWindow*, CoordHandle*);
-			virtual ~CalxWatcherPool();
-			
-			CalxCoordPlaneWatcher *newWatcher();
-			bool hasWatchers();
-			void updateWatchers();
-			void bindWatcher(CalxCoordPlaneWatcher*);
-			void unbindWatcher(CalxCoordPlaneWatcher*);
-		private:
-			wxWindow *parent;
-			CoordHandle *handle;
-			std::vector<CalxCoordPlaneWatcher*> watchers;
-	};
+
+  class CalxCoordPlaneWatcher;  // Forward referencing
+
+  class CalxWatcherPool {
+   public:
+	CalxWatcherPool(wxWindow *, CoordHandle *);
+	virtual ~CalxWatcherPool();
+
+	CalxCoordPlaneWatcher *newWatcher();
+	bool hasWatchers();
+	void updateWatchers();
+	void bindWatcher(CalxCoordPlaneWatcher *);
+	void unbindWatcher(CalxCoordPlaneWatcher *);
+
+   private:
+	wxWindow *parent;
+	CoordHandle *handle;
+	std::vector<CalxCoordPlaneWatcher *> watchers;
+  };
 }
 
 #endif

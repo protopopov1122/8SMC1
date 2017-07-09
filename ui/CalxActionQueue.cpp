@@ -61,7 +61,7 @@ namespace CalXUI {
   bool CalxActionQueue::isEmpty() {
 	return this->queue.empty();
   }
-  
+
   bool CalxActionQueue::isBusy() {
 	return this->current != nullptr;
   }

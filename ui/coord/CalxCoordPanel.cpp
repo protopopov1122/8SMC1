@@ -32,7 +32,6 @@ namespace CalXUI {
 
   CalxCoordPanel::CalxCoordPanel(wxWindow *win, wxWindowID id)
 	  : CalxPanelPane::CalxPanelPane(win, id) {
-
 	wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 	SetSizer(sizer);
 	wxSplitterWindow *splitter = new wxSplitterWindow(this, wxID_ANY);
@@ -85,24 +84,24 @@ namespace CalXUI {
 	mainPanel->Layout();
 	Layout();
   }
-  
+
   size_t CalxCoordPanel::getCoordCount() {
 	return coords.size();
   }
-  
+
   CalxCoordCtrl *CalxCoordPanel::getCoordCtrl(size_t sz) {
 	return sz < coords.size() ? coords.at(sz) : nullptr;
   }
-  
-  bool CalxCoordPanel::isBusy()  {
+
+  bool CalxCoordPanel::isBusy() {
 	for (const auto &c : coords) {
-		if (c->isBusy()) {
-			return true;
-		}
+	  if (c->isBusy()) {
+		return true;
+	  }
 	}
 	return false;
- }
-  
+  }
+
   void CalxCoordPanel::shutdown() {
 	for (const auto &ctrl : this->coords) {
 	  ctrl->shutdown();

@@ -350,13 +350,13 @@ namespace CalXUI {
 	updateEntry();
 	this->Bind(wxEVT_CLOSE_WINDOW, &CalxConfigEditor::OnExit, this);
   }
-  
+
   bool CalxConfigEditor::isBusy() {
 	return false;
   }
-  
+
   void CalxConfigEditor::updateUI() {}
-  
+
   void CalxConfigEditor::shutdown() {}
 
   wxButton *CalxConfigEditor::getOkButton() {

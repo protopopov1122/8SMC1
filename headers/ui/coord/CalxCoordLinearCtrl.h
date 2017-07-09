@@ -35,17 +35,17 @@ namespace CalXUI {
 
   class CalxCoordLinearCtrl : public wxPanel {
    public:
-	CalxCoordLinearCtrl(wxWindow*, wxWindowID, CalxCoordController*);
+	CalxCoordLinearCtrl(wxWindow *, wxWindowID, CalxCoordController *);
 
    private:
-	void OnMoveClick(wxCommandEvent&);
-	void OnJumpClick(wxCommandEvent&);
-	
+	void OnMoveClick(wxCommandEvent &);
+	void OnJumpClick(wxCommandEvent &);
+
 	wxSpinCtrlDouble *xCoord;
 	wxSpinCtrlDouble *yCoord;
 	wxSpinCtrlDouble *speed;
 	wxCheckBox *relative;
-	
+
 	CalxCoordController *controller;
   };
 }

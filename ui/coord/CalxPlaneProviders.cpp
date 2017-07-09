@@ -20,7 +20,7 @@
 #include "ui/coord/CalxPlaneProviders.h"
 
 namespace CalXUI {
-	  class CalxCoordPlaneAddProvider : public RequestProvider {
+  class CalxCoordPlaneAddProvider : public RequestProvider {
    public:
 	CalxCoordPlaneAddProvider(CalxCoordPanel *panel)
 		: RequestProvider::RequestProvider("plane.create") {
@@ -86,7 +86,7 @@ namespace CalXUI {
 		bool ready = false;
 		ctrl->getController()->measure(trailer, &ready);
 		while (!ready) {
-			wxThread::Yield();
+		  wxThread::Yield();
 		}
 		return true;
 	  } else {
@@ -119,15 +119,15 @@ namespace CalXUI {
 	  double y = ((RealConfigValue *) PROVIDER_ARG(req, 2))->getValue();
 	  if (sysman->getCoord((size_t) plid) != nullptr) {
 		CalxCoordCtrl *ctrl = panel->getCoordCtrl((size_t) plid);
-		ConfigManager *config = wxGetApp().getSystemManager()->getConfiguration();
-		coord_point_t dest = {x, y};
-		int_conf_t mspeed =
-			config->getEntry("core")->getInt("maxspeed", 125);
+		ConfigManager *config =
+			wxGetApp().getSystemManager()->getConfiguration();
+		coord_point_t dest = { x, y };
+		int_conf_t mspeed = config->getEntry("core")->getInt("maxspeed", 125);
 		double speed = ((double) mspeed) / wxGetApp().getSpeedScale();
 		bool ready = false;
 		ctrl->getController()->move(dest, speed, &ready);
 		while (!ready) {
-			wxThread::Yield();
+		  wxThread::Yield();
 		}
 		return true;
 	  } else {
@@ -165,10 +165,11 @@ namespace CalXUI {
 	  motor_point_t mdest = { x, y };
 	  if (sysman->getCoord((size_t) plid) != nullptr) {
 		CalxCoordCtrl *ctrl = panel->getCoordCtrl((size_t) plid);
-		ConfigManager *config = wxGetApp().getSystemManager()->getConfiguration();
-		int_conf_t mspeed =
-			config->getEntry("core")->getInt("maxspeed", 125);
-		coord_point_t dest = {mdest.x / wxGetApp().getUnitScale(), mdest.y / wxGetApp().getUnitScale()};
+		ConfigManager *config =
+			wxGetApp().getSystemManager()->getConfiguration();
+		int_conf_t mspeed = config->getEntry("core")->getInt("maxspeed", 125);
+		coord_point_t dest = { mdest.x / wxGetApp().getUnitScale(),
+							   mdest.y / wxGetApp().getUnitScale() };
 		double speed = ((double) mspeed) / wxGetApp().getSpeedScale();
 		bool ready = false;
 		ctrl->getController()->move(dest, speed, false, false, &ready);
@@ -202,10 +203,13 @@ namespace CalXUI {
 			  ->getValue();
 	  if (sysman->getCoord((size_t) plid) != nullptr) {
 		CalxCoordCtrl *ctrl = panel->getCoordCtrl((size_t) plid);
-		motor_point_t offset = ctrl->getController()->getHandle()->getPosition();
+		motor_point_t offset =
+			ctrl->getController()->getHandle()->getPosition();
 		motor_scale_t scale = ctrl->getController()->getMapFilter()->getScale();
-		offset.x += ctrl->getController()->getMapFilter()->getOffset().x / scale.x;
-		offset.y += ctrl->getController()->getMapFilter()->getOffset().y / scale.y;
+		offset.x +=
+			ctrl->getController()->getMapFilter()->getOffset().x / scale.x;
+		offset.y +=
+			ctrl->getController()->getMapFilter()->getOffset().y / scale.y;
 		ctrl->setOffset(offset);
 		return true;
 	  } else {
@@ -276,7 +280,7 @@ namespace CalXUI {
    private:
 	CalxCoordPanel *panel;
   };
-	
+
   void calx_panel_init_resolvers(CalxCoordPanel *panel) {
 	CalxApp &app = wxGetApp();
 	app.getSystemManager()->getRequestResolver()->registerProvider(

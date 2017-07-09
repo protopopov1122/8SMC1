@@ -154,7 +154,7 @@ namespace CalXUI {
 	this->ctrl = ctrl;
 	this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
 	this->listener = new CalxInstrumentEventListener(this);
-	 
+
 	wxStaticBox *box = new wxStaticBox(
 		this, wxID_ANY,
 		FORMAT(__("Instrument #%s"), std::to_string(ctrl->getID())));
@@ -227,7 +227,7 @@ namespace CalXUI {
 	timer->Stop();
 	this->queue->stop();
   }
-  
+
   bool CalxInstrumentCtrl::isBusy() {
 	return this->queue->isBusy();
   }

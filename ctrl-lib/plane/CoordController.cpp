@@ -557,9 +557,9 @@ namespace CalX {
   CoordPlaneStatus CoordController::getStatus() {
 	return this->status;
   }
-  
+
   bool CoordController::isUsed() {
-	 return this->session_opened;
+	return this->session_opened;
   }
 
   ErrorCode CoordController::open_session() {

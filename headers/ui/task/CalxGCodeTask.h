@@ -26,10 +26,8 @@ namespace CalXUI {
 
   class CalxGCodeTaskFactory : public CalxTaskFactory {
    public:
-	virtual CalxTaskHandle *newTask(wxWindow*);
+	virtual CalxTaskHandle *newTask(wxWindow *);
   };
-	
-	
 
   class CalxGcodeHandle : public CalxTaskHandle {
    public:

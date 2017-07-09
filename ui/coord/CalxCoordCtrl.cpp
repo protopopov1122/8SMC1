@@ -44,10 +44,10 @@ namespace CalXUI {
 
 	this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
 	this->queue->Run();
-	
+
 	this->controller = new CalxCoordController(this->ctrl, this, this->queue);
 	this->watchers = new CalxWatcherPool(this, this->ctrl);
-	
+
 	this->listener = new CalxCoordEventListener(this);
 	this->ctrl->addEventListener(this->listener);
 	this->xListener = new CalxCoordMotorListener(this);
@@ -102,7 +102,8 @@ namespace CalXUI {
 	wxWindow *linearPanel = linearPane->GetPane();
 	wxBoxSizer *linearSizer = new wxBoxSizer(wxHORIZONTAL);
 	linearPanel->SetSizer(linearSizer);
-	this->linear = new CalxCoordLinearCtrl(linearPanel, wxID_ANY, this->controller);
+	this->linear =
+		new CalxCoordLinearCtrl(linearPanel, wxID_ANY, this->controller);
 	linearSizer->Add(linear, 0, wxALL);
 	linearPane->Bind(wxEVT_COLLAPSIBLEPANE_CHANGED,
 					 &CalxCoordCtrl::OnInterfaceUpdate, this);
@@ -124,7 +125,8 @@ namespace CalXUI {
 	wxWindow *graphPanel = graphPane->GetPane();
 	wxBoxSizer *graphSizer = new wxBoxSizer(wxHORIZONTAL);
 	graphPanel->SetSizer(graphSizer);
-	this->graphCtrl = new CalxCoordGraphCtrl(graphPanel, wxID_ANY, this->controller);
+	this->graphCtrl =
+		new CalxCoordGraphCtrl(graphPanel, wxID_ANY, this->controller);
 	graphSizer->Add(graphCtrl, 0, wxALL);
 	graphPane->Bind(wxEVT_COLLAPSIBLEPANE_CHANGED,
 					&CalxCoordCtrl::OnInterfaceUpdate, this);
@@ -136,13 +138,13 @@ namespace CalXUI {
 		new wxStaticBox(actionSub2Panel, wxID_ANY, __("Other"));
 	wxStaticBoxSizer *otherSizer = new wxStaticBoxSizer(otherBox, wxVERTICAL);
 	actionSub2Panel->SetSizer(otherSizer);
-	this->otherCtrl = new CalxCoordOtherCtrl(actionSub2Panel, wxID_ANY, this->controller, this);
+	this->otherCtrl = new CalxCoordOtherCtrl(actionSub2Panel, wxID_ANY,
+											 this->controller, this);
 	otherSizer->Add(otherCtrl, 1, wxALL | wxEXPAND);
-	this->otherCtrl->getPositionPane()->Bind(wxEVT_COLLAPSIBLEPANE_CHANGED,
-				  &CalxCoordCtrl::OnInterfaceUpdate, this);
-	this->otherCtrl->getFiltersPane()->Bind(wxEVT_COLLAPSIBLEPANE_CHANGED,
-				  &CalxCoordCtrl::OnInterfaceUpdate, this);
-	
+	this->otherCtrl->getPositionPane()->Bind(
+		wxEVT_COLLAPSIBLEPANE_CHANGED, &CalxCoordCtrl::OnInterfaceUpdate, this);
+	this->otherCtrl->getFiltersPane()->Bind(
+		wxEVT_COLLAPSIBLEPANE_CHANGED, &CalxCoordCtrl::OnInterfaceUpdate, this);
 
 	sizer->Add(actionPanel, 0, wxALL | wxEXPAND, 0);
 	Bind(wxEVT_COORD_CTRL_WATCHER, &CalxCoordCtrl::OnWatcherRequest, this);
@@ -157,15 +159,15 @@ namespace CalXUI {
 	this->timer.setCtrl(this);
 	timer.Start(100);
   }
-  
+
   CoordHandle *CalxCoordCtrl::getHandle() {
 	return this->ctrl;
   }
-  
+
   CalxCoordController *CalxCoordCtrl::getController() {
 	return this->controller;
   }
-  
+
   bool CalxCoordCtrl::isBusy() {
 	return this->queue->isBusy();
   }
@@ -205,13 +207,13 @@ namespace CalXUI {
 	this->controller->getMapFilter()->setOffset(offset);
 	this->watchers->updateWatchers();
   }
-  
+
   void CalxCoordCtrl::setScale(motor_scale_t scale) {
 	this->otherCtrl->setScale(scale);
 	this->controller->getMapFilter()->setScale(scale);
 	this->watchers->updateWatchers();
   }
-  
+
   CalxWatcherPool *CalxCoordCtrl::getWatchers() {
 	return this->watchers;
   }

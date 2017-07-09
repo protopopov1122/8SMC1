@@ -47,8 +47,8 @@ namespace CalXUI {
 	Bind(wxEVT_CLOSE_WINDOW, &CalxDevicePanel::OnExit, this);
 	Bind(wxEVT_DEVICE_PANEL_UPDATE, &CalxDevicePanel::OnDevicePanelUpdate,
 		 this);
-	Bind(wxEVT_DEVICE_PANEL_DEVICE_APPEND,
-		 &CalxDevicePanel::OnDeviceAppend, this);
+	Bind(wxEVT_DEVICE_PANEL_DEVICE_APPEND, &CalxDevicePanel::OnDeviceAppend,
+		 this);
 	this->queue->Run();
   }
 
@@ -77,22 +77,24 @@ namespace CalXUI {
 	}
 	return false;
   }
-  
+
   void CalxDevicePanel::OnDeviceConnectClick(wxCommandEvent &evt) {
 	if (this->factories.count(evt.GetEventObject()) != 0) {
-		CalxDeviceFactory *fact = this->factories[evt.GetEventObject()];
-		fact->newDevice(this, this, this->queue);
+	  CalxDeviceFactory *fact = this->factories[evt.GetEventObject()];
+	  fact->newDevice(this, this, this->queue);
 	}
   }
-  
+
   void CalxDevicePanel::appendDevice(CalxDeviceConstructor *cnstr) {
 	wxThreadEvent evt(wxEVT_DEVICE_PANEL_DEVICE_APPEND);
 	evt.SetPayload(cnstr);
 	wxPostEvent(this, evt);
   }
-  
-  void CalxDevicePanel::appendDeviceFactory(std::string name, CalxDeviceFactory *fact) {
-	wxButton *button = new wxButton(this->connectPanel, wxID_ANY, __("Connect ") + name);
+
+  void CalxDevicePanel::appendDeviceFactory(std::string name,
+											CalxDeviceFactory *fact) {
+	wxButton *button =
+		new wxButton(this->connectPanel, wxID_ANY, __("Connect ") + name);
 	button->Bind(wxEVT_BUTTON, &CalxDevicePanel::OnDeviceConnectClick, this);
 	this->factories[button] = fact;
 	this->connectPanel->GetSizer()->Add(button);
@@ -106,14 +108,14 @@ namespace CalXUI {
 	updateUI();
 	Refresh();
   }
-  
+
   void CalxDevicePanel::OnDeviceAppend(wxThreadEvent &evt) {
-	 CalxDeviceConstructor *cnstr = evt.GetPayload<CalxDeviceConstructor *>();
-	 CalxDeviceHandle *device = cnstr->construct(this);
-	 delete cnstr;
-	 GetSizer()->Add(device, 0, wxEXPAND | wxALL, 10);
-	 this->devices.push_back(device);
-	 updateUI();
-	 Refresh();
+	CalxDeviceConstructor *cnstr = evt.GetPayload<CalxDeviceConstructor *>();
+	CalxDeviceHandle *device = cnstr->construct(this);
+	delete cnstr;
+	GetSizer()->Add(device, 0, wxEXPAND | wxALL, 10);
+	this->devices.push_back(device);
+	updateUI();
+	Refresh();
   }
 }

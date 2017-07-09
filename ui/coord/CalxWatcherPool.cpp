@@ -19,47 +19,48 @@
 
 #include "ui/coord/CalxWatcherPool.h"
 #include "ui/coord/CalxCoordPlaneWatcher.h"
+#include <algorithm>
 
 namespace CalXUI {
 
-	CalxWatcherPool::CalxWatcherPool(wxWindow *win, CoordHandle *handle)
-		: parent(win), handle(handle) {}
-		
-	CalxWatcherPool::~CalxWatcherPool() {	
-		while (this->watchers.size() > 0) {
-		  const auto &w = this->watchers.at(0);
-		  w->Close(true);
-		}
-	}
+  CalxWatcherPool::CalxWatcherPool(wxWindow *win, CoordHandle *handle)
+	  : parent(win), handle(handle) {}
 
-	void CalxWatcherPool::bindWatcher(CalxCoordPlaneWatcher *w) {
-		this->watchers.push_back(w);
+  CalxWatcherPool::~CalxWatcherPool() {
+	while (this->watchers.size() > 0) {
+	  const auto &w = this->watchers.at(0);
+	  w->Close(true);
 	}
+  }
 
-	void CalxWatcherPool::unbindWatcher(CalxCoordPlaneWatcher *w) {
-		this->watchers.erase(
-			std::remove(this->watchers.begin(), this->watchers.end(), w),
-			this->watchers.end());
-	}
+  void CalxWatcherPool::bindWatcher(CalxCoordPlaneWatcher *w) {
+	this->watchers.push_back(w);
+  }
 
-	bool CalxWatcherPool::hasWatchers() {
-		return !this->watchers.empty();
-	}
+  void CalxWatcherPool::unbindWatcher(CalxCoordPlaneWatcher *w) {
+	this->watchers.erase(
+		std::remove(this->watchers.begin(), this->watchers.end(), w),
+		this->watchers.end());
+  }
 
-	void CalxWatcherPool::updateWatchers() {
-		for (const auto &w : this->watchers) {
-			w->update();
-		}
+  bool CalxWatcherPool::hasWatchers() {
+	return !this->watchers.empty();
+  }
+
+  void CalxWatcherPool::updateWatchers() {
+	for (const auto &w : this->watchers) {
+	  w->update();
 	}
-	
-	CalxCoordPlaneWatcher *CalxWatcherPool::newWatcher() {
-		if (!this->handle->isMeasured()) {
-		  wxMessageBox(__("Plane need to be measured before preview"),
-					   __("Warning"), wxICON_WARNING);
-		  return nullptr;
-		}
-		CalxCoordPlaneWatcherDialog *watcher =
-			new CalxCoordPlaneWatcherDialog(this->parent, wxID_ANY, this->handle, this);
-		watcher->Show(true);
+  }
+
+  CalxCoordPlaneWatcher *CalxWatcherPool::newWatcher() {
+	if (!this->handle->isMeasured()) {
+	  wxMessageBox(__("Plane need to be measured before preview"),
+				   __("Warning"), wxICON_WARNING);
+	  return nullptr;
 	}
+	CalxCoordPlaneWatcherDialog *watcher = new CalxCoordPlaneWatcherDialog(
+		this->parent, wxID_ANY, this->handle, this);
+	watcher->Show(true);
+  }
 }

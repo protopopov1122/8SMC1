@@ -128,8 +128,8 @@ namespace CalX {
   ErrorCode CoordPlaneStack::close_session() {
 	return this->peekPlane()->close_session();
   }
-  
+
   bool CoordPlaneStack::isUsed() {
-	 return this->peekPlane()->isUsed();
+	return this->peekPlane()->isUsed();
   }
 }

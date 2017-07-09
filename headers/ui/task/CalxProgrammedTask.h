@@ -27,7 +27,8 @@ namespace CalXUI {
 
   class CalxProgrammedTaskFactory : public CalxTaskFactory {
    public:
-	virtual CalxTaskHandle *newTask(wxWindow*);
+	virtual CalxTaskHandle *newTask(wxWindow *);
+
    private:
 	size_t next_id = 0;
   };

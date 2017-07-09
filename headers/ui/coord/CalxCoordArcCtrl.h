@@ -35,11 +35,11 @@ namespace CalXUI {
 
   class CalxCoordArcCtrl : public wxPanel {
    public:
-	CalxCoordArcCtrl(wxWindow*, wxWindowID, CalxCoordController*);
+	CalxCoordArcCtrl(wxWindow *, wxWindowID, CalxCoordController *);
 
    private:
-	void OnMoveClick(wxCommandEvent&);
-	
+	void OnMoveClick(wxCommandEvent &);
+
 	wxSpinCtrlDouble *xCoord;
 	wxSpinCtrlDouble *yCoord;
 	wxSpinCtrlDouble *cxCoord;
@@ -48,7 +48,7 @@ namespace CalXUI {
 	wxSpinCtrl *splitter;
 	wxCheckBox *clockwise;
 	wxCheckBox *relative;
-	
+
 	CalxCoordController *controller;
   };
 }

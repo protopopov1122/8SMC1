@@ -44,8 +44,8 @@ namespace CalXUI {
 	virtual void shutdown();
 	virtual bool isBusy();
 	void setEnabled(bool);
-	
-	void attachTaskFactory(std::string, CalxTaskFactory*);
+
+	void attachTaskFactory(std::string, CalxTaskFactory *);
 
    private:
 	void OnExit(wxCloseEvent &);
@@ -64,7 +64,7 @@ namespace CalXUI {
 	wxPanel *taskPanel;
 	wxPanel *taskFactoryPanel;
 	std::vector<CalxTaskHandle *> list;
-	std::map<wxObject*, CalxTaskFactory*> factories;
+	std::map<wxObject *, CalxTaskFactory *> factories;
 	wxPanel *execPanel;
 	wxButton *stopButton;
 	wxChoice *plane;

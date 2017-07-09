@@ -36,19 +36,19 @@ namespace CalXUI {
 	virtual void shutdown();
 	virtual bool isBusy();
 	virtual void updateUI();
-	virtual void appendDevice(CalxDeviceConstructor*);
-	virtual void appendDeviceFactory(std::string, CalxDeviceFactory*);
+	virtual void appendDevice(CalxDeviceConstructor *);
+	virtual void appendDeviceFactory(std::string, CalxDeviceFactory *);
 
    private:
 	void OnExit(wxCloseEvent &);
 	void OnDeviceConnectClick(wxCommandEvent &);
 	void OnDevicePanelUpdate(wxThreadEvent &);
 	void OnDeviceAppend(wxThreadEvent &);
-	
+
 	std::vector<CalxDeviceHandle *> devices;
-	std::map<wxObject*, CalxDeviceFactory*> factories;
+	std::map<wxObject *, CalxDeviceFactory *> factories;
 	CalxActionQueue *queue;
-	
+
 	wxPanel *connectPanel;
   };
 }

@@ -51,7 +51,7 @@ namespace CalXUI {
 	CoordHandle *getHandle();
 	CalxWatcherPool *getWatchers();
 	CalxCoordController *getController();
-	
+
 	bool isBusy();
 	void use();
 	void unuse();

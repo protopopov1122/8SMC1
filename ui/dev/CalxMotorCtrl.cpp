@@ -301,7 +301,7 @@ namespace CalXUI {
 	this->timer.Stop();
 	this->queue->stop();
   }
-  
+
   bool CalxMotorCtrl::isBusy() {
 	return this->queue->isBusy();
   }

@@ -23,12 +23,11 @@ namespace CalXUI {
 
   class CalxLinearTaskFactory : public CalxTaskFactory {
    public:
-	virtual CalxTaskHandle *newTask(wxWindow*);
+	virtual CalxTaskHandle *newTask(wxWindow *);
+
    private:
 	size_t next_id = 0;
   };
-	
-	
 
   class CalxLinearTaskHandle : public CalxTaskHandle {
    public:

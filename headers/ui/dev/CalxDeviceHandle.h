@@ -24,24 +24,24 @@
 
 namespace CalXUI {
 
-	class CalxDeviceHandle : public wxPanel {
-		public:
-			CalxDeviceHandle(wxWindow *win, wxWindowID id)
-				: wxPanel::wxPanel(win, id) {}
-			virtual void updateUI() = 0;
-			virtual void stop() = 0;
-			virtual bool isBusy() = 0;
-	};
-	
-	class CalxDeviceConstructor {
-		public:
-			virtual CalxDeviceHandle *construct(wxWindow*) = 0;
-	};
-	
-	class CalxDevicePool {
-		public:
-			virtual void appendDevice(CalxDeviceConstructor*) = 0;
-	};
+  class CalxDeviceHandle : public wxPanel {
+   public:
+	CalxDeviceHandle(wxWindow *win, wxWindowID id)
+		: wxPanel::wxPanel(win, id) {}
+	virtual void updateUI() = 0;
+	virtual void stop() = 0;
+	virtual bool isBusy() = 0;
+  };
+
+  class CalxDeviceConstructor {
+   public:
+	virtual CalxDeviceHandle *construct(wxWindow *) = 0;
+  };
+
+  class CalxDevicePool {
+   public:
+	virtual void appendDevice(CalxDeviceConstructor *) = 0;
+  };
 }
 
 #endif

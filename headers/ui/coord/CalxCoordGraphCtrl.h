@@ -38,13 +38,13 @@ namespace CalXUI {
 
   class CalxCoordGraphCtrl : public wxPanel {
    public:
-	CalxCoordGraphCtrl(wxWindow*, wxWindowID, CalxCoordController*);
+	CalxCoordGraphCtrl(wxWindow *, wxWindowID, CalxCoordController *);
 
    private:
 	void OnClose(wxCloseEvent &);
-	void OnBuildClick(wxCommandEvent&);
-	void OnPreviewClick(wxCommandEvent&);
-	
+	void OnBuildClick(wxCommandEvent &);
+	void OnPreviewClick(wxCommandEvent &);
+
 	wxTextCtrl *expr;
 	wxSpinCtrlDouble *xmin;
 	wxSpinCtrlDouble *xmax;
@@ -54,7 +54,7 @@ namespace CalXUI {
 	CalxCoordFilter *translator;
 	ComplexCoordTranslator *trans;
 	wxSpinCtrlDouble *speed;
-	
+
 	CalxCoordController *controller;
   };
 }

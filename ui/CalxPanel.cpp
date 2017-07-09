@@ -23,34 +23,32 @@ namespace CalXUI {
 
   CalxPanel::CalxPanel(wxWindow *win, wxWindowID id)
 	  : wxNotebook::wxNotebook(win, id) {
-
 	Bind(wxEVT_CLOSE_WINDOW, &CalxPanel::OnExit, this);
   }
-  
+
   void CalxPanel::addPane(std::string title, CalxPanelPane *pane) {
 	this->panes.push_back(pane);
 	this->AddPage(pane, title);
   }
 
-
   void CalxPanel::updateUI() {
 	for (const auto &pane : this->panes) {
-		pane->updateUI();
+	  pane->updateUI();
 	}
   }
-  
+
   bool CalxPanel::isBusy() {
 	for (const auto &pane : this->panes) {
-		if (pane->isBusy()) {
-			return true;
-		}
+	  if (pane->isBusy()) {
+		return true;
+	  }
 	}
 	return false;
   }
 
   void CalxPanel::OnExit(wxCloseEvent &evt) {
 	for (const auto &pane : this->panes) {
-		pane->shutdown();
+	  pane->shutdown();
 	}
 
 	wxMilliSleep(400);
@@ -59,7 +57,7 @@ namespace CalXUI {
 	  RemovePage(0);
 	}
 	for (const auto &pane : this->panes) {
-		pane->Close(true);
+	  pane->Close(true);
 	}
 
 	Destroy();

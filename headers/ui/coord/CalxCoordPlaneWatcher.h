@@ -63,7 +63,8 @@ namespace CalXUI {
 
   class CalxCoordPlaneWatcher : public wxWindow {
    public:
-	CalxCoordPlaneWatcher(wxWindow *, wxWindowID, wxSize, CoordHandle *, CalxWatcherPool *);
+	CalxCoordPlaneWatcher(wxWindow *, wxWindowID, wxSize, CoordHandle *,
+						  CalxWatcherPool *);
 	void clear();
 	bool isRendering();
 	bool hasUpdates();
@@ -97,13 +98,14 @@ namespace CalXUI {
 
   class CalxCoordPlaneWatcherDialog : public wxDialog {
    public:
-	CalxCoordPlaneWatcherDialog(wxWindow *, wxWindowID, CoordHandle *, CalxWatcherPool *);
+	CalxCoordPlaneWatcherDialog(wxWindow *, wxWindowID, CoordHandle *,
+								CalxWatcherPool *);
 
    private:
 	void OnOkClick(wxCommandEvent &);
 	void OnClearClick(wxCommandEvent &);
 	void OnMouseMove(wxMouseEvent &);
-	
+
 	CalxCoordPlaneWatcher *watcher;
 	CalxWatcherPool *pool;
 	CoordHandle *handle;

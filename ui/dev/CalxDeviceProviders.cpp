@@ -21,7 +21,6 @@
 
 namespace CalXUI {
 
-	
   class CalxInstrumentSerialConnectProvider : public RequestProvider {
    public:
 	CalxInstrumentSerialConnectProvider(CalxDevicePanel *devpanel)
@@ -160,7 +159,7 @@ namespace CalXUI {
    private:
 	CalxDevicePanel *devpanel;
   };
-  
+
   void calx_init_device_providers(CalxDevicePanel *panel) {
 	CalxApp &app = wxGetApp();
 	app.getSystemManager()->getRequestResolver()->registerProvider(

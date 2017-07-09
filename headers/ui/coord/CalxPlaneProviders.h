@@ -25,7 +25,7 @@
 
 namespace CalXUI {
 
-	void calx_panel_init_resolvers(CalxCoordPanel*);
+  void calx_panel_init_resolvers(CalxCoordPanel*);
 }
 
 #endif

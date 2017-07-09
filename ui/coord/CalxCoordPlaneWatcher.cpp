@@ -72,7 +72,8 @@ namespace CalXUI {
   }
 
   CalxCoordPlaneWatcher::CalxCoordPlaneWatcher(wxWindow *win, wxWindowID id,
-											   wxSize min, CoordHandle *handle, CalxWatcherPool *pool)
+											   wxSize min, CoordHandle *handle,
+											   CalxWatcherPool *pool)
 	  : wxWindow::wxWindow(win, id),
 		pointer_colour(255, 0, 0),
 		jump_colour(128, 128, 128),
@@ -348,10 +349,8 @@ namespace CalXUI {
 	this->rendering = false;
   }
 
-  CalxCoordPlaneWatcherDialog::CalxCoordPlaneWatcherDialog(wxWindow *win,
-														   wxWindowID id,
-														   CoordHandle *handle,
-														   CalxWatcherPool *pool)
+  CalxCoordPlaneWatcherDialog::CalxCoordPlaneWatcherDialog(
+	  wxWindow *win, wxWindowID id, CoordHandle *handle, CalxWatcherPool *pool)
 	  : wxDialog::wxDialog(win, id, FORMAT(__("Coordinate plane #%s Watcher"),
 										   std::to_string(handle->getID())),
 						   wxDefaultPosition, wxDefaultSize,
@@ -364,8 +363,8 @@ namespace CalXUI {
 
 	this->mouseCoords = new wxStaticText(this, wxID_ANY, "");
 	sizer->Add(this->mouseCoords);
-	this->watcher =
-		new CalxCoordPlaneWatcher(this, wxID_ANY, wxSize(500, 500), handle, pool);
+	this->watcher = new CalxCoordPlaneWatcher(this, wxID_ANY, wxSize(500, 500),
+											  handle, pool);
 	sizer->Add(this->watcher, 1, wxALL | wxEXPAND, 5);
 
 	wxPanel *buttonPanel = new wxPanel(this, wxID_ANY);

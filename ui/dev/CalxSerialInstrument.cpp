@@ -25,7 +25,8 @@ namespace CalXUI {
 
   class CalxSerialInstrumentConnectAction : public CalxAction {
    public:
-	CalxSerialInstrumentConnectAction(CalxDevicePool *pool, DeviceConnectionPrms *prms) {
+	CalxSerialInstrumentConnectAction(CalxDevicePool *pool,
+									  DeviceConnectionPrms *prms) {
 	  this->pool = pool;
 	  this->prms = prms;
 	}
@@ -35,29 +36,32 @@ namespace CalXUI {
 	virtual void perform(SystemManager *sysman) {
 	  InstrumentController *ctrl = sysman->connectInstrument(prms);
 	  if (ctrl == nullptr) {
-		wxMessageBox(__("Instrument can't be connected"), __("Connection error"),
-					 wxICON_WARNING);
+		wxMessageBox(__("Instrument can't be connected"),
+					 __("Connection error"), wxICON_WARNING);
 	  } else {
 		pool->appendDevice(new CalxInstrumentConstructor(pool, ctrl));
 	  }
 	}
 	virtual void stop() {}
+
    private:
 	CalxDevicePool *pool;
 	DeviceConnectionPrms *prms;
   };
 
-	void CalxSerialInstrumentFactory::newDevice(wxWindow *win, CalxDevicePool *pool, CalxActionQueue *queue) {
-		CalxCOMSelectDialog *dialog = new CalxCOMSelectDialog(win, wxID_ANY);
-		dialog->ShowModal();
-		if (dialog->getPort() != -1) {
-		  DeviceSerialPortConnectionPrms *prms =
-			  new DeviceSerialPortConnectionPrms();
-		  prms->port = (uint8_t) dialog->getPort();
-		  prms->speed = (uint32_t) dialog->getSpeed();
-		  prms->parity = dialog->getParity();
-		  queue->addAction(new CalxSerialInstrumentConnectAction(pool, prms));
-		}
-		dialog->Destroy();
+  void CalxSerialInstrumentFactory::newDevice(wxWindow *win,
+											  CalxDevicePool *pool,
+											  CalxActionQueue *queue) {
+	CalxCOMSelectDialog *dialog = new CalxCOMSelectDialog(win, wxID_ANY);
+	dialog->ShowModal();
+	if (dialog->getPort() != -1) {
+	  DeviceSerialPortConnectionPrms *prms =
+		  new DeviceSerialPortConnectionPrms();
+	  prms->port = (uint8_t) dialog->getPort();
+	  prms->speed = (uint32_t) dialog->getSpeed();
+	  prms->parity = dialog->getParity();
+	  queue->addAction(new CalxSerialInstrumentConnectAction(pool, prms));
 	}
+	dialog->Destroy();
+  }
 }

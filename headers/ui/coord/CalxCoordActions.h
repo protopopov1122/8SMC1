@@ -44,8 +44,8 @@ namespace CalXUI {
 
   class CalxCoordActionArc : public CalxAction {
    public:
-	CalxCoordActionArc(CoordHandle *, coord_point_t,
-							coord_point_t, int, double, bool, bool);
+	CalxCoordActionArc(CoordHandle *, coord_point_t, coord_point_t, int, double,
+					   bool, bool);
 
 	virtual void perform(SystemManager *);
 	virtual void stop();
@@ -59,7 +59,6 @@ namespace CalXUI {
 	bool clockwise;
 	bool relative;
   };
-  
 
   class CalxCoordActionCalibrate : public CalxAction {
    public:
@@ -85,9 +84,10 @@ namespace CalXUI {
 	TrailerId trailer;
   };
 
- class CalxCoordActionConfigure : public CalxAction {
+  class CalxCoordActionConfigure : public CalxAction {
    public:
-	CalxCoordActionConfigure(CoordHandle *, CalxFilterController *, coord_point_t, double);
+	CalxCoordActionConfigure(CoordHandle *, CalxFilterController *,
+							 coord_point_t, double);
 
 	virtual void perform(SystemManager *);
 	virtual void stop();
@@ -102,8 +102,8 @@ namespace CalXUI {
 
   class CalxCoordActionGraphBuild : public CalxAction {
    public:
-	CalxCoordActionGraphBuild(CoordHandle *, CoordTranslator *,
-						 GraphBuilder *, double);
+	CalxCoordActionGraphBuild(CoordHandle *, CoordTranslator *, GraphBuilder *,
+							  double);
 	virtual ~CalxCoordActionGraphBuild();
 
 	virtual void perform(SystemManager *);
@@ -120,7 +120,7 @@ namespace CalXUI {
   class CalxCoordActionGraphPreview : public CalxAction {
    public:
 	CalxCoordActionGraphPreview(CalxVirtualPlaneDialog *, CoordTranslator *,
-						 GraphBuilder *, double);
+								GraphBuilder *, double);
 	virtual ~CalxCoordActionGraphPreview();
 
 	virtual void perform(SystemManager *);

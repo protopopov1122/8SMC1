@@ -39,22 +39,23 @@ namespace CalXUI {
 
   class CalxCoordOtherCtrl : public wxPanel {
    public:
-	CalxCoordOtherCtrl(wxWindow*, wxWindowID, CalxCoordController*, CalxFilterController*);
-	
+	CalxCoordOtherCtrl(wxWindow *, wxWindowID, CalxCoordController *,
+					   CalxFilterController *);
+
 	wxCollapsiblePane *getPositionPane();
 	wxCollapsiblePane *getFiltersPane();
-	
+
 	void setOffset(motor_point_t);
 	void setScale(motor_scale_t);
 
    private:
-	void OnInstrumentEnableClick(wxCommandEvent&);
-	void OnAdjustPositionClick(wxCommandEvent&);
-	void OnCalibrateClick(wxCommandEvent&);
-	void OnMeasureClick(wxCommandEvent&);
-	void OnFiltersUpdate(wxCommandEvent&);
-   
-    wxCollapsiblePane *posCollPane;
+	void OnInstrumentEnableClick(wxCommandEvent &);
+	void OnAdjustPositionClick(wxCommandEvent &);
+	void OnCalibrateClick(wxCommandEvent &);
+	void OnMeasureClick(wxCommandEvent &);
+	void OnFiltersUpdate(wxCommandEvent &);
+
+	wxCollapsiblePane *posCollPane;
 	wxCollapsiblePane *filtersCollPane;
 	wxCheckBox *enableInstrument;
 	wxChoice *trailer;
@@ -70,7 +71,7 @@ namespace CalXUI {
 	wxSpinCtrl *maxx;
 	wxSpinCtrl *maxy;
 	wxSpinCtrl *speed;
-	
+
 	CalxCoordPositionCtrl *posCtrl;
 	CalxCoordController *controller;
 	CalxFilterController *filters;

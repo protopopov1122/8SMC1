@@ -164,8 +164,8 @@ namespace CalX {
   ErrorCode CoordPlaneLog::close_session() {
 	return this->plane->close_session();
   }
-  
+
   bool CoordPlaneLog::isUsed() {
-	 return this->plane->isUsed();
+	return this->plane->isUsed();
   }
 }

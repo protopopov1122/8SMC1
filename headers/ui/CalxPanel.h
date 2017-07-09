@@ -25,18 +25,18 @@
 #include <wx/notebook.h>
 
 namespace CalXUI {
-	
+
   class CalxPanel : public wxNotebook {
    public:
 	CalxPanel(wxWindow *, wxWindowID);
-	void addPane(std::string, CalxPanelPane*);
+	void addPane(std::string, CalxPanelPane *);
 	void updateUI();
 	bool isBusy();
 
    private:
 	void OnExit(wxCloseEvent &);
 
-	std::vector<CalxPanelPane*> panes;
+	std::vector<CalxPanelPane *> panes;
   };
 }
 

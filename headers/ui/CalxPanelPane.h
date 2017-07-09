@@ -23,15 +23,15 @@
 #include "ui/calx.h"
 
 namespace CalXUI {
-	
-	class CalxPanelPane : public wxScrolledWindow {
-		public:
-			CalxPanelPane(wxWindow *win, wxWindowID id)
-				: wxScrolledWindow::wxScrolledWindow(win, id) {}
-			virtual bool isBusy() = 0;
-			virtual void shutdown() = 0;
-			virtual void updateUI() = 0;
-	};
+
+  class CalxPanelPane : public wxScrolledWindow {
+   public:
+	CalxPanelPane(wxWindow *win, wxWindowID id)
+		: wxScrolledWindow::wxScrolledWindow(win, id) {}
+	virtual bool isBusy() = 0;
+	virtual void shutdown() = 0;
+	virtual void updateUI() = 0;
+  };
 }
 
 #endif

@@ -144,8 +144,8 @@ namespace CalX {
   ErrorCode CoordPlaneValidator::close_session() {
 	return this->plane->close_session();
   }
-  
+
   bool CoordPlaneValidator::isUsed() {
-	 return this->plane->isUsed();
+	return this->plane->isUsed();
   }
 }

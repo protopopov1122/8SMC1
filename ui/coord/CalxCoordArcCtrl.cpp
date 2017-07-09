@@ -21,8 +21,9 @@
 
 namespace CalXUI {
 
-  CalxCoordArcCtrl::CalxCoordArcCtrl(wxWindow *win, wxWindowID id, CalxCoordController *controller)
-	: wxPanel::wxPanel(win, id), controller(controller) {
+  CalxCoordArcCtrl::CalxCoordArcCtrl(wxWindow *win, wxWindowID id,
+									 CalxCoordController *controller)
+	  : wxPanel::wxPanel(win, id), controller(controller) {
 	std::string units = wxGetApp().getUnits();
 	wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 	SetSizer(sizer);
@@ -96,14 +97,16 @@ namespace CalXUI {
 	sizer->Add(relative);
 	sizer->Add(new wxStaticText(this, wxID_ANY, ""));
 	sizer->Add(moveButton);
-	
+
 	moveButton->Bind(wxEVT_BUTTON, &CalxCoordArcCtrl::OnMoveClick, this);
   }
-  
+
   void CalxCoordArcCtrl::OnMoveClick(wxCommandEvent &evt) {
-	coord_point_t dest = {this->xCoord->GetValue(), this->yCoord->GetValue()};
-	coord_point_t cen = {this->cxCoord->GetValue(), this->cyCoord->GetValue()};
-	this->controller->arc(dest, cen, this->splitter->GetValue(), this->speed->GetValue(),
-		this->clockwise->GetValue(), this->relative->GetValue());
+	coord_point_t dest = { this->xCoord->GetValue(), this->yCoord->GetValue() };
+	coord_point_t cen = { this->cxCoord->GetValue(),
+						  this->cyCoord->GetValue() };
+	this->controller->arc(dest, cen, this->splitter->GetValue(),
+						  this->speed->GetValue(), this->clockwise->GetValue(),
+						  this->relative->GetValue());
   }
 }

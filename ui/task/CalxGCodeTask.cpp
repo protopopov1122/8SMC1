@@ -21,7 +21,6 @@
 #include "ui/task/CalxGcodeLoader.h"
 
 namespace CalXUI {
-	
 
   CalxGcodeHandle::CalxGcodeHandle(wxWindow *win, wxWindowID id,
 								   std::string sid, std::istream *is,
@@ -52,7 +51,7 @@ namespace CalXUI {
 	Layout();
 	this->Bind(wxEVT_CLOSE_WINDOW, &CalxGcodeHandle::OnExit, this);
   }
-  
+
   std::string CalxGcodeHandle::getName() {
 	return this->id;
   }
@@ -69,19 +68,19 @@ namespace CalXUI {
   void CalxGcodeHandle::update() {
 	this->filter->getTranslator();
   }
-  
+
   CoordTranslator *CalxGcodeHandle::getTranslator() {
 	return this->translator;
   }
-  
+
   CalxTaskHandle *CalxGCodeTaskFactory::newTask(wxWindow *win) {
 	CalxGcodeHandle *handle = nullptr;
 	CalxGcodeLoader *loader = new CalxGcodeLoader(win, wxID_ANY);
 	loader->ShowModal();
 	if (loader->isLoaded()) {
 	  std::fstream is(loader->getPath());
-	  handle = new CalxGcodeHandle(
-		  win, wxID_ANY, loader->getPath(), &is, loader->getTranslator());
+	  handle = new CalxGcodeHandle(win, wxID_ANY, loader->getPath(), &is,
+								   loader->getTranslator());
 	  is.close();
 	}
 	loader->Destroy();

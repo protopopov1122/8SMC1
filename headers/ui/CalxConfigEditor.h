@@ -30,8 +30,8 @@
 #include "ui/CalxPanelPane.h"
 
 namespace CalXUI {
-	
-  class CalxConfigEditor; // Forward referencing
+
+  class CalxConfigEditor;  // Forward referencing
 
   class CalxNewKeyDialog : public wxDialog {
    public:
@@ -86,7 +86,7 @@ namespace CalXUI {
 	CalxConfigEditor(wxWindow *, wxWindowID, ConfigManager *);
 	ConfigManager *getConfiguration();
 	wxButton *getOkButton();
-	
+
 	virtual bool isBusy();
 	virtual void shutdown();
 	virtual void updateUI();

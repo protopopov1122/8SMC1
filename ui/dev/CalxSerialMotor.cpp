@@ -25,7 +25,8 @@ namespace CalXUI {
 
   class CalxSerialMotorConnectAction : public CalxAction {
    public:
-	CalxSerialMotorConnectAction(CalxDevicePool *pool, DeviceConnectionPrms *prms) {
+	CalxSerialMotorConnectAction(CalxDevicePool *pool,
+								 DeviceConnectionPrms *prms) {
 	  this->pool = pool;
 	  this->prms = prms;
 	}
@@ -42,22 +43,24 @@ namespace CalXUI {
 	  }
 	}
 	virtual void stop() {}
+
    private:
 	CalxDevicePool *pool;
 	DeviceConnectionPrms *prms;
   };
 
-	void CalxSerialMotorFactory::newDevice(wxWindow *win, CalxDevicePool *pool, CalxActionQueue *queue) {
-		CalxCOMSelectDialog *dialog = new CalxCOMSelectDialog(win, wxID_ANY);
-		dialog->ShowModal();
-		if (dialog->getPort() != -1) {
-		  DeviceSerialPortConnectionPrms *prms =
-			  new DeviceSerialPortConnectionPrms();
-		  prms->port = (uint8_t) dialog->getPort();
-		  prms->speed = (uint32_t) dialog->getSpeed();
-		  prms->parity = dialog->getParity();
-		  queue->addAction(new CalxSerialMotorConnectAction(pool, prms));
-		}
-		dialog->Destroy();
+  void CalxSerialMotorFactory::newDevice(wxWindow *win, CalxDevicePool *pool,
+										 CalxActionQueue *queue) {
+	CalxCOMSelectDialog *dialog = new CalxCOMSelectDialog(win, wxID_ANY);
+	dialog->ShowModal();
+	if (dialog->getPort() != -1) {
+	  DeviceSerialPortConnectionPrms *prms =
+		  new DeviceSerialPortConnectionPrms();
+	  prms->port = (uint8_t) dialog->getPort();
+	  prms->speed = (uint32_t) dialog->getSpeed();
+	  prms->parity = dialog->getParity();
+	  queue->addAction(new CalxSerialMotorConnectAction(pool, prms));
 	}
+	dialog->Destroy();
+  }
 }

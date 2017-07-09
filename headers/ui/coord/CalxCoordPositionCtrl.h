@@ -28,16 +28,16 @@ namespace CalXUI {
 
   class CalxCoordPositionCtrl : public wxPanel {
    public:
-	CalxCoordPositionCtrl(wxWindow *, wxWindowID, CalxCoordController*);
+	CalxCoordPositionCtrl(wxWindow *, wxWindowID, CalxCoordController *);
 
    private:
-	void OnMoveClick(wxCommandEvent&);
-	void OnConfigureClick(wxCommandEvent&);
-   
+	void OnMoveClick(wxCommandEvent &);
+	void OnConfigureClick(wxCommandEvent &);
+
 	wxSpinCtrlDouble *xPos;
 	wxSpinCtrlDouble *yPos;
 	wxSpinCtrlDouble *speed;
-	
+
 	CalxCoordController *controller;
   };
 }

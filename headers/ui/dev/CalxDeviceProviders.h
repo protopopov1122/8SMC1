@@ -24,7 +24,7 @@
 #include "ui/dev/CalxDevicePanel.h"
 
 namespace CalXUI {
-	void calx_init_device_providers(CalxDevicePanel*);
+  void calx_init_device_providers(CalxDevicePanel*);
 }
 
 #endif

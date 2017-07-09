@@ -21,21 +21,23 @@
 
 namespace CalXUI {
 
-	CalxMotorConstructor::CalxMotorConstructor(CalxDevicePool *pool, MotorController *ctrl) {
-		this->pool = pool;
-		this->ctrl = ctrl;
-	}
-	
-	CalxDeviceHandle *CalxMotorConstructor::construct(wxWindow *win) {
-		return new CalxMotorCtrl(win, wxID_ANY, ctrl);
-	}
-	
-	CalxInstrumentConstructor::CalxInstrumentConstructor(CalxDevicePool *pool, InstrumentController *ctrl) {
-		this->pool = pool;
-		this->ctrl = ctrl;
-	}
-	
-	CalxDeviceHandle *CalxInstrumentConstructor::construct(wxWindow *win) {
-		return new CalxInstrumentCtrl(win, wxID_ANY, ctrl);
-	}
+  CalxMotorConstructor::CalxMotorConstructor(CalxDevicePool *pool,
+											 MotorController *ctrl) {
+	this->pool = pool;
+	this->ctrl = ctrl;
+  }
+
+  CalxDeviceHandle *CalxMotorConstructor::construct(wxWindow *win) {
+	return new CalxMotorCtrl(win, wxID_ANY, ctrl);
+  }
+
+  CalxInstrumentConstructor::CalxInstrumentConstructor(
+	  CalxDevicePool *pool, InstrumentController *ctrl) {
+	this->pool = pool;
+	this->ctrl = ctrl;
+  }
+
+  CalxDeviceHandle *CalxInstrumentConstructor::construct(wxWindow *win) {
+	return new CalxInstrumentCtrl(win, wxID_ANY, ctrl);
+  }
 }

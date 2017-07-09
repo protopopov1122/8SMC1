@@ -26,8 +26,9 @@
 
 namespace CalXUI {
 
-  CalxCoordGraphCtrl::CalxCoordGraphCtrl(wxWindow *win, wxWindowID id, CalxCoordController *controller)
-	: wxPanel::wxPanel(win, id), controller(controller) {
+  CalxCoordGraphCtrl::CalxCoordGraphCtrl(wxWindow *win, wxWindowID id,
+										 CalxCoordController *controller)
+	  : wxPanel::wxPanel(win, id), controller(controller) {
 	std::string units = wxGetApp().getUnits();
 	ConfigEntry *graphconf =
 		wxGetApp().getSystemManager()->getConfiguration()->getEntry("graph");
@@ -131,16 +132,17 @@ namespace CalXUI {
 	this->trans = new ComplexCoordTranslator(basic);
 	this->translator = new CalxCoordFilterCtrl(this, wxID_ANY, this->trans);
 	sizer->Add(this->translator, 1, wxALL | wxEXPAND, 5);
-	
+
 	buildButton->Bind(wxEVT_BUTTON, &CalxCoordGraphCtrl::OnBuildClick, this);
-	previewButton->Bind(wxEVT_BUTTON, &CalxCoordGraphCtrl::OnPreviewClick, this);
+	previewButton->Bind(wxEVT_BUTTON, &CalxCoordGraphCtrl::OnPreviewClick,
+						this);
 	Bind(wxEVT_CLOSE_WINDOW, &CalxCoordGraphCtrl::OnClose, this);
   }
 
   void CalxCoordGraphCtrl::OnClose(wxCloseEvent &evt) {
 	delete this->translator->getTranslator();
   }
-  
+
   void CalxCoordGraphCtrl::OnBuildClick(wxCommandEvent &evt) {
 	std::stringstream ss(this->expr->GetValue().ToStdString());
 	FunctionLexer lexer(ss);
@@ -159,9 +161,9 @@ namespace CalXUI {
 	coord_point_t min = { minx, miny };
 	coord_point_t max = { maxx, maxy };
 	GraphBuilder *graph = new GraphBuilder(node, min, max, step);
-	this->controller->build(this->translator->getTranslator(), graph, speed);  
+	this->controller->build(this->translator->getTranslator(), graph, speed);
   }
-  
+
   void CalxCoordGraphCtrl::OnPreviewClick(wxCommandEvent &evt) {
 	if (!this->controller->getHandle()->isMeasured()) {
 	  wxMessageBox(__("Plane need to be measured before preview"),
@@ -185,11 +187,12 @@ namespace CalXUI {
 	coord_point_t min = { minx, miny };
 	coord_point_t max = { maxx, maxy };
 	GraphBuilder *graph = new GraphBuilder(node, min, max, step);
-	CalxVirtualPlaneDialog *dialog =
-		new CalxVirtualPlaneDialog(this, wxID_ANY, this->controller->getHandle(), wxSize(500, 500));
-	
-	this->controller->preview(dialog, this->translator->getTranslator(), graph, speed); 
+	CalxVirtualPlaneDialog *dialog = new CalxVirtualPlaneDialog(
+		this, wxID_ANY, this->controller->getHandle(), wxSize(500, 500));
+
+	this->controller->preview(dialog, this->translator->getTranslator(), graph,
+							  speed);
 	dialog->ShowModal();
-	delete dialog;  
+	delete dialog;
   }
 }

@@ -24,24 +24,26 @@
 #include "ui/dev/CalxMotorCtrl.h"
 #include "ui/dev/CalxInstrumentCtrl.h"
 
-namespace CalXUI {	
-	
+namespace CalXUI {
+
   class CalxMotorConstructor : public CalxDeviceConstructor {
-	public:
-		CalxMotorConstructor(CalxDevicePool*, MotorController*);
-		CalxDeviceHandle *construct(wxWindow*);
-	private:
-		CalxDevicePool *pool;
-		MotorController *ctrl;
+   public:
+	CalxMotorConstructor(CalxDevicePool *, MotorController *);
+	CalxDeviceHandle *construct(wxWindow *);
+
+   private:
+	CalxDevicePool *pool;
+	MotorController *ctrl;
   };
-	
+
   class CalxInstrumentConstructor : public CalxDeviceConstructor {
-	public:
-		CalxInstrumentConstructor(CalxDevicePool*, InstrumentController*);
-		CalxDeviceHandle *construct(wxWindow *win);
-	private:
-		CalxDevicePool *pool;
-		InstrumentController *ctrl;
+   public:
+	CalxInstrumentConstructor(CalxDevicePool *, InstrumentController *);
+	CalxDeviceHandle *construct(wxWindow *win);
+
+   private:
+	CalxDevicePool *pool;
+	InstrumentController *ctrl;
   };
 }
 

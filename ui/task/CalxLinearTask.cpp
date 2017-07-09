@@ -21,9 +21,10 @@
 
 namespace CalXUI {
 
-  CalxLinearTaskHandle::CalxLinearTaskHandle(wxWindow *win, wxWindowID id, size_t tid)
+  CalxLinearTaskHandle::CalxLinearTaskHandle(wxWindow *win, wxWindowID id,
+											 size_t tid)
 	  : CalxTaskHandle(win, id) {
-    this->id = tid;
+	this->id = tid;
 	std::string units = wxGetApp().getUnits();
 
 	ConfigEntry *confEntry =
@@ -112,7 +113,7 @@ namespace CalXUI {
 	Layout();
 	this->update();
   }
-  
+
   std::string CalxLinearTaskHandle::getName() {
 	return "Linear Task #" + std::to_string(this->id);
   }
@@ -169,7 +170,7 @@ namespace CalXUI {
 	delete this->trans;
 	Destroy();
   }
-  
+
   CalxTaskHandle *CalxLinearTaskFactory::newTask(wxWindow *win) {
 	return new CalxLinearTaskHandle(win, wxID_ANY, ++this->next_id);
   }

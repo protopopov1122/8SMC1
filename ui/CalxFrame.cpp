@@ -56,22 +56,25 @@ namespace CalXUI {
 	Bind(wxEVT_COMMAND_MENU_SELECTED, &CalxFrame::OnAboutMenuClick, this,
 		 wxID_ABOUT);
 	this->menuBar->Append(this->aboutMenu, __("About"));
-	SetMenuBar(this->menuBar);		
-		
+	SetMenuBar(this->menuBar);
+
 	CalxDevicePanel *devPanel = new CalxDevicePanel(panel, wxID_ANY);
-	
+
 	CalxTaskPanel *taskPanel = new CalxTaskPanel(panel, wxID_ANY);
 	taskPanel->attachTaskFactory(__("GCode"), new CalxGCodeTaskFactory());
-	taskPanel->attachTaskFactory(__("Programmed"), new CalxProgrammedTaskFactory());
-	taskPanel->attachTaskFactory(__("Linear"), new CalxLinearTaskFactory());	
-		
+	taskPanel->attachTaskFactory(__("Programmed"),
+								 new CalxProgrammedTaskFactory());
+	taskPanel->attachTaskFactory(__("Linear"), new CalxLinearTaskFactory());
+
 	panel->addPane(__("Devices"), devPanel);
-	panel->addPane(__("Coordinate planes"), new CalxCoordPanel(panel, wxID_ANY));
-	panel->addPane(__("Tasks"),  taskPanel);
-	panel->addPane(__("Configuration"), new CalxConfigEditor(
-		panel, wxID_ANY, wxGetApp().getSystemManager()->getConfiguration()));
-		
-		
+	panel->addPane(__("Coordinate planes"),
+				   new CalxCoordPanel(panel, wxID_ANY));
+	panel->addPane(__("Tasks"), taskPanel);
+	panel->addPane(__("Configuration"),
+				   new CalxConfigEditor(
+					   panel, wxID_ANY,
+					   wxGetApp().getSystemManager()->getConfiguration()));
+
 	std::vector<DeviceConnectionType> devConType;
 	std::vector<DeviceConnectionType> instrConType;
 	wxGetApp().getSystemManager()->getDeviceManager()->getConnectionTypes(
@@ -79,27 +82,36 @@ namespace CalXUI {
 	for (const auto &devCon : devConType) {
 	  switch (devCon) {
 		case DeviceConnectionType::SerialPort: {
-			devPanel->appendDeviceFactory(__("COM Motor"), new CalxSerialMotorFactory());
+		  devPanel->appendDeviceFactory(__("COM Motor"),
+										new CalxSerialMotorFactory());
 		} break;
 	  }
 	}
 	for (const auto &instrCon : instrConType) {
 	  switch (instrCon) {
 		case DeviceConnectionType::SerialPort: {
-			devPanel->appendDeviceFactory(__("COM Instrument"), new CalxSerialInstrumentFactory());
+		  devPanel->appendDeviceFactory(__("COM Instrument"),
+										new CalxSerialInstrumentFactory());
 		} break;
 	  }
 	}
-	
-	for (size_t i = 0; i < wxGetApp().getSystemManager()->getMotorCount(); i++) {
-	  devPanel->appendDevice(new CalxMotorConstructor(devPanel, wxGetApp().getSystemManager()->getMotorController((device_id_t) i)));
+
+	for (size_t i = 0; i < wxGetApp().getSystemManager()->getMotorCount();
+		 i++) {
+	  devPanel->appendDevice(new CalxMotorConstructor(
+		  devPanel,
+		  wxGetApp().getSystemManager()->getMotorController((device_id_t) i)));
 	}
 
-	for (size_t i = 0; i < wxGetApp().getSystemManager()->getInstrumentCount(); i++) {
-	  devPanel->appendDevice(new CalxInstrumentConstructor(devPanel, wxGetApp().getSystemManager()->getInstrumentController((device_id_t) i)));
+	for (size_t i = 0; i < wxGetApp().getSystemManager()->getInstrumentCount();
+		 i++) {
+	  devPanel->appendDevice(new CalxInstrumentConstructor(
+		  devPanel,
+		  wxGetApp().getSystemManager()->getInstrumentController(
+			  (device_id_t) i)));
 	}
 	devPanel->updateUI();
-	
+
 	Layout();
 	Fit();
   }

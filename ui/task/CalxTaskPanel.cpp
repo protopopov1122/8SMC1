@@ -118,12 +118,12 @@ namespace CalXUI {
 	taskPanel->SetSizer(taskSizer);
 	this->taskList = new wxListBox(taskPanel, wxID_ANY);
 	taskSizer->Add(this->taskList, 1, wxALL | wxEXPAND);
-	
+
 	this->taskFactoryPanel = new wxPanel(taskPanel, wxID_ANY);
 	taskSizer->Add(this->taskFactoryPanel, 0, wxALL | wxEXPAND);
 	wxBoxSizer *taskFactorySizer = new wxBoxSizer(wxVERTICAL);
 	taskFactoryPanel->SetSizer(taskFactorySizer);
-	
+
 	wxButton *removeButton = new wxButton(taskPanel, wxID_ANY, __("Remove"));
 	taskSizer->Add(removeButton, 0, wxALL | wxEXPAND);
 	removeButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnRemoveClick, this);
@@ -186,10 +186,12 @@ namespace CalXUI {
 	this->Bind(wxEVT_CLOSE_WINDOW, &CalxTaskPanel::OnExit, this);
 	this->Bind(wxEVT_TASK_PANEL_ENABLE, &CalxTaskPanel::OnEnableEvent, this);
   }
-  
-  void CalxTaskPanel::attachTaskFactory(std::string name, CalxTaskFactory *factory) {
-	wxButton *factButton = new wxButton(this->taskFactoryPanel, wxID_ANY, __("New") +
-		std::string(" ") + name + std::string(" ") + __("task"));
+
+  void CalxTaskPanel::attachTaskFactory(std::string name,
+										CalxTaskFactory *factory) {
+	wxButton *factButton = new wxButton(
+		this->taskFactoryPanel, wxID_ANY,
+		__("New") + std::string(" ") + name + std::string(" ") + __("task"));
 	this->taskFactoryPanel->GetSizer()->Add(factButton, 0, wxALL | wxEXPAND);
 	factButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnNewTaskClick, this);
 	this->factories[factButton] = factory;
@@ -198,7 +200,7 @@ namespace CalXUI {
   void CalxTaskPanel::shutdown() {
 	this->queue->stop();
   }
-  
+
   bool CalxTaskPanel::isBusy() {
 	return queue->isBusy();
   }
@@ -212,7 +214,8 @@ namespace CalXUI {
 	}
 	plane->Clear();
 	CalxPanel *calxPanel = wxGetApp().getMainFrame()->getPanel();
-	for (size_t i = 0; i < wxGetApp().getSystemManager()->getCoordCount(); i++) {
+	for (size_t i = 0; i < wxGetApp().getSystemManager()->getCoordCount();
+		 i++) {
 	  if (wxGetApp().getSystemManager()->getCoord(i)->isUsed()) {
 		continue;
 	  }
@@ -241,19 +244,19 @@ namespace CalXUI {
 	}
 	Destroy();
   }
-  
+
   void CalxTaskPanel::OnNewTaskClick(wxCommandEvent &evt) {
 	if (this->factories.count(evt.GetEventObject()) != 0) {
-		CalxTaskFactory *fact = this->factories[evt.GetEventObject()];
-		CalxTaskHandle *task = fact->newTask(mainPanel);
-		if (task != nullptr) {
-			list.push_back(task);
-			taskList->Append(task->getName());
-			mainPanel->GetSizer()->Add(task, 1, wxALL | wxEXPAND, 5);
-			taskList->SetSelection((int) list.size() - 1);
-			Layout();
-			updateUI();
-		}
+	  CalxTaskFactory *fact = this->factories[evt.GetEventObject()];
+	  CalxTaskHandle *task = fact->newTask(mainPanel);
+	  if (task != nullptr) {
+		list.push_back(task);
+		taskList->Append(task->getName());
+		mainPanel->GetSizer()->Add(task, 1, wxALL | wxEXPAND, 5);
+		taskList->SetSelection((int) list.size() - 1);
+		Layout();
+		updateUI();
+	  }
 	}
   }
 
@@ -282,9 +285,8 @@ namespace CalXUI {
 		plane->GetSelection() != wxNOT_FOUND) {
 	  list.at((size_t) taskList->GetSelection())->update();
 	  CoordTask *task = list.at((size_t) taskList->GetSelection())->getTask();
-	  CoordHandle *handle =
-		  wxGetApp().getSystemManager()->getCoord(
-			  (size_t) plane->GetSelection());
+	  CoordHandle *handle = wxGetApp().getSystemManager()->getCoord(
+		  (size_t) plane->GetSelection());
 	  float speed = this->speed->GetValue();
 	  TaskParameters prms = { (float) speed };
 	  queue->addAction(new CalxTaskAction(this, handle, task, prms));
@@ -305,9 +307,8 @@ namespace CalXUI {
 		plane->GetSelection() != wxNOT_FOUND) {
 	  list.at((size_t) taskList->GetSelection())->update();
 	  CoordTask *task = list.at((size_t) taskList->GetSelection())->getTask();
-	  CoordHandle *handle =
-		  wxGetApp().getSystemManager()->getCoord(
-			  (size_t) plane->GetSelection());
+	  CoordHandle *handle = wxGetApp().getSystemManager()->getCoord(
+		  (size_t) plane->GetSelection());
 	  if (!handle->isMeasured()) {
 		wxMessageBox(__("Plane need to be measured before preview"),
 					 __("Warning"), wxICON_WARNING);
@@ -336,9 +337,8 @@ namespace CalXUI {
 		plane->GetSelection() != wxNOT_FOUND) {
 	  list.at((size_t) taskList->GetSelection())->update();
 	  CoordTask *task = list.at((size_t) taskList->GetSelection())->getTask();
-	  CoordHandle *handle =
-		  wxGetApp().getSystemManager()->getCoord(
-			  (size_t) plane->GetSelection());
+	  CoordHandle *handle = wxGetApp().getSystemManager()->getCoord(
+		  (size_t) plane->GetSelection());
 	  if (!handle->isMeasured()) {
 		wxMessageBox(__("Plane need to be measured to linearize"),
 					 __("Warning"), wxICON_WARNING);
@@ -368,16 +368,18 @@ namespace CalXUI {
 	  }
 	  ss.seekg(0);
 
-	  ComplexCoordTranslator *trans = new ComplexCoordTranslator(list.at((size_t) taskList->GetSelection())
-			  ->getTranslator()
-			  ->clone(nullptr));
+	  ComplexCoordTranslator *trans =
+		  new ComplexCoordTranslator(list.at((size_t) taskList->GetSelection())
+										 ->getTranslator()
+										 ->clone(nullptr));
 	  CalxGcodeHandle *gcodeHandle = new CalxGcodeHandle(
 		  mainPanel, wxID_ANY,
 		  __("Linear ") + taskList->GetStringSelection().ToStdString(), &ss,
 		  trans);
 
 	  list.push_back(gcodeHandle);
-	  taskList->Append(__("Linear ") + taskList->GetStringSelection().ToStdString());
+	  taskList->Append(__("Linear ") +
+					   taskList->GetStringSelection().ToStdString());
 	  mainPanel->GetSizer()->Add(gcodeHandle, 1, wxALL | wxEXPAND, 5);
 	  taskList->SetSelection((int) list.size() - 1);
 	  Layout();
