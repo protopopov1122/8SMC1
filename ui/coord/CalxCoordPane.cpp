@@ -29,12 +29,6 @@
 #include "ui/coord/CalxCoordPane.h"
 #include "ui/coord/CalxCoordPlaneWatcher.h"
 #include "ui/coord/CalxCoordAdjuster.h"
-#include "ui/coord/CalxCoordLinearComponent.h"
-#include "ui/coord/CalxCoordArcComponent.h"
-#include "ui/coord/CalxCoordGraphComponent.h"
-#include "ui/coord/CalxCoordFilterComponent.h"
-#include "ui/coord/CalxCoordPositionComponent.h"
-#include "ui/coord/CalxCoordOtherComponent.h"
 
 namespace CalXUI {
 
@@ -104,27 +98,13 @@ namespace CalXUI {
 	  this->component_panes.push_back(comPane);
 	}
 
-	addComponent(__("Linear movement"),
-				 new CalxCoordLinearComponentFactory(this->controller), 0);
-	addComponent(__("Arc movement"),
-				 new CalxCoordArcComponentFactory(this->controller), 0);
-	addComponent(__("Function graph"),
-				 new CalxCoordGraphComponentFactory(this->controller), 0,
-				 false);
-	addComponent(__("Other"),
-				 new CalxCoordOtherComponentFactory(this->controller), 1,
-				 false);
-	addComponent(__("Position"),
-				 new CalxCoordPositionComponentFactory(this->controller), 1,
-				 false);
-	addComponent(__("Filters"),
-				 new CalxCoordFilterComponentFactory(this->controller), 1);
-
 	sizer->Add(component_panel, 0, wxALL | wxEXPAND, 0);
 	Bind(wxEVT_COORD_CTRL_WATCHER, &CalxCoordPane::OnWatcherRequest, this);
 	Bind(wxEVT_CLOSE_WINDOW, &CalxCoordPane::OnExit, this);
 	Bind(wxEVT_COORD_CTRL_ENABLE, &CalxCoordPane::OnEnableEvent, this);
 	updateUI();
+
+	this->controller->addFilterListener(this);
 
 	this->Layout();
 	this->setEnabled(true);
@@ -147,7 +127,8 @@ namespace CalXUI {
 	wxWindow *winPane = colPane->GetPane();
 	wxBoxSizer *winSizer = new wxBoxSizer(wxHORIZONTAL);
 	winPane->SetSizer(winSizer);
-	CalxCoordComponent *comp = compFact->newComponent(winPane);
+	CalxCoordComponent *comp =
+		compFact->newComponent(winPane, this->controller);
 	winSizer->Add(comp, 0, wxALL);
 	colPane->Bind(wxEVT_COLLAPSIBLEPANE_CHANGED,
 				  &CalxCoordPane::OnInterfaceUpdate, this);
@@ -199,16 +180,11 @@ namespace CalXUI {
 	stopButton->Enable(!e && this->queue->isBusy());
   }
 
-  void CalxCoordPane::setOffset(motor_point_t offset) {
-	motor_scale_t scale = this->controller->getScale();
-	offset.x *= scale.x;
-	offset.y *= scale.y;
-	this->controller->setOffset(offset);
+  void CalxCoordPane::updateOffset(motor_point_t offset) {
 	this->watchers->updateWatchers();
   }
 
-  void CalxCoordPane::setScale(motor_scale_t scale) {
-	this->controller->setScale(scale);
+  void CalxCoordPane::updateScale(motor_scale_t scale) {
 	this->watchers->updateWatchers();
   }
 
@@ -268,12 +244,13 @@ namespace CalXUI {
   }
 
   void CalxCoordPane::OnExit(wxCloseEvent &evt) {
-	delete this->controller;
-	delete this->watchers;
-
 	for (const auto &comp : this->components) {
 	  comp->Close(true);
 	}
+	this->controller->removeFilterListener(this);
+
+	delete this->controller;
+	delete this->watchers;
 
 	this->ctrl->removeEventListener(this->listener);
 	this->ctrl->getController()->getXAxis()->removeEventListener(

@@ -26,15 +26,26 @@
 #include <wx/listbox.h>
 #include "ui/CalxPanelPane.h"
 #include "ui/coord/CalxCoordPane.h"
-#include "ui/coord/CalxCoordPlaneWatcher.h"
+#include "ui/coord/CalxCoordComponent.h"
 
 namespace CalXUI {
 
   wxDECLARE_EVENT(wxEVT_COORD_PANEL_UPDATE, wxThreadEvent);
 
+  struct CalxCoordComponentFactoryHandle {
+   public:
+	CalxCoordComponentFactoryHandle(std::string title,
+									CalxCoordComponentFactory *factory,
+									bool hidden)
+		: title(title), factory(factory), hidden(hidden) {}
+	std::string title;
+	CalxCoordComponentFactory *factory;
+	bool hidden;
+  };
+
   class CalxCoordPanel : public CalxPanelPane {
    public:
-	CalxCoordPanel(wxWindow *, wxWindowID);
+	CalxCoordPanel(wxWindow *, wxWindowID, size_t);
 
 	size_t getCoordCount();
 	CalxCoordPane *getCoordCtrl(size_t sz);
@@ -42,6 +53,9 @@ namespace CalXUI {
 	virtual void updateUI();
 	virtual void shutdown();
 	virtual bool isBusy();
+	size_t getLayoutColumnCount();
+	bool addComponentFactory(std::string, CalxCoordComponentFactory *, size_t,
+							 bool = true);
 
    private:
 	void addPlane(CoordHandle *);
@@ -55,6 +69,7 @@ namespace CalXUI {
 
 	wxListBox *coordList;
 	std::vector<CalxCoordPane *> coords;
+	std::vector<std::vector<CalxCoordComponentFactoryHandle>> layout;
 	wxPanel *mainPanel;
 	int nextId;
   };

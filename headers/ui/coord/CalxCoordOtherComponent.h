@@ -36,12 +36,8 @@ using namespace CalX;
 namespace CalXUI {
 
   class CalxCoordOtherComponentFactory : public CalxCoordComponentFactory {
-   public:
-	CalxCoordOtherComponentFactory(CalxCoordController *);
-	virtual CalxCoordComponent *newComponent(wxWindow *);
-
-   private:
-	CalxCoordController *controller;
+	;
+	virtual CalxCoordComponent *newComponent(wxWindow *, CalxCoordController *);
   };
 
   class CalxCoordOtherComponent : public CalxCoordComponent {

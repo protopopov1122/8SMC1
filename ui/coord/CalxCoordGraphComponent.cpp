@@ -26,13 +26,9 @@
 
 namespace CalXUI {
 
-  CalxCoordGraphComponentFactory::CalxCoordGraphComponentFactory(
-	  CalxCoordController *ctrl)
-	  : controller(ctrl) {}
-
   CalxCoordComponent *CalxCoordGraphComponentFactory::newComponent(
-	  wxWindow *win) {
-	return new CalxCoordGraphComponent(win, wxID_ANY, this->controller);
+	  wxWindow *win, CalxCoordController *ctrl) {
+	return new CalxCoordGraphComponent(win, wxID_ANY, ctrl);
   }
 
   CalxCoordGraphComponent::CalxCoordGraphComponent(

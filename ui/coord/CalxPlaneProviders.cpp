@@ -208,7 +208,7 @@ namespace CalXUI {
 		motor_scale_t scale = ctrl->getController()->getScale();
 		offset.x += ctrl->getController()->getOffset().x / scale.x;
 		offset.y += ctrl->getController()->getOffset().y / scale.y;
-		ctrl->setOffset(offset);
+		ctrl->getController()->setOffset(offset);
 		return true;
 	  } else {
 		return false;
@@ -239,7 +239,7 @@ namespace CalXUI {
 		motor_scale_t scale = ctrl->getController()->getScale();
 		scale.x *= -1;
 		scale.y *= -1;
-		ctrl->setScale(scale);
+		ctrl->getController()->setScale(scale);
 		return true;
 	  } else {
 		return false;

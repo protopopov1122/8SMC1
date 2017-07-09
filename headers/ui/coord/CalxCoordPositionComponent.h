@@ -28,12 +28,7 @@
 namespace CalXUI {
 
   class CalxCoordPositionComponentFactory : public CalxCoordComponentFactory {
-   public:
-	CalxCoordPositionComponentFactory(CalxCoordController *);
-	virtual CalxCoordComponent *newComponent(wxWindow *);
-
-   private:
-	CalxCoordController *controller;
+	virtual CalxCoordComponent *newComponent(wxWindow *, CalxCoordController *);
   };
 
   class CalxCoordPositionComponent : public CalxCoordComponent {

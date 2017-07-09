@@ -34,6 +34,12 @@
 #include "ui/dev/CalxSerialMotor.h"
 #include "ui/dev/CalxSerialInstrument.h"
 #include "ui/dev/CalxDeviceConstructor.h"
+#include "ui/coord/CalxCoordLinearComponent.h"
+#include "ui/coord/CalxCoordArcComponent.h"
+#include "ui/coord/CalxCoordGraphComponent.h"
+#include "ui/coord/CalxCoordFilterComponent.h"
+#include "ui/coord/CalxCoordPositionComponent.h"
+#include "ui/coord/CalxCoordOtherComponent.h"
 
 namespace CalXUI {
   CalxFrame::CalxFrame(std::string title)
@@ -66,9 +72,22 @@ namespace CalXUI {
 								 new CalxProgrammedTaskFactory());
 	taskPanel->attachTaskFactory(__("Linear"), new CalxLinearTaskFactory());
 
+	CalxCoordPanel *coordPanel = new CalxCoordPanel(panel, wxID_ANY, 2);
+	coordPanel->addComponentFactory(__("Linear movement"),
+									new CalxCoordLinearComponentFactory(), 0);
+	coordPanel->addComponentFactory(__("Arc movement"),
+									new CalxCoordArcComponentFactory(), 0);
+	coordPanel->addComponentFactory(
+		__("Function graph"), new CalxCoordGraphComponentFactory(), 0, false);
+	coordPanel->addComponentFactory(
+		__("Other"), new CalxCoordOtherComponentFactory(), 1, false);
+	coordPanel->addComponentFactory(
+		__("Position"), new CalxCoordPositionComponentFactory(), 1, false);
+	coordPanel->addComponentFactory(__("Filters"),
+									new CalxCoordFilterComponentFactory(), 1);
+
 	panel->addPane(__("Devices"), devPanel);
-	panel->addPane(__("Coordinate planes"),
-				   new CalxCoordPanel(panel, wxID_ANY));
+	panel->addPane(__("Coordinate planes"), coordPanel);
 	panel->addPane(__("Tasks"), taskPanel);
 	panel->addPane(__("Configuration"),
 				   new CalxConfigEditor(

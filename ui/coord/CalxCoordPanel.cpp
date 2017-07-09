@@ -30,8 +30,14 @@ namespace CalXUI {
 
   wxDEFINE_EVENT(wxEVT_COORD_PANEL_UPDATE, wxThreadEvent);
 
-  CalxCoordPanel::CalxCoordPanel(wxWindow *win, wxWindowID id)
+  CalxCoordPanel::CalxCoordPanel(wxWindow *win, wxWindowID id,
+								 size_t layout_cols)
 	  : CalxPanelPane::CalxPanelPane(win, id) {
+	for (size_t i = 0; i < layout_cols; i++) {
+	  std::vector<CalxCoordComponentFactoryHandle> vec;
+	  this->layout.push_back(vec);
+	}
+
 	wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 	SetSizer(sizer);
 	wxSplitterWindow *splitter = new wxSplitterWindow(this, wxID_ANY);
@@ -108,9 +114,29 @@ namespace CalXUI {
 	}
   }
 
+  size_t CalxCoordPanel::getLayoutColumnCount() {
+	return this->layout.size();
+  }
+
+  bool CalxCoordPanel::addComponentFactory(std::string title,
+										   CalxCoordComponentFactory *fact,
+										   size_t column, bool hidden) {
+	if (column >= this->layout.size()) {
+	  return false;
+	}
+	this->layout.at(column).push_back(
+		CalxCoordComponentFactoryHandle(title, fact, hidden));
+	return true;
+  }
+
   void CalxCoordPanel::addPlane(CoordHandle *handle) {
-	CalxCoordPane *ctrl =
-		new CalxCoordPane(this->mainPanel, wxID_ANY, handle, 2);
+	CalxCoordPane *ctrl = new CalxCoordPane(this->mainPanel, wxID_ANY, handle,
+											this->layout.size());
+	for (size_t i = 0; i < this->layout.size(); i++) {
+	  for (const auto &fact : this->layout.at(i)) {
+		ctrl->addComponent(fact.title, fact.factory, i, fact.hidden);
+	  }
+	}
 	this->mainPanel->GetSizer()->Add(ctrl, 1, wxALL | wxEXPAND, 5);
 	this->coords.push_back(ctrl);
 	this->coordList->Append("Plane #" + std::to_string(handle->getID()));
@@ -132,6 +158,11 @@ namespace CalXUI {
   }
 
   void CalxCoordPanel::OnExit(wxCloseEvent &evt) {
+	for (const auto &vec : this->layout) {
+	  for (const auto &fact : vec) {
+		delete fact.factory;
+	  }
+	}
 	while (!this->coords.empty()) {
 	  size_t pl = 0;
 	  this->mainPanel->GetSizer()->Detach(coords.at(pl));

@@ -21,13 +21,9 @@
 
 namespace CalXUI {
 
-  CalxCoordFilterComponentFactory::CalxCoordFilterComponentFactory(
-	  CalxCoordController *ctrl)
-	  : controller(ctrl) {}
-
   CalxCoordComponent *CalxCoordFilterComponentFactory::newComponent(
-	  wxWindow *win) {
-	return new CalxCoordFilterComponent(win, wxID_ANY, this->controller);
+	  wxWindow *win, CalxCoordController *ctrl) {
+	return new CalxCoordFilterComponent(win, wxID_ANY, ctrl);
   }
 
   CalxCoordFilterComponent::CalxCoordFilterComponent(

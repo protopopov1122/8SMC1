@@ -39,7 +39,8 @@ namespace CalXUI {
   wxDECLARE_EVENT(wxEVT_COORD_CTRL_WATCHER, wxThreadEvent);
   wxDECLARE_EVENT(wxEVT_COORD_CTRL_ENABLE, wxThreadEvent);
 
-  class CalxCoordPane : public wxScrolledWindow {
+  class CalxCoordPane : public wxScrolledWindow,
+						public CalxCoordFilterListener {
    public:
 	CalxCoordPane(wxWindow *, wxWindowID, CoordHandle *, size_t);
 
@@ -56,8 +57,8 @@ namespace CalXUI {
 	void use();
 	void unuse();
 	bool isUsed();
-	virtual void setOffset(motor_point_t);
-	virtual void setScale(motor_scale_t);
+	virtual void updateOffset(motor_point_t);
+	virtual void updateScale(motor_scale_t);
 	void setEnabled(bool);
 
    private:

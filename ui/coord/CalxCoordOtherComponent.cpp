@@ -22,13 +22,9 @@
 
 namespace CalXUI {
 
-  CalxCoordOtherComponentFactory::CalxCoordOtherComponentFactory(
-	  CalxCoordController *ctrl)
-	  : controller(ctrl) {}
-
   CalxCoordComponent *CalxCoordOtherComponentFactory::newComponent(
-	  wxWindow *win) {
-	return new CalxCoordOtherComponent(win, wxID_ANY, this->controller);
+	  wxWindow *win, CalxCoordController *ctrl) {
+	return new CalxCoordOtherComponent(win, wxID_ANY, ctrl);
   }
 
   CalxCoordOtherComponent::CalxCoordOtherComponent(

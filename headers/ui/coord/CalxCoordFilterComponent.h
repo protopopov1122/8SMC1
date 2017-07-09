@@ -35,11 +35,7 @@ namespace CalXUI {
 
   class CalxCoordFilterComponentFactory : public CalxCoordComponentFactory {
    public:
-	CalxCoordFilterComponentFactory(CalxCoordController *);
-	virtual CalxCoordComponent *newComponent(wxWindow *);
-
-   private:
-	CalxCoordController *controller;
+	virtual CalxCoordComponent *newComponent(wxWindow *, CalxCoordController *);
   };
 
   class CalxCoordFilterComponent : public CalxCoordComponent,

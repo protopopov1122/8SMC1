@@ -21,6 +21,7 @@
 #define CALX_UI_COORD_CALX_COORD_COMPONENT_H_
 
 #include "ui/CalxApp.h"
+#include "ui/coord/CalxCoordController.h"
 
 namespace CalXUI {
 
@@ -32,7 +33,8 @@ namespace CalXUI {
 
   class CalxCoordComponentFactory {
    public:
-	virtual CalxCoordComponent *newComponent(wxWindow *) = 0;
+	virtual CalxCoordComponent *newComponent(wxWindow *,
+											 CalxCoordController *) = 0;
   };
 }
 
