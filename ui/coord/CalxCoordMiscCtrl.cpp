@@ -19,7 +19,7 @@
 
 #include "ui/CalxApp.h"
 #include "ui/CalxErrorHandler.h"
-#include "ui/coord/CalxCoordCtrl.h"
+#include "ui/coord/CalxCoordPane.h"
 
 namespace CalXUI {
 
@@ -27,7 +27,7 @@ namespace CalXUI {
 	ctrl->updateUI();
   }
 
-  CalxCoordEventListener::CalxCoordEventListener(CalxCoordCtrl *ctrl) {
+  CalxCoordEventListener::CalxCoordEventListener(CalxCoordPane *ctrl) {
 	this->ctrl = ctrl;
   }
 
@@ -41,7 +41,7 @@ namespace CalXUI {
 	ctrl->unuse();
   }
 
-  CalxCoordMotorListener::CalxCoordMotorListener(CalxCoordCtrl *ctrl) {
+  CalxCoordMotorListener::CalxCoordMotorListener(CalxCoordPane *ctrl) {
 	this->ctrl = ctrl;
   }
 
@@ -56,7 +56,7 @@ namespace CalXUI {
   }
 
   CalxCoordInstrumentListener::CalxCoordInstrumentListener(
-	  CalxCoordCtrl *ctrl) {
+	  CalxCoordPane *ctrl) {
 	this->ctrl = ctrl;
   }
 

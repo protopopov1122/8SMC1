@@ -27,12 +27,9 @@
 #include <wx/spinctrl.h>
 #include <wx/collpane.h>
 #include "ui/CalxActionQueue.h"
-#include "ui/coord/CalxCoordLinearCtrl.h"
-#include "ui/coord/CalxCoordArcCtrl.h"
-#include "ui/coord/CalxCoordGraphCtrl.h"
-#include "ui/coord/CalxCoordOtherCtrl.h"
 #include "ui/coord/CalxCoordMiscCtrl.h"
 #include "ui/coord/CalxCoordController.h"
+#include "ui/coord/CalxCoordComponent.h"
 #include "ui/coord/CalxWatcherPool.h"
 
 using namespace CalX;
@@ -42,15 +39,18 @@ namespace CalXUI {
   wxDECLARE_EVENT(wxEVT_COORD_CTRL_WATCHER, wxThreadEvent);
   wxDECLARE_EVENT(wxEVT_COORD_CTRL_ENABLE, wxThreadEvent);
 
-  class CalxCoordCtrl : public wxScrolledWindow, public CalxFilterController {
+  class CalxCoordPane : public wxScrolledWindow {
    public:
-	CalxCoordCtrl(wxWindow *, wxWindowID, CoordHandle *);
+	CalxCoordPane(wxWindow *, wxWindowID, CoordHandle *, size_t);
 
 	void updateUI();
 	void shutdown();
 	CoordHandle *getHandle();
 	CalxWatcherPool *getWatchers();
 	CalxCoordController *getController();
+	bool addComponent(std::string, CalxCoordComponentFactory *, size_t,
+					  bool = true);
+	size_t getComponentPaneCount();
 
 	bool isBusy();
 	void use();
@@ -81,14 +81,12 @@ namespace CalXUI {
 	int used;
 
 	// Components
+	std::vector<CalxCoordComponent *> components;
 	wxPanel *generalPanel;
-	wxPanel *actionPanel;
+	wxPanel *component_panel;
+	std::vector<wxPanel *> component_panes;
 	wxButton *stopButton;
 	wxStaticText *generalInfoText;
-	CalxCoordLinearCtrl *linear;
-	CalxCoordArcCtrl *arc;
-	CalxCoordGraphCtrl *graphCtrl;
-	CalxCoordOtherCtrl *otherCtrl;
 	CalxCoordTimer timer;
   };
 }

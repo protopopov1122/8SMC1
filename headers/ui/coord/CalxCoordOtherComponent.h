@@ -21,60 +21,44 @@
 #define CALX_UI_CALX_COORD_OTHER_CTRL_H_
 
 #include <math.h>
-#include "ui/calx.h"
+#include "ui/CalxApp.h"
 #include <wx/stattext.h>
 #include <wx/choice.h>
 #include <wx/checkbox.h>
 #include <wx/spinctrl.h>
 #include <wx/collpane.h>
 #include "ui/CalxActionQueue.h"
-#include "ui/CalxFrame.h"
-#include "ui/coord/CalxCoordPositionCtrl.h"
 #include "ui/coord/CalxCoordController.h"
-#include "ui/coord/CalxFilterController.h"
+#include "ui/coord/CalxCoordComponent.h"
 
 using namespace CalX;
 
 namespace CalXUI {
 
-  class CalxCoordOtherCtrl : public wxPanel {
+  class CalxCoordOtherComponentFactory : public CalxCoordComponentFactory {
    public:
-	CalxCoordOtherCtrl(wxWindow *, wxWindowID, CalxCoordController *,
-					   CalxFilterController *);
+	CalxCoordOtherComponentFactory(CalxCoordController *);
+	virtual CalxCoordComponent *newComponent(wxWindow *);
 
-	wxCollapsiblePane *getPositionPane();
-	wxCollapsiblePane *getFiltersPane();
+   private:
+	CalxCoordController *controller;
+  };
 
-	void setOffset(motor_point_t);
-	void setScale(motor_scale_t);
+  class CalxCoordOtherComponent : public CalxCoordComponent {
+   public:
+	CalxCoordOtherComponent(wxWindow *, wxWindowID, CalxCoordController *);
 
    private:
 	void OnInstrumentEnableClick(wxCommandEvent &);
 	void OnAdjustPositionClick(wxCommandEvent &);
 	void OnCalibrateClick(wxCommandEvent &);
 	void OnMeasureClick(wxCommandEvent &);
-	void OnFiltersUpdate(wxCommandEvent &);
 
-	wxCollapsiblePane *posCollPane;
-	wxCollapsiblePane *filtersCollPane;
 	wxCheckBox *enableInstrument;
 	wxChoice *trailer;
 	wxChoice *measureTrailer;
-	wxCheckBox *logActions;
-	wxCheckBox *logErrors;
-	wxSpinCtrl *xOffset;
-	wxSpinCtrl *yOffset;
-	wxSpinCtrlDouble *xScale;
-	wxSpinCtrlDouble *yScale;
-	wxSpinCtrl *minx;
-	wxSpinCtrl *miny;
-	wxSpinCtrl *maxx;
-	wxSpinCtrl *maxy;
-	wxSpinCtrl *speed;
 
-	CalxCoordPositionCtrl *posCtrl;
 	CalxCoordController *controller;
-	CalxFilterController *filters;
   };
 }
 

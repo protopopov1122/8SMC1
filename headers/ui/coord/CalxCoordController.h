@@ -21,23 +21,34 @@
 #define CALX_UI_COORD_CALX_COORD_CONTROLLER_H_
 
 #include "ui/CalxApp.h"
-#include "ui/coord/CalxFilterController.h"
 #include "ui/CalxActionQueue.h"
 #include "ui/coord/CalxVirtualPlane.h"
 
 namespace CalXUI {
 
+  class CalxCoordFilterListener {
+   public:
+	virtual void updateOffset(motor_point_t) = 0;
+	virtual void updateScale(motor_scale_t) = 0;
+  };
+
   class CalxCoordController {
    public:
-	CalxCoordController(CoordHandle *, CalxFilterController *,
-						CalxActionQueue *);
+	CalxCoordController(CoordHandle *, CalxActionQueue *);
 	virtual ~CalxCoordController();
 
 	CoordHandle *getHandle();
 	CoordPlaneLog *getLogFilter();
-	CoordPlaneMap *getMapFilter();
+	//	CoordPlaneMap *getMapFilter();
 	CoordPlaneValidator *getValidateFilter();
 	CoordPlaneMap *getUnitMapFilter();
+
+	motor_point_t getOffset();
+	motor_scale_t getScale();
+	void setOffset(motor_point_t);
+	void setScale(motor_scale_t);
+	void addFilterListener(CalxCoordFilterListener *);
+	void removeFilterListener(CalxCoordFilterListener *);
 
 	void move(coord_point_t, double, bool, bool, bool * = nullptr);
 	void arc(coord_point_t, coord_point_t, int, double, bool, bool,
@@ -52,10 +63,10 @@ namespace CalXUI {
 
    private:
 	CoordHandle *handle;
-	CalxFilterController *filters;
 	CalxActionQueue *queue;
 
 	// Filters
+	std::vector<CalxCoordFilterListener *> listeners;
 	CoordPlaneLog *log;
 	CoordPlaneMap *map;
 	CoordPlaneValidator *validator;

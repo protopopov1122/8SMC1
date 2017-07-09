@@ -17,43 +17,46 @@
 	along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CALX_UI_CALX_COORD_GRAPH_CTRL_H_
-#define CALX_UI_CALX_COORD_GRAPH_CTRL_H_
+#ifndef CALX_UI_CALX_COORD_ARC_CTRL_H_
+#define CALX_UI_CALX_COORD_ARC_CTRL_H_
 
-#include "ui/calx.h"
+#include "ui/CalxApp.h"
 #include <wx/stattext.h>
 #include <wx/choice.h>
 #include <wx/checkbox.h>
 #include <wx/spinctrl.h>
 #include "ui/CalxActionQueue.h"
-#include "ui/CalxFrame.h"
-#include "ui/coord/CalxCoordFilter.h"
 #include "ui/coord/CalxCoordController.h"
+#include "ui/coord/CalxCoordComponent.h"
 
 using namespace CalX;
 
 namespace CalXUI {
 
-  class CalxCoordCtrl;  // Forward reference
-
-  class CalxCoordGraphCtrl : public wxPanel {
+  class CalxCoordArcComponentFactory : public CalxCoordComponentFactory {
    public:
-	CalxCoordGraphCtrl(wxWindow *, wxWindowID, CalxCoordController *);
+	CalxCoordArcComponentFactory(CalxCoordController *);
+	virtual CalxCoordComponent *newComponent(wxWindow *);
 
    private:
-	void OnClose(wxCloseEvent &);
-	void OnBuildClick(wxCommandEvent &);
-	void OnPreviewClick(wxCommandEvent &);
+	CalxCoordController *controller;
+  };
 
-	wxTextCtrl *expr;
-	wxSpinCtrlDouble *xmin;
-	wxSpinCtrlDouble *xmax;
-	wxSpinCtrlDouble *ymin;
-	wxSpinCtrlDouble *ymax;
-	wxSpinCtrlDouble *step;
-	CalxCoordFilter *translator;
-	ComplexCoordTranslator *trans;
+  class CalxCoordArcComponent : public CalxCoordComponent {
+   public:
+	CalxCoordArcComponent(wxWindow *, wxWindowID, CalxCoordController *);
+
+   private:
+	void OnMoveClick(wxCommandEvent &);
+
+	wxSpinCtrlDouble *xCoord;
+	wxSpinCtrlDouble *yCoord;
+	wxSpinCtrlDouble *cxCoord;
+	wxSpinCtrlDouble *cyCoord;
 	wxSpinCtrlDouble *speed;
+	wxSpinCtrl *splitter;
+	wxCheckBox *clockwise;
+	wxCheckBox *relative;
 
 	CalxCoordController *controller;
   };

@@ -17,8 +17,8 @@
 	along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CALX_UI_CALX_COORD_LINEAR_CTRL_H_
-#define CALX_UI_CALX_COORD_LINEAR_CTRL_H_
+#ifndef CALX_UI_CALX_COORD_GRAPH_CTRL_H_
+#define CALX_UI_CALX_COORD_GRAPH_CTRL_H_
 
 #include "ui/calx.h"
 #include <wx/stattext.h>
@@ -27,24 +27,41 @@
 #include <wx/spinctrl.h>
 #include "ui/CalxActionQueue.h"
 #include "ui/CalxFrame.h"
+#include "ui/coord/CalxCoordFilter.h"
 #include "ui/coord/CalxCoordController.h"
+#include "ui/coord/CalxCoordComponent.h"
 
 using namespace CalX;
 
 namespace CalXUI {
 
-  class CalxCoordLinearCtrl : public wxPanel {
+  class CalxCoordGraphComponentFactory : public CalxCoordComponentFactory {
    public:
-	CalxCoordLinearCtrl(wxWindow *, wxWindowID, CalxCoordController *);
+	CalxCoordGraphComponentFactory(CalxCoordController *);
+	virtual CalxCoordComponent *newComponent(wxWindow *);
 
    private:
-	void OnMoveClick(wxCommandEvent &);
-	void OnJumpClick(wxCommandEvent &);
+	CalxCoordController *controller;
+  };
 
-	wxSpinCtrlDouble *xCoord;
-	wxSpinCtrlDouble *yCoord;
+  class CalxCoordGraphComponent : public CalxCoordComponent {
+   public:
+	CalxCoordGraphComponent(wxWindow *, wxWindowID, CalxCoordController *);
+
+   private:
+	void OnClose(wxCloseEvent &);
+	void OnBuildClick(wxCommandEvent &);
+	void OnPreviewClick(wxCommandEvent &);
+
+	wxTextCtrl *expr;
+	wxSpinCtrlDouble *xmin;
+	wxSpinCtrlDouble *xmax;
+	wxSpinCtrlDouble *ymin;
+	wxSpinCtrlDouble *ymax;
+	wxSpinCtrlDouble *step;
+	CalxCoordFilter *translator;
+	ComplexCoordTranslator *trans;
 	wxSpinCtrlDouble *speed;
-	wxCheckBox *relative;
 
 	CalxCoordController *controller;
   };

@@ -17,26 +17,43 @@
 	along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CALX_UI_CALX_COORD_POSITION_CTRL_H_
-#define CALX_UI_CALX_COORD_POSITION_CTRL_H_
+#ifndef CALX_UI_CALX_COORD_LINEAR_CTRL_H_
+#define CALX_UI_CALX_COORD_LINEAR_CTRL_H_
 
 #include "ui/CalxApp.h"
-#include "ui/coord/CalxCoordController.h"
+#include <wx/stattext.h>
+#include <wx/choice.h>
+#include <wx/checkbox.h>
 #include <wx/spinctrl.h>
+#include "ui/CalxActionQueue.h"
+#include "ui/coord/CalxCoordController.h"
+#include "ui/coord/CalxCoordComponent.h"
+
+using namespace CalX;
 
 namespace CalXUI {
 
-  class CalxCoordPositionCtrl : public wxPanel {
+  class CalxCoordLinearComponentFactory : public CalxCoordComponentFactory {
    public:
-	CalxCoordPositionCtrl(wxWindow *, wxWindowID, CalxCoordController *);
+	CalxCoordLinearComponentFactory(CalxCoordController *);
+	virtual CalxCoordComponent *newComponent(wxWindow *);
+
+   private:
+	CalxCoordController *controller;
+  };
+
+  class CalxCoordLinearComponent : public CalxCoordComponent {
+   public:
+	CalxCoordLinearComponent(wxWindow *, wxWindowID, CalxCoordController *);
 
    private:
 	void OnMoveClick(wxCommandEvent &);
-	void OnConfigureClick(wxCommandEvent &);
+	void OnJumpClick(wxCommandEvent &);
 
-	wxSpinCtrlDouble *xPos;
-	wxSpinCtrlDouble *yPos;
+	wxSpinCtrlDouble *xCoord;
+	wxSpinCtrlDouble *yCoord;
 	wxSpinCtrlDouble *speed;
+	wxCheckBox *relative;
 
 	CalxCoordController *controller;
   };

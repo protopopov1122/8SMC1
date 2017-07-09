@@ -19,12 +19,12 @@
 
 #include "ui/coord/CalxCoordController.h"
 #include "ui/coord/CalxCoordActions.h"
+#include <algorithm>
 
 namespace CalXUI {
   CalxCoordController::CalxCoordController(CoordHandle *handle,
-										   CalxFilterController *filters,
 										   CalxActionQueue *queue)
-	  : handle(handle), filters(filters), queue(queue) {
+	  : handle(handle), queue(queue) {
 	motor_point_t plane_offset = { 0, 0 };
 	motor_scale_t plane_scale = { wxGetApp()
 									  .getSystemManager()
@@ -79,17 +79,49 @@ namespace CalXUI {
   CoordPlaneLog *CalxCoordController::getLogFilter() {
 	return this->log;
   }
-
-  CoordPlaneMap *CalxCoordController::getMapFilter() {
-	return this->map;
-  }
-
+  /*
+	CoordPlaneMap *CalxCoordController::getMapFilter() {
+	  return this->map;
+	}
+  */
   CoordPlaneValidator *CalxCoordController::getValidateFilter() {
 	return this->validator;
   }
 
   CoordPlaneMap *CalxCoordController::getUnitMapFilter() {
 	return this->unit_map;
+  }
+
+  motor_point_t CalxCoordController::getOffset() {
+	return this->map->getOffset();
+  }
+
+  motor_scale_t CalxCoordController::getScale() {
+	return this->map->getScale();
+  }
+
+  void CalxCoordController::setOffset(motor_point_t m) {
+	this->map->setOffset(m);
+	for (const auto &l : this->listeners) {
+	  l->updateOffset(m);
+	}
+  }
+
+  void CalxCoordController::setScale(motor_scale_t sc) {
+	this->map->setScale(sc);
+	for (const auto &l : this->listeners) {
+	  l->updateScale(sc);
+	}
+  }
+
+  void CalxCoordController::addFilterListener(CalxCoordFilterListener *l) {
+	this->listeners.push_back(l);
+  }
+
+  void CalxCoordController::removeFilterListener(CalxCoordFilterListener *l) {
+	this->listeners.erase(
+		std::remove(this->listeners.begin(), this->listeners.end(), l),
+		this->listeners.end());
   }
 
   void CalxCoordController::move(coord_point_t dest, double speed, bool jump,
@@ -128,8 +160,7 @@ namespace CalXUI {
   void CalxCoordController::configure(coord_point_t pos, double speed,
 									  bool *ready) {
 	this->queue->addAction(
-		new CalxCoordActionConfigure(this->handle, this->filters, pos, speed),
-		ready);
+		new CalxCoordActionConfigure(this->handle, this, pos, speed), ready);
   }
 
   void CalxCoordController::build(CoordTranslator *trans, GraphBuilder *builder,

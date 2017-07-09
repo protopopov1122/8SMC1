@@ -17,23 +17,37 @@
 	along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/coord/CalxCoordCtrl.h"
+#include "ui/coord/CalxCoordPositionComponent.h"
 
 namespace CalXUI {
 
-  CalxCoordLinearCtrl::CalxCoordLinearCtrl(wxWindow *win, wxWindowID id,
-										   CalxCoordController *controller)
-	  : wxPanel::wxPanel(win, id), controller(controller) {
-	std::string units = wxGetApp().getUnits();
+  CalxCoordPositionComponentFactory::CalxCoordPositionComponentFactory(
+	  CalxCoordController *ctrl)
+	  : controller(ctrl) {}
+
+  CalxCoordComponent *CalxCoordPositionComponentFactory::newComponent(
+	  wxWindow *win) {
+	return new CalxCoordPositionComponent(win, wxID_ANY, this->controller);
+  }
+
+  CalxCoordPositionComponent::CalxCoordPositionComponent(
+	  wxWindow *win, wxWindowID id, CalxCoordController *controller)
+	  : CalxCoordComponent::CalxCoordComponent(win, id),
+		controller(controller) {
 	wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 	SetSizer(sizer);
 
-	this->xCoord = new wxSpinCtrlDouble(
+	ConfigEntry *confEntry =
+		wxGetApp().getSystemManager()->getConfiguration()->getEntry(
+			"relative_pos");
+	this->xPos = new wxSpinCtrlDouble(
 		this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitPrecision());
-	this->yCoord = new wxSpinCtrlDouble(
+		wxSP_ARROW_KEYS, 0, 1, confEntry->getReal("x", 0.5),
+		confEntry->getReal("x_prec", 0.0001));
+	this->yPos = new wxSpinCtrlDouble(
 		this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitPrecision());
+		wxSP_ARROW_KEYS, 0, 1, confEntry->getReal("y", 0.5),
+		confEntry->getReal("y_prec", 0.0001));
 	this->speed =
 		new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
 							 wxDefaultSize, wxSP_ARROW_KEYS, 0,
@@ -48,9 +62,8 @@ namespace CalXUI {
 								 ->getEntry("units")
 								 ->getReal("unit_speed", 4000.0),
 							 wxGetApp().getSpeedPrecision());
-	this->relative = new wxCheckBox(this, wxID_ANY, __("Relative"));
 	wxButton *moveButton = new wxButton(this, wxID_ANY, __("Move"));
-	wxButton *jumpButton = new wxButton(this, wxID_ANY, __("Jump"));
+	wxButton *configureButton = new wxButton(this, wxID_ANY, __("Configure"));
 
 	sizer->Add(
 		new wxStaticText(this, wxID_ANY, __("Destination") + std::string(":")));
@@ -58,35 +71,41 @@ namespace CalXUI {
 	sizer->Add(new wxStaticText(this, wxID_ANY, ""));
 	sizer->Add(new wxStaticText(this, wxID_ANY, _("x") + std::string(":")), 0,
 			   wxALIGN_RIGHT | wxRIGHT, 10);
-	sizer->Add(xCoord, 0, wxALL | wxEXPAND);
-	sizer->Add(new wxStaticText(this, wxID_ANY, units));
+	sizer->Add(xPos, 0, wxALL | wxEXPAND);
+	sizer->Add(new wxStaticText(this, wxID_ANY, ""));
 	sizer->Add(new wxStaticText(this, wxID_ANY, __("y") + std::string(":")), 0,
 			   wxALIGN_RIGHT | wxRIGHT, 10);
-	sizer->Add(yCoord, 0, wxALL | wxEXPAND);
-	sizer->Add(new wxStaticText(this, wxID_ANY, units));
+	sizer->Add(yPos, 0, wxALL | wxEXPAND);
+	sizer->Add(new wxStaticText(this, wxID_ANY, ""));
 	sizer->Add(new wxStaticText(this, wxID_ANY, __("Speed") + std::string(":")),
 			   0, wxALIGN_RIGHT | wxRIGHT, 10);
 	sizer->Add(speed, 0, wxEXPAND);
 	sizer->Add(new wxStaticText(this, wxID_ANY, wxGetApp().getSpeedUnits()));
-	sizer->Add(relative, 0, wxALIGN_CENTER);
-	sizer->Add(new wxStaticText(this, wxID_ANY, ""));
-	sizer->Add(new wxStaticText(this, wxID_ANY, ""));
 	sizer->Add(moveButton);
-	sizer->Add(jumpButton);
+	sizer->Add(configureButton);
 
-	moveButton->Bind(wxEVT_BUTTON, &CalxCoordLinearCtrl::OnMoveClick, this);
-	jumpButton->Bind(wxEVT_BUTTON, &CalxCoordLinearCtrl::OnJumpClick, this);
+	moveButton->Bind(wxEVT_BUTTON, &CalxCoordPositionComponent::OnMoveClick,
+					 this);
+	configureButton->Bind(wxEVT_BUTTON,
+						  &CalxCoordPositionComponent::OnConfigureClick, this);
   }
 
-  void CalxCoordLinearCtrl::OnMoveClick(wxCommandEvent &evt) {
-	coord_point_t dest = { this->xCoord->GetValue(), this->yCoord->GetValue() };
-	this->controller->move(dest, this->speed->GetValue(), true,
-						   this->relative->GetValue());
+  void CalxCoordPositionComponent::OnMoveClick(wxCommandEvent &evt) {
+	if (!this->controller->getHandle()->isMeasured()) {
+	  wxMessageBox(
+		  __("Plane need to be measured before relative position change"),
+		  __("Warning"), wxICON_WARNING);
+	  return;
+	}
+
+	coord_point_t dest = { this->xPos->GetValue(), this->yPos->GetValue() };
+	double speed = this->speed->GetValue();
+	this->controller->move(dest, speed);
   }
 
-  void CalxCoordLinearCtrl::OnJumpClick(wxCommandEvent &evt) {
-	coord_point_t dest = { this->xCoord->GetValue(), this->yCoord->GetValue() };
-	this->controller->move(dest, this->speed->GetValue(), false,
-						   this->relative->GetValue());
+  void CalxCoordPositionComponent::OnConfigureClick(wxCommandEvent &evt) {
+	coord_point_t dest = { this->xPos->GetValue(), this->yPos->GetValue() };
+	double speed = this->speed->GetValue();
+	this->controller->configure(dest, speed);
   }
 }

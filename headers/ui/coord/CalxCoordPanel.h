@@ -25,7 +25,7 @@
 #include "ui/CalxApp.h"
 #include <wx/listbox.h>
 #include "ui/CalxPanelPane.h"
-#include "ui/coord/CalxCoordCtrl.h"
+#include "ui/coord/CalxCoordPane.h"
 #include "ui/coord/CalxCoordPlaneWatcher.h"
 
 namespace CalXUI {
@@ -37,7 +37,7 @@ namespace CalXUI {
 	CalxCoordPanel(wxWindow *, wxWindowID);
 
 	size_t getCoordCount();
-	CalxCoordCtrl *getCoordCtrl(size_t sz);
+	CalxCoordPane *getCoordCtrl(size_t sz);
 	void updateList(CoordHandle *, bool *);
 	virtual void updateUI();
 	virtual void shutdown();
@@ -54,7 +54,7 @@ namespace CalXUI {
 	void OnCoordPlaneAdd(wxThreadEvent &);
 
 	wxListBox *coordList;
-	std::vector<CalxCoordCtrl *> coords;
+	std::vector<CalxCoordPane *> coords;
 	wxPanel *mainPanel;
 	int nextId;
   };

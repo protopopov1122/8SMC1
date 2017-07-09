@@ -17,7 +17,7 @@
 	along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/coord/CalxCoordCtrl.h"
+#include "ui/coord/CalxCoordGraphComponent.h"
 #include "ui/CalxErrorHandler.h"
 #include "ctrl-lib/misc/GraphBuilder.h"
 #include "ctrl-lib/graph/FunctionEngine.h"
@@ -26,9 +26,19 @@
 
 namespace CalXUI {
 
-  CalxCoordGraphCtrl::CalxCoordGraphCtrl(wxWindow *win, wxWindowID id,
-										 CalxCoordController *controller)
-	  : wxPanel::wxPanel(win, id), controller(controller) {
+  CalxCoordGraphComponentFactory::CalxCoordGraphComponentFactory(
+	  CalxCoordController *ctrl)
+	  : controller(ctrl) {}
+
+  CalxCoordComponent *CalxCoordGraphComponentFactory::newComponent(
+	  wxWindow *win) {
+	return new CalxCoordGraphComponent(win, wxID_ANY, this->controller);
+  }
+
+  CalxCoordGraphComponent::CalxCoordGraphComponent(
+	  wxWindow *win, wxWindowID id, CalxCoordController *controller)
+	  : CalxCoordComponent::CalxCoordComponent(win, id),
+		controller(controller) {
 	std::string units = wxGetApp().getUnits();
 	ConfigEntry *graphconf =
 		wxGetApp().getSystemManager()->getConfiguration()->getEntry("graph");
@@ -133,17 +143,18 @@ namespace CalXUI {
 	this->translator = new CalxCoordFilterCtrl(this, wxID_ANY, this->trans);
 	sizer->Add(this->translator, 1, wxALL | wxEXPAND, 5);
 
-	buildButton->Bind(wxEVT_BUTTON, &CalxCoordGraphCtrl::OnBuildClick, this);
-	previewButton->Bind(wxEVT_BUTTON, &CalxCoordGraphCtrl::OnPreviewClick,
+	buildButton->Bind(wxEVT_BUTTON, &CalxCoordGraphComponent::OnBuildClick,
+					  this);
+	previewButton->Bind(wxEVT_BUTTON, &CalxCoordGraphComponent::OnPreviewClick,
 						this);
-	Bind(wxEVT_CLOSE_WINDOW, &CalxCoordGraphCtrl::OnClose, this);
+	Bind(wxEVT_CLOSE_WINDOW, &CalxCoordGraphComponent::OnClose, this);
   }
 
-  void CalxCoordGraphCtrl::OnClose(wxCloseEvent &evt) {
+  void CalxCoordGraphComponent::OnClose(wxCloseEvent &evt) {
 	delete this->translator->getTranslator();
   }
 
-  void CalxCoordGraphCtrl::OnBuildClick(wxCommandEvent &evt) {
+  void CalxCoordGraphComponent::OnBuildClick(wxCommandEvent &evt) {
 	std::stringstream ss(this->expr->GetValue().ToStdString());
 	FunctionLexer lexer(ss);
 	FunctionParser parser(&lexer);
@@ -164,7 +175,7 @@ namespace CalXUI {
 	this->controller->build(this->translator->getTranslator(), graph, speed);
   }
 
-  void CalxCoordGraphCtrl::OnPreviewClick(wxCommandEvent &evt) {
+  void CalxCoordGraphComponent::OnPreviewClick(wxCommandEvent &evt) {
 	if (!this->controller->getHandle()->isMeasured()) {
 	  wxMessageBox(__("Plane need to be measured before preview"),
 				   __("Warning"), wxICON_WARNING);

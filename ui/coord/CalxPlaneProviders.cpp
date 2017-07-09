@@ -82,7 +82,7 @@ namespace CalXUI {
 		  2;
 	  TrailerId trailer = tr == 1 ? TrailerId::Trailer1 : TrailerId::Trailer2;
 	  if (sysman->getCoord((size_t) plid) != nullptr) {
-		CalxCoordCtrl *ctrl = panel->getCoordCtrl((size_t) plid);
+		CalxCoordPane *ctrl = panel->getCoordCtrl((size_t) plid);
 		bool ready = false;
 		ctrl->getController()->measure(trailer, &ready);
 		while (!ready) {
@@ -118,7 +118,7 @@ namespace CalXUI {
 	  double x = ((RealConfigValue *) PROVIDER_ARG(req, 1))->getValue();
 	  double y = ((RealConfigValue *) PROVIDER_ARG(req, 2))->getValue();
 	  if (sysman->getCoord((size_t) plid) != nullptr) {
-		CalxCoordCtrl *ctrl = panel->getCoordCtrl((size_t) plid);
+		CalxCoordPane *ctrl = panel->getCoordCtrl((size_t) plid);
 		ConfigManager *config =
 			wxGetApp().getSystemManager()->getConfiguration();
 		coord_point_t dest = { x, y };
@@ -164,7 +164,7 @@ namespace CalXUI {
 			  ->getValue();
 	  motor_point_t mdest = { x, y };
 	  if (sysman->getCoord((size_t) plid) != nullptr) {
-		CalxCoordCtrl *ctrl = panel->getCoordCtrl((size_t) plid);
+		CalxCoordPane *ctrl = panel->getCoordCtrl((size_t) plid);
 		ConfigManager *config =
 			wxGetApp().getSystemManager()->getConfiguration();
 		int_conf_t mspeed = config->getEntry("core")->getInt("maxspeed", 125);
@@ -202,14 +202,12 @@ namespace CalXUI {
 		  (device_id_t)((IntegerConfigValue *) PROVIDER_ARG(req, 0))
 			  ->getValue();
 	  if (sysman->getCoord((size_t) plid) != nullptr) {
-		CalxCoordCtrl *ctrl = panel->getCoordCtrl((size_t) plid);
+		CalxCoordPane *ctrl = panel->getCoordCtrl((size_t) plid);
 		motor_point_t offset =
 			ctrl->getController()->getHandle()->getPosition();
-		motor_scale_t scale = ctrl->getController()->getMapFilter()->getScale();
-		offset.x +=
-			ctrl->getController()->getMapFilter()->getOffset().x / scale.x;
-		offset.y +=
-			ctrl->getController()->getMapFilter()->getOffset().y / scale.y;
+		motor_scale_t scale = ctrl->getController()->getScale();
+		offset.x += ctrl->getController()->getOffset().x / scale.x;
+		offset.y += ctrl->getController()->getOffset().y / scale.y;
 		ctrl->setOffset(offset);
 		return true;
 	  } else {
@@ -237,8 +235,8 @@ namespace CalXUI {
 		  (device_id_t)((IntegerConfigValue *) PROVIDER_ARG(req, 0))
 			  ->getValue();
 	  if (sysman->getCoord((size_t) plid) != nullptr) {
-		CalxCoordCtrl *ctrl = panel->getCoordCtrl((size_t) plid);
-		motor_scale_t scale = ctrl->getController()->getMapFilter()->getScale();
+		CalxCoordPane *ctrl = panel->getCoordCtrl((size_t) plid);
+		motor_scale_t scale = ctrl->getController()->getScale();
 		scale.x *= -1;
 		scale.y *= -1;
 		ctrl->setScale(scale);
@@ -268,7 +266,7 @@ namespace CalXUI {
 		  (device_id_t)((IntegerConfigValue *) PROVIDER_ARG(req, 0))
 			  ->getValue();
 	  if (sysman->getCoord((size_t) plid) != nullptr) {
-		CalxCoordCtrl *ctrl = panel->getCoordCtrl((size_t) plid);
+		CalxCoordPane *ctrl = panel->getCoordCtrl((size_t) plid);
 		wxThreadEvent evt(wxEVT_COORD_CTRL_WATCHER);
 		wxPostEvent(ctrl, evt);
 		return true;

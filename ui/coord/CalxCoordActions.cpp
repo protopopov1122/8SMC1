@@ -83,11 +83,12 @@ namespace CalXUI {
 	this->handle->stop();
   }
 
-  CalxCoordActionConfigure::CalxCoordActionConfigure(
-	  CoordHandle *handle, CalxFilterController *filters, coord_point_t dest,
-	  double speed)
+  CalxCoordActionConfigure::CalxCoordActionConfigure(CoordHandle *handle,
+													 CalxCoordController *ctrl,
+													 coord_point_t dest,
+													 double speed)
 	  : handle(handle),
-		filters(filters),
+		controller(ctrl),
 		dest(dest),
 		speed(speed),
 		work(false) {}
@@ -96,7 +97,7 @@ namespace CalXUI {
 	handle->open_session();
 	work = true;
 	motor_point_t offset = { 0, 0 };
-	filters->setOffset(offset);
+	controller->setOffset(offset);
 	ErrorCode errcode = this->handle->measure(TrailerId::Trailer1);
 	if (errcode != ErrorCode::NoError) {
 	  work = false;
@@ -111,8 +112,7 @@ namespace CalXUI {
 	  errcode = handle->move(dest, speed, false);
 	}
 	if (work && errcode == ErrorCode::NoError) {
-	  filters->setOffset(handle->getPosition());
-	  ;
+	  controller->setOffset(handle->getPosition());
 	}
 	wxGetApp().getErrorHandler()->handle(errcode);
 	handle->close_session();

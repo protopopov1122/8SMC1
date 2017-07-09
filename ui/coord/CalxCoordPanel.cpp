@@ -89,7 +89,7 @@ namespace CalXUI {
 	return coords.size();
   }
 
-  CalxCoordCtrl *CalxCoordPanel::getCoordCtrl(size_t sz) {
+  CalxCoordPane *CalxCoordPanel::getCoordCtrl(size_t sz) {
 	return sz < coords.size() ? coords.at(sz) : nullptr;
   }
 
@@ -109,7 +109,8 @@ namespace CalXUI {
   }
 
   void CalxCoordPanel::addPlane(CoordHandle *handle) {
-	CalxCoordCtrl *ctrl = new CalxCoordCtrl(this->mainPanel, wxID_ANY, handle);
+	CalxCoordPane *ctrl =
+		new CalxCoordPane(this->mainPanel, wxID_ANY, handle, 2);
 	this->mainPanel->GetSizer()->Add(ctrl, 1, wxALL | wxEXPAND, 5);
 	this->coords.push_back(ctrl);
 	this->coordList->Append("Plane #" + std::to_string(handle->getID()));

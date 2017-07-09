@@ -22,8 +22,8 @@
 
 #include "ui/CalxApp.h"
 #include "ui/CalxActionQueue.h"
-#include "ui/coord/CalxFilterController.h"
 #include "ui/coord/CalxVirtualPlane.h"
+#include "ui/coord/CalxCoordController.h"
 
 namespace CalXUI {
 
@@ -86,7 +86,7 @@ namespace CalXUI {
 
   class CalxCoordActionConfigure : public CalxAction {
    public:
-	CalxCoordActionConfigure(CoordHandle *, CalxFilterController *,
+	CalxCoordActionConfigure(CoordHandle *, CalxCoordController *,
 							 coord_point_t, double);
 
 	virtual void perform(SystemManager *);
@@ -94,7 +94,7 @@ namespace CalXUI {
 
    private:
 	CoordHandle *handle;
-	CalxFilterController *filters;
+	CalxCoordController *controller;
 	coord_point_t dest;
 	double speed;
 	bool work;

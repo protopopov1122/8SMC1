@@ -27,62 +27,58 @@
 #include <wx/spinctrl.h>
 #include "ui/CalxActionQueue.h"
 #include "ui/CalxFrame.h"
-#include "ui/coord/CalxCoordLinearCtrl.h"
-#include "ui/coord/CalxCoordArcCtrl.h"
-#include "ui/coord/CalxCoordGraphCtrl.h"
-#include "ui/coord/CalxCoordOtherCtrl.h"
 #include "ui/coord/CalxVirtualPlane.h"
 
 using namespace CalX;
 
 namespace CalXUI {
 
-  class CalxCoordCtrl;  // Forward reference
+  class CalxCoordPane;  // Forward reference
 
   class CalxCoordEventListener : public CoordEventListener {
    public:
-	CalxCoordEventListener(CalxCoordCtrl *);
+	CalxCoordEventListener(CalxCoordPane *);
 	virtual ~CalxCoordEventListener();
 	virtual void use();
 	virtual void unuse();
 
    private:
-	CalxCoordCtrl *ctrl;
+	CalxCoordPane *ctrl;
   };
 
   class CalxCoordMotorListener : public MotorEventListener {
    public:
-	CalxCoordMotorListener(CalxCoordCtrl *);
+	CalxCoordMotorListener(CalxCoordPane *);
 	virtual ~CalxCoordMotorListener();
 	virtual void use();
 	virtual void unuse();
 
    private:
-	CalxCoordCtrl *ctrl;
+	CalxCoordPane *ctrl;
   };
 
   class CalxCoordInstrumentListener : public InstrumentEventListener {
    public:
-	CalxCoordInstrumentListener(CalxCoordCtrl *);
+	CalxCoordInstrumentListener(CalxCoordPane *);
 	virtual ~CalxCoordInstrumentListener();
 	virtual void use();
 	virtual void unuse();
 
    private:
-	CalxCoordCtrl *ctrl;
+	CalxCoordPane *ctrl;
   };
 
   class CalxCoordTimer : public wxTimer {
    public:
 	CalxCoordTimer() : wxTimer::wxTimer(), ctrl(nullptr) {}
 	~CalxCoordTimer() {}
-	void setCtrl(CalxCoordCtrl *c) {
+	void setCtrl(CalxCoordPane *c) {
 	  this->ctrl = c;
 	}
 	virtual void Notify();
 
    private:
-	CalxCoordCtrl *ctrl;
+	CalxCoordPane *ctrl;
   };
 }
 

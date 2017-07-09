@@ -17,13 +17,23 @@
 	along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/coord/CalxCoordCtrl.h"
+#include "ui/coord/CalxCoordArcComponent.h"
 
 namespace CalXUI {
 
-  CalxCoordArcCtrl::CalxCoordArcCtrl(wxWindow *win, wxWindowID id,
-									 CalxCoordController *controller)
-	  : wxPanel::wxPanel(win, id), controller(controller) {
+  CalxCoordArcComponentFactory::CalxCoordArcComponentFactory(
+	  CalxCoordController *ctrl)
+	  : controller(ctrl) {}
+
+  CalxCoordComponent *CalxCoordArcComponentFactory::newComponent(
+	  wxWindow *win) {
+	return new CalxCoordArcComponent(win, wxID_ANY, this->controller);
+  }
+
+  CalxCoordArcComponent::CalxCoordArcComponent(wxWindow *win, wxWindowID id,
+											   CalxCoordController *controller)
+	  : CalxCoordComponent::CalxCoordComponent(win, id),
+		controller(controller) {
 	std::string units = wxGetApp().getUnits();
 	wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 	SetSizer(sizer);
@@ -98,10 +108,10 @@ namespace CalXUI {
 	sizer->Add(new wxStaticText(this, wxID_ANY, ""));
 	sizer->Add(moveButton);
 
-	moveButton->Bind(wxEVT_BUTTON, &CalxCoordArcCtrl::OnMoveClick, this);
+	moveButton->Bind(wxEVT_BUTTON, &CalxCoordArcComponent::OnMoveClick, this);
   }
 
-  void CalxCoordArcCtrl::OnMoveClick(wxCommandEvent &evt) {
+  void CalxCoordArcComponent::OnMoveClick(wxCommandEvent &evt) {
 	coord_point_t dest = { this->xCoord->GetValue(), this->yCoord->GetValue() };
 	coord_point_t cen = { this->cxCoord->GetValue(),
 						  this->cyCoord->GetValue() };

@@ -26,18 +26,23 @@
 #include <wx/stattext.h>
 #include <wx/sizer.h>
 #include <wx/timer.h>
-#include "ctrl-lib/graph/FunctionParser.h"
-#include "ctrl-lib/graph/FunctionEngine.h"
-#include "ui/coord/CalxCoordCtrl.h"
+#include "ui/coord/CalxCoordPane.h"
 #include "ui/coord/CalxCoordPlaneWatcher.h"
 #include "ui/coord/CalxCoordAdjuster.h"
+#include "ui/coord/CalxCoordLinearComponent.h"
+#include "ui/coord/CalxCoordArcComponent.h"
+#include "ui/coord/CalxCoordGraphComponent.h"
+#include "ui/coord/CalxCoordFilterComponent.h"
+#include "ui/coord/CalxCoordPositionComponent.h"
+#include "ui/coord/CalxCoordOtherComponent.h"
 
 namespace CalXUI {
 
   wxDEFINE_EVENT(wxEVT_COORD_CTRL_WATCHER, wxThreadEvent);
   wxDEFINE_EVENT(wxEVT_COORD_CTRL_ENABLE, wxThreadEvent);
 
-  CalxCoordCtrl::CalxCoordCtrl(wxWindow *win, wxWindowID id, CoordHandle *ctrl)
+  CalxCoordPane::CalxCoordPane(wxWindow *win, wxWindowID id, CoordHandle *ctrl,
+							   size_t component_pane_count)
 	  : wxScrolledWindow::wxScrolledWindow(win, id) {
 	this->ctrl = ctrl;
 	this->used = 0;
@@ -45,7 +50,7 @@ namespace CalXUI {
 	this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
 	this->queue->Run();
 
-	this->controller = new CalxCoordController(this->ctrl, this, this->queue);
+	this->controller = new CalxCoordController(this->ctrl, this->queue);
 	this->watchers = new CalxWatcherPool(this, this->ctrl);
 
 	this->listener = new CalxCoordEventListener(this);
@@ -74,82 +79,51 @@ namespace CalXUI {
 	generalButtonPanel->SetSizer(generalButtonSizer);
 	wxButton *watcherButton =
 		new wxButton(generalButtonPanel, wxID_ANY, __("Watcher"));
-	watcherButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnWatcherClick, this);
+	watcherButton->Bind(wxEVT_BUTTON, &CalxCoordPane::OnWatcherClick, this);
 	wxButton *adjusterButton =
 		new wxButton(generalButtonPanel, wxID_ANY, __("Adjuster"));
-	adjusterButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnAdjusterClick, this);
+	adjusterButton->Bind(wxEVT_BUTTON, &CalxCoordPane::OnAdjusterClick, this);
 	this->stopButton = new wxButton(generalButtonPanel, wxID_ANY, __("Stop"));
 	generalSizer->Add(this->generalInfoText, 0, wxTOP | wxEXPAND, 5);
 	generalSizer->Add(generalButtonPanel, 0, wxALL, 10);
 	generalButtonSizer->Add(watcherButton, 0, wxALL);
 	generalButtonSizer->Add(adjusterButton, 0, wxALL);
 	generalButtonSizer->Add(this->stopButton, 0, wxALL);
-	this->stopButton->Bind(wxEVT_BUTTON, &CalxCoordCtrl::OnStopClick, this);
+	this->stopButton->Bind(wxEVT_BUTTON, &CalxCoordPane::OnStopClick, this);
 	sizer->Add(generalPanel, 0, wxALL | wxEXPAND, 0);
 
-	this->actionPanel = new wxPanel(this, wxID_ANY);
+	this->component_panel = new wxPanel(this, wxID_ANY);
 	wxBoxSizer *actionSizer = new wxBoxSizer(wxHORIZONTAL);
-	actionPanel->SetSizer(actionSizer);
+	component_panel->SetSizer(actionSizer);
 
-	wxPanel *actionSubPanel = new wxPanel(actionPanel, wxID_ANY);
-	wxBoxSizer *actionSubSizer = new wxBoxSizer(wxVERTICAL);
-	actionSubPanel->SetSizer(actionSubSizer);
-	actionSizer->Add(actionSubPanel, 0, wxALL | wxEXPAND);
+	for (size_t i = 0; i < component_pane_count; i++) {
+	  wxPanel *comPane = new wxPanel(this->component_panel, wxID_ANY);
+	  actionSizer->Add(comPane, 0, wxALL | wxEXPAND);
+	  wxBoxSizer *comSizer = new wxBoxSizer(wxVERTICAL);
+	  comPane->SetSizer(comSizer);
+	  this->component_panes.push_back(comPane);
+	}
 
-	wxCollapsiblePane *linearPane =
-		new wxCollapsiblePane(actionSubPanel, wxID_ANY, __("Linear movement"));
-	actionSubSizer->Add(linearPane, 0, wxALL | wxEXPAND);
-	wxWindow *linearPanel = linearPane->GetPane();
-	wxBoxSizer *linearSizer = new wxBoxSizer(wxHORIZONTAL);
-	linearPanel->SetSizer(linearSizer);
-	this->linear =
-		new CalxCoordLinearCtrl(linearPanel, wxID_ANY, this->controller);
-	linearSizer->Add(linear, 0, wxALL);
-	linearPane->Bind(wxEVT_COLLAPSIBLEPANE_CHANGED,
-					 &CalxCoordCtrl::OnInterfaceUpdate, this);
+	addComponent(__("Linear movement"),
+				 new CalxCoordLinearComponentFactory(this->controller), 0);
+	addComponent(__("Arc movement"),
+				 new CalxCoordArcComponentFactory(this->controller), 0);
+	addComponent(__("Function graph"),
+				 new CalxCoordGraphComponentFactory(this->controller), 0,
+				 false);
+	addComponent(__("Other"),
+				 new CalxCoordOtherComponentFactory(this->controller), 1,
+				 false);
+	addComponent(__("Position"),
+				 new CalxCoordPositionComponentFactory(this->controller), 1,
+				 false);
+	addComponent(__("Filters"),
+				 new CalxCoordFilterComponentFactory(this->controller), 1);
 
-	wxCollapsiblePane *arcPane =
-		new wxCollapsiblePane(actionSubPanel, wxID_ANY, __("Arc movement"));
-	actionSubSizer->Add(arcPane, 0, wxALL | wxEXPAND);
-	wxWindow *arcPanel = arcPane->GetPane();
-	wxBoxSizer *arcSizer = new wxBoxSizer(wxHORIZONTAL);
-	arcPanel->SetSizer(arcSizer);
-	this->arc = new CalxCoordArcCtrl(arcPanel, wxID_ANY, this->controller);
-	arcSizer->Add(arc, 0, wxALL);
-	arcPane->Bind(wxEVT_COLLAPSIBLEPANE_CHANGED,
-				  &CalxCoordCtrl::OnInterfaceUpdate, this);
-
-	wxCollapsiblePane *graphPane =
-		new wxCollapsiblePane(actionSubPanel, wxID_ANY, __("Function graph"));
-	actionSubSizer->Add(graphPane, 0, wxALL | wxEXPAND);
-	wxWindow *graphPanel = graphPane->GetPane();
-	wxBoxSizer *graphSizer = new wxBoxSizer(wxHORIZONTAL);
-	graphPanel->SetSizer(graphSizer);
-	this->graphCtrl =
-		new CalxCoordGraphCtrl(graphPanel, wxID_ANY, this->controller);
-	graphSizer->Add(graphCtrl, 0, wxALL);
-	graphPane->Bind(wxEVT_COLLAPSIBLEPANE_CHANGED,
-					&CalxCoordCtrl::OnInterfaceUpdate, this);
-	graphPane->Collapse(false);
-
-	wxPanel *actionSub2Panel = new wxPanel(actionPanel, wxID_ANY);
-	actionSizer->Add(actionSub2Panel, 1, wxLEFT | wxEXPAND, 5);
-	wxStaticBox *otherBox =
-		new wxStaticBox(actionSub2Panel, wxID_ANY, __("Other"));
-	wxStaticBoxSizer *otherSizer = new wxStaticBoxSizer(otherBox, wxVERTICAL);
-	actionSub2Panel->SetSizer(otherSizer);
-	this->otherCtrl = new CalxCoordOtherCtrl(actionSub2Panel, wxID_ANY,
-											 this->controller, this);
-	otherSizer->Add(otherCtrl, 1, wxALL | wxEXPAND);
-	this->otherCtrl->getPositionPane()->Bind(
-		wxEVT_COLLAPSIBLEPANE_CHANGED, &CalxCoordCtrl::OnInterfaceUpdate, this);
-	this->otherCtrl->getFiltersPane()->Bind(
-		wxEVT_COLLAPSIBLEPANE_CHANGED, &CalxCoordCtrl::OnInterfaceUpdate, this);
-
-	sizer->Add(actionPanel, 0, wxALL | wxEXPAND, 0);
-	Bind(wxEVT_COORD_CTRL_WATCHER, &CalxCoordCtrl::OnWatcherRequest, this);
-	Bind(wxEVT_CLOSE_WINDOW, &CalxCoordCtrl::OnExit, this);
-	Bind(wxEVT_COORD_CTRL_ENABLE, &CalxCoordCtrl::OnEnableEvent, this);
+	sizer->Add(component_panel, 0, wxALL | wxEXPAND, 0);
+	Bind(wxEVT_COORD_CTRL_WATCHER, &CalxCoordPane::OnWatcherRequest, this);
+	Bind(wxEVT_CLOSE_WINDOW, &CalxCoordPane::OnExit, this);
+	Bind(wxEVT_COORD_CTRL_ENABLE, &CalxCoordPane::OnEnableEvent, this);
 	updateUI();
 
 	this->Layout();
@@ -160,19 +134,45 @@ namespace CalXUI {
 	timer.Start(100);
   }
 
-  CoordHandle *CalxCoordCtrl::getHandle() {
+  bool CalxCoordPane::addComponent(std::string name,
+								   CalxCoordComponentFactory *compFact,
+								   size_t paneid, bool coll) {
+	if (paneid >= this->component_panes.size()) {
+	  return false;
+	}
+	wxPanel *comPane = this->component_panes.at(paneid);
+
+	wxCollapsiblePane *colPane = new wxCollapsiblePane(comPane, wxID_ANY, name);
+	comPane->GetSizer()->Add(colPane, 0, wxALL | wxEXPAND);
+	wxWindow *winPane = colPane->GetPane();
+	wxBoxSizer *winSizer = new wxBoxSizer(wxHORIZONTAL);
+	winPane->SetSizer(winSizer);
+	CalxCoordComponent *comp = compFact->newComponent(winPane);
+	winSizer->Add(comp, 0, wxALL);
+	colPane->Bind(wxEVT_COLLAPSIBLEPANE_CHANGED,
+				  &CalxCoordPane::OnInterfaceUpdate, this);
+	colPane->Collapse(coll);
+	this->components.push_back(comp);
+	return true;
+  }
+
+  size_t CalxCoordPane::getComponentPaneCount() {
+	return this->component_panes.size();
+  }
+
+  CoordHandle *CalxCoordPane::getHandle() {
 	return this->ctrl;
   }
 
-  CalxCoordController *CalxCoordCtrl::getController() {
+  CalxCoordController *CalxCoordPane::getController() {
 	return this->controller;
   }
 
-  bool CalxCoordCtrl::isBusy() {
+  bool CalxCoordPane::isBusy() {
 	return this->queue->isBusy();
   }
 
-  void CalxCoordCtrl::use() {
+  void CalxCoordPane::use() {
 	this->used++;
 	if (this->used == 1) {
 	  wxThreadEvent evt(wxEVT_COORD_CTRL_ENABLE);
@@ -181,7 +181,7 @@ namespace CalXUI {
 	}
   }
 
-  void CalxCoordCtrl::unuse() {
+  void CalxCoordPane::unuse() {
 	this->used--;
 	if (this->used == 0) {
 	  wxThreadEvent evt(wxEVT_COORD_CTRL_ENABLE);
@@ -190,35 +190,33 @@ namespace CalXUI {
 	}
   }
 
-  bool CalxCoordCtrl::isUsed() {
+  bool CalxCoordPane::isUsed() {
 	return this->used != 0;
   }
 
-  void CalxCoordCtrl::setEnabled(bool e) {
-	actionPanel->Enable(e);
+  void CalxCoordPane::setEnabled(bool e) {
+	component_panel->Enable(e);
 	stopButton->Enable(!e && this->queue->isBusy());
   }
 
-  void CalxCoordCtrl::setOffset(motor_point_t offset) {
-	motor_scale_t scale = this->controller->getMapFilter()->getScale();
+  void CalxCoordPane::setOffset(motor_point_t offset) {
+	motor_scale_t scale = this->controller->getScale();
 	offset.x *= scale.x;
 	offset.y *= scale.y;
-	this->otherCtrl->setOffset(offset);
-	this->controller->getMapFilter()->setOffset(offset);
+	this->controller->setOffset(offset);
 	this->watchers->updateWatchers();
   }
 
-  void CalxCoordCtrl::setScale(motor_scale_t scale) {
-	this->otherCtrl->setScale(scale);
-	this->controller->getMapFilter()->setScale(scale);
+  void CalxCoordPane::setScale(motor_scale_t scale) {
+	this->controller->setScale(scale);
 	this->watchers->updateWatchers();
   }
 
-  CalxWatcherPool *CalxCoordCtrl::getWatchers() {
+  CalxWatcherPool *CalxCoordPane::getWatchers() {
 	return this->watchers;
   }
 
-  void CalxCoordCtrl::updateUI() {
+  void CalxCoordPane::updateUI() {
 	std::string units = wxGetApp().getUnits();
 	std::string general =
 		FORMAT(__("Name: Coordinate plane #%s"),
@@ -259,19 +257,23 @@ namespace CalXUI {
 	Layout();
   }
 
-  void CalxCoordCtrl::shutdown() {
+  void CalxCoordPane::shutdown() {
 	timer.Stop();
 	this->queue->stop();
 	ctrl->getController()->stop();
   }
 
-  void CalxCoordCtrl::OnWatcherClick(wxCommandEvent &evt) {
+  void CalxCoordPane::OnWatcherClick(wxCommandEvent &evt) {
 	this->watchers->newWatcher();
   }
 
-  void CalxCoordCtrl::OnExit(wxCloseEvent &evt) {
+  void CalxCoordPane::OnExit(wxCloseEvent &evt) {
 	delete this->controller;
 	delete this->watchers;
+
+	for (const auto &comp : this->components) {
+	  comp->Close(true);
+	}
 
 	this->ctrl->removeEventListener(this->listener);
 	this->ctrl->getController()->getXAxis()->removeEventListener(
@@ -284,33 +286,28 @@ namespace CalXUI {
 	}
 	wxGetApp().getSystemManager()->removeCoord(ctrl->getID());
 
-	this->linear->Close(true);
-	this->arc->Close(true);
-	this->graphCtrl->Close(true);
-	this->otherCtrl->Close(true);
-
 	Destroy();
   }
 
-  void CalxCoordCtrl::OnStopClick(wxCommandEvent &evt) {
+  void CalxCoordPane::OnStopClick(wxCommandEvent &evt) {
 	this->queue->stopCurrent();
   }
 
-  void CalxCoordCtrl::OnInterfaceUpdate(wxCollapsiblePaneEvent &evt) {
+  void CalxCoordPane::OnInterfaceUpdate(wxCollapsiblePaneEvent &evt) {
 	Layout();
 	Refresh();
   }
 
-  void CalxCoordCtrl::OnWatcherRequest(wxThreadEvent &evt) {
+  void CalxCoordPane::OnWatcherRequest(wxThreadEvent &evt) {
 	this->watchers->newWatcher();
   }
 
-  void CalxCoordCtrl::OnEnableEvent(wxThreadEvent &evt) {
+  void CalxCoordPane::OnEnableEvent(wxThreadEvent &evt) {
 	setEnabled(evt.GetPayload<bool>());
 	wxGetApp().getMainFrame()->getPanel()->updateUI();
   }
 
-  void CalxCoordCtrl::OnAdjusterClick(wxCommandEvent &evt) {
+  void CalxCoordPane::OnAdjusterClick(wxCommandEvent &evt) {
 	if (!this->ctrl->isMeasured()) {
 	  wxMessageBox(__("Plane need to be measured before adjustement"),
 				   __("Warning"), wxICON_WARNING);
