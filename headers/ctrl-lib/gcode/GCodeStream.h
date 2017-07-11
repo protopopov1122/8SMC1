@@ -27,6 +27,11 @@
 #include <map>
 #include <set>
 
+/* This is GCode parser that translates raw symbol stream into
+   command sequence. Parser is quite liberal and doesn't strictly
+   follow GCode standarts so it tries to execute even
+   slightly incorrect GCode. */
+
 namespace CalX {
 
   enum class GCodeParameterType { Integer, Real, Unknown };

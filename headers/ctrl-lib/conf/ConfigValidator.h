@@ -25,6 +25,9 @@
 #include "ctrl-lib/CtrlCore.h"
 #include "ctrl-lib/conf/ConfigManager.h"
 
+/* Config validator allows configuration validation. It is
+   not used by the project. */
+
 namespace CalX {
 
   class AbstractValidator {

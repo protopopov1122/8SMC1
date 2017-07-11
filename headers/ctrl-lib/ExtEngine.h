@@ -22,6 +22,9 @@
 
 #include "ctrl-lib/CtrlCore.h"
 
+/* CalX supports basic extensions. Extensions are attached to System Manager
+   and System Manager calls extension object on most significant events. */
+
 namespace CalX {
 
   class MotorController;       // Forward referencing

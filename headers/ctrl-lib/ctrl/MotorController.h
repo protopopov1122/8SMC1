@@ -27,12 +27,8 @@
 #include "ctrl-lib/CtrlCore.h"
 #include "ctrl-lib/EventListener.h"
 
-/* This file contains definitions of high-level device controller library.
-   Library purpose is controlling device state, speed, complex
-   moves and synchronization.
-   This class was made at the start of project, but
-   now almost all its functional is migrated to CooordController.
-   It is used only by CLI.*/
+/* Motor controller offers some more complex actions on top of
+   motor device drivers. */
 
 namespace CalX {
 

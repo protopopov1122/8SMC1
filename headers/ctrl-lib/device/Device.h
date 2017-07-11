@@ -26,7 +26,9 @@
 #include <mutex>
 #include <string>
 
-/* This file contains Device API interfaces. */
+/* This file contains Device API interfaces.
+   They tend to be as simple and as compact
+   as possible to cover most device models. */
 
 namespace CalX {
 

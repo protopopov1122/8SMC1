@@ -22,6 +22,9 @@
 
 #include "ctrl-lib/plane/AbstractCoordPlane.h"
 
+/* Adds floating point coordinate support to coordinate plane by
+   implementing according methods for all elementar coordinate actions */
+
 namespace CalX {
 
   class FloatCoordPlane : public CoordPlane {

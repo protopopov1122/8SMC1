@@ -25,6 +25,10 @@
 #include "ctrl-lib/CtrlCore.h"
 #include "ctrl-lib/EventListener.h"
 
+/* Instrument controller is higher-level interface for
+   interface drivers. It offers a bit more complex functionality
+   comparing to device driver. */
+
 namespace CalX {
 
   class InstrumentController {

@@ -26,6 +26,9 @@
 #include "ctrl-lib/conf/ConfigManager.h"
 #include "ctrl-lib/translator/CoordTranslator.h"
 
+/* GCode interpreter executes parser produced commands
+   on given coordinate plane with given speeed. */
+
 namespace CalX {
   class GCodeInterpreter {
    public:

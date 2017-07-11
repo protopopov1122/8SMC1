@@ -32,7 +32,8 @@
 #include "ctrl-lib/ExtEngine.h"
 
 /* SystemManager is component that store and control most system
-   objects. System manager was made to use with command line, so
+   objects like devices, coord planes, tasks and configuration.
+   System manager was made to use with command line, so
    in GUI application may duplicate its functions if it's
    necessary. */
 

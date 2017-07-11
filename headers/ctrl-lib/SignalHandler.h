@@ -23,6 +23,10 @@
 #include "ctrl-lib/CtrlCore.h"
 #include "ctrl-lib/SystemManager.h"
 
+/* This header contains OS-oriented signal 
+   hanlers that catch fatal errors and try
+   to prevent hardware damage. */
+
 extern CalX::SystemManager *SYSMAN;
 
 extern "C" void calx_terminate();

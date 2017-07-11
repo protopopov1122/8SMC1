@@ -26,12 +26,18 @@
 #include "ctrl-lib/plane/CoordPlane.h"
 #include "ctrl-lib/translator/CoordTranslator.h"
 
+/* Task is complex action which as can be performed on any coordinate plane.
+   Usually task consists of a set of elementar actions, their speed is
+   represented as coefficient(from 0 to 1).
+*/
+
 namespace CalX {
 
   class SystemManager;  // Forward referencing
 
   struct TaskParameters {
-	float speed;
+	float speed;          // Task build base speed
+	                      // It is multiplied by task speed coeficients to get final speed
   };
 
   class TaskStep {
@@ -42,11 +48,10 @@ namespace CalX {
   };
 
   enum class CoordTaskType {
-	ProgrammedTask,
-	GraphTask,
-	WrapperTask,
-	GCodeTask,
-	LinearTask
+	ProgrammedTask,            // Sequence of elementar actions on plane
+	GraphTask,                 // Evaluates given function graph and builds it
+	LinearTask,                // Builds sequence of lines on a given rectangle
+	GCodeTask                  // Executes GCode on given coordinate plane
   };
 
   class CoordTask : public TaskStep {

@@ -23,6 +23,11 @@
 #include <string>
 #include "ctrl-lib/CtrlCore.h"
 
+/* This header contains event type defintions.
+   CalX Ctrl-lib widely uses events to communicate
+   with user interface. Events are based on possible
+   action types and are emited by these actions */
+
 namespace CalX {
 
   class ConfigManager;  // Forward referencing
