@@ -29,6 +29,7 @@ namespace CalXUI {
    public:
 	CalxCoordComponent(wxWindow *win, wxWindowID id)
 		: wxPanel::wxPanel(win, id) {}
+	virtual void setEnabled(bool en) {Enable(en);}
   };
 
   class CalxCoordComponentFactory {

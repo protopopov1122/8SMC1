@@ -28,7 +28,7 @@ namespace CalXUI {
   }
 
   CalxDeviceHandle *CalxMotorConstructor::construct(wxWindow *win) {
-	return new CalxMotorCtrl(win, wxID_ANY, ctrl);
+	return new CalxMotorComponent(win, wxID_ANY, ctrl);
   }
 
   CalxInstrumentConstructor::CalxInstrumentConstructor(
@@ -38,6 +38,6 @@ namespace CalXUI {
   }
 
   CalxDeviceHandle *CalxInstrumentConstructor::construct(wxWindow *win) {
-	return new CalxInstrumentCtrl(win, wxID_ANY, ctrl);
+	return new CalxInstrumentComponent(win, wxID_ANY, ctrl);
   }
 }

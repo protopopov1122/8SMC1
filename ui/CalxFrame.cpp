@@ -24,23 +24,22 @@
 #include <wx/app.h>
 #include <wx/aboutdlg.h>
 #include "ui/CalxPanel.h"
-#include "ui/task/CalxTaskPanel.h"
-#include "ui/coord/CalxCoordPanel.h"
 #include "ui/dev/CalxDevicePanel.h"
-#include "ui/CalxConfigEditor.h"
-#include "ui/task/CalxGCodeTask.h"
-#include "ui/task/CalxLinearTask.h"
-#include "ui/task/CalxProgrammedTask.h"
 #include "ui/dev/CalxSerialMotor.h"
 #include "ui/dev/CalxSerialInstrument.h"
 #include "ui/dev/CalxDeviceConstructor.h"
+#include "ui/coord/CalxCoordPanel.h"
 #include "ui/coord/CalxCoordLinearComponent.h"
 #include "ui/coord/CalxCoordArcComponent.h"
 #include "ui/coord/CalxCoordGraphComponent.h"
 #include "ui/coord/CalxCoordFilterComponent.h"
 #include "ui/coord/CalxCoordPositionComponent.h"
 #include "ui/coord/CalxCoordOtherComponent.h"
-
+#include "ui/task/CalxTaskPanel.h"
+#include "ui/task/CalxGCodeTask.h"
+#include "ui/task/CalxLinearTask.h"
+#include "ui/task/CalxProgrammedTask.h"
+#include "ui/config/CalxConfigEditor.h"
 namespace CalXUI {
 
   CalxDevicePanel *newDevicePanel(wxWindow *win) {

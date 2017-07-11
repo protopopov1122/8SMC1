@@ -36,12 +36,8 @@ namespace CalXUI {
    public:
 	CalxCoordController(CoordHandle *, CalxActionQueue *);
 	virtual ~CalxCoordController();
-
+	
 	CoordHandle *getHandle();
-	CoordPlaneLog *getLogFilter();
-	//	CoordPlaneMap *getMapFilter();
-	CoordPlaneValidator *getValidateFilter();
-	CoordPlaneMap *getUnitMapFilter();
 
 	motor_point_t getOffset();
 	motor_scale_t getScale();
@@ -49,6 +45,18 @@ namespace CalXUI {
 	void setScale(motor_scale_t);
 	void addFilterListener(CalxCoordFilterListener *);
 	void removeFilterListener(CalxCoordFilterListener *);
+	
+	bool isLoggingActions();
+	void setLoggingActions(bool);
+	bool isLoggingErrors();
+	void setLoggingErrors(bool);
+	
+	motor_point_t getValidateMinimum();
+	void setValidateMinimum(motor_point_t);
+	motor_point_t getValidateMaximum();
+	void setValidateMaximum(motor_point_t);
+	float getValidateMaxSpeed();
+	void setValidateMaxSpeed(float);
 
 	void move(coord_point_t, double, bool, bool, bool * = nullptr);
 	void arc(coord_point_t, coord_point_t, int, double, bool, bool,

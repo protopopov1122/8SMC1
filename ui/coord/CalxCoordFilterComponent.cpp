@@ -135,18 +135,18 @@ namespace CalXUI {
 		new wxStaticText(validatePanel, wxID_ANY, __("Maximum speed")));
 	validateSizer->Add(speed, 0, wxEXPAND);
 
-	logActions->SetValue(controller->getLogFilter()->isLoggingActions());
-	logErrors->SetValue(controller->getLogFilter()->isLoggingErrors());
+	logActions->SetValue(controller->isLoggingActions());
+	logErrors->SetValue(controller->isLoggingErrors());
 	xOffset->SetValue((int) controller->getOffset().x);
 	yOffset->SetValue((int) controller->getOffset().y);
-	xScale->SetValue(std::to_string((float) controller->getScale().x));
-	yScale->SetValue(std::to_string((float) controller->getScale().y));
-	minx->SetValue((int) controller->getValidateFilter()->getMinimum().x);
-	miny->SetValue((int) controller->getValidateFilter()->getMinimum().y);
-	maxx->SetValue((int) controller->getValidateFilter()->getMaximum().x);
-	maxy->SetValue((int) controller->getValidateFilter()->getMaximum().y);
+	xScale->SetValue((float) controller->getScale().x);
+	yScale->SetValue((float) controller->getScale().y);
+	minx->SetValue((int) controller->getValidateMinimum().x);
+	miny->SetValue((int) controller->getValidateMinimum().y);
+	maxx->SetValue((int) controller->getValidateMaximum().x);
+	maxy->SetValue((int) controller->getValidateMaximum().y);
 	speed->SetValue(
-		static_cast<int>(controller->getValidateFilter()->getMaxSpeed()));
+		static_cast<int>(controller->getValidateMaxSpeed()));
 
 	logActions->Bind(wxEVT_CHECKBOX, &CalxCoordFilterComponent::OnFiltersUpdate,
 					 this);
@@ -185,17 +185,17 @@ namespace CalXUI {
   }
 
   void CalxCoordFilterComponent::OnFiltersUpdate(wxCommandEvent &evt) {
-	controller->getLogFilter()->setLoggingActions(logActions->GetValue());
-	controller->getLogFilter()->setLoggingErrors(logErrors->GetValue());
+	controller->setLoggingActions(logActions->GetValue());
+	controller->setLoggingErrors(logErrors->GetValue());
 	motor_point_t moffset = { xOffset->GetValue(), yOffset->GetValue() };
 	motor_scale_t mscale = { xScale->GetValue(), yScale->GetValue() };
 	controller->setOffset(moffset);
 	controller->setScale(mscale);
 	motor_point_t min = { minx->GetValue(), miny->GetValue() };
 	motor_point_t max = { maxx->GetValue(), maxy->GetValue() };
-	controller->getValidateFilter()->setMinimum(min);
-	controller->getValidateFilter()->setMaximum(max);
-	controller->getValidateFilter()->setMaxSpeed(speed->GetValue());
+	controller->setValidateMinimum(min);
+	controller->setValidateMaximum(max);
+	controller->setValidateMaxSpeed(speed->GetValue());
   }
 
   void CalxCoordFilterComponent::OnExit(wxCloseEvent &evt) {

@@ -21,8 +21,8 @@
 #define CALX_UI_DEV_CALX_DEVICE_CONSTRUCTOR_H_
 
 #include "ui/dev/CalxDeviceHandle.h"
-#include "ui/dev/CalxMotorCtrl.h"
-#include "ui/dev/CalxInstrumentCtrl.h"
+#include "ui/dev/CalxMotorComponent.h"
+#include "ui/dev/CalxInstrumentComponent.h"
 
 namespace CalXUI {
 
