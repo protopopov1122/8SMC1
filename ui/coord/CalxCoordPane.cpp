@@ -74,7 +74,7 @@ namespace CalXUI {
 	wxButton *watcherButton =
 		new wxButton(generalButtonPanel, wxID_ANY, __("Watcher"));
 	watcherButton->Bind(wxEVT_BUTTON, &CalxCoordPane::OnWatcherClick, this);
-	wxButton *adjusterButton =
+	this->adjusterButton =
 		new wxButton(generalButtonPanel, wxID_ANY, __("Adjuster"));
 	adjusterButton->Bind(wxEVT_BUTTON, &CalxCoordPane::OnAdjusterClick, this);
 	this->stopButton = new wxButton(generalButtonPanel, wxID_ANY, __("Stop"));
@@ -177,6 +177,7 @@ namespace CalXUI {
 
   void CalxCoordPane::setEnabled(bool e) {
 	component_panel->Enable(e);
+	adjusterButton->Enable(e);
 	stopButton->Enable(!e && this->queue->isBusy());
   }
 

@@ -86,6 +86,7 @@ namespace CalXUI {
 	wxPanel *generalPanel;
 	wxPanel *component_panel;
 	std::vector<wxPanel *> component_panes;
+	wxButton *adjusterButton;
 	wxButton *stopButton;
 	wxStaticText *generalInfoText;
 	CalxCoordTimer timer;

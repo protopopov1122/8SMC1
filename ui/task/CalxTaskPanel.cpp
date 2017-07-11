@@ -368,10 +368,15 @@ namespace CalXUI {
 	  }
 	  ss.seekg(0);
 
-	  ComplexCoordTranslator *trans =
-		  new ComplexCoordTranslator(list.at((size_t) taskList->GetSelection())
+	  CoordTranslator *translator = list.at((size_t) taskList->GetSelection())
 										 ->getTranslator()
-										 ->clone(nullptr));
+										 ->clone(nullptr);
+	  ComplexCoordTranslator *trans = nullptr;
+	  if (translator->getType() == ComplexCoord) {
+		  trans = (ComplexCoordTranslator*) translator;
+	  } else {
+		  trans = new ComplexCoordTranslator(translator);
+	  }
 	  CalxGcodeHandle *gcodeHandle = new CalxGcodeHandle(
 		  mainPanel, wxID_ANY,
 		  __("Linear ") + taskList->GetStringSelection().ToStdString(), &ss,
