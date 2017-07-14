@@ -79,8 +79,7 @@ SpacesInContainerLiterals: false
 SpacesInCStyleCastParentheses: false
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
-Standard:        Cpp11
-TabWidth:        4
-UseTab:          ForContinuationAndIndentation
-...
+Standard: Cpp11
+TabWidth: 2
+UseTab: ForIndentation
 

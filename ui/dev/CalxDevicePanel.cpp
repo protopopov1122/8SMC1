@@ -1,121 +1,122 @@
 /*
-	Copyright (c) 2017 Jevgenijs Protopopovs
+        Copyright (c) 2017 Jevgenijs Protopopovs
 
-	This file is part of CalX project.
+        This file is part of CalX project.
 
-	CalX is free software: you can redistribute it and/or modify
-	it under the terms of the GNU Lesser General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
+        CalX is free software: you can redistribute it and/or modify
+        it under the terms of the GNU Lesser General Public License as published
+   by
+        the Free Software Foundation, either version 3 of the License, or
+        (at your option) any later version.
 
-	CalX is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU Lesser General Public License for more details.
+        CalX is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        GNU Lesser General Public License for more details.
 
-	You should have received a copy of the GNU Lesser General Public License
-	along with CalX.  If not, see <http://www.gnu.org/licenses/>.
+        You should have received a copy of the GNU Lesser General Public License
+        along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <vector>
+#include "ui/dev/CalxDevicePanel.h"
 #include "ui/CalxApp.h"
+#include "ui/dev/CalxDeviceFactory.h"
+#include "ui/dev/CalxDeviceProviders.h"
+#include <vector>
 #include <wx/listctrl.h>
 #include <wx/sizer.h>
-#include "ui/dev/CalxDevicePanel.h"
-#include "ui/dev/CalxDeviceProviders.h"
-#include "ui/dev/CalxDeviceFactory.h"
 
 namespace CalXUI {
 
-  wxDEFINE_EVENT(wxEVT_DEVICE_PANEL_UPDATE, wxThreadEvent);
-  wxDEFINE_EVENT(wxEVT_DEVICE_PANEL_DEVICE_APPEND, wxThreadEvent);
+	wxDEFINE_EVENT(wxEVT_DEVICE_PANEL_UPDATE, wxThreadEvent);
+	wxDEFINE_EVENT(wxEVT_DEVICE_PANEL_DEVICE_APPEND, wxThreadEvent);
 
-  CalxDevicePanel::CalxDevicePanel(wxWindow *win, wxWindowID id)
-	  : CalxPanelPane::CalxPanelPane(win, id) {
-	CalxApp &app = wxGetApp();
-	this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
-	wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
-	this->SetSizer(sizer);
+	CalxDevicePanel::CalxDevicePanel(wxWindow *win, wxWindowID id)
+	    : CalxPanelPane::CalxPanelPane(win, id) {
+		CalxApp &app = wxGetApp();
+		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
+		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
+		this->SetSizer(sizer);
 
-	connectPanel = new wxPanel(this, wxID_ANY);
-	sizer->Add(connectPanel, 0, wxALL | wxEXPAND);
-	wxBoxSizer *connectSizer = new wxBoxSizer(wxHORIZONTAL);
-	connectPanel->SetSizer(connectSizer);
+		connectPanel = new wxPanel(this, wxID_ANY);
+		sizer->Add(connectPanel, 0, wxALL | wxEXPAND);
+		wxBoxSizer *connectSizer = new wxBoxSizer(wxHORIZONTAL);
+		connectPanel->SetSizer(connectSizer);
 
-	Layout();
-	this->SetScrollRate(5, 5);
-	Bind(wxEVT_CLOSE_WINDOW, &CalxDevicePanel::OnExit, this);
-	Bind(wxEVT_DEVICE_PANEL_UPDATE, &CalxDevicePanel::OnDevicePanelUpdate,
-		 this);
-	Bind(wxEVT_DEVICE_PANEL_DEVICE_APPEND, &CalxDevicePanel::OnDeviceAppend,
-		 this);
-	this->queue->Run();
-  }
-
-  void CalxDevicePanel::shutdown() {
-	for (const auto &dev : this->devices) {
-	  dev->stop();
+		Layout();
+		this->SetScrollRate(5, 5);
+		Bind(wxEVT_CLOSE_WINDOW, &CalxDevicePanel::OnExit, this);
+		Bind(wxEVT_DEVICE_PANEL_UPDATE, &CalxDevicePanel::OnDevicePanelUpdate,
+		     this);
+		Bind(wxEVT_DEVICE_PANEL_DEVICE_APPEND, &CalxDevicePanel::OnDeviceAppend,
+		     this);
+		this->queue->Run();
 	}
-  }
 
-  void CalxDevicePanel::OnExit(wxCloseEvent &evt) {
-	this->queue->stop();
-	for (const auto &kv : this->factories) {
-	  delete kv.second;
+	void CalxDevicePanel::shutdown() {
+		for (const auto &dev : this->devices) {
+			dev->stop();
+		}
 	}
-	for (const auto &dev : devices) {
-	  dev->Close(true);
+
+	void CalxDevicePanel::OnExit(wxCloseEvent &evt) {
+		this->queue->stop();
+		for (const auto &kv : this->factories) {
+			delete kv.second;
+		}
+		for (const auto &dev : devices) {
+			dev->Close(true);
+		}
+		Destroy();
 	}
-	Destroy();
-  }
 
-  bool CalxDevicePanel::isBusy() {
-	for (const auto &d : devices) {
-	  if (d->isBusy()) {
-		return true;
-	  }
+	bool CalxDevicePanel::isBusy() {
+		for (const auto &d : devices) {
+			if (d->isBusy()) {
+				return true;
+			}
+		}
+		return false;
 	}
-	return false;
-  }
 
-  void CalxDevicePanel::OnDeviceConnectClick(wxCommandEvent &evt) {
-	if (this->factories.count(evt.GetEventObject()) != 0) {
-	  CalxDeviceFactory *fact = this->factories[evt.GetEventObject()];
-	  fact->newDevice(this, this, this->queue);
+	void CalxDevicePanel::OnDeviceConnectClick(wxCommandEvent &evt) {
+		if (this->factories.count(evt.GetEventObject()) != 0) {
+			CalxDeviceFactory *fact = this->factories[evt.GetEventObject()];
+			fact->newDevice(this, this, this->queue);
+		}
 	}
-  }
 
-  void CalxDevicePanel::appendDevice(CalxDeviceConstructor *cnstr) {
-	wxThreadEvent evt(wxEVT_DEVICE_PANEL_DEVICE_APPEND);
-	evt.SetPayload(cnstr);
-	wxPostEvent(this, evt);
-  }
+	void CalxDevicePanel::appendDevice(CalxDeviceConstructor *cnstr) {
+		wxThreadEvent evt(wxEVT_DEVICE_PANEL_DEVICE_APPEND);
+		evt.SetPayload(cnstr);
+		wxPostEvent(this, evt);
+	}
 
-  void CalxDevicePanel::appendDeviceFactory(std::string name,
-											CalxDeviceFactory *fact) {
-	wxButton *button =
-		new wxButton(this->connectPanel, wxID_ANY, __("Connect ") + name);
-	button->Bind(wxEVT_BUTTON, &CalxDevicePanel::OnDeviceConnectClick, this);
-	this->factories[button] = fact;
-	this->connectPanel->GetSizer()->Add(button);
-  }
+	void CalxDevicePanel::appendDeviceFactory(std::string name,
+	                                          CalxDeviceFactory *fact) {
+		wxButton *button =
+		    new wxButton(this->connectPanel, wxID_ANY, __("Connect ") + name);
+		button->Bind(wxEVT_BUTTON, &CalxDevicePanel::OnDeviceConnectClick, this);
+		this->factories[button] = fact;
+		this->connectPanel->GetSizer()->Add(button);
+	}
 
-  void CalxDevicePanel::updateUI() {
-	Layout();
-  }
+	void CalxDevicePanel::updateUI() {
+		Layout();
+	}
 
-  void CalxDevicePanel::OnDevicePanelUpdate(wxThreadEvent &evt) {
-	updateUI();
-	Refresh();
-  }
+	void CalxDevicePanel::OnDevicePanelUpdate(wxThreadEvent &evt) {
+		updateUI();
+		Refresh();
+	}
 
-  void CalxDevicePanel::OnDeviceAppend(wxThreadEvent &evt) {
-	CalxDeviceConstructor *cnstr = evt.GetPayload<CalxDeviceConstructor *>();
-	CalxDeviceHandle *device = cnstr->construct(this);
-	delete cnstr;
-	GetSizer()->Add(device, 0, wxEXPAND | wxALL, 10);
-	this->devices.push_back(device);
-	updateUI();
-	Refresh();
-  }
+	void CalxDevicePanel::OnDeviceAppend(wxThreadEvent &evt) {
+		CalxDeviceConstructor *cnstr = evt.GetPayload<CalxDeviceConstructor *>();
+		CalxDeviceHandle *device = cnstr->construct(this);
+		delete cnstr;
+		GetSizer()->Add(device, 0, wxEXPAND | wxALL, 10);
+		this->devices.push_back(device);
+		updateUI();
+		Refresh();
+	}
 }

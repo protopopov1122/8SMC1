@@ -1,20 +1,21 @@
 /*
-	Copyright (c) 2017 Jevgenijs Protopopovs
+        Copyright (c) 2017 Jevgenijs Protopopovs
 
-	This file is part of CalX project.
+        This file is part of CalX project.
 
-	CalX is free software: you can redistribute it and/or modify
-	it under the terms of the GNU Lesser General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
+        CalX is free software: you can redistribute it and/or modify
+        it under the terms of the GNU Lesser General Public License as published
+   by
+        the Free Software Foundation, either version 3 of the License, or
+        (at your option) any later version.
 
-	CalX is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU Lesser General Public License for more details.
+        CalX is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        GNU Lesser General Public License for more details.
 
-	You should have received a copy of the GNU Lesser General Public License
-	along with CalX.  If not, see <http://www.gnu.org/licenses/>.
+        You should have received a copy of the GNU Lesser General Public License
+        along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "ui/CalxApp.h"
@@ -23,50 +24,50 @@
 
 namespace CalXUI {
 
-  void CalxCoordTimer::Notify() {
-	ctrl->updateUI();
-  }
+	void CalxCoordTimer::Notify() {
+		ctrl->updateUI();
+	}
 
-  CalxCoordEventListener::CalxCoordEventListener(CalxCoordPane *ctrl) {
-	this->ctrl = ctrl;
-  }
+	CalxCoordEventListener::CalxCoordEventListener(CalxCoordPane *ctrl) {
+		this->ctrl = ctrl;
+	}
 
-  CalxCoordEventListener::~CalxCoordEventListener() {}
+	CalxCoordEventListener::~CalxCoordEventListener() {}
 
-  void CalxCoordEventListener::use() {
-	ctrl->use();
-  }
+	void CalxCoordEventListener::use() {
+		ctrl->use();
+	}
 
-  void CalxCoordEventListener::unuse() {
-	ctrl->unuse();
-  }
+	void CalxCoordEventListener::unuse() {
+		ctrl->unuse();
+	}
 
-  CalxCoordMotorListener::CalxCoordMotorListener(CalxCoordPane *ctrl) {
-	this->ctrl = ctrl;
-  }
+	CalxCoordMotorListener::CalxCoordMotorListener(CalxCoordPane *ctrl) {
+		this->ctrl = ctrl;
+	}
 
-  CalxCoordMotorListener::~CalxCoordMotorListener() {}
+	CalxCoordMotorListener::~CalxCoordMotorListener() {}
 
-  void CalxCoordMotorListener::use() {
-	ctrl->use();
-  }
+	void CalxCoordMotorListener::use() {
+		ctrl->use();
+	}
 
-  void CalxCoordMotorListener::unuse() {
-	ctrl->unuse();
-  }
+	void CalxCoordMotorListener::unuse() {
+		ctrl->unuse();
+	}
 
-  CalxCoordInstrumentListener::CalxCoordInstrumentListener(
-	  CalxCoordPane *ctrl) {
-	this->ctrl = ctrl;
-  }
+	CalxCoordInstrumentListener::CalxCoordInstrumentListener(
+	    CalxCoordPane *ctrl) {
+		this->ctrl = ctrl;
+	}
 
-  CalxCoordInstrumentListener::~CalxCoordInstrumentListener() {}
+	CalxCoordInstrumentListener::~CalxCoordInstrumentListener() {}
 
-  void CalxCoordInstrumentListener::use() {
-	ctrl->use();
-  }
+	void CalxCoordInstrumentListener::use() {
+		ctrl->use();
+	}
 
-  void CalxCoordInstrumentListener::unuse() {
-	ctrl->unuse();
-  }
+	void CalxCoordInstrumentListener::unuse() {
+		ctrl->unuse();
+	}
 }

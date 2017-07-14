@@ -1,20 +1,21 @@
 /*
-	Copyright (c) 2017 Jevgenijs Protopopovs
+        Copyright (c) 2017 Jevgenijs Protopopovs
 
-	This file is part of CalX project.
+        This file is part of CalX project.
 
-	CalX is free software: you can redistribute it and/or modify
-	it under the terms of the GNU Lesser General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
+        CalX is free software: you can redistribute it and/or modify
+        it under the terms of the GNU Lesser General Public License as published
+   by
+        the Free Software Foundation, either version 3 of the License, or
+        (at your option) any later version.
 
-	CalX is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU Lesser General Public License for more details.
+        CalX is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        GNU Lesser General Public License for more details.
 
-	You should have received a copy of the GNU Lesser General Public License
-	along with CalX.  If not, see <http://www.gnu.org/licenses/>.
+        You should have received a copy of the GNU Lesser General Public License
+        along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "ctrl-lib/SystemManager.h"
@@ -23,26 +24,26 @@ using namespace CalX;
 
 class SampleExtEngine : public ExtEngine {
  public:
-  SampleExtEngine() : sysman(nullptr) {}
-  virtual ~SampleExtEngine() {}
-  virtual bool init(SystemManager *);
-  virtual bool destroy();
+	SampleExtEngine() : sysman(nullptr) {}
+	virtual ~SampleExtEngine() {}
+	virtual bool init(SystemManager *);
+	virtual bool destroy();
 
  private:
-  SystemManager *sysman;
+	SystemManager *sysman;
 };
 
 bool SampleExtEngine::init(SystemManager *sysman) {
-  std::cout << "Sample extension engine init" << std::endl;
-  this->sysman = sysman;
-  return true;
+	std::cout << "Sample extension engine init" << std::endl;
+	this->sysman = sysman;
+	return true;
 }
 
 bool SampleExtEngine::destroy() {
-  std::cout << "Sample extension engine destroy" << std::endl;
-  return true;
+	std::cout << "Sample extension engine destroy" << std::endl;
+	return true;
 }
 
 extern "C" LIBEXPORT ExtEngine *getExtEngine() {
-  return new SampleExtEngine();
+	return new SampleExtEngine();
 }

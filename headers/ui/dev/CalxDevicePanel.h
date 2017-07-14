@@ -1,56 +1,57 @@
 /*
-	Copyright (c) 2017 Jevgenijs Protopopovs
+        Copyright (c) 2017 Jevgenijs Protopopovs
 
-	This file is part of CalX project.
+        This file is part of CalX project.
 
-	CalX is free software: you can redistribute it and/or modify
-	it under the terms of the GNU Lesser General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
+        CalX is free software: you can redistribute it and/or modify
+        it under the terms of the GNU Lesser General Public License as published
+   by
+        the Free Software Foundation, either version 3 of the License, or
+        (at your option) any later version.
 
-	CalX is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU Lesser General Public License for more details.
+        CalX is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        GNU Lesser General Public License for more details.
 
-	You should have received a copy of the GNU Lesser General Public License
-	along with CalX.  If not, see <http://www.gnu.org/licenses/>.
+        You should have received a copy of the GNU Lesser General Public License
+        along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifndef CALX_UI_CALX_DEVICE_PANEL_H_
 #define CALX_UI_CALX_DEVICE_PANEL_H_
 
+#include "ui/CalxActionQueue.h"
 #include "ui/CalxApp.h"
 #include "ui/CalxPanelPane.h"
 #include "ui/dev/CalxDeviceFactory.h"
-#include "ui/CalxActionQueue.h"
 
 namespace CalXUI {
 
-  wxDECLARE_EVENT(wxEVT_DEVICE_PANEL_UPDATE, wxThreadEvent);
-  wxDECLARE_EVENT(wxEVT_DEVICE_PANEL_DEVICE_APPEND, wxThreadEvent);
+	wxDECLARE_EVENT(wxEVT_DEVICE_PANEL_UPDATE, wxThreadEvent);
+	wxDECLARE_EVENT(wxEVT_DEVICE_PANEL_DEVICE_APPEND, wxThreadEvent);
 
-  class CalxDevicePanel : public CalxPanelPane, public CalxDevicePool {
-   public:
-	CalxDevicePanel(wxWindow *, wxWindowID);
-	virtual void shutdown();
-	virtual bool isBusy();
-	virtual void updateUI();
-	virtual void appendDevice(CalxDeviceConstructor *);
-	virtual void appendDeviceFactory(std::string, CalxDeviceFactory *);
+	class CalxDevicePanel : public CalxPanelPane, public CalxDevicePool {
+	 public:
+		CalxDevicePanel(wxWindow *, wxWindowID);
+		virtual void shutdown();
+		virtual bool isBusy();
+		virtual void updateUI();
+		virtual void appendDevice(CalxDeviceConstructor *);
+		virtual void appendDeviceFactory(std::string, CalxDeviceFactory *);
 
-   private:
-	void OnExit(wxCloseEvent &);
-	void OnDeviceConnectClick(wxCommandEvent &);
-	void OnDevicePanelUpdate(wxThreadEvent &);
-	void OnDeviceAppend(wxThreadEvent &);
+	 private:
+		void OnExit(wxCloseEvent &);
+		void OnDeviceConnectClick(wxCommandEvent &);
+		void OnDevicePanelUpdate(wxThreadEvent &);
+		void OnDeviceAppend(wxThreadEvent &);
 
-	std::vector<CalxDeviceHandle *> devices;
-	std::map<wxObject *, CalxDeviceFactory *> factories;
-	CalxActionQueue *queue;
+		std::vector<CalxDeviceHandle *> devices;
+		std::map<wxObject *, CalxDeviceFactory *> factories;
+		CalxActionQueue *queue;
 
-	wxPanel *connectPanel;
-  };
+		wxPanel *connectPanel;
+	};
 }
 
 #endif

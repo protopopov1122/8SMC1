@@ -1,97 +1,98 @@
 /*
-	Copyright (c) 2017 Jevgenijs Protopopovs
+        Copyright (c) 2017 Jevgenijs Protopopovs
 
-	This file is part of CalX project.
+        This file is part of CalX project.
 
-	CalX is free software: you can redistribute it and/or modify
-	it under the terms of the GNU Lesser General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
+        CalX is free software: you can redistribute it and/or modify
+        it under the terms of the GNU Lesser General Public License as published
+   by
+        the Free Software Foundation, either version 3 of the License, or
+        (at your option) any later version.
 
-	CalX is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU Lesser General Public License for more details.
+        CalX is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        GNU Lesser General Public License for more details.
 
-	You should have received a copy of the GNU Lesser General Public License
-	along with CalX.  If not, see <http://www.gnu.org/licenses/>.
+        You should have received a copy of the GNU Lesser General Public License
+        along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <math.h>
 #include "ctrl-lib/translator/CoordTranslator.h"
+#include <math.h>
 
 namespace CalX {
 
-  PolarCoordTranslator::PolarCoordTranslator(CoordTranslator *base)
-	  : CoordTranslator::CoordTranslator(CoordType::PolarCoord) {
-	this->base = base;
-	INIT_LOG("PolarCoordTranslator");
-  }
-
-  PolarCoordTranslator::~PolarCoordTranslator() {
-	DESTROY_LOG("PolarCoordTranslator");
-  }
-
-  CoordTranslator *PolarCoordTranslator::getBase() {
-	return this->base;
-  }
-
-  void PolarCoordTranslator::setBase(CoordTranslator *t) {
-	this->base = t;
-  }
-
-  motor_point_t PolarCoordTranslator::get(double x, double y) {
-	double nx = x * cos(y);
-	double ny = x * sin(y);
-	if (this->base == nullptr) {
-	  motor_point_t pnt = { (int64_t) nx, (int64_t) ny };
-	  return pnt;
-	} else {
-	  return this->base->get(nx, ny);
+	PolarCoordTranslator::PolarCoordTranslator(CoordTranslator *base)
+	    : CoordTranslator::CoordTranslator(CoordType::PolarCoord) {
+		this->base = base;
+		INIT_LOG("PolarCoordTranslator");
 	}
-  }
 
-  coord_point_t PolarCoordTranslator::get(motor_point_t pnt) {
-	coord_point_t out;
-	if (this->base == nullptr) {
-	  out = { (double) pnt.x, (double) pnt.y };
-	} else {
-	  out = this->base->get(pnt);
+	PolarCoordTranslator::~PolarCoordTranslator() {
+		DESTROY_LOG("PolarCoordTranslator");
 	}
-	double p = sqrt(pow(out.x, 2) + pow(out.y, 2));
-	double f = atan2(out.y, out.x);
-	out = { p, f };
-	return out;
-  }
 
-  coord_point_t PolarCoordTranslator::floatGet(double x, double y) {
-	double nx = x * cos(y);
-	double ny = x * sin(y);
-	if (this->base == nullptr) {
-	  coord_point_t pnt = { nx, ny };
-	  return pnt;
-	} else {
-	  return this->base->floatGet(nx, ny);
+	CoordTranslator *PolarCoordTranslator::getBase() {
+		return this->base;
 	}
-  }
 
-  coord_point_t PolarCoordTranslator::floatGet(coord_point_t pnt) {
-	coord_point_t out;
-	if (this->base == nullptr) {
-	  out = pnt;
-	} else {
-	  out = this->base->floatGet(pnt);
+	void PolarCoordTranslator::setBase(CoordTranslator *t) {
+		this->base = t;
 	}
-	double p = sqrt(pow(out.x, 2) + pow(out.y, 2));
-	double f = atan2(out.y, out.x);
-	out = { p, f };
-	return out;
-  }
 
-  CoordTranslator *PolarCoordTranslator::clone(CoordTranslator *base) {
-	if (base == nullptr && this->base != nullptr) {
-	  base = this->base->clone(nullptr);
+	motor_point_t PolarCoordTranslator::get(double x, double y) {
+		double nx = x * cos(y);
+		double ny = x * sin(y);
+		if (this->base == nullptr) {
+			motor_point_t pnt = { (int64_t) nx, (int64_t) ny };
+			return pnt;
+		} else {
+			return this->base->get(nx, ny);
+		}
 	}
-	return new PolarCoordTranslator(base);
-  }
+
+	coord_point_t PolarCoordTranslator::get(motor_point_t pnt) {
+		coord_point_t out;
+		if (this->base == nullptr) {
+			out = { (double) pnt.x, (double) pnt.y };
+		} else {
+			out = this->base->get(pnt);
+		}
+		double p = sqrt(pow(out.x, 2) + pow(out.y, 2));
+		double f = atan2(out.y, out.x);
+		out = { p, f };
+		return out;
+	}
+
+	coord_point_t PolarCoordTranslator::floatGet(double x, double y) {
+		double nx = x * cos(y);
+		double ny = x * sin(y);
+		if (this->base == nullptr) {
+			coord_point_t pnt = { nx, ny };
+			return pnt;
+		} else {
+			return this->base->floatGet(nx, ny);
+		}
+	}
+
+	coord_point_t PolarCoordTranslator::floatGet(coord_point_t pnt) {
+		coord_point_t out;
+		if (this->base == nullptr) {
+			out = pnt;
+		} else {
+			out = this->base->floatGet(pnt);
+		}
+		double p = sqrt(pow(out.x, 2) + pow(out.y, 2));
+		double f = atan2(out.y, out.x);
+		out = { p, f };
+		return out;
+	}
+
+	CoordTranslator *PolarCoordTranslator::clone(CoordTranslator *base) {
+		if (base == nullptr && this->base != nullptr) {
+			base = this->base->clone(nullptr);
+		}
+		return new PolarCoordTranslator(base);
+	}
 }

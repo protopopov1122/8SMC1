@@ -1,32 +1,33 @@
 /*
-	Copyright (c) 2017 Jevgenijs Protopopovs
+        Copyright (c) 2017 Jevgenijs Protopopovs
 
-	This file is part of CalX project.
+        This file is part of CalX project.
 
-	CalX is free software: you can redistribute it and/or modify
-	it under the terms of the GNU Lesser General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
+        CalX is free software: you can redistribute it and/or modify
+        it under the terms of the GNU Lesser General Public License as published
+   by
+        the Free Software Foundation, either version 3 of the License, or
+        (at your option) any later version.
 
-	CalX is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU Lesser General Public License for more details.
+        CalX is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        GNU Lesser General Public License for more details.
 
-	You should have received a copy of the GNU Lesser General Public License
-	along with CalX.  If not, see <http://www.gnu.org/licenses/>.
+        You should have received a copy of the GNU Lesser General Public License
+        along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifndef CALX_UI_CALX_APP_H_
 #define CALX_UI_CALX_APP_H_
 
-#include <iostream>
-#include <fstream>
-#include "ui/calx.h"
-#include <wx/dynlib.h>
-#include <wx/intl.h>
 #include "ui/CalxFrame.h"
 #include "ui/UIExtEngine.h"
+#include "ui/calx.h"
+#include <fstream>
+#include <iostream>
+#include <wx/dynlib.h>
+#include <wx/intl.h>
 
 using namespace CalX;
 
@@ -41,53 +42,53 @@ using namespace CalX;
 
 namespace CalXUI {
 
-  class CalxDebugConsole;  // Forward referencing
-  class CalxErrorHandler;  // Forward referencing
+	class CalxDebugConsole;  // Forward referencing
+	class CalxErrorHandler;  // Forward referencing
 
-  wxDECLARE_EVENT(wxEVT_APP_ERROR, wxThreadEvent);
-  wxDECLARE_EVENT(wxEVT_APP_AUTOCONF, wxThreadEvent);
+	wxDECLARE_EVENT(wxEVT_APP_ERROR, wxThreadEvent);
+	wxDECLARE_EVENT(wxEVT_APP_AUTOCONF, wxThreadEvent);
 
-  class CalxApp : public wxApp {
-   public:
-	virtual bool OnInit();
-	virtual int OnExit();
-	virtual void OnUnhandledException();
-	virtual void OnFatalException();
-	void OnErrorEvent(wxThreadEvent &);
-	void OnAutoconfEvent(wxThreadEvent &);
-	SystemManager *getSystemManager();
-	CalxErrorHandler *getErrorHandler();
-	CalxFrame *getMainFrame();
+	class CalxApp : public wxApp {
+	 public:
+		virtual bool OnInit();
+		virtual int OnExit();
+		virtual void OnUnhandledException();
+		virtual void OnFatalException();
+		void OnErrorEvent(wxThreadEvent &);
+		void OnAutoconfEvent(wxThreadEvent &);
+		SystemManager *getSystemManager();
+		CalxErrorHandler *getErrorHandler();
+		CalxFrame *getMainFrame();
 
-	std::string formatDouble(double);
-	std::string getUnits();
-	std::string getSpeedUnits();
-	double getUnitPrecision();
-	double getSpeedPrecision();
-	double getUnitScale();
-	double getSpeedScale();
-	coord_point_t getUnitOffset();
+		std::string formatDouble(double);
+		std::string getUnits();
+		std::string getSpeedUnits();
+		double getUnitPrecision();
+		double getSpeedPrecision();
+		double getUnitScale();
+		double getSpeedScale();
+		coord_point_t getUnitOffset();
 
-   private:
-	void loadDevicesPlugin();
+	 private:
+		void loadDevicesPlugin();
 
-	CalxFrame *frame;
-	wxDynamicLibrary *dynlib;
-	wxDynamicLibrary *extLib;
-	DeviceManager *devman;
-	SystemManager *sysman;
+		CalxFrame *frame;
+		wxDynamicLibrary *dynlib;
+		wxDynamicLibrary *extLib;
+		DeviceManager *devman;
+		SystemManager *sysman;
 
-	bool debug_mode;
-	CalxDebugConsole *debug_console;
-	CalxErrorHandler *error_handler;
+		bool debug_mode;
+		CalxDebugConsole *debug_console;
+		CalxErrorHandler *error_handler;
 
-	std::ofstream *errors_log;
-	std::ofstream *warnings_log;
-	std::ofstream *debug_log;
-	std::ofstream *info_log;
-	std::ofstream *resources_log;
-	std::ofstream *instruments_log;
-  };
+		std::ofstream *errors_log;
+		std::ofstream *warnings_log;
+		std::ofstream *debug_log;
+		std::ofstream *info_log;
+		std::ofstream *resources_log;
+		std::ofstream *instruments_log;
+	};
 }
 wxDECLARE_APP(CalXUI::CalxApp);
 
