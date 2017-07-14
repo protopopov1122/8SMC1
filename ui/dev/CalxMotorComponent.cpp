@@ -60,8 +60,8 @@ namespace CalXUI {
 
   class CalxMotorMoveAction : public CalxAction {
    public:
-	CalxMotorMoveAction(CalxMotorComponent *ctrl, MotorController *dev, int dest,
-						float speed, bool rel) {
+	CalxMotorMoveAction(CalxMotorComponent *ctrl, MotorController *dev,
+						int dest, float speed, bool rel) {
 	  this->ctrl = ctrl;
 	  this->dev = dev;
 	  this->dest = dest;
@@ -118,7 +118,7 @@ namespace CalXUI {
   };
 
   CalxMotorComponent::CalxMotorComponent(wxWindow *win, wxWindowID id,
-							   CalX::MotorController *dev)
+										 CalX::MotorController *dev)
 	  : CalxDeviceHandle::CalxDeviceHandle(win, id) {
 	this->dev = dev;
 	this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
@@ -245,7 +245,8 @@ namespace CalXUI {
 	actionPanel->SetSizer(actionSizer);
 	sizer->Add(actionPanel, 0, wxALL, 10);
 
-	this->Bind(wxEVT_COMMAND_QUEUE_UPDATE, &CalxMotorComponent::threadUpdate, this);
+	this->Bind(wxEVT_COMMAND_QUEUE_UPDATE, &CalxMotorComponent::threadUpdate,
+			   this);
 	Bind(wxEVT_CLOSE_WINDOW, &CalxMotorComponent::OnExit, this);
 	Bind(wxEVT_MOTOR_CTRL_ENABLE, &CalxMotorComponent::OnEnableEvent, this);
 	// Post init

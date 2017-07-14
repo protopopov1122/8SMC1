@@ -145,8 +145,7 @@ namespace CalXUI {
 	miny->SetValue((int) controller->getValidateMinimum().y);
 	maxx->SetValue((int) controller->getValidateMaximum().x);
 	maxy->SetValue((int) controller->getValidateMaximum().y);
-	speed->SetValue(
-		static_cast<int>(controller->getValidateMaxSpeed()));
+	speed->SetValue(static_cast<int>(controller->getValidateMaxSpeed()));
 
 	logActions->Bind(wxEVT_CHECKBOX, &CalxCoordFilterComponent::OnFiltersUpdate,
 					 this);

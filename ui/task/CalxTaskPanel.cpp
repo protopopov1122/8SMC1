@@ -369,13 +369,13 @@ namespace CalXUI {
 	  ss.seekg(0);
 
 	  CoordTranslator *translator = list.at((size_t) taskList->GetSelection())
-										 ->getTranslator()
-										 ->clone(nullptr);
+										->getTranslator()
+										->clone(nullptr);
 	  ComplexCoordTranslator *trans = nullptr;
 	  if (translator->getType() == ComplexCoord) {
-		  trans = (ComplexCoordTranslator*) translator;
+		trans = (ComplexCoordTranslator *) translator;
 	  } else {
-		  trans = new ComplexCoordTranslator(translator);
+		trans = new ComplexCoordTranslator(translator);
 	  }
 	  CalxGcodeHandle *gcodeHandle = new CalxGcodeHandle(
 		  mainPanel, wxID_ANY,

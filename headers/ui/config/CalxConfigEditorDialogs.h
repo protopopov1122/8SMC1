@@ -25,51 +25,51 @@
 
 namespace CalXUI {
 
-	class CalxConfigEditor;  // Forward referencing
-  
-	class CalxNewKeyDialog : public wxDialog {
-		public:
-			CalxNewKeyDialog(wxWindow *, wxWindowID, ConfigEntry *);
+  class CalxConfigEditor;  // Forward referencing
 
-		private:
-			void updateUI();
+  class CalxNewKeyDialog : public wxDialog {
+   public:
+	CalxNewKeyDialog(wxWindow *, wxWindowID, ConfigEntry *);
 
-			void OnOkClick(wxCommandEvent &);
-			void OnCancelClick(wxCommandEvent &);
-			void OnTypeChange(wxCommandEvent &);
+   private:
+	void updateUI();
 
-			ConfigEntry *entry;
-			wxTextCtrl *key;
-			wxComboBox *type;
+	void OnOkClick(wxCommandEvent &);
+	void OnCancelClick(wxCommandEvent &);
+	void OnTypeChange(wxCommandEvent &);
 
-			wxPanel *editorPanel;
-			wxSpinCtrl *integer;
-			wxTextCtrl *real;
-			wxCheckBox *boolean;
-			wxTextCtrl *string;
-	};
-	
-	class CalxNewEntryDialog : public wxDialog {
-		public:
-			CalxNewEntryDialog(wxWindow *, wxWindowID, ConfigManager *);
+	ConfigEntry *entry;
+	wxTextCtrl *key;
+	wxComboBox *type;
 
-		private:
-			void OnOkClick(wxCommandEvent &);
-			void OnCancelClick(wxCommandEvent &);
+	wxPanel *editorPanel;
+	wxSpinCtrl *integer;
+	wxTextCtrl *real;
+	wxCheckBox *boolean;
+	wxTextCtrl *string;
+  };
 
-			wxTextCtrl *entryName;
-			ConfigManager *config;
-	};
+  class CalxNewEntryDialog : public wxDialog {
+   public:
+	CalxNewEntryDialog(wxWindow *, wxWindowID, ConfigManager *);
 
-	class CalxConfigDialog : public wxDialog {
-		public:
-			CalxConfigDialog(wxWindow *, wxWindowID, ConfigManager *);
-			ConfigManager *getConfiguration();
+   private:
+	void OnOkClick(wxCommandEvent &);
+	void OnCancelClick(wxCommandEvent &);
 
-		private:
-			void OnOkClick(wxCommandEvent &);
-			CalxConfigEditor *editor;
-	};
+	wxTextCtrl *entryName;
+	ConfigManager *config;
+  };
+
+  class CalxConfigDialog : public wxDialog {
+   public:
+	CalxConfigDialog(wxWindow *, wxWindowID, ConfigManager *);
+	ConfigManager *getConfiguration();
+
+   private:
+	void OnOkClick(wxCommandEvent &);
+	CalxConfigEditor *editor;
+  };
 }
 
 #endif

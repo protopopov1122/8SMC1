@@ -27,12 +27,14 @@
 #include "ctrl-lib/EventListener.h"
 
 /*  Coordinate plane has several elementar actions:
-      * linear movement - synchrone and asynchrone
+	  * linear movement - synchrone and asynchrone
 	  * arc movement
-	  * relative linear and arc movement - all coordinates are calculated using current position and offset
+	  * relative linear and arc movement - all coordinates are calculated using
+   current position and offset
 	  * calibration - both motors are moved to the start or end of axis
-	  * measurement - plane performs double calibration to determine available size
-    All actions should be performed during session. To open/close session use
+	  * measurement - plane performs double calibration to determine available
+   size
+	All actions should be performed during session. To open/close session use
 	appropriate methods.
 */
 

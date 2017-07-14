@@ -36,8 +36,8 @@ namespace CalX {
   class SystemManager;  // Forward referencing
 
   struct TaskParameters {
-	float speed;          // Task build base speed
-	                      // It is multiplied by task speed coeficients to get final speed
+	float speed;  // Task build base speed
+	// It is multiplied by task speed coeficients to get final speed
   };
 
   class TaskStep {
@@ -48,10 +48,10 @@ namespace CalX {
   };
 
   enum class CoordTaskType {
-	ProgrammedTask,            // Sequence of elementar actions on plane
-	GraphTask,                 // Evaluates given function graph and builds it
-	LinearTask,                // Builds sequence of lines on a given rectangle
-	GCodeTask                  // Executes GCode on given coordinate plane
+	ProgrammedTask,  // Sequence of elementar actions on plane
+	GraphTask,       // Evaluates given function graph and builds it
+	LinearTask,      // Builds sequence of lines on a given rectangle
+	GCodeTask        // Executes GCode on given coordinate plane
   };
 
   class CoordTask : public TaskStep {

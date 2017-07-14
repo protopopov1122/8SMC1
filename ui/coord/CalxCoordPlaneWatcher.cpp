@@ -224,9 +224,9 @@ namespace CalXUI {
 
   void CalxCoordPlaneWatcher::OnResizeEvent(wxSizeEvent &evt) {
 	if (GetSize().x > 0 && GetSize().y > 0) {
-		this->bitmap.Create(GetSize().x, GetSize().y);
-		renderBitmap();
-		Refresh();
+	  this->bitmap.Create(GetSize().x, GetSize().y);
+	  renderBitmap();
+	  Refresh();
 	}
   }
 

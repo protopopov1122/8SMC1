@@ -149,7 +149,7 @@ namespace CalXUI {
   };
 
   CalxInstrumentComponent::CalxInstrumentComponent(wxWindow *win, wxWindowID id,
-										 InstrumentController *ctrl)
+												   InstrumentController *ctrl)
 	  : CalxDeviceHandle::CalxDeviceHandle(win, id) {
 	this->ctrl = ctrl;
 	this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
@@ -219,8 +219,8 @@ namespace CalXUI {
 	this->timer = new CalxInstrumentTimer(this);
 	timer->Start(100);
 	this->Bind(wxEVT_CLOSE_WINDOW, &CalxInstrumentComponent::OnExit, this);
-	this->Bind(wxEVT_INSTRUMENT_CTRL_ENABLE, &CalxInstrumentComponent::OnEnableEvent,
-			   this);
+	this->Bind(wxEVT_INSTRUMENT_CTRL_ENABLE,
+			   &CalxInstrumentComponent::OnEnableEvent, this);
   }
 
   void CalxInstrumentComponent::stop() {

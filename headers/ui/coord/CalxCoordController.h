@@ -36,7 +36,7 @@ namespace CalXUI {
    public:
 	CalxCoordController(CoordHandle *, CalxActionQueue *);
 	virtual ~CalxCoordController();
-	
+
 	CoordHandle *getHandle();
 
 	motor_point_t getOffset();
@@ -45,12 +45,12 @@ namespace CalXUI {
 	void setScale(motor_scale_t);
 	void addFilterListener(CalxCoordFilterListener *);
 	void removeFilterListener(CalxCoordFilterListener *);
-	
+
 	bool isLoggingActions();
 	void setLoggingActions(bool);
 	bool isLoggingErrors();
 	void setLoggingErrors(bool);
-	
+
 	motor_point_t getValidateMinimum();
 	void setValidateMinimum(motor_point_t);
 	motor_point_t getValidateMaximum();

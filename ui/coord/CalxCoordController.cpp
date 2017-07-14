@@ -71,7 +71,7 @@ namespace CalXUI {
   }
 
   CalxCoordController::~CalxCoordController() {}
-  
+
   CoordHandle *CalxCoordController::getHandle() {
 	return this->handle;
   }
@@ -97,45 +97,45 @@ namespace CalXUI {
 	  l->updateScale(sc);
 	}
   }
-	bool CalxCoordController::isLoggingActions() {
-		return this->log->isLoggingActions();
-	}
-	
-	void CalxCoordController::setLoggingActions(bool la) {
-		this->log->setLoggingActions(la);
-	}
-	
-	bool CalxCoordController::isLoggingErrors() {
-		return this->log->isLoggingErrors();
-	}
-	
-	void CalxCoordController::setLoggingErrors(bool le) {
-		this->log->setLoggingErrors(le);
-	}
+  bool CalxCoordController::isLoggingActions() {
+	return this->log->isLoggingActions();
+  }
 
-	motor_point_t CalxCoordController::getValidateMinimum() {
-		return this->validator->getMinimum();
-	}
-	
-	void CalxCoordController::setValidateMinimum(motor_point_t mp) {
-		this->validator->setMinimum(mp);
-	}
-	
-	motor_point_t CalxCoordController::getValidateMaximum() {
-		return this->validator->getMaximum();
-	}
-	
-	void CalxCoordController::setValidateMaximum(motor_point_t mp) {
-		this->validator->setMaximum(mp);
-	}
-	
-	float CalxCoordController::getValidateMaxSpeed() {
-		return this->validator->getMaxSpeed();
-	}
-	
-	void CalxCoordController::setValidateMaxSpeed(float ms) {
-		this->validator->setMaxSpeed(ms);
-	}
+  void CalxCoordController::setLoggingActions(bool la) {
+	this->log->setLoggingActions(la);
+  }
+
+  bool CalxCoordController::isLoggingErrors() {
+	return this->log->isLoggingErrors();
+  }
+
+  void CalxCoordController::setLoggingErrors(bool le) {
+	this->log->setLoggingErrors(le);
+  }
+
+  motor_point_t CalxCoordController::getValidateMinimum() {
+	return this->validator->getMinimum();
+  }
+
+  void CalxCoordController::setValidateMinimum(motor_point_t mp) {
+	this->validator->setMinimum(mp);
+  }
+
+  motor_point_t CalxCoordController::getValidateMaximum() {
+	return this->validator->getMaximum();
+  }
+
+  void CalxCoordController::setValidateMaximum(motor_point_t mp) {
+	this->validator->setMaximum(mp);
+  }
+
+  float CalxCoordController::getValidateMaxSpeed() {
+	return this->validator->getMaxSpeed();
+  }
+
+  void CalxCoordController::setValidateMaxSpeed(float ms) {
+	this->validator->setMaxSpeed(ms);
+  }
 
   void CalxCoordController::addFilterListener(CalxCoordFilterListener *l) {
 	this->listeners.push_back(l);

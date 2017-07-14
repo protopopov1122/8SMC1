@@ -34,19 +34,25 @@
 namespace CalX {
 
   enum CoordType {
-	BasicCoord,           // Basic coord translator. Similar to linear, but has no underlying translators
-	
-	LinearCoord,          // Linear translator picks given coordinates, multiples them by scale and adds offset.
-	                      // Basically, it represents Decart coordinates. After translation coordinates are passed
-                          // to underlying one(if exists)
-						  
-	LogarithmicCoord,     // Creates logarithmic coordinates. Translates given coordinates to logarithm with
-	                      // given base(if base != 0 otherwise coordinate stay same)
-						  
-	PolarCoord,           // Creates polar coordinate plane abstraction. Given coordinates are
-	                      // translated to angle and radius
-						  
-	ComplexCoord          // Allows to easily stack coordinate translators and manages them
+	BasicCoord,  // Basic coord translator. Similar to linear, but has no
+				 // underlying translators
+
+	LinearCoord,  // Linear translator picks given coordinates, multiples them
+				  // by scale and adds offset.
+	// Basically, it represents Decart coordinates. After translation
+	// coordinates are passed
+	// to underlying one(if exists)
+
+	LogarithmicCoord,  // Creates logarithmic coordinates. Translates given
+					   // coordinates to logarithm with
+	// given base(if base != 0 otherwise coordinate stay same)
+
+	PolarCoord,  // Creates polar coordinate plane abstraction. Given
+				 // coordinates are
+				 // translated to angle and radius
+
+	ComplexCoord  // Allows to easily stack coordinate translators and manages
+				  // them
   };
 
   class CoordTranslator {
