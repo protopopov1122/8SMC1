@@ -23,6 +23,7 @@
 
 #include "ctrl-lib/conf/ConfigManager.h"
 #include "ui/CalxApp.h"
+#include <wx/spinctrl.h>
 
 namespace CalXUI {
 

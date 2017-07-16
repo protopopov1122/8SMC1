@@ -23,6 +23,7 @@
 
 #include "ctrl-lib/graph/FunctionEngine.h"
 #include "ctrl-lib/plane/CoordPlane.h"
+#include "ctrl-lib/translator/CoordTranslator.h"
 
 /* Graph builder contains routine functions to build mathematical
    function graphs to coordinate planes. It stores function,

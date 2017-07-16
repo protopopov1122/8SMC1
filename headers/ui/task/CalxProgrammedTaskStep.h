@@ -21,6 +21,9 @@
 #ifndef CALX_UI_TASK_CALX_PROGRAMMED_TASK_STEP_H_
 #define CALX_UI_TASK_CALX_PROGRAMMED_TASK_STEP_H_
 
+#include "ui/CalxApp.h"
+#include <wx/spinctrl.h>
+
 namespace CalXUI {
 
 	class CalxTaskStepHandle : public wxPanel {
