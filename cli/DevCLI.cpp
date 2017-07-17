@@ -768,7 +768,7 @@ namespace CalX {
 			BasicCoordTranslator *trans = new BasicCoordTranslator(center, scale);
 			std::string path = args.at(5);
 			std::ifstream is(path, std::ifstream::in);
-			sysman->addTask(new GCodeCoordTask(&is, trans));
+			sysman->addTask(std::make_unique<GCodeCoordTask>(&is, trans));
 			is.close();
 		} else if (args.at(0).compare("graph") == 0) {
 			if (args.size() < 12) {
@@ -791,8 +791,7 @@ namespace CalX {
 			coord_point_t min = { minx, miny };
 			coord_point_t max = { maxx, maxy };
 			GraphBuilder *graph = new GraphBuilder(node, min, max, step);
-			GraphCoordTask *task = new GraphCoordTask(graph, trans, speed);
-			std::cout << "New graph task #" << sysman->addTask(task) << std::endl;
+			std::cout << "New graph task #" << sysman->addTask(std::make_unique<GraphCoordTask>(graph, trans, speed)) << std::endl;
 		} else {
 			std::cout << "Wrong command '" << args.at(0) << "'" << std::endl;
 		}

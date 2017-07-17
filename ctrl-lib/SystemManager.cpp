@@ -24,25 +24,25 @@ namespace CalX {
 
 	const char *SYSMAN_TAG = "SysMan";
 
-	SystemManager::SystemManager(DeviceManager *devman, ConfigManager *conf,
-	                             ExtEngine *ext_eng) {
-		this->devman = devman;
-		this->conf = conf;
-		this->ext_engine = ext_eng;
+	SystemManager::SystemManager(std::unique_ptr<DeviceManager> devman, std::unique_ptr<ConfigManager> conf,
+	                             std::unique_ptr<ExtEngine> ext_eng) {
+		this->devman = std::move(devman);
+		this->conf = std::move(conf);
+		this->ext_engine = std::move(ext_eng);
 		for (device_id_t d = 0; d < (device_id_t) devman->getMotorCount(); d++) {
-			this->dev.push_back(new MotorController(devman->getMotor(d), this->conf));
+			this->dev.push_back(std::make_unique<MotorController>(this->devman->getMotor(d), this->getConfiguration()));
 		}
 		for (device_id_t i = 0; i < (device_id_t) devman->getInstrumentCount();
 		     i++) {
-			this->instr.push_back(new InstrumentController(devman->getInstrument(i)));
+			this->instr.push_back(std::make_unique<InstrumentController>(this->devman->getInstrument(i)));
 		}
 		LOG(SYSMAN_TAG,
 		    "System startup. Found " + std::to_string(devman->getMotorCount()) +
 		        " motors and " + std::to_string(devman->getInstrumentCount()) +
 		        " instruments.");
 		FunctionEngine_add_default_functions(&this->engine);
-		this->resolver = new RequestResolver(this);
-		RequestResolver_init_standart_providers(this->resolver);
+		this->resolver = std::make_unique<RequestResolver>(this);
+		RequestResolver_init_standart_providers(this->resolver.get());
 		if (this->ext_engine != nullptr) {
 			this->ext_engine->init(this);
 		}
@@ -53,45 +53,32 @@ namespace CalX {
 		LOG(SYSMAN_TAG, "System exiting");
 		if (this->ext_engine != nullptr) {
 			this->ext_engine->destroy();
-			delete this->ext_engine;
 		}
-		delete this->resolver;
-		for (size_t i = 0; i < this->tasks.size(); i++) {
-			delete this->tasks.at(i);
-		}
-		for (size_t i = 0; i < this->coords.size(); i++) {
-			delete this->coords.at(i);
-		}
-		for (device_id_t i = 0;
-		     i < (device_id_t) this->devman->getInstrumentCount(); i++) {
-			delete this->instr.at((size_t) i);
-		}
-		for (device_id_t d = 0; d < (device_id_t) this->devman->getMotorCount();
-		     d++) {
-			delete this->dev.at((size_t) d);
-		}
-		delete this->conf;
+		this->tasks.clear();
+		this->coords.clear();
+		this->instr.clear();
+		this->dev.clear();
 		LOG(SYSMAN_TAG, "Sysman exited");
 		DESTROY_LOG("SystemManager");
 	}
 
 	DeviceManager *SystemManager::getDeviceManager() {
-		return this->devman;
+		return this->devman.get();
 	}
 
 	ConfigManager *SystemManager::getConfiguration() {
-		return this->conf;
+		return this->conf.get();
 	}
 
 	ExtEngine *SystemManager::getExtEngine() {
-		return this->ext_engine;
+		return this->ext_engine.get();
 	}
 
 	MotorController *SystemManager::getMotorController(device_id_t d) {
 		if (d >= (device_id_t) this->devman->getMotorCount() || d < 0) {
 			return nullptr;
 		}
-		return this->dev.at((size_t) d);
+		return this->dev.at((size_t) d).get();
 	}
 
 	FunctionEngine *SystemManager::getFunctionEngine() {
@@ -99,7 +86,7 @@ namespace CalX {
 	}
 
 	RequestResolver *SystemManager::getRequestResolver() {
-		return this->resolver;
+		return this->resolver.get();
 	}
 
 	size_t SystemManager::getMotorCount() {
@@ -114,13 +101,13 @@ namespace CalX {
 		if (i >= this->tasks.size()) {
 			return nullptr;
 		}
-		return this->tasks.at(i);
+		return this->tasks.at(i).get();
 	}
 
-	size_t SystemManager::addTask(CoordTask *task) {
-		this->tasks.push_back(task);
+	size_t SystemManager::addTask(std::unique_ptr<CoordTask> task) {
+		this->tasks.push_back(std::move(task));
 		if (this->ext_engine != nullptr) {
-			this->ext_engine->taskAdded(task);
+			this->ext_engine->taskAdded(this->tasks.at(this->tasks.size() - 1).get());
 		}
 		LOG(SYSMAN_TAG,
 		    "Added new task #" + std::to_string(this->tasks.size() - 1) +
@@ -129,15 +116,15 @@ namespace CalX {
 	}
 
 	ProgrammedCoordTask *SystemManager::createProgrammedTask() {
-		ProgrammedCoordTask *task = new ProgrammedCoordTask();
-		this->tasks.push_back(task);
+		this->tasks.push_back(std::make_unique<ProgrammedCoordTask>());
+		ProgrammedCoordTask *ptr = (ProgrammedCoordTask*) this->getTask(this->getTaskCount() - 1);
 		if (this->ext_engine != nullptr) {
-			this->ext_engine->taskAdded(task);
+			this->ext_engine->taskAdded(ptr);
 		}
 		LOG(SYSMAN_TAG,
 		    "Added new programmed task #" + std::to_string(this->tasks.size() - 1) +
 		        ". Task count: " + std::to_string(this->tasks.size()));
-		return task;
+		return ptr;
 	}
 
 	bool SystemManager::removeTask(size_t i) {
@@ -147,7 +134,7 @@ namespace CalX {
 		if (this->ext_engine != nullptr) {
 			this->ext_engine->taskRemoving(i);
 		}
-		delete this->tasks.at(i);
+		
 		this->tasks.erase(this->tasks.begin() + (std::ptrdiff_t) i);
 		LOG(SYSMAN_TAG,
 		    "Removed task # " + std::to_string(i) +
@@ -163,7 +150,7 @@ namespace CalX {
 		if (c >= this->coords.size()) {
 			return nullptr;
 		}
-		return this->coords.at(c);
+		return this->coords.at(c).get();
 	}
 
 	CoordHandle *SystemManager::createCoord(device_id_t d1, device_id_t d2,
@@ -174,17 +161,18 @@ namespace CalX {
 		}
 
 		CoordController *ctrl = new CoordController(
-		    this->getMotorController(d1), this->getMotorController(d2), this->conf,
+		    this->getMotorController(d1), this->getMotorController(d2), this->getConfiguration(),
 		    this->getInstrumentController(instr));
-		CoordHandle *handle = new CoordHandle(this->coords.size(), ctrl);
-		this->coords.push_back(handle);
+		std::unique_ptr<CoordHandle> handle = std::make_unique<CoordHandle>(this->coords.size(), ctrl);
 		if (getConfiguration()->getEntry("core")->getBool("auto_power_motors",
 		                                                  false)) {
 			ctrl->getXAxis()->enablePower(true);
 			ctrl->getYAxis()->enablePower(true);
 		}
+		this->coords.push_back(std::move(handle));
+		CoordHandle *ptr = this->getCoord(this->getCoordCount() - 1);
 		if (this->ext_engine != nullptr) {
-			this->ext_engine->coordAdded(handle);
+			this->ext_engine->coordAdded(ptr);
 		}
 		LOG(SYSMAN_TAG,
 		    "New coordinate plane #" + std::to_string(this->coords.size() - 1) +
@@ -194,7 +182,7 @@ namespace CalX {
 		                                           ? "#" + std::to_string(instr)
 		                                           : "no") +
 		        ".");
-		return handle;
+		return ptr;
 	}
 
 	void SystemManager::removeCoord(size_t id) {
@@ -202,7 +190,6 @@ namespace CalX {
 			if (this->ext_engine != nullptr) {
 				this->ext_engine->coordRemoving(id);
 			}
-			delete this->coords.at(id);
 			this->coords.erase(this->coords.begin() + (std::ptrdiff_t) id);
 			LOG(SYSMAN_TAG, "Removed coord #" + std::to_string(id));
 		}
@@ -216,7 +203,7 @@ namespace CalX {
 		if (i >= (device_id_t) this->devman->getInstrumentCount() || i < 0) {
 			return nullptr;
 		}
-		return this->instr.at((size_t) i);
+		return this->instr.at((size_t) i).get();
 	}
 
 	MotorController *SystemManager::connectMotor(DeviceConnectionPrms *prms) {
@@ -225,14 +212,15 @@ namespace CalX {
 			return nullptr;
 		}
 		devman->refresh();
-		MotorController *ctrl = new MotorController(d, this->conf);
-		this->dev.push_back(ctrl);
+		std::unique_ptr<MotorController> ctrl = std::make_unique<MotorController>(d, this->getConfiguration());
+		this->dev.push_back(std::move(ctrl));
+		MotorController *ptr = this->getMotorController(this->getMotorCount() - 1);
 		if (this->ext_engine != nullptr) {
-			this->ext_engine->motorConnected(ctrl);
+			this->ext_engine->motorConnected(ptr);
 		}
 		LOG(SYSMAN_TAG,
 		    "Connected new device #" + std::to_string(this->dev.size() - 1));
-		return ctrl;
+		return ptr;
 	}
 
 	InstrumentController *SystemManager::connectInstrument(
@@ -241,13 +229,14 @@ namespace CalX {
 		if (i == nullptr) {
 			return nullptr;
 		}
-		InstrumentController *ctrl = new InstrumentController(i);
-		this->instr.push_back(ctrl);
+		std::unique_ptr<InstrumentController> ctrl = std::make_unique<InstrumentController>(i);
+		this->instr.push_back(std::move(ctrl));
+		InstrumentController *ptr = this->getInstrumentController(this->getInstrumentCount() - 1);
 		if (this->ext_engine != nullptr) {
-			this->ext_engine->instrumentConnected(ctrl);
+			this->ext_engine->instrumentConnected(ptr);
 		}
 		LOG(SYSMAN_TAG,
 		    "Connected new instrument #" + std::to_string(this->instr.size() - 1));
-		return ctrl;
+		return ptr;
 	}
 }

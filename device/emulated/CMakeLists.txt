@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 project(CalX)
 
-set (CMAKE_CXX_STANDARD 11)
 include_directories(${CMAKE_SOURCE_DIR}/headers)
 add_library(dev_emulated SHARED EmuMotor.cpp EmuInstrument.cpp EmuDeviceManager.cpp)
 target_link_libraries(dev_emulated calx)

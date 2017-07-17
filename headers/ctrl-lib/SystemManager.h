@@ -21,6 +21,7 @@
 #ifndef CALX_CTRL_LIB_SYSTEM_MANAGER_H_
 #define CALX_CTRL_LIB_SYSTEM_MANAGER_H_
 
+#include <memory>
 #include "ctrl-lib/ExtEngine.h"
 #include "ctrl-lib/conf/ConfigManager.h"
 #include "ctrl-lib/conf/RequestResolver.h"
@@ -42,7 +43,7 @@ namespace CalX {
 
 	class SystemManager {
 	 public:
-		SystemManager(DeviceManager *, ConfigManager *, ExtEngine * = nullptr);
+		SystemManager(std::unique_ptr<DeviceManager>, std::unique_ptr<ConfigManager>, std::unique_ptr<ExtEngine> = nullptr);
 		virtual ~SystemManager();
 		DeviceManager *getDeviceManager();
 		ConfigManager *getConfiguration();
@@ -57,7 +58,7 @@ namespace CalX {
 		size_t getTaskCount();
 		CoordTask *getTask(size_t);
 		ProgrammedCoordTask *createProgrammedTask();
-		size_t addTask(CoordTask *);
+		size_t addTask(std::unique_ptr<CoordTask>);
 		bool removeTask(size_t);
 		// Coordinate plane control
 		size_t getCoordCount();
@@ -69,15 +70,15 @@ namespace CalX {
 		InstrumentController *connectInstrument(DeviceConnectionPrms *);
 
 	 private:
-		DeviceManager *devman;
-		ConfigManager *conf;
-		std::vector<MotorController *> dev;
-		std::vector<InstrumentController *> instr;
-		std::vector<CoordTask *> tasks;
-		std::vector<CoordHandle *> coords;
+		std::unique_ptr<DeviceManager> devman;
+		std::unique_ptr<ConfigManager> conf;
+		std::vector<std::unique_ptr<MotorController>> dev;
+		std::vector<std::unique_ptr<InstrumentController>> instr;
+		std::vector<std::unique_ptr<CoordTask>> tasks;
+		std::vector<std::unique_ptr<CoordHandle>> coords;
 		FunctionEngine engine;
-		RequestResolver *resolver;
-		ExtEngine *ext_engine;
+		std::unique_ptr<RequestResolver> resolver;
+		std::unique_ptr<ExtEngine> ext_engine;
 	};
 }
 

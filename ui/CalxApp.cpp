@@ -76,14 +76,14 @@ namespace CalXUI {
 		std::string path = confLoader->getFileName();
 		confLoader->Destroy();
 
-		ConfigManager *conf = nullptr;
+		std::unique_ptr<ConfigManager> conf = nullptr;
 		std::ifstream cnf(path);
 		if (!cnf.good()) {
 			wxMessageBox(__("Can't open configuration. Using default values."),
 			             __("Warning"), wxICON_WARNING);
-			conf = new ConfigManager();
+			conf = std::make_unique<ConfigManager>();
 		} else {
-			conf = ConfigManager::load(&cnf, &std::cout);
+			conf = std::unique_ptr<ConfigManager>(ConfigManager::load(&cnf, &std::cout));
 		}
 		cnf.close();
 
@@ -145,7 +145,7 @@ namespace CalXUI {
 #undef SETUP_LOG
 
 		std::string ext_addr = conf->getEntry("ext")->getString("engine", "");
-		ExtEngine *ext = nullptr;
+		std::unique_ptr<ExtEngine> ext = nullptr;
 		if (!ext_addr.empty()) {
 			this->extLib =
 			    new wxDynamicLibrary(wxDynamicLibrary::CanonicalizeName(ext_addr),
@@ -165,7 +165,7 @@ namespace CalXUI {
 						    *((UIExtEngine_getter *) &ext_raw_getter);
 						UIExtEngine *uiext = ext_getter();
 						uiext->uiInit(wxGetApp());
-						ext = uiext;
+						ext = std::unique_ptr<ExtEngine>(uiext);
 					}
 				} else {
 					void *ext_raw_getter = extLib->GetSymbol("getExtEngine", &ext_suc);
@@ -175,7 +175,7 @@ namespace CalXUI {
 					} else {
 						ExtEngine_getter ext_getter =
 						    *((ExtEngine_getter *) &ext_raw_getter);
-						ext = ext_getter();
+						ext = std::unique_ptr<ExtEngine>(ext_getter());
 					}
 				}
 			}
@@ -183,8 +183,8 @@ namespace CalXUI {
 			this->extLib = nullptr;
 		}
 
-		this->devman = getter();
-		this->sysman = new SystemManager(this->devman, conf, ext);
+		std::unique_ptr<DeviceManager> devman = std::unique_ptr<DeviceManager>(getter());
+		this->sysman = new SystemManager(std::move(devman), std::move(conf), std::move(ext));
 		this->error_handler = new CalxErrorHandler(this->sysman);
 
 		if (this->debug_mode && conf->getEntry("ui")->getBool("console", false)) {
@@ -213,7 +213,6 @@ namespace CalXUI {
 
 		delete this->error_handler;
 		delete this->sysman;
-		delete this->devman;
 		this->dynlib->Detach();
 		this->dynlib->Unload();
 		if (this->extLib != nullptr) {

@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 project(CalX)
 
-
-set (CMAKE_CXX_STANDARD 11)
 if (WIN32)
 
 	if (EXISTS ${CMAKE_SOURCE_DIR}/res/USMCDLL.h)
