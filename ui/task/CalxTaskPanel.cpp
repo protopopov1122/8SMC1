@@ -214,7 +214,6 @@ namespace CalXUI {
 			this->list.at((size_t) taskList->GetSelection())->Show(true);
 		}
 		plane->Clear();
-		CalxPanel *calxPanel = wxGetApp().getMainFrame()->getPanel();
 		for (size_t i = 0; i < wxGetApp().getSystemManager()->getCoordCount();
 		     i++) {
 			if (wxGetApp().getSystemManager()->getCoord(i)->isUsed()) {
@@ -369,14 +368,16 @@ namespace CalXUI {
 			}
 			ss.seekg(0);
 
-			CoordTranslator *translator = list.at((size_t) taskList->GetSelection())
+			std::unique_ptr<CoordTranslator> translator = list.at((size_t) taskList->GetSelection())
 			                                  ->getTranslator()
 			                                  ->clone(nullptr);
-			ComplexCoordTranslator *trans = nullptr;
+			std::shared_ptr<ComplexCoordTranslator> trans = nullptr;
 			if (translator->getType() == ComplexCoord) {
-				trans = (ComplexCoordTranslator *) translator;
+				std::shared_ptr<CoordTranslator> shtrans = std::move(translator);
+				trans = std::static_pointer_cast<ComplexCoordTranslator>(shtrans);
 			} else {
-				trans = new ComplexCoordTranslator(translator);
+				std::shared_ptr<CoordTranslator> shtrans = std::move(translator);
+				trans = std::make_shared<ComplexCoordTranslator>(shtrans);
 			}
 			CalxGcodeHandle *gcodeHandle = new CalxGcodeHandle(
 			    mainPanel, wxID_ANY,

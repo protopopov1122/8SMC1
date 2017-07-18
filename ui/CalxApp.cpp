@@ -145,6 +145,7 @@ namespace CalXUI {
 
 #undef SETUP_LOG
 
+
 		std::string ext_addr = conf->getEntry("ext")->getString("engine", "");
 		std::unique_ptr<ExtEngine> ext = nullptr;
 		if (!ext_addr.empty()) {
@@ -190,7 +191,7 @@ namespace CalXUI {
 		    new SystemManager(std::move(devman), std::move(conf), std::move(ext));
 		this->error_handler = new CalxErrorHandler(this->sysman);
 
-		if (this->debug_mode && conf->getEntry("ui")->getBool("console", false)) {
+		if (this->debug_mode && sysman->getConfiguration()->getEntry("ui")->getBool("console", false)) {
 			this->debug_console = new CalxDebugConsole(this->sysman);
 			this->debug_console->Run();
 		} else {

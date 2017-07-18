@@ -33,7 +33,7 @@ namespace CalXUI {
 		CalxGcodeLoader(wxWindow *, wxWindowID);
 		bool isLoaded();
 		std::string getPath();
-		ComplexCoordTranslator *getTranslator();
+		std::shared_ptr<ComplexCoordTranslator> getTranslator();
 		void ShowLoader();
 
 	 private:

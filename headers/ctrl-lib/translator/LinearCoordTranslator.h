@@ -28,10 +28,10 @@ namespace CalX {
 	class LinearCoordTranslator : public CoordTranslator {
 	 public:
 		LinearCoordTranslator(coord_point_t, coord_scale_t,
-		                      CoordTranslator * = nullptr);
+		                      std::shared_ptr<CoordTranslator> = nullptr);
 		virtual ~LinearCoordTranslator();
-		virtual CoordTranslator *getBase();
-		virtual void setBase(CoordTranslator *);
+		virtual std::shared_ptr<CoordTranslator> getBase();
+		virtual void setBase(std::shared_ptr<CoordTranslator>);
 		coord_point_t getOffset();
 		coord_scale_t getScale();
 		void setOffset(coord_point_t);
@@ -40,10 +40,10 @@ namespace CalX {
 		virtual coord_point_t get(motor_point_t);
 		virtual coord_point_t floatGet(double, double);
 		virtual coord_point_t floatGet(coord_point_t);
-		virtual CoordTranslator *clone(CoordTranslator *);
+		virtual std::unique_ptr<CoordTranslator> clone(std::shared_ptr<CoordTranslator>);
 
 	 private:
-		CoordTranslator *base;
+		std::shared_ptr<CoordTranslator> base;
 		coord_point_t offset;
 		coord_scale_t scale;
 	};

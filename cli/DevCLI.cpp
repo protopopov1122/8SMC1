@@ -765,7 +765,7 @@ namespace CalX {
 			}
 			motor_point_t center = { std::stoi(args.at(1)), std::stoi(args.at(2)) };
 			motor_size_t scale = { std::stoi(args.at(3)), std::stoi(args.at(4)) };
-			BasicCoordTranslator *trans = new BasicCoordTranslator(center, scale);
+			std::shared_ptr<BasicCoordTranslator> trans = std::make_shared<BasicCoordTranslator>(center, scale);
 			std::string path = args.at(5);
 			std::ifstream is(path, std::ifstream::in);
 			sysman->addTask(std::make_unique<GCodeCoordTask>(&is, trans));

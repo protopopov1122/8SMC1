@@ -33,7 +33,7 @@ namespace CalXUI {
 	class CalxGcodeHandle : public CalxTaskHandle {
 	 public:
 		CalxGcodeHandle(wxWindow *, wxWindowID, std::string, std::istream *,
-		                ComplexCoordTranslator *);
+		                std::shared_ptr<ComplexCoordTranslator>);
 		virtual std::string getName();
 		virtual CoordTask *getTask();
 		virtual void update();
@@ -44,7 +44,7 @@ namespace CalXUI {
 
 		std::string id;
 		CalxCoordFilterCtrl *filter;
-		ComplexCoordTranslator *translator;
+		std::shared_ptr<ComplexCoordTranslator> translator;
 
 		CoordTask *task;
 	};

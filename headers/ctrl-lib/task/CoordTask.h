@@ -90,18 +90,18 @@ namespace CalX {
 
 	class GCodeCoordTask : public CoordTask {
 	 public:
-		GCodeCoordTask(std::istream *, CoordTranslator *);
+		GCodeCoordTask(std::istream *, std::shared_ptr<CoordTranslator>);
 		virtual ~GCodeCoordTask();
 		virtual ErrorCode perform(CoordPlane *, TaskParameters &, SystemManager *,
 		                          TaskState *);
 
 		std::string getGCode();
-		CoordTranslator *getTranslator();
+		std::shared_ptr<CoordTranslator> getTranslator();
 
 	 private:
 		std::string code;
 		GCodeStream *stream;
-		CoordTranslator *translator;
+		std::shared_ptr<CoordTranslator> translator;
 	};
 }
 

@@ -30,18 +30,18 @@ namespace CalX {
 		this->devman = std::move(devman);
 		this->conf = std::move(conf);
 		this->ext_engine = std::move(ext_eng);
-		for (device_id_t d = 0; d < (device_id_t) devman->getMotorCount(); d++) {
+		for (device_id_t d = 0; d < (device_id_t) this->devman->getMotorCount(); d++) {
 			this->dev.push_back(std::make_unique<MotorController>(
 			    this->devman->getMotor(d), this->getConfiguration()));
 		}
-		for (device_id_t i = 0; i < (device_id_t) devman->getInstrumentCount();
+		for (device_id_t i = 0; i < (device_id_t) this->devman->getInstrumentCount();
 		     i++) {
 			this->instr.push_back(std::make_unique<InstrumentController>(
 			    this->devman->getInstrument(i)));
 		}
 		LOG(SYSMAN_TAG,
-		    "System startup. Found " + std::to_string(devman->getMotorCount()) +
-		        " motors and " + std::to_string(devman->getInstrumentCount()) +
+		    "System startup. Found " + std::to_string(this->devman->getMotorCount()) +
+		        " motors and " + std::to_string(this->devman->getInstrumentCount()) +
 		        " instruments.");
 		FunctionEngine_add_default_functions(&this->engine);
 		this->resolver = std::make_unique<RequestResolver>(this);

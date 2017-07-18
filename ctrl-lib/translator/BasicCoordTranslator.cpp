@@ -88,7 +88,7 @@ namespace CalX {
 		return pnt;
 	}
 
-	CoordTranslator *BasicCoordTranslator::clone(CoordTranslator *base) {
-		return new BasicCoordTranslator(this->center, this->scale);
+	std::unique_ptr<CoordTranslator> BasicCoordTranslator::clone(std::shared_ptr<CoordTranslator> base) {
+		return std::make_unique<BasicCoordTranslator>(this->center, this->scale);
 	}
 }

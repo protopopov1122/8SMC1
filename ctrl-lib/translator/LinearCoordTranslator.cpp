@@ -24,7 +24,7 @@ namespace CalX {
 
 	LinearCoordTranslator::LinearCoordTranslator(coord_point_t cen,
 	                                             coord_scale_t sc,
-	                                             CoordTranslator *base)
+	                                             std::shared_ptr<CoordTranslator> base)
 	    : CoordTranslator::CoordTranslator(CoordType::LinearCoord) {
 		this->base = base;
 		this->offset = cen;
@@ -44,11 +44,11 @@ namespace CalX {
 		return this->scale;
 	}
 
-	CoordTranslator *LinearCoordTranslator::getBase() {
+	std::shared_ptr<CoordTranslator> LinearCoordTranslator::getBase() {
 		return this->base;
 	}
 
-	void LinearCoordTranslator::setBase(CoordTranslator *t) {
+	void LinearCoordTranslator::setBase(std::shared_ptr<CoordTranslator> t) {
 		this->base = t;
 	}
 
@@ -112,10 +112,10 @@ namespace CalX {
 		return out;
 	}
 
-	CoordTranslator *LinearCoordTranslator::clone(CoordTranslator *base) {
+	std::unique_ptr<CoordTranslator> LinearCoordTranslator::clone(std::shared_ptr<CoordTranslator> base) {
 		if (base == nullptr && this->base != nullptr) {
 			base = this->base->clone(nullptr);
 		}
-		return new LinearCoordTranslator(this->offset, this->scale, base);
+		return std::make_unique<LinearCoordTranslator>(this->offset, this->scale, base);
 	}
 }

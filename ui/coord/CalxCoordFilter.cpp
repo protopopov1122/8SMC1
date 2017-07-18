@@ -30,7 +30,7 @@ namespace CalXUI {
 	    : wxPanel::wxPanel(win, id) {}
 
 	CalxCoordBasicFilter::CalxCoordBasicFilter(wxWindow *win, wxWindowID id,
-	                                           BasicCoordTranslator *tr)
+	                                           std::shared_ptr<BasicCoordTranslator> tr)
 	    : CalxCoordFilter::CalxCoordFilter(win, id) {
 		this->translator = tr;
 
@@ -74,7 +74,7 @@ namespace CalXUI {
 		Layout();
 	}
 
-	CoordTranslator *CalxCoordBasicFilter::getTranslator() {
+	std::shared_ptr<CoordTranslator> CalxCoordBasicFilter::getTranslator() {
 		updateData();
 		return this->translator;
 	}
@@ -88,7 +88,7 @@ namespace CalXUI {
 	}
 
 	CalxCoordLinearFilter::CalxCoordLinearFilter(wxWindow *win, wxWindowID id,
-	                                             LinearCoordTranslator *ctrl)
+	                                             std::shared_ptr<LinearCoordTranslator> ctrl)
 	    : CalxCoordFilter::CalxCoordFilter(win, id) {
 		this->translator = ctrl;
 
@@ -137,7 +137,7 @@ namespace CalXUI {
 		Layout();
 	}
 
-	CoordTranslator *CalxCoordLinearFilter::getTranslator() {
+	std::shared_ptr<CoordTranslator> CalxCoordLinearFilter::getTranslator() {
 		updateData();
 		return this->translator;
 	}
@@ -159,7 +159,7 @@ namespace CalXUI {
 	}
 
 	CalxCoordLogarithmicFilter::CalxCoordLogarithmicFilter(
-	    wxWindow *win, wxWindowID id, LogarithmicCoordTranslator *trans)
+	    wxWindow *win, wxWindowID id, std::shared_ptr<LogarithmicCoordTranslator> trans)
 	    : CalxCoordFilter::CalxCoordFilter(win, id) {
 		this->translator = trans;
 
@@ -192,7 +192,7 @@ namespace CalXUI {
 		Layout();
 	}
 
-	CoordTranslator *CalxCoordLogarithmicFilter::getTranslator() {
+	std::shared_ptr<CoordTranslator> CalxCoordLogarithmicFilter::getTranslator() {
 		updateData();
 		return this->translator;
 	}
@@ -210,7 +210,7 @@ namespace CalXUI {
 	}
 
 	CalxCoordPolarFilter::CalxCoordPolarFilter(wxWindow *win, wxWindowID id,
-	                                           PolarCoordTranslator *polar)
+	                                           std::shared_ptr<PolarCoordTranslator> polar)
 	    : CalxCoordFilter::CalxCoordFilter(win, id) {
 		this->translator = polar;
 
@@ -221,12 +221,12 @@ namespace CalXUI {
 		                               "parameters.\n Add other filters.")));
 	}
 
-	CoordTranslator *CalxCoordPolarFilter::getTranslator() {
+	std::shared_ptr<CoordTranslator> CalxCoordPolarFilter::getTranslator() {
 		return this->translator;
 	}
 
 	CalxCoordFilterCtrl::CalxCoordFilterCtrl(wxWindow *win, wxWindowID id,
-	                                         ComplexCoordTranslator *tr)
+	                                         std::shared_ptr<ComplexCoordTranslator> tr)
 	    : CalxCoordFilter::CalxCoordFilter(win, id) {
 		wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 		SetSizer(sizer);
@@ -270,8 +270,8 @@ namespace CalXUI {
 			coord_point_t cen = wxGetApp().getUnitOffset();
 			coord_scale_t scl = { wxGetApp().getUnitScale(),
 				                    wxGetApp().getUnitScale() };
-			LinearCoordTranslator *basic = new LinearCoordTranslator(cen, scl);
-			this->trans = new ComplexCoordTranslator(basic);
+			std::shared_ptr<LinearCoordTranslator> basic = std::make_shared<LinearCoordTranslator>(cen, scl);
+			this->trans = std::make_shared<ComplexCoordTranslator>(basic);
 			addFilter(basic);
 		} else {
 			for (size_t i = 0; i < trans->getSize(); i++) {
@@ -283,7 +283,7 @@ namespace CalXUI {
 		Fit();
 	}
 
-	ComplexCoordTranslator *CalxCoordFilterCtrl::getTranslator() {
+	std::shared_ptr<CoordTranslator> CalxCoordFilterCtrl::getTranslator() {
 		for (const auto &f : this->filter) {
 			f->getTranslator();
 		}
@@ -308,29 +308,29 @@ namespace CalXUI {
 	}
 
 	void CalxCoordFilterCtrl::OnAddLinearClick(wxCommandEvent &evt) {
-		CoordTranslator *base =
+		std::shared_ptr<CoordTranslator> base =
 		    this->trans->getTranslator(this->trans->getSize() - 1);
 		coord_point_t offset = { 0, 0 };
 		coord_scale_t scale = { 1, 1 };
-		LinearCoordTranslator *linear =
-		    new LinearCoordTranslator(offset, scale, base);
+		std::shared_ptr<LinearCoordTranslator> linear =
+		    std::make_shared<LinearCoordTranslator>(offset, scale, base);
 		this->trans->add(linear);
 		addFilter(linear);
 	}
 
 	void CalxCoordFilterCtrl::OnAddLogarithmicClick(wxCommandEvent &evt) {
-		CoordTranslator *base =
+		std::shared_ptr<CoordTranslator> base =
 		    this->trans->getTranslator(this->trans->getSize() - 1);
 		coord_scale_t sc = { 0, 0 };
-		LogarithmicCoordTranslator *logt = new LogarithmicCoordTranslator(sc, base);
+		std::shared_ptr<LogarithmicCoordTranslator> logt = std::make_shared<LogarithmicCoordTranslator>(sc, base);
 		this->trans->add(logt);
 		addFilter(logt);
 	}
 
 	void CalxCoordFilterCtrl::OnAddPolarClick(wxCommandEvent &evt) {
-		CoordTranslator *base =
+		std::shared_ptr<CoordTranslator> base =
 		    this->trans->getTranslator(this->trans->getSize() - 1);
-		PolarCoordTranslator *polar = new PolarCoordTranslator(base);
+		std::shared_ptr<PolarCoordTranslator> polar = std::make_shared<PolarCoordTranslator>(base);
 		this->trans->add(polar);
 		addFilter(polar);
 	}
@@ -349,27 +349,27 @@ namespace CalXUI {
 		updateUI();
 	}
 
-	void CalxCoordFilterCtrl::addFilter(CoordTranslator *tr) {
+	void CalxCoordFilterCtrl::addFilter(std::shared_ptr<CoordTranslator> tr) {
 		CalxCoordFilter *fil = nullptr;
 		switch (tr->getType()) {
 			case CoordType::BasicCoord:
 				fil = new CalxCoordBasicFilter(mainPanel, wxID_ANY,
-				                               (BasicCoordTranslator *) tr);
+				                               std::static_pointer_cast<BasicCoordTranslator>(tr));
 				filterList->Append(__("Basic"));
 				break;
 			case CoordType::LinearCoord:
 				fil = new CalxCoordLinearFilter(mainPanel, wxID_ANY,
-				                                (LinearCoordTranslator *) tr);
+				                                std::static_pointer_cast<LinearCoordTranslator>(tr));
 				filterList->Append(__("Linear"));
 				break;
 			case CoordType::LogarithmicCoord:
 				fil = new CalxCoordLogarithmicFilter(mainPanel, wxID_ANY,
-				                                     (LogarithmicCoordTranslator *) tr);
+				                                     std::static_pointer_cast<LogarithmicCoordTranslator>(tr));
 				filterList->Append(__("Logarithmic"));
 				break;
 			case CoordType::PolarCoord:
 				fil = new CalxCoordPolarFilter(mainPanel, wxID_ANY,
-				                               (PolarCoordTranslator *) tr);
+				                               std::static_pointer_cast<PolarCoordTranslator>(tr));
 				filterList->Append(__("Polar"));
 				break;
 			default:

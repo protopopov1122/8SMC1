@@ -24,7 +24,7 @@
 
 namespace CalX {
 
-	GCodeCoordTask::GCodeCoordTask(std::istream *input, CoordTranslator *trans)
+	GCodeCoordTask::GCodeCoordTask(std::istream *input, std::shared_ptr<CoordTranslator> trans)
 	    : CoordTask::CoordTask(CoordTaskType::GCodeTask) {
 		int ch;
 		std::stringstream ss;
@@ -40,7 +40,6 @@ namespace CalX {
 
 	GCodeCoordTask::~GCodeCoordTask() {
 		delete this->stream;
-		delete this->translator;
 		DESTROY_LOG("GCodeCoordTask");
 	}
 
@@ -59,7 +58,7 @@ namespace CalX {
 		return this->code;
 	}
 
-	CoordTranslator *GCodeCoordTask::getTranslator() {
+	std::shared_ptr<CoordTranslator> GCodeCoordTask::getTranslator() {
 		return this->translator;
 	}
 }

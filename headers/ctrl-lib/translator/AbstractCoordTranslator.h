@@ -24,6 +24,7 @@
 #include "ctrl-lib/CtrlCore.h"
 #include <iostream>
 #include <string>
+#include <memory>
 
 /* Coordinate translators are used to map
    floating point coordinates to integer ones(as well as floats).
@@ -72,11 +73,11 @@ namespace CalX {
 		virtual coord_point_t get(motor_point_t) = 0;
 		virtual coord_point_t floatGet(double, double) = 0;
 		virtual coord_point_t floatGet(coord_point_t) = 0;
-		virtual CoordTranslator *getBase() {
+		virtual std::shared_ptr<CoordTranslator> getBase() {
 			return nullptr;
 		}
-		virtual void setBase(CoordTranslator *b) {}
-		virtual CoordTranslator *clone(CoordTranslator *) = 0;
+		virtual void setBase(std::shared_ptr<CoordTranslator>) {}
+		virtual std::unique_ptr<CoordTranslator> clone(std::shared_ptr<CoordTranslator>) = 0;
 
 	 private:
 		CoordType type;

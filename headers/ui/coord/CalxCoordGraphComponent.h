@@ -55,7 +55,7 @@ namespace CalXUI {
 		wxSpinCtrlDouble *ymax;
 		wxSpinCtrlDouble *step;
 		CalxCoordFilter *translator;
-		ComplexCoordTranslator *trans;
+		std::shared_ptr<ComplexCoordTranslator> trans;
 		wxSpinCtrlDouble *speed;
 
 		CalxCoordController *controller;

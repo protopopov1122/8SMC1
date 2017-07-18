@@ -28,23 +28,23 @@ namespace CalX {
 
 	class ComplexCoordTranslator : public CoordTranslator {
 	 public:
-		ComplexCoordTranslator(CoordTranslator *);
+		ComplexCoordTranslator(std::shared_ptr<CoordTranslator>);
 		virtual ~ComplexCoordTranslator();
 		virtual motor_point_t get(double, double);
 		virtual coord_point_t get(motor_point_t);
 		virtual coord_point_t floatGet(double, double);
 		virtual coord_point_t floatGet(coord_point_t);
 		size_t getSize();
-		CoordTranslator *getTranslator(size_t);
-		void add(CoordTranslator *);
+		std::shared_ptr<CoordTranslator> getTranslator(size_t);
+		void add(std::shared_ptr<CoordTranslator>);
 		bool remove(size_t);
-		bool insert(size_t, CoordTranslator *);
-		virtual CoordTranslator *getBase();
-		virtual void setBase(CoordTranslator *);
-		virtual ComplexCoordTranslator *clone(CoordTranslator *);
+		bool insert(size_t, std::shared_ptr<CoordTranslator>);
+		virtual std::shared_ptr<CoordTranslator> getBase();
+		virtual void setBase(std::shared_ptr<CoordTranslator>);
+		virtual std::unique_ptr<CoordTranslator> clone(std::shared_ptr<CoordTranslator>);
 
 	 private:
-		std::vector<CoordTranslator *> list;
+		std::vector<std::shared_ptr<CoordTranslator>> list;
 	};
 }
 

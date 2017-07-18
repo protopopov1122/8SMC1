@@ -135,8 +135,8 @@ namespace CalXUI {
 			static_cast<double>(conf->getEntry("coords")->getReal("scale_x", 1.0)),
 			static_cast<double>(conf->getEntry("coords")->getReal("scale_y", 1.0))
 		};
-		LinearCoordTranslator *basic = new LinearCoordTranslator(cen, scl);
-		this->trans = new ComplexCoordTranslator(basic);
+		std::shared_ptr<LinearCoordTranslator> basic = std::make_shared<LinearCoordTranslator>(cen, scl);
+		this->trans = std::make_shared<ComplexCoordTranslator>(basic);
 		this->translator = new CalxCoordFilterCtrl(this, wxID_ANY, this->trans);
 		sizer->Add(this->translator, 1, wxALL | wxEXPAND, 5);
 
@@ -148,7 +148,6 @@ namespace CalXUI {
 	}
 
 	void CalxCoordGraphComponent::OnClose(wxCloseEvent &evt) {
-		delete this->translator->getTranslator();
 	}
 
 	void CalxCoordGraphComponent::OnBuildClick(wxCommandEvent &evt) {
@@ -169,7 +168,7 @@ namespace CalXUI {
 		coord_point_t min = { minx, miny };
 		coord_point_t max = { maxx, maxy };
 		GraphBuilder *graph = new GraphBuilder(node, min, max, step);
-		this->controller->build(this->translator->getTranslator(), graph, speed);
+		this->controller->build(this->translator->getTranslator().get(), graph, speed);
 	}
 
 	void CalxCoordGraphComponent::OnPreviewClick(wxCommandEvent &evt) {
@@ -198,7 +197,7 @@ namespace CalXUI {
 		CalxVirtualPlaneDialog *dialog = new CalxVirtualPlaneDialog(
 		    this, wxID_ANY, this->controller->getHandle(), wxSize(500, 500));
 
-		this->controller->preview(dialog, this->translator->getTranslator(), graph,
+		this->controller->preview(dialog, this->translator->getTranslator().get(), graph,
 		                          speed);
 		dialog->ShowModal();
 		delete dialog;

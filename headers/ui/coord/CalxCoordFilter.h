@@ -31,17 +31,17 @@ namespace CalXUI {
 	class CalxCoordFilter : public wxPanel {
 	 public:
 		CalxCoordFilter(wxWindow *, wxWindowID);
-		virtual CoordTranslator *getTranslator() = 0;
+		virtual std::shared_ptr<CoordTranslator> getTranslator() = 0;
 	};
 
 	class CalxCoordBasicFilter : public CalxCoordFilter {
 	 public:
-		CalxCoordBasicFilter(wxWindow *, wxWindowID, BasicCoordTranslator *);
-		virtual CoordTranslator *getTranslator();
+		CalxCoordBasicFilter(wxWindow *, wxWindowID, std::shared_ptr<BasicCoordTranslator>);
+		virtual std::shared_ptr<CoordTranslator> getTranslator();
 
 	 private:
 		void updateData();
-		BasicCoordTranslator *translator;
+		std::shared_ptr<BasicCoordTranslator> translator;
 		wxSpinCtrl *xoffset;
 		wxSpinCtrl *yoffset;
 		wxSpinCtrl *xscale;
@@ -50,14 +50,14 @@ namespace CalXUI {
 
 	class CalxCoordLinearFilter : public CalxCoordFilter {
 	 public:
-		CalxCoordLinearFilter(wxWindow *, wxWindowID, LinearCoordTranslator *);
-		virtual CoordTranslator *getTranslator();
+		CalxCoordLinearFilter(wxWindow *, wxWindowID, std::shared_ptr<LinearCoordTranslator>);
+		virtual std::shared_ptr<CoordTranslator> getTranslator();
 
 	 private:
 		void updateData();
 		void OnFieldChange(wxCommandEvent &);
 
-		LinearCoordTranslator *translator;
+		std::shared_ptr<LinearCoordTranslator> translator;
 		wxSpinCtrlDouble *xoffset;
 		wxSpinCtrlDouble *yoffset;
 		wxSpinCtrlDouble *xscale;
@@ -67,32 +67,32 @@ namespace CalXUI {
 	class CalxCoordLogarithmicFilter : public CalxCoordFilter {
 	 public:
 		CalxCoordLogarithmicFilter(wxWindow *, wxWindowID,
-		                           LogarithmicCoordTranslator *);
-		virtual CoordTranslator *getTranslator();
+		                           std::shared_ptr<LogarithmicCoordTranslator>);
+		virtual std::shared_ptr<CoordTranslator> getTranslator();
 
 	 private:
 		void updateData();
 		void OnFieldChange(wxCommandEvent &);
 
-		LogarithmicCoordTranslator *translator;
+		std::shared_ptr<LogarithmicCoordTranslator> translator;
 		wxSpinCtrlDouble *xscale;
 		wxSpinCtrlDouble *yscale;
 	};
 
 	class CalxCoordPolarFilter : public CalxCoordFilter {
 	 public:
-		CalxCoordPolarFilter(wxWindow *, wxWindowID, PolarCoordTranslator *);
-		virtual CoordTranslator *getTranslator();
+		CalxCoordPolarFilter(wxWindow *, wxWindowID, std::shared_ptr<PolarCoordTranslator>);
+		virtual std::shared_ptr<CoordTranslator> getTranslator();
 
 	 private:
-		PolarCoordTranslator *translator;
+		std::shared_ptr<PolarCoordTranslator> translator;
 	};
 
 	class CalxCoordFilterCtrl : public CalxCoordFilter {
 	 public:
 		CalxCoordFilterCtrl(wxWindow *, wxWindowID,
-		                    ComplexCoordTranslator * = nullptr);
-		virtual ComplexCoordTranslator *getTranslator();
+		                    std::shared_ptr<ComplexCoordTranslator> = nullptr);
+		virtual std::shared_ptr<CoordTranslator> getTranslator();
 		void updateUI();
 
 	 private:
@@ -102,13 +102,13 @@ namespace CalXUI {
 		void OnAddPolarClick(wxCommandEvent &);
 		void OnRemoveClick(wxCommandEvent &);
 
-		void addFilter(CoordTranslator *);
+		void addFilter(std::shared_ptr<CoordTranslator>);
 
 		wxPanel *mainPanel;
 		wxListBox *filterList;
 		wxButton *removeButton;
 
-		ComplexCoordTranslator *trans;
+		std::shared_ptr<ComplexCoordTranslator> trans;
 		std::vector<CalxCoordFilter *> filter;
 	};
 }

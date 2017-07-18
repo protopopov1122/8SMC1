@@ -25,7 +25,7 @@ namespace CalXUI {
 
 	CalxGcodeHandle::CalxGcodeHandle(wxWindow *win, wxWindowID id,
 	                                 std::string sid, std::istream *is,
-	                                 ComplexCoordTranslator *tr)
+	                                 std::shared_ptr<ComplexCoordTranslator> tr)
 	    : CalxTaskHandle::CalxTaskHandle(win, id) {
 		this->id = sid;
 		this->translator = tr;
@@ -62,7 +62,6 @@ namespace CalXUI {
 	}
 
 	void CalxGcodeHandle::OnExit(wxCloseEvent &evt) {
-		delete this->translator;
 		Destroy();
 	}
 
@@ -71,7 +70,7 @@ namespace CalXUI {
 	}
 
 	CoordTranslator *CalxGcodeHandle::getTranslator() {
-		return this->translator;
+		return this->translator.get();
 	}
 
 	CalxTaskHandle *CalxGCodeTaskFactory::newTask(wxWindow *win) {

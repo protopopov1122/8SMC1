@@ -61,11 +61,11 @@ namespace CalXUI {
 		coord_point_t unit_offset = wxGetApp().getUnitOffset();
 		coord_scale_t unit_scale = { wxGetApp().getUnitScale(),
 			                           wxGetApp().getUnitScale() };
-		LinearCoordTranslator *unit_trans =
-		    new LinearCoordTranslator(unit_offset, unit_scale);
-		LinearCoordTranslator *trans =
-		    new LinearCoordTranslator(trans_offset, trans_scale, unit_trans);
-		ComplexCoordTranslator *ctrans = new ComplexCoordTranslator(unit_trans);
+		std::shared_ptr<LinearCoordTranslator> unit_trans =
+		    std::make_shared<LinearCoordTranslator>(unit_offset, unit_scale);
+		std::shared_ptr<LinearCoordTranslator> trans =
+		    std::make_shared<LinearCoordTranslator>(trans_offset, trans_scale, unit_trans);
+		std::shared_ptr<ComplexCoordTranslator> ctrans = std::make_shared<ComplexCoordTranslator>(unit_trans);
 		ctrans->add(trans);
 
 		this->translator = new CalxCoordFilterCtrl(mainPanel, wxID_ANY, ctrans);
@@ -102,8 +102,8 @@ namespace CalXUI {
 		return this->gcodePath->GetValue().ToStdString();
 	}
 
-	ComplexCoordTranslator *CalxGcodeLoader::getTranslator() {
-		return this->translator->getTranslator();
+	std::shared_ptr<ComplexCoordTranslator> CalxGcodeLoader::getTranslator() {
+		return std::static_pointer_cast<ComplexCoordTranslator>(this->translator->getTranslator());
 	}
 
 	void CalxGcodeLoader::OnOkClick(wxCommandEvent &evt) {
@@ -112,7 +112,6 @@ namespace CalXUI {
 	}
 
 	void CalxGcodeLoader::OnCancelClick(wxCommandEvent &evt) {
-		delete this->translator->getTranslator();
 		Hide();
 	}
 
