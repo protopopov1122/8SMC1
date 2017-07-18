@@ -36,6 +36,7 @@ namespace CalXUI {
 
 	class CalxDeviceConstructor {
 	 public:
+		virtual ~CalxDeviceConstructor() {}
 		virtual CalxDeviceHandle *construct(wxWindow *) = 0;
 	};
 

@@ -43,7 +43,9 @@ namespace CalX {
 
 	class SystemManager {
 	 public:
-		SystemManager(std::unique_ptr<DeviceManager>, std::unique_ptr<ConfigManager>, std::unique_ptr<ExtEngine> = nullptr);
+		SystemManager(std::unique_ptr<DeviceManager>,
+		              std::unique_ptr<ConfigManager>,
+		              std::unique_ptr<ExtEngine> = nullptr);
 		virtual ~SystemManager();
 		DeviceManager *getDeviceManager();
 		ConfigManager *getConfiguration();

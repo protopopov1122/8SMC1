@@ -33,7 +33,6 @@ namespace CalXUI {
 
 	CalxDevicePanel::CalxDevicePanel(wxWindow *win, wxWindowID id)
 	    : CalxPanelPane::CalxPanelPane(win, id) {
-		CalxApp &app = wxGetApp();
 		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		this->SetSizer(sizer);

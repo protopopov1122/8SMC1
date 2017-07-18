@@ -83,7 +83,8 @@ namespace CalXUI {
 			             __("Warning"), wxICON_WARNING);
 			conf = std::make_unique<ConfigManager>();
 		} else {
-			conf = std::unique_ptr<ConfigManager>(ConfigManager::load(&cnf, &std::cout));
+			conf =
+			    std::unique_ptr<ConfigManager>(ConfigManager::load(&cnf, &std::cout));
 		}
 		cnf.close();
 
@@ -183,8 +184,10 @@ namespace CalXUI {
 			this->extLib = nullptr;
 		}
 
-		std::unique_ptr<DeviceManager> devman = std::unique_ptr<DeviceManager>(getter());
-		this->sysman = new SystemManager(std::move(devman), std::move(conf), std::move(ext));
+		std::unique_ptr<DeviceManager> devman =
+		    std::unique_ptr<DeviceManager>(getter());
+		this->sysman =
+		    new SystemManager(std::move(devman), std::move(conf), std::move(ext));
 		this->error_handler = new CalxErrorHandler(this->sysman);
 
 		if (this->debug_mode && conf->getEntry("ui")->getBool("console", false)) {

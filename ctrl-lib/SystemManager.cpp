@@ -24,17 +24,20 @@ namespace CalX {
 
 	const char *SYSMAN_TAG = "SysMan";
 
-	SystemManager::SystemManager(std::unique_ptr<DeviceManager> devman, std::unique_ptr<ConfigManager> conf,
+	SystemManager::SystemManager(std::unique_ptr<DeviceManager> devman,
+	                             std::unique_ptr<ConfigManager> conf,
 	                             std::unique_ptr<ExtEngine> ext_eng) {
 		this->devman = std::move(devman);
 		this->conf = std::move(conf);
 		this->ext_engine = std::move(ext_eng);
 		for (device_id_t d = 0; d < (device_id_t) devman->getMotorCount(); d++) {
-			this->dev.push_back(std::make_unique<MotorController>(this->devman->getMotor(d), this->getConfiguration()));
+			this->dev.push_back(std::make_unique<MotorController>(
+			    this->devman->getMotor(d), this->getConfiguration()));
 		}
 		for (device_id_t i = 0; i < (device_id_t) devman->getInstrumentCount();
 		     i++) {
-			this->instr.push_back(std::make_unique<InstrumentController>(this->devman->getInstrument(i)));
+			this->instr.push_back(std::make_unique<InstrumentController>(
+			    this->devman->getInstrument(i)));
 		}
 		LOG(SYSMAN_TAG,
 		    "System startup. Found " + std::to_string(devman->getMotorCount()) +
@@ -117,7 +120,8 @@ namespace CalX {
 
 	ProgrammedCoordTask *SystemManager::createProgrammedTask() {
 		this->tasks.push_back(std::make_unique<ProgrammedCoordTask>());
-		ProgrammedCoordTask *ptr = (ProgrammedCoordTask*) this->getTask(this->getTaskCount() - 1);
+		ProgrammedCoordTask *ptr =
+		    (ProgrammedCoordTask *) this->getTask(this->getTaskCount() - 1);
 		if (this->ext_engine != nullptr) {
 			this->ext_engine->taskAdded(ptr);
 		}
@@ -134,7 +138,7 @@ namespace CalX {
 		if (this->ext_engine != nullptr) {
 			this->ext_engine->taskRemoving(i);
 		}
-		
+
 		this->tasks.erase(this->tasks.begin() + (std::ptrdiff_t) i);
 		LOG(SYSMAN_TAG,
 		    "Removed task # " + std::to_string(i) +
@@ -161,9 +165,10 @@ namespace CalX {
 		}
 
 		CoordController *ctrl = new CoordController(
-		    this->getMotorController(d1), this->getMotorController(d2), this->getConfiguration(),
-		    this->getInstrumentController(instr));
-		std::unique_ptr<CoordHandle> handle = std::make_unique<CoordHandle>(this->coords.size(), ctrl);
+		    this->getMotorController(d1), this->getMotorController(d2),
+		    this->getConfiguration(), this->getInstrumentController(instr));
+		std::unique_ptr<CoordHandle> handle =
+		    std::make_unique<CoordHandle>(this->coords.size(), ctrl);
 		if (getConfiguration()->getEntry("core")->getBool("auto_power_motors",
 		                                                  false)) {
 			ctrl->getXAxis()->enablePower(true);
@@ -212,7 +217,8 @@ namespace CalX {
 			return nullptr;
 		}
 		devman->refresh();
-		std::unique_ptr<MotorController> ctrl = std::make_unique<MotorController>(d, this->getConfiguration());
+		std::unique_ptr<MotorController> ctrl =
+		    std::make_unique<MotorController>(d, this->getConfiguration());
 		this->dev.push_back(std::move(ctrl));
 		MotorController *ptr = this->getMotorController(this->getMotorCount() - 1);
 		if (this->ext_engine != nullptr) {
@@ -229,9 +235,11 @@ namespace CalX {
 		if (i == nullptr) {
 			return nullptr;
 		}
-		std::unique_ptr<InstrumentController> ctrl = std::make_unique<InstrumentController>(i);
+		std::unique_ptr<InstrumentController> ctrl =
+		    std::make_unique<InstrumentController>(i);
 		this->instr.push_back(std::move(ctrl));
-		InstrumentController *ptr = this->getInstrumentController(this->getInstrumentCount() - 1);
+		InstrumentController *ptr =
+		    this->getInstrumentController(this->getInstrumentCount() - 1);
 		if (this->ext_engine != nullptr) {
 			this->ext_engine->instrumentConnected(ptr);
 		}

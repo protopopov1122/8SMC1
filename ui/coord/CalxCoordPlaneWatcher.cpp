@@ -388,6 +388,10 @@ namespace CalXUI {
 		Fit();
 	}
 
+	CalxCoordPlaneWatcher *CalxCoordPlaneWatcherDialog::getWatcher() {
+		return this->watcher;
+	}
+
 	void CalxCoordPlaneWatcherDialog::OnOkClick(wxCommandEvent &evt) {
 		this->watcher->Close(true);
 		Destroy();

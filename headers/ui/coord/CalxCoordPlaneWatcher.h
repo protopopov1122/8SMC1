@@ -101,6 +101,7 @@ namespace CalXUI {
 	 public:
 		CalxCoordPlaneWatcherDialog(wxWindow *, wxWindowID, CoordHandle *,
 		                            CalxWatcherPool *);
+		CalxCoordPlaneWatcher *getWatcher();
 
 	 private:
 		void OnOkClick(wxCommandEvent &);

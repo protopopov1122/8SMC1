@@ -791,7 +791,10 @@ namespace CalX {
 			coord_point_t min = { minx, miny };
 			coord_point_t max = { maxx, maxy };
 			GraphBuilder *graph = new GraphBuilder(node, min, max, step);
-			std::cout << "New graph task #" << sysman->addTask(std::make_unique<GraphCoordTask>(graph, trans, speed)) << std::endl;
+			std::cout << "New graph task #"
+			          << sysman->addTask(
+			                 std::make_unique<GraphCoordTask>(graph, trans, speed))
+			          << std::endl;
 		} else {
 			std::cout << "Wrong command '" << args.at(0) << "'" << std::endl;
 		}

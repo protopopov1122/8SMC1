@@ -29,6 +29,7 @@ namespace CalXUI {
 
 	class CalxDeviceFactory {
 	 public:
+		virtual ~CalxDeviceFactory() {}
 		virtual void newDevice(wxWindow *, CalxDevicePool *, CalxActionQueue *) = 0;
 	};
 }

@@ -63,5 +63,6 @@ namespace CalXUI {
 		CalxCoordPlaneWatcherDialog *watcher = new CalxCoordPlaneWatcherDialog(
 		    this->parent, wxID_ANY, this->handle, this);
 		watcher->Show(true);
+		return watcher->getWatcher();
 	}
 }
