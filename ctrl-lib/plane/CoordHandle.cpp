@@ -22,19 +22,17 @@
 
 namespace CalX {
 
-	CoordHandle::CoordHandle(size_t id, CoordController *root)
+	CoordHandle::CoordHandle(size_t id, std::shared_ptr<CoordController> root)
 	    : CoordPlaneStack::CoordPlaneStack(root) {
 		this->id = id;
 		this->root = root;
 		coord_point_t offset = { 0.0, 0.0 };
 		coord_scale_t scale = { 1.0, 1.0 };
-		this->floatPlane = new FloatCoordPlane(offset, scale, 1.0, root);
+		this->floatPlane = std::make_shared<FloatCoordPlane>(offset, scale, 1.0, root);
 		INIT_LOG("CoordHandle");
 	}
 
 	CoordHandle::~CoordHandle() {
-		delete this->root;
-		delete this->floatPlane;
 		DESTROY_LOG("CoordHandle");
 	}
 
@@ -42,11 +40,11 @@ namespace CalX {
 		return this->id;
 	}
 
-	CoordController *CoordHandle::getController() {
+	std::shared_ptr<CoordController> CoordHandle::getController() {
 		return this->root;
 	}
 
-	FloatCoordPlane *CoordHandle::getFloatPlane() {
+	std::shared_ptr<FloatCoordPlane> CoordHandle::getFloatPlane() {
 		return this->floatPlane;
 	}
 
@@ -59,7 +57,7 @@ namespace CalX {
 		}
 	}
 
-	void CoordHandle::pushPlane(CoordPlane *pl) {
+	void CoordHandle::pushPlane(std::shared_ptr<CoordPlane> pl) {
 		CoordPlaneStack::pushPlane(pl);
 		this->floatPlane->setBase(this->peekPlane());
 	}

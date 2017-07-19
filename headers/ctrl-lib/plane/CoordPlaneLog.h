@@ -27,10 +27,10 @@ namespace CalX {
 
 	class CoordPlaneLog : public CoordPlane {
 	 public:
-		CoordPlaneLog(CoordPlane *, std::ostream *, std::string, bool = true,
+		CoordPlaneLog(std::shared_ptr<CoordPlane>, std::ostream *, std::string, bool = true,
 		              bool = true);
 		virtual ~CoordPlaneLog();
-		CoordPlane *getBase();
+		std::shared_ptr<CoordPlane> getBase();
 		std::string getPrefix();
 		bool isLoggingActions();
 		bool isLoggingErrors();
@@ -50,14 +50,14 @@ namespace CalX {
 		virtual void unuse();
 		virtual void stop();
 		virtual void dump(std::ostream &);
-		virtual CoordPlane *clone(CoordPlane *);
+		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
 		virtual CoordPlaneStatus getStatus();
 		virtual ErrorCode open_session();
 		virtual ErrorCode close_session();
 		virtual bool isUsed();
 
 	 private:
-		CoordPlane *plane;
+		std::shared_ptr<CoordPlane> plane;
 		std::ostream *out;
 		std::string prefix;
 		bool log_actions;

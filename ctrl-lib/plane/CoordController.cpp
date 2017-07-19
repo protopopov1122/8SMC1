@@ -550,8 +550,8 @@ namespace CalX {
 		stop();
 	}
 
-	CoordPlane *CoordController::clone(CoordPlane *base) {
-		return new CoordController(this->xAxis, this->yAxis, this->config,
+	std::unique_ptr<CoordPlane> CoordController::clone(std::shared_ptr<CoordPlane> base) {
+		return std::make_unique<CoordController>(this->xAxis, this->yAxis, this->config,
 		                           this->instr);
 	}
 

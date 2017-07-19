@@ -24,6 +24,7 @@
 #include "ctrl-lib/EventListener.h"
 #include "ctrl-lib/conf/ConfigManager.h"
 #include <iostream>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -65,7 +66,7 @@ namespace CalX {
 		virtual void unuse() = 0;
 		virtual void stop() = 0;
 		virtual void dump(std::ostream &) = 0;
-		virtual CoordPlane *clone(CoordPlane *) = 0;
+		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>) = 0;
 		virtual CoordPlaneStatus getStatus() = 0;
 		virtual ErrorCode open_session();
 		virtual ErrorCode close_session();

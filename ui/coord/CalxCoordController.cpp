@@ -42,12 +42,12 @@ namespace CalXUI {
 		                              ->getConfiguration()
 		                              ->getEntry("units")
 		                              ->getReal("plane_speed_scale", 1.0f);
-		this->unit_map = new CoordPlaneMap(plane_offset, plane_scale,
+		this->unit_map = std::make_shared<CoordPlaneMap>(plane_offset, plane_scale,
 		                                   plane_speed_scale, handle->peekPlane());
 		handle->pushPlane(this->unit_map);
 		motor_point_t validateMin = { INT_MIN, INT_MIN };
 		motor_point_t validateMax = { INT_MAX, INT_MAX };
-		this->validator = new CoordPlaneValidator(validateMin, validateMax,
+		this->validator = std::make_shared<CoordPlaneValidator>(validateMin, validateMax,
 		                                          wxGetApp()
 		                                              .getSystemManager()
 		                                              ->getConfiguration()
@@ -55,13 +55,13 @@ namespace CalXUI {
 		                                              ->getInt("maxspeed", 4000),
 		                                          handle->peekPlane());
 		handle->pushPlane(this->validator);
-		this->log = new CoordPlaneLog(
+		this->log = std::make_shared<CoordPlaneLog>(
 		    handle->peekPlane(), &std::cout,
 		    "Plane #" + std::to_string(handle->getID()) + ": ", false);
 		handle->pushPlane(this->log);
 		motor_point_t mapOffset = { 0, 0 };
 		motor_scale_t mapScale = { 1.0f, 1.0f };
-		this->map = new CoordPlaneMap(mapOffset, mapScale, 1, handle->peekPlane());
+		this->map = std::make_shared<CoordPlaneMap>(mapOffset, mapScale, 1, handle->peekPlane());
 		handle->pushPlane(this->map);
 
 		coord_scale_t unit_scale = { wxGetApp().getUnitScale(),

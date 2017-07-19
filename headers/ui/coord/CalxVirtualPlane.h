@@ -33,7 +33,7 @@ namespace CalXUI {
 		CalxPlaneTracker(motor_point_t, motor_rect_t);
 		virtual ~CalxPlaneTracker();
 
-		virtual CoordPlane *clone(CoordPlane *);
+		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
 		std::vector<std::pair<motor_point_t, bool>> *getPath();
 		void reset();
 
@@ -59,9 +59,9 @@ namespace CalXUI {
 		void OnResizeEvent(wxSizeEvent &);
 		void render(wxDC &);
 
-		CalxPlaneTracker *tracker;
-		CoordPlaneStack *stack;
-		FloatCoordPlane *float_plane;
+		std::shared_ptr<CalxPlaneTracker> tracker;
+		std::shared_ptr<CoordPlaneStack> stack;
+		std::shared_ptr<FloatCoordPlane> float_plane;
 		CoordHandle *base;
 
 		wxColour pointer_colour;

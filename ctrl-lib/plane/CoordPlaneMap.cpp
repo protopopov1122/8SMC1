@@ -23,7 +23,7 @@
 namespace CalX {
 
 	CoordPlaneMap::CoordPlaneMap(motor_point_t offset, motor_scale_t scale,
-	                             float speedSc, CoordPlane *plane) {
+	                             float speedSc, std::shared_ptr<CoordPlane> plane) {
 		this->offset = offset;
 		this->scale = scale;
 		this->plane = plane;
@@ -35,7 +35,7 @@ namespace CalX {
 		DESTROY_LOG("CoordPlaneMap");
 	}
 
-	CoordPlane *CoordPlaneMap::getBase() {
+	std::shared_ptr<CoordPlane> CoordPlaneMap::getBase() {
 		return this->plane;
 	}
 
@@ -139,8 +139,8 @@ namespace CalX {
 		this->plane->stop();
 	}
 
-	CoordPlane *CoordPlaneMap::clone(CoordPlane *base) {
-		return new CoordPlaneMap(this->offset, this->scale, this->speedScale, base);
+	std::unique_ptr<CoordPlane> CoordPlaneMap::clone(std::shared_ptr<CoordPlane> base) {
+		return std::make_unique<CoordPlaneMap>(this->offset, this->scale, this->speedScale, base);
 	}
 
 	CoordPlaneStatus CoordPlaneMap::getStatus() {

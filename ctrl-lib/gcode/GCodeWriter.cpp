@@ -34,8 +34,8 @@ namespace CalX {
 		*out << "%" << std::endl;
 	}
 
-	CoordPlane *GCodeWriter::clone(CoordPlane *base) {
-		GCodeWriter *writer = new GCodeWriter(base->getPosition(), base->getSize(),
+	std::unique_ptr<CoordPlane> GCodeWriter::clone(std::shared_ptr<CoordPlane> base) {
+		std::unique_ptr<GCodeWriter> writer = std::make_unique<GCodeWriter>(base->getPosition(), base->getSize(),
 		                                      this->trans, this->out);
 		return writer;
 	}

@@ -22,39 +22,34 @@
 
 namespace CalX {
 
-	CoordPlaneStack::CoordPlaneStack(CoordPlane *root) {
+	CoordPlaneStack::CoordPlaneStack(std::shared_ptr<CoordPlane> root) {
 		this->stack.push_back(root);
 		INIT_LOG("CoordPlaneStack");
 	}
 
 	CoordPlaneStack::~CoordPlaneStack() {
-		for (size_t i = 1; i < this->stack.size(); i++) {
-			delete this->stack.at(i);
-		}
 		this->stack.clear();
 		DESTROY_LOG("CoordPlaneStack");
 	}
 
 	bool CoordPlaneStack::popPlane() {
 		if (this->stack.size() > 1) {
-			CoordPlane *plane = this->peekPlane();
 			this->stack.pop_back();
-			delete plane;
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	void CoordPlaneStack::pushPlane(CoordPlane *plane) {
+	void CoordPlaneStack::pushPlane(std::shared_ptr<CoordPlane> plane) {
 		this->stack.push_back(plane);
 	}
 
-	CoordPlane *CoordPlaneStack::peekPlane() {
+	std::shared_ptr<CoordPlane> CoordPlaneStack::peekPlane() {
 		return this->stack.at(this->stack.size() - 1);
 	}
 
-	CoordPlane *CoordPlaneStack::getBase() {
+	std::shared_ptr<CoordPlane> CoordPlaneStack::getBase() {
 		return this->stack.at(0);
 	}
 
@@ -91,7 +86,7 @@ namespace CalX {
 
 	void CoordPlaneStack::dump(std::ostream &os) {
 		for (size_t i = this->stack.size() - 1; i < this->stack.size(); i--) {
-			CoordPlane *plane = this->stack.at(i);
+			std::shared_ptr<CoordPlane> plane = this->stack.at(i);
 			os << "\t";
 			plane->dump(os);
 			os << std::endl;
@@ -110,8 +105,8 @@ namespace CalX {
 		this->peekPlane()->stop();
 	}
 
-	CoordPlaneStack *CoordPlaneStack::clone(CoordPlane *plane) {
-		CoordPlaneStack *stack = new CoordPlaneStack(plane);
+	std::unique_ptr<CoordPlane> CoordPlaneStack::clone(std::shared_ptr<CoordPlane> plane) {
+		std::unique_ptr<CoordPlaneStack> stack = std::make_unique<CoordPlaneStack>(plane);
 		for (size_t i = 1; i < this->stack.size(); i++) {
 			stack->pushPlane(this->stack.at(i)->clone(stack->peekPlane()));
 		}

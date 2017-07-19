@@ -76,10 +76,10 @@ namespace CalXUI {
 
 		// Filters
 		std::vector<CalxCoordFilterListener *> listeners;
-		CoordPlaneLog *log;
-		CoordPlaneMap *map;
-		CoordPlaneValidator *validator;
-		CoordPlaneMap *unit_map;
+		std::shared_ptr<CoordPlaneLog> log;
+		std::shared_ptr<CoordPlaneMap> map;
+		std::shared_ptr<CoordPlaneValidator> validator;
+		std::shared_ptr<CoordPlaneMap> unit_map;
 	};
 }
 

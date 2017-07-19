@@ -24,7 +24,7 @@
 namespace CalX {
 
 	FloatCoordPlane::FloatCoordPlane(coord_point_t offs, coord_scale_t scl,
-	                                 double sp, CoordPlane *bs)
+	                                 double sp, std::shared_ptr<CoordPlane> bs)
 	    : offset(offs), scale(scl), speed(sp), plane(bs) {
 		INIT_LOG("FloatCoordPlane");
 	}
@@ -33,7 +33,7 @@ namespace CalX {
 		DESTROY_LOG("FloatCoordPlane");
 	}
 
-	CoordPlane *FloatCoordPlane::getBase() {
+	std::shared_ptr<CoordPlane> FloatCoordPlane::getBase() {
 		return this->plane;
 	}
 
@@ -49,7 +49,7 @@ namespace CalX {
 		return this->speed;
 	}
 
-	void FloatCoordPlane::setBase(CoordPlane *pl) {
+	void FloatCoordPlane::setBase(std::shared_ptr<CoordPlane> pl) {
 		this->plane = pl;
 	}
 
@@ -141,8 +141,8 @@ namespace CalX {
 		this->plane->stop();
 	}
 
-	CoordPlane *FloatCoordPlane::clone(CoordPlane *base) {
-		return new FloatCoordPlane(this->offset, this->scale, this->speed, base);
+	std::unique_ptr<CoordPlane> FloatCoordPlane::clone(std::shared_ptr<CoordPlane> base) {
+		return std::make_unique<FloatCoordPlane>(this->offset, this->scale, this->speed, base);
 	}
 
 	CoordPlaneStatus FloatCoordPlane::getStatus() {

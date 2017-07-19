@@ -28,13 +28,13 @@ namespace CalX {
 	// Coordinate plane abstraction stacking
 	class CoordPlaneStack : public CoordPlane {
 	 public:
-		CoordPlaneStack(CoordPlane *);
+		CoordPlaneStack(std::shared_ptr<CoordPlane>);
 		virtual ~CoordPlaneStack();
 
-		virtual CoordPlane *peekPlane();
+		virtual std::shared_ptr<CoordPlane> peekPlane();
 		virtual bool popPlane();
-		virtual void pushPlane(CoordPlane *);
-		virtual CoordPlane *getBase();
+		virtual void pushPlane(std::shared_ptr<CoordPlane>);
+		virtual std::shared_ptr<CoordPlane> getBase();
 
 		virtual ErrorCode move(motor_point_t, float, bool);
 		virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,
@@ -48,14 +48,14 @@ namespace CalX {
 		virtual void unuse();
 		virtual void stop();
 		virtual void dump(std::ostream &);
-		virtual CoordPlaneStack *clone(CoordPlane *);
+		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
 		virtual CoordPlaneStatus getStatus();
 		virtual ErrorCode open_session();
 		virtual ErrorCode close_session();
 		virtual bool isUsed();
 
 	 private:
-		std::vector<CoordPlane *> stack;
+		std::vector<std::shared_ptr<CoordPlane>> stack;
 	};
 }
 

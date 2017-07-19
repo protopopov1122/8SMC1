@@ -139,7 +139,7 @@ namespace CalXUI {
 	void CalxCoordActionGraphBuild::perform(SystemManager *sysman) {
 		handle->open_session();
 		wxGetApp().getErrorHandler()->handle(builder->floatBuild(
-		    sysman, handle->getFloatPlane(), translator, speed, &state));
+		    sysman, handle->getFloatPlane().get(), translator, speed, &state));
 		handle->close_session();
 	}
 

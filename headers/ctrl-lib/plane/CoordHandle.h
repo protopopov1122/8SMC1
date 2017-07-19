@@ -28,23 +28,23 @@ namespace CalX {
 
 	class CoordHandle : public CoordPlaneStack {
 	 public:
-		CoordHandle(size_t, CoordController *);
+		CoordHandle(size_t, std::shared_ptr<CoordController>);
 		virtual ~CoordHandle();
 
 		size_t getID();
-		CoordController *getController();
-		FloatCoordPlane *getFloatPlane();
+		std::shared_ptr<CoordController> getController();
+		std::shared_ptr<FloatCoordPlane> getFloatPlane();
 
 		virtual bool popPlane();
-		virtual void pushPlane(CoordPlane *);
+		virtual void pushPlane(std::shared_ptr<CoordPlane>);
 
 		void addEventListener(CoordEventListener *);
 		void removeEventListener(CoordEventListener *);
 
 	 private:
 		size_t id;
-		CoordController *root;
-		FloatCoordPlane *floatPlane;
+		std::shared_ptr<CoordController> root;
+		std::shared_ptr<FloatCoordPlane> floatPlane;
 	};
 }
 

@@ -38,7 +38,7 @@ namespace CalX {
 		virtual motor_point_t getPosition();
 		virtual motor_rect_t getSize();
 		virtual bool isMeasured();
-		virtual CoordPlane *clone(CoordPlane *) = 0;
+		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>) = 0;
 		virtual CoordPlaneStatus getStatus();
 		virtual ErrorCode open_session();
 		virtual ErrorCode close_session();

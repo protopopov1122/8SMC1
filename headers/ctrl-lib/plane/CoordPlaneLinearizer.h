@@ -27,9 +27,9 @@ namespace CalX {
 
 	class CoordPlaneLinearizer : public CoordPlane {
 	 public:
-		CoordPlaneLinearizer(CoordPlane *);
+		CoordPlaneLinearizer(std::shared_ptr<CoordPlane>);
 		virtual ~CoordPlaneLinearizer();
-		CoordPlane *getBase();
+		std::shared_ptr<CoordPlane> getBase();
 
 		virtual ErrorCode move(motor_point_t, float, bool);
 		virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,
@@ -43,14 +43,14 @@ namespace CalX {
 		virtual void unuse();
 		virtual void stop();
 		virtual void dump(std::ostream &);
-		virtual CoordPlane *clone(CoordPlane *);
+		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
 		virtual CoordPlaneStatus getStatus();
 		virtual ErrorCode open_session();
 		virtual ErrorCode close_session();
 		virtual bool isUsed();
 
 	 private:
-		CoordPlane *base;
+		std::shared_ptr<CoordPlane> base;
 		bool work;
 		bool defWork;
 	};

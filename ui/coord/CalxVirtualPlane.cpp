@@ -42,8 +42,8 @@ namespace CalXUI {
 		this->path.clear();
 	}
 
-	CoordPlane *CalxPlaneTracker::clone(CoordPlane *plane) {
-		return new CalxPlaneTracker(this->getPosition(), this->getSize());
+	std::unique_ptr<CoordPlane> CalxPlaneTracker::clone(std::shared_ptr<CoordPlane> plane) {
+		return std::make_unique<CalxPlaneTracker>(this->getPosition(), this->getSize());
 	}
 
 	CalxVirtualPlane::CalxVirtualPlane(wxWindow *win, wxWindowID id,
@@ -52,10 +52,11 @@ namespace CalXUI {
 	      pointer_colour(255, 0, 0),
 	      jump_colour(128, 128, 128),
 	      move_colour(0, 0, 0) {
-		this->tracker = new CalxPlaneTracker(base->getBase()->getPosition(),
+		this->tracker = std::make_shared<CalxPlaneTracker>(base->getBase()->getPosition(),
 		                                     base->getBase()->getSize());
-		this->stack = new CoordPlaneStack(base->clone(this->tracker));
-		this->float_plane = (FloatCoordPlane *) base->getFloatPlane()->clone(stack);
+		this->stack = std::make_shared<CoordPlaneStack>(base->clone(this->tracker));
+		std::shared_ptr<CoordPlane> shflt(base->getFloatPlane()->clone(stack));
+		this->float_plane = std::static_pointer_cast<FloatCoordPlane>(shflt);
 		this->base = base;
 		SetMinSize(min);
 		ConfigEntry *colourEntry =
@@ -76,22 +77,18 @@ namespace CalXUI {
 	}
 
 	CoordPlaneStack *CalxVirtualPlane::getPlane() {
-		return this->stack;
+		return this->stack.get();
 	}
 
 	CalxPlaneTracker *CalxVirtualPlane::getTracker() {
-		return this->tracker;
+		return this->tracker.get();
 	}
 
 	FloatCoordPlane *CalxVirtualPlane::getFloatPlane() {
-		return this->float_plane;
+		return this->float_plane.get();
 	}
 
-	void CalxVirtualPlane::OnExit(wxCloseEvent &evt) {
-		delete this->float_plane;
-		delete this->stack;
-		delete this->tracker;
-	}
+	void CalxVirtualPlane::OnExit(wxCloseEvent &evt) {}
 
 	void CalxVirtualPlane::OnPaintEvent(wxPaintEvent &evt) {
 		wxPaintDC dc(this);

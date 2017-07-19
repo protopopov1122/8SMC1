@@ -22,7 +22,7 @@
 
 namespace CalX {
 
-	CoordPlaneLog::CoordPlaneLog(CoordPlane *cplane, std::ostream *os,
+	CoordPlaneLog::CoordPlaneLog(std::shared_ptr<CoordPlane> cplane, std::ostream *os,
 	                             std::string prefix, bool log_act, bool log_err) {
 		this->plane = cplane;
 		this->out = os;
@@ -36,7 +36,7 @@ namespace CalX {
 		DESTROY_LOG("CoordPlaneLog");
 	}
 
-	CoordPlane *CoordPlaneLog::getBase() {
+	std::shared_ptr<CoordPlane> CoordPlaneLog::getBase() {
 		return this->plane;
 	}
 
@@ -148,8 +148,8 @@ namespace CalX {
 		this->plane->stop();
 	}
 
-	CoordPlane *CoordPlaneLog::clone(CoordPlane *base) {
-		CoordPlaneLog *log = new CoordPlaneLog(base, this->out, this->prefix,
+	std::unique_ptr<CoordPlane> CoordPlaneLog::clone(std::shared_ptr<CoordPlane> base) {
+		std::unique_ptr<CoordPlaneLog> log = std::make_unique<CoordPlaneLog>(base, this->out, this->prefix,
 		                                       this->log_actions, this->log_errors);
 		return log;
 	}

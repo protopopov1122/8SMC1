@@ -47,7 +47,7 @@ namespace CalX {
 		virtual void stop();
 		void kill();
 		virtual void dump(std::ostream &);
-		virtual CoordPlane *clone(CoordPlane *);
+		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
 		virtual CoordPlaneStatus getStatus();
 		virtual ErrorCode open_session();
 		virtual ErrorCode close_session();

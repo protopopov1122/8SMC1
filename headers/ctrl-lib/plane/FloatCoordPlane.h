@@ -30,14 +30,14 @@ namespace CalX {
 
 	class FloatCoordPlane : public CoordPlane {
 	 public:
-		FloatCoordPlane(coord_point_t, coord_scale_t, double, CoordPlane *);
+		FloatCoordPlane(coord_point_t, coord_scale_t, double, std::shared_ptr<CoordPlane>);
 		virtual ~FloatCoordPlane();
 
-		CoordPlane *getBase();
+		std::shared_ptr<CoordPlane> getBase();
 		coord_point_t getOffset();
 		coord_scale_t getScale();
 		double getSpeedScale();
-		void setBase(CoordPlane *);
+		void setBase(std::shared_ptr<CoordPlane>);
 		void setOffset(coord_point_t);
 		void setScale(coord_scale_t);
 		void setSpeedScale(double);
@@ -55,7 +55,7 @@ namespace CalX {
 		virtual void unuse();
 		virtual void stop();
 		virtual void dump(std::ostream &);
-		virtual CoordPlane *clone(CoordPlane *);
+		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
 		virtual CoordPlaneStatus getStatus();
 		virtual ErrorCode open_session();
 		virtual ErrorCode close_session();
@@ -74,7 +74,7 @@ namespace CalX {
 		coord_point_t offset;
 		coord_scale_t scale;
 		double speed;
-		CoordPlane *plane;
+		std::shared_ptr<CoordPlane> plane;
 	};
 }
 

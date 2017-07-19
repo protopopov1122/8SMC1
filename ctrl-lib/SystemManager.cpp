@@ -164,7 +164,7 @@ namespace CalX {
 			return nullptr;
 		}
 
-		CoordController *ctrl = new CoordController(
+		std::shared_ptr<CoordController> ctrl = std::make_shared<CoordController>(
 		    this->getMotorController(d1), this->getMotorController(d2),
 		    this->getConfiguration(), this->getInstrumentController(instr));
 		std::unique_ptr<CoordHandle> handle =

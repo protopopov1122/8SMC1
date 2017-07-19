@@ -264,7 +264,7 @@ namespace CalX {
 					prefix += " ";
 				}
 			}
-			ctrl->pushPlane(new CoordPlaneLog(ctrl->peekPlane(), &std::cout, prefix));
+			ctrl->pushPlane(std::make_shared<CoordPlaneLog>(ctrl->peekPlane(), &std::cout, prefix));
 		} else if (com.compare("map") == 0) {
 			if (args.size() < 5) {
 				std::cout << "Provide arguments" << std::endl;
@@ -277,7 +277,7 @@ namespace CalX {
 			}
 			motor_point_t offset = { std::stoi(args.at(1)), std::stoi(args.at(2)) };
 			motor_scale_t scale = { std::stod(args.at(3)), std::stod(args.at(4)) };
-			ctrl->pushPlane(new CoordPlaneMap(offset, scale, 1, ctrl->peekPlane()));
+			ctrl->pushPlane(std::make_shared<CoordPlaneMap>(offset, scale, 1, ctrl->peekPlane()));
 		} else if (com.compare("validate") == 0) {
 			if (args.size() < 6) {
 				std::cout << "Provide arguments" << std::endl;
@@ -292,7 +292,7 @@ namespace CalX {
 			motor_point_t max = { std::stoi(args.at(3)), std::stoi(args.at(4)) };
 			float speed = static_cast<float>(std::stod(args.at(5)));
 			ctrl->pushPlane(
-			    new CoordPlaneValidator(min, max, speed, ctrl->peekPlane()));
+			    std::make_shared<CoordPlaneValidator>(min, max, speed, ctrl->peekPlane()));
 		} else if (com.compare("move") == 0) {
 			if (args.size() < 4) {
 				std::cout << "Provide arguments" << std::endl;
@@ -497,7 +497,7 @@ namespace CalX {
 			}
 			size_t coordNum = (size_t) std::stoul(args.at(0));
 			int coordTrailer = std::stoi(args.at(1));
-			CoordController *coordController =
+			std::shared_ptr<CoordController> coordController =
 			    sysman->getCoord(coordNum)->getController();
 			if (coordController == nullptr) {
 				std::cout << "Wrong coord id" << std::endl;

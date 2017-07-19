@@ -23,7 +23,7 @@
 namespace CalX {
 
 	CoordPlaneValidator::CoordPlaneValidator(motor_point_t min, motor_point_t max,
-	                                         float maxspeed, CoordPlane *cplane) {
+	                                         float maxspeed, std::shared_ptr<CoordPlane> cplane) {
 		this->plane = cplane;
 		this->min = min;
 		this->max = max;
@@ -35,7 +35,7 @@ namespace CalX {
 		DESTROY_LOG("CoordPlaneValidator");
 	}
 
-	CoordPlane *CoordPlaneValidator::getBase() {
+	std::shared_ptr<CoordPlane> CoordPlaneValidator::getBase() {
 		return this->plane;
 	}
 
@@ -130,8 +130,8 @@ namespace CalX {
 		this->plane->stop();
 	}
 
-	CoordPlane *CoordPlaneValidator::clone(CoordPlane *base) {
-		return new CoordPlaneValidator(this->min, this->max, this->max_speed, base);
+	std::unique_ptr<CoordPlane> CoordPlaneValidator::clone(std::shared_ptr<CoordPlane> base) {
+		return std::make_unique<CoordPlaneValidator>(this->min, this->max, this->max_speed, base);
 	}
 
 	CoordPlaneStatus CoordPlaneValidator::getStatus() {

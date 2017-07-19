@@ -32,7 +32,7 @@
 
 namespace CalX {
 
-	CoordPlaneLinearizer::CoordPlaneLinearizer(CoordPlane *base) {
+	CoordPlaneLinearizer::CoordPlaneLinearizer(std::shared_ptr<CoordPlane> base) {
 		this->base = base;
 		this->work = false;
 		this->defWork = true;
@@ -43,7 +43,7 @@ namespace CalX {
 		DESTROY_LOG("CoordPlaneLinearizer");
 	}
 
-	CoordPlane *CoordPlaneLinearizer::getBase() {
+	std::shared_ptr<CoordPlane> CoordPlaneLinearizer::getBase() {
 		return this->base;
 	}
 
@@ -140,8 +140,8 @@ namespace CalX {
 		this->base->stop();
 	}
 
-	CoordPlane *CoordPlaneLinearizer::clone(CoordPlane *base) {
-		return new CoordPlaneLinearizer(base);
+	std::unique_ptr<CoordPlane> CoordPlaneLinearizer::clone(std::shared_ptr<CoordPlane> base) {
+		return std::make_unique<CoordPlaneLinearizer>(base);
 	}
 
 	CoordPlaneStatus CoordPlaneLinearizer::getStatus() {

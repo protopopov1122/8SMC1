@@ -33,7 +33,7 @@ namespace CalX {
 		GCodeWriter(motor_point_t, motor_rect_t, CoordTranslator *, std::ostream *);
 		virtual ~GCodeWriter();
 
-		virtual CoordPlane *clone(CoordPlane *);
+		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
 
 	 protected:
 		virtual void jump(motor_point_t, bool);

@@ -27,9 +27,9 @@ namespace CalX {
 
 	class CoordPlaneMap : public CoordPlane {
 	 public:
-		CoordPlaneMap(motor_point_t, motor_scale_t, float, CoordPlane *);
+		CoordPlaneMap(motor_point_t, motor_scale_t, float, std::shared_ptr<CoordPlane>);
 		virtual ~CoordPlaneMap();
-		CoordPlane *getBase();
+		std::shared_ptr<CoordPlane> getBase();
 		motor_point_t getOffset();
 		motor_scale_t getScale();
 		float getSpeedScale();
@@ -49,14 +49,14 @@ namespace CalX {
 		virtual void unuse();
 		virtual void stop();
 		virtual void dump(std::ostream &);
-		virtual CoordPlane *clone(CoordPlane *);
+		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
 		virtual CoordPlaneStatus getStatus();
 		virtual ErrorCode open_session();
 		virtual ErrorCode close_session();
 		virtual bool isUsed();
 
 	 private:
-		CoordPlane *plane;
+		std::shared_ptr<CoordPlane> plane;
 		motor_point_t offset;
 		motor_scale_t scale;
 		float speedScale;

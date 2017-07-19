@@ -27,9 +27,9 @@ namespace CalX {
 
 	class CoordPlaneValidator : public CoordPlane {
 	 public:
-		CoordPlaneValidator(motor_point_t, motor_point_t, float, CoordPlane *);
+		CoordPlaneValidator(motor_point_t, motor_point_t, float, std::shared_ptr<CoordPlane>);
 		virtual ~CoordPlaneValidator();
-		CoordPlane *getBase();
+		std::shared_ptr<CoordPlane> getBase();
 		motor_point_t getMinimum();
 		motor_point_t getMaximum();
 		float getMaxSpeed();
@@ -49,14 +49,14 @@ namespace CalX {
 		virtual void unuse();
 		virtual void stop();
 		virtual void dump(std::ostream &);
-		virtual CoordPlane *clone(CoordPlane *);
+		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
 		virtual CoordPlaneStatus getStatus();
 		virtual ErrorCode open_session();
 		virtual ErrorCode close_session();
 		virtual bool isUsed();
 
 	 private:
-		CoordPlane *plane;
+		std::shared_ptr<CoordPlane> plane;
 		motor_point_t min;
 		motor_point_t max;
 		float max_speed;
