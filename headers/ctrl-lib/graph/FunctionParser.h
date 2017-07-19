@@ -24,6 +24,7 @@
 #include "ctrl-lib/graph/AST.h"
 #include "ctrl-lib/graph/Lexem.h"
 #include <cinttypes>
+#include <memory>
 #include <iostream>
 #include <map>
 #include <string>
@@ -34,7 +35,7 @@ namespace CalX {
 	 public:
 		FunctionLexer(std::istream &);
 		virtual ~FunctionLexer();
-		Token *lex();
+		std::unique_ptr<Token> lex();
 
 	 private:
 		std::istream *in;
@@ -42,24 +43,24 @@ namespace CalX {
 
 	class FunctionParser {
 	 public:
-		FunctionParser(FunctionLexer *);
+		FunctionParser(std::unique_ptr<FunctionLexer>);
 		virtual ~FunctionParser();
 
-		Node *parse();
+		std::unique_ptr<Node> parse();
 
 	 private:
-		Token *nextToken();
-		Node *nextAddsub();
-		Node *nextMuldiv();
-		Node *nextPower();
-		Node *nextFactor();
+		void nextToken();
+		std::unique_ptr<Node> nextAddsub();
+		std::unique_ptr<Node> nextMuldiv();
+		std::unique_ptr<Node> nextPower();
+		std::unique_ptr<Node> nextFactor();
 
 		bool expectOperator(Token *, OperatorType);
 		bool expectOperator(OperatorType);
 
-		FunctionLexer *lexer;
+		std::unique_ptr<FunctionLexer> lexer;
 		std::map<uint32_t, std::string> symbols;
-		Token *tokens[3];
+		std::unique_ptr<Token> tokens[3];
 	};
 }
 

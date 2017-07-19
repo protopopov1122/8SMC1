@@ -152,9 +152,8 @@ namespace CalXUI {
 
 	void CalxCoordGraphComponent::OnBuildClick(wxCommandEvent &evt) {
 		std::stringstream ss(this->expr->GetValue().ToStdString());
-		FunctionLexer lexer(ss);
-		FunctionParser parser(&lexer);
-		Node *node = parser.parse();
+		FunctionParser parser(std::make_unique<FunctionLexer>(ss));
+		std::unique_ptr<Node> node = parser.parse();
 		if (node == nullptr) {
 			wxGetApp().getErrorHandler()->handle(ErrorCode::MathExprError);
 			return;
@@ -167,7 +166,7 @@ namespace CalXUI {
 		double speed = this->speed->GetValue();
 		coord_point_t min = { minx, miny };
 		coord_point_t max = { maxx, maxy };
-		GraphBuilder *graph = new GraphBuilder(node, min, max, step);
+		GraphBuilder *graph = new GraphBuilder(std::move(node), min, max, step);
 		this->controller->build(this->translator->getTranslator().get(), graph, speed);
 	}
 
@@ -178,9 +177,8 @@ namespace CalXUI {
 			return;
 		}
 		std::stringstream ss(this->expr->GetValue().ToStdString());
-		FunctionLexer lexer(ss);
-		FunctionParser parser(&lexer);
-		Node *node = parser.parse();
+		FunctionParser parser(std::make_unique<FunctionLexer>(ss));
+		std::unique_ptr<Node> node = parser.parse();
 		if (node == nullptr) {
 			wxGetApp().getErrorHandler()->handle(ErrorCode::MathExprError);
 			return;
@@ -193,7 +191,7 @@ namespace CalXUI {
 		double speed = this->speed->GetValue();
 		coord_point_t min = { minx, miny };
 		coord_point_t max = { maxx, maxy };
-		GraphBuilder *graph = new GraphBuilder(node, min, max, step);
+		GraphBuilder *graph = new GraphBuilder(std::move(node), min, max, step);
 		CalxVirtualPlaneDialog *dialog = new CalxVirtualPlaneDialog(
 		    this, wxID_ANY, this->controller->getHandle(), wxSize(500, 500));
 

@@ -37,7 +37,7 @@ namespace CalXUI {
 		virtual std::string getName();
 		virtual CoordTask *getTask();
 		virtual void update();
-		virtual CoordTranslator *getTranslator();
+		virtual std::shared_ptr<CoordTranslator> getTranslator();
 
 	 private:
 		void OnExit(wxCloseEvent &);

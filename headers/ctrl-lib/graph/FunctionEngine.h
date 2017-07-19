@@ -24,6 +24,7 @@
 #include "ctrl-lib/CtrlCore.h"
 #include "ctrl-lib/graph/AST.h"
 #include <cinttypes>
+#include <memory>
 #include <map>
 #include <string>
 #include <vector>

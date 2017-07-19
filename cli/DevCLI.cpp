@@ -520,9 +520,8 @@ namespace CalX {
 				return;
 			}
 			std::stringstream ss(args.at(1));
-			FunctionLexer lexer(ss);
-			FunctionParser parser(&lexer);
-			Node *node = parser.parse();
+			FunctionParser parser(std::make_unique<FunctionLexer>(ss));
+			std::unique_ptr<Node> node = parser.parse();
 			if (node == nullptr) {
 				std::cout << "Math expression parse error" << std::endl;
 				return;
@@ -538,7 +537,7 @@ namespace CalX {
 			BasicCoordTranslator trans(toffset, tsize);
 			coord_point_t min = { minx, miny };
 			coord_point_t max = { maxx, maxy };
-			GraphBuilder graph(node, min, max, step);
+			GraphBuilder graph(std::move(node), min, max, step);
 			TaskState state;
 			ErrorCode errcode = graph.build(sysman, plane, &trans, speed, &state);
 			if (errcode != ErrorCode::NoError) {
@@ -776,9 +775,8 @@ namespace CalX {
 				return;
 			}
 			std::stringstream ss(args.at(1));
-			FunctionLexer lexer(ss);
-			FunctionParser parser(&lexer);
-			Node *node = parser.parse();
+			FunctionParser parser(std::make_unique<FunctionLexer>(ss));
+			std::unique_ptr<Node> node = parser.parse();
 			motor_point_t toffset = { std::stoi(args.at(2)), std::stoi(args.at(3)) };
 			motor_size_t tsize = { std::stoi(args.at(4)), std::stoi(args.at(5)) };
 			double minx = std::stod(args.at(6));
@@ -790,7 +788,7 @@ namespace CalX {
 			CoordTranslator *trans = new BasicCoordTranslator(toffset, tsize);
 			coord_point_t min = { minx, miny };
 			coord_point_t max = { maxx, maxy };
-			GraphBuilder *graph = new GraphBuilder(node, min, max, step);
+			GraphBuilder *graph = new GraphBuilder(std::move(node), min, max, step);
 			std::cout << "New graph task #"
 			          << sysman->addTask(
 			                 std::make_unique<GraphCoordTask>(graph, trans, speed))

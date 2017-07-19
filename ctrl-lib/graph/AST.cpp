@@ -27,26 +27,17 @@ namespace CalX {
 		return eng->getScope()->getVariable(id);
 	}
 
-	BinaryNode::BinaryNode(BinaryOperation op, Node *left, Node *right)
-	    : Node::Node(NodeType::Binary) {
-		this->oper = op;
-		this->left = left;
-		this->right = right;
-	}
-
-	BinaryNode::~BinaryNode() {
-		delete this->left;
-		delete this->right;
-	}
+	BinaryNode::BinaryNode(BinaryOperation op, std::unique_ptr<Node> left, std::unique_ptr<Node> right)
+	    : Node::Node(NodeType::Binary), oper(op), left(std::move(left)), right(std::move(right)) {}
 
 	engine_value_t BinaryNode::eval(FunctionEngine *eng) {
 		engine_value_t res = { 0, MathError::MNoError };
-		engine_value_t leftv = eng->eval(this->left);
+		engine_value_t leftv = eng->eval(this->left.get());
 		if (leftv.err != MathError::MNoError) {
 			res.err = leftv.err;
 			return res;
 		}
-		engine_value_t rightv = eng->eval(this->right);
+		engine_value_t rightv = eng->eval(this->right.get());
 		if (rightv.err != MathError::MNoError) {
 			res.err = rightv.err;
 			return res;
@@ -73,38 +64,13 @@ namespace CalX {
 		return res;
 	}
 
-	FunctionNode::FunctionNode(std::string id, std::vector<Node *> *args)
-	    : Node::Node(NodeType::Function) {
-		this->id = id;
-		this->args = args;
-	}
-
-	FunctionNode::~FunctionNode() {
-		for (size_t i = 0; i < this->args->size(); i++) {
-			delete this->args->at(i);
-		}
-		delete this->args;
-	}
-
-	std::string FunctionNode::getId() {
-		return this->id;
-	}
-
-	size_t FunctionNode::getArgumentCount() {
-		return this->args->size();
-	}
-
-	Node *FunctionNode::getArgument(size_t i) {
-		if (i >= this->args->size()) {
-			return nullptr;
-		}
-		return this->args->at(i);
-	}
+	FunctionNode::FunctionNode(std::string id, std::unique_ptr<std::vector<std::unique_ptr<Node>>> args)
+	    : Node::Node(NodeType::Function), id(id), args(std::move(args)) {}
 
 	engine_value_t FunctionNode::eval(FunctionEngine *eng) {
 		std::vector<double> vec;
 		for (size_t i = 0; i < this->args->size(); i++) {
-			engine_value_t val = eng->eval(this->args->at(i));
+			engine_value_t val = eng->eval(this->args->at(i).get());
 			if (val.err != MathError::MNoError) {
 				val.value = 0;
 				return val;

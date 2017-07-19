@@ -24,6 +24,7 @@
 #include "ctrl-lib/CtrlCore.h"
 #include <cinttypes>
 #include <string>
+#include <memory>
 #include <vector>
 
 /* This file contains abstract syntax tree node definitions.
@@ -77,7 +78,6 @@ namespace CalX {
 		IntegerConstantNode(int64_t v) : Node::Node(NodeType::IntegerConstant) {
 			this->value = v;
 		}
-		virtual ~IntegerConstantNode() {}
 		int64_t getValue() {
 			return this->value;
 		}
@@ -94,7 +94,6 @@ namespace CalX {
 		RealConstantNode(double v) : Node::Node(NodeType::RealConstant) {
 			this->value = v;
 		}
-		virtual ~RealConstantNode() {}
 		double getValue() {
 			return this->value;
 		}
@@ -111,7 +110,6 @@ namespace CalX {
 		VariableNode(std::string i) : Node::Node(NodeType::Variable) {
 			this->id = i;
 		}
-		virtual ~VariableNode() {}
 		std::string getId() {
 			return this->id;
 		}
@@ -123,15 +121,7 @@ namespace CalX {
 
 	class InvertNode : public Node {
 	 public:
-		InvertNode(Node *n) : Node::Node(NodeType::Invert) {
-			this->node = n;
-		}
-		virtual ~InvertNode() {
-			delete this->node;
-		}
-		Node *getExpression() {
-			return this->node;
-		}
+		InvertNode(std::unique_ptr<Node> n) : Node::Node(NodeType::Invert), node(std::move(n)) {}
 		virtual engine_value_t eval(FunctionEngine *eng) {
 			engine_value_t val = this->node->eval(eng);
 			val.value *= -1;
@@ -139,44 +129,30 @@ namespace CalX {
 		}
 
 	 private:
-		Node *node;
+		std::unique_ptr<Node> node;
 	};
 
 	enum BinaryOperation { Add, Subtract, Multiply, Divide, PowerOp };
 
 	class BinaryNode : public Node {
 	 public:
-		BinaryNode(BinaryOperation, Node *, Node *);
-		virtual ~BinaryNode();
-		BinaryOperation getOperation() {
-			return this->oper;
-		}
-		Node *getLeft() {
-			return this->left;
-		}
-		Node *getRight() {
-			return this->right;
-		}
+		BinaryNode(BinaryOperation, std::unique_ptr<Node>, std::unique_ptr<Node>);
 		virtual engine_value_t eval(FunctionEngine *eng);
 
 	 private:
 		BinaryOperation oper;
-		Node *left;
-		Node *right;
+		std::unique_ptr<Node> left;
+		std::unique_ptr<Node> right;
 	};
 
 	class FunctionNode : public Node {
 	 public:
-		FunctionNode(std::string, std::vector<Node *> *);
-		virtual ~FunctionNode();
-		std::string getId();
-		size_t getArgumentCount();
-		Node *getArgument(size_t);
+		FunctionNode(std::string, std::unique_ptr<std::vector<std::unique_ptr<Node>>>);
 		virtual engine_value_t eval(FunctionEngine *eng);
 
 	 private:
 		std::string id;
-		std::vector<Node *> *args;
+		std::unique_ptr<std::vector<std::unique_ptr<Node>>> args;
 	};
 }
 

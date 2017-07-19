@@ -25,22 +25,12 @@
 
 namespace CalX {
 
-	GraphBuilder::GraphBuilder(Node *nd, coord_point_t min, coord_point_t max,
+	GraphBuilder::GraphBuilder(std::unique_ptr<Node> nd, coord_point_t min, coord_point_t max,
 	                           double step) {
-		this->node = nd;
+		this->node = std::move(nd);
 		this->min = min;
 		this->max = max;
 		this->step = step;
-		INIT_LOG("GraphBuilder");
-	}
-
-	GraphBuilder::~GraphBuilder() {
-		delete this->node;
-		DESTROY_LOG("GraphBuilder");
-	}
-
-	Node *GraphBuilder::getFunction() {
-		return this->node;
 	}
 
 	coord_point_t GraphBuilder::getMinimum() {
@@ -70,7 +60,7 @@ namespace CalX {
 		     (step > 0 ? x <= this->max.x : x >= this->max.x) && state->work;
 		     x += step) {
 			engine->getScope()->putVariable("x", x);
-			engine_value_t val = engine->eval(this->node);
+			engine_value_t val = engine->eval(this->node.get());
 			if (val.err != MathError::MNoError) {
 				plane->unuse();
 				state->work = false;
@@ -127,7 +117,7 @@ namespace CalX {
 		     (step > 0 ? x <= this->max.x : x >= this->max.x) && state->work;
 		     x += step) {
 			engine->getScope()->putVariable("x", x);
-			engine_value_t val = engine->eval(this->node);
+			engine_value_t val = engine->eval(this->node.get());
 			if (val.err != MathError::MNoError) {
 				plane->unuse();
 				state->work = false;

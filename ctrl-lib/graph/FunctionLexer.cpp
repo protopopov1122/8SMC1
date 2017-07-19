@@ -34,7 +34,7 @@ namespace CalX {
 		DESTROY_LOG("FunctionLexer");
 	}
 
-	Token *FunctionLexer::lex() {
+	std::unique_ptr<Token> FunctionLexer::lex() {
 		int chr = in->get();
 		while (isspace(chr)) {
 			if (chr == EOF) {
@@ -50,7 +50,7 @@ namespace CalX {
 	case ch: {                                                                   \
 		char buf[] = { (char) chr, '\0' };                                         \
 		std::string raw(buf);                                                      \
-		Token *lexem = new Token();                                                \
+		std::unique_ptr<Token> lexem = std::make_unique<Token>();                                                \
 		lexem->literal = raw;                                                      \
 		lexem->oper = tp;                                                          \
 		lexem->type = TokenType::Operator;                                         \
@@ -82,7 +82,7 @@ namespace CalX {
 			in->unget();
 			buf[offset] = '\0';
 			std::string raw(buf);
-			Token *lexem = new Token();
+			std::unique_ptr<Token> lexem = std::make_unique<Token>();
 			lexem->literal = raw;
 			if (real) {
 				lexem->type = TokenType::Real;
@@ -109,7 +109,7 @@ namespace CalX {
 		}
 		buf[offset] = '\0';
 		std::string raw(buf);
-		Token *lexem = new Token();
+		std::unique_ptr<Token> lexem = std::make_unique<Token>();
 		lexem->type = TokenType::Literal;
 		lexem->literal = raw;
 		return lexem;

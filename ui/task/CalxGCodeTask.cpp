@@ -69,8 +69,8 @@ namespace CalXUI {
 		this->filter->getTranslator();
 	}
 
-	CoordTranslator *CalxGcodeHandle::getTranslator() {
-		return this->translator.get();
+	std::shared_ptr<CoordTranslator> CalxGcodeHandle::getTranslator() {
+		return this->translator;
 	}
 
 	CalxTaskHandle *CalxGCodeTaskFactory::newTask(wxWindow *win) {

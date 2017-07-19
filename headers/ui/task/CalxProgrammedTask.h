@@ -39,7 +39,7 @@ namespace CalXUI {
 		CalxProgrammedTaskHandle(wxWindow *, wxWindowID, size_t);
 		virtual std::string getName();
 		virtual CoordTask *getTask();
-		virtual CoordTranslator *getTranslator();
+		virtual std::shared_ptr<CoordTranslator> getTranslator();
 		virtual void update();
 		void updateUI();
 
@@ -60,7 +60,7 @@ namespace CalXUI {
 		wxListBox *stepList;
 		wxButton *moveUpButton;
 		wxButton *moveDownButton;
-		CoordTranslator *trans;
+		std::shared_ptr<CoordTranslator> trans;
 	};
 }
 

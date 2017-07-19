@@ -35,10 +35,8 @@ namespace CalX {
 
 	class GraphBuilder {
 	 public:
-		GraphBuilder(Node *, coord_point_t, coord_point_t, double);
-		virtual ~GraphBuilder();
+		GraphBuilder(std::unique_ptr<Node>, coord_point_t, coord_point_t, double);
 
-		Node *getFunction();
 		coord_point_t getMinimum();
 		coord_point_t getMaximum();
 		double getStep();
@@ -49,7 +47,7 @@ namespace CalX {
 		                     float, TaskState *);
 
 	 private:
-		Node *node;
+		std::unique_ptr<Node> node;
 		coord_point_t min;
 		coord_point_t max;
 		double step;

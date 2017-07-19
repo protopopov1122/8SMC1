@@ -23,8 +23,8 @@
 
 namespace CalX {
 
-	FunctionParser::FunctionParser(FunctionLexer *lexer) {
-		this->lexer = lexer;
+	FunctionParser::FunctionParser(std::unique_ptr<FunctionLexer> lexer) {
+		this->lexer = std::move(lexer);
 		this->tokens[0] = this->lexer->lex();
 		this->tokens[1] = this->lexer->lex();
 		this->tokens[2] = this->lexer->lex();
@@ -32,21 +32,15 @@ namespace CalX {
 	}
 
 	FunctionParser::~FunctionParser() {
-		for (size_t i = 0; i < 3; i++) {
-			if (this->tokens[i] != nullptr) {
-				delete this->tokens[i];
-			}
-		}
 		DESTROY_LOG("FunctionParser");
 	}
 
-	Node *FunctionParser::parse() {
-		Node *node = nextAddsub();
-		return node;
+	std::unique_ptr<Node> FunctionParser::parse() {
+		return nextAddsub();
 	}
 
-	Node *FunctionParser::nextAddsub() {
-		Node *node = nextMuldiv();
+	std::unique_ptr<Node> FunctionParser::nextAddsub() {
+		std::unique_ptr<Node> node = nextMuldiv();
 		if (node == nullptr) {
 			return nullptr;
 		}
@@ -54,19 +48,19 @@ namespace CalX {
 		       expectOperator(OperatorType::MINUS)) {
 			bool plus = this->tokens[0]->oper == OperatorType::PLUS;
 			this->nextToken();
-			Node *right = nextMuldiv();
+			std::unique_ptr<Node> right = nextMuldiv();
 			if (right == nullptr) {
-				delete node;
 				return nullptr;
 			}
-			node = new BinaryNode(
-			    plus ? BinaryOperation::Add : BinaryOperation::Subtract, node, right);
+			std::unique_ptr<Node> res = std::make_unique<BinaryNode>(
+			    plus ? BinaryOperation::Add : BinaryOperation::Subtract, std::move(node), std::move(right));
+			node = std::move(res);
 		}
 		return node;
 	}
 
-	Node *FunctionParser::nextMuldiv() {
-		Node *node = nextPower();
+	std::unique_ptr<Node> FunctionParser::nextMuldiv() {
+		std::unique_ptr<Node> node = nextPower();
 		if (node == nullptr) {
 			return nullptr;
 		}
@@ -74,45 +68,45 @@ namespace CalX {
 		       expectOperator(OperatorType::SLASH)) {
 			bool mul = this->tokens[0]->oper == OperatorType::STAR;
 			this->nextToken();
-			Node *right = nextPower();
+			std::unique_ptr<Node> right = nextPower();
 			if (right == nullptr) {
-				delete node;
 				return nullptr;
 			}
-			node = new BinaryNode(
-			    mul ? BinaryOperation::Multiply : BinaryOperation::Divide, node,
-			    right);
+			std::unique_ptr<Node> res = std::make_unique<BinaryNode>(
+			    mul ? BinaryOperation::Multiply : BinaryOperation::Divide, std::move(node),
+			    std::move(right));
+			node = std::move(res);
 		}
 		return node;
 	}
 
-	Node *FunctionParser::nextPower() {
-		Node *node = nextFactor();
+	std::unique_ptr<Node> FunctionParser::nextPower() {
+		std::unique_ptr<Node> node = nextFactor();
 		if (node == nullptr) {
 			return nullptr;
 		}
 		while (expectOperator(OperatorType::POWER)) {
 			this->nextToken();
-			Node *right = nextFactor();
+			std::unique_ptr<Node> right = nextFactor();
 			if (right == nullptr) {
-				delete node;
 				return nullptr;
 			}
-			node = new BinaryNode(BinaryOperation::PowerOp, node, right);
+			std::unique_ptr<Node> res = std::make_unique<BinaryNode>(BinaryOperation::PowerOp, std::move(node), std::move(right));
+			node = std::move(res);
 		}
 		return node;
 	}
 
-	Node *FunctionParser::nextFactor() {
+	std::unique_ptr<Node> FunctionParser::nextFactor() {
 		if (this->tokens[0] != nullptr &&
 		    this->tokens[0]->type == TokenType::Integer) {
-			IntegerConstantNode *node =
-			    new IntegerConstantNode(this->tokens[0]->integer);
+			std::unique_ptr<IntegerConstantNode> node =
+			    std::make_unique<IntegerConstantNode>(this->tokens[0]->integer);
 			nextToken();
 			return node;
 		} else if (this->tokens[0] != nullptr &&
 		           this->tokens[0]->type == TokenType::Real) {
-			RealConstantNode *node = new RealConstantNode(this->tokens[0]->real);
+			std::unique_ptr<RealConstantNode> node = std::make_unique<RealConstantNode>(this->tokens[0]->real);
 			nextToken();
 			return node;
 		} else if (this->tokens[0] != nullptr &&
@@ -120,44 +114,36 @@ namespace CalX {
 			std::string id = this->tokens[0]->literal;
 			nextToken();
 			if (expectOperator(OperatorType::OPENING_PARENTHESE)) {
-				std::vector<Node *> *args = new std::vector<Node *>();
+				std::unique_ptr<std::vector<std::unique_ptr<Node>>> args = std::make_unique<std::vector<std::unique_ptr<Node>>>();
 				nextToken();
 				while (!expectOperator(OperatorType::CLOSING_PARENTHESE)) {
 					if (this->tokens[0] == nullptr) {
-						for (const auto &nd : *args) {
-							delete nd;
-						}
 						return nullptr;
 					}
 					args->push_back(nextAddsub());
 					if (expectOperator(OperatorType::COMMA)) {
 						nextToken();
 					} else if (!expectOperator(OperatorType::CLOSING_PARENTHESE)) {
-						for (const auto &nd : *args) {
-							delete nd;
-						}
-						delete args;
 						return nullptr;
 					}
 				}
 				nextToken();
-				FunctionNode *node = new FunctionNode(id, args);
+				std::unique_ptr<FunctionNode> node = std::make_unique<FunctionNode>(id, std::move(args));
 				return node;
 			}
-			VariableNode *node = new VariableNode(id);
+			std::unique_ptr<VariableNode> node = std::make_unique<VariableNode>(id);
 			return node;
 		} else if (expectOperator(OperatorType::PLUS)) {
 			nextToken();
 			return nextAddsub();
 		} else if (expectOperator(OperatorType::MINUS)) {
 			nextToken();
-			Node *node = nextAddsub();
-			return node != nullptr ? new InvertNode(node) : nullptr;
+			std::unique_ptr<Node> node = nextAddsub();
+			return node != nullptr ? std::make_unique<InvertNode>(std::move(node)) : nullptr;
 		} else if (expectOperator(OperatorType::OPENING_PARENTHESE)) {
 			nextToken();
-			Node *node = nextAddsub();
+			std::unique_ptr<Node> node = nextAddsub();
 			if (!expectOperator(OperatorType::CLOSING_PARENTHESE)) {
-				delete node;
 				return nullptr;
 			}
 			nextToken();
@@ -166,14 +152,10 @@ namespace CalX {
 		return nullptr;
 	}
 
-	Token *FunctionParser::nextToken() {
-		if (this->tokens[0] != nullptr) {
-			delete this->tokens[0];
-		}
-		this->tokens[0] = this->tokens[1];
-		this->tokens[1] = this->tokens[2];
+	void FunctionParser::nextToken() {
+		this->tokens[0] = std::move(this->tokens[1]);
+		this->tokens[1] = std::move(this->tokens[2]);
 		this->tokens[2] = this->lexer->lex();
-		return this->tokens[0];
 	}
 
 	bool FunctionParser::expectOperator(Token *tok, OperatorType op) {
@@ -182,6 +164,6 @@ namespace CalX {
 	}
 
 	bool FunctionParser::expectOperator(OperatorType op) {
-		return expectOperator(this->tokens[0], op);
+		return expectOperator(this->tokens[0].get(), op);
 	}
 }

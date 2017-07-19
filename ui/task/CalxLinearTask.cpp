@@ -45,7 +45,7 @@ namespace CalXUI {
 		coord_point_t offset = wxGetApp().getUnitOffset();
 		coord_scale_t size = { wxGetApp().getUnitScale(),
 			                     wxGetApp().getUnitScale() };
-		this->trans = new LinearCoordTranslator(offset, size);
+		this->trans = std::make_shared<LinearCoordTranslator>(offset, size);
 
 		this->xCoord =
 		    new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
@@ -123,7 +123,7 @@ namespace CalXUI {
 		return this->task;
 	}
 
-	CoordTranslator *CalxLinearTaskHandle::getTranslator() {
+	std::shared_ptr<CoordTranslator> CalxLinearTaskHandle::getTranslator() {
 		return this->trans;
 	}
 
@@ -168,7 +168,6 @@ namespace CalXUI {
 
 	void CalxLinearTaskHandle::OnExit(wxCloseEvent &evt) {
 		delete this->task;
-		delete this->trans;
 		Destroy();
 	}
 
