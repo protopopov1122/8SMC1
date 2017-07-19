@@ -29,12 +29,12 @@ namespace CalX {
 
 	class CoordController : public CoordPlane {
 	 public:
-		CoordController(MotorController *, MotorController *, ConfigManager *,
-		                InstrumentController * = nullptr);
+		CoordController(std::shared_ptr<MotorController>, std::shared_ptr<MotorController>, ConfigManager *,
+		                std::shared_ptr<InstrumentController> = nullptr);
 		virtual ~CoordController();
-		MotorController *getXAxis();
-		MotorController *getYAxis();
-		InstrumentController *getInstrument();
+		std::shared_ptr<MotorController> getXAxis();
+		std::shared_ptr<MotorController> getYAxis();
+		std::shared_ptr<InstrumentController> getInstrument();
 
 		virtual ErrorCode move(motor_point_t, float, bool);
 		virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,
@@ -59,9 +59,9 @@ namespace CalX {
 		virtual void unuse();
 
 	 private:
-		MotorController *xAxis;
-		MotorController *yAxis;
-		InstrumentController *instr;
+		std::shared_ptr<MotorController> xAxis;
+		std::shared_ptr<MotorController> yAxis;
+		std::shared_ptr<InstrumentController> instr;
 		ConfigManager *config;
 		bool work;
 		bool defWork;

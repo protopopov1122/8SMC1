@@ -29,22 +29,22 @@ namespace CalXUI {
 
 	class CalxMotorConstructor : public CalxDeviceConstructor {
 	 public:
-		CalxMotorConstructor(CalxDevicePool *, MotorController *);
+		CalxMotorConstructor(CalxDevicePool *, std::shared_ptr<MotorController>);
 		CalxDeviceHandle *construct(wxWindow *);
 
 	 private:
 		CalxDevicePool *pool;
-		MotorController *ctrl;
+		std::shared_ptr<MotorController> ctrl;
 	};
 
 	class CalxInstrumentConstructor : public CalxDeviceConstructor {
 	 public:
-		CalxInstrumentConstructor(CalxDevicePool *, InstrumentController *);
+		CalxInstrumentConstructor(CalxDevicePool *, std::shared_ptr<InstrumentController>);
 		CalxDeviceHandle *construct(wxWindow *win);
 
 	 private:
 		CalxDevicePool *pool;
-		InstrumentController *ctrl;
+		std::shared_ptr<InstrumentController> ctrl;
 	};
 }
 

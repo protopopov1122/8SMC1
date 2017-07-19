@@ -64,7 +64,7 @@ namespace CalXUI {
 			prms.port = port;
 			prms.speed = speed;
 			prms.parity = parity;
-			InstrumentController *ctrl = sysman->connectInstrument(&prms);
+			std::shared_ptr<InstrumentController> ctrl = sysman->connectInstrument(&prms);
 			if (ctrl == nullptr) {
 				return false;
 			}
@@ -119,7 +119,7 @@ namespace CalXUI {
 			prms.port = port;
 			prms.speed = speed;
 			prms.parity = parity;
-			MotorController *ctrl = sysman->connectMotor(&prms);
+			std::shared_ptr<MotorController> ctrl = sysman->connectMotor(&prms);
 			if (ctrl == nullptr) {
 				return false;
 			}
@@ -149,7 +149,7 @@ namespace CalXUI {
 			    (device_id_t)((IntegerConfigValue *) PROVIDER_ARG(req, 0))
 			        ->getValue();
 			bool power = ((BoolConfigValue *) PROVIDER_ARG(req, 1))->getValue();
-			MotorController *ctrl = sysman->getMotorController(devid);
+			std::shared_ptr<MotorController> ctrl = sysman->getMotorController(devid);
 			if (ctrl != nullptr) {
 				return ctrl->getMotor()->enablePower(power);
 			} else {

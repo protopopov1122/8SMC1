@@ -150,7 +150,7 @@ namespace CalXUI {
 	};
 
 	CalxInstrumentComponent::CalxInstrumentComponent(wxWindow *win, wxWindowID id,
-	                                                 InstrumentController *ctrl)
+	                                                 std::shared_ptr<InstrumentController> ctrl)
 	    : CalxDeviceHandle::CalxDeviceHandle(win, id) {
 		this->ctrl = ctrl;
 		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
@@ -251,11 +251,11 @@ namespace CalXUI {
 	}
 
 	void CalxInstrumentComponent::OnEnableButton(wxCommandEvent &evt) {
-		queue->addAction(new CalxInstrumentEnableAction(this->ctrl));
+		queue->addAction(new CalxInstrumentEnableAction(this->ctrl.get()));
 	}
 
 	void CalxInstrumentComponent::OnSessionSwitch(wxCommandEvent &evt) {
-		queue->addAction(new CalxInstrumentSessionAction(this->ctrl));
+		queue->addAction(new CalxInstrumentSessionAction(this->ctrl.get()));
 	}
 
 	void CalxInstrumentComponent::OnConfClick(wxCommandEvent &evt) {
@@ -272,7 +272,7 @@ namespace CalXUI {
 			InstrumentMode mode =
 			    sel == 0 ? InstrumentMode::Off : (sel == 1 ? InstrumentMode::Prepare
 			                                               : InstrumentMode::Full);
-			queue->addAction(new CalxInstrumentModeAction(this->ctrl, mode));
+			queue->addAction(new CalxInstrumentModeAction(this->ctrl.get(), mode));
 		}
 	}
 

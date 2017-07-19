@@ -126,7 +126,7 @@ namespace CalX {
 					std::cout << "Provide trailer id" << std::endl;
 					return;
 				}
-				MotorController *dev =
+				std::shared_ptr<MotorController> dev =
 				    sysman->getMotorController(std::stoi(args.at(0)));
 				if (dev == nullptr) {
 					std::cout << "Device not found" << std::endl;
@@ -143,7 +143,7 @@ namespace CalX {
 					std::cout << "Provide arguments" << std::endl;
 					return;
 				}
-				MotorController *dev =
+				std::shared_ptr<MotorController> dev =
 				    sysman->getMotorController(std::stoi(args.at(0)));
 				if (dev == nullptr) {
 					std::cout << "Device not found" << std::endl;
@@ -164,7 +164,7 @@ namespace CalX {
 					std::cout << "Provide arguments" << std::endl;
 					return;
 				}
-				MotorController *dev =
+				std::shared_ptr<MotorController> dev =
 				    sysman->getMotorController(std::stoi(args.at(0)));
 				if (dev == nullptr) {
 					std::cout << "Device not found" << std::endl;
@@ -181,7 +181,7 @@ namespace CalX {
 			if (args.empty()) {
 				std::cout << "Provide device id" << std::endl;
 			} else {
-				MotorController *dev =
+				std::shared_ptr<MotorController> dev =
 				    sysman->getMotorController(std::stoi(args.at(0)));
 				if (dev == nullptr) {
 					std::cout << "Device not found" << std::endl;
@@ -196,7 +196,7 @@ namespace CalX {
 				std::cout << "Provide device id" << std::endl;
 			} else
 				for (size_t i = 0; i < args.size(); i++) {
-					MotorController *dev =
+					std::shared_ptr<MotorController> dev =
 					    sysman->getMotorController(std::stoi(args.at(i)));
 					if (dev == nullptr) {
 						std::cout << "Device #" << i << " not found" << std::endl;

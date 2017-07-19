@@ -119,7 +119,7 @@ namespace CalXUI {
 	};
 
 	CalxMotorComponent::CalxMotorComponent(wxWindow *win, wxWindowID id,
-	                                       CalX::MotorController *dev)
+	                                       std::shared_ptr<CalX::MotorController> dev)
 	    : CalxDeviceHandle::CalxDeviceHandle(win, id) {
 		this->dev = dev;
 		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
@@ -313,11 +313,11 @@ namespace CalXUI {
 	}
 
 	void CalxMotorComponent::rollToTrailer1(wxCommandEvent &evt) {
-		this->queue->addAction(new CalxMotorCalibrationAction(this, dev, 1));
+		this->queue->addAction(new CalxMotorCalibrationAction(this, dev.get(), 1));
 	}
 
 	void CalxMotorComponent::rollToTrailer2(wxCommandEvent &evt) {
-		this->queue->addAction(new CalxMotorCalibrationAction(this, dev, 2));
+		this->queue->addAction(new CalxMotorCalibrationAction(this, dev.get(), 2));
 	}
 
 	void CalxMotorComponent::stopClick(wxCommandEvent &evt) {
@@ -326,13 +326,13 @@ namespace CalXUI {
 
 	void CalxMotorComponent::moveClick(wxCommandEvent &evt) {
 		this->queue->addAction(
-		    new CalxMotorMoveAction(this, dev, this->moveSpin->GetValue(),
+		    new CalxMotorMoveAction(this, dev.get(), this->moveSpin->GetValue(),
 		                            this->moveSpeedSpin->GetValue(), false));
 	}
 
 	void CalxMotorComponent::rmoveClick(wxCommandEvent &evt) {
 		this->queue->addAction(
-		    new CalxMotorMoveAction(this, dev, this->moveSpin->GetValue(),
+		    new CalxMotorMoveAction(this, dev.get(), this->moveSpin->GetValue(),
 		                            this->moveSpeedSpin->GetValue(), true));
 	}
 

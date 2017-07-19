@@ -49,9 +49,9 @@ namespace CalX {
 		virtual ~SystemManager();
 		DeviceManager *getDeviceManager();
 		ConfigManager *getConfiguration();
-		MotorController *getMotorController(device_id_t);
+		std::shared_ptr<MotorController> getMotorController(device_id_t);
 		size_t getMotorCount();
-		InstrumentController *getInstrumentController(device_id_t);
+		std::shared_ptr<InstrumentController> getInstrumentController(device_id_t);
 		size_t getInstrumentCount();
 		FunctionEngine *getFunctionEngine();
 		RequestResolver *getRequestResolver();
@@ -68,14 +68,14 @@ namespace CalX {
 		CoordHandle *createCoord(device_id_t, device_id_t, device_id_t = -1);
 		void removeCoord(size_t);
 		// Device connection
-		MotorController *connectMotor(DeviceConnectionPrms *);
-		InstrumentController *connectInstrument(DeviceConnectionPrms *);
+		std::shared_ptr<MotorController> connectMotor(DeviceConnectionPrms *);
+		std::shared_ptr<InstrumentController> connectInstrument(DeviceConnectionPrms *);
 
 	 private:
 		std::unique_ptr<DeviceManager> devman;
 		std::unique_ptr<ConfigManager> conf;
-		std::vector<std::unique_ptr<MotorController>> dev;
-		std::vector<std::unique_ptr<InstrumentController>> instr;
+		std::vector<std::shared_ptr<MotorController>> dev;
+		std::vector<std::shared_ptr<InstrumentController>> instr;
 		std::vector<std::unique_ptr<CoordTask>> tasks;
 		std::vector<std::unique_ptr<CoordHandle>> coords;
 		FunctionEngine engine;

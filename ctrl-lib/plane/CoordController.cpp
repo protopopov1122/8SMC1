@@ -34,10 +34,10 @@ namespace CalX {
 
 	const char *COORD_CTRL_TAG = "CoordCtrl";
 
-	CoordController::CoordController(MotorController *xaxis,
-	                                 MotorController *yaxis,
+	CoordController::CoordController(std::shared_ptr<MotorController> xaxis,
+	                                 std::shared_ptr<MotorController> yaxis,
 	                                 ConfigManager *config,
-	                                 InstrumentController *instr) {
+	                                 std::shared_ptr<InstrumentController> instr) {
 		this->xAxis = xaxis;
 		this->yAxis = yaxis;
 		this->instr = instr;
@@ -69,15 +69,15 @@ namespace CalX {
 		   << ")";
 	}
 
-	MotorController *CoordController::getXAxis() {
+	std::shared_ptr<MotorController> CoordController::getXAxis() {
 		return this->xAxis;
 	}
 
-	MotorController *CoordController::getYAxis() {
+	std::shared_ptr<MotorController> CoordController::getYAxis() {
 		return this->yAxis;
 	}
 
-	InstrumentController *CoordController::getInstrument() {
+	std::shared_ptr<InstrumentController> CoordController::getInstrument() {
 		return this->instr;
 	}
 

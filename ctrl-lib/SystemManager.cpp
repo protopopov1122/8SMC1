@@ -31,12 +31,12 @@ namespace CalX {
 		this->conf = std::move(conf);
 		this->ext_engine = std::move(ext_eng);
 		for (device_id_t d = 0; d < (device_id_t) this->devman->getMotorCount(); d++) {
-			this->dev.push_back(std::make_unique<MotorController>(
+			this->dev.push_back(std::make_shared<MotorController>(
 			    this->devman->getMotor(d), this->getConfiguration()));
 		}
 		for (device_id_t i = 0; i < (device_id_t) this->devman->getInstrumentCount();
 		     i++) {
-			this->instr.push_back(std::make_unique<InstrumentController>(
+			this->instr.push_back(std::make_shared<InstrumentController>(
 			    this->devman->getInstrument(i)));
 		}
 		LOG(SYSMAN_TAG,
@@ -77,11 +77,11 @@ namespace CalX {
 		return this->ext_engine.get();
 	}
 
-	MotorController *SystemManager::getMotorController(device_id_t d) {
+	std::shared_ptr<MotorController> SystemManager::getMotorController(device_id_t d) {
 		if (d >= (device_id_t) this->devman->getMotorCount() || d < 0) {
 			return nullptr;
 		}
-		return this->dev.at((size_t) d).get();
+		return this->dev.at((size_t) d);
 	}
 
 	FunctionEngine *SystemManager::getFunctionEngine() {
@@ -204,47 +204,44 @@ namespace CalX {
 		return this->devman->getInstrumentCount();
 	}
 
-	InstrumentController *SystemManager::getInstrumentController(device_id_t i) {
+	std::shared_ptr<InstrumentController> SystemManager::getInstrumentController(device_id_t i) {
 		if (i >= (device_id_t) this->devman->getInstrumentCount() || i < 0) {
 			return nullptr;
 		}
-		return this->instr.at((size_t) i).get();
+		return this->instr.at((size_t) i);
 	}
 
-	MotorController *SystemManager::connectMotor(DeviceConnectionPrms *prms) {
+	std::shared_ptr<MotorController> SystemManager::connectMotor(DeviceConnectionPrms *prms) {
 		Motor *d = devman->connectMotor(prms);
 		if (d == nullptr) {
 			return nullptr;
 		}
 		devman->refresh();
-		std::unique_ptr<MotorController> ctrl =
-		    std::make_unique<MotorController>(d, this->getConfiguration());
-		this->dev.push_back(std::move(ctrl));
-		MotorController *ptr = this->getMotorController(this->getMotorCount() - 1);
+		std::shared_ptr<MotorController> ctrl =
+		    std::make_shared<MotorController>(d, this->getConfiguration());
+		this->dev.push_back(ctrl);
 		if (this->ext_engine != nullptr) {
-			this->ext_engine->motorConnected(ptr);
+			this->ext_engine->motorConnected(ctrl.get());
 		}
 		LOG(SYSMAN_TAG,
 		    "Connected new device #" + std::to_string(this->dev.size() - 1));
-		return ptr;
+		return ctrl;
 	}
 
-	InstrumentController *SystemManager::connectInstrument(
+	std::shared_ptr<InstrumentController> SystemManager::connectInstrument(
 	    DeviceConnectionPrms *prms) {
 		Instrument *i = devman->connectInstrument(prms);
 		if (i == nullptr) {
 			return nullptr;
 		}
-		std::unique_ptr<InstrumentController> ctrl =
-		    std::make_unique<InstrumentController>(i);
-		this->instr.push_back(std::move(ctrl));
-		InstrumentController *ptr =
-		    this->getInstrumentController(this->getInstrumentCount() - 1);
+		std::shared_ptr<InstrumentController> ctrl =
+		    std::make_shared<InstrumentController>(i);
+		this->instr.push_back(ctrl);
 		if (this->ext_engine != nullptr) {
-			this->ext_engine->instrumentConnected(ptr);
+			this->ext_engine->instrumentConnected(ctrl.get());
 		}
 		LOG(SYSMAN_TAG,
 		    "Connected new instrument #" + std::to_string(this->instr.size() - 1));
-		return ptr;
+		return ctrl;
 	}
 }
