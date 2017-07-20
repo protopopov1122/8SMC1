@@ -534,12 +534,12 @@ namespace CalX {
 			double maxy = std::stod(args.at(9));
 			double step = std::stod(args.at(10));
 			float speed = static_cast<float>(std::stod(args.at(11)));
-			BasicCoordTranslator trans(toffset, tsize);
+			std::shared_ptr<BasicCoordTranslator> trans = std::make_shared<BasicCoordTranslator>(toffset, tsize);
 			coord_point_t min = { minx, miny };
 			coord_point_t max = { maxx, maxy };
 			GraphBuilder graph(std::move(node), min, max, step);
 			TaskState state;
-			ErrorCode errcode = graph.build(sysman, plane, &trans, speed, &state);
+			ErrorCode errcode = graph.build(sysman, plane, trans, speed, &state);
 			if (errcode != ErrorCode::NoError) {
 				std::cout << "Graph build error(" << errcode << ")" << std::endl;
 			}
@@ -785,13 +785,13 @@ namespace CalX {
 			double maxy = std::stod(args.at(9));
 			double step = std::stod(args.at(10));
 			float speed = static_cast<float>(std::stod(args.at(11)));
-			CoordTranslator *trans = new BasicCoordTranslator(toffset, tsize);
+			std::shared_ptr<CoordTranslator> trans = std::make_shared<BasicCoordTranslator>(toffset, tsize);
 			coord_point_t min = { minx, miny };
 			coord_point_t max = { maxx, maxy };
-			GraphBuilder *graph = new GraphBuilder(std::move(node), min, max, step);
+			std::unique_ptr<GraphBuilder> graph = std::make_unique<GraphBuilder>(std::move(node), min, max, step);
 			std::cout << "New graph task #"
 			          << sysman->addTask(
-			                 std::make_unique<GraphCoordTask>(graph, trans, speed))
+			                 std::make_unique<GraphCoordTask>(std::move(graph), trans, speed))
 			          << std::endl;
 		} else {
 			std::cout << "Wrong command '" << args.at(0) << "'" << std::endl;

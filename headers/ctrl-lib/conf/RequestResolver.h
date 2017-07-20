@@ -40,14 +40,13 @@ namespace CalX {
 
 	class Request {
 	 public:
-		Request(std::string, std::vector<ConfigValue *>);
-		virtual ~Request();
+		Request(std::string, std::vector<std::shared_ptr<ConfigValue>>);
 		std::string getProvider();
-		std::vector<ConfigValue *> &getArguments();
+		std::vector<std::shared_ptr<ConfigValue>> &getArguments();
 
 	 private:
 		std::string provider;
-		std::vector<ConfigValue *> args;
+		std::vector<std::shared_ptr<ConfigValue>> args;
 	};
 
 	class RequestProvider {
@@ -97,7 +96,7 @@ namespace CalX {
 	    req->getArguments().at(index)->getType() != type) {                      \
 		return false;                                                              \
 	}
-#define PROVIDER_ARG(req, index) (req->getArguments().at(index))
+#define PROVIDER_ARG(req, index) (req->getArguments().at(index).get())
 }
 
 #endif

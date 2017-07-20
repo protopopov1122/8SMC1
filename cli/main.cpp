@@ -57,17 +57,16 @@ class HelpCMD : public CLICommand {
 int main(int argc, char **argv) {
 	std::unique_ptr<DeviceManager> devman =
 	    std::unique_ptr<DeviceManager>(getDeviceManager());
-	std::unique_ptr<ConfigManager> conf = nullptr;
+	std::shared_ptr<ConfigManager> conf = nullptr;
 	std::ifstream cnf("main.conf.ini");
 	if (!cnf.good()) {
 		std::cout << "Can't load configuration, using default values." << std::endl;
-		conf = std::make_unique<ConfigManager>();
+		conf = std::make_shared<ConfigManager>();
 	} else {
-		conf =
-		    std::unique_ptr<ConfigManager>(ConfigManager::load(&cnf, &std::cout));
+		conf = ConfigManager::load(&cnf, &std::cout);
 	}
 	cnf.close();
-	SystemManager *sysman = new SystemManager(std::move(devman), std::move(conf));
+	SystemManager *sysman = new SystemManager(std::move(devman), conf);
 	setup_signals(sysman);
 	CLI cli(std::cout, std::cin);
 	cli.addCommand("echo", new EchoCMD());

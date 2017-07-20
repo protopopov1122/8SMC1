@@ -25,23 +25,16 @@
 
 namespace CalX {
 
-	Request::Request(std::string provider, std::vector<ConfigValue *> args) {
+	Request::Request(std::string provider, std::vector<std::shared_ptr<ConfigValue>> args) {
 		this->provider = provider;
 		this->args = args;
-	}
-
-	Request::~Request() {
-		for (const auto &arg : this->args) {
-			delete arg;
-		}
-		this->args.clear();
 	}
 
 	std::string Request::getProvider() {
 		return this->provider;
 	}
 
-	std::vector<ConfigValue *> &Request::getArguments() {
+	std::vector<std::shared_ptr<ConfigValue>> &Request::getArguments() {
 		return this->args;
 	}
 
@@ -97,55 +90,8 @@ namespace CalX {
 
 	Request *RequestResolver::parseRequest(std::string str) {
 		const char *cstr = str.c_str();
-		/*for (size_t i = 0; i < strlen(cstr); i++) {
-		        if (cstr[i] == '#') {
-		                cstr[i] = '\0';
-		                break;
-		        }
-		}
 		std::string provider;
-		std::vector<ConfigValue*> args;
-		while (*cstr != ':' &&
-		        *cstr != '\0') {
-		        provider.push_back(*cstr);
-		        cstr++;
-		}
-		if (*cstr == ':') {
-		        cstr++;
-		}
-		std::string arg;
-		while (*cstr != '\0') {
-		        if (*cstr == ',') {
-		                trimString(arg);
-		                if (!arg.empty()) {
-		                        ConfigValue *value =
-		ConfigManager::parseValue(arg.c_str());
-		                        if (value != nullptr) {
-		                                args.push_back(value);
-		                        }
-		                        arg.clear();
-		                }
-		        } else {
-		                arg.push_back(*cstr);
-		        }
-		        cstr++;
-		}
-		        trimString(arg);
-		if (!arg.empty()) {
-		        ConfigValue *value = ConfigManager::parseValue(arg.c_str());
-		        if (value != nullptr) {
-		                args.push_back(value);
-		        }
-		        arg.clear();
-		}
-		delete[] cstr;
-		if (provider.empty() && args.empty()) {
-		        return nullptr;
-		}
-		return new Request(provider, args);*/
-
-		std::string provider;
-		std::vector<ConfigValue *> args;
+		std::vector<std::shared_ptr<ConfigValue>> args;
 		size_t pos = 0;
 		for (; pos < strlen(cstr) && cstr[pos] != ':' && cstr[pos] != '#'; pos++) {
 			if (isspace(cstr[pos])) {
@@ -163,7 +109,7 @@ namespace CalX {
 			char chr = cstr[pos];
 			if (chr == ',' && !quote) {
 				if (!arg.empty()) {
-					ConfigValue *value = ConfigManager::parseValue(arg.c_str());
+					std::shared_ptr<ConfigValue> value = std::move(ConfigManager::parseValue(arg.c_str()));
 					if (value != nullptr) {
 						args.push_back(value);
 					}
@@ -180,7 +126,7 @@ namespace CalX {
 			}
 		}
 		if (!arg.empty()) {
-			ConfigValue *value = ConfigManager::parseValue(arg.c_str());
+			std::shared_ptr<ConfigValue> value = std::move(ConfigManager::parseValue(arg.c_str()));
 			if (value != nullptr) {
 				args.push_back(value);
 			}

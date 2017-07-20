@@ -23,7 +23,7 @@
 namespace CalXUI {
 
 	CalxNewKeyDialog::CalxNewKeyDialog(wxWindow *win, wxWindowID id,
-	                                   ConfigEntry *entry)
+	                                   std::shared_ptr<ConfigEntry> entry)
 	    : wxDialog::wxDialog(win, id, __("Add new key")) {
 		this->entry = entry;
 
@@ -126,7 +126,7 @@ namespace CalXUI {
 		switch (this->type->GetSelection()) {
 			case 0: {
 				int_conf_t value = this->integer->GetValue();
-				this->entry->put(key, new IntegerConfigValue(value));
+				this->entry->put(key, std::make_shared<IntegerConfigValue>(value));
 			} break;
 			case 1: {
 				wxString raw = this->real->GetValue();
@@ -135,15 +135,15 @@ namespace CalXUI {
 					wxMessageBox(__("Enter valid real value"), __("Error"), wxICON_ERROR);
 					return;
 				}
-				this->entry->put(key, new RealConfigValue(val));
+				this->entry->put(key, std::make_shared<RealConfigValue>(val));
 			} break;
 			case 2: {
 				bool value = this->boolean->GetValue();
-				this->entry->put(key, new BoolConfigValue(value));
+				this->entry->put(key, std::make_shared<BoolConfigValue>(value));
 			} break;
 			case 3: {
 				std::string value = this->string->GetValue().ToStdString();
-				this->entry->put(key, new StringConfigValue(value));
+				this->entry->put(key, std::make_shared<StringConfigValue>(value));
 			} break;
 		}
 		Hide();
@@ -158,7 +158,7 @@ namespace CalXUI {
 	}
 
 	CalxNewEntryDialog::CalxNewEntryDialog(wxWindow *win, wxWindowID id,
-	                                       ConfigManager *config)
+	                                       std::shared_ptr<ConfigManager> config)
 	    : wxDialog::wxDialog(win, id, __("Add new entry")) {
 		this->config = config;
 
@@ -211,7 +211,7 @@ namespace CalXUI {
 	}
 
 	CalxConfigDialog::CalxConfigDialog(wxWindow *win, wxWindowID id,
-	                                   ConfigManager *conf)
+	                                   std::shared_ptr<ConfigManager> conf)
 	    : wxDialog::wxDialog(win, id, __("Configuration Editor"),
 	                         wxDefaultPosition, wxDefaultSize,
 	                         wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER) {
@@ -229,7 +229,7 @@ namespace CalXUI {
 		Fit();
 	}
 
-	ConfigManager *CalxConfigDialog::getConfiguration() {
+	std::shared_ptr<ConfigManager> CalxConfigDialog::getConfiguration() {
 		return this->editor->getConfiguration();
 	}
 

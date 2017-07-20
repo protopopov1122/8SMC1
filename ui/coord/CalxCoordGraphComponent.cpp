@@ -37,7 +37,7 @@ namespace CalXUI {
 	    : CalxCoordComponent::CalxCoordComponent(win, id),
 	      controller(controller) {
 		std::string units = wxGetApp().getUnits();
-		ConfigEntry *graphconf =
+		std::shared_ptr<ConfigEntry> graphconf =
 		    wxGetApp().getSystemManager()->getConfiguration()->getEntry("graph");
 		wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 		SetSizer(sizer);
@@ -126,7 +126,7 @@ namespace CalXUI {
 		graphSizer->Add(buildButton);
 		graphSizer->Add(previewButton);
 
-		ConfigManager *conf = wxGetApp().getSystemManager()->getConfiguration();
+		std::shared_ptr<ConfigManager> conf = wxGetApp().getSystemManager()->getConfiguration();
 		coord_point_t cen = {
 			static_cast<double>(conf->getEntry("coords")->getReal("offset_x", 0.0)),
 			static_cast<double>(conf->getEntry("coords")->getReal("offset_y", 0.0))
@@ -166,8 +166,8 @@ namespace CalXUI {
 		double speed = this->speed->GetValue();
 		coord_point_t min = { minx, miny };
 		coord_point_t max = { maxx, maxy };
-		GraphBuilder *graph = new GraphBuilder(std::move(node), min, max, step);
-		this->controller->build(this->translator->getTranslator().get(), graph, speed);
+		std::unique_ptr<GraphBuilder> graph = std::make_unique<GraphBuilder>(std::move(node), min, max, step);
+		this->controller->build(this->translator->getTranslator(), std::move(graph), speed);
 	}
 
 	void CalxCoordGraphComponent::OnPreviewClick(wxCommandEvent &evt) {
@@ -191,11 +191,11 @@ namespace CalXUI {
 		double speed = this->speed->GetValue();
 		coord_point_t min = { minx, miny };
 		coord_point_t max = { maxx, maxy };
-		GraphBuilder *graph = new GraphBuilder(std::move(node), min, max, step);
+		std::unique_ptr<GraphBuilder> graph = std::make_unique<GraphBuilder>(std::move(node), min, max, step);
 		CalxVirtualPlaneDialog *dialog = new CalxVirtualPlaneDialog(
 		    this, wxID_ANY, this->controller->getHandle(), wxSize(500, 500));
 
-		this->controller->preview(dialog, this->translator->getTranslator().get(), graph,
+		this->controller->preview(dialog, this->translator->getTranslator(), std::move(graph),
 		                          speed);
 		dialog->ShowModal();
 		delete dialog;

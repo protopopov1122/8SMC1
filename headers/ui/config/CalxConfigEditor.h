@@ -51,8 +51,8 @@ namespace CalXUI {
 
 	class CalxConfigEditor : public CalxPanelPane {
 	 public:
-		CalxConfigEditor(wxWindow *, wxWindowID, ConfigManager *);
-		ConfigManager *getConfiguration();
+		CalxConfigEditor(wxWindow *, wxWindowID, std::shared_ptr<ConfigManager>);
+		std::shared_ptr<ConfigManager> getConfiguration();
 		wxButton *getOkButton();
 
 		virtual bool isBusy();
@@ -83,7 +83,7 @@ namespace CalXUI {
 		wxPanel *valuePanel;
 		wxPanel *editorPanel;
 
-		ConfigValue *currentValue;
+		std::shared_ptr<ConfigValue> currentValue;
 		wxPanel *integerEditor;
 		wxSpinCtrl *integerSpin;
 		wxPanel *realEditor;
@@ -93,8 +93,8 @@ namespace CalXUI {
 		wxPanel *stringEditor;
 		wxTextCtrl *stringCtrl;
 
-		ConfigManager *config;
-		CalxConfigEventListener *listener;
+		std::shared_ptr<ConfigManager> config;
+		std::shared_ptr<CalxConfigEventListener> listener;
 	};
 }
 

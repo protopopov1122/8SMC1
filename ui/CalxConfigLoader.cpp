@@ -65,7 +65,7 @@ namespace CalXUI {
 			std::string path =
 			    this->filesys.URLToFileName(fname).GetFullPath().ToStdString();
 			std::string name, descr;
-			ConfigManager *conf = nullptr;
+			std::shared_ptr<ConfigManager> conf = nullptr;
 			std::ifstream cnf(path);
 			if (!cnf.good()) {
 				fname = this->filesys.FindNext().ToStdString();
@@ -78,7 +78,6 @@ namespace CalXUI {
 				descr = conf->getEntry("config")->getString("description", __("None"));
 			}
 			cnf.close();
-			delete conf;
 
 			CalxConfigFile cf;
 			cf.path = path;

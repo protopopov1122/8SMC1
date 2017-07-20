@@ -28,6 +28,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <memory>
 
 /* This file contains configuration manager - configuration parameter storage.
    It represents structure similar to INI file, but all values have types.
@@ -133,12 +134,11 @@ namespace CalX {
 	class ConfigEntry {
 	 public:
 		ConfigEntry(ConfigManager *, std::string);
-		virtual ~ConfigEntry();
 		std::string getEntryName();
 
-		ConfigValue *get(std::string);
+		std::shared_ptr<ConfigValue> get(std::string);
 		bool has(std::string);
-		bool put(std::string, ConfigValue *);
+		bool put(std::string, std::shared_ptr<ConfigValue>);
 		bool remove(std::string);
 		bool is(std::string, ConfigValueType);
 		void store(std::ostream *);
@@ -148,12 +148,12 @@ namespace CalX {
 		bool getBool(std::string, bool = false);
 		std::string getString(std::string, std::string = "");
 
-		void getContent(std::vector<std::pair<std::string, ConfigValue *>> &);
+		void getContent(std::vector<std::pair<std::string, std::shared_ptr<ConfigValue>>> &);
 
 	 private:
 		ConfigManager *config;
 		std::string name;
-		std::map<std::string, ConfigValue *> content;
+		std::map<std::string, std::shared_ptr<ConfigValue>> content;
 	};
 
 	class ConfigManager {
@@ -161,27 +161,27 @@ namespace CalX {
 		ConfigManager();
 		virtual ~ConfigManager();
 
-		ConfigEntry *getEntry(std::string, bool = true);
+		std::shared_ptr<ConfigEntry> getEntry(std::string, bool = true);
 		bool hasEntry(std::string);
 		bool removeEntry(std::string);
 		void store(std::ostream *);
-		void getEntries(std::vector<ConfigEntry *> &);
-		void setValidator(ConfigValidator *);
-		ConfigValidator *getValidator();
-		bool validate(ConfigValidator * = nullptr);
+		void getEntries(std::vector<std::shared_ptr<ConfigEntry>> &);
+		void setValidator(std::shared_ptr<ConfigValidator>);
+		std::shared_ptr<ConfigValidator> getValidator();
+		bool validate(std::shared_ptr<ConfigValidator> = nullptr);
 
-		void addEventListener(ConfigEventListener *);
-		void removeEventListener(ConfigEventListener *);
-		std::vector<ConfigEventListener *> &getEventListeners();
+		void addEventListener(std::shared_ptr<ConfigEventListener>);
+		void removeEventListener(std::shared_ptr<ConfigEventListener>);
+		std::vector<std::shared_ptr<ConfigEventListener>> &getEventListeners();
 
-		static ConfigManager *load(std::istream *, std::ostream *,
-		                           ConfigManager * = nullptr);
-		static ConfigValue *parseValue(const char *);
+		static std::shared_ptr<ConfigManager> load(std::istream *, std::ostream *,
+								                    std::shared_ptr<ConfigManager> = nullptr);
+		static std::unique_ptr<ConfigValue> parseValue(const char *);
 
 	 private:
-		std::map<std::string, ConfigEntry *> entries;
-		ConfigValidator *validator;
-		std::vector<ConfigEventListener *> listeners;
+		std::map<std::string, std::shared_ptr<ConfigEntry>> entries;
+		std::shared_ptr<ConfigValidator> validator;
+		std::vector<std::shared_ptr<ConfigEventListener>> listeners;
 	};
 }
 

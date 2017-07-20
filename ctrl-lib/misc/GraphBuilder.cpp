@@ -46,7 +46,7 @@ namespace CalX {
 	}
 
 	ErrorCode GraphBuilder::build(SystemManager *sysman, CoordPlane *plane,
-	                              CoordTranslator *trans, float speed,
+	                              std::shared_ptr<CoordTranslator> trans, float speed,
 	                              TaskState *state) {
 		plane->use();
 		FunctionEngine *engine = sysman->getFunctionEngine();
@@ -103,7 +103,7 @@ namespace CalX {
 
 	ErrorCode GraphBuilder::floatBuild(SystemManager *sysman,
 	                                   FloatCoordPlane *plane,
-	                                   CoordTranslator *trans, float speed,
+	                                   std::shared_ptr<CoordTranslator> trans, float speed,
 	                                   TaskState *state) {
 		plane->use();
 		FunctionEngine *engine = sysman->getFunctionEngine();

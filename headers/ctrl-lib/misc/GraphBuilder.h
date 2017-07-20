@@ -41,9 +41,9 @@ namespace CalX {
 		coord_point_t getMaximum();
 		double getStep();
 
-		ErrorCode build(SystemManager *, CoordPlane *, CoordTranslator *, float,
+		ErrorCode build(SystemManager *, CoordPlane *,  std::shared_ptr<CoordTranslator>, float,
 		                TaskState *);
-		ErrorCode floatBuild(SystemManager *, FloatCoordPlane *, CoordTranslator *,
+		ErrorCode floatBuild(SystemManager *, FloatCoordPlane *, std::shared_ptr<CoordTranslator>,
 		                     float, TaskState *);
 
 	 private:

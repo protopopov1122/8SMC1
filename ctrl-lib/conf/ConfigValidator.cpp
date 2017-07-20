@@ -43,7 +43,7 @@ namespace CalX {
 		return this->type;
 	}
 
-	bool ConfigValueValidator::validate(ConfigValue *value) {
+	bool ConfigValueValidator::validate(std::shared_ptr<ConfigValue> value) {
 		if (value == nullptr) {
 			return this->isOptional();
 		}
@@ -69,11 +69,11 @@ namespace CalX {
 		return this->value;
 	}
 
-	bool ConfigKeyValidator::validate(ConfigEntry *entry) {
+	bool ConfigKeyValidator::validate(std::shared_ptr<ConfigEntry> entry) {
 		if (entry == nullptr || !entry->has(key)) {
 			return this->isOptional();
 		}
-		ConfigValue *value = entry->get(key);
+		std::shared_ptr<ConfigValue> value = entry->get(key);
 		return this->value->validate(value);
 	}
 
@@ -101,7 +101,7 @@ namespace CalX {
 			return this->isOptional();
 		}
 
-		ConfigEntry *entry = conf->getEntry(this->name, false);
+		std::shared_ptr<ConfigEntry> entry = conf->getEntry(this->name, false);
 		for (const auto &k : this->keys) {
 			if (!k->validate(entry)) {
 				return false;

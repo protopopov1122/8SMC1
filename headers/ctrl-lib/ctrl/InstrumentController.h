@@ -51,7 +51,7 @@ namespace CalX {
 
 		InstrumentMode getMode();
 		bool setMode(InstrumentMode);
-		ConfigManager *getConfiguration();
+		std::shared_ptr<ConfigManager> getConfiguration();
 
 		void addEventListener(InstrumentEventListener *);
 		void removeEventListener(InstrumentEventListener *);

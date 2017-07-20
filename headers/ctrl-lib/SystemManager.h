@@ -44,11 +44,11 @@ namespace CalX {
 	class SystemManager {
 	 public:
 		SystemManager(std::unique_ptr<DeviceManager>,
-		              std::unique_ptr<ConfigManager>,
+		              std::shared_ptr<ConfigManager>,
 		              std::unique_ptr<ExtEngine> = nullptr);
 		virtual ~SystemManager();
 		DeviceManager *getDeviceManager();
-		ConfigManager *getConfiguration();
+		std::shared_ptr<ConfigManager> getConfiguration();
 		std::shared_ptr<MotorController> getMotorController(device_id_t);
 		size_t getMotorCount();
 		std::shared_ptr<InstrumentController> getInstrumentController(device_id_t);
@@ -73,7 +73,7 @@ namespace CalX {
 
 	 private:
 		std::unique_ptr<DeviceManager> devman;
-		std::unique_ptr<ConfigManager> conf;
+		std::shared_ptr<ConfigManager> conf;
 		std::vector<std::shared_ptr<MotorController>> dev;
 		std::vector<std::shared_ptr<InstrumentController>> instr;
 		std::vector<std::unique_ptr<CoordTask>> tasks;

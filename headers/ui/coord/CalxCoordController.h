@@ -66,8 +66,8 @@ namespace CalXUI {
 		void measure(TrailerId, bool * = nullptr);
 		void move(coord_point_t, double, bool * = nullptr);
 		void configure(coord_point_t, double, bool * = nullptr);
-		void build(CoordTranslator *, GraphBuilder *, double, bool * = nullptr);
-		void preview(CalxVirtualPlaneDialog *, CoordTranslator *, GraphBuilder *,
+		void build(std::shared_ptr<CoordTranslator>, std::unique_ptr<GraphBuilder>, double, bool * = nullptr);
+		void preview(CalxVirtualPlaneDialog *, std::shared_ptr<CoordTranslator>, std::unique_ptr<GraphBuilder>,
 		             double, bool * = nullptr);
 
 	 private:

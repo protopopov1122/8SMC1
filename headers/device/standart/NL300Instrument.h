@@ -68,7 +68,7 @@ namespace CalX {
 		std::string getSystemCommandResponse(std::string, std::string);
 		NL300GeneralCommand *inquireGeneralParameter(char, uint16_t);
 		int64_t inquireIntegerParameter(char, uint16_t, int64_t);
-		ConfigEntry *getCoreEntry();
+		std::shared_ptr<ConfigEntry> getCoreEntry();
 
 		bool aborting;
 		StandartDeviceManager *devman;
@@ -76,7 +76,7 @@ namespace CalX {
 		InstrumentMode work_mode;
 		HANDLE handle;
 		DeviceSerialPortConnectionPrms prms;
-		NL300ConfigEventListener *listener;
+		std::shared_ptr<NL300ConfigEventListener> listener;
 
 		std::string hardwareInfo;
 		std::string softwareInfo;

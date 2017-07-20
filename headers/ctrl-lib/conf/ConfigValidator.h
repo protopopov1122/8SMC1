@@ -46,7 +46,7 @@ namespace CalX {
 		ConfigValueValidator(ConfigValueType, bool = false);
 		virtual ~ConfigValueValidator();
 		ConfigValueType getType();
-		virtual bool validate(ConfigValue *);
+		virtual bool validate(std::shared_ptr<ConfigValue>);
 
 	 private:
 		ConfigValueType type;
@@ -58,7 +58,7 @@ namespace CalX {
 		virtual ~ConfigKeyValidator();
 		std::string getKey();
 		ConfigValueValidator *getValue();
-		bool validate(ConfigEntry *);
+		bool validate(std::shared_ptr<ConfigEntry>);
 
 	 private:
 		std::string key;

@@ -42,7 +42,7 @@ namespace CalX {
 		return this->instr->getID();
 	}
 
-	ConfigManager *InstrumentController::getConfiguration() {
+	std::shared_ptr<ConfigManager> InstrumentController::getConfiguration() {
 		return this->instr->getConfiguration();
 	}
 

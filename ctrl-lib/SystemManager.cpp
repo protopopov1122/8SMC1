@@ -25,14 +25,14 @@ namespace CalX {
 	const char *SYSMAN_TAG = "SysMan";
 
 	SystemManager::SystemManager(std::unique_ptr<DeviceManager> devman,
-	                             std::unique_ptr<ConfigManager> conf,
+	                             std::shared_ptr<ConfigManager> conf,
 	                             std::unique_ptr<ExtEngine> ext_eng) {
 		this->devman = std::move(devman);
-		this->conf = std::move(conf);
+		this->conf = conf;
 		this->ext_engine = std::move(ext_eng);
 		for (device_id_t d = 0; d < (device_id_t) this->devman->getMotorCount(); d++) {
 			this->dev.push_back(std::make_shared<MotorController>(
-			    this->devman->getMotor(d), this->getConfiguration()));
+			    this->devman->getMotor(d), this->getConfiguration().get()));
 		}
 		for (device_id_t i = 0; i < (device_id_t) this->devman->getInstrumentCount();
 		     i++) {
@@ -69,8 +69,8 @@ namespace CalX {
 		return this->devman.get();
 	}
 
-	ConfigManager *SystemManager::getConfiguration() {
-		return this->conf.get();
+	std::shared_ptr<ConfigManager> SystemManager::getConfiguration() {
+		return this->conf;
 	}
 
 	ExtEngine *SystemManager::getExtEngine() {
@@ -166,7 +166,7 @@ namespace CalX {
 
 		std::shared_ptr<CoordController> ctrl = std::make_shared<CoordController>(
 		    this->getMotorController(d1), this->getMotorController(d2),
-		    this->getConfiguration(), this->getInstrumentController(instr));
+		    this->getConfiguration().get(), this->getInstrumentController(instr));
 		std::unique_ptr<CoordHandle> handle =
 		    std::make_unique<CoordHandle>(this->coords.size(), ctrl);
 		if (getConfiguration()->getEntry("core")->getBool("auto_power_motors",
@@ -218,7 +218,7 @@ namespace CalX {
 		}
 		devman->refresh();
 		std::shared_ptr<MotorController> ctrl =
-		    std::make_shared<MotorController>(d, this->getConfiguration());
+		    std::make_shared<MotorController>(d, this->getConfiguration().get());
 		this->dev.push_back(ctrl);
 		if (this->ext_engine != nullptr) {
 			this->ext_engine->motorConnected(ctrl.get());

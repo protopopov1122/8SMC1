@@ -39,7 +39,7 @@ namespace CalX {
 
 	NL300Instrument::~NL300Instrument() {
 		if (this->listener != nullptr) {
-			this->config.removeEventListener(this->listener);
+			this->config->removeEventListener(this->listener);
 		}
 		if (this->handle != INVALID_HANDLE_VALUE) {
 			CloseHandle(handle);
@@ -61,7 +61,7 @@ namespace CalX {
 		          "; baud rate: " + std::to_string(prms->speed) +
 		          "; parity: " + std::to_string(static_cast<int>(prms->parity)));
 		this->listener = nullptr;
-		getDeviceManager()->loadConfiguration("NL300.ini", &this->config);
+		getDeviceManager()->loadConfiguration("NL300.ini", this->config);
 		memcpy(&this->prms, prms, sizeof(DeviceSerialPortConnectionPrms));
 		this->log("Configuration sucessfully loaded");
 
@@ -87,18 +87,18 @@ namespace CalX {
 
 		COMMTIMEOUTS CommTimeOuts;
 		CommTimeOuts.ReadIntervalTimeout =
-		    this->config.getEntry("connection")->getInt("ReadIntervalTimeout", 1);
+		    this->config->getEntry("connection")->getInt("ReadIntervalTimeout", 1);
 		CommTimeOuts.ReadTotalTimeoutMultiplier =
-		    this->config.getEntry("connection")
+		    this->config->getEntry("connection")
 		        ->getInt("ReadTotalTimeoutMultiplier", 1);
 		CommTimeOuts.ReadTotalTimeoutConstant =
-		    this->config.getEntry("connection")
+		    this->config->getEntry("connection")
 		        ->getInt("ReadTotalTimeoutConstant", 0xFFFFFFFF);
 		CommTimeOuts.WriteTotalTimeoutMultiplier =
-		    this->config.getEntry("connection")
+		    this->config->getEntry("connection")
 		        ->getInt("WriteTotalTimeoutMultiplier", 1);
 		CommTimeOuts.WriteTotalTimeoutConstant =
-		    this->config.getEntry("connection")
+		    this->config->getEntry("connection")
 		        ->getInt("WriteTotalTimeoutConstant", 250);
 
 		if (!SetCommTimeouts(handle, &CommTimeOuts)) {
@@ -159,20 +159,20 @@ namespace CalX {
 		this->work_mode = InstrumentMode::Off;
 		this->log("Instrument mode switched to off");
 
-		this->listener = new NL300ConfigEventListener(this);
-		this->config.addEventListener(this->listener);
+		this->listener = std::make_shared<NL300ConfigEventListener>(this);
+		this->config->addEventListener(this->listener);
 
-		ConfigEntry *core = this->config.getEntry(NL300_ENTRY_NAME);
+		std::shared_ptr<ConfigEntry> core = this->config->getEntry(NL300_ENTRY_NAME);
 		core->put(NL300_PACK_PULSES,
-		          new IntegerConfigValue(inquireIntegerParameter('P', 0, 1)));
+		          std::make_unique<IntegerConfigValue>(inquireIntegerParameter('P', 0, 1)));
 		core->put(NL300_MAX_OUTPUT_DELAY,
-		          new IntegerConfigValue(inquireIntegerParameter('D', 0, 400)));
+		          std::make_unique<IntegerConfigValue>(inquireIntegerParameter('D', 0, 400)));
 		core->put(NL300_ADJ_OUTPUT_DELAY,
-		          new IntegerConfigValue(inquireIntegerParameter('D', 1, 400)));
+		          std::make_unique<IntegerConfigValue>(inquireIntegerParameter('D', 1, 400)));
 		core->put(NL300_SYNC_OUT_DELAY,
-		          new IntegerConfigValue(inquireIntegerParameter('D', 2, 0)));
+		          std::make_unique<IntegerConfigValue>(inquireIntegerParameter('D', 2, 0)));
 		core->put(NL300_REPETITION_RATE_DIV,
-		          new IntegerConfigValue(inquireIntegerParameter('F', 0, 1)));
+		          std::make_unique<IntegerConfigValue>(inquireIntegerParameter('F', 0, 1)));
 
 		this->hardwareInfo = getSystemCommandResponse("VER", "");
 		this->softwareInfo = getSystemCommandResponse("SN", "");
@@ -629,9 +629,9 @@ namespace CalX {
 		return val;
 	}
 
-	ConfigEntry *NL300Instrument::getCoreEntry() {
-		std::string name = this->config.getEntry(NL300_CORE_NAME)
+	std::shared_ptr<ConfigEntry> NL300Instrument::getCoreEntry() {
+		std::string name = this->config->getEntry(NL300_CORE_NAME)
 		                       ->getString(NL300_CORE_MODE, "default");
-		return this->config.getEntry(name);
+		return this->config->getEntry(name);
 	}
 }

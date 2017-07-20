@@ -30,18 +30,11 @@ namespace CalX {
 		this->name = name;
 	}
 
-	ConfigEntry::~ConfigEntry() {
-		for (const auto &kv : this->content) {
-			delete kv.second;
-		}
-		this->content.clear();
-	}
-
 	std::string ConfigEntry::getEntryName() {
 		return this->name;
 	}
 
-	ConfigValue *ConfigEntry::get(std::string id) {
+	std::shared_ptr<ConfigValue> ConfigEntry::get(std::string id) {
 		if (this->content.count(id) != 0) {
 			return this->content[id];
 		} else {
@@ -53,10 +46,9 @@ namespace CalX {
 		return this->content.count(id) != 0;
 	}
 
-	bool ConfigEntry::put(std::string id, ConfigValue *value) {
+	bool ConfigEntry::put(std::string id, std::shared_ptr<ConfigValue> value) {
 		bool change = false;
 		if (this->has(id)) {
-			delete this->content[id];
 			this->content.erase(id);
 			change = true;
 		}
@@ -78,7 +70,6 @@ namespace CalX {
 		if (this->content.count(id) == 0) {
 			return false;
 		}
-		delete this->content[id];
 		this->content.erase(id);
 		for (const auto &l : this->config->getEventListeners()) {
 			l->keyRemoved(this->config, this, id);
@@ -90,13 +81,13 @@ namespace CalX {
 		if (this->content.count(id) == 0) {
 			return false;
 		}
-		ConfigValue *val = this->content[id];
+		std::shared_ptr<ConfigValue> val = this->content[id];
 		return val->getType() == type;
 	}
 
 	int_conf_t ConfigEntry::getInt(std::string key, int_conf_t def) {
 		if (this->is(key, ConfigValueType::Integer)) {
-			return ((IntegerConfigValue *) this->get(key))->getValue();
+			return ((IntegerConfigValue *) this->get(key).get())->getValue();
 		} else {
 			return def;
 		}
@@ -104,7 +95,7 @@ namespace CalX {
 
 	real_conf_t ConfigEntry::getReal(std::string key, real_conf_t def) {
 		if (this->is(key, ConfigValueType::Real)) {
-			return ((RealConfigValue *) this->get(key))->getValue();
+			return ((RealConfigValue *) this->get(key).get())->getValue();
 		} else {
 			return def;
 		}
@@ -112,7 +103,7 @@ namespace CalX {
 
 	bool ConfigEntry::getBool(std::string key, bool def) {
 		if (this->is(key, ConfigValueType::Boolean)) {
-			return ((BoolConfigValue *) this->get(key))->getValue();
+			return ((BoolConfigValue *) this->get(key).get())->getValue();
 		} else {
 			return def;
 		}
@@ -120,14 +111,14 @@ namespace CalX {
 
 	std::string ConfigEntry::getString(std::string key, std::string def) {
 		if (this->is(key, ConfigValueType::String)) {
-			return ((StringConfigValue *) this->get(key))->getValue();
+			return ((StringConfigValue *) this->get(key).get())->getValue();
 		} else {
 			return def;
 		}
 	}
 
 	void ConfigEntry::getContent(
-	    std::vector<std::pair<std::string, ConfigValue *>> &vec) {
+	    std::vector<std::pair<std::string, std::shared_ptr<ConfigValue>>> &vec) {
 		for (const auto &kv : this->content) {
 			vec.push_back(make_pair(kv.first, kv.second));
 		}
@@ -136,7 +127,7 @@ namespace CalX {
 	void ConfigEntry::store(std::ostream *os) {
 		for (const auto &kv : this->content) {
 			*os << kv.first << '=';
-			ConfigValue *value = kv.second;
+			ConfigValue *value = kv.second.get();
 			switch (value->getType()) {
 				case ConfigValueType::Integer:
 					*os << ((IntegerConfigValue *) value)->getValue();
@@ -159,22 +150,13 @@ namespace CalX {
 		this->validator = nullptr;
 	}
 
-	ConfigManager::~ConfigManager() {
-		for (const auto &l : this->listeners) {
-			delete l;
-		}
-		this->listeners.clear();
-		for (const auto &kv : this->entries) {
-			delete kv.second;
-		}
-		this->entries.clear();
-	}
+	ConfigManager::~ConfigManager() {}
 
-	ConfigEntry *ConfigManager::getEntry(std::string id, bool createNew) {
+	std::shared_ptr<ConfigEntry> ConfigManager::getEntry(std::string id, bool createNew) {
 		if (this->entries.count(id) != 0) {
 			return this->entries[id];
 		} else if (createNew) {
-			ConfigEntry *entry = new ConfigEntry(this, id);
+			std::shared_ptr<ConfigEntry> entry = std::make_shared<ConfigEntry>(this, id);
 			this->entries[id] = entry;
 			for (const auto &l : this->listeners) {
 				l->entryAdded(this, id);
@@ -193,7 +175,6 @@ namespace CalX {
 		if (this->entries.count(id) == 0) {
 			return false;
 		}
-		delete this->entries[id];
 		this->entries.erase(id);
 		for (const auto &l : this->listeners) {
 			l->entryRemoved(this, id);
@@ -201,24 +182,21 @@ namespace CalX {
 		return true;
 	}
 
-	void ConfigManager::getEntries(std::vector<ConfigEntry *> &vec) {
+	void ConfigManager::getEntries(std::vector<std::shared_ptr<ConfigEntry>> &vec) {
 		for (const auto &kv : this->entries) {
 			vec.push_back(kv.second);
 		}
 	}
 
-	ConfigValidator *ConfigManager::getValidator() {
+	std::shared_ptr<ConfigValidator> ConfigManager::getValidator() {
 		return this->validator;
 	}
 
-	void ConfigManager::setValidator(ConfigValidator *v) {
-		if (this->validator != nullptr) {
-			delete this->validator;
-		}
+	void ConfigManager::setValidator(std::shared_ptr<ConfigValidator> v) {
 		this->validator = v;
 	}
 
-	bool ConfigManager::validate(ConfigValidator *v) {
+	bool ConfigManager::validate(std::shared_ptr<ConfigValidator> v) {
 		if (v == nullptr) {
 			v = this->validator;
 		}
@@ -233,18 +211,17 @@ namespace CalX {
 		}
 	}
 
-	void ConfigManager::addEventListener(ConfigEventListener *l) {
+	void ConfigManager::addEventListener(std::shared_ptr<ConfigEventListener> l) {
 		this->listeners.push_back(l);
 	}
 
-	void ConfigManager::removeEventListener(ConfigEventListener *l) {
+	void ConfigManager::removeEventListener(std::shared_ptr<ConfigEventListener> l) {
 		this->listeners.erase(
 		    std::remove(this->listeners.begin(), this->listeners.end(), l),
 		    this->listeners.end());
-		delete l;
 	}
 
-	std::vector<ConfigEventListener *> &ConfigManager::getEventListeners() {
+	std::vector<std::shared_ptr<ConfigEventListener>> &ConfigManager::getEventListeners() {
 		return this->listeners;
 	}
 
@@ -255,7 +232,7 @@ namespace CalX {
 		return start;
 	}
 
-	ConfigValue *ConfigManager::parseValue(const char *input) {
+	std::unique_ptr<ConfigValue> ConfigManager::parseValue(const char *input) {
 		size_t pos = 0;
 		pos = skipWhitespaces(input, pos);
 		const char *val = &input[pos];
@@ -268,10 +245,10 @@ namespace CalX {
 			}
 			std::string strval(&val[1]);
 			strval.erase(strval.begin() + (std::ptrdiff_t) strval.length() - 1);
-			return new StringConfigValue(strval);
+			return std::make_unique<StringConfigValue>(strval);
 		} else if (strcmp(val, "true") == 0 || strcmp(val, "false") == 0) {
 			bool boolval = strcmp(val, "true") == 0;
-			return new BoolConfigValue(boolval);
+			return std::make_unique<BoolConfigValue>(boolval);
 		} else {
 			bool integer = true, real = false;
 			for (size_t i = 0; i < strlen(val); i++) {
@@ -291,24 +268,24 @@ namespace CalX {
 			if (integer) {
 				if (real) {
 					real_conf_t realval = std::stod(val);
-					return new RealConfigValue(realval);
+					return std::make_unique<RealConfigValue>(realval);
 				} else {
 					int_conf_t intval = std::stoll(val);
-					return new IntegerConfigValue(intval);
+					return std::make_unique<IntegerConfigValue>(intval);
 				}
 			} else {
 				std::string strval(val);
-				return new StringConfigValue(strval);
+				return std::make_unique<StringConfigValue>(strval);
 			}
 		}
 	}
 
-	ConfigManager *ConfigManager::load(std::istream *is, std::ostream *err,
-	                                   ConfigManager *man) {
+	std::shared_ptr<ConfigManager> ConfigManager::load(std::istream *is, std::ostream *err,
+	                                   std::shared_ptr<ConfigManager> man) {
 		if (man == nullptr) {
-			man = new ConfigManager();
+			man = std::make_shared<ConfigManager>();
 		}
-		ConfigEntry *entry = nullptr;
+		std::shared_ptr<ConfigEntry> entry = nullptr;
 		const int LINE_LEN = 256;
 		char rawline[LINE_LEN];
 		int line_num = 0;
@@ -370,9 +347,9 @@ namespace CalX {
 						     << ": expected value in the line" << std::endl;
 						continue;
 					}
-					ConfigValue *value = parseValue(&line[pos]);
+					std::unique_ptr<ConfigValue> value = parseValue(&line[pos]);
 					if (value != nullptr) {
-						entry->put(key, value);
+						entry->put(key, std::move(value));
 					}
 				}
 			}

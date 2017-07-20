@@ -94,7 +94,7 @@ namespace CalXUI {
 	                                             CoordHandle *handle, wxSize sz)
 	    : wxWindow::wxWindow(win, id), handle(handle), pointer_colour(255, 0, 0) {
 		SetMinSize(sz);
-		ConfigEntry *colourEntry =
+		std::shared_ptr<ConfigEntry> colourEntry =
 		    wxGetApp().getSystemManager()->getConfiguration()->getEntry(
 		        "watcher_color");
 		this->pointer_colour = wxColour(colourEntry->getInt("pointer_R", 255),

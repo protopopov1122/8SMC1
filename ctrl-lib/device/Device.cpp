@@ -27,6 +27,7 @@ namespace CalX {
 	Device::Device(DeviceType t, device_id_t id) {
 		this->type = t;
 		this->id = id;
+		this->config = std::make_shared<ConfigManager>();
 	}
 
 	Device::~Device() {}
@@ -39,8 +40,8 @@ namespace CalX {
 		return this->id;
 	}
 
-	ConfigManager *Device::getConfiguration() {
-		return &this->config;
+	std::shared_ptr<ConfigManager> Device::getConfiguration() {
+		return this->config;
 	}
 
 	bool Device::hasErrors() {

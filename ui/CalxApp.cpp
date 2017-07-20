@@ -76,15 +76,14 @@ namespace CalXUI {
 		std::string path = confLoader->getFileName();
 		confLoader->Destroy();
 
-		std::unique_ptr<ConfigManager> conf = nullptr;
+		std::shared_ptr<ConfigManager> conf = nullptr;
 		std::ifstream cnf(path);
 		if (!cnf.good()) {
 			wxMessageBox(__("Can't open configuration. Using default values."),
 			             __("Warning"), wxICON_WARNING);
-			conf = std::make_unique<ConfigManager>();
+			conf = std::make_shared<ConfigManager>();
 		} else {
-			conf =
-			    std::unique_ptr<ConfigManager>(ConfigManager::load(&cnf, &std::cout));
+			conf = ConfigManager::load(&cnf, &std::cout);
 		}
 		cnf.close();
 
@@ -188,7 +187,7 @@ namespace CalXUI {
 		std::unique_ptr<DeviceManager> devman =
 		    std::unique_ptr<DeviceManager>(getter());
 		this->sysman =
-		    new SystemManager(std::move(devman), std::move(conf), std::move(ext));
+		    new SystemManager(std::move(devman), conf, std::move(ext));
 		this->error_handler = new CalxErrorHandler(this->sysman);
 
 		if (this->debug_mode && sysman->getConfiguration()->getEntry("ui")->getBool("console", false)) {

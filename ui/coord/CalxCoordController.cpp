@@ -187,18 +187,18 @@ namespace CalXUI {
 		    new CalxCoordActionConfigure(this->handle, this, pos, speed), ready);
 	}
 
-	void CalxCoordController::build(CoordTranslator *trans, GraphBuilder *builder,
+	void CalxCoordController::build(std::shared_ptr<CoordTranslator> trans, std::unique_ptr<GraphBuilder> builder,
 	                                double speed, bool *ready) {
 		this->queue->addAction(
-		    new CalxCoordActionGraphBuild(this->handle, trans, builder, speed),
+		    new CalxCoordActionGraphBuild(this->handle, trans, std::move(builder), speed),
 		    ready);
 	}
 
 	void CalxCoordController::preview(CalxVirtualPlaneDialog *dialog,
-	                                  CoordTranslator *trans,
-	                                  GraphBuilder *builder, double speed,
+	                                  std::shared_ptr<CoordTranslator> trans,
+	                                  std::unique_ptr<GraphBuilder> builder, double speed,
 	                                  bool *ready) {
 		this->queue->addAction(
-		    new CalxCoordActionGraphPreview(dialog, trans, builder, speed), ready);
+		    new CalxCoordActionGraphPreview(dialog, trans, std::move(builder), speed), ready);
 	}
 }

@@ -34,7 +34,7 @@ namespace CalX {
 	bool clname::execute(Request *req, SystemManager *sysman)
 
 	PROVIDER(EchoProvider, "echo") {
-		std::vector<ConfigValue *> &args = req->getArguments();
+		std::vector<std::shared_ptr<ConfigValue>> &args = req->getArguments();
 		for (const auto &arg : args) {
 			std::cout << arg->toString() << " ";
 		}

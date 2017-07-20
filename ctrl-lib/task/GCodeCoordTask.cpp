@@ -48,7 +48,7 @@ namespace CalX {
 		state->plane = plane;
 		state->work = true;
 		ErrorCode errcode = GCodeInterpreter::execute(
-		    this->stream, plane, this->translator, sysman->getConfiguration(),
+		    this->stream, plane, this->translator, sysman->getConfiguration().get(),
 		    prms.speed, state);
 		state->work = false;
 		return errcode;
