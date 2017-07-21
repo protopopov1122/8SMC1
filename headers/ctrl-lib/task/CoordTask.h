@@ -77,7 +77,8 @@ namespace CalX {
 
 	class GraphCoordTask : public CoordTask {
 	 public:
-		GraphCoordTask(std::unique_ptr<GraphBuilder>, std::shared_ptr<CoordTranslator>, float);
+		GraphCoordTask(std::unique_ptr<GraphBuilder>,
+		               std::shared_ptr<CoordTranslator>, float);
 		virtual ~GraphCoordTask();
 		virtual ErrorCode perform(CoordPlane *, TaskParameters &, SystemManager *,
 		                          TaskState *);

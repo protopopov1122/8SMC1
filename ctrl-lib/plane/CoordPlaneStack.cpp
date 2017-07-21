@@ -105,8 +105,10 @@ namespace CalX {
 		this->peekPlane()->stop();
 	}
 
-	std::unique_ptr<CoordPlane> CoordPlaneStack::clone(std::shared_ptr<CoordPlane> plane) {
-		std::unique_ptr<CoordPlaneStack> stack = std::make_unique<CoordPlaneStack>(plane);
+	std::unique_ptr<CoordPlane> CoordPlaneStack::clone(
+	    std::shared_ptr<CoordPlane> plane) {
+		std::unique_ptr<CoordPlaneStack> stack =
+		    std::make_unique<CoordPlaneStack>(plane);
 		for (size_t i = 1; i < this->stack.size(); i++) {
 			stack->pushPlane(this->stack.at(i)->clone(stack->peekPlane()));
 		}

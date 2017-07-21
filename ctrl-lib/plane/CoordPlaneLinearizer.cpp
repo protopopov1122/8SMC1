@@ -140,7 +140,8 @@ namespace CalX {
 		this->base->stop();
 	}
 
-	std::unique_ptr<CoordPlane> CoordPlaneLinearizer::clone(std::shared_ptr<CoordPlane> base) {
+	std::unique_ptr<CoordPlane> CoordPlaneLinearizer::clone(
+	    std::shared_ptr<CoordPlane> base) {
 		return std::make_unique<CoordPlaneLinearizer>(base);
 	}
 

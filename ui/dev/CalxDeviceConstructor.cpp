@@ -22,8 +22,8 @@
 
 namespace CalXUI {
 
-	CalxMotorConstructor::CalxMotorConstructor(CalxDevicePool *pool,
-	                                           std::shared_ptr<MotorController> ctrl) {
+	CalxMotorConstructor::CalxMotorConstructor(
+	    CalxDevicePool *pool, std::shared_ptr<MotorController> ctrl) {
 		this->pool = pool;
 		this->ctrl = ctrl;
 	}

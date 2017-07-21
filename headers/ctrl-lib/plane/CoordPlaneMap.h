@@ -27,7 +27,8 @@ namespace CalX {
 
 	class CoordPlaneMap : public CoordPlane {
 	 public:
-		CoordPlaneMap(motor_point_t, motor_scale_t, float, std::shared_ptr<CoordPlane>);
+		CoordPlaneMap(motor_point_t, motor_scale_t, float,
+		              std::shared_ptr<CoordPlane>);
 		virtual ~CoordPlaneMap();
 		std::shared_ptr<CoordPlane> getBase();
 		motor_point_t getOffset();

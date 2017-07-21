@@ -149,8 +149,8 @@ namespace CalXUI {
 		InstrumentMode mode;
 	};
 
-	CalxInstrumentComponent::CalxInstrumentComponent(wxWindow *win, wxWindowID id,
-	                                                 std::shared_ptr<InstrumentController> ctrl)
+	CalxInstrumentComponent::CalxInstrumentComponent(
+	    wxWindow *win, wxWindowID id, std::shared_ptr<InstrumentController> ctrl)
 	    : CalxDeviceHandle::CalxDeviceHandle(win, id) {
 		this->ctrl = ctrl;
 		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);

@@ -30,7 +30,8 @@ namespace CalX {
 
 	class FloatCoordPlane : public CoordPlane {
 	 public:
-		FloatCoordPlane(coord_point_t, coord_scale_t, double, std::shared_ptr<CoordPlane>);
+		FloatCoordPlane(coord_point_t, coord_scale_t, double,
+		                std::shared_ptr<CoordPlane>);
 		virtual ~FloatCoordPlane();
 
 		std::shared_ptr<CoordPlane> getBase();

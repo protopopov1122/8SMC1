@@ -123,11 +123,13 @@ namespace CalXUI {
 		handle->stop();
 	}
 
-	CalxCoordActionGraphBuild::CalxCoordActionGraphBuild(CoordHandle *handle,
-	                                                     std::shared_ptr<CoordTranslator> trans,
-	                                                     std::unique_ptr<GraphBuilder> builder,
-	                                                     double speed)
-	    : handle(handle), translator(trans), builder(std::move(builder)), speed(speed) {
+	CalxCoordActionGraphBuild::CalxCoordActionGraphBuild(
+	    CoordHandle *handle, std::shared_ptr<CoordTranslator> trans,
+	    std::unique_ptr<GraphBuilder> builder, double speed)
+	    : handle(handle),
+	      translator(trans),
+	      builder(std::move(builder)),
+	      speed(speed) {
 		this->state.plane = nullptr;
 		this->state.work = false;
 	}
@@ -146,7 +148,10 @@ namespace CalXUI {
 	CalxCoordActionGraphPreview::CalxCoordActionGraphPreview(
 	    CalxVirtualPlaneDialog *dialog, std::shared_ptr<CoordTranslator> trans,
 	    std::unique_ptr<GraphBuilder> builder, double speed)
-	    : dialog(dialog), translator(trans), builder(std::move(builder)), speed(speed) {
+	    : dialog(dialog),
+	      translator(trans),
+	      builder(std::move(builder)),
+	      speed(speed) {
 		this->state.plane = nullptr;
 		this->state.work = false;
 	}

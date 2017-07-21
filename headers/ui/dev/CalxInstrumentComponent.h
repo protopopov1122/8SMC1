@@ -35,7 +35,8 @@ namespace CalXUI {
 
 	class CalxInstrumentComponent : public CalxDeviceHandle {
 	 public:
-		CalxInstrumentComponent(wxWindow *, wxWindowID, std::shared_ptr<InstrumentController>);
+		CalxInstrumentComponent(wxWindow *, wxWindowID,
+		                        std::shared_ptr<InstrumentController>);
 		virtual void stop();
 		virtual void updateUI();
 		virtual bool isBusy();

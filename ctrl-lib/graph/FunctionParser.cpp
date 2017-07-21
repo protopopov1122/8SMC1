@@ -53,7 +53,8 @@ namespace CalX {
 				return nullptr;
 			}
 			std::unique_ptr<Node> res = std::make_unique<BinaryNode>(
-			    plus ? BinaryOperation::Add : BinaryOperation::Subtract, std::move(node), std::move(right));
+			    plus ? BinaryOperation::Add : BinaryOperation::Subtract,
+			    std::move(node), std::move(right));
 			node = std::move(res);
 		}
 		return node;
@@ -73,8 +74,8 @@ namespace CalX {
 				return nullptr;
 			}
 			std::unique_ptr<Node> res = std::make_unique<BinaryNode>(
-			    mul ? BinaryOperation::Multiply : BinaryOperation::Divide, std::move(node),
-			    std::move(right));
+			    mul ? BinaryOperation::Multiply : BinaryOperation::Divide,
+			    std::move(node), std::move(right));
 			node = std::move(res);
 		}
 		return node;
@@ -91,7 +92,8 @@ namespace CalX {
 			if (right == nullptr) {
 				return nullptr;
 			}
-			std::unique_ptr<Node> res = std::make_unique<BinaryNode>(BinaryOperation::PowerOp, std::move(node), std::move(right));
+			std::unique_ptr<Node> res = std::make_unique<BinaryNode>(
+			    BinaryOperation::PowerOp, std::move(node), std::move(right));
 			node = std::move(res);
 		}
 		return node;
@@ -106,7 +108,8 @@ namespace CalX {
 			return node;
 		} else if (this->tokens[0] != nullptr &&
 		           this->tokens[0]->type == TokenType::Real) {
-			std::unique_ptr<RealConstantNode> node = std::make_unique<RealConstantNode>(this->tokens[0]->real);
+			std::unique_ptr<RealConstantNode> node =
+			    std::make_unique<RealConstantNode>(this->tokens[0]->real);
 			nextToken();
 			return node;
 		} else if (this->tokens[0] != nullptr &&
@@ -114,7 +117,8 @@ namespace CalX {
 			std::string id = this->tokens[0]->literal;
 			nextToken();
 			if (expectOperator(OperatorType::OPENING_PARENTHESE)) {
-				std::unique_ptr<std::vector<std::unique_ptr<Node>>> args = std::make_unique<std::vector<std::unique_ptr<Node>>>();
+				std::unique_ptr<std::vector<std::unique_ptr<Node>>> args =
+				    std::make_unique<std::vector<std::unique_ptr<Node>>>();
 				nextToken();
 				while (!expectOperator(OperatorType::CLOSING_PARENTHESE)) {
 					if (this->tokens[0] == nullptr) {
@@ -128,7 +132,8 @@ namespace CalX {
 					}
 				}
 				nextToken();
-				std::unique_ptr<FunctionNode> node = std::make_unique<FunctionNode>(id, std::move(args));
+				std::unique_ptr<FunctionNode> node =
+				    std::make_unique<FunctionNode>(id, std::move(args));
 				return node;
 			}
 			std::unique_ptr<VariableNode> node = std::make_unique<VariableNode>(id);
@@ -139,7 +144,8 @@ namespace CalX {
 		} else if (expectOperator(OperatorType::MINUS)) {
 			nextToken();
 			std::unique_ptr<Node> node = nextAddsub();
-			return node != nullptr ? std::make_unique<InvertNode>(std::move(node)) : nullptr;
+			return node != nullptr ? std::make_unique<InvertNode>(std::move(node))
+			                       : nullptr;
 		} else if (expectOperator(OperatorType::OPENING_PARENTHESE)) {
 			nextToken();
 			std::unique_ptr<Node> node = nextAddsub();

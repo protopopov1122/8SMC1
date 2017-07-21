@@ -41,7 +41,8 @@ namespace CalX {
 		bool insert(size_t, std::shared_ptr<CoordTranslator>);
 		virtual std::shared_ptr<CoordTranslator> getBase();
 		virtual void setBase(std::shared_ptr<CoordTranslator>);
-		virtual std::unique_ptr<CoordTranslator> clone(std::shared_ptr<CoordTranslator>);
+		virtual std::unique_ptr<CoordTranslator> clone(
+		    std::shared_ptr<CoordTranslator>);
 
 	 private:
 		std::vector<std::shared_ptr<CoordTranslator>> list;

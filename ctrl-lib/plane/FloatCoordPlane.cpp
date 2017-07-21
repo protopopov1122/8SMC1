@@ -141,8 +141,10 @@ namespace CalX {
 		this->plane->stop();
 	}
 
-	std::unique_ptr<CoordPlane> FloatCoordPlane::clone(std::shared_ptr<CoordPlane> base) {
-		return std::make_unique<FloatCoordPlane>(this->offset, this->scale, this->speed, base);
+	std::unique_ptr<CoordPlane> FloatCoordPlane::clone(
+	    std::shared_ptr<CoordPlane> base) {
+		return std::make_unique<FloatCoordPlane>(this->offset, this->scale,
+		                                         this->speed, base);
 	}
 
 	CoordPlaneStatus FloatCoordPlane::getStatus() {

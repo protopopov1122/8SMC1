@@ -77,7 +77,8 @@ namespace CalX {
 			return nullptr;
 		}
 		virtual void setBase(std::shared_ptr<CoordTranslator>) {}
-		virtual std::unique_ptr<CoordTranslator> clone(std::shared_ptr<CoordTranslator>) = 0;
+		virtual std::unique_ptr<CoordTranslator> clone(
+		    std::shared_ptr<CoordTranslator>) = 0;
 
 	 private:
 		CoordType type;

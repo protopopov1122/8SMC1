@@ -50,7 +50,7 @@ namespace CalX {
 	case ch: {                                                                   \
 		char buf[] = { (char) chr, '\0' };                                         \
 		std::string raw(buf);                                                      \
-		std::unique_ptr<Token> lexem = std::make_unique<Token>();                                                \
+		std::unique_ptr<Token> lexem = std::make_unique<Token>();                  \
 		lexem->literal = raw;                                                      \
 		lexem->oper = tp;                                                          \
 		lexem->type = TokenType::Operator;                                         \

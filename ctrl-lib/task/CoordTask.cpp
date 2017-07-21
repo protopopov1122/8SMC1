@@ -337,10 +337,13 @@ namespace CalX {
 		this->clockwise = c;
 	}
 
-	GraphCoordTask::GraphCoordTask(std::unique_ptr<GraphBuilder> graph, std::shared_ptr<CoordTranslator> trans,
+	GraphCoordTask::GraphCoordTask(std::unique_ptr<GraphBuilder> graph,
+	                               std::shared_ptr<CoordTranslator> trans,
 	                               float scale)
-	    : CoordTask::CoordTask(CoordTaskType::GraphTask), graph(std::move(graph)),
-			trans(trans), scale(scale) {
+	    : CoordTask::CoordTask(CoordTaskType::GraphTask),
+	      graph(std::move(graph)),
+	      trans(trans),
+	      scale(scale) {
 		INIT_LOG("GraphCoordTask");
 	}
 

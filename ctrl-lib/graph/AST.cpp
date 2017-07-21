@@ -27,8 +27,12 @@ namespace CalX {
 		return eng->getScope()->getVariable(id);
 	}
 
-	BinaryNode::BinaryNode(BinaryOperation op, std::unique_ptr<Node> left, std::unique_ptr<Node> right)
-	    : Node::Node(NodeType::Binary), oper(op), left(std::move(left)), right(std::move(right)) {}
+	BinaryNode::BinaryNode(BinaryOperation op, std::unique_ptr<Node> left,
+	                       std::unique_ptr<Node> right)
+	    : Node::Node(NodeType::Binary),
+	      oper(op),
+	      left(std::move(left)),
+	      right(std::move(right)) {}
 
 	engine_value_t BinaryNode::eval(FunctionEngine *eng) {
 		engine_value_t res = { 0, MathError::MNoError };
@@ -64,7 +68,8 @@ namespace CalX {
 		return res;
 	}
 
-	FunctionNode::FunctionNode(std::string id, std::unique_ptr<std::vector<std::unique_ptr<Node>>> args)
+	FunctionNode::FunctionNode(
+	    std::string id, std::unique_ptr<std::vector<std::unique_ptr<Node>>> args)
 	    : Node::Node(NodeType::Function), id(id), args(std::move(args)) {}
 
 	engine_value_t FunctionNode::eval(FunctionEngine *eng) {

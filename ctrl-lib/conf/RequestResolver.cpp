@@ -25,7 +25,8 @@
 
 namespace CalX {
 
-	Request::Request(std::string provider, std::vector<std::shared_ptr<ConfigValue>> args) {
+	Request::Request(std::string provider,
+	                 std::vector<std::shared_ptr<ConfigValue>> args) {
 		this->provider = provider;
 		this->args = args;
 	}
@@ -109,7 +110,8 @@ namespace CalX {
 			char chr = cstr[pos];
 			if (chr == ',' && !quote) {
 				if (!arg.empty()) {
-					std::shared_ptr<ConfigValue> value = std::move(ConfigManager::parseValue(arg.c_str()));
+					std::shared_ptr<ConfigValue> value =
+					    std::move(ConfigManager::parseValue(arg.c_str()));
 					if (value != nullptr) {
 						args.push_back(value);
 					}
@@ -126,7 +128,8 @@ namespace CalX {
 			}
 		}
 		if (!arg.empty()) {
-			std::shared_ptr<ConfigValue> value = std::move(ConfigManager::parseValue(arg.c_str()));
+			std::shared_ptr<ConfigValue> value =
+			    std::move(ConfigManager::parseValue(arg.c_str()));
 			if (value != nullptr) {
 				args.push_back(value);
 			}

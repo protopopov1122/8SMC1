@@ -126,7 +126,8 @@ namespace CalXUI {
 		graphSizer->Add(buildButton);
 		graphSizer->Add(previewButton);
 
-		std::shared_ptr<ConfigManager> conf = wxGetApp().getSystemManager()->getConfiguration();
+		std::shared_ptr<ConfigManager> conf =
+		    wxGetApp().getSystemManager()->getConfiguration();
 		coord_point_t cen = {
 			static_cast<double>(conf->getEntry("coords")->getReal("offset_x", 0.0)),
 			static_cast<double>(conf->getEntry("coords")->getReal("offset_y", 0.0))
@@ -135,7 +136,8 @@ namespace CalXUI {
 			static_cast<double>(conf->getEntry("coords")->getReal("scale_x", 1.0)),
 			static_cast<double>(conf->getEntry("coords")->getReal("scale_y", 1.0))
 		};
-		std::shared_ptr<LinearCoordTranslator> basic = std::make_shared<LinearCoordTranslator>(cen, scl);
+		std::shared_ptr<LinearCoordTranslator> basic =
+		    std::make_shared<LinearCoordTranslator>(cen, scl);
 		this->trans = std::make_shared<ComplexCoordTranslator>(basic);
 		this->translator = new CalxCoordFilterCtrl(this, wxID_ANY, this->trans);
 		sizer->Add(this->translator, 1, wxALL | wxEXPAND, 5);
@@ -147,8 +149,7 @@ namespace CalXUI {
 		Bind(wxEVT_CLOSE_WINDOW, &CalxCoordGraphComponent::OnClose, this);
 	}
 
-	void CalxCoordGraphComponent::OnClose(wxCloseEvent &evt) {
-	}
+	void CalxCoordGraphComponent::OnClose(wxCloseEvent &evt) {}
 
 	void CalxCoordGraphComponent::OnBuildClick(wxCommandEvent &evt) {
 		std::stringstream ss(this->expr->GetValue().ToStdString());
@@ -166,8 +167,10 @@ namespace CalXUI {
 		double speed = this->speed->GetValue();
 		coord_point_t min = { minx, miny };
 		coord_point_t max = { maxx, maxy };
-		std::unique_ptr<GraphBuilder> graph = std::make_unique<GraphBuilder>(std::move(node), min, max, step);
-		this->controller->build(this->translator->getTranslator(), std::move(graph), speed);
+		std::unique_ptr<GraphBuilder> graph =
+		    std::make_unique<GraphBuilder>(std::move(node), min, max, step);
+		this->controller->build(this->translator->getTranslator(), std::move(graph),
+		                        speed);
 	}
 
 	void CalxCoordGraphComponent::OnPreviewClick(wxCommandEvent &evt) {
@@ -191,12 +194,13 @@ namespace CalXUI {
 		double speed = this->speed->GetValue();
 		coord_point_t min = { minx, miny };
 		coord_point_t max = { maxx, maxy };
-		std::unique_ptr<GraphBuilder> graph = std::make_unique<GraphBuilder>(std::move(node), min, max, step);
+		std::unique_ptr<GraphBuilder> graph =
+		    std::make_unique<GraphBuilder>(std::move(node), min, max, step);
 		CalxVirtualPlaneDialog *dialog = new CalxVirtualPlaneDialog(
 		    this, wxID_ANY, this->controller->getHandle(), wxSize(500, 500));
 
-		this->controller->preview(dialog, this->translator->getTranslator(), std::move(graph),
-		                          speed);
+		this->controller->preview(dialog, this->translator->getTranslator(),
+		                          std::move(graph), speed);
 		dialog->ShowModal();
 		delete dialog;
 	}

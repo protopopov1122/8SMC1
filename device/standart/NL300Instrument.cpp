@@ -162,17 +162,21 @@ namespace CalX {
 		this->listener = std::make_shared<NL300ConfigEventListener>(this);
 		this->config->addEventListener(this->listener);
 
-		std::shared_ptr<ConfigEntry> core = this->config->getEntry(NL300_ENTRY_NAME);
-		core->put(NL300_PACK_PULSES,
-		          std::make_unique<IntegerConfigValue>(inquireIntegerParameter('P', 0, 1)));
+		std::shared_ptr<ConfigEntry> core =
+		    this->config->getEntry(NL300_ENTRY_NAME);
+		core->put(NL300_PACK_PULSES, std::make_unique<IntegerConfigValue>(
+		                                 inquireIntegerParameter('P', 0, 1)));
 		core->put(NL300_MAX_OUTPUT_DELAY,
-		          std::make_unique<IntegerConfigValue>(inquireIntegerParameter('D', 0, 400)));
+		          std::make_unique<IntegerConfigValue>(
+		              inquireIntegerParameter('D', 0, 400)));
 		core->put(NL300_ADJ_OUTPUT_DELAY,
-		          std::make_unique<IntegerConfigValue>(inquireIntegerParameter('D', 1, 400)));
-		core->put(NL300_SYNC_OUT_DELAY,
-		          std::make_unique<IntegerConfigValue>(inquireIntegerParameter('D', 2, 0)));
+		          std::make_unique<IntegerConfigValue>(
+		              inquireIntegerParameter('D', 1, 400)));
+		core->put(NL300_SYNC_OUT_DELAY, std::make_unique<IntegerConfigValue>(
+		                                    inquireIntegerParameter('D', 2, 0)));
 		core->put(NL300_REPETITION_RATE_DIV,
-		          std::make_unique<IntegerConfigValue>(inquireIntegerParameter('F', 0, 1)));
+		          std::make_unique<IntegerConfigValue>(
+		              inquireIntegerParameter('F', 0, 1)));
 
 		this->hardwareInfo = getSystemCommandResponse("VER", "");
 		this->softwareInfo = getSystemCommandResponse("SN", "");

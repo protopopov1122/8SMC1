@@ -25,8 +25,8 @@
 
 namespace CalX {
 
-	LogarithmicCoordTranslator::LogarithmicCoordTranslator(coord_scale_t scale,
-	                                                       std::shared_ptr<CoordTranslator> base)
+	LogarithmicCoordTranslator::LogarithmicCoordTranslator(
+	    coord_scale_t scale, std::shared_ptr<CoordTranslator> base)
 	    : CoordTranslator::CoordTranslator(CoordType::LogarithmicCoord) {
 		this->base = base;
 		this->scale = scale;
@@ -115,7 +115,8 @@ namespace CalX {
 		return out;
 	}
 
-	std::unique_ptr<CoordTranslator> LogarithmicCoordTranslator::clone(std::shared_ptr<CoordTranslator> base) {
+	std::unique_ptr<CoordTranslator> LogarithmicCoordTranslator::clone(
+	    std::shared_ptr<CoordTranslator> base) {
 		if (base == nullptr && this->base != nullptr) {
 			base = this->base->clone(nullptr);
 		}

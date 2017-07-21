@@ -27,8 +27,8 @@ namespace CalX {
 
 	class CoordPlaneLog : public CoordPlane {
 	 public:
-		CoordPlaneLog(std::shared_ptr<CoordPlane>, std::ostream *, std::string, bool = true,
-		              bool = true);
+		CoordPlaneLog(std::shared_ptr<CoordPlane>, std::ostream *, std::string,
+		              bool = true, bool = true);
 		virtual ~CoordPlaneLog();
 		std::shared_ptr<CoordPlane> getBase();
 		std::string getPrefix();

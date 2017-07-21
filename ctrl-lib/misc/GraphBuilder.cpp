@@ -25,8 +25,8 @@
 
 namespace CalX {
 
-	GraphBuilder::GraphBuilder(std::unique_ptr<Node> nd, coord_point_t min, coord_point_t max,
-	                           double step) {
+	GraphBuilder::GraphBuilder(std::unique_ptr<Node> nd, coord_point_t min,
+	                           coord_point_t max, double step) {
 		this->node = std::move(nd);
 		this->min = min;
 		this->max = max;
@@ -46,8 +46,8 @@ namespace CalX {
 	}
 
 	ErrorCode GraphBuilder::build(SystemManager *sysman, CoordPlane *plane,
-	                              std::shared_ptr<CoordTranslator> trans, float speed,
-	                              TaskState *state) {
+	                              std::shared_ptr<CoordTranslator> trans,
+	                              float speed, TaskState *state) {
 		plane->use();
 		FunctionEngine *engine = sysman->getFunctionEngine();
 		double nan = std::numeric_limits<double>::quiet_NaN();
@@ -103,8 +103,8 @@ namespace CalX {
 
 	ErrorCode GraphBuilder::floatBuild(SystemManager *sysman,
 	                                   FloatCoordPlane *plane,
-	                                   std::shared_ptr<CoordTranslator> trans, float speed,
-	                                   TaskState *state) {
+	                                   std::shared_ptr<CoordTranslator> trans,
+	                                   float speed, TaskState *state) {
 		plane->use();
 		FunctionEngine *engine = sysman->getFunctionEngine();
 		double nan = std::numeric_limits<double>::quiet_NaN();

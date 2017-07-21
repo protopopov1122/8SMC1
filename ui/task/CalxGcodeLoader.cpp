@@ -49,7 +49,8 @@ namespace CalXUI {
 		gcodeSizer->Add(chooseButton, 0, wxALL);
 		chooseButton->Bind(wxEVT_BUTTON, &CalxGcodeLoader::OnChooseClick, this);
 
-		std::shared_ptr<ConfigManager> conf = wxGetApp().getSystemManager()->getConfiguration();
+		std::shared_ptr<ConfigManager> conf =
+		    wxGetApp().getSystemManager()->getConfiguration();
 		coord_point_t trans_offset = {
 			static_cast<double>(conf->getEntry("coords")->getReal("offset_x", 0.0)),
 			static_cast<double>(conf->getEntry("coords")->getReal("offset_y", 0.0))
@@ -64,8 +65,10 @@ namespace CalXUI {
 		std::shared_ptr<LinearCoordTranslator> unit_trans =
 		    std::make_shared<LinearCoordTranslator>(unit_offset, unit_scale);
 		std::shared_ptr<LinearCoordTranslator> trans =
-		    std::make_shared<LinearCoordTranslator>(trans_offset, trans_scale, unit_trans);
-		std::shared_ptr<ComplexCoordTranslator> ctrans = std::make_shared<ComplexCoordTranslator>(unit_trans);
+		    std::make_shared<LinearCoordTranslator>(trans_offset, trans_scale,
+		                                            unit_trans);
+		std::shared_ptr<ComplexCoordTranslator> ctrans =
+		    std::make_shared<ComplexCoordTranslator>(unit_trans);
 		ctrans->add(trans);
 
 		this->translator = new CalxCoordFilterCtrl(mainPanel, wxID_ANY, ctrans);
@@ -103,7 +106,8 @@ namespace CalXUI {
 	}
 
 	std::shared_ptr<ComplexCoordTranslator> CalxGcodeLoader::getTranslator() {
-		return std::static_pointer_cast<ComplexCoordTranslator>(this->translator->getTranslator());
+		return std::static_pointer_cast<ComplexCoordTranslator>(
+		    this->translator->getTranslator());
 	}
 
 	void CalxGcodeLoader::OnOkClick(wxCommandEvent &evt) {

@@ -27,7 +27,8 @@ namespace CalX {
 
 	class CoordPlaneValidator : public CoordPlane {
 	 public:
-		CoordPlaneValidator(motor_point_t, motor_point_t, float, std::shared_ptr<CoordPlane>);
+		CoordPlaneValidator(motor_point_t, motor_point_t, float,
+		                    std::shared_ptr<CoordPlane>);
 		virtual ~CoordPlaneValidator();
 		std::shared_ptr<CoordPlane> getBase();
 		motor_point_t getMinimum();

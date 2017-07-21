@@ -64,7 +64,8 @@ namespace CalXUI {
 			prms.port = port;
 			prms.speed = speed;
 			prms.parity = parity;
-			std::shared_ptr<InstrumentController> ctrl = sysman->connectInstrument(&prms);
+			std::shared_ptr<InstrumentController> ctrl =
+			    sysman->connectInstrument(&prms);
 			if (ctrl == nullptr) {
 				return false;
 			}

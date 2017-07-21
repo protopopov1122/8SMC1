@@ -148,7 +148,8 @@ namespace CalX {
 		bool getBool(std::string, bool = false);
 		std::string getString(std::string, std::string = "");
 
-		void getContent(std::vector<std::pair<std::string, std::shared_ptr<ConfigValue>>> &);
+		void getContent(
+		    std::vector<std::pair<std::string, std::shared_ptr<ConfigValue>>> &);
 
 	 private:
 		ConfigManager *config;
@@ -174,8 +175,9 @@ namespace CalX {
 		void removeEventListener(std::shared_ptr<ConfigEventListener>);
 		std::vector<std::shared_ptr<ConfigEventListener>> &getEventListeners();
 
-		static std::shared_ptr<ConfigManager> load(std::istream *, std::ostream *,
-								                    std::shared_ptr<ConfigManager> = nullptr);
+		static std::shared_ptr<ConfigManager> load(
+		    std::istream *, std::ostream *,
+		    std::shared_ptr<ConfigManager> = nullptr);
 		static std::unique_ptr<ConfigValue> parseValue(const char *);
 
 	 private:

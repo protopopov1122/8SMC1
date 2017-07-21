@@ -27,7 +27,8 @@ namespace CalX {
 
 	class LogarithmicCoordTranslator : public CoordTranslator {
 	 public:
-		LogarithmicCoordTranslator(coord_scale_t, std::shared_ptr<CoordTranslator> = nullptr);
+		LogarithmicCoordTranslator(coord_scale_t,
+		                           std::shared_ptr<CoordTranslator> = nullptr);
 		virtual ~LogarithmicCoordTranslator();
 		virtual std::shared_ptr<CoordTranslator> getBase();
 		virtual void setBase(std::shared_ptr<CoordTranslator>);
@@ -37,7 +38,8 @@ namespace CalX {
 		virtual coord_point_t get(motor_point_t);
 		virtual coord_point_t floatGet(double, double);
 		virtual coord_point_t floatGet(coord_point_t);
-		virtual std::unique_ptr<CoordTranslator> clone(std::shared_ptr<CoordTranslator>);
+		virtual std::unique_ptr<CoordTranslator> clone(
+		    std::shared_ptr<CoordTranslator>);
 
 	 private:
 		std::shared_ptr<CoordTranslator> base;

@@ -152,11 +152,13 @@ namespace CalX {
 
 	ConfigManager::~ConfigManager() {}
 
-	std::shared_ptr<ConfigEntry> ConfigManager::getEntry(std::string id, bool createNew) {
+	std::shared_ptr<ConfigEntry> ConfigManager::getEntry(std::string id,
+	                                                     bool createNew) {
 		if (this->entries.count(id) != 0) {
 			return this->entries[id];
 		} else if (createNew) {
-			std::shared_ptr<ConfigEntry> entry = std::make_shared<ConfigEntry>(this, id);
+			std::shared_ptr<ConfigEntry> entry =
+			    std::make_shared<ConfigEntry>(this, id);
 			this->entries[id] = entry;
 			for (const auto &l : this->listeners) {
 				l->entryAdded(this, id);
@@ -182,7 +184,8 @@ namespace CalX {
 		return true;
 	}
 
-	void ConfigManager::getEntries(std::vector<std::shared_ptr<ConfigEntry>> &vec) {
+	void ConfigManager::getEntries(
+	    std::vector<std::shared_ptr<ConfigEntry>> &vec) {
 		for (const auto &kv : this->entries) {
 			vec.push_back(kv.second);
 		}
@@ -215,13 +218,15 @@ namespace CalX {
 		this->listeners.push_back(l);
 	}
 
-	void ConfigManager::removeEventListener(std::shared_ptr<ConfigEventListener> l) {
+	void ConfigManager::removeEventListener(
+	    std::shared_ptr<ConfigEventListener> l) {
 		this->listeners.erase(
 		    std::remove(this->listeners.begin(), this->listeners.end(), l),
 		    this->listeners.end());
 	}
 
-	std::vector<std::shared_ptr<ConfigEventListener>> &ConfigManager::getEventListeners() {
+	std::vector<std::shared_ptr<ConfigEventListener>>
+	    &ConfigManager::getEventListeners() {
 		return this->listeners;
 	}
 
@@ -280,8 +285,8 @@ namespace CalX {
 		}
 	}
 
-	std::shared_ptr<ConfigManager> ConfigManager::load(std::istream *is, std::ostream *err,
-	                                   std::shared_ptr<ConfigManager> man) {
+	std::shared_ptr<ConfigManager> ConfigManager::load(
+	    std::istream *is, std::ostream *err, std::shared_ptr<ConfigManager> man) {
 		if (man == nullptr) {
 			man = std::make_shared<ConfigManager>();
 		}

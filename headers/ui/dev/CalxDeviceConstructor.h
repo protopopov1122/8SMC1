@@ -39,7 +39,8 @@ namespace CalXUI {
 
 	class CalxInstrumentConstructor : public CalxDeviceConstructor {
 	 public:
-		CalxInstrumentConstructor(CalxDevicePool *, std::shared_ptr<InstrumentController>);
+		CalxInstrumentConstructor(CalxDevicePool *,
+		                          std::shared_ptr<InstrumentController>);
 		CalxDeviceHandle *construct(wxWindow *win);
 
 	 private:

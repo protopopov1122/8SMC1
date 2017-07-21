@@ -34,10 +34,10 @@ namespace CalX {
 
 	const char *COORD_CTRL_TAG = "CoordCtrl";
 
-	CoordController::CoordController(std::shared_ptr<MotorController> xaxis,
-	                                 std::shared_ptr<MotorController> yaxis,
-	                                 ConfigManager *config,
-	                                 std::shared_ptr<InstrumentController> instr) {
+	CoordController::CoordController(
+	    std::shared_ptr<MotorController> xaxis,
+	    std::shared_ptr<MotorController> yaxis, ConfigManager *config,
+	    std::shared_ptr<InstrumentController> instr) {
 		this->xAxis = xaxis;
 		this->yAxis = yaxis;
 		this->instr = instr;
@@ -550,9 +550,10 @@ namespace CalX {
 		stop();
 	}
 
-	std::unique_ptr<CoordPlane> CoordController::clone(std::shared_ptr<CoordPlane> base) {
-		return std::make_unique<CoordController>(this->xAxis, this->yAxis, this->config,
-		                           this->instr);
+	std::unique_ptr<CoordPlane> CoordController::clone(
+	    std::shared_ptr<CoordPlane> base) {
+		return std::make_unique<CoordController>(this->xAxis, this->yAxis,
+		                                         this->config, this->instr);
 	}
 
 	CoordPlaneStatus CoordController::getStatus() {

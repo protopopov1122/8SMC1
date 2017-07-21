@@ -62,7 +62,8 @@ namespace CalXUI {
 	class CalxMotorComponent : public CalxDeviceHandle {
 	 public:
 		friend class CalxMotorEventListener;
-		CalxMotorComponent(wxWindow *, wxWindowID, std::shared_ptr<CalX::MotorController>);
+		CalxMotorComponent(wxWindow *, wxWindowID,
+		                   std::shared_ptr<CalX::MotorController>);
 		virtual void updateUI();
 		virtual void stop();
 		virtual bool isBusy();

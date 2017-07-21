@@ -121,7 +121,8 @@ namespace CalX {
 
 	class InvertNode : public Node {
 	 public:
-		InvertNode(std::unique_ptr<Node> n) : Node::Node(NodeType::Invert), node(std::move(n)) {}
+		InvertNode(std::unique_ptr<Node> n)
+		    : Node::Node(NodeType::Invert), node(std::move(n)) {}
 		virtual engine_value_t eval(FunctionEngine *eng) {
 			engine_value_t val = this->node->eval(eng);
 			val.value *= -1;
@@ -147,7 +148,8 @@ namespace CalX {
 
 	class FunctionNode : public Node {
 	 public:
-		FunctionNode(std::string, std::unique_ptr<std::vector<std::unique_ptr<Node>>>);
+		FunctionNode(std::string,
+		             std::unique_ptr<std::vector<std::unique_ptr<Node>>>);
 		virtual engine_value_t eval(FunctionEngine *eng);
 
 	 private:

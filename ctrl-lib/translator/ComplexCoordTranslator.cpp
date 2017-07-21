@@ -22,7 +22,8 @@
 
 namespace CalX {
 
-	ComplexCoordTranslator::ComplexCoordTranslator(std::shared_ptr<CoordTranslator> root)
+	ComplexCoordTranslator::ComplexCoordTranslator(
+	    std::shared_ptr<CoordTranslator> root)
 	    : CoordTranslator::CoordTranslator(CoordType::ComplexCoord) {
 		this->list.push_back(root);
 		INIT_LOG("ComplexCoordTranslator");
@@ -37,7 +38,8 @@ namespace CalX {
 		return this->list.size();
 	}
 
-	std::shared_ptr<CoordTranslator> ComplexCoordTranslator::getTranslator(size_t i) {
+	std::shared_ptr<CoordTranslator> ComplexCoordTranslator::getTranslator(
+	    size_t i) {
 		if (i >= this->list.size()) {
 			return nullptr;
 		}
@@ -64,7 +66,8 @@ namespace CalX {
 		return true;
 	}
 
-	bool ComplexCoordTranslator::insert(size_t i, std::shared_ptr<CoordTranslator> t) {
+	bool ComplexCoordTranslator::insert(size_t i,
+	                                    std::shared_ptr<CoordTranslator> t) {
 		if (i >= this->list.size()) {
 			return false;
 		}
@@ -106,11 +109,13 @@ namespace CalX {
 		insert(0, t);
 	}
 
-	std::unique_ptr<CoordTranslator> ComplexCoordTranslator::clone(std::shared_ptr<CoordTranslator> base) {
+	std::unique_ptr<CoordTranslator> ComplexCoordTranslator::clone(
+	    std::shared_ptr<CoordTranslator> base) {
 		if (base == nullptr) {
 			base = this->list.at(0)->clone(nullptr);
 		}
-		std::unique_ptr<ComplexCoordTranslator> trans = std::make_unique<ComplexCoordTranslator>(base);
+		std::unique_ptr<ComplexCoordTranslator> trans =
+		    std::make_unique<ComplexCoordTranslator>(base);
 		for (size_t i = 1; i < this->list.size(); i++) {
 			trans->add(this->getTranslator(i)->clone(trans->getTranslator(i - 1)));
 		}

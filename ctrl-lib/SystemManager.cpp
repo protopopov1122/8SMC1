@@ -30,18 +30,20 @@ namespace CalX {
 		this->devman = std::move(devman);
 		this->conf = conf;
 		this->ext_engine = std::move(ext_eng);
-		for (device_id_t d = 0; d < (device_id_t) this->devman->getMotorCount(); d++) {
+		for (device_id_t d = 0; d < (device_id_t) this->devman->getMotorCount();
+		     d++) {
 			this->dev.push_back(std::make_shared<MotorController>(
 			    this->devman->getMotor(d), this->getConfiguration().get()));
 		}
-		for (device_id_t i = 0; i < (device_id_t) this->devman->getInstrumentCount();
-		     i++) {
+		for (device_id_t i = 0;
+		     i < (device_id_t) this->devman->getInstrumentCount(); i++) {
 			this->instr.push_back(std::make_shared<InstrumentController>(
 			    this->devman->getInstrument(i)));
 		}
 		LOG(SYSMAN_TAG,
-		    "System startup. Found " + std::to_string(this->devman->getMotorCount()) +
-		        " motors and " + std::to_string(this->devman->getInstrumentCount()) +
+		    "System startup. Found " +
+		        std::to_string(this->devman->getMotorCount()) + " motors and " +
+		        std::to_string(this->devman->getInstrumentCount()) +
 		        " instruments.");
 		FunctionEngine_add_default_functions(&this->engine);
 		this->resolver = std::make_unique<RequestResolver>(this);
@@ -77,7 +79,8 @@ namespace CalX {
 		return this->ext_engine.get();
 	}
 
-	std::shared_ptr<MotorController> SystemManager::getMotorController(device_id_t d) {
+	std::shared_ptr<MotorController> SystemManager::getMotorController(
+	    device_id_t d) {
 		if (d >= (device_id_t) this->devman->getMotorCount() || d < 0) {
 			return nullptr;
 		}
@@ -204,14 +207,16 @@ namespace CalX {
 		return this->devman->getInstrumentCount();
 	}
 
-	std::shared_ptr<InstrumentController> SystemManager::getInstrumentController(device_id_t i) {
+	std::shared_ptr<InstrumentController> SystemManager::getInstrumentController(
+	    device_id_t i) {
 		if (i >= (device_id_t) this->devman->getInstrumentCount() || i < 0) {
 			return nullptr;
 		}
 		return this->instr.at((size_t) i);
 	}
 
-	std::shared_ptr<MotorController> SystemManager::connectMotor(DeviceConnectionPrms *prms) {
+	std::shared_ptr<MotorController> SystemManager::connectMotor(
+	    DeviceConnectionPrms *prms) {
 		Motor *d = devman->connectMotor(prms);
 		if (d == nullptr) {
 			return nullptr;

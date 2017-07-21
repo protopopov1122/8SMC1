@@ -28,7 +28,8 @@ namespace CalX {
 		this->root = root;
 		coord_point_t offset = { 0.0, 0.0 };
 		coord_scale_t scale = { 1.0, 1.0 };
-		this->floatPlane = std::make_shared<FloatCoordPlane>(offset, scale, 1.0, root);
+		this->floatPlane =
+		    std::make_shared<FloatCoordPlane>(offset, scale, 1.0, root);
 		INIT_LOG("CoordHandle");
 	}
 

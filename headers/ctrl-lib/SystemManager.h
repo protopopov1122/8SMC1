@@ -69,7 +69,8 @@ namespace CalX {
 		void removeCoord(size_t);
 		// Device connection
 		std::shared_ptr<MotorController> connectMotor(DeviceConnectionPrms *);
-		std::shared_ptr<InstrumentController> connectInstrument(DeviceConnectionPrms *);
+		std::shared_ptr<InstrumentController> connectInstrument(
+		    DeviceConnectionPrms *);
 
 	 private:
 		std::unique_ptr<DeviceManager> devman;

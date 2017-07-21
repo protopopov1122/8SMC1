@@ -382,8 +382,8 @@ namespace CalXUI {
 			switch (value->getType()) {
 				case ConfigValueType::Integer:
 					data.push_back(wxVariant(__("integer")));
-					data.push_back(wxVariant(
-					    std::to_string(((IntegerConfigValue *) value.get())->getValue())));
+					data.push_back(wxVariant(std::to_string(
+					    ((IntegerConfigValue *) value.get())->getValue())));
 					break;
 				case ConfigValueType::Real:
 					data.push_back(wxVariant(__("real")));
@@ -392,12 +392,14 @@ namespace CalXUI {
 					break;
 				case ConfigValueType::Boolean:
 					data.push_back(wxVariant(__("boolean")));
-					data.push_back(wxVariant(
-					    ((BoolConfigValue *) value.get())->getValue() ? "true" : "false"));
+					data.push_back(wxVariant(((BoolConfigValue *) value.get())->getValue()
+					                             ? "true"
+					                             : "false"));
 					break;
 				case ConfigValueType::String:
 					data.push_back(wxVariant(__("string")));
-					data.push_back(wxVariant(((StringConfigValue *) value.get())->getValue()));
+					data.push_back(
+					    wxVariant(((StringConfigValue *) value.get())->getValue()));
 					break;
 			}
 			this->valueList->AppendItem(data);
@@ -418,7 +420,8 @@ namespace CalXUI {
 			case ConfigValueType::Integer:
 				this->integerEditor->Show(true);
 				this->integerSpin->SetValue(
-				    (int) ((IntegerConfigValue *) this->currentValue.get())->getValue());
+				    (int) ((IntegerConfigValue *) this->currentValue.get())
+				        ->getValue());
 				break;
 			case ConfigValueType::Real:
 				this->realEditor->Show(true);
@@ -459,8 +462,8 @@ namespace CalXUI {
 					    wxVariant(__("integer")),
 					    (unsigned int) this->valueList->GetSelectedRow(), 1);
 					this->valueList->SetValue(
-					    wxVariant(
-					        std::to_string(((IntegerConfigValue *) value.get())->getValue())),
+					    wxVariant(std::to_string(
+					        ((IntegerConfigValue *) value.get())->getValue())),
 					    (unsigned int) this->valueList->GetSelectedRow(), 2);
 					break;
 				case ConfigValueType::Real:
@@ -468,8 +471,8 @@ namespace CalXUI {
 					    wxVariant(__("real")),
 					    (unsigned int) this->valueList->GetSelectedRow(), 1);
 					this->valueList->SetValue(
-					    wxVariant(
-					        std::to_string(((RealConfigValue *) value.get())->getValue())),
+					    wxVariant(std::to_string(
+					        ((RealConfigValue *) value.get())->getValue())),
 					    (unsigned int) this->valueList->GetSelectedRow(), 2);
 					break;
 				case ConfigValueType::Boolean:
@@ -478,7 +481,8 @@ namespace CalXUI {
 					    (unsigned int) this->valueList->GetSelectedRow(), 1);
 					this->valueList->SetValue(
 					    wxVariant(std::string(
-					        ((BoolConfigValue *) value.get())->getValue() ? "true" : "false")),
+					        ((BoolConfigValue *) value.get())->getValue() ? "true"
+					                                                      : "false")),
 					    (unsigned int) this->valueList->GetSelectedRow(), 2);
 					break;
 				case ConfigValueType::String:

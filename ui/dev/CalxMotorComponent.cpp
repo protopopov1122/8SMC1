@@ -118,8 +118,8 @@ namespace CalXUI {
 		int tr;
 	};
 
-	CalxMotorComponent::CalxMotorComponent(wxWindow *win, wxWindowID id,
-	                                       std::shared_ptr<CalX::MotorController> dev)
+	CalxMotorComponent::CalxMotorComponent(
+	    wxWindow *win, wxWindowID id, std::shared_ptr<CalX::MotorController> dev)
 	    : CalxDeviceHandle::CalxDeviceHandle(win, id) {
 		this->dev = dev;
 		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);

@@ -35,8 +35,10 @@ namespace CalX {
 
 		coord_point_t troffset = { 0, 0 };
 		coord_scale_t trscale = { 1, 1 };
-		std::shared_ptr<LinearCoordTranslator> unit_trans = std::make_shared<LinearCoordTranslator>(troffset, trscale, trans);
-		std::shared_ptr<LinearCoordTranslator> translator = std::make_shared<LinearCoordTranslator>(troffset, trscale, unit_trans);
+		std::shared_ptr<LinearCoordTranslator> unit_trans =
+		    std::make_shared<LinearCoordTranslator>(troffset, trscale, trans);
+		std::shared_ptr<LinearCoordTranslator> translator =
+		    std::make_shared<LinearCoordTranslator>(troffset, trscale, unit_trans);
 
 		motor_point_t offset = translator->get(0, 0);
 		int invert = 1;

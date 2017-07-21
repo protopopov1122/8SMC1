@@ -264,7 +264,8 @@ namespace CalX {
 					prefix += " ";
 				}
 			}
-			ctrl->pushPlane(std::make_shared<CoordPlaneLog>(ctrl->peekPlane(), &std::cout, prefix));
+			ctrl->pushPlane(std::make_shared<CoordPlaneLog>(ctrl->peekPlane(),
+			                                                &std::cout, prefix));
 		} else if (com.compare("map") == 0) {
 			if (args.size() < 5) {
 				std::cout << "Provide arguments" << std::endl;
@@ -277,7 +278,8 @@ namespace CalX {
 			}
 			motor_point_t offset = { std::stoi(args.at(1)), std::stoi(args.at(2)) };
 			motor_scale_t scale = { std::stod(args.at(3)), std::stod(args.at(4)) };
-			ctrl->pushPlane(std::make_shared<CoordPlaneMap>(offset, scale, 1, ctrl->peekPlane()));
+			ctrl->pushPlane(
+			    std::make_shared<CoordPlaneMap>(offset, scale, 1, ctrl->peekPlane()));
 		} else if (com.compare("validate") == 0) {
 			if (args.size() < 6) {
 				std::cout << "Provide arguments" << std::endl;
@@ -291,8 +293,8 @@ namespace CalX {
 			motor_point_t min = { std::stoi(args.at(1)), std::stoi(args.at(2)) };
 			motor_point_t max = { std::stoi(args.at(3)), std::stoi(args.at(4)) };
 			float speed = static_cast<float>(std::stod(args.at(5)));
-			ctrl->pushPlane(
-			    std::make_shared<CoordPlaneValidator>(min, max, speed, ctrl->peekPlane()));
+			ctrl->pushPlane(std::make_shared<CoordPlaneValidator>(min, max, speed,
+			                                                      ctrl->peekPlane()));
 		} else if (com.compare("move") == 0) {
 			if (args.size() < 4) {
 				std::cout << "Provide arguments" << std::endl;
@@ -534,7 +536,8 @@ namespace CalX {
 			double maxy = std::stod(args.at(9));
 			double step = std::stod(args.at(10));
 			float speed = static_cast<float>(std::stod(args.at(11)));
-			std::shared_ptr<BasicCoordTranslator> trans = std::make_shared<BasicCoordTranslator>(toffset, tsize);
+			std::shared_ptr<BasicCoordTranslator> trans =
+			    std::make_shared<BasicCoordTranslator>(toffset, tsize);
 			coord_point_t min = { minx, miny };
 			coord_point_t max = { maxx, maxy };
 			GraphBuilder graph(std::move(node), min, max, step);
@@ -764,7 +767,8 @@ namespace CalX {
 			}
 			motor_point_t center = { std::stoi(args.at(1)), std::stoi(args.at(2)) };
 			motor_size_t scale = { std::stoi(args.at(3)), std::stoi(args.at(4)) };
-			std::shared_ptr<BasicCoordTranslator> trans = std::make_shared<BasicCoordTranslator>(center, scale);
+			std::shared_ptr<BasicCoordTranslator> trans =
+			    std::make_shared<BasicCoordTranslator>(center, scale);
 			std::string path = args.at(5);
 			std::ifstream is(path, std::ifstream::in);
 			sysman->addTask(std::make_unique<GCodeCoordTask>(&is, trans));
@@ -785,13 +789,15 @@ namespace CalX {
 			double maxy = std::stod(args.at(9));
 			double step = std::stod(args.at(10));
 			float speed = static_cast<float>(std::stod(args.at(11)));
-			std::shared_ptr<CoordTranslator> trans = std::make_shared<BasicCoordTranslator>(toffset, tsize);
+			std::shared_ptr<CoordTranslator> trans =
+			    std::make_shared<BasicCoordTranslator>(toffset, tsize);
 			coord_point_t min = { minx, miny };
 			coord_point_t max = { maxx, maxy };
-			std::unique_ptr<GraphBuilder> graph = std::make_unique<GraphBuilder>(std::move(node), min, max, step);
+			std::unique_ptr<GraphBuilder> graph =
+			    std::make_unique<GraphBuilder>(std::move(node), min, max, step);
 			std::cout << "New graph task #"
-			          << sysman->addTask(
-			                 std::make_unique<GraphCoordTask>(std::move(graph), trans, speed))
+			          << sysman->addTask(std::make_unique<GraphCoordTask>(
+			                 std::move(graph), trans, speed))
 			          << std::endl;
 		} else {
 			std::cout << "Wrong command '" << args.at(0) << "'" << std::endl;

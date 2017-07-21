@@ -103,8 +103,8 @@ namespace CalXUI {
 
 	class CalxCoordActionGraphBuild : public CalxAction {
 	 public:
-		CalxCoordActionGraphBuild(CoordHandle *, std::shared_ptr<CoordTranslator>, std::unique_ptr<GraphBuilder>,
-		                          double);
+		CalxCoordActionGraphBuild(CoordHandle *, std::shared_ptr<CoordTranslator>,
+		                          std::unique_ptr<GraphBuilder>, double);
 
 		virtual void perform(SystemManager *);
 		virtual void stop();
@@ -119,7 +119,8 @@ namespace CalXUI {
 
 	class CalxCoordActionGraphPreview : public CalxAction {
 	 public:
-		CalxCoordActionGraphPreview(CalxVirtualPlaneDialog *, std::shared_ptr<CoordTranslator>,
+		CalxCoordActionGraphPreview(CalxVirtualPlaneDialog *,
+		                            std::shared_ptr<CoordTranslator>,
 		                            std::unique_ptr<GraphBuilder>, double);
 
 		virtual void perform(SystemManager *);

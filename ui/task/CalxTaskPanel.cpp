@@ -368,9 +368,10 @@ namespace CalXUI {
 			}
 			ss.seekg(0);
 
-			std::unique_ptr<CoordTranslator> translator = list.at((size_t) taskList->GetSelection())
-			                                  ->getTranslator()
-			                                  ->clone(nullptr);
+			std::unique_ptr<CoordTranslator> translator =
+			    list.at((size_t) taskList->GetSelection())
+			        ->getTranslator()
+			        ->clone(nullptr);
 			std::shared_ptr<ComplexCoordTranslator> trans = nullptr;
 			if (translator->getType() == ComplexCoord) {
 				std::shared_ptr<CoordTranslator> shtrans = std::move(translator);

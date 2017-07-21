@@ -42,12 +42,13 @@ namespace CalXUI {
 		                              ->getConfiguration()
 		                              ->getEntry("units")
 		                              ->getReal("plane_speed_scale", 1.0f);
-		this->unit_map = std::make_shared<CoordPlaneMap>(plane_offset, plane_scale,
-		                                   plane_speed_scale, handle->peekPlane());
+		this->unit_map = std::make_shared<CoordPlaneMap>(
+		    plane_offset, plane_scale, plane_speed_scale, handle->peekPlane());
 		handle->pushPlane(this->unit_map);
 		motor_point_t validateMin = { INT_MIN, INT_MIN };
 		motor_point_t validateMax = { INT_MAX, INT_MAX };
-		this->validator = std::make_shared<CoordPlaneValidator>(validateMin, validateMax,
+		this->validator =
+		    std::make_shared<CoordPlaneValidator>(validateMin, validateMax,
 		                                          wxGetApp()
 		                                              .getSystemManager()
 		                                              ->getConfiguration()
@@ -61,7 +62,8 @@ namespace CalXUI {
 		handle->pushPlane(this->log);
 		motor_point_t mapOffset = { 0, 0 };
 		motor_scale_t mapScale = { 1.0f, 1.0f };
-		this->map = std::make_shared<CoordPlaneMap>(mapOffset, mapScale, 1, handle->peekPlane());
+		this->map = std::make_shared<CoordPlaneMap>(mapOffset, mapScale, 1,
+		                                            handle->peekPlane());
 		handle->pushPlane(this->map);
 
 		coord_scale_t unit_scale = { wxGetApp().getUnitScale(),
@@ -187,18 +189,20 @@ namespace CalXUI {
 		    new CalxCoordActionConfigure(this->handle, this, pos, speed), ready);
 	}
 
-	void CalxCoordController::build(std::shared_ptr<CoordTranslator> trans, std::unique_ptr<GraphBuilder> builder,
+	void CalxCoordController::build(std::shared_ptr<CoordTranslator> trans,
+	                                std::unique_ptr<GraphBuilder> builder,
 	                                double speed, bool *ready) {
-		this->queue->addAction(
-		    new CalxCoordActionGraphBuild(this->handle, trans, std::move(builder), speed),
-		    ready);
+		this->queue->addAction(new CalxCoordActionGraphBuild(
+		                           this->handle, trans, std::move(builder), speed),
+		                       ready);
 	}
 
 	void CalxCoordController::preview(CalxVirtualPlaneDialog *dialog,
 	                                  std::shared_ptr<CoordTranslator> trans,
-	                                  std::unique_ptr<GraphBuilder> builder, double speed,
-	                                  bool *ready) {
-		this->queue->addAction(
-		    new CalxCoordActionGraphPreview(dialog, trans, std::move(builder), speed), ready);
+	                                  std::unique_ptr<GraphBuilder> builder,
+	                                  double speed, bool *ready) {
+		this->queue->addAction(new CalxCoordActionGraphPreview(
+		                           dialog, trans, std::move(builder), speed),
+		                       ready);
 	}
 }

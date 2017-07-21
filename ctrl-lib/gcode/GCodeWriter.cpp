@@ -23,7 +23,8 @@
 namespace CalX {
 
 	GCodeWriter::GCodeWriter(motor_point_t pos, motor_rect_t size,
-	                         std::shared_ptr<CoordTranslator> trans, std::ostream *out)
+	                         std::shared_ptr<CoordTranslator> trans,
+	                         std::ostream *out)
 	    : VirtualCoordPlane::VirtualCoordPlane(pos, size) {
 		this->trans = trans;
 		this->out = out;
@@ -34,9 +35,10 @@ namespace CalX {
 		*out << "%" << std::endl;
 	}
 
-	std::unique_ptr<CoordPlane> GCodeWriter::clone(std::shared_ptr<CoordPlane> base) {
-		std::unique_ptr<GCodeWriter> writer = std::make_unique<GCodeWriter>(base->getPosition(), base->getSize(),
-		                                      this->trans, this->out);
+	std::unique_ptr<CoordPlane> GCodeWriter::clone(
+	    std::shared_ptr<CoordPlane> base) {
+		std::unique_ptr<GCodeWriter> writer = std::make_unique<GCodeWriter>(
+		    base->getPosition(), base->getSize(), this->trans, this->out);
 		return writer;
 	}
 
