@@ -102,7 +102,7 @@ namespace CalXUI {
 #endif
 	}
 
-	CoordHandle *CalxCoordDialog::getCoordPlane() {
+	std::shared_ptr<CoordHandle> CalxCoordDialog::getCoordPlane() {
 		return this->ctrl;
 	}
 

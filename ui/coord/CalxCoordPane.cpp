@@ -36,7 +36,8 @@ namespace CalXUI {
 	wxDEFINE_EVENT(wxEVT_COORD_CTRL_WATCHER, wxThreadEvent);
 	wxDEFINE_EVENT(wxEVT_COORD_CTRL_ENABLE, wxThreadEvent);
 
-	CalxCoordPane::CalxCoordPane(wxWindow *win, wxWindowID id, CoordHandle *ctrl,
+	CalxCoordPane::CalxCoordPane(wxWindow *win, wxWindowID id,
+	                             std::shared_ptr<CoordHandle> ctrl,
 	                             size_t component_pane_count)
 	    : wxScrolledWindow::wxScrolledWindow(win, id) {
 		this->ctrl = ctrl;
@@ -50,12 +51,12 @@ namespace CalXUI {
 
 		this->listener = new CalxCoordEventListener(this);
 		this->ctrl->addEventListener(this->listener);
-		this->xListener = new CalxCoordMotorListener(this);
-		this->yListener = new CalxCoordMotorListener(this);
+		this->xListener = std::make_shared<CalxCoordMotorListener>(this);
+		this->yListener = std::make_shared<CalxCoordMotorListener>(this);
 		this->ctrl->getController()->getXAxis()->addEventListener(this->xListener);
 		this->ctrl->getController()->getYAxis()->addEventListener(this->yListener);
 		if (this->ctrl->getController()->getInstrument() != nullptr) {
-			this->instrListener = new CalxCoordInstrumentListener(this);
+			this->instrListener = std::make_shared<CalxCoordInstrumentListener>(this);
 			this->ctrl->getController()->getInstrument()->addEventListener(
 			    this->instrListener);
 		}
@@ -142,7 +143,7 @@ namespace CalXUI {
 		return this->component_panes.size();
 	}
 
-	CoordHandle *CalxCoordPane::getHandle() {
+	std::shared_ptr<CoordHandle> CalxCoordPane::getHandle() {
 		return this->ctrl;
 	}
 

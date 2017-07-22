@@ -73,7 +73,7 @@ namespace CalX {
 	};
 
 	struct TaskState {
-		CoordPlane *plane;
+		std::shared_ptr<CoordPlane> plane;
 		bool work;
 
 		void stop();

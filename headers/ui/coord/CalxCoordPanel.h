@@ -50,7 +50,7 @@ namespace CalXUI {
 
 		size_t getCoordCount();
 		CalxCoordPane *getCoordCtrl(size_t sz);
-		void updateList(CoordHandle *, bool *);
+		void updateList(std::shared_ptr<CoordHandle>, bool *);
 		virtual void updateUI();
 		virtual void shutdown();
 		virtual bool isBusy();
@@ -59,7 +59,7 @@ namespace CalXUI {
 		                         bool = true);
 
 	 private:
-		void addPlane(CoordHandle *);
+		void addPlane(std::shared_ptr<CoordHandle>);
 		void removePlane(size_t);
 
 		void OnExit(wxCloseEvent &);

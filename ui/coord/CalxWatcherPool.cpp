@@ -24,7 +24,8 @@
 
 namespace CalXUI {
 
-	CalxWatcherPool::CalxWatcherPool(wxWindow *win, CoordHandle *handle)
+	CalxWatcherPool::CalxWatcherPool(wxWindow *win,
+	                                 std::shared_ptr<CoordHandle> handle)
 	    : parent(win), handle(handle) {}
 
 	CalxWatcherPool::~CalxWatcherPool() {

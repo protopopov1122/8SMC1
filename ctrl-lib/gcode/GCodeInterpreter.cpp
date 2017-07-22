@@ -30,7 +30,7 @@ namespace CalX {
 	ErrorCode GCodeInterpreter::execute(GCodeStream *input, CoordPlane *plane,
 	                                    std::shared_ptr<CoordTranslator> trans,
 	                                    ConfigManager *config, float speed,
-	                                    TaskState *state) {
+	                                    std::shared_ptr<TaskState> state) {
 		input->reset();
 
 		coord_point_t troffset = { 0, 0 };

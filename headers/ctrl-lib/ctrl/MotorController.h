@@ -39,8 +39,6 @@ namespace CalX {
 
 	class MotorController {
 	 public:
-		friend class CoordController;
-
 		MotorController(Motor *, ConfigManager *);
 		virtual ~MotorController();
 		Motor *getMotor();
@@ -57,28 +55,29 @@ namespace CalX {
 
 		motor_coord_t getPosition();
 
-		void addEventListener(MotorEventListener *);
-		void removeEventListener(MotorEventListener *);
+		void addEventListener(std::shared_ptr<MotorEventListener>);
+		void removeEventListener(std::shared_ptr<MotorEventListener>);
 		void use();
 		void unuse();
 
-	 protected:
+		ErrorCode waitWhileRunning();
+		ErrorCode checkTrailers();
+
 		void sendMovingEvent(MotorMoveEvent &);
 		void sendMovedEvent(MotorMoveEvent &);
 		void sendStoppedEvent(MotorErrorEvent &);
 		void sendRollingEvent(MotorRollEvent &);
 		void sendRolledEvent(MotorRollEvent &);
 
+		MoveType dest;
+
 	 private:
 		bool work;
-		ErrorCode waitWhileRunning();
-		ErrorCode checkTrailers();
 
 		Motor *dev;
-		MoveType dest;
 		ConfigManager *config;
 
-		std::vector<MotorEventListener *> listeners;
+		std::vector<std::shared_ptr<MotorEventListener>> listeners;
 	};
 }
 

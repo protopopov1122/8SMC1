@@ -35,10 +35,10 @@ namespace CalXUI {
 
 	class CalxCoordController {
 	 public:
-		CalxCoordController(CoordHandle *, CalxActionQueue *);
+		CalxCoordController(std::shared_ptr<CoordHandle>, CalxActionQueue *);
 		virtual ~CalxCoordController();
 
-		CoordHandle *getHandle();
+		std::shared_ptr<CoordHandle> getHandle();
 
 		motor_point_t getOffset();
 		motor_scale_t getScale();
@@ -72,7 +72,7 @@ namespace CalXUI {
 		             std::unique_ptr<GraphBuilder>, double, bool * = nullptr);
 
 	 private:
-		CoordHandle *handle;
+		std::shared_ptr<CoordHandle> handle;
 		CalxActionQueue *queue;
 
 		// Filters

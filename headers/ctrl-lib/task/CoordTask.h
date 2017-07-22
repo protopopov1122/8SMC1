@@ -42,9 +42,8 @@ namespace CalX {
 	class LinearCoordTask : public CoordTask {
 	 public:
 		LinearCoordTask(motor_rect_t, motor_coord_t, bool = true);
-		virtual ~LinearCoordTask();
-		virtual ErrorCode perform(CoordPlane *, TaskParameters &, SystemManager *,
-		                          TaskState *);
+		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
+		                          SystemManager *, std::shared_ptr<TaskState>);
 
 		motor_rect_t getRectangle();
 		void setRectangle(motor_rect_t);
@@ -63,8 +62,8 @@ namespace CalX {
 	 public:
 		ProgrammedCoordTask();
 		virtual ~ProgrammedCoordTask();
-		virtual ErrorCode perform(CoordPlane *, TaskParameters &, SystemManager *,
-		                          TaskState *);
+		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
+		                          SystemManager *, std::shared_ptr<TaskState>);
 		void addStep(TaskStep *);
 		size_t getSubCount();
 		bool removeStep(size_t);
@@ -79,9 +78,8 @@ namespace CalX {
 	 public:
 		GraphCoordTask(std::unique_ptr<GraphBuilder>,
 		               std::shared_ptr<CoordTranslator>, float);
-		virtual ~GraphCoordTask();
-		virtual ErrorCode perform(CoordPlane *, TaskParameters &, SystemManager *,
-		                          TaskState *);
+		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
+		                          SystemManager *, std::shared_ptr<TaskState>);
 
 	 private:
 		std::unique_ptr<GraphBuilder> graph;
@@ -93,8 +91,8 @@ namespace CalX {
 	 public:
 		GCodeCoordTask(std::istream *, std::shared_ptr<CoordTranslator>);
 		virtual ~GCodeCoordTask();
-		virtual ErrorCode perform(CoordPlane *, TaskParameters &, SystemManager *,
-		                          TaskState *);
+		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
+		                          SystemManager *, std::shared_ptr<TaskState>);
 
 		std::string getGCode();
 		std::shared_ptr<CoordTranslator> getTranslator();

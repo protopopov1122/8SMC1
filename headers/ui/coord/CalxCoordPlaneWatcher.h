@@ -34,12 +34,13 @@ namespace CalXUI {
 
 	class CalxCoordPlaneWatcherTimer : public wxTimer {
 	 public:
-		CalxCoordPlaneWatcherTimer(CalxCoordPlaneWatcher *, CoordHandle *);
+		CalxCoordPlaneWatcherTimer(CalxCoordPlaneWatcher *,
+		                           std::shared_ptr<CoordHandle>);
 		virtual void Notify();
 
 	 private:
 		CalxCoordPlaneWatcher *watcher;
-		CoordHandle *handle;
+		std::shared_ptr<CoordHandle> handle;
 	};
 
 	class CalxCoordPlaneWatcherRepaintTimer : public wxTimer {
@@ -53,23 +54,24 @@ namespace CalXUI {
 
 	class CalxCoordPlaneWatcherEvent : public CoordEventListener {
 	 public:
-		CalxCoordPlaneWatcherEvent(CalxCoordPlaneWatcher *, CoordHandle *);
+		CalxCoordPlaneWatcherEvent(CalxCoordPlaneWatcher *,
+		                           std::shared_ptr<CoordHandle>);
 		virtual ~CalxCoordPlaneWatcherEvent();
 		virtual void moved(CoordMoveEvent &);
 
 	 private:
 		CalxCoordPlaneWatcher *watcher;
-		CoordHandle *handle;
+		std::shared_ptr<CoordHandle> handle;
 	};
 
 	class CalxCoordPlaneWatcher : public wxWindow {
 	 public:
-		CalxCoordPlaneWatcher(wxWindow *, wxWindowID, wxSize, CoordHandle *,
-		                      CalxWatcherPool *);
+		CalxCoordPlaneWatcher(wxWindow *, wxWindowID, wxSize,
+		                      std::shared_ptr<CoordHandle>, CalxWatcherPool *);
 		void clear();
 		bool isRendering();
 		bool hasUpdates();
-		CoordHandle *getHandle();
+		std::shared_ptr<CoordHandle> getHandle();
 		void update();
 
 	 private:
@@ -81,7 +83,7 @@ namespace CalXUI {
 		void OnResizeEvent(wxSizeEvent &);
 		void OnAppendEvent(wxThreadEvent &);
 
-		CoordHandle *handle;
+		std::shared_ptr<CoordHandle> handle;
 		CalxWatcherPool *pool;
 		CalxCoordPlaneWatcherTimer *timer;
 		CalxCoordPlaneWatcherRepaintTimer *repaint_timer;
@@ -99,7 +101,8 @@ namespace CalXUI {
 
 	class CalxCoordPlaneWatcherDialog : public wxDialog {
 	 public:
-		CalxCoordPlaneWatcherDialog(wxWindow *, wxWindowID, CoordHandle *,
+		CalxCoordPlaneWatcherDialog(wxWindow *, wxWindowID,
+		                            std::shared_ptr<CoordHandle>,
 		                            CalxWatcherPool *);
 		CalxCoordPlaneWatcher *getWatcher();
 
@@ -110,7 +113,7 @@ namespace CalXUI {
 
 		CalxCoordPlaneWatcher *watcher;
 		CalxWatcherPool *pool;
-		CoordHandle *handle;
+		std::shared_ptr<CoordHandle> handle;
 		wxStaticText *mouseCoords;
 	};
 }

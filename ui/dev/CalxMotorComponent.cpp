@@ -123,7 +123,7 @@ namespace CalXUI {
 	    : CalxDeviceHandle::CalxDeviceHandle(win, id) {
 		this->dev = dev;
 		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
-		this->listener = new CalxMotorEventListener(this);
+		this->listener = std::make_shared<CalxMotorEventListener>(this);
 
 		wxStaticBox *box = new wxStaticBox(
 		    this, wxID_ANY,

@@ -37,36 +37,37 @@ namespace CalXUI {
 
 	class CalxTaskAction : public CalxAction {
 	 public:
-		CalxTaskAction(CalxTaskPanel *panel, CoordHandle *handle, CoordTask *task,
-		               TaskParameters prms) {
+		CalxTaskAction(CalxTaskPanel *panel, std::shared_ptr<CoordHandle> handle,
+		               CoordTask *task, TaskParameters prms) {
 			this->panel = panel;
 			this->handle = handle;
 			this->task = task;
 			this->prms = prms;
 			this->prms.speed *= this->handle->getFloatPlane()->getSpeedScale();
-			this->state.plane = nullptr;
-			this->state.work = false;
+			this->state = std::make_shared<TaskState>();
+			this->state->plane = nullptr;
+			this->state->work = false;
 		}
 
 		virtual void perform(SystemManager *sysman) {
 			handle->open_session();
 			panel->setEnabled(false);
 			wxGetApp().getErrorHandler()->handle(
-			    task->perform(handle, prms, sysman, &state));
+			    task->perform(handle, prms, sysman, state));
 			panel->setEnabled(true);
 			handle->close_session();
 		}
 
 		virtual void stop() {
-			state.stop();
+			state->stop();
 		}
 
 	 private:
 		CalxTaskPanel *panel;
-		CoordHandle *handle;
+		std::shared_ptr<CoordHandle> handle;
 		CoordTask *task;
 		TaskParameters prms;
-		TaskState state;
+		std::shared_ptr<TaskState> state;
 	};
 
 	class CalxPreviewAction : public CalxAction {
@@ -78,22 +79,23 @@ namespace CalXUI {
 			this->task = task;
 			this->prms = prms;
 			this->prms.speed *= dialog->getFloatPlane()->getSpeedScale();
-			this->state.plane = nullptr;
-			this->state.work = false;
+			this->state = std::make_shared<TaskState>();
+			this->state->plane = nullptr;
+			this->state->work = false;
 		}
 
 		virtual void perform(SystemManager *sysman) {
 			dialog->setEnabled(false);
 			panel->setEnabled(false);
 			wxGetApp().getErrorHandler()->handle(
-			    task->perform(dialog->getPlane(), prms, sysman, &state));
+			    task->perform(dialog->getPlane(), prms, sysman, state));
 			panel->setEnabled(true);
 			dialog->setEnabled(true);
 			dialog->Refresh();
 		}
 
 		virtual void stop() {
-			state.stop();
+			state->stop();
 		}
 
 	 private:
@@ -101,7 +103,7 @@ namespace CalXUI {
 		CalxVirtualPlaneDialog *dialog;
 		CoordTask *task;
 		TaskParameters prms;
-		TaskState state;
+		std::shared_ptr<TaskState> state;
 	};
 
 	CalxTaskPanel::CalxTaskPanel(wxWindow *win, wxWindowID id)
@@ -219,7 +221,8 @@ namespace CalXUI {
 			if (wxGetApp().getSystemManager()->getCoord(i)->isUsed()) {
 				continue;
 			}
-			CoordHandle *handle = wxGetApp().getSystemManager()->getCoord(i);
+			std::shared_ptr<CoordHandle> handle =
+			    wxGetApp().getSystemManager()->getCoord(i);
 			plane->Append("Plane #" + std::to_string(handle->getID()));
 		}
 		if (wxGetApp().getSystemManager()->getCoordCount() > 0) {
@@ -285,8 +288,9 @@ namespace CalXUI {
 		    plane->GetSelection() != wxNOT_FOUND) {
 			list.at((size_t) taskList->GetSelection())->update();
 			CoordTask *task = list.at((size_t) taskList->GetSelection())->getTask();
-			CoordHandle *handle = wxGetApp().getSystemManager()->getCoord(
-			    (size_t) plane->GetSelection());
+			std::shared_ptr<CoordHandle> handle =
+			    wxGetApp().getSystemManager()->getCoord(
+			        (size_t) plane->GetSelection());
 			float speed = this->speed->GetValue();
 			TaskParameters prms = { (float) speed };
 			queue->addAction(new CalxTaskAction(this, handle, task, prms));
@@ -307,8 +311,9 @@ namespace CalXUI {
 		    plane->GetSelection() != wxNOT_FOUND) {
 			list.at((size_t) taskList->GetSelection())->update();
 			CoordTask *task = list.at((size_t) taskList->GetSelection())->getTask();
-			CoordHandle *handle = wxGetApp().getSystemManager()->getCoord(
-			    (size_t) plane->GetSelection());
+			std::shared_ptr<CoordHandle> handle =
+			    wxGetApp().getSystemManager()->getCoord(
+			        (size_t) plane->GetSelection());
 			if (!handle->isMeasured()) {
 				wxMessageBox(__("Plane need to be measured before preview"),
 				             __("Warning"), wxICON_WARNING);
@@ -337,8 +342,9 @@ namespace CalXUI {
 		    plane->GetSelection() != wxNOT_FOUND) {
 			list.at((size_t) taskList->GetSelection())->update();
 			CoordTask *task = list.at((size_t) taskList->GetSelection())->getTask();
-			CoordHandle *handle = wxGetApp().getSystemManager()->getCoord(
-			    (size_t) plane->GetSelection());
+			std::shared_ptr<CoordHandle> handle =
+			    wxGetApp().getSystemManager()->getCoord(
+			        (size_t) plane->GetSelection());
 			if (!handle->isMeasured()) {
 				wxMessageBox(__("Plane need to be measured to linearize"),
 				             __("Warning"), wxICON_WARNING);
@@ -347,15 +353,15 @@ namespace CalXUI {
 			TaskParameters prms = { (float) this->speed->GetValue() };
 
 			std::stringstream ss;
-			TaskState state;
-			GCodeWriter *writer = new GCodeWriter(
+			std::shared_ptr<TaskState> state = std::make_shared<TaskState>();
+			std::shared_ptr<GCodeWriter> writer = std::make_shared<GCodeWriter>(
 			    handle->getPosition(), handle->getSize(),
 			    list.at((size_t) taskList->GetSelection())->getTranslator(), &ss);
 			this->setEnabled(false);
 			wxGetApp().getErrorHandler()->handle(
-			    task->perform(writer, prms, wxGetApp().getSystemManager(), &state));
+			    task->perform(writer, prms, wxGetApp().getSystemManager(), state));
 			this->setEnabled(true);
-			delete writer;
+			writer->close();
 
 			wxFileDialog *dialog =
 			    new wxFileDialog(this, __("Export linearized GCode"), "", "", "",

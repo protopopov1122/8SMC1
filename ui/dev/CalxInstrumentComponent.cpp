@@ -154,7 +154,7 @@ namespace CalXUI {
 	    : CalxDeviceHandle::CalxDeviceHandle(win, id) {
 		this->ctrl = ctrl;
 		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
-		this->listener = new CalxInstrumentEventListener(this);
+		this->listener = std::make_shared<CalxInstrumentEventListener>(this);
 
 		wxStaticBox *box = new wxStaticBox(
 		    this, wxID_ANY,

@@ -23,7 +23,7 @@
 #include <algorithm>
 
 namespace CalXUI {
-	CalxCoordController::CalxCoordController(CoordHandle *handle,
+	CalxCoordController::CalxCoordController(std::shared_ptr<CoordHandle> handle,
 	                                         CalxActionQueue *queue)
 	    : handle(handle), queue(queue) {
 		motor_point_t plane_offset = { 0, 0 };
@@ -75,7 +75,7 @@ namespace CalXUI {
 
 	CalxCoordController::~CalxCoordController() {}
 
-	CoordHandle *CalxCoordController::getHandle() {
+	std::shared_ptr<CoordHandle> CalxCoordController::getHandle() {
 		return this->handle;
 	}
 

@@ -25,10 +25,9 @@
 
 namespace CalXUI {
 
-	CalxCoordAdjustAction::CalxCoordAdjustAction(CalxCoordAdjustDialog *dialog,
-	                                             CoordHandle *handle,
-	                                             CalxAdjustDirection dir,
-	                                             double step, double speed)
+	CalxCoordAdjustAction::CalxCoordAdjustAction(
+	    CalxCoordAdjustDialog *dialog, std::shared_ptr<CoordHandle> handle,
+	    CalxAdjustDirection dir, double step, double speed)
 	    : dialog(dialog),
 	      handle(handle),
 	      direction(dir),
@@ -65,8 +64,8 @@ namespace CalXUI {
 	}
 
 	CalxCoordAdjustMoveAction::CalxCoordAdjustMoveAction(
-	    CalxCoordAdjustDialog *dialog, CoordHandle *handle, coord_point_t dest,
-	    double speed)
+	    CalxCoordAdjustDialog *dialog, std::shared_ptr<CoordHandle> handle,
+	    coord_point_t dest, double speed)
 	    : dialog(dialog), handle(handle), dest(dest), speed(speed) {}
 
 	void CalxCoordAdjustMoveAction::perform(SystemManager *sysman) {
@@ -90,8 +89,9 @@ namespace CalXUI {
 		this->dialog->updateUI();
 	}
 
-	CalxCoordAdjustViewer::CalxCoordAdjustViewer(wxWindow *win, wxWindowID id,
-	                                             CoordHandle *handle, wxSize sz)
+	CalxCoordAdjustViewer::CalxCoordAdjustViewer(
+	    wxWindow *win, wxWindowID id, std::shared_ptr<CoordHandle> handle,
+	    wxSize sz)
 	    : wxWindow::wxWindow(win, id), handle(handle), pointer_colour(255, 0, 0) {
 		SetMinSize(sz);
 		std::shared_ptr<ConfigEntry> colourEntry =
@@ -183,8 +183,8 @@ namespace CalXUI {
 		dc.DrawRectangle((int) _x - 2, (int) _y - 2, 4, 4);
 	}
 
-	CalxCoordAdjustDialog::CalxCoordAdjustDialog(wxWindow *win, wxWindowID id,
-	                                             CoordHandle *handle)
+	CalxCoordAdjustDialog::CalxCoordAdjustDialog(
+	    wxWindow *win, wxWindowID id, std::shared_ptr<CoordHandle> handle)
 	    : wxDialog::wxDialog(win, id, __("Adjust dialog"), wxDefaultPosition,
 	                         wxDefaultSize,
 	                         wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER),

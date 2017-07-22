@@ -41,10 +41,12 @@ namespace CalX {
 		coord_point_t getMaximum();
 		double getStep();
 
-		ErrorCode build(SystemManager *, CoordPlane *,
-		                std::shared_ptr<CoordTranslator>, float, TaskState *);
-		ErrorCode floatBuild(SystemManager *, FloatCoordPlane *,
-		                     std::shared_ptr<CoordTranslator>, float, TaskState *);
+		ErrorCode build(SystemManager *, std::shared_ptr<CoordPlane>,
+		                std::shared_ptr<CoordTranslator>, float,
+		                std::shared_ptr<TaskState>);
+		ErrorCode floatBuild(SystemManager *, std::shared_ptr<FloatCoordPlane>,
+		                     std::shared_ptr<CoordTranslator>, float,
+		                     std::shared_ptr<TaskState>);
 
 	 private:
 		std::unique_ptr<Node> node;

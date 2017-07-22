@@ -49,7 +49,7 @@ namespace CalX {
 		ConfigValue(ConfigValueType type) {
 			this->type = type;
 		}
-		virtual ~ConfigValue() {}
+		virtual ~ConfigValue() = default;
 		ConfigValueType getType() {
 			return this->type;
 		}
@@ -160,7 +160,7 @@ namespace CalX {
 	class ConfigManager {
 	 public:
 		ConfigManager();
-		virtual ~ConfigManager();
+		virtual ~ConfigManager() = default;
 
 		std::shared_ptr<ConfigEntry> getEntry(std::string, bool = true);
 		bool hasEntry(std::string);

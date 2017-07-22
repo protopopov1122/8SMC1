@@ -44,7 +44,8 @@ namespace CalXUI {
 			device_id_t instr =
 			    (device_id_t)((IntegerConfigValue *) PROVIDER_ARG(req, 2))
 			        ->getValue();
-			CoordHandle *handle = sysman->createCoord(dev1, dev2, instr);
+			std::shared_ptr<CoordHandle> handle =
+			    sysman->createCoord(dev1, dev2, instr);
 			if (handle == nullptr) {
 				return false;
 			}

@@ -33,9 +33,6 @@ namespace CalX {
 	}
 
 	MotorController::~MotorController() {
-		for (const auto &l : this->listeners) {
-			delete l;
-		}
 		DESTROY_LOG("MotorController");
 	}
 
@@ -200,15 +197,16 @@ namespace CalX {
 		return this->dev->getPosition();
 	}
 
-	void MotorController::addEventListener(MotorEventListener *l) {
+	void MotorController::addEventListener(
+	    std::shared_ptr<MotorEventListener> l) {
 		this->listeners.push_back(l);
 	}
 
-	void MotorController::removeEventListener(MotorEventListener *l) {
+	void MotorController::removeEventListener(
+	    std::shared_ptr<MotorEventListener> l) {
 		this->listeners.erase(
 		    std::remove(this->listeners.begin(), this->listeners.end(), l),
 		    this->listeners.end());
-		delete l;
 	}
 
 	void MotorController::sendMovingEvent(MotorMoveEvent &evt) {

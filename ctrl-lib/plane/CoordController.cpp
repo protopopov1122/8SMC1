@@ -127,11 +127,12 @@ namespace CalX {
 			return ErrorCode::NoError;
 		}
 
-		if (xAxis->dev->isRunning() || yAxis->dev->isRunning()) {
+		if (xAxis->getMotor()->isRunning() || yAxis->getMotor()->isRunning()) {
 			return ErrorCode::MotorRunning;
 		}
-		xAxis->dest = point.x > xAxis->dev->getPosition() ? MoveType::MoveUp
-		                                                  : MoveType::MoveDown;
+		xAxis->dest = point.x > xAxis->getMotor()->getPosition()
+		                  ? MoveType::MoveUp
+		                  : MoveType::MoveDown;
 		xAxis->use();
 		yAxis->use();
 
@@ -148,7 +149,7 @@ namespace CalX {
 
 		this->status = sync ? CoordPlaneStatus::Move : CoordPlaneStatus::Jump;
 		MotorMoveEvent xmevt = { point.x, x_speed };
-		if (!xAxis->dev->start(point.x, x_speed)) {
+		if (!xAxis->getMotor()->start(point.x, x_speed)) {
 			this->status = CoordPlaneStatus::Idle;
 			xAxis->unuse();
 			yAxis->unuse();
@@ -158,10 +159,11 @@ namespace CalX {
 		xAxis->sendMovingEvent(xmevt);
 
 		MotorMoveEvent ymevt = { point.y, y_speed };
-		yAxis->dest = point.y > yAxis->dev->getPosition() ? MoveType::MoveUp
-		                                                  : MoveType::MoveDown;
+		yAxis->dest = point.y > yAxis->getMotor()->getPosition()
+		                  ? MoveType::MoveUp
+		                  : MoveType::MoveDown;
 
-		if (!yAxis->dev->start(point.y, y_speed)) {
+		if (!yAxis->getMotor()->start(point.y, y_speed)) {
 			this->status = CoordPlaneStatus::Idle;
 			xAxis->unuse();
 			yAxis->unuse();
@@ -223,7 +225,7 @@ namespace CalX {
 			}
 		}
 
-		while (xAxis->dev->isRunning() || yAxis->dev->isRunning()) {
+		while (xAxis->getMotor()->isRunning() || yAxis->getMotor()->isRunning()) {
 		}
 		this->status = CoordPlaneStatus::Idle;
 

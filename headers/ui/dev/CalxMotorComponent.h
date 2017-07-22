@@ -83,7 +83,7 @@ namespace CalXUI {
 
 		std::shared_ptr<CalX::MotorController> dev;
 		CalxActionQueue *queue;
-		MotorEventListener *listener;
+		std::shared_ptr<MotorEventListener> listener;
 		CalxMotorTimer timer;
 
 		wxPanel *infoPanel;

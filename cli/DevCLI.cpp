@@ -77,7 +77,7 @@ namespace CalX {
 				          << std::endl;
 			} else if (cmp(COORDS)) {
 				for (size_t i = 0; i < sysman->getCoordCount(); i++) {
-					CoordPlane *plane = sysman->getCoord(i);
+					std::shared_ptr<CoordPlane> plane = sysman->getCoord(i);
 					std::cout << i << "\tPosition: " << plane->getPosition().x << "x"
 					          << plane->getPosition().y
 					          << "; Dimension: start=" << plane->getSize().x << "x"
@@ -241,7 +241,8 @@ namespace CalX {
 				std::cout << "Provide arguments" << std::endl;
 				return;
 			}
-			CoordPlaneStack *ctrl = sysman->getCoord((size_t) std::stoul(args.at(0)));
+			std::shared_ptr<CoordHandle> ctrl =
+			    sysman->getCoord((size_t) std::stoul(args.at(0)));
 			if (ctrl->popPlane()) {
 				std::cout << "\tOk" << std::endl;
 			} else {
@@ -252,7 +253,8 @@ namespace CalX {
 				std::cout << "Provide coord id" << std::endl;
 				return;
 			}
-			CoordPlaneStack *ctrl = sysman->getCoord((size_t) std::stoul(args.at(0)));
+			std::shared_ptr<CoordHandle> ctrl =
+			    sysman->getCoord((size_t) std::stoul(args.at(0)));
 			if (ctrl == nullptr) {
 				std::cout << "Wrong coord id" << std::endl;
 				return;
@@ -271,7 +273,8 @@ namespace CalX {
 				std::cout << "Provide arguments" << std::endl;
 				return;
 			}
-			CoordPlaneStack *ctrl = sysman->getCoord((size_t) std::stoul(args.at(0)));
+			std::shared_ptr<CoordHandle> ctrl =
+			    sysman->getCoord((size_t) std::stoul(args.at(0)));
 			if (ctrl == nullptr) {
 				std::cout << "Wrong coord id" << std::endl;
 				return;
@@ -285,7 +288,8 @@ namespace CalX {
 				std::cout << "Provide arguments" << std::endl;
 				return;
 			}
-			CoordPlaneStack *ctrl = sysman->getCoord((size_t) std::stoul(args.at(0)));
+			std::shared_ptr<CoordHandle> ctrl =
+			    sysman->getCoord((size_t) std::stoul(args.at(0)));
 			if (ctrl == nullptr) {
 				std::cout << "Wrong coord id" << std::endl;
 				return;
@@ -299,7 +303,7 @@ namespace CalX {
 			if (args.size() < 4) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
-				CoordPlaneStack *ctrl =
+				std::shared_ptr<CoordHandle> ctrl =
 				    sysman->getCoord((size_t) std::stoul(args.at(0)));
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
@@ -318,7 +322,7 @@ namespace CalX {
 			if (args.size() < 4) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
-				CoordPlaneStack *ctrl =
+				std::shared_ptr<CoordHandle> ctrl =
 				    sysman->getCoord((size_t) std::stoul(args.at(0)));
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
@@ -337,7 +341,7 @@ namespace CalX {
 			if (args.size() < 4) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
-				CoordPlaneStack *ctrl =
+				std::shared_ptr<CoordHandle> ctrl =
 				    sysman->getCoord((size_t) std::stoul(args.at(0)));
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
@@ -356,7 +360,7 @@ namespace CalX {
 			if (args.size() < 4) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
-				CoordPlaneStack *ctrl =
+				std::shared_ptr<CoordHandle> ctrl =
 				    sysman->getCoord((size_t) std::stoul(args.at(0)));
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
@@ -375,7 +379,7 @@ namespace CalX {
 			if (args.size() < 7) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
-				CoordPlaneStack *ctrl =
+				std::shared_ptr<CoordHandle> ctrl =
 				    sysman->getCoord((size_t) std::stoul(args.at(0)));
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
@@ -400,7 +404,7 @@ namespace CalX {
 			if (args.size() < 7) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
-				CoordPlaneStack *ctrl =
+				std::shared_ptr<CoordHandle> ctrl =
 				    sysman->getCoord((size_t) std::stoi(args.at(0)));
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
@@ -426,7 +430,7 @@ namespace CalX {
 			if (args.size() < 7) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
-				CoordPlaneStack *ctrl =
+				std::shared_ptr<CoordHandle> ctrl =
 				    sysman->getCoord((size_t) std::stoul(args.at(0)));
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
@@ -452,7 +456,7 @@ namespace CalX {
 			if (args.size() < 7) {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
-				CoordPlaneStack *ctrl =
+				std::shared_ptr<CoordHandle> ctrl =
 				    sysman->getCoord((size_t) std::stoul(args.at(0)));
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
@@ -481,7 +485,7 @@ namespace CalX {
 			}
 			size_t coordNum = (size_t) std::stoul(args.at(0));
 			int coordTrailer = std::stoi(args.at(1));
-			CoordPlaneStack *coordController = sysman->getCoord(coordNum);
+			std::shared_ptr<CoordHandle> coordController = sysman->getCoord(coordNum);
 			if (coordController == nullptr) {
 				std::cout << "Wrong coord id" << std::endl;
 				return;
@@ -516,7 +520,8 @@ namespace CalX {
 				std::cout << "Provide args" << std::endl;
 				return;
 			}
-			CoordPlane *plane = sysman->getCoord((size_t) std::stoul(args.at(0)));
+			std::shared_ptr<CoordPlane> plane =
+			    sysman->getCoord((size_t) std::stoul(args.at(0)));
 			if (plane == nullptr) {
 				std::cout << "Wrong coord id" << std::endl;
 				return;
@@ -541,8 +546,8 @@ namespace CalX {
 			coord_point_t min = { minx, miny };
 			coord_point_t max = { maxx, maxy };
 			GraphBuilder graph(std::move(node), min, max, step);
-			TaskState state;
-			ErrorCode errcode = graph.build(sysman, plane, trans, speed, &state);
+			std::shared_ptr<TaskState> state = std::make_shared<TaskState>();
+			ErrorCode errcode = graph.build(sysman, plane, trans, speed, state);
 			if (errcode != ErrorCode::NoError) {
 				std::cout << "Graph build error(" << errcode << ")" << std::endl;
 			}
@@ -746,7 +751,7 @@ namespace CalX {
 				return;
 			}
 			CoordTask *task = sysman->getTask((size_t) std::stoul(args.at(1)));
-			CoordPlaneStack *coord =
+			std::shared_ptr<CoordHandle> coord =
 			    sysman->getCoord((size_t) std::stoul(args.at(2)));
 			float speed = static_cast<float>(std::stod(args.at(3)));
 			if (task == nullptr) {
@@ -758,8 +763,8 @@ namespace CalX {
 				return;
 			}
 			TaskParameters prms = { speed };
-			TaskState state;
-			task->perform(coord, prms, sysman, &state);
+			std::shared_ptr<TaskState> state = std::make_shared<TaskState>();
+			task->perform(coord, prms, sysman, state);
 		} else if (args.at(0).compare("load") == 0) {
 			if (args.size() < 6) {
 				std::cout << "Wrong argument count" << std::endl;

@@ -29,8 +29,8 @@ namespace CalX {
 	 public:
 		MoveTaskStep(motor_point_t, float, bool = false);
 		virtual ~MoveTaskStep();
-		virtual ErrorCode perform(CoordPlane *, TaskParameters &, SystemManager *,
-		                          TaskState *);
+		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
+		                          SystemManager *, std::shared_ptr<TaskState>);
 
 		motor_point_t getPosition();
 		float getSpeed();
@@ -50,8 +50,8 @@ namespace CalX {
 	 public:
 		JumpTaskStep(motor_point_t, float, bool = false);
 		virtual ~JumpTaskStep();
-		virtual ErrorCode perform(CoordPlane *, TaskParameters &, SystemManager *,
-		                          TaskState *);
+		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
+		                          SystemManager *, std::shared_ptr<TaskState>);
 
 		motor_point_t getPosition();
 		float getSpeed();
@@ -71,8 +71,8 @@ namespace CalX {
 	 public:
 		CalibrateTaskStep(TrailerId);
 		virtual ~CalibrateTaskStep();
-		virtual ErrorCode perform(CoordPlane *, TaskParameters &, SystemManager *,
-		                          TaskState *);
+		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
+		                          SystemManager *, std::shared_ptr<TaskState>);
 
 	 private:
 		TrailerId side;
@@ -82,8 +82,8 @@ namespace CalX {
 	 public:
 		ArcTaskStep(motor_point_t, motor_point_t, int, float, bool = false);
 		virtual ~ArcTaskStep();
-		virtual ErrorCode perform(CoordPlane *, TaskParameters &, SystemManager *,
-		                          TaskState *);
+		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
+		                          SystemManager *, std::shared_ptr<TaskState>);
 
 		motor_point_t getDestination();
 		motor_point_t getCenter();
@@ -113,8 +113,8 @@ namespace CalX {
 	 public:
 		RelArcTaskStep(motor_point_t, motor_point_t, int, float, bool = false);
 		virtual ~RelArcTaskStep();
-		virtual ErrorCode perform(CoordPlane *, TaskParameters &, SystemManager *,
-		                          TaskState *);
+		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
+		                          SystemManager *, std::shared_ptr<TaskState>);
 		void setClockwise(bool);
 
 	 private:

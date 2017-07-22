@@ -24,6 +24,7 @@
 #include "ctrl-lib/plane/CoordPlane.h"
 #include "ctrl-lib/translator/CoordTranslator.h"
 #include <iostream>
+#include <memory>
 #include <sstream>
 #include <vector>
 
@@ -43,9 +44,9 @@ namespace CalX {
 
 	class TaskStep {
 	 public:
-		virtual ~TaskStep(){};
-		virtual ErrorCode perform(CoordPlane *, TaskParameters &, SystemManager *,
-		                          TaskState *) = 0;
+		virtual ~TaskStep() = default;
+		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
+		                          SystemManager *, std::shared_ptr<TaskState>) = 0;
 	};
 
 	enum class CoordTaskType {
@@ -57,15 +58,13 @@ namespace CalX {
 
 	class CoordTask : public TaskStep {
 	 public:
-		CoordTask(CoordTaskType tp) {
-			this->type = tp;
-		}
-		virtual ~CoordTask() {}
+		CoordTask(CoordTaskType tp) : type(tp) {}
+		virtual ~CoordTask() = default;
 		CoordTaskType getType() {
 			return this->type;
 		}
-		virtual ErrorCode perform(CoordPlane *, TaskParameters &, SystemManager *,
-		                          TaskState *) = 0;
+		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
+		                          SystemManager *, std::shared_ptr<TaskState>) = 0;
 
 	 private:
 		CoordTaskType type;

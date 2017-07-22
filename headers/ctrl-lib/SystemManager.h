@@ -64,8 +64,9 @@ namespace CalX {
 		bool removeTask(size_t);
 		// Coordinate plane control
 		size_t getCoordCount();
-		CoordHandle *getCoord(size_t);
-		CoordHandle *createCoord(device_id_t, device_id_t, device_id_t = -1);
+		std::shared_ptr<CoordHandle> getCoord(size_t);
+		std::shared_ptr<CoordHandle> createCoord(device_id_t, device_id_t,
+		                                         device_id_t = -1);
 		void removeCoord(size_t);
 		// Device connection
 		std::shared_ptr<MotorController> connectMotor(DeviceConnectionPrms *);
@@ -78,7 +79,7 @@ namespace CalX {
 		std::vector<std::shared_ptr<MotorController>> dev;
 		std::vector<std::shared_ptr<InstrumentController>> instr;
 		std::vector<std::unique_ptr<CoordTask>> tasks;
-		std::vector<std::unique_ptr<CoordHandle>> coords;
+		std::vector<std::shared_ptr<CoordHandle>> coords;
 		FunctionEngine engine;
 		std::unique_ptr<RequestResolver> resolver;
 		std::unique_ptr<ExtEngine> ext_engine;

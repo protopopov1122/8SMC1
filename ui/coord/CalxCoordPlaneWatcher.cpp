@@ -28,7 +28,7 @@ namespace CalXUI {
 	wxDEFINE_EVENT(wxEVT_WATCHER_APPEND_POINT, wxThreadEvent);
 
 	CalxCoordPlaneWatcherTimer::CalxCoordPlaneWatcherTimer(
-	    CalxCoordPlaneWatcher *watcher, CoordHandle *handle)
+	    CalxCoordPlaneWatcher *watcher, std::shared_ptr<CoordHandle> handle)
 	    : wxTimer::wxTimer() {
 		this->watcher = watcher;
 		this->handle = handle;
@@ -57,7 +57,7 @@ namespace CalXUI {
 	}
 
 	CalxCoordPlaneWatcherEvent::CalxCoordPlaneWatcherEvent(
-	    CalxCoordPlaneWatcher *w, CoordHandle *handle) {
+	    CalxCoordPlaneWatcher *w, std::shared_ptr<CoordHandle> handle) {
 		this->watcher = w;
 		this->handle = handle;
 	}
@@ -72,9 +72,9 @@ namespace CalXUI {
 		wxPostEvent(watcher, evt);
 	}
 
-	CalxCoordPlaneWatcher::CalxCoordPlaneWatcher(wxWindow *win, wxWindowID id,
-	                                             wxSize min, CoordHandle *handle,
-	                                             CalxWatcherPool *pool)
+	CalxCoordPlaneWatcher::CalxCoordPlaneWatcher(
+	    wxWindow *win, wxWindowID id, wxSize min,
+	    std::shared_ptr<CoordHandle> handle, CalxWatcherPool *pool)
 	    : wxWindow::wxWindow(win, id),
 	      pointer_colour(255, 0, 0),
 	      jump_colour(128, 128, 128),
@@ -138,7 +138,7 @@ namespace CalXUI {
 		this->handle->addEventListener(this->listener);
 	}
 
-	CoordHandle *CalxCoordPlaneWatcher::getHandle() {
+	std::shared_ptr<CoordHandle> CalxCoordPlaneWatcher::getHandle() {
 		return this->handle;
 	}
 
@@ -353,7 +353,8 @@ namespace CalXUI {
 	}
 
 	CalxCoordPlaneWatcherDialog::CalxCoordPlaneWatcherDialog(
-	    wxWindow *win, wxWindowID id, CoordHandle *handle, CalxWatcherPool *pool)
+	    wxWindow *win, wxWindowID id, std::shared_ptr<CoordHandle> handle,
+	    CalxWatcherPool *pool)
 	    : wxDialog::wxDialog(win, id, FORMAT(__("Coordinate plane #%s Watcher"),
 	                                         std::to_string(handle->getID())),
 	                         wxDefaultPosition, wxDefaultSize,

@@ -129,15 +129,16 @@ namespace CalX {
 		return this->instr->setWorkingMode(m);
 	}
 
-	void InstrumentController::addEventListener(InstrumentEventListener *l) {
+	void InstrumentController::addEventListener(
+	    std::shared_ptr<InstrumentEventListener> l) {
 		this->listeners.push_back(l);
 	}
 
-	void InstrumentController::removeEventListener(InstrumentEventListener *l) {
+	void InstrumentController::removeEventListener(
+	    std::shared_ptr<InstrumentEventListener> l) {
 		this->listeners.erase(
 		    std::remove(this->listeners.begin(), this->listeners.end(), l),
 		    this->listeners.end());
-		delete l;
 	}
 
 	void InstrumentController::use() {

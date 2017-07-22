@@ -39,16 +39,17 @@ namespace CalX {
 		DESTROY_LOG("ProgrammedCoordTask");
 	}
 
-	ErrorCode ProgrammedCoordTask::perform(CoordPlane *ctrl, TaskParameters &prms,
+	ErrorCode ProgrammedCoordTask::perform(std::shared_ptr<CoordPlane> ctrl,
+	                                       TaskParameters &prms,
 	                                       SystemManager *sysman,
-	                                       TaskState *state) {
+	                                       std::shared_ptr<TaskState> state) {
 		ErrorCode errcode;
 		state->plane = ctrl;
 		state->work = true;
 		ctrl->use();
-		TaskState subSt;
+		std::shared_ptr<TaskState> subSt = std::make_shared<TaskState>();
 		for (size_t i = 0; i < this->list.size() && state->work; i++) {
-			errcode = this->list.at(i)->perform(ctrl, prms, sysman, &subSt);
+			errcode = this->list.at(i)->perform(ctrl, prms, sysman, subSt);
 			if (errcode != ErrorCode::NoError) {
 				state->work = false;
 				ctrl->unuse();
@@ -110,8 +111,9 @@ namespace CalX {
 		DESTROY_LOG("MoveTaskStep");
 	}
 
-	ErrorCode MoveTaskStep::perform(CoordPlane *ctrl, TaskParameters &prms,
-	                                SystemManager *sysman, TaskState *state) {
+	ErrorCode MoveTaskStep::perform(std::shared_ptr<CoordPlane> ctrl,
+	                                TaskParameters &prms, SystemManager *sysman,
+	                                std::shared_ptr<TaskState> state) {
 		ErrorCode code;
 		state->work = true;
 		state->plane = ctrl;
@@ -160,8 +162,9 @@ namespace CalX {
 		DESTROY_LOG("JumpTaskStep");
 	}
 
-	ErrorCode JumpTaskStep::perform(CoordPlane *ctrl, TaskParameters &prms,
-	                                SystemManager *sysman, TaskState *state) {
+	ErrorCode JumpTaskStep::perform(std::shared_ptr<CoordPlane> ctrl,
+	                                TaskParameters &prms, SystemManager *sysman,
+	                                std::shared_ptr<TaskState> state) {
 		ErrorCode code;
 		state->plane = ctrl;
 		state->work = true;
@@ -208,9 +211,10 @@ namespace CalX {
 		DESTROY_LOG("CalibrateTaskStep");
 	}
 
-	ErrorCode CalibrateTaskStep::perform(CoordPlane *ctrl, TaskParameters &prms,
+	ErrorCode CalibrateTaskStep::perform(std::shared_ptr<CoordPlane> ctrl,
+	                                     TaskParameters &prms,
 	                                     SystemManager *sysman,
-	                                     TaskState *state) {
+	                                     std::shared_ptr<TaskState> state) {
 		state->plane = ctrl;
 		state->work = true;
 		ErrorCode code = ctrl->calibrate(this->side);
@@ -234,8 +238,9 @@ namespace CalX {
 		DESTROY_LOG("ArcTaskStep");
 	}
 
-	ErrorCode ArcTaskStep::perform(CoordPlane *ctrl, TaskParameters &prms,
-	                               SystemManager *sysman, TaskState *state) {
+	ErrorCode ArcTaskStep::perform(std::shared_ptr<CoordPlane> ctrl,
+	                               TaskParameters &prms, SystemManager *sysman,
+	                               std::shared_ptr<TaskState> state) {
 		ErrorCode code;
 		state->plane = ctrl;
 		state->work = true;
@@ -314,8 +319,9 @@ namespace CalX {
 		DESTROY_LOG("RelArcTaskStep");
 	}
 
-	ErrorCode RelArcTaskStep::perform(CoordPlane *ctrl, TaskParameters &prms,
-	                                  SystemManager *sysman, TaskState *state) {
+	ErrorCode RelArcTaskStep::perform(std::shared_ptr<CoordPlane> ctrl,
+	                                  TaskParameters &prms, SystemManager *sysman,
+	                                  std::shared_ptr<TaskState> state) {
 		motor_point_t cen = ctrl->getPosition();
 		cen.x += center.x;
 		cen.y += center.y;
@@ -343,16 +349,11 @@ namespace CalX {
 	    : CoordTask::CoordTask(CoordTaskType::GraphTask),
 	      graph(std::move(graph)),
 	      trans(trans),
-	      scale(scale) {
-		INIT_LOG("GraphCoordTask");
-	}
+	      scale(scale) {}
 
-	GraphCoordTask::~GraphCoordTask() {
-		DESTROY_LOG("GraphCoordTask");
-	}
-
-	ErrorCode GraphCoordTask::perform(CoordPlane *plane, TaskParameters &prms,
-	                                  SystemManager *sysman, TaskState *state) {
+	ErrorCode GraphCoordTask::perform(std::shared_ptr<CoordPlane> plane,
+	                                  TaskParameters &prms, SystemManager *sysman,
+	                                  std::shared_ptr<TaskState> state) {
 		return this->graph->build(sysman, plane, this->trans,
 		                          this->scale * prms.speed, state);
 	}

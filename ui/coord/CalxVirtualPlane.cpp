@@ -49,7 +49,8 @@ namespace CalXUI {
 	}
 
 	CalxVirtualPlane::CalxVirtualPlane(wxWindow *win, wxWindowID id,
-	                                   CoordHandle *base, wxSize min)
+	                                   std::shared_ptr<CoordHandle> base,
+	                                   wxSize min)
 	    : wxWindow::wxWindow(win, id),
 	      pointer_colour(255, 0, 0),
 	      jump_colour(128, 128, 128),
@@ -78,16 +79,16 @@ namespace CalXUI {
 		this->Bind(wxEVT_SIZE, &CalxVirtualPlane::OnResizeEvent, this);
 	}
 
-	CoordPlaneStack *CalxVirtualPlane::getPlane() {
-		return this->stack.get();
+	std::shared_ptr<CoordPlaneStack> CalxVirtualPlane::getPlane() {
+		return this->stack;
 	}
 
-	CalxPlaneTracker *CalxVirtualPlane::getTracker() {
-		return this->tracker.get();
+	std::shared_ptr<CalxPlaneTracker> CalxVirtualPlane::getTracker() {
+		return this->tracker;
 	}
 
-	FloatCoordPlane *CalxVirtualPlane::getFloatPlane() {
-		return this->float_plane.get();
+	std::shared_ptr<FloatCoordPlane> CalxVirtualPlane::getFloatPlane() {
+		return this->float_plane;
 	}
 
 	void CalxVirtualPlane::OnExit(wxCloseEvent &evt) {}
@@ -204,8 +205,9 @@ namespace CalXUI {
 		dc.DrawRectangle((int) _x - 2, (int) _y - 2, 4, 4);
 	}
 
-	CalxVirtualPlaneDialog::CalxVirtualPlaneDialog(wxWindow *win, wxWindowID id,
-	                                               CoordHandle *base, wxSize min)
+	CalxVirtualPlaneDialog::CalxVirtualPlaneDialog(
+	    wxWindow *win, wxWindowID id, std::shared_ptr<CoordHandle> base,
+	    wxSize min)
 	    : wxDialog::wxDialog(win, id, __("Preview"), wxDefaultPosition,
 	                         wxDefaultSize,
 	                         wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER) {
@@ -227,11 +229,11 @@ namespace CalXUI {
 		Fit();
 	}
 
-	CoordPlaneStack *CalxVirtualPlaneDialog::getPlane() {
+	std::shared_ptr<CoordPlaneStack> CalxVirtualPlaneDialog::getPlane() {
 		return this->plane->getPlane();
 	}
 
-	FloatCoordPlane *CalxVirtualPlaneDialog::getFloatPlane() {
+	std::shared_ptr<FloatCoordPlane> CalxVirtualPlaneDialog::getFloatPlane() {
 		return this->plane->getFloatPlane();
 	}
 

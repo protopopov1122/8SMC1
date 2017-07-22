@@ -35,7 +35,7 @@ namespace CalX {
 	 public:
 		static ErrorCode execute(GCodeStream *, CoordPlane *,
 		                         std::shared_ptr<CoordTranslator>, ConfigManager *,
-		                         float, TaskState *);
+		                         float, std::shared_ptr<TaskState>);
 	};
 }
 

@@ -31,7 +31,7 @@ namespace CalX {
 		*out << "%" << std::endl;
 	}
 
-	GCodeWriter::~GCodeWriter() {
+	void GCodeWriter::close() {
 		*out << "%" << std::endl;
 	}
 

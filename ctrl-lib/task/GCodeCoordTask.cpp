@@ -44,13 +44,14 @@ namespace CalX {
 		DESTROY_LOG("GCodeCoordTask");
 	}
 
-	ErrorCode GCodeCoordTask::perform(CoordPlane *plane, TaskParameters &prms,
-	                                  SystemManager *sysman, TaskState *state) {
+	ErrorCode GCodeCoordTask::perform(std::shared_ptr<CoordPlane> plane,
+	                                  TaskParameters &prms, SystemManager *sysman,
+	                                  std::shared_ptr<TaskState> state) {
 		state->plane = plane;
 		state->work = true;
 		ErrorCode errcode = GCodeInterpreter::execute(
-		    this->stream, plane, this->translator, sysman->getConfiguration().get(),
-		    prms.speed, state);
+		    this->stream, plane.get(), this->translator,
+		    sysman->getConfiguration().get(), prms.speed, state);
 		state->work = false;
 		return errcode;
 	}

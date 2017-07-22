@@ -150,8 +150,6 @@ namespace CalX {
 		this->validator = nullptr;
 	}
 
-	ConfigManager::~ConfigManager() {}
-
 	std::shared_ptr<ConfigEntry> ConfigManager::getEntry(std::string id,
 	                                                     bool createNew) {
 		if (this->entries.count(id) != 0) {

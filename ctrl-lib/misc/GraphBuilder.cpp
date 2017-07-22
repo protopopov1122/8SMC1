@@ -45,9 +45,10 @@ namespace CalX {
 		return this->step;
 	}
 
-	ErrorCode GraphBuilder::build(SystemManager *sysman, CoordPlane *plane,
+	ErrorCode GraphBuilder::build(SystemManager *sysman,
+	                              std::shared_ptr<CoordPlane> plane,
 	                              std::shared_ptr<CoordTranslator> trans,
-	                              float speed, TaskState *state) {
+	                              float speed, std::shared_ptr<TaskState> state) {
 		plane->use();
 		FunctionEngine *engine = sysman->getFunctionEngine();
 		double nan = std::numeric_limits<double>::quiet_NaN();
@@ -102,9 +103,10 @@ namespace CalX {
 	}
 
 	ErrorCode GraphBuilder::floatBuild(SystemManager *sysman,
-	                                   FloatCoordPlane *plane,
+	                                   std::shared_ptr<FloatCoordPlane> plane,
 	                                   std::shared_ptr<CoordTranslator> trans,
-	                                   float speed, TaskState *state) {
+	                                   float speed,
+	                                   std::shared_ptr<TaskState> state) {
 		plane->use();
 		FunctionEngine *engine = sysman->getFunctionEngine();
 		double nan = std::numeric_limits<double>::quiet_NaN();

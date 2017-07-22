@@ -4,7 +4,7 @@
 
 namespace CalXUI {
 
-	CalxCoordActionMove::CalxCoordActionMove(CoordHandle *handle,
+	CalxCoordActionMove::CalxCoordActionMove(std::shared_ptr<CoordHandle> handle,
 	                                         coord_point_t dest, double speed,
 	                                         bool jump, bool relative)
 	    : handle(handle),
@@ -29,7 +29,7 @@ namespace CalXUI {
 		handle->stop();
 	}
 
-	CalxCoordActionArc::CalxCoordActionArc(CoordHandle *handle,
+	CalxCoordActionArc::CalxCoordActionArc(std::shared_ptr<CoordHandle> handle,
 	                                       coord_point_t dest, coord_point_t cen,
 	                                       int splitter, double speed,
 	                                       bool clockwise, bool relative)
@@ -57,8 +57,8 @@ namespace CalXUI {
 		handle->stop();
 	}
 
-	CalxCoordActionCalibrate::CalxCoordActionCalibrate(CoordHandle *handle,
-	                                                   TrailerId tr)
+	CalxCoordActionCalibrate::CalxCoordActionCalibrate(
+	    std::shared_ptr<CoordHandle> handle, TrailerId tr)
 	    : handle(handle), trailer(tr) {}
 
 	void CalxCoordActionCalibrate::perform(SystemManager *sysman) {
@@ -70,8 +70,8 @@ namespace CalXUI {
 		this->handle->stop();
 	}
 
-	CalxCoordActionMeasure::CalxCoordActionMeasure(CoordHandle *handle,
-	                                               TrailerId tr)
+	CalxCoordActionMeasure::CalxCoordActionMeasure(
+	    std::shared_ptr<CoordHandle> handle, TrailerId tr)
 	    : handle(handle), trailer(tr) {}
 
 	void CalxCoordActionMeasure::perform(SystemManager *sysman) {
@@ -83,10 +83,9 @@ namespace CalXUI {
 		this->handle->stop();
 	}
 
-	CalxCoordActionConfigure::CalxCoordActionConfigure(CoordHandle *handle,
-	                                                   CalxCoordController *ctrl,
-	                                                   coord_point_t dest,
-	                                                   double speed)
+	CalxCoordActionConfigure::CalxCoordActionConfigure(
+	    std::shared_ptr<CoordHandle> handle, CalxCoordController *ctrl,
+	    coord_point_t dest, double speed)
 	    : handle(handle),
 	      controller(ctrl),
 	      dest(dest),
@@ -124,25 +123,27 @@ namespace CalXUI {
 	}
 
 	CalxCoordActionGraphBuild::CalxCoordActionGraphBuild(
-	    CoordHandle *handle, std::shared_ptr<CoordTranslator> trans,
+	    std::shared_ptr<CoordHandle> handle,
+	    std::shared_ptr<CoordTranslator> trans,
 	    std::unique_ptr<GraphBuilder> builder, double speed)
 	    : handle(handle),
 	      translator(trans),
 	      builder(std::move(builder)),
 	      speed(speed) {
-		this->state.plane = nullptr;
-		this->state.work = false;
+		this->state = std::make_shared<TaskState>();
+		this->state->plane = nullptr;
+		this->state->work = false;
 	}
 
 	void CalxCoordActionGraphBuild::perform(SystemManager *sysman) {
 		handle->open_session();
 		wxGetApp().getErrorHandler()->handle(builder->floatBuild(
-		    sysman, handle->getFloatPlane().get(), translator, speed, &state));
+		    sysman, handle->getFloatPlane(), translator, speed, state));
 		handle->close_session();
 	}
 
 	void CalxCoordActionGraphBuild::stop() {
-		this->state.stop();
+		this->state->stop();
 	}
 
 	CalxCoordActionGraphPreview::CalxCoordActionGraphPreview(
@@ -152,20 +153,21 @@ namespace CalXUI {
 	      translator(trans),
 	      builder(std::move(builder)),
 	      speed(speed) {
-		this->state.plane = nullptr;
-		this->state.work = false;
+		this->state = std::make_shared<TaskState>();
+		this->state->plane = nullptr;
+		this->state->work = false;
 	}
 
 	void CalxCoordActionGraphPreview::perform(SystemManager *sysman) {
 		dialog->Enable(false);
 		wxGetApp().getErrorHandler()->handle(builder->floatBuild(
-		    sysman, dialog->getFloatPlane(), translator, speed, &state));
+		    sysman, dialog->getFloatPlane(), translator, speed, state));
 		;
 		dialog->Refresh();
 		dialog->Enable(true);
 	}
 
 	void CalxCoordActionGraphPreview::stop() {
-		this->state.stop();
+		this->state->stop();
 	}
 }

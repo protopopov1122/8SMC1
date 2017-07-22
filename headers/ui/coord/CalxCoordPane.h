@@ -43,11 +43,11 @@ namespace CalXUI {
 	class CalxCoordPane : public wxScrolledWindow,
 	                      public CalxCoordFilterListener {
 	 public:
-		CalxCoordPane(wxWindow *, wxWindowID, CoordHandle *, size_t);
+		CalxCoordPane(wxWindow *, wxWindowID, std::shared_ptr<CoordHandle>, size_t);
 
 		void updateUI();
 		void shutdown();
-		CoordHandle *getHandle();
+		std::shared_ptr<CoordHandle> getHandle();
 		CalxWatcherPool *getWatchers();
 		CalxCoordController *getController();
 		bool addComponent(std::string, CalxCoordComponentFactory *, size_t,
@@ -72,12 +72,12 @@ namespace CalXUI {
 		void OnInterfaceUpdate(wxCollapsiblePaneEvent &);
 
 		CalxCoordController *controller;
-		CoordHandle *ctrl;
+		std::shared_ptr<CoordHandle> ctrl;
 		CalxWatcherPool *watchers;
 		CoordEventListener *listener;
-		CalxCoordMotorListener *xListener;
-		CalxCoordMotorListener *yListener;
-		CalxCoordInstrumentListener *instrListener;
+		std::shared_ptr<CalxCoordMotorListener> xListener;
+		std::shared_ptr<CalxCoordMotorListener> yListener;
+		std::shared_ptr<CalxCoordInstrumentListener> instrListener;
 		CalxActionQueue *queue;
 
 		int used;

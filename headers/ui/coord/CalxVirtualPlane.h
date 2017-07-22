@@ -46,11 +46,12 @@ namespace CalXUI {
 
 	class CalxVirtualPlane : public wxWindow {
 	 public:
-		CalxVirtualPlane(wxWindow *, wxWindowID, CoordHandle *, wxSize);
+		CalxVirtualPlane(wxWindow *, wxWindowID, std::shared_ptr<CoordHandle>,
+		                 wxSize);
 
-		CoordPlaneStack *getPlane();
-		CalxPlaneTracker *getTracker();
-		FloatCoordPlane *getFloatPlane();
+		std::shared_ptr<CoordPlaneStack> getPlane();
+		std::shared_ptr<CalxPlaneTracker> getTracker();
+		std::shared_ptr<FloatCoordPlane> getFloatPlane();
 		void repaint();
 
 	 private:
@@ -62,7 +63,7 @@ namespace CalXUI {
 		std::shared_ptr<CalxPlaneTracker> tracker;
 		std::shared_ptr<CoordPlaneStack> stack;
 		std::shared_ptr<FloatCoordPlane> float_plane;
-		CoordHandle *base;
+		std::shared_ptr<CoordHandle> base;
 
 		wxColour pointer_colour;
 		wxColour jump_colour;
@@ -71,10 +72,11 @@ namespace CalXUI {
 
 	class CalxVirtualPlaneDialog : public wxDialog {
 	 public:
-		CalxVirtualPlaneDialog(wxWindow *, wxWindowID, CoordHandle *, wxSize);
+		CalxVirtualPlaneDialog(wxWindow *, wxWindowID, std::shared_ptr<CoordHandle>,
+		                       wxSize);
 
-		CoordPlaneStack *getPlane();
-		FloatCoordPlane *getFloatPlane();
+		std::shared_ptr<CoordPlaneStack> getPlane();
+		std::shared_ptr<FloatCoordPlane> getFloatPlane();
 		void setEnabled(bool);
 
 	 private:

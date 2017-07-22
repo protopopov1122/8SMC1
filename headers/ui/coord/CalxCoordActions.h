@@ -30,13 +30,14 @@ namespace CalXUI {
 
 	class CalxCoordActionMove : public CalxAction {
 	 public:
-		CalxCoordActionMove(CoordHandle *, coord_point_t, double, bool, bool);
+		CalxCoordActionMove(std::shared_ptr<CoordHandle>, coord_point_t, double,
+		                    bool, bool);
 
 		virtual void perform(SystemManager *);
 		virtual void stop();
 
 	 private:
-		CoordHandle *handle;
+		std::shared_ptr<CoordHandle> handle;
 		coord_point_t dest;
 		double speed;
 		bool jump;
@@ -45,14 +46,14 @@ namespace CalXUI {
 
 	class CalxCoordActionArc : public CalxAction {
 	 public:
-		CalxCoordActionArc(CoordHandle *, coord_point_t, coord_point_t, int, double,
-		                   bool, bool);
+		CalxCoordActionArc(std::shared_ptr<CoordHandle>, coord_point_t,
+		                   coord_point_t, int, double, bool, bool);
 
 		virtual void perform(SystemManager *);
 		virtual void stop();
 
 	 private:
-		CoordHandle *handle;
+		std::shared_ptr<CoordHandle> handle;
 		coord_point_t dest;
 		coord_point_t cen;
 		int splitter;
@@ -63,38 +64,38 @@ namespace CalXUI {
 
 	class CalxCoordActionCalibrate : public CalxAction {
 	 public:
-		CalxCoordActionCalibrate(CoordHandle *, TrailerId);
+		CalxCoordActionCalibrate(std::shared_ptr<CoordHandle>, TrailerId);
 
 		virtual void perform(SystemManager *);
 		virtual void stop();
 
 	 private:
-		CoordHandle *handle;
+		std::shared_ptr<CoordHandle> handle;
 		TrailerId trailer;
 	};
 
 	class CalxCoordActionMeasure : public CalxAction {
 	 public:
-		CalxCoordActionMeasure(CoordHandle *, TrailerId);
+		CalxCoordActionMeasure(std::shared_ptr<CoordHandle>, TrailerId);
 
 		virtual void perform(SystemManager *);
 		virtual void stop();
 
 	 private:
-		CoordHandle *handle;
+		std::shared_ptr<CoordHandle> handle;
 		TrailerId trailer;
 	};
 
 	class CalxCoordActionConfigure : public CalxAction {
 	 public:
-		CalxCoordActionConfigure(CoordHandle *, CalxCoordController *,
-		                         coord_point_t, double);
+		CalxCoordActionConfigure(std::shared_ptr<CoordHandle>,
+		                         CalxCoordController *, coord_point_t, double);
 
 		virtual void perform(SystemManager *);
 		virtual void stop();
 
 	 private:
-		CoordHandle *handle;
+		std::shared_ptr<CoordHandle> handle;
 		CalxCoordController *controller;
 		coord_point_t dest;
 		double speed;
@@ -103,18 +104,19 @@ namespace CalXUI {
 
 	class CalxCoordActionGraphBuild : public CalxAction {
 	 public:
-		CalxCoordActionGraphBuild(CoordHandle *, std::shared_ptr<CoordTranslator>,
+		CalxCoordActionGraphBuild(std::shared_ptr<CoordHandle>,
+		                          std::shared_ptr<CoordTranslator>,
 		                          std::unique_ptr<GraphBuilder>, double);
 
 		virtual void perform(SystemManager *);
 		virtual void stop();
 
 	 private:
-		CoordHandle *handle;
+		std::shared_ptr<CoordHandle> handle;
 		std::shared_ptr<CoordTranslator> translator;
 		std::unique_ptr<GraphBuilder> builder;
 		double speed;
-		TaskState state;
+		std::shared_ptr<TaskState> state;
 	};
 
 	class CalxCoordActionGraphPreview : public CalxAction {
@@ -131,7 +133,7 @@ namespace CalXUI {
 		std::shared_ptr<CoordTranslator> translator;
 		std::unique_ptr<GraphBuilder> builder;
 		double speed;
-		TaskState state;
+		std::shared_ptr<TaskState> state;
 	};
 }
 

@@ -57,7 +57,7 @@ namespace CalXUI {
 
 		CalxActionQueue *queue;
 		std::shared_ptr<InstrumentController> ctrl;
-		InstrumentEventListener *listener;
+		std::shared_ptr<InstrumentEventListener> listener;
 		wxTimer *timer;
 	};
 }

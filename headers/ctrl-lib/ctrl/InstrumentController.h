@@ -53,12 +53,10 @@ namespace CalX {
 		bool setMode(InstrumentMode);
 		std::shared_ptr<ConfigManager> getConfiguration();
 
-		void addEventListener(InstrumentEventListener *);
-		void removeEventListener(InstrumentEventListener *);
+		void addEventListener(std::shared_ptr<InstrumentEventListener>);
+		void removeEventListener(std::shared_ptr<InstrumentEventListener>);
 		void use();
 		void unuse();
-
-		void work(bool);
 
 	 protected:
 		void sendStateChanged();
@@ -67,7 +65,7 @@ namespace CalX {
 		Instrument *instr;
 		bool session_state;
 		bool state;
-		std::vector<InstrumentEventListener *> listeners;
+		std::vector<std::shared_ptr<InstrumentEventListener>> listeners;
 	};
 }
 

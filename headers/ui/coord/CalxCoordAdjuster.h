@@ -34,14 +34,14 @@ namespace CalXUI {
 
 	class CalxCoordAdjustAction : public CalxAction {
 	 public:
-		CalxCoordAdjustAction(CalxCoordAdjustDialog *, CoordHandle *,
+		CalxCoordAdjustAction(CalxCoordAdjustDialog *, std::shared_ptr<CoordHandle>,
 		                      CalxAdjustDirection, double, double);
 		void perform(SystemManager *);
 		void stop();
 
 	 private:
 		CalxCoordAdjustDialog *dialog;
-		CoordHandle *handle;
+		std::shared_ptr<CoordHandle> handle;
 		CalxAdjustDirection direction;
 		double step;
 		double speed;
@@ -49,28 +49,30 @@ namespace CalXUI {
 
 	class CalxCoordAdjustMoveAction : public CalxAction {
 	 public:
-		CalxCoordAdjustMoveAction(CalxCoordAdjustDialog *, CoordHandle *,
-		                          coord_point_t, double);
+		CalxCoordAdjustMoveAction(CalxCoordAdjustDialog *,
+		                          std::shared_ptr<CoordHandle>, coord_point_t,
+		                          double);
 		void perform(SystemManager *);
 		void stop();
 
 	 private:
 		CalxCoordAdjustDialog *dialog;
-		CoordHandle *handle;
+		std::shared_ptr<CoordHandle> handle;
 		coord_point_t dest;
 		double speed;
 	};
 
 	class CalxCoordAdjustViewer : public wxWindow {
 	 public:
-		CalxCoordAdjustViewer(wxWindow *, wxWindowID, CoordHandle *, wxSize);
+		CalxCoordAdjustViewer(wxWindow *, wxWindowID, std::shared_ptr<CoordHandle>,
+		                      wxSize);
 
 	 private:
 		void OnPaintEvent(wxPaintEvent &);
 		void OnResizeEvent(wxSizeEvent &);
 		void render(wxDC &);
 
-		CoordHandle *handle;
+		std::shared_ptr<CoordHandle> handle;
 		wxColour pointer_colour;
 	};
 
@@ -85,7 +87,7 @@ namespace CalXUI {
 
 	class CalxCoordAdjustDialog : public wxDialog {
 	 public:
-		CalxCoordAdjustDialog(wxWindow *, wxWindowID, CoordHandle *);
+		CalxCoordAdjustDialog(wxWindow *, wxWindowID, std::shared_ptr<CoordHandle>);
 
 		void adjust(CalxAdjustDirection);
 		void setEnabled(bool);
@@ -110,7 +112,7 @@ namespace CalXUI {
 		wxSpinCtrlDouble *stepSpin;
 		wxSpinCtrlDouble *speedSpin;
 
-		CoordHandle *handle;
+		std::shared_ptr<CoordHandle> handle;
 		CalxActionQueue *queue;
 		CalxCoordAdjustRepaintTimer *timer;
 		CalxCoordAdjustViewer *viewer;

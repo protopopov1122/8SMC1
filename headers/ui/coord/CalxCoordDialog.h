@@ -34,7 +34,7 @@ namespace CalXUI {
 	class CalxCoordDialog : public wxDialog {
 	 public:
 		CalxCoordDialog(wxWindow *, wxWindowID, SystemManager *);
-		CoordHandle *getCoordPlane();
+		std::shared_ptr<CoordHandle> getCoordPlane();
 
 	 private:
 		void OnOkButtonClick(wxCommandEvent &);
@@ -45,7 +45,7 @@ namespace CalXUI {
 		wxChoice *instrChoice;
 
 		SystemManager *sysman;
-		CoordHandle *ctrl;
+		std::shared_ptr<CoordHandle> ctrl;
 	};
 }
 

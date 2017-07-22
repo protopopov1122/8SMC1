@@ -30,7 +30,7 @@ namespace CalXUI {
 
 	class CalxWatcherPool {
 	 public:
-		CalxWatcherPool(wxWindow *, CoordHandle *);
+		CalxWatcherPool(wxWindow *, std::shared_ptr<CoordHandle>);
 		virtual ~CalxWatcherPool();
 
 		CalxCoordPlaneWatcher *newWatcher();
@@ -41,7 +41,7 @@ namespace CalXUI {
 
 	 private:
 		wxWindow *parent;
-		CoordHandle *handle;
+		std::shared_ptr<CoordHandle> handle;
 		std::vector<CalxCoordPlaneWatcher *> watchers;
 	};
 }

@@ -75,7 +75,8 @@ namespace CalXUI {
 		this->nextId = 0;
 	}
 
-	void CalxCoordPanel::updateList(CoordHandle *handle, bool *ready) {
+	void CalxCoordPanel::updateList(std::shared_ptr<CoordHandle> handle,
+	                                bool *ready) {
 		wxThreadEvent evt(wxEVT_COORD_PANEL_UPDATE);
 		evt.SetPayload(std::make_pair(handle, ready));
 		wxPostEvent(this, evt);
@@ -130,7 +131,7 @@ namespace CalXUI {
 		return true;
 	}
 
-	void CalxCoordPanel::addPlane(CoordHandle *handle) {
+	void CalxCoordPanel::addPlane(std::shared_ptr<CoordHandle> handle) {
 		CalxCoordPane *ctrl = new CalxCoordPane(this->mainPanel, wxID_ANY, handle,
 		                                        this->layout.size());
 		for (size_t i = 0; i < this->layout.size(); i++) {
@@ -198,8 +199,8 @@ namespace CalXUI {
 	}
 
 	void CalxCoordPanel::OnCoordPlaneAdd(wxThreadEvent &evt) {
-		std::pair<CoordHandle *, bool *> pair =
-		    evt.GetPayload<std::pair<CoordHandle *, bool *>>();
+		std::pair<std::shared_ptr<CoordHandle>, bool *> pair =
+		    evt.GetPayload<std::pair<std::shared_ptr<CoordHandle>, bool *>>();
 		addPlane(pair.first);
 		*pair.second = true;
 	}

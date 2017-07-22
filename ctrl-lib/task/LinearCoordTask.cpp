@@ -30,10 +30,10 @@ namespace CalX {
 		this->vertical = vertical;
 	}
 
-	LinearCoordTask::~LinearCoordTask() {}
-
-	ErrorCode LinearCoordTask::perform(CoordPlane *plane, TaskParameters &prms,
-	                                   SystemManager *sysman, TaskState *state) {
+	ErrorCode LinearCoordTask::perform(std::shared_ptr<CoordPlane> plane,
+	                                   TaskParameters &prms,
+	                                   SystemManager *sysman,
+	                                   std::shared_ptr<TaskState> state) {
 		state->plane = plane;
 		state->work = true;
 		float speed = prms.speed;

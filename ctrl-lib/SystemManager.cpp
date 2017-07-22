@@ -153,15 +153,16 @@ namespace CalX {
 		return this->coords.size();
 	}
 
-	CoordHandle *SystemManager::getCoord(size_t c) {
+	std::shared_ptr<CoordHandle> SystemManager::getCoord(size_t c) {
 		if (c >= this->coords.size()) {
 			return nullptr;
 		}
-		return this->coords.at(c).get();
+		return this->coords.at(c);
 	}
 
-	CoordHandle *SystemManager::createCoord(device_id_t d1, device_id_t d2,
-	                                        device_id_t instr) {
+	std::shared_ptr<CoordHandle> SystemManager::createCoord(device_id_t d1,
+	                                                        device_id_t d2,
+	                                                        device_id_t instr) {
 		if (d1 >= (device_id_t) this->devman->getMotorCount() ||
 		    d2 >= (device_id_t) this->devman->getMotorCount()) {
 			return nullptr;
@@ -170,17 +171,16 @@ namespace CalX {
 		std::shared_ptr<CoordController> ctrl = std::make_shared<CoordController>(
 		    this->getMotorController(d1), this->getMotorController(d2),
 		    this->getConfiguration().get(), this->getInstrumentController(instr));
-		std::unique_ptr<CoordHandle> handle =
-		    std::make_unique<CoordHandle>(this->coords.size(), ctrl);
+		std::shared_ptr<CoordHandle> handle =
+		    std::make_shared<CoordHandle>(this->coords.size(), ctrl);
 		if (getConfiguration()->getEntry("core")->getBool("auto_power_motors",
 		                                                  false)) {
 			ctrl->getXAxis()->enablePower(true);
 			ctrl->getYAxis()->enablePower(true);
 		}
-		this->coords.push_back(std::move(handle));
-		CoordHandle *ptr = this->getCoord(this->getCoordCount() - 1);
+		this->coords.push_back(handle);
 		if (this->ext_engine != nullptr) {
-			this->ext_engine->coordAdded(ptr);
+			this->ext_engine->coordAdded(handle.get());
 		}
 		LOG(SYSMAN_TAG,
 		    "New coordinate plane #" + std::to_string(this->coords.size() - 1) +
@@ -190,7 +190,7 @@ namespace CalX {
 		                                           ? "#" + std::to_string(instr)
 		                                           : "no") +
 		        ".");
-		return ptr;
+		return handle;
 	}
 
 	void SystemManager::removeCoord(size_t id) {
