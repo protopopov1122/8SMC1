@@ -122,6 +122,6 @@ namespace CalX {
 		virtual void keyRemoved(ConfigManager *, ConfigEntry *, std::string) {}
 		virtual void keyChanged(ConfigManager *, ConfigEntry *, std::string) {}
 	};
-}
+}  // namespace CalX
 
 #endif

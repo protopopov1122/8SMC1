@@ -156,6 +156,6 @@ namespace CalX {
 		std::string id;
 		std::unique_ptr<std::vector<std::unique_ptr<Node>>> args;
 	};
-}
+}  // namespace CalX
 
 #endif

@@ -363,4 +363,4 @@ namespace CalXUI {
 		}
 		delete editor;
 	}
-}
+}  // namespace CalXUI

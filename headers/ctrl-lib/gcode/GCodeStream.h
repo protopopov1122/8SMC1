@@ -103,6 +103,6 @@ namespace CalX {
 		std::vector<GCodeCmd> commands;
 		size_t position;
 	};
-}
+}  // namespace CalX
 
 #endif

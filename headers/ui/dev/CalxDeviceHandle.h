@@ -44,6 +44,6 @@ namespace CalXUI {
 	 public:
 		virtual void appendDevice(CalxDeviceConstructor *) = 0;
 	};
-}
+}  // namespace CalXUI
 
 #endif

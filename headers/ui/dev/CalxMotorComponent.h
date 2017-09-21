@@ -49,7 +49,6 @@ namespace CalXUI {
 	class CalxMotorTimer : public wxTimer {
 	 public:
 		CalxMotorTimer() : wxTimer::wxTimer(), ctrl(nullptr) {}
-		~CalxMotorTimer() {}
 		void setCtrl(CalxMotorComponent *d) {
 			this->ctrl = d;
 		}
@@ -104,6 +103,6 @@ namespace CalXUI {
 		wxStaticText *hardwareInfo;
 		wxStaticText *runtimeInfo;
 	};
-}
+}  // namespace CalXUI
 
 #endif

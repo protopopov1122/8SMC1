@@ -33,6 +33,6 @@ namespace CalXUI {
 		virtual void shutdown() = 0;
 		virtual void updateUI() = 0;
 	};
-}
+}  // namespace CalXUI
 
 #endif

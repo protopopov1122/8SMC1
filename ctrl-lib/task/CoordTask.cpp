@@ -28,16 +28,7 @@
 namespace CalX {
 
 	ProgrammedCoordTask::ProgrammedCoordTask()
-	    : CoordTask::CoordTask(CoordTaskType::ProgrammedTask) {
-		INIT_LOG("ProgrammedCoordTask");
-	}
-
-	ProgrammedCoordTask::~ProgrammedCoordTask() {
-		for (size_t i = 0; i < this->list.size(); i++) {
-			delete this->list.at(i);
-		}
-		DESTROY_LOG("ProgrammedCoordTask");
-	}
+	    : CoordTask::CoordTask(CoordTaskType::ProgrammedTask) {}
 
 	ErrorCode ProgrammedCoordTask::perform(std::shared_ptr<CoordPlane> ctrl,
 	                                       TaskParameters &prms,
@@ -61,7 +52,7 @@ namespace CalX {
 		return ErrorCode::NoError;
 	}
 
-	void ProgrammedCoordTask::addStep(TaskStep *st) {
+	void ProgrammedCoordTask::addStep(std::shared_ptr<TaskStep> st) {
 		this->list.push_back(st);
 	}
 
@@ -73,28 +64,29 @@ namespace CalX {
 		if (i >= this->list.size()) {
 			return false;
 		}
-		delete this->list.at(i);
 		this->list.erase(this->list.begin() + (std::ptrdiff_t) i);
 		return true;
 	}
 
-	TaskStep *ProgrammedCoordTask::pollStep(size_t i) {
+	std::shared_ptr<TaskStep> ProgrammedCoordTask::pollStep(size_t i) {
 		if (i >= this->list.size()) {
 			return nullptr;
 		}
-		TaskStep *step = this->list.at(i);
+		std::shared_ptr<TaskStep> step = this->list.at(i);
 		this->list.erase(this->list.begin() + (std::ptrdiff_t) i);
 		return step;
 	}
 
-	bool ProgrammedCoordTask::insertStep(size_t i, TaskStep *step) {
+	bool ProgrammedCoordTask::insertStep(size_t i,
+	                                     std::shared_ptr<TaskStep> step) {
 		if (i > this->list.size()) {
 			return false;
 		}
 		if (i == this->list.size()) {
 			this->list.push_back(step);
 		} else {
-			this->list.insert(this->list.begin() + (std::ptrdiff_t) i, step);
+			this->list.insert(this->list.begin() + (std::ptrdiff_t) i,
+			                  std::move(step));
 		}
 		return true;
 	}
@@ -357,4 +349,4 @@ namespace CalX {
 		return this->graph->build(sysman, plane, this->trans,
 		                          this->scale * prms.speed, state);
 	}
-}
+}  // namespace CalX

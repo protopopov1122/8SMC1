@@ -49,6 +49,6 @@ namespace CalXUI {
 		void OnExit(wxCloseEvent &);
 		wxStaticText *text;
 	};
-}
+}  // namespace CalXUI
 
 #endif

@@ -109,6 +109,6 @@ namespace CalX {
 		virtual ~NL300NoneParameter();
 		virtual std::string getString();
 	};
-}
+}  // namespace CalX
 
 #endif

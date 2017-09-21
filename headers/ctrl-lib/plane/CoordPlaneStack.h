@@ -29,7 +29,6 @@ namespace CalX {
 	class CoordPlaneStack : public CoordPlane {
 	 public:
 		CoordPlaneStack(std::shared_ptr<CoordPlane>);
-		virtual ~CoordPlaneStack();
 
 		virtual std::shared_ptr<CoordPlane> peekPlane();
 		virtual bool popPlane();
@@ -57,6 +56,6 @@ namespace CalX {
 	 private:
 		std::vector<std::shared_ptr<CoordPlane>> stack;
 	};
-}
+}  // namespace CalX
 
 #endif

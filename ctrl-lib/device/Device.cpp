@@ -30,8 +30,6 @@ namespace CalX {
 		this->config = std::make_shared<ConfigManager>();
 	}
 
-	Device::~Device() {}
-
 	DeviceType Device::getType() {
 		return this->type;
 	}
@@ -71,14 +69,10 @@ namespace CalX {
 
 	Motor::Motor(device_id_t id) : Device::Device(DeviceType::Motor, id) {}
 
-	Motor::~Motor() {}
-
 	Instrument::Instrument(device_id_t id)
 	    : Device::Device(DeviceType::Instrument, id) {}
-
-	Instrument::~Instrument() {}
 
 	void Instrument::log(std::string msg) {
 		LOG_INSTR(this->getID(), msg);
 	}
-}
+}  // namespace CalX

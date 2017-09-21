@@ -136,6 +136,6 @@ namespace CalX {
 		bool waitSync;
 		int divisor;
 	};
-}
+}  // namespace CalX
 
 #endif

@@ -29,7 +29,6 @@ namespace CalX {
 	 public:
 		LinearCoordTranslator(coord_point_t, coord_scale_t,
 		                      std::shared_ptr<CoordTranslator> = nullptr);
-		virtual ~LinearCoordTranslator();
 		virtual std::shared_ptr<CoordTranslator> getBase();
 		virtual void setBase(std::shared_ptr<CoordTranslator>);
 		coord_point_t getOffset();
@@ -48,6 +47,6 @@ namespace CalX {
 		coord_point_t offset;
 		coord_scale_t scale;
 	};
-}
+}  // namespace CalX
 
 #endif

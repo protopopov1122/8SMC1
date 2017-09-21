@@ -210,28 +210,31 @@ namespace CalXUI {
 		                  std::to_string(
 		                      ctrl->getController()->getInstrument()->getID()))
 		         : __("Instrument: no")) +
-		    "\n" + FORMAT(__("Position: %sx%s %s"),
+		    "\n" +
+		    FORMAT(__("Position: %sx%s %s"),
+		           wxGetApp().formatDouble(
+		               ctrl->getFloatPlane()->getFloatPosition().x),
+		           wxGetApp().formatDouble(
+		               ctrl->getFloatPlane()->getFloatPosition().y),
+		           units) +
+		    "\n" +
+		    (ctrl->isMeasured()
+		         ? FORMAT(__("Start: %sx%s %s"),
 		                  wxGetApp().formatDouble(
-		                      ctrl->getFloatPlane()->getFloatPosition().x),
+		                      ctrl->getFloatPlane()->getFloatSize().x),
 		                  wxGetApp().formatDouble(
-		                      ctrl->getFloatPlane()->getFloatPosition().y),
-		                  units) +
-		    "\n" + (ctrl->isMeasured()
-		                ? FORMAT(__("Start: %sx%s %s"),
-		                         wxGetApp().formatDouble(
-		                             ctrl->getFloatPlane()->getFloatSize().x),
-		                         wxGetApp().formatDouble(
-		                             ctrl->getFloatPlane()->getFloatSize().y),
-		                         units)
-		                : __("Start: Not measured")) +
-		    "\n" + (ctrl->isMeasured()
-		                ? FORMAT(__("Size: %sx%s %s"),
-		                         wxGetApp().formatDouble(
-		                             ctrl->getFloatPlane()->getFloatSize().w),
-		                         wxGetApp().formatDouble(
-		                             ctrl->getFloatPlane()->getFloatSize().h),
-		                         units)
-		                : __("Size: Not measured"));
+		                      ctrl->getFloatPlane()->getFloatSize().y),
+		                  units)
+		         : __("Start: Not measured")) +
+		    "\n" +
+		    (ctrl->isMeasured()
+		         ? FORMAT(__("Size: %sx%s %s"),
+		                  wxGetApp().formatDouble(
+		                      ctrl->getFloatPlane()->getFloatSize().w),
+		                  wxGetApp().formatDouble(
+		                      ctrl->getFloatPlane()->getFloatSize().h),
+		                  units)
+		         : __("Size: Not measured"));
 		this->generalInfoText->SetLabel(general);
 		Layout();
 	}
@@ -298,4 +301,4 @@ namespace CalXUI {
 		dialog->ShowModal();
 		delete dialog;
 	}
-}
+}  // namespace CalXUI

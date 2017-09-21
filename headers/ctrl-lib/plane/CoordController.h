@@ -79,6 +79,6 @@ namespace CalX {
 		void sendCalibratingEvent(CoordCalibrateEvent &);
 		void sendCalibratedEvent(CoordCalibrateEvent &);
 	};
-}
+}  // namespace CalX
 
 #endif

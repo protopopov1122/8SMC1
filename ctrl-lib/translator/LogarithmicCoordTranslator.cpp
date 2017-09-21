@@ -26,16 +26,10 @@
 namespace CalX {
 
 	LogarithmicCoordTranslator::LogarithmicCoordTranslator(
-	    coord_scale_t scale, std::shared_ptr<CoordTranslator> base)
-	    : CoordTranslator::CoordTranslator(CoordType::LogarithmicCoord) {
-		this->base = base;
-		this->scale = scale;
-		INIT_LOG("LogarithmicCoordTranslator");
-	}
-
-	LogarithmicCoordTranslator::~LogarithmicCoordTranslator() {
-		DESTROY_LOG("LogarithmicCoordTranslator");
-	}
+	    coord_scale_t sc, std::shared_ptr<CoordTranslator> bs)
+	    : CoordTranslator::CoordTranslator(CoordType::LogarithmicCoord),
+	      base(bs),
+	      scale(sc) {}
 
 	std::shared_ptr<CoordTranslator> LogarithmicCoordTranslator::getBase() {
 		return this->base;
@@ -122,4 +116,4 @@ namespace CalX {
 		}
 		return std::make_unique<LogarithmicCoordTranslator>(this->scale, base);
 	}
-}
+}  // namespace CalX

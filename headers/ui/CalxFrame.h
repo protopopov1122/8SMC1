@@ -43,6 +43,6 @@ namespace CalXUI {
 
 		CalxPanel *panel;
 	};
-}
+}  // namespace CalXUI
 
 #endif

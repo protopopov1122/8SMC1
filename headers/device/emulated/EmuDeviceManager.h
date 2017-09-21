@@ -40,6 +40,6 @@ namespace CalX {
 		virtual Motor *connectMotor(DeviceConnectionPrms *);
 		virtual Instrument *connectInstrument(DeviceConnectionPrms *);
 	};
-}
+}  // namespace CalX
 
 #endif

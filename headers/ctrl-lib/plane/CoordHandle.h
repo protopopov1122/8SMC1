@@ -29,7 +29,6 @@ namespace CalX {
 	class CoordHandle : public CoordPlaneStack {
 	 public:
 		CoordHandle(size_t, std::shared_ptr<CoordController>);
-		virtual ~CoordHandle();
 
 		size_t getID();
 		std::shared_ptr<CoordController> getController();
@@ -46,6 +45,6 @@ namespace CalX {
 		std::shared_ptr<CoordController> root;
 		std::shared_ptr<FloatCoordPlane> floatPlane;
 	};
-}
+}  // namespace CalX
 
 #endif

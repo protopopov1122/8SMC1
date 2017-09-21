@@ -72,6 +72,6 @@ namespace CalX {
 		NL300GeneralAction action;
 		NL300Parameter *parameter;
 	};
-}
+}  // namespace CalX
 
 #endif

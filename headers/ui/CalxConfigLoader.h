@@ -53,6 +53,6 @@ namespace CalXUI {
 		std::vector<CalxConfigFile> found;
 		wxDataViewListCtrl *configList;
 	};
-}
+}  // namespace CalXUI
 
 #endif

@@ -29,7 +29,6 @@ namespace CalXUI {
 	class CalxDebugConsole : public wxThread {
 	 public:
 		CalxDebugConsole(SystemManager *);
-		virtual ~CalxDebugConsole();
 
 	 protected:
 		virtual ExitCode Entry();
@@ -38,6 +37,6 @@ namespace CalXUI {
 		SystemManager *sysman;
 		DeviceManager *devman;
 	};
-}
+}  // namespace CalXUI
 
 #endif

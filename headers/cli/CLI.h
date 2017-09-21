@@ -56,6 +56,6 @@ namespace CalX {
 		std::ostream *out;
 		std::istream *in;
 	};
-}
+}  // namespace CalX
 
 #endif

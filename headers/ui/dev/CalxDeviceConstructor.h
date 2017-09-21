@@ -47,6 +47,6 @@ namespace CalXUI {
 		CalxDevicePool *pool;
 		std::shared_ptr<InstrumentController> ctrl;
 	};
-}
+}  // namespace CalXUI
 
 #endif

@@ -58,9 +58,9 @@ namespace CalX {
 		ExtEngine *getExtEngine();
 		// Tasks control
 		size_t getTaskCount();
-		CoordTask *getTask(size_t);
-		ProgrammedCoordTask *createProgrammedTask();
-		size_t addTask(std::unique_ptr<CoordTask>);
+		std::shared_ptr<CoordTask> getTask(size_t);
+		std::shared_ptr<ProgrammedCoordTask> createProgrammedTask();
+		size_t addTask(std::shared_ptr<CoordTask>);
 		bool removeTask(size_t);
 		// Coordinate plane control
 		size_t getCoordCount();
@@ -78,12 +78,12 @@ namespace CalX {
 		std::shared_ptr<ConfigManager> conf;
 		std::vector<std::shared_ptr<MotorController>> dev;
 		std::vector<std::shared_ptr<InstrumentController>> instr;
-		std::vector<std::unique_ptr<CoordTask>> tasks;
+		std::vector<std::shared_ptr<CoordTask>> tasks;
 		std::vector<std::shared_ptr<CoordHandle>> coords;
 		FunctionEngine engine;
 		std::unique_ptr<RequestResolver> resolver;
 		std::unique_ptr<ExtEngine> ext_engine;
 	};
-}
+}  // namespace CalX
 
 #endif

@@ -81,6 +81,6 @@ namespace CalX {
 		std::string hardwareInfo;
 		std::string softwareInfo;
 	};
-}
+}  // namespace CalX
 
 #endif

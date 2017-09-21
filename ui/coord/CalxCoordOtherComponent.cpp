@@ -117,4 +117,4 @@ namespace CalXUI {
 		                                                  : TrailerId::Trailer2;
 		this->controller->measure(tr);
 	}
-}
+}  // namespace CalXUI

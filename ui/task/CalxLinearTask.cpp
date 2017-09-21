@@ -41,7 +41,7 @@ namespace CalXUI {
 		motor_rect_t mrect = { 0, 0, 0, 0 };
 		motor_coord_t mspac = 0;
 		bool mvert = true;
-		this->task = new LinearCoordTask(mrect, mspac, mvert);
+		this->task = std::make_shared<LinearCoordTask>(mrect, mspac, mvert);
 		coord_point_t offset = wxGetApp().getUnitOffset();
 		coord_scale_t size = { wxGetApp().getUnitScale(),
 			                     wxGetApp().getUnitScale() };
@@ -119,7 +119,7 @@ namespace CalXUI {
 		return "Linear Task #" + std::to_string(this->id);
 	}
 
-	CoordTask *CalxLinearTaskHandle::getTask() {
+	std::shared_ptr<CoordTask> CalxLinearTaskHandle::getTask() {
 		return this->task;
 	}
 
@@ -167,11 +167,10 @@ namespace CalXUI {
 	}
 
 	void CalxLinearTaskHandle::OnExit(wxCloseEvent &evt) {
-		delete this->task;
 		Destroy();
 	}
 
 	CalxTaskHandle *CalxLinearTaskFactory::newTask(wxWindow *win) {
 		return new CalxLinearTaskHandle(win, wxID_ANY, ++this->next_id);
 	}
-}
+}  // namespace CalXUI

@@ -34,7 +34,7 @@ namespace CalX {
 	class AbstractValidator {
 	 public:
 		AbstractValidator(bool);
-		virtual ~AbstractValidator();
+		virtual ~AbstractValidator() = default;
 		bool isOptional();
 
 	 protected:
@@ -44,7 +44,6 @@ namespace CalX {
 	class ConfigValueValidator : public AbstractValidator {
 	 public:
 		ConfigValueValidator(ConfigValueType, bool = false);
-		virtual ~ConfigValueValidator();
 		ConfigValueType getType();
 		virtual bool validate(std::shared_ptr<ConfigValue>);
 
@@ -54,40 +53,38 @@ namespace CalX {
 
 	class ConfigKeyValidator : public AbstractValidator {
 	 public:
-		ConfigKeyValidator(std::string, ConfigValueValidator *, bool = false);
-		virtual ~ConfigKeyValidator();
+		ConfigKeyValidator(std::string, std::unique_ptr<ConfigValueValidator>,
+		                   bool = false);
 		std::string getKey();
 		ConfigValueValidator *getValue();
 		bool validate(std::shared_ptr<ConfigEntry>);
 
 	 private:
 		std::string key;
-		ConfigValueValidator *value;
+		std::unique_ptr<ConfigValueValidator> value;
 	};
 
 	class ConfigEntryValidator : public AbstractValidator {
 	 public:
 		ConfigEntryValidator(std::string, bool = false);
-		virtual ~ConfigEntryValidator();
 		std::string getEntryName();
 		bool validate(ConfigManager *);
-		void addKeyValidator(ConfigKeyValidator *);
+		void addKeyValidator(std::unique_ptr<ConfigKeyValidator>);
 
 	 private:
 		std::string name;
-		std::vector<ConfigKeyValidator *> keys;
+		std::vector<std::unique_ptr<ConfigKeyValidator>> keys;
 	};
 
 	class ConfigValidator : public AbstractValidator {
 	 public:
 		ConfigValidator(bool = true);
-		virtual ~ConfigValidator();
-		void addEntryValidator(ConfigEntryValidator *);
+		void addEntryValidator(std::unique_ptr<ConfigEntryValidator>);
 		bool validate(ConfigManager *);
 
 	 private:
-		std::vector<ConfigEntryValidator *> entries;
+		std::vector<std::unique_ptr<ConfigEntryValidator>> entries;
 	};
-}
+}  // namespace CalX
 
 #endif

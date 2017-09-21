@@ -60,6 +60,6 @@ namespace CalX {
 	CMD(MotorCommand)
 
 #undef CMD
-}
+}  // namespace CalX
 
 #endif

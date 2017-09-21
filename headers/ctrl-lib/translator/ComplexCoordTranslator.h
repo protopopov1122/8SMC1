@@ -29,7 +29,6 @@ namespace CalX {
 	class ComplexCoordTranslator : public CoordTranslator {
 	 public:
 		ComplexCoordTranslator(std::shared_ptr<CoordTranslator>);
-		virtual ~ComplexCoordTranslator();
 		virtual motor_point_t get(double, double);
 		virtual coord_point_t get(motor_point_t);
 		virtual coord_point_t floatGet(double, double);
@@ -47,6 +46,6 @@ namespace CalX {
 	 private:
 		std::vector<std::shared_ptr<CoordTranslator>> list;
 	};
-}
+}  // namespace CalX
 
 #endif

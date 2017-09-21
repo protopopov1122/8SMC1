@@ -24,12 +24,6 @@ namespace CalX {
 
 	CoordPlaneStack::CoordPlaneStack(std::shared_ptr<CoordPlane> root) {
 		this->stack.push_back(root);
-		INIT_LOG("CoordPlaneStack");
-	}
-
-	CoordPlaneStack::~CoordPlaneStack() {
-		this->stack.clear();
-		DESTROY_LOG("CoordPlaneStack");
 	}
 
 	bool CoordPlaneStack::popPlane() {
@@ -130,4 +124,4 @@ namespace CalX {
 	bool CoordPlaneStack::isUsed() {
 		return this->peekPlane()->isUsed();
 	}
-}
+}  // namespace CalX

@@ -29,7 +29,6 @@ namespace CalX {
 	 public:
 		CoordPlaneLog(std::shared_ptr<CoordPlane>, std::ostream *, std::string,
 		              bool = true, bool = true);
-		virtual ~CoordPlaneLog();
 		std::shared_ptr<CoordPlane> getBase();
 		std::string getPrefix();
 		bool isLoggingActions();
@@ -63,6 +62,6 @@ namespace CalX {
 		bool log_actions;
 		bool log_errors;
 	};
-}
+}  // namespace CalX
 
 #endif

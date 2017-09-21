@@ -31,7 +31,7 @@ namespace CalX {
 	class GCodeWriter : public VirtualCoordPlane {
 	 public:
 		GCodeWriter(motor_point_t, motor_rect_t, std::shared_ptr<CoordTranslator>,
-		            std::ostream *);
+		            std::ostream &);
 		void close();
 		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
 
@@ -40,8 +40,8 @@ namespace CalX {
 
 	 private:
 		std::shared_ptr<CoordTranslator> trans;
-		std::ostream *out;
+		std::ostream &out;
 	};
-}
+}  // namespace CalX
 
 #endif

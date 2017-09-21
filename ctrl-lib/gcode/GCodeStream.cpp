@@ -229,4 +229,4 @@ namespace CalX {
 		}
 		return true;
 	}
-}
+}  // namespace CalX

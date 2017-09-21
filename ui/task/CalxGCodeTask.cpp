@@ -47,7 +47,7 @@ namespace CalXUI {
 		codeText->SetValue(code);
 
 		std::stringstream ss(code);
-		this->task = new GCodeCoordTask(&ss, tr);
+		this->task = std::make_shared<GCodeCoordTask>(ss, tr);
 
 		Layout();
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxGcodeHandle::OnExit, this);
@@ -57,7 +57,7 @@ namespace CalXUI {
 		return this->id;
 	}
 
-	CoordTask *CalxGcodeHandle::getTask() {
+	std::shared_ptr<CoordTask> CalxGcodeHandle::getTask() {
 		return this->task;
 	}
 
@@ -86,4 +86,4 @@ namespace CalXUI {
 		loader->Destroy();
 		return handle;
 	}
-}
+}  // namespace CalXUI

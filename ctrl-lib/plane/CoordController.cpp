@@ -95,9 +95,9 @@ namespace CalX {
 			float maxspeed =
 			    this->config->getEntry("core")->getReal("jump_speed", 0.0f);
 			if (maxspeed > 0 && speed < maxspeed) {
-				LOG("CoordController",
-				    "Changing jump speed from " + std::to_string(speed) + " to " +
-				        std::to_string(maxspeed) + " steps/sec");
+				LOG("CoordController", "Changing jump speed from " +
+				                           std::to_string(speed) + " to " +
+				                           std::to_string(maxspeed) + " steps/sec");
 				speed = maxspeed;
 			}
 		}
@@ -589,4 +589,4 @@ namespace CalX {
 		LOG("CoordController", "Session closed");
 		return err;
 	}
-}
+}  // namespace CalX

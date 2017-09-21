@@ -98,4 +98,4 @@ namespace CalXUI {
 		this->controller->move(dest, this->speed->GetValue(), false,
 		                       this->relative->GetValue());
 	}
-}
+}  // namespace CalXUI

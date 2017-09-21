@@ -34,7 +34,7 @@ namespace CalXUI {
 
 	class CalxAction {
 	 public:
-		virtual ~CalxAction(){};
+		virtual ~CalxAction() = default;
 		virtual void perform(SystemManager *) = 0;
 		virtual void stop() = 0;
 	};
@@ -63,6 +63,6 @@ namespace CalXUI {
 		bool work;
 		SystemManager *sysman;
 	};
-}
+}  // namespace CalXUI
 
 #endif

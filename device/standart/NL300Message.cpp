@@ -143,4 +143,4 @@ namespace CalX {
 	std::string NL300NoneParameter::getString() {
 		return "";
 	}
-}
+}  // namespace CalX

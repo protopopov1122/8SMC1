@@ -25,13 +25,7 @@ namespace CalX {
 
 	FloatCoordPlane::FloatCoordPlane(coord_point_t offs, coord_scale_t scl,
 	                                 double sp, std::shared_ptr<CoordPlane> bs)
-	    : offset(offs), scale(scl), speed(sp), plane(bs) {
-		INIT_LOG("FloatCoordPlane");
-	}
-
-	FloatCoordPlane::~FloatCoordPlane() {
-		DESTROY_LOG("FloatCoordPlane");
-	}
+	    : offset(offs), scale(scl), speed(sp), plane(bs) {}
 
 	std::shared_ptr<CoordPlane> FloatCoordPlane::getBase() {
 		return this->plane;
@@ -232,4 +226,4 @@ namespace CalX {
 		center.y += relcenter.y;
 		return arc(dest, center, splitter, speed, clockwise, scale);
 	}
-}
+}  // namespace CalX

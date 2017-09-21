@@ -52,6 +52,6 @@ namespace CalXUI {
 
 		wxPanel *connectPanel;
 	};
-}
+}  // namespace CalXUI
 
 #endif

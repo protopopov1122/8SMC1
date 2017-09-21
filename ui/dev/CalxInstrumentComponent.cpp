@@ -269,9 +269,9 @@ namespace CalXUI {
 	void CalxInstrumentComponent::OnModeClick(wxCommandEvent &evt) {
 		if (this->modeChoice->GetSelection() != wxNOT_FOUND) {
 			int sel = this->modeChoice->GetSelection();
-			InstrumentMode mode =
-			    sel == 0 ? InstrumentMode::Off : (sel == 1 ? InstrumentMode::Prepare
-			                                               : InstrumentMode::Full);
+			InstrumentMode mode = sel == 0 ? InstrumentMode::Off
+			                               : (sel == 1 ? InstrumentMode::Prepare
+			                                           : InstrumentMode::Full);
 			queue->addAction(new CalxInstrumentModeAction(this->ctrl.get(), mode));
 		}
 	}
@@ -280,4 +280,4 @@ namespace CalXUI {
 		bool e = evt.GetPayload<bool>();
 		Enable(e);
 	}
-}
+}  // namespace CalXUI

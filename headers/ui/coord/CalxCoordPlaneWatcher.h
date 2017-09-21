@@ -116,6 +116,6 @@ namespace CalXUI {
 		std::shared_ptr<CoordHandle> handle;
 		wxStaticText *mouseCoords;
 	};
-}
+}  // namespace CalXUI
 
 #endif

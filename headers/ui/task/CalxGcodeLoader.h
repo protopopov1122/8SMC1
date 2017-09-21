@@ -46,6 +46,6 @@ namespace CalXUI {
 		CalxCoordFilterCtrl *translator;
 		bool state;
 	};
-}
+}  // namespace CalXUI
 
 #endif

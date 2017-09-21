@@ -66,4 +66,4 @@ namespace CalXUI {
 		}
 		dialog->Destroy();
 	}
-}
+}  // namespace CalXUI

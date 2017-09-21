@@ -84,4 +84,4 @@ namespace CalXUI {
 		this->text->SetLabel(txt);
 		wxMessageBox(txt, "Initialization error", wxICON_ERROR);
 	}
-}
+}  // namespace CalXUI

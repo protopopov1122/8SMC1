@@ -64,4 +64,4 @@ namespace CalX {
 #endif
 		}
 	}
-}
+}  // namespace CalX

@@ -88,7 +88,7 @@ namespace CalXUI {
 		std::ofstream *resources_log;
 		std::ofstream *instruments_log;
 	};
-}
+}  // namespace CalXUI
 wxDECLARE_APP(CalXUI::CalxApp);
 
 #endif

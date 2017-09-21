@@ -76,9 +76,8 @@ namespace CalXUI {
 		for (size_t i = 0; i < wxGetApp().getSystemManager()->getInstrumentCount();
 		     i++) {
 			devPanel->appendDevice(new CalxInstrumentConstructor(
-			    devPanel,
-			    wxGetApp().getSystemManager()->getInstrumentController(
-			        (device_id_t) i)));
+			    devPanel, wxGetApp().getSystemManager()->getInstrumentController(
+			                  (device_id_t) i)));
 		}
 		devPanel->updateUI();
 		return devPanel;
@@ -191,4 +190,4 @@ namespace CalXUI {
 
 		wxAboutBox(about);
 	}
-}
+}  // namespace CalXUI

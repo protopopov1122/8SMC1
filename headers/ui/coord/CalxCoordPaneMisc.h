@@ -79,6 +79,6 @@ namespace CalXUI {
 	 private:
 		CalxCoordPane *ctrl;
 	};
-}
+}  // namespace CalXUI
 
 #endif

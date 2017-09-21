@@ -237,4 +237,4 @@ namespace CalXUI {
 		this->editor->Close(true);
 		Hide();
 	}
-}
+}  // namespace CalXUI

@@ -106,4 +106,4 @@ namespace CalXUI {
 		finished = true;
 		return nullptr;
 	}
-}
+}  // namespace CalXUI

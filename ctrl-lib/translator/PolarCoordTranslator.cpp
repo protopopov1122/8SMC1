@@ -24,15 +24,8 @@
 namespace CalX {
 
 	PolarCoordTranslator::PolarCoordTranslator(
-	    std::shared_ptr<CoordTranslator> base)
-	    : CoordTranslator::CoordTranslator(CoordType::PolarCoord) {
-		this->base = base;
-		INIT_LOG("PolarCoordTranslator");
-	}
-
-	PolarCoordTranslator::~PolarCoordTranslator() {
-		DESTROY_LOG("PolarCoordTranslator");
-	}
+	    std::shared_ptr<CoordTranslator> bs)
+	    : CoordTranslator::CoordTranslator(CoordType::PolarCoord), base(bs) {}
 
 	std::shared_ptr<CoordTranslator> PolarCoordTranslator::getBase() {
 		return this->base;
@@ -97,4 +90,4 @@ namespace CalX {
 		}
 		return std::make_unique<PolarCoordTranslator>(base);
 	}
-}
+}  // namespace CalX

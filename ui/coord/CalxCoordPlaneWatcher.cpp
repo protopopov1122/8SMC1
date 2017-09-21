@@ -355,8 +355,9 @@ namespace CalXUI {
 	CalxCoordPlaneWatcherDialog::CalxCoordPlaneWatcherDialog(
 	    wxWindow *win, wxWindowID id, std::shared_ptr<CoordHandle> handle,
 	    CalxWatcherPool *pool)
-	    : wxDialog::wxDialog(win, id, FORMAT(__("Coordinate plane #%s Watcher"),
-	                                         std::to_string(handle->getID())),
+	    : wxDialog::wxDialog(win, id,
+	                         FORMAT(__("Coordinate plane #%s Watcher"),
+	                                std::to_string(handle->getID())),
 	                         wxDefaultPosition, wxDefaultSize,
 	                         wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER) {
 		this->handle = handle;
@@ -424,4 +425,4 @@ namespace CalXUI {
 			this->mouseCoords->SetLabel(res);
 		}
 	}
-}
+}  // namespace CalXUI

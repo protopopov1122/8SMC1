@@ -22,22 +22,14 @@
 
 namespace CalX {
 
-	AbstractValidator::AbstractValidator(bool opt) {
-		this->optional = opt;
-	}
-
-	AbstractValidator::~AbstractValidator() {}
+	AbstractValidator::AbstractValidator(bool opt) : optional(opt) {}
 
 	bool AbstractValidator::isOptional() {
 		return this->optional;
 	}
 
-	ConfigValueValidator::ConfigValueValidator(ConfigValueType type, bool opt)
-	    : AbstractValidator::AbstractValidator(opt) {
-		this->type = type;
-	}
-
-	ConfigValueValidator::~ConfigValueValidator() {}
+	ConfigValueValidator::ConfigValueValidator(ConfigValueType tp, bool opt)
+	    : AbstractValidator::AbstractValidator(opt), type(tp) {}
 
 	ConfigValueType ConfigValueValidator::getType() {
 		return this->type;
@@ -50,23 +42,18 @@ namespace CalX {
 		return value->getType() == type || this->isOptional();
 	}
 
-	ConfigKeyValidator::ConfigKeyValidator(std::string key,
-	                                       ConfigValueValidator *value, bool opt)
-	    : AbstractValidator::AbstractValidator(opt) {
-		this->key = key;
-		this->value = value;
-	}
-
-	ConfigKeyValidator::~ConfigKeyValidator() {
-		delete this->value;
-	}
+	ConfigKeyValidator::ConfigKeyValidator(
+	    std::string k, std::unique_ptr<ConfigValueValidator> v, bool opt)
+	    : AbstractValidator::AbstractValidator(opt),
+	      key(k),
+	      value(std::move(v)) {}
 
 	std::string ConfigKeyValidator::getKey() {
 		return this->key;
 	}
 
 	ConfigValueValidator *ConfigKeyValidator::getValue() {
-		return this->value;
+		return this->value.get();
 	}
 
 	bool ConfigKeyValidator::validate(std::shared_ptr<ConfigEntry> entry) {
@@ -77,23 +64,16 @@ namespace CalX {
 		return this->value->validate(value);
 	}
 
-	ConfigEntryValidator::ConfigEntryValidator(std::string name, bool opt)
-	    : AbstractValidator::AbstractValidator(opt) {
-		this->name = name;
-	}
-
-	ConfigEntryValidator::~ConfigEntryValidator() {
-		for (const auto &k : this->keys) {
-			delete k;
-		}
-	}
+	ConfigEntryValidator::ConfigEntryValidator(std::string nm, bool opt)
+	    : AbstractValidator::AbstractValidator(opt), name(nm) {}
 
 	std::string ConfigEntryValidator::getEntryName() {
 		return this->name;
 	}
 
-	void ConfigEntryValidator::addKeyValidator(ConfigKeyValidator *kv) {
-		this->keys.push_back(kv);
+	void ConfigEntryValidator::addKeyValidator(
+	    std::unique_ptr<ConfigKeyValidator> kv) {
+		this->keys.push_back(std::move(kv));
 	}
 
 	bool ConfigEntryValidator::validate(ConfigManager *conf) {
@@ -113,14 +93,9 @@ namespace CalX {
 	ConfigValidator::ConfigValidator(bool opt)
 	    : AbstractValidator::AbstractValidator(opt) {}
 
-	ConfigValidator::~ConfigValidator() {
-		for (const auto &entry : this->entries) {
-			delete entry;
-		}
-	}
-
-	void ConfigValidator::addEntryValidator(ConfigEntryValidator *entry) {
-		this->entries.push_back(entry);
+	void ConfigValidator::addEntryValidator(
+	    std::unique_ptr<ConfigEntryValidator> entry) {
+		this->entries.push_back(std::move(entry));
 	}
 
 	bool ConfigValidator::validate(ConfigManager *conf) {
@@ -134,4 +109,4 @@ namespace CalX {
 		}
 		return true;
 	}
-}
+}  // namespace CalX

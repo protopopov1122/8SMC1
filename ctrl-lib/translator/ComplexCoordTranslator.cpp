@@ -26,12 +26,6 @@ namespace CalX {
 	    std::shared_ptr<CoordTranslator> root)
 	    : CoordTranslator::CoordTranslator(CoordType::ComplexCoord) {
 		this->list.push_back(root);
-		INIT_LOG("ComplexCoordTranslator");
-	}
-
-	ComplexCoordTranslator::~ComplexCoordTranslator() {
-		this->list.clear();
-		DESTROY_LOG("ComplexCoordTranslator");
 	}
 
 	size_t ComplexCoordTranslator::getSize() {
@@ -121,4 +115,4 @@ namespace CalX {
 		}
 		return trans;
 	}
-}
+}  // namespace CalX

@@ -126,4 +126,4 @@ namespace CalX {
 	extern "C" LIBEXPORT DeviceManager *getDeviceManager() {
 		return new StandartDeviceManager();
 	}
-}
+}  // namespace CalX

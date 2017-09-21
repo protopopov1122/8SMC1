@@ -45,6 +45,6 @@ namespace CalXUI {
 		int32_t speed;
 		SerialPortParity parity;
 	};
-}
+}  // namespace CalXUI
 
 #endif

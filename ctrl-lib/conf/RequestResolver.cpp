@@ -170,4 +170,4 @@ namespace CalX {
 			delete req;
 		}
 	}
-}
+}  // namespace CalX

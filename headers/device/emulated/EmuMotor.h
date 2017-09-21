@@ -54,6 +54,6 @@ namespace CalX {
 		motor_coord_t pos;
 		Power power;
 	};
-}
+}  // namespace CalX
 
 #endif

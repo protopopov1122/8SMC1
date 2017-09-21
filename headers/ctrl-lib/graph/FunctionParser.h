@@ -34,17 +34,15 @@ namespace CalX {
 	class FunctionLexer {
 	 public:
 		FunctionLexer(std::istream &);
-		virtual ~FunctionLexer();
 		std::unique_ptr<Token> lex();
 
 	 private:
-		std::istream *in;
+		std::istream &in;
 	};
 
 	class FunctionParser {
 	 public:
 		FunctionParser(std::unique_ptr<FunctionLexer>);
-		virtual ~FunctionParser();
 
 		std::unique_ptr<Node> parse();
 
@@ -62,6 +60,6 @@ namespace CalX {
 		std::map<uint32_t, std::string> symbols;
 		std::unique_ptr<Token> tokens[3];
 	};
-}
+}  // namespace CalX
 
 #endif

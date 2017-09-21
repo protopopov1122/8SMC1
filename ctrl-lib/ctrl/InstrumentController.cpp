@@ -27,11 +27,6 @@ namespace CalX {
 		this->instr = instr;
 		this->state = true;
 		this->session_state = false;
-		INIT_LOG("InstrumentController");
-	}
-
-	InstrumentController::~InstrumentController() {
-		DESTROY_LOG("InstrumentController");
 	}
 
 	Instrument *InstrumentController::getInstrument() {
@@ -158,4 +153,4 @@ namespace CalX {
 			l->stateChanged(this->isRunnable(), this->isEnabled());
 		}
 	}
-}
+}  // namespace CalX

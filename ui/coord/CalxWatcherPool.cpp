@@ -66,4 +66,4 @@ namespace CalXUI {
 		watcher->Show(true);
 		return watcher->getWatcher();
 	}
-}
+}  // namespace CalXUI

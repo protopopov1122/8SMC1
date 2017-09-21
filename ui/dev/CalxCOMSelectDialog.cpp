@@ -140,4 +140,4 @@ namespace CalXUI {
 	void CalxCOMSelectDialog::OnCancelClick(wxCommandEvent &evt) {
 		Hide();
 	}
-}
+}  // namespace CalXUI

@@ -24,24 +24,18 @@
 
 namespace CalX {
 
-	GCodeCoordTask::GCodeCoordTask(std::istream *input,
+	GCodeCoordTask::GCodeCoordTask(std::istream &input,
 	                               std::shared_ptr<CoordTranslator> trans)
 	    : CoordTask::CoordTask(CoordTaskType::GCodeTask) {
 		int ch;
 		std::stringstream ss;
-		while ((ch = input->get()) != EOF) {
+		while ((ch = input.get()) != EOF) {
 			ss << (char) ch;
 		}
 		this->code = ss.str();
 		ss.seekg(0);
-		this->stream = new GCodeStream(ss);
+		this->stream = std::make_shared<GCodeStream>(ss);
 		this->translator = trans;
-		INIT_LOG("GCodeCoordTask");
-	}
-
-	GCodeCoordTask::~GCodeCoordTask() {
-		delete this->stream;
-		DESTROY_LOG("GCodeCoordTask");
 	}
 
 	ErrorCode GCodeCoordTask::perform(std::shared_ptr<CoordPlane> plane,
@@ -50,8 +44,8 @@ namespace CalX {
 		state->plane = plane;
 		state->work = true;
 		ErrorCode errcode = GCodeInterpreter::execute(
-		    this->stream, plane.get(), this->translator,
-		    sysman->getConfiguration().get(), prms.speed, state);
+		    *this->stream.get(), plane.get(), this->translator,
+		    sysman->getConfiguration(), prms.speed, state);
 		state->work = false;
 		return errcode;
 	}
@@ -63,4 +57,4 @@ namespace CalX {
 	std::shared_ptr<CoordTranslator> GCodeCoordTask::getTranslator() {
 		return this->translator;
 	}
-}
+}  // namespace CalX

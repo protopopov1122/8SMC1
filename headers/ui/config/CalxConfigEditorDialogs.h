@@ -72,6 +72,6 @@ namespace CalXUI {
 		void OnOkClick(wxCommandEvent &);
 		CalxConfigEditor *editor;
 	};
-}
+}  // namespace CalXUI
 
 #endif

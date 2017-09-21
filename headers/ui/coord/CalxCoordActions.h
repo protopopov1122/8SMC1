@@ -135,6 +135,6 @@ namespace CalXUI {
 		double speed;
 		std::shared_ptr<TaskState> state;
 	};
-}
+}  // namespace CalXUI
 
 #endif

@@ -105,4 +105,4 @@ namespace CalXUI {
 		double speed = this->speed->GetValue();
 		this->controller->configure(dest, speed);
 	}
-}
+}  // namespace CalXUI

@@ -30,11 +30,6 @@ namespace CalX {
 		coord_scale_t scale = { 1.0, 1.0 };
 		this->floatPlane =
 		    std::make_shared<FloatCoordPlane>(offset, scale, 1.0, root);
-		INIT_LOG("CoordHandle");
-	}
-
-	CoordHandle::~CoordHandle() {
-		DESTROY_LOG("CoordHandle");
 	}
 
 	size_t CoordHandle::getID() {
@@ -70,4 +65,4 @@ namespace CalX {
 	void CoordHandle::removeEventListener(CoordEventListener *l) {
 		this->root->removeEventListener(l);
 	}
-}
+}  // namespace CalX

@@ -25,15 +25,9 @@
 namespace CalX {
 
 	BasicCoordTranslator::BasicCoordTranslator(motor_point_t cen, motor_size_t sc)
-	    : CoordTranslator::CoordTranslator(CoordType::BasicCoord) {
-		this->center = cen;
-		this->scale = sc;
-		INIT_LOG("BasicCoordTranslator");
-	}
-
-	BasicCoordTranslator::~BasicCoordTranslator() {
-		DESTROY_LOG("BasicCoordTranslator");
-	}
+	    : CoordTranslator::CoordTranslator(CoordType::BasicCoord),
+	      center(cen),
+	      scale(sc) {}
 
 	motor_point_t BasicCoordTranslator::getCenter() {
 		return this->center;
@@ -92,4 +86,4 @@ namespace CalX {
 	    std::shared_ptr<CoordTranslator> base) {
 		return std::make_unique<BasicCoordTranslator>(this->center, this->scale);
 	}
-}
+}  // namespace CalX

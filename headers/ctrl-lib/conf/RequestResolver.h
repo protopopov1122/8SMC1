@@ -97,6 +97,6 @@ namespace CalX {
 		return false;                                                              \
 	}
 #define PROVIDER_ARG(req, index) (req->getArguments().at(index).get())
-}
+}  // namespace CalX
 
 #endif

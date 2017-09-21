@@ -96,6 +96,6 @@ namespace CalXUI {
 		std::shared_ptr<ConfigManager> config;
 		std::shared_ptr<CalxConfigEventListener> listener;
 	};
-}
+}  // namespace CalXUI
 
 #endif

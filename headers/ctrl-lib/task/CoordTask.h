@@ -61,17 +61,16 @@ namespace CalX {
 	class ProgrammedCoordTask : public CoordTask {
 	 public:
 		ProgrammedCoordTask();
-		virtual ~ProgrammedCoordTask();
 		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
 		                          SystemManager *, std::shared_ptr<TaskState>);
-		void addStep(TaskStep *);
+		void addStep(std::shared_ptr<TaskStep>);
 		size_t getSubCount();
 		bool removeStep(size_t);
-		TaskStep *pollStep(size_t);
-		bool insertStep(size_t, TaskStep *);
+		std::shared_ptr<TaskStep> pollStep(size_t);
+		bool insertStep(size_t, std::shared_ptr<TaskStep>);
 
 	 private:
-		std::vector<TaskStep *> list;
+		std::vector<std::shared_ptr<TaskStep>> list;
 	};
 
 	class GraphCoordTask : public CoordTask {
@@ -89,8 +88,7 @@ namespace CalX {
 
 	class GCodeCoordTask : public CoordTask {
 	 public:
-		GCodeCoordTask(std::istream *, std::shared_ptr<CoordTranslator>);
-		virtual ~GCodeCoordTask();
+		GCodeCoordTask(std::istream &, std::shared_ptr<CoordTranslator>);
 		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
 		                          SystemManager *, std::shared_ptr<TaskState>);
 
@@ -99,9 +97,9 @@ namespace CalX {
 
 	 private:
 		std::string code;
-		GCodeStream *stream;
+		std::shared_ptr<GCodeStream> stream;
 		std::shared_ptr<CoordTranslator> translator;
 	};
-}
+}  // namespace CalX
 
 #endif

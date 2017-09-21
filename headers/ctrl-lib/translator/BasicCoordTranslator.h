@@ -28,7 +28,6 @@ namespace CalX {
 	class BasicCoordTranslator : public CoordTranslator {
 	 public:
 		BasicCoordTranslator(motor_point_t, motor_size_t);
-		virtual ~BasicCoordTranslator();
 		motor_point_t getCenter();
 		motor_size_t getScale();
 		void setCenter(motor_point_t);
@@ -44,6 +43,6 @@ namespace CalX {
 		motor_point_t center;
 		motor_size_t scale;
 	};
-}
+}  // namespace CalX
 
 #endif

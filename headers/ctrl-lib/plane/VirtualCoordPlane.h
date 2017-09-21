@@ -28,7 +28,6 @@ namespace CalX {
 	class VirtualCoordPlane : public CoordPlane {
 	 public:
 		VirtualCoordPlane(motor_point_t, motor_rect_t);
-		virtual ~VirtualCoordPlane();
 
 		virtual ErrorCode move(motor_point_t, float, bool);
 		virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,
@@ -56,6 +55,6 @@ namespace CalX {
 		motor_point_t position;
 		motor_rect_t size;
 	};
-}
+}  // namespace CalX
 
 #endif

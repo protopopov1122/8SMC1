@@ -62,7 +62,7 @@ namespace CalX {
 		CoordTranslator(CoordType t) {
 			this->type = t;
 		}
-		virtual ~CoordTranslator() {}
+		virtual ~CoordTranslator() = default;
 		CoordType getType() {
 			return this->type;
 		}
@@ -83,6 +83,6 @@ namespace CalX {
 	 private:
 		CoordType type;
 	};
-}
+}  // namespace CalX
 
 #endif

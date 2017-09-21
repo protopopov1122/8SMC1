@@ -267,4 +267,4 @@ namespace CalXUI {
 			this->mouseCoords->SetLabel(res);
 		}
 	}
-}
+}  // namespace CalXUI

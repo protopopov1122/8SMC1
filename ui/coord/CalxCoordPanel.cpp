@@ -204,4 +204,4 @@ namespace CalXUI {
 		addPlane(pair.first);
 		*pair.second = true;
 	}
-}
+}  // namespace CalXUI

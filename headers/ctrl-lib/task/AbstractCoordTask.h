@@ -69,6 +69,6 @@ namespace CalX {
 	 private:
 		CoordTaskType type;
 	};
-}
+}  // namespace CalX
 
 #endif

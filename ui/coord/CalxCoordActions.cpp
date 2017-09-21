@@ -170,4 +170,4 @@ namespace CalXUI {
 	void CalxCoordActionGraphPreview::stop() {
 		this->state->stop();
 	}
-}
+}  // namespace CalXUI

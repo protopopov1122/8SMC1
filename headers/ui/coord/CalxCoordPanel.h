@@ -74,6 +74,6 @@ namespace CalXUI {
 		wxPanel *mainPanel;
 		int nextId;
 	};
-}
+}  // namespace CalXUI
 
 #endif

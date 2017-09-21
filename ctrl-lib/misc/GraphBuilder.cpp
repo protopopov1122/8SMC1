@@ -60,7 +60,7 @@ namespace CalX {
 		for (double x = this->min.x;
 		     (step > 0 ? x <= this->max.x : x >= this->max.x) && state->work;
 		     x += step) {
-			engine->getScope()->putVariable("x", x);
+			engine->getScope().putVariable("x", x);
 			engine_value_t val = engine->eval(this->node.get());
 			if (val.err != MathError::MNoError) {
 				plane->unuse();
@@ -118,7 +118,7 @@ namespace CalX {
 		for (double x = this->min.x;
 		     (step > 0 ? x <= this->max.x : x >= this->max.x) && state->work;
 		     x += step) {
-			engine->getScope()->putVariable("x", x);
+			engine->getScope().putVariable("x", x);
 			engine_value_t val = engine->eval(this->node.get());
 			if (val.err != MathError::MNoError) {
 				plane->unuse();
@@ -159,4 +159,4 @@ namespace CalX {
 		plane->unuse();
 		return ErrorCode::NoError;
 	}
-}
+}  // namespace CalX

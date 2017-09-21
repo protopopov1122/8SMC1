@@ -63,4 +63,4 @@ namespace CalXUI {
 
 		Destroy();
 	}
-}
+}  // namespace CalXUI

@@ -31,6 +31,6 @@ namespace CalXUI {
 		virtual ~CalxTaskFactory() {}
 		virtual CalxTaskHandle *newTask(wxWindow *) = 0;
 	};
-}
+}  // namespace CalXUI
 
 #endif

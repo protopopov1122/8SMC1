@@ -48,6 +48,6 @@ namespace CalX {
 		double real;
 		std::string literal;
 	};
-}
+}  // namespace CalX
 
 #endif

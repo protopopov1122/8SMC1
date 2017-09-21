@@ -118,4 +118,4 @@ namespace CalXUI {
 		updateUI();
 		Refresh();
 	}
-}
+}  // namespace CalXUI

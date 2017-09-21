@@ -298,4 +298,4 @@ namespace CalXUI {
 		app.getSystemManager()->getRequestResolver()->registerProvider(
 		    new CalxCoordPlaneWatcherProvider(panel));
 	}
-}
+}  // namespace CalXUI

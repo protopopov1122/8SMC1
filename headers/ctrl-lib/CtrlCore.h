@@ -108,6 +108,6 @@ namespace CalX {
 		double w;
 		double h;
 	};
-}
+}  // namespace CalX
 
 #endif

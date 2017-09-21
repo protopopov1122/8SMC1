@@ -27,11 +27,12 @@ namespace CalX {
 	     ? prm.value.real                                                        \
 	     : static_cast<double>(prm.value.integer))
 
-	ErrorCode GCodeInterpreter::execute(GCodeStream *input, CoordPlane *plane,
+	ErrorCode GCodeInterpreter::execute(GCodeStream &input, CoordPlane *plane,
 	                                    std::shared_ptr<CoordTranslator> trans,
-	                                    ConfigManager *config, float speed,
+	                                    std::shared_ptr<ConfigManager> config,
+	                                    float speed,
 	                                    std::shared_ptr<TaskState> state) {
-		input->reset();
+		input.reset();
 
 		coord_point_t troffset = { 0, 0 };
 		coord_scale_t trscale = { 1, 1 };
@@ -52,12 +53,12 @@ namespace CalX {
 		const int_conf_t CHORD_COUNT =
 		    config->getEntry("core")->getInt("chord_count", 100);
 		ErrorCode errcode = ErrorCode::NoError;
-		while (input->hasNext() && state->work && errcode == ErrorCode::NoError) {
+		while (input.hasNext() && state->work && errcode == ErrorCode::NoError) {
 			motor_point_t rel_offset = { 0, 0 };
 			if (relative_pos) {
 				rel_offset = plane->getPosition();
 			}
-			GCodeCmd cmd = input->next();
+			GCodeCmd cmd = input.next();
 			switch (cmd.getOperation()) {
 				case GCodeOperation::RapidMove: {
 					coord_point_t dest = translator->get(plane->getPosition());

@@ -397,4 +397,4 @@ namespace CalX {
 		this->updateState();
 		return this->state.SyncIN;
 	}
-}
+}  // namespace CalX

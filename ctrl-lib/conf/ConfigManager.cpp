@@ -124,25 +124,25 @@ namespace CalX {
 		}
 	}
 
-	void ConfigEntry::store(std::ostream *os) {
+	void ConfigEntry::store(std::ostream &os) {
 		for (const auto &kv : this->content) {
-			*os << kv.first << '=';
+			os << kv.first << '=';
 			ConfigValue *value = kv.second.get();
 			switch (value->getType()) {
 				case ConfigValueType::Integer:
-					*os << ((IntegerConfigValue *) value)->getValue();
+					os << ((IntegerConfigValue *) value)->getValue();
 					break;
 				case ConfigValueType::Real:
-					*os << ((RealConfigValue *) value)->getValue();
+					os << ((RealConfigValue *) value)->getValue();
 					break;
 				case ConfigValueType::Boolean:
-					*os << (((BoolConfigValue *) value)->getValue() ? "true" : "false");
+					os << (((BoolConfigValue *) value)->getValue() ? "true" : "false");
 					break;
 				case ConfigValueType::String:
-					*os << '\"' << ((StringConfigValue *) value)->getValue() << '\"';
+					os << '\"' << ((StringConfigValue *) value)->getValue() << '\"';
 					break;
 			}
-			*os << std::endl;
+			os << std::endl;
 		}
 	}
 
@@ -204,11 +204,11 @@ namespace CalX {
 		return v->validate(this);
 	}
 
-	void ConfigManager::store(std::ostream *os) {
+	void ConfigManager::store(std::ostream &os) {
 		for (const auto &kv : this->entries) {
-			*os << '[' << kv.first << ']' << std::endl;
+			os << '[' << kv.first << ']' << std::endl;
 			kv.second->store(os);
-			*os << std::endl;
+			os << std::endl;
 		}
 	}
 
@@ -284,7 +284,7 @@ namespace CalX {
 	}
 
 	std::shared_ptr<ConfigManager> ConfigManager::load(
-	    std::istream *is, std::ostream *err, std::shared_ptr<ConfigManager> man) {
+	    std::istream &is, std::ostream &err, std::shared_ptr<ConfigManager> man) {
 		if (man == nullptr) {
 			man = std::make_shared<ConfigManager>();
 		}
@@ -292,8 +292,8 @@ namespace CalX {
 		const int LINE_LEN = 256;
 		char rawline[LINE_LEN];
 		int line_num = 0;
-		while (is->good()) {
-			is->getline(rawline, LINE_LEN);
+		while (is.good()) {
+			is.getline(rawline, LINE_LEN);
 			line_num++;
 			// Remove comments
 			for (size_t i = 0; i < strlen(rawline); i++) {
@@ -319,8 +319,8 @@ namespace CalX {
 			// Parse line
 			if (line[0] == '[') {  // Line is entry start
 				if (strlen(line) == 1 || line[strlen(line) - 1] != ']') {
-					*err << "Error at line " << line_num
-					     << ": expected ']' at the end of line" << std::endl;
+					err << "Error at line " << line_num
+					    << ": expected ']' at the end of line" << std::endl;
 					continue;
 				}
 				line[strlen(line) - 1] = '\0';
@@ -328,8 +328,8 @@ namespace CalX {
 				entry = man->getEntry(entryId);
 			} else {  // Line is a key/value pair
 				if (entry == nullptr) {
-					*err << "Error at line " << line_num << ": entry not defined"
-					     << std::endl;
+					err << "Error at line " << line_num << ": entry not defined"
+					    << std::endl;
 				} else {
 					std::string key;
 					size_t pos = 0;
@@ -340,14 +340,14 @@ namespace CalX {
 					}
 					pos = skipWhitespaces(line, pos);
 					if (pos >= strlen(line) || line[pos] != '=') {
-						*err << "Error at line " << line_num << ": expected '=' in the line"
-						     << std::endl;
+						err << "Error at line " << line_num << ": expected '=' in the line"
+						    << std::endl;
 						continue;
 					}
 					pos = skipWhitespaces(line, ++pos);
 					if (pos >= strlen(line)) {
-						*err << "Error at line " << line_num
-						     << ": expected value in the line" << std::endl;
+						err << "Error at line " << line_num
+						    << ": expected value in the line" << std::endl;
 						continue;
 					}
 					std::unique_ptr<ConfigValue> value = parseValue(&line[pos]);
@@ -359,4 +359,4 @@ namespace CalX {
 		}
 		return man;
 	}
-}
+}  // namespace CalX

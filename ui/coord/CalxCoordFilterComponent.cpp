@@ -201,4 +201,4 @@ namespace CalXUI {
 	void CalxCoordFilterComponent::OnExit(wxCloseEvent &evt) {
 		this->controller->removeFilterListener(this);
 	}
-}
+}  // namespace CalXUI

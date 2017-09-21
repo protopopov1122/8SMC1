@@ -36,11 +36,6 @@ namespace CalX {
 		this->base = base;
 		this->work = false;
 		this->defWork = true;
-		INIT_LOG("CoordPlaneLinearizer");
-	}
-
-	CoordPlaneLinearizer::~CoordPlaneLinearizer() {
-		DESTROY_LOG("CoordPlaneLinearizer");
 	}
 
 	std::shared_ptr<CoordPlane> CoordPlaneLinearizer::getBase() {
@@ -160,4 +155,4 @@ namespace CalX {
 	bool CoordPlaneLinearizer::isUsed() {
 		return this->base->isUsed();
 	}
-}
+}  // namespace CalX

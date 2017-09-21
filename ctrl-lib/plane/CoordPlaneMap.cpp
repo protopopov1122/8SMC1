@@ -29,11 +29,6 @@ namespace CalX {
 		this->scale = scale;
 		this->plane = plane;
 		this->speedScale = speedSc;
-		INIT_LOG("CoordPlaneMap");
-	}
-
-	CoordPlaneMap::~CoordPlaneMap() {
-		DESTROY_LOG("CoordPlaneMap");
 	}
 
 	std::shared_ptr<CoordPlane> CoordPlaneMap::getBase() {
@@ -161,4 +156,4 @@ namespace CalX {
 	bool CoordPlaneMap::isUsed() {
 		return this->plane->isUsed();
 	}
-}
+}  // namespace CalX

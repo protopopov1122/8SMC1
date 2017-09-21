@@ -105,4 +105,4 @@ namespace CalX {
 	void LinearCoordTask::setVertical(bool v) {
 		this->vertical = v;
 	}
-}
+}  // namespace CalX

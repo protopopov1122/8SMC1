@@ -114,6 +114,6 @@ namespace CalXUI {
 		std::shared_ptr<ComplexCoordTranslator> trans;
 		std::vector<CalxCoordFilter *> filter;
 	};
-}
+}  // namespace CalXUI
 
 #endif

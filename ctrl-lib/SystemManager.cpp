@@ -40,11 +40,11 @@ namespace CalX {
 			this->instr.push_back(std::make_shared<InstrumentController>(
 			    this->devman->getInstrument(i)));
 		}
-		LOG(SYSMAN_TAG,
-		    "System startup. Found " +
-		        std::to_string(this->devman->getMotorCount()) + " motors and " +
-		        std::to_string(this->devman->getInstrumentCount()) +
-		        " instruments.");
+		LOG(SYSMAN_TAG, "System startup. Found " +
+		                    std::to_string(this->devman->getMotorCount()) +
+		                    " motors and " +
+		                    std::to_string(this->devman->getInstrumentCount()) +
+		                    " instruments.");
 		FunctionEngine_add_default_functions(&this->engine);
 		this->resolver = std::make_unique<RequestResolver>(this);
 		RequestResolver_init_standart_providers(this->resolver.get());
@@ -103,34 +103,34 @@ namespace CalX {
 		return this->tasks.size();
 	}
 
-	CoordTask *SystemManager::getTask(size_t i) {
+	std::shared_ptr<CoordTask> SystemManager::getTask(size_t i) {
 		if (i >= this->tasks.size()) {
 			return nullptr;
 		}
-		return this->tasks.at(i).get();
+		return this->tasks.at(i);
 	}
 
-	size_t SystemManager::addTask(std::unique_ptr<CoordTask> task) {
+	size_t SystemManager::addTask(std::shared_ptr<CoordTask> task) {
 		this->tasks.push_back(std::move(task));
 		if (this->ext_engine != nullptr) {
 			this->ext_engine->taskAdded(this->tasks.at(this->tasks.size() - 1).get());
 		}
-		LOG(SYSMAN_TAG,
-		    "Added new task #" + std::to_string(this->tasks.size() - 1) +
-		        ". Task count: " + std::to_string(this->tasks.size()));
+		LOG(SYSMAN_TAG, "Added new task #" +
+		                    std::to_string(this->tasks.size() - 1) +
+		                    ". Task count: " + std::to_string(this->tasks.size()));
 		return this->tasks.size() - 1;
 	}
 
-	ProgrammedCoordTask *SystemManager::createProgrammedTask() {
-		this->tasks.push_back(std::make_unique<ProgrammedCoordTask>());
-		ProgrammedCoordTask *ptr =
-		    (ProgrammedCoordTask *) this->getTask(this->getTaskCount() - 1);
+	std::shared_ptr<ProgrammedCoordTask> SystemManager::createProgrammedTask() {
+		std::shared_ptr<ProgrammedCoordTask> ptr =
+		    std::make_shared<ProgrammedCoordTask>();
+		this->tasks.push_back(ptr);
 		if (this->ext_engine != nullptr) {
-			this->ext_engine->taskAdded(ptr);
+			this->ext_engine->taskAdded(ptr.get());
 		}
-		LOG(SYSMAN_TAG,
-		    "Added new programmed task #" + std::to_string(this->tasks.size() - 1) +
-		        ". Task count: " + std::to_string(this->tasks.size()));
+		LOG(SYSMAN_TAG, "Added new programmed task #" +
+		                    std::to_string(this->tasks.size() - 1) +
+		                    ". Task count: " + std::to_string(this->tasks.size()));
 		return ptr;
 	}
 
@@ -143,9 +143,8 @@ namespace CalX {
 		}
 
 		this->tasks.erase(this->tasks.begin() + (std::ptrdiff_t) i);
-		LOG(SYSMAN_TAG,
-		    "Removed task # " + std::to_string(i) +
-		        ". Task count: " + std::to_string(this->tasks.size()));
+		LOG(SYSMAN_TAG, "Removed task # " + std::to_string(i) +
+		                    ". Task count: " + std::to_string(this->tasks.size()));
 		return true;
 	}
 
@@ -182,14 +181,14 @@ namespace CalX {
 		if (this->ext_engine != nullptr) {
 			this->ext_engine->coordAdded(handle.get());
 		}
-		LOG(SYSMAN_TAG,
-		    "New coordinate plane #" + std::to_string(this->coords.size() - 1) +
-		        ". Devices: #" + std::to_string(d1) + ", #" + std::to_string(d2) +
-		        "; instrument: " + std::string(getInstrumentController(instr) !=
-		                                               nullptr
-		                                           ? "#" + std::to_string(instr)
-		                                           : "no") +
-		        ".");
+		LOG(SYSMAN_TAG, "New coordinate plane #" +
+		                    std::to_string(this->coords.size() - 1) +
+		                    ". Devices: #" + std::to_string(d1) + ", #" +
+		                    std::to_string(d2) + "; instrument: " +
+		                    std::string(getInstrumentController(instr) != nullptr
+		                                    ? "#" + std::to_string(instr)
+		                                    : "no") +
+		                    ".");
 		return handle;
 	}
 
@@ -249,4 +248,4 @@ namespace CalX {
 		    "Connected new instrument #" + std::to_string(this->instr.size() - 1));
 		return ctrl;
 	}
-}
+}  // namespace CalX

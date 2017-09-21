@@ -46,9 +46,7 @@ namespace CalX {
 
 	class ConfigValue {
 	 public:
-		ConfigValue(ConfigValueType type) {
-			this->type = type;
-		}
+		ConfigValue(ConfigValueType tp) : type(tp) {}
 		virtual ~ConfigValue() = default;
 		ConfigValueType getType() {
 			return this->type;
@@ -62,9 +60,7 @@ namespace CalX {
 	class IntegerConfigValue : public ConfigValue {
 	 public:
 		IntegerConfigValue(int_conf_t v)
-		    : ConfigValue::ConfigValue(ConfigValueType::Integer) {
-			this->value = v;
-		}
+		    : ConfigValue::ConfigValue(ConfigValueType::Integer), value(v) {}
 
 		int_conf_t getValue() {
 			return this->value;
@@ -80,9 +76,7 @@ namespace CalX {
 	class RealConfigValue : public ConfigValue {
 	 public:
 		RealConfigValue(real_conf_t v)
-		    : ConfigValue::ConfigValue(ConfigValueType::Real) {
-			this->value = v;
-		}
+		    : ConfigValue::ConfigValue(ConfigValueType::Real), value(v) {}
 
 		real_conf_t getValue() {
 			return this->value;
@@ -98,9 +92,7 @@ namespace CalX {
 	class BoolConfigValue : public ConfigValue {
 	 public:
 		BoolConfigValue(bool v)
-		    : ConfigValue::ConfigValue(ConfigValueType::Boolean) {
-			this->value = v;
-		}
+		    : ConfigValue::ConfigValue(ConfigValueType::Boolean), value(v) {}
 
 		bool getValue() {
 			return this->value;
@@ -116,9 +108,7 @@ namespace CalX {
 	class StringConfigValue : public ConfigValue {
 	 public:
 		StringConfigValue(std::string v)
-		    : ConfigValue::ConfigValue(ConfigValueType::String) {
-			this->value = v;
-		}
+		    : ConfigValue::ConfigValue(ConfigValueType::String), value(v) {}
 
 		std::string getValue() {
 			return this->value;
@@ -141,7 +131,7 @@ namespace CalX {
 		bool put(std::string, std::shared_ptr<ConfigValue>);
 		bool remove(std::string);
 		bool is(std::string, ConfigValueType);
-		void store(std::ostream *);
+		void store(std::ostream &);
 
 		int_conf_t getInt(std::string, int_conf_t = 0);
 		real_conf_t getReal(std::string, real_conf_t = 0);
@@ -165,7 +155,7 @@ namespace CalX {
 		std::shared_ptr<ConfigEntry> getEntry(std::string, bool = true);
 		bool hasEntry(std::string);
 		bool removeEntry(std::string);
-		void store(std::ostream *);
+		void store(std::ostream &);
 		void getEntries(std::vector<std::shared_ptr<ConfigEntry>> &);
 		void setValidator(std::shared_ptr<ConfigValidator>);
 		std::shared_ptr<ConfigValidator> getValidator();
@@ -176,7 +166,7 @@ namespace CalX {
 		std::vector<std::shared_ptr<ConfigEventListener>> &getEventListeners();
 
 		static std::shared_ptr<ConfigManager> load(
-		    std::istream *, std::ostream *,
+		    std::istream &, std::ostream &,
 		    std::shared_ptr<ConfigManager> = nullptr);
 		static std::unique_ptr<ConfigValue> parseValue(const char *);
 
@@ -185,6 +175,6 @@ namespace CalX {
 		std::shared_ptr<ConfigValidator> validator;
 		std::vector<std::shared_ptr<ConfigEventListener>> listeners;
 	};
-}
+}  // namespace CalX
 
 #endif

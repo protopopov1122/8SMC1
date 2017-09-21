@@ -32,6 +32,6 @@ namespace CalXUI {
 		virtual ~CalxDeviceFactory() {}
 		virtual void newDevice(wxWindow *, CalxDevicePool *, CalxActionQueue *) = 0;
 	};
-}
+}  // namespace CalXUI
 
 #endif

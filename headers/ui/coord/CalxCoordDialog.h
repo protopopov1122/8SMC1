@@ -47,6 +47,6 @@ namespace CalXUI {
 		SystemManager *sysman;
 		std::shared_ptr<CoordHandle> ctrl;
 	};
-}
+}  // namespace CalXUI
 
 #endif

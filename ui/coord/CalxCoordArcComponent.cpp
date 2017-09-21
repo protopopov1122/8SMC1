@@ -116,4 +116,4 @@ namespace CalXUI {
 		                      this->speed->GetValue(), this->clockwise->GetValue(),
 		                      this->relative->GetValue());
 	}
-}
+}  // namespace CalXUI

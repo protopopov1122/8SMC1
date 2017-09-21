@@ -24,7 +24,7 @@ namespace CalXUI {
 	CalxProgrammedTaskHandle::CalxProgrammedTaskHandle(wxWindow *win,
 	                                                   wxWindowID id, size_t tid)
 	    : CalxTaskHandle::CalxTaskHandle(win, id) {
-		this->task = new ProgrammedCoordTask();
+		this->task = std::make_shared<ProgrammedCoordTask>();
 		this->id = tid;
 
 		coord_point_t offset = wxGetApp().getUnitOffset();
@@ -85,7 +85,7 @@ namespace CalXUI {
 		return "Programmed Task #" + std::to_string(this->id);
 	}
 
-	CoordTask *CalxProgrammedTaskHandle::getTask() {
+	std::shared_ptr<CoordTask> CalxProgrammedTaskHandle::getTask() {
 		return this->task;
 	}
 
@@ -158,7 +158,7 @@ namespace CalXUI {
 			return;
 		}
 
-		TaskStep *step = task->pollStep((size_t) sel);
+		std::shared_ptr<TaskStep> step = task->pollStep((size_t) sel);
 		task->insertStep((size_t) sel - 1, step);
 
 		CalxTaskStepHandle *handle = steps.at((size_t) sel);
@@ -178,7 +178,7 @@ namespace CalXUI {
 			return;
 		}
 
-		TaskStep *step = task->pollStep((size_t) sel);
+		std::shared_ptr<TaskStep> step = task->pollStep((size_t) sel);
 		task->insertStep((size_t) sel + 1, step);
 
 		CalxTaskStepHandle *handle = steps.at((size_t) sel);
@@ -203,11 +203,10 @@ namespace CalXUI {
 	}
 
 	void CalxProgrammedTaskHandle::OnExit(wxCloseEvent &evt) {
-		delete this->task;
 		Destroy();
 	}
 
 	CalxTaskHandle *CalxProgrammedTaskFactory::newTask(wxWindow *win) {
 		return new CalxProgrammedTaskHandle(win, wxID_ANY, ++this->next_id);
 	}
-}
+}  // namespace CalXUI

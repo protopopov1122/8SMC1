@@ -29,7 +29,6 @@ namespace CalX {
 	 public:
 		LogarithmicCoordTranslator(coord_scale_t,
 		                           std::shared_ptr<CoordTranslator> = nullptr);
-		virtual ~LogarithmicCoordTranslator();
 		virtual std::shared_ptr<CoordTranslator> getBase();
 		virtual void setBase(std::shared_ptr<CoordTranslator>);
 		coord_scale_t getScale();
@@ -45,6 +44,6 @@ namespace CalX {
 		std::shared_ptr<CoordTranslator> base;
 		coord_scale_t scale;
 	};
-}
+}  // namespace CalX
 
 #endif

@@ -388,4 +388,4 @@ namespace CalXUI {
 		    FORMAT(__("%sx%s %s"), wxGetApp().formatDouble(pos.x),
 		           wxGetApp().formatDouble(pos.y), wxGetApp().getUnits()));
 	}
-}
+}  // namespace CalXUI

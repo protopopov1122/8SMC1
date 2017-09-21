@@ -73,8 +73,6 @@ namespace CalXUI {
 		handle->getFloatPlane()->setSpeedScale(unit_speed_scale);
 	}
 
-	CalxCoordController::~CalxCoordController() {}
-
 	std::shared_ptr<CoordHandle> CalxCoordController::getHandle() {
 		return this->handle;
 	}
@@ -205,4 +203,4 @@ namespace CalXUI {
 		                           dialog, trans, std::move(builder), speed),
 		                       ready);
 	}
-}
+}  // namespace CalXUI

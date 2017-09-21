@@ -88,10 +88,11 @@ namespace CalX {
 				}
 			} else if (cmp(TASKS)) {
 				for (size_t i = 0; i < sysman->getTaskCount(); i++) {
-					CoordTask *task = sysman->getTask(i);
+					std::shared_ptr<CoordTask> task = sysman->getTask(i);
 					std::cout << i;
 					if (task->getType() == CoordTaskType::ProgrammedTask) {
-						ProgrammedCoordTask *pct = (ProgrammedCoordTask *) task;
+						std::shared_ptr<ProgrammedCoordTask> pct =
+						    std::dynamic_pointer_cast<ProgrammedCoordTask>(task);
 						std::cout << "\tsize: " << pct->getSubCount();
 					}
 					std::cout << std::endl;
@@ -566,7 +567,7 @@ namespace CalX {
 			return;
 		}
 		if (args.at(0).compare("new") == 0) {
-			CoordTask *task = sysman->createProgrammedTask();
+			std::shared_ptr<CoordTask> task = sysman->createProgrammedTask();
 			if (task == nullptr) {
 				std::cout << "Error occured" << std::endl;
 			} else {
@@ -585,7 +586,8 @@ namespace CalX {
 			}
 		} else if (args.at(0).compare("add") == 0) {
 			args.erase(args.begin());
-			CoordTask *tsk = sysman->getTask((size_t) std::stoul(args.at(0)));
+			std::shared_ptr<CoordTask> tsk =
+			    sysman->getTask((size_t) std::stoul(args.at(0)));
 			args.erase(args.begin());
 			std::string com = args.at(0);
 			args.erase(args.begin());
@@ -597,7 +599,8 @@ namespace CalX {
 				std::cout << "Can't add steps to this task" << std::endl;
 				return;
 			}
-			ProgrammedCoordTask *task = (ProgrammedCoordTask *) tsk;
+			std::shared_ptr<ProgrammedCoordTask> task =
+			    std::dynamic_pointer_cast<ProgrammedCoordTask>(tsk);
 			if (com.compare("move") == 0) {
 				if (args.size() < 3) {
 					std::cout << "Wrong argument count" << std::endl;
@@ -611,7 +614,7 @@ namespace CalX {
 					return;
 				}
 				motor_point_t pnt = { x, y };
-				task->addStep(new MoveTaskStep(pnt, sp));
+				task->addStep(std::make_unique<MoveTaskStep>(pnt, sp));
 			} else if (com.compare("rmove") == 0) {
 				if (args.size() < 3) {
 					std::cout << "Wrong argument count" << std::endl;
@@ -625,7 +628,7 @@ namespace CalX {
 					return;
 				}
 				motor_point_t pnt = { x, y };
-				task->addStep(new MoveTaskStep(pnt, sp, true));
+				task->addStep(std::make_unique<MoveTaskStep>(pnt, sp, true));
 			} else if (com.compare("jump") == 0) {
 				if (args.size() < 3) {
 					std::cout << "Wrong argument count" << std::endl;
@@ -639,7 +642,7 @@ namespace CalX {
 					return;
 				}
 				motor_point_t pnt = { x, y };
-				task->addStep(new JumpTaskStep(pnt, sp));
+				task->addStep(std::make_unique<JumpTaskStep>(pnt, sp));
 			} else if (com.compare("rjump") == 0) {
 				if (args.size() < 3) {
 					std::cout << "Wrong argument count" << std::endl;
@@ -653,7 +656,7 @@ namespace CalX {
 					return;
 				}
 				motor_point_t pnt = { x, y };
-				task->addStep(new JumpTaskStep(pnt, sp, true));
+				task->addStep(std::make_unique<JumpTaskStep>(pnt, sp, true));
 			} else if (com.compare("arc") == 0) {
 				if (args.size() < 6) {
 					std::cout << "Wrong argument count" << std::endl;
@@ -671,7 +674,7 @@ namespace CalX {
 				}
 				motor_point_t pnt = { x, y };
 				motor_point_t cpnt = { cx, cy };
-				task->addStep(new ArcTaskStep(pnt, cpnt, sp, speed));
+				task->addStep(std::make_unique<ArcTaskStep>(pnt, cpnt, sp, speed));
 			} else if (com.compare("carc") == 0) {
 				if (args.size() < 6) {
 					std::cout << "Wrong argument count" << std::endl;
@@ -689,9 +692,10 @@ namespace CalX {
 				}
 				motor_point_t pnt = { x, y };
 				motor_point_t cpnt = { cx, cy };
-				ArcTaskStep *st = new ArcTaskStep(pnt, cpnt, sp, speed);
+				std::unique_ptr<ArcTaskStep> st =
+				    std::make_unique<ArcTaskStep>(pnt, cpnt, sp, speed);
 				st->setClockwise(false);
-				task->addStep(st);
+				task->addStep(std::move(st));
 			} else if (com.compare("rarc") == 0) {
 				if (args.size() < 6) {
 					std::cout << "Wrong argument count" << std::endl;
@@ -709,7 +713,8 @@ namespace CalX {
 				}
 				motor_point_t pnt = { x, y };
 				motor_point_t cpnt = { cx, cy };
-				task->addStep(new ArcTaskStep(pnt, cpnt, sp, speed, true));
+				task->addStep(
+				    std::make_unique<ArcTaskStep>(pnt, cpnt, sp, speed, true));
 			} else if (com.compare("rcarc") == 0) {
 				if (args.size() < 6) {
 					std::cout << "Wrong argument count" << std::endl;
@@ -727,9 +732,10 @@ namespace CalX {
 				}
 				motor_point_t pnt = { x, y };
 				motor_point_t cpnt = { cx, cy };
-				ArcTaskStep *st = new ArcTaskStep(pnt, cpnt, sp, speed, true);
+				std::unique_ptr<ArcTaskStep> st =
+				    std::make_unique<ArcTaskStep>(pnt, cpnt, sp, speed, true);
 				st->setClockwise(false);
-				task->addStep(st);
+				task->addStep(std::move(st));
 			} else if (com.compare("cal") == 0) {
 				if (args.empty()) {
 					std::cout << "Wrong argument count" << std::endl;
@@ -740,8 +746,8 @@ namespace CalX {
 					std::cout << "Wrond calibration side" << std::endl;
 					return;
 				}
-				task->addStep(new CalibrateTaskStep(side == 1 ? TrailerId::Trailer1
-				                                              : TrailerId::Trailer2));
+				task->addStep(std::make_unique<CalibrateTaskStep>(
+				    side == 1 ? TrailerId::Trailer1 : TrailerId::Trailer2));
 			} else {
 				std::cout << "Wrong command '" << com << "'" << std::endl;
 			}
@@ -750,7 +756,8 @@ namespace CalX {
 				std::cout << "Wrong argument count" << std::endl;
 				return;
 			}
-			CoordTask *task = sysman->getTask((size_t) std::stoul(args.at(1)));
+			std::shared_ptr<CoordTask> task =
+			    sysman->getTask((size_t) std::stoul(args.at(1)));
 			std::shared_ptr<CoordHandle> coord =
 			    sysman->getCoord((size_t) std::stoul(args.at(2)));
 			float speed = static_cast<float>(std::stod(args.at(3)));
@@ -776,7 +783,7 @@ namespace CalX {
 			    std::make_shared<BasicCoordTranslator>(center, scale);
 			std::string path = args.at(5);
 			std::ifstream is(path, std::ifstream::in);
-			sysman->addTask(std::make_unique<GCodeCoordTask>(&is, trans));
+			sysman->addTask(std::make_unique<GCodeCoordTask>(is, trans));
 			is.close();
 		} else if (args.at(0).compare("graph") == 0) {
 			if (args.size() < 12) {
@@ -808,4 +815,4 @@ namespace CalX {
 			std::cout << "Wrong command '" << args.at(0) << "'" << std::endl;
 		}
 	}
-}
+}  // namespace CalX

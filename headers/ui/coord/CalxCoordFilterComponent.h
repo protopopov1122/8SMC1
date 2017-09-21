@@ -65,6 +65,6 @@ namespace CalXUI {
 
 		CalxCoordController *controller;
 	};
-}
+}  // namespace CalXUI
 
 #endif

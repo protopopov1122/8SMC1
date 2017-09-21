@@ -28,7 +28,6 @@ namespace CalX {
 	class CoordPlaneLinearizer : public CoordPlane {
 	 public:
 		CoordPlaneLinearizer(std::shared_ptr<CoordPlane>);
-		virtual ~CoordPlaneLinearizer();
 		std::shared_ptr<CoordPlane> getBase();
 
 		virtual ErrorCode move(motor_point_t, float, bool);
@@ -54,6 +53,6 @@ namespace CalX {
 		bool work;
 		bool defWork;
 	};
-}
+}  // namespace CalX
 
 #endif

@@ -29,6 +29,7 @@ namespace CalXUI {
 
 	class CalxCoordFilterListener {
 	 public:
+		virtual ~CalxCoordFilterListener() = default;
 		virtual void updateOffset(motor_point_t) = 0;
 		virtual void updateScale(motor_scale_t) = 0;
 	};
@@ -36,7 +37,7 @@ namespace CalXUI {
 	class CalxCoordController {
 	 public:
 		CalxCoordController(std::shared_ptr<CoordHandle>, CalxActionQueue *);
-		virtual ~CalxCoordController();
+		virtual ~CalxCoordController() = default;
 
 		std::shared_ptr<CoordHandle> getHandle();
 
@@ -82,6 +83,6 @@ namespace CalXUI {
 		std::shared_ptr<CoordPlaneValidator> validator;
 		std::shared_ptr<CoordPlaneMap> unit_map;
 	};
-}
+}  // namespace CalXUI
 
 #endif

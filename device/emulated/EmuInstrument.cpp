@@ -71,4 +71,4 @@ namespace CalX {
 	}
 
 	void EmuInstrument::terminate() {}
-}
+}  // namespace CalX

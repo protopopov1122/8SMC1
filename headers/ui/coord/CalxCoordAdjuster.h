@@ -117,6 +117,6 @@ namespace CalXUI {
 		CalxCoordAdjustRepaintTimer *timer;
 		CalxCoordAdjustViewer *viewer;
 	};
-}
+}  // namespace CalXUI
 
 #endif

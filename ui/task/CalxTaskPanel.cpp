@@ -38,7 +38,7 @@ namespace CalXUI {
 	class CalxTaskAction : public CalxAction {
 	 public:
 		CalxTaskAction(CalxTaskPanel *panel, std::shared_ptr<CoordHandle> handle,
-		               CoordTask *task, TaskParameters prms) {
+		               std::shared_ptr<CoordTask> task, TaskParameters prms) {
 			this->panel = panel;
 			this->handle = handle;
 			this->task = task;
@@ -65,7 +65,7 @@ namespace CalXUI {
 	 private:
 		CalxTaskPanel *panel;
 		std::shared_ptr<CoordHandle> handle;
-		CoordTask *task;
+		std::shared_ptr<CoordTask> task;
 		TaskParameters prms;
 		std::shared_ptr<TaskState> state;
 	};
@@ -73,7 +73,7 @@ namespace CalXUI {
 	class CalxPreviewAction : public CalxAction {
 	 public:
 		CalxPreviewAction(CalxTaskPanel *panel, CalxVirtualPlaneDialog *dialog,
-		                  CoordTask *task, TaskParameters prms) {
+		                  std::shared_ptr<CoordTask> task, TaskParameters prms) {
 			this->panel = panel;
 			this->dialog = dialog;
 			this->task = task;
@@ -101,7 +101,7 @@ namespace CalXUI {
 	 private:
 		CalxTaskPanel *panel;
 		CalxVirtualPlaneDialog *dialog;
-		CoordTask *task;
+		std::shared_ptr<CoordTask> task;
 		TaskParameters prms;
 		std::shared_ptr<TaskState> state;
 	};
@@ -287,7 +287,8 @@ namespace CalXUI {
 		if (taskList->GetSelection() != wxNOT_FOUND &&
 		    plane->GetSelection() != wxNOT_FOUND) {
 			list.at((size_t) taskList->GetSelection())->update();
-			CoordTask *task = list.at((size_t) taskList->GetSelection())->getTask();
+			std::shared_ptr<CoordTask> task =
+			    list.at((size_t) taskList->GetSelection())->getTask();
 			std::shared_ptr<CoordHandle> handle =
 			    wxGetApp().getSystemManager()->getCoord(
 			        (size_t) plane->GetSelection());
@@ -310,7 +311,8 @@ namespace CalXUI {
 		if (taskList->GetSelection() != wxNOT_FOUND &&
 		    plane->GetSelection() != wxNOT_FOUND) {
 			list.at((size_t) taskList->GetSelection())->update();
-			CoordTask *task = list.at((size_t) taskList->GetSelection())->getTask();
+			std::shared_ptr<CoordTask> task =
+			    list.at((size_t) taskList->GetSelection())->getTask();
 			std::shared_ptr<CoordHandle> handle =
 			    wxGetApp().getSystemManager()->getCoord(
 			        (size_t) plane->GetSelection());
@@ -341,7 +343,8 @@ namespace CalXUI {
 		if (taskList->GetSelection() != wxNOT_FOUND &&
 		    plane->GetSelection() != wxNOT_FOUND) {
 			list.at((size_t) taskList->GetSelection())->update();
-			CoordTask *task = list.at((size_t) taskList->GetSelection())->getTask();
+			std::shared_ptr<CoordTask> task =
+			    list.at((size_t) taskList->GetSelection())->getTask();
 			std::shared_ptr<CoordHandle> handle =
 			    wxGetApp().getSystemManager()->getCoord(
 			        (size_t) plane->GetSelection());
@@ -356,7 +359,7 @@ namespace CalXUI {
 			std::shared_ptr<TaskState> state = std::make_shared<TaskState>();
 			std::shared_ptr<GCodeWriter> writer = std::make_shared<GCodeWriter>(
 			    handle->getPosition(), handle->getSize(),
-			    list.at((size_t) taskList->GetSelection())->getTranslator(), &ss);
+			    list.at((size_t) taskList->GetSelection())->getTranslator(), ss);
 			this->setEnabled(false);
 			wxGetApp().getErrorHandler()->handle(
 			    task->perform(writer, prms, wxGetApp().getSystemManager(), state));
@@ -429,4 +432,4 @@ namespace CalXUI {
 		}
 		this->stopButton->Enable(!e);
 	}
-}
+}  // namespace CalXUI

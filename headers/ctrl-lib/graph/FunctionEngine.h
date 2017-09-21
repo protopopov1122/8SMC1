@@ -37,31 +37,30 @@ namespace CalX {
 
 	class EngineFunction {
 	 public:
-		virtual ~EngineFunction() {}
+		virtual ~EngineFunction() = default;
 		virtual engine_value_t eval(std::vector<double> &) = 0;
 	};
 
 	class EngineScope {
 	 public:
 		EngineScope();
-		virtual ~EngineScope();
 		engine_value_t getVariable(std::string);
 		bool hasVariable(std::string);
 		void putVariable(std::string, double);
 		bool hasFunction(std::string);
 		engine_value_t evalFunction(std::string, std::vector<double> &);
-		bool addFunction(std::string, EngineFunction *);
+		bool addFunction(std::string, std::unique_ptr<EngineFunction>);
 
 	 private:
 		std::map<std::string, double> vars;
-		std::map<std::string, EngineFunction *> func;
+		std::map<std::string, std::unique_ptr<EngineFunction>> func;
 	};
 
 	class FunctionEngine {
 	 public:
 		FunctionEngine();
-		virtual ~FunctionEngine();
-		EngineScope *getScope();
+		virtual ~FunctionEngine() = default;
+		EngineScope &getScope();
 		engine_value_t eval(Node *);
 
 	 private:
@@ -69,6 +68,6 @@ namespace CalX {
 	};
 
 	void FunctionEngine_add_default_functions(FunctionEngine *);
-}
+}  // namespace CalX
 
 #endif

@@ -44,6 +44,6 @@ namespace CalXUI {
 		std::shared_ptr<CoordHandle> handle;
 		std::vector<CalxCoordPlaneWatcher *> watchers;
 	};
-}
+}  // namespace CalXUI
 
 #endif

@@ -28,8 +28,6 @@ namespace CalXUI {
 		this->devman = sysman->getDeviceManager();
 	}
 
-	CalxDebugConsole::~CalxDebugConsole() {}
-
 	void *CalxDebugConsole::Entry() {
 		CLI cli(std::cout, std::cin);
 		cli.addCommand("echo", new EchoCMD());
@@ -50,4 +48,4 @@ namespace CalXUI {
 		} while (cli.shell());
 		return nullptr;
 	}
-}
+}  // namespace CalXUI

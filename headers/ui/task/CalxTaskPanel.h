@@ -72,6 +72,6 @@ namespace CalXUI {
 		wxSpinCtrlDouble *speed;
 		CalxActionQueue *queue;
 	};
-}
+}  // namespace CalXUI
 
 #endif

@@ -504,9 +504,9 @@ namespace CalXUI {
 		if (dialog->ShowModal() == wxID_OK) {
 			std::string path = dialog->GetPath().ToStdString();
 			std::ofstream out(path);
-			this->config->store(&out);
+			this->config->store(out);
 			out.close();
 		}
 		dialog->Destroy();
 	}
-}
+}  // namespace CalXUI

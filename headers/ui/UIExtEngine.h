@@ -32,12 +32,11 @@ namespace CalXUI {
 	class UIExtEngine : public ExtEngine {
 	 public:
 		UIExtEngine() : ExtEngine::ExtEngine() {}
-		virtual ~UIExtEngine() {}
 		virtual bool uiInit(CalxApp &) = 0;
 	};
 
 	typedef UIExtEngine *(*UIExtEngine_getter)();
 	extern "C" LIBEXPORT UIExtEngine *getUIExtEngine();
-}
+}  // namespace CalXUI
 
 #endif

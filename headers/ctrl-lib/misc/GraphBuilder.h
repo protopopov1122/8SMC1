@@ -54,6 +54,6 @@ namespace CalX {
 		coord_point_t max;
 		double step;
 	};
-}
+}  // namespace CalX
 
 #endif

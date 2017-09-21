@@ -32,11 +32,6 @@ namespace CalX {
 	VirtualCoordPlane::VirtualCoordPlane(motor_point_t pos, motor_rect_t size) {
 		this->position = pos;
 		this->size = size;
-		INIT_LOG("VirtualCoordPlane");
-	}
-
-	VirtualCoordPlane::~VirtualCoordPlane() {
-		DESTROY_LOG("VirtualCoordPlane");
 	}
 
 	void VirtualCoordPlane::dump(std::ostream &os) {
@@ -136,4 +131,4 @@ namespace CalX {
 	bool VirtualCoordPlane::isUsed() {
 		return false;
 	}
-}
+}  // namespace CalX

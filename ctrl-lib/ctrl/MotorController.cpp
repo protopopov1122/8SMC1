@@ -29,11 +29,6 @@ namespace CalX {
 		this->config = config;
 		this->dest = MoveType::Stop;
 		this->work = false;
-		INIT_LOG("MotorController");
-	}
-
-	MotorController::~MotorController() {
-		DESTROY_LOG("MotorController");
 	}
 
 	Motor *MotorController::getMotor() {
@@ -250,4 +245,4 @@ namespace CalX {
 			l->unuse();
 		}
 	}
-}
+}  // namespace CalX

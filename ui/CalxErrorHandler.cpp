@@ -28,8 +28,6 @@ namespace CalXUI {
 		this->sysman = sysman;
 	}
 
-	CalxErrorHandler::~CalxErrorHandler() {}
-
 	void CalxErrorHandler::handle(ErrorCode code) {
 		wxThreadEvent evt(wxEVT_APP_ERROR);
 		evt.SetPayload(code);
@@ -55,4 +53,4 @@ namespace CalXUI {
 			wxMessageBox(text, __("Error occured"), wxICON_ERROR);
 		}
 	}
-}
+}  // namespace CalXUI

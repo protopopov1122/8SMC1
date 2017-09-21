@@ -34,4 +34,4 @@ namespace CalX {
 		plane->stop();
 		work = false;
 	}
-}
+}  // namespace CalX

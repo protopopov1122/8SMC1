@@ -30,7 +30,7 @@ namespace CalXUI {
 		std::string units = wxGetApp().getUnits();
 
 		motor_point_t pos = { 0, 0 };
-		this->step = new MoveTaskStep(pos, 1, false);
+		this->step = std::make_shared<MoveTaskStep>(pos, 1, false);
 
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 		SetSizer(sizer);
@@ -81,7 +81,7 @@ namespace CalXUI {
 		Layout();
 	}
 
-	MoveTaskStep *CalxTaskLinearStepHandle::getTaskStep() {
+	std::shared_ptr<MoveTaskStep> CalxTaskLinearStepHandle::getTaskStep() {
 		return this->step;
 	}
 
@@ -107,7 +107,7 @@ namespace CalXUI {
 		std::string units = wxGetApp().getUnits();
 
 		motor_point_t pos = { 0, 0 };
-		this->step = new JumpTaskStep(pos, 1, false);
+		this->step = std::make_shared<JumpTaskStep>(pos, 1, false);
 
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 		SetSizer(sizer);
@@ -159,7 +159,7 @@ namespace CalXUI {
 		Layout();
 	}
 
-	JumpTaskStep *CalxTaskLinearJumpStepHandle::getTaskStep() {
+	std::shared_ptr<JumpTaskStep> CalxTaskLinearJumpStepHandle::getTaskStep() {
 		return this->step;
 	}
 
@@ -184,7 +184,7 @@ namespace CalXUI {
 		std::string units = wxGetApp().getUnits();
 
 		motor_point_t pnt = { 0, 0 };
-		this->step = new ArcTaskStep(pnt, pnt, 200, 1.0f, false);
+		this->step = std::make_shared<ArcTaskStep>(pnt, pnt, 200, 1.0f, false);
 
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 		SetSizer(sizer);
@@ -274,7 +274,7 @@ namespace CalXUI {
 		Layout();
 	}
 
-	ArcTaskStep *CalxTaskArcStepHandle::getTaskStep() {
+	std::shared_ptr<ArcTaskStep> CalxTaskArcStepHandle::getTaskStep() {
 		return this->step;
 	}
 
@@ -304,4 +304,4 @@ namespace CalXUI {
 	void CalxTaskArcStepHandle::OnFieldChange(wxCommandEvent &evt) {
 		update();
 	}
-}
+}  // namespace CalXUI

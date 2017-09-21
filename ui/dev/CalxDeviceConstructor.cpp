@@ -41,4 +41,4 @@ namespace CalXUI {
 	CalxDeviceHandle *CalxInstrumentConstructor::construct(wxWindow *win) {
 		return new CalxInstrumentComponent(win, wxID_ANY, ctrl);
 	}
-}
+}  // namespace CalXUI

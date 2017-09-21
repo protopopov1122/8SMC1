@@ -71,7 +71,7 @@ namespace CalXUI {
 				fname = this->filesys.FindNext().ToStdString();
 				continue;
 			} else {
-				conf = ConfigManager::load(&cnf, &std::cout);
+				conf = ConfigManager::load(cnf, std::cout);
 				name = conf->getEntry("config")->getString(
 				    "name",
 				    this->filesys.URLToFileName(fname).GetFullName().ToStdString());
@@ -128,4 +128,4 @@ namespace CalXUI {
 		this->exiting = true;
 		Hide();
 	}
-}
+}  // namespace CalXUI

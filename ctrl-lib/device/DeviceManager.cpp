@@ -90,7 +90,7 @@ namespace CalX {
 		if (!cnf.good()) {
 			return false;
 		} else {
-			ConfigManager::load(&cnf, &std::cout, conf);
+			ConfigManager::load(cnf, std::cout, conf);
 		}
 		cnf.close();
 		return true;
@@ -116,4 +116,4 @@ namespace CalX {
 			motor->terminate();
 		}
 	}
-}
+}  // namespace CalX

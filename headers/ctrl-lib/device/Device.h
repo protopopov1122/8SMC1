@@ -80,7 +80,7 @@ namespace CalX {
 	class Device {
 	 public:
 		Device(DeviceType, device_id_t);
-		virtual ~Device();
+		virtual ~Device() = default;
 		DeviceType getType();
 		void lock();
 		void unlock();
@@ -109,7 +109,6 @@ namespace CalX {
 	class Motor : public Device {
 	 public:
 		Motor(device_id_t);
-		virtual ~Motor();
 		virtual motor_coord_t getPosition() = 0;
 		virtual bool isTrailerPressed(int) = 0;
 		virtual bool isRunning() = 0;
@@ -122,7 +121,6 @@ namespace CalX {
 	class Instrument : public Device {
 	 public:
 		Instrument(device_id_t);
-		virtual ~Instrument();
 		virtual bool open_session() = 0;
 		virtual bool close_session() = 0;
 		virtual bool enable(bool) = 0;
@@ -133,6 +131,6 @@ namespace CalX {
 	 protected:
 		virtual void log(std::string);
 	};
-}
+}  // namespace CalX
 
 #endif

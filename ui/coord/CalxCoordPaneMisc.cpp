@@ -70,4 +70,4 @@ namespace CalXUI {
 	void CalxCoordInstrumentListener::unuse() {
 		ctrl->unuse();
 	}
-}
+}  // namespace CalXUI

@@ -171,4 +171,4 @@ namespace CalXUI {
 		app.getSystemManager()->getRequestResolver()->registerProvider(
 		    new CalxMotorPowerProvider(panel));
 	}
-}
+}  // namespace CalXUI

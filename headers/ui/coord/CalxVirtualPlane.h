@@ -86,6 +86,6 @@ namespace CalXUI {
 		wxStaticText *mouseCoords;
 		wxButton *okButton;
 	};
-}
+}  // namespace CalXUI
 
 #endif

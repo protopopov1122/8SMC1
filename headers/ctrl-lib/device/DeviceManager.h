@@ -77,6 +77,6 @@ namespace CalX {
 	/* Used as exported function in Device API implementations.*/
 	extern "C" LIBEXPORT DeviceManager *getDeviceManager();
 	typedef DeviceManager *(*DeviceManager_getter)();
-}
+}  // namespace CalX
 
 #endif

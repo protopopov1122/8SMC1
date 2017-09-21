@@ -34,7 +34,7 @@ namespace CalXUI {
 	 public:
 		CalxLinearTaskHandle(wxWindow *, wxWindowID, size_t);
 		virtual std::string getName();
-		virtual CoordTask *getTask();
+		virtual std::shared_ptr<CoordTask> getTask();
 		virtual std::shared_ptr<CoordTranslator> getTranslator();
 		virtual void update();
 		void setRectangle(coord_rect_t);
@@ -42,7 +42,7 @@ namespace CalXUI {
 	 private:
 		void OnFieldChange(wxCommandEvent &);
 		void OnExit(wxCloseEvent &);
-		LinearCoordTask *task;
+		std::shared_ptr<LinearCoordTask> task;
 		size_t id;
 		std::shared_ptr<CoordTranslator> trans;
 		wxSpinCtrlDouble *xCoord;
@@ -52,4 +52,4 @@ namespace CalXUI {
 		wxSpinCtrlDouble *spacing;
 		wxCheckBox *vertical;
 	};
-}
+}  // namespace CalXUI

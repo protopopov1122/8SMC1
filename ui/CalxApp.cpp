@@ -83,7 +83,7 @@ namespace CalXUI {
 			             __("Warning"), wxICON_WARNING);
 			conf = std::make_shared<ConfigManager>();
 		} else {
-			conf = ConfigManager::load(&cnf, &std::cout);
+			conf = ConfigManager::load(cnf, std::cout);
 		}
 		cnf.close();
 
@@ -346,6 +346,6 @@ namespace CalXUI {
 	void CalxApp::OnErrorEvent(wxThreadEvent &evt) {
 		this->error_handler->display(evt.GetPayload<ErrorCode>());
 	}
-}
+}  // namespace CalXUI
 
 wxIMPLEMENT_APP(CalXUI::CalxApp);

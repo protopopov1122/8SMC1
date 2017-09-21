@@ -36,13 +36,13 @@ namespace CalXUI {
 	class CalxTaskLinearStepHandle : public CalxTaskStepHandle {
 	 public:
 		CalxTaskLinearStepHandle(wxWindow *, wxWindowID);
-		MoveTaskStep *getTaskStep();
+		std::shared_ptr<MoveTaskStep> getTaskStep();
 		virtual void update();
 
 	 private:
 		void OnFieldChange(wxCommandEvent &);
 
-		MoveTaskStep *step;
+		std::shared_ptr<MoveTaskStep> step;
 
 		wxSpinCtrlDouble *xCoord;
 		wxSpinCtrlDouble *yCoord;
@@ -53,13 +53,13 @@ namespace CalXUI {
 	class CalxTaskLinearJumpStepHandle : public CalxTaskStepHandle {
 	 public:
 		CalxTaskLinearJumpStepHandle(wxWindow *, wxWindowID);
-		JumpTaskStep *getTaskStep();
+		std::shared_ptr<JumpTaskStep> getTaskStep();
 		virtual void update();
 
 	 private:
 		void OnFieldChange(wxCommandEvent &);
 
-		JumpTaskStep *step;
+		std::shared_ptr<JumpTaskStep> step;
 
 		wxSpinCtrlDouble *xCoord;
 		wxSpinCtrlDouble *yCoord;
@@ -70,13 +70,13 @@ namespace CalXUI {
 	class CalxTaskArcStepHandle : public CalxTaskStepHandle {
 	 public:
 		CalxTaskArcStepHandle(wxWindow *, wxWindowID);
-		ArcTaskStep *getTaskStep();
+		std::shared_ptr<ArcTaskStep> getTaskStep();
 		virtual void update();
 
 	 private:
 		void OnFieldChange(wxCommandEvent &);
 
-		ArcTaskStep *step;
+		std::shared_ptr<ArcTaskStep> step;
 
 		wxSpinCtrlDouble *destXCoord;
 		wxSpinCtrlDouble *destYCoord;
@@ -87,6 +87,6 @@ namespace CalXUI {
 		wxCheckBox *clockwise;
 		wxCheckBox *relative;
 	};
-}
+}  // namespace CalXUI
 
 #endif

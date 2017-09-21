@@ -30,6 +30,6 @@ namespace CalX {
 	 private:
 		USMC_Devices devs;
 	};
-}
+}  // namespace CalX
 
 #endif

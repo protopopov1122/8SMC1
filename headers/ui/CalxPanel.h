@@ -39,6 +39,6 @@ namespace CalXUI {
 
 		std::vector<CalxPanelPane *> panes;
 	};
-}
+}  // namespace CalXUI
 
 #endif

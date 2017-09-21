@@ -60,6 +60,6 @@ namespace CalXUI {
 		std::shared_ptr<InstrumentEventListener> listener;
 		wxTimer *timer;
 	};
-}
+}  // namespace CalXUI
 
 #endif

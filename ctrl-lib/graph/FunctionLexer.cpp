@@ -25,22 +25,15 @@
 
 namespace CalX {
 
-	FunctionLexer::FunctionLexer(std::istream &is) {
-		this->in = &is;
-		INIT_LOG("FunctionLexer");
-	}
-
-	FunctionLexer::~FunctionLexer() {
-		DESTROY_LOG("FunctionLexer");
-	}
+	FunctionLexer::FunctionLexer(std::istream &is) : in(is) {}
 
 	std::unique_ptr<Token> FunctionLexer::lex() {
-		int chr = in->get();
+		int chr = in.get();
 		while (isspace(chr)) {
 			if (chr == EOF) {
 				return nullptr;
 			}
-			chr = in->get();
+			chr = in.get();
 		}
 		if (chr == EOF) {
 			return nullptr;
@@ -73,13 +66,13 @@ namespace CalX {
 		if (isdigit(chr)) {
 			bool real = false;
 			for (; (isdigit(chr) || chr == '.') && offset + 1 < BUF_SZ;
-			     chr = in->get()) {
+			     chr = in.get()) {
 				if (chr == '.') {
 					real = true;
 				}
 				buf[offset++] = (char) chr;
 			}
-			in->unget();
+			in.unget();
 			buf[offset] = '\0';
 			std::string raw(buf);
 			std::unique_ptr<Token> lexem = std::make_unique<Token>();
@@ -96,14 +89,14 @@ namespace CalX {
 		while (offset + 1 < BUF_SZ) {
 			buf[offset++] = (char) chr;
 
-			chr = in->get();
+			chr = in.get();
 			if (chr == EOF) {
 				break;
 			}
 			if (isspace(chr) || isdigit(chr) || chr == '+' || chr == '-' ||
 			    chr == '*' || chr == '/' || chr == '(' || chr == ')' || chr == '^' ||
 			    chr == ',') {
-				in->unget();
+				in.unget();
 				break;
 			}
 		}
@@ -114,4 +107,4 @@ namespace CalX {
 		lexem->literal = raw;
 		return lexem;
 	}
-}
+}  // namespace CalX

@@ -29,7 +29,6 @@ namespace CalX {
 	 public:
 		CoordPlaneMap(motor_point_t, motor_scale_t, float,
 		              std::shared_ptr<CoordPlane>);
-		virtual ~CoordPlaneMap();
 		std::shared_ptr<CoordPlane> getBase();
 		motor_point_t getOffset();
 		motor_scale_t getScale();
@@ -62,6 +61,6 @@ namespace CalX {
 		motor_scale_t scale;
 		float speedScale;
 	};
-}
+}  // namespace CalX
 
 #endif

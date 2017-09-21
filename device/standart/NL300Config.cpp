@@ -84,4 +84,4 @@ namespace CalX {
 			this->instr->writeMessage(cmd);
 		}
 	}
-}
+}  // namespace CalX

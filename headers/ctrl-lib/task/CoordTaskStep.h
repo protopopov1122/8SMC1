@@ -125,6 +125,6 @@ namespace CalX {
 		bool clockwise;
 		bool rel;
 	};
-}
+}  // namespace CalX
 
 #endif

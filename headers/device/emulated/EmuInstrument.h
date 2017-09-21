@@ -51,6 +51,6 @@ namespace CalX {
 		bool en;
 		InstrumentMode mode;
 	};
-}
+}  // namespace CalX
 
 #endif

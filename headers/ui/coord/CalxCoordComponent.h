@@ -37,10 +37,10 @@ namespace CalXUI {
 
 	class CalxCoordComponentFactory {
 	 public:
-		virtual ~CalxCoordComponentFactory() {}
+		virtual ~CalxCoordComponentFactory() = default;
 		virtual CalxCoordComponent *newComponent(wxWindow *,
 		                                         CalxCoordController *) = 0;
 	};
-}
+}  // namespace CalXUI
 
 #endif

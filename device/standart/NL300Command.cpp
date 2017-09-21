@@ -79,4 +79,4 @@ namespace CalX {
 	NL300Parameter *NL300GeneralCommand::getParameter() {
 		return this->parameter;
 	}
-}
+}  // namespace CalX

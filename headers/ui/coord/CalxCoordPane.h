@@ -92,6 +92,6 @@ namespace CalXUI {
 		wxStaticText *generalInfoText;
 		CalxCoordTimer timer;
 	};
-}
+}  // namespace CalXUI
 
 #endif

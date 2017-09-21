@@ -638,4 +638,4 @@ namespace CalX {
 		                       ->getString(NL300_CORE_MODE, "default");
 		return this->config->getEntry(name);
 	}
-}
+}  // namespace CalX

@@ -28,7 +28,6 @@ namespace CalX {
 	class PolarCoordTranslator : public CoordTranslator {
 	 public:
 		PolarCoordTranslator(std::shared_ptr<CoordTranslator> = nullptr);
-		virtual ~PolarCoordTranslator();
 		virtual std::shared_ptr<CoordTranslator> getBase();
 		virtual void setBase(std::shared_ptr<CoordTranslator>);
 		virtual motor_point_t get(double, double);
@@ -41,6 +40,6 @@ namespace CalX {
 	 private:
 		std::shared_ptr<CoordTranslator> base;
 	};
-}
+}  // namespace CalX
 
 #endif

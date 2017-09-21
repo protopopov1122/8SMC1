@@ -28,11 +28,6 @@ namespace CalX {
 		this->tokens[0] = this->lexer->lex();
 		this->tokens[1] = this->lexer->lex();
 		this->tokens[2] = this->lexer->lex();
-		INIT_LOG("FunctionParser");
-	}
-
-	FunctionParser::~FunctionParser() {
-		DESTROY_LOG("FunctionParser");
 	}
 
 	std::unique_ptr<Node> FunctionParser::parse() {
@@ -172,4 +167,4 @@ namespace CalX {
 	bool FunctionParser::expectOperator(OperatorType op) {
 		return expectOperator(this->tokens[0].get(), op);
 	}
-}
+}  // namespace CalX

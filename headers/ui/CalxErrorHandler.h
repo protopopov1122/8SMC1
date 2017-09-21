@@ -28,13 +28,12 @@ namespace CalXUI {
 	class CalxErrorHandler {
 	 public:
 		CalxErrorHandler(SystemManager *);
-		virtual ~CalxErrorHandler();
 		void handle(ErrorCode);
 		void display(ErrorCode);
 
 	 private:
 		SystemManager *sysman;
 	};
-}
+}  // namespace CalXUI
 
 #endif

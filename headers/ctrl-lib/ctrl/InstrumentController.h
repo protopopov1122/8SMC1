@@ -35,7 +35,6 @@ namespace CalX {
 	class InstrumentController {
 	 public:
 		InstrumentController(Instrument *);
-		virtual ~InstrumentController();
 		Instrument *getInstrument();
 		device_id_t getID();
 		bool isSessionOpened();
@@ -67,6 +66,6 @@ namespace CalX {
 		bool state;
 		std::vector<std::shared_ptr<InstrumentEventListener>> listeners;
 	};
-}
+}  // namespace CalX
 
 #endif

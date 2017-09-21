@@ -37,7 +37,7 @@ namespace CalX {
 	class ExtEngine {
 	 public:
 		ExtEngine() {}
-		virtual ~ExtEngine() {}
+		virtual ~ExtEngine() = default;
 		virtual bool init(SystemManager *) = 0;
 		virtual bool destroy() = 0;
 
@@ -51,6 +51,6 @@ namespace CalX {
 
 	typedef ExtEngine *(*ExtEngine_getter)();
 	extern "C" LIBEXPORT ExtEngine *getExtEngine();
-}
+}  // namespace CalX
 
 #endif

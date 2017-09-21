@@ -40,7 +40,6 @@ namespace CalX {
 	class MotorController {
 	 public:
 		MotorController(Motor *, ConfigManager *);
-		virtual ~MotorController();
 		Motor *getMotor();
 		device_id_t getID();
 

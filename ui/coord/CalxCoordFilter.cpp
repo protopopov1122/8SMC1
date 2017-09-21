@@ -391,4 +391,4 @@ namespace CalXUI {
 		filterList->SetSelection((int) (filter.size() - 1));
 		updateUI();
 	}
-}
+}  // namespace CalXUI

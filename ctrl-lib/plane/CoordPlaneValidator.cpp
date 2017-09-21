@@ -29,11 +29,6 @@ namespace CalX {
 		this->min = min;
 		this->max = max;
 		this->max_speed = maxspeed;
-		INIT_LOG("CoordPlaneValidator");
-	}
-
-	CoordPlaneValidator::~CoordPlaneValidator() {
-		DESTROY_LOG("CoordPlaneValidator");
 	}
 
 	std::shared_ptr<CoordPlane> CoordPlaneValidator::getBase() {
@@ -152,4 +147,4 @@ namespace CalX {
 	bool CoordPlaneValidator::isUsed() {
 		return this->plane->isUsed();
 	}
-}
+}  // namespace CalX

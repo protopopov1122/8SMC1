@@ -125,4 +125,4 @@ namespace CalXUI {
 	void CalxCoordDialog::OnCancelButtonClick(wxCommandEvent &evt) {
 		Hide();
 	}
-}
+}  // namespace CalXUI

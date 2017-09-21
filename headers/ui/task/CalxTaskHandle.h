@@ -41,10 +41,10 @@ namespace CalXUI {
 			this->SetScrollRate(5, 5);
 		}
 		virtual std::string getName() = 0;
-		virtual CoordTask *getTask() = 0;
+		virtual std::shared_ptr<CoordTask> getTask() = 0;
 		virtual std::shared_ptr<CoordTranslator> getTranslator() = 0;
 		virtual void update() = 0;
 	};
-}
+}  // namespace CalXUI
 
 #endif

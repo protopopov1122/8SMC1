@@ -24,7 +24,7 @@
 namespace CalX {
 
 	engine_value_t VariableNode::eval(FunctionEngine *eng) {
-		return eng->getScope()->getVariable(id);
+		return eng->getScope().getVariable(id);
 	}
 
 	BinaryNode::BinaryNode(BinaryOperation op, std::unique_ptr<Node> left,
@@ -82,6 +82,6 @@ namespace CalX {
 			}
 			vec.push_back(val.value);
 		}
-		return eng->getScope()->evalFunction(this->id, vec);
+		return eng->getScope().evalFunction(this->id, vec);
 	}
-}
+}  // namespace CalX

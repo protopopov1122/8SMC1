@@ -204,4 +204,4 @@ namespace CalXUI {
 		dialog->ShowModal();
 		delete dialog;
 	}
-}
+}  // namespace CalXUI

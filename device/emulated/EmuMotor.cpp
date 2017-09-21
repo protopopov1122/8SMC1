@@ -85,4 +85,4 @@ namespace CalX {
 	}
 
 	void EmuMotor::terminate() {}
-}
+}  // namespace CalX
