@@ -25,7 +25,6 @@
 #include <stdio.h>
 
 namespace CalX {
-	DeviceManager::~DeviceManager() {}
 
 	bool DeviceManager::hasError() {
 		return !this->error_queue.empty();
@@ -44,7 +43,7 @@ namespace CalX {
 		if (d >= (device_id_t) this->motors.size() || d < 0) {
 			return nullptr;
 		}
-		return this->motors.at((size_t) d);
+		return this->motors.at((size_t) d).get();
 	}
 
 	size_t DeviceManager::getMotorCount() {
@@ -59,7 +58,7 @@ namespace CalX {
 		if (id >= (device_id_t) this->instruments.size() || id < 0) {
 			return nullptr;
 		}
-		return this->instruments.at((size_t) id);
+		return this->instruments.at((size_t) id).get();
 	}
 
 	void DeviceManager::getConnectionTypes(

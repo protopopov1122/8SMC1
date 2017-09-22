@@ -150,27 +150,28 @@ namespace CalXUI {
 
 	void CalxCoordController::move(coord_point_t dest, double speed, bool jump,
 	                               bool relative, bool *ready) {
-		this->queue->addAction(
-		    new CalxCoordActionMove(this->handle, dest, speed, jump, relative),
-		    ready);
+		this->queue->addAction(std::make_unique<CalxCoordActionMove>(
+		                           this->handle, dest, speed, jump, relative),
+		                       ready);
 	}
 
 	void CalxCoordController::arc(coord_point_t dest, coord_point_t cen,
 	                              int splitter, double speed, bool clockwise,
 	                              bool relative, bool *ready) {
 		this->queue->addAction(
-		    new CalxCoordActionArc(this->handle, dest, cen, splitter, speed,
-		                           clockwise, relative),
+		    std::make_unique<CalxCoordActionArc>(this->handle, dest, cen, splitter,
+		                                         speed, clockwise, relative),
 		    ready);
 	}
 
 	void CalxCoordController::calibrate(TrailerId tr, bool *ready) {
-		this->queue->addAction(new CalxCoordActionCalibrate(this->handle, tr),
-		                       ready);
+		this->queue->addAction(
+		    std::make_unique<CalxCoordActionCalibrate>(this->handle, tr), ready);
 	}
 
 	void CalxCoordController::measure(TrailerId tr, bool *ready) {
-		this->queue->addAction(new CalxCoordActionMeasure(this->handle, tr), ready);
+		this->queue->addAction(
+		    std::make_unique<CalxCoordActionMeasure>(this->handle, tr), ready);
 	}
 
 	void CalxCoordController::move(coord_point_t pos, double speed, bool *ready) {
@@ -183,14 +184,15 @@ namespace CalXUI {
 
 	void CalxCoordController::configure(coord_point_t pos, double speed,
 	                                    bool *ready) {
-		this->queue->addAction(
-		    new CalxCoordActionConfigure(this->handle, this, pos, speed), ready);
+		this->queue->addAction(std::make_unique<CalxCoordActionConfigure>(
+		                           this->handle, this, pos, speed),
+		                       ready);
 	}
 
 	void CalxCoordController::build(std::shared_ptr<CoordTranslator> trans,
 	                                std::unique_ptr<GraphBuilder> builder,
 	                                double speed, bool *ready) {
-		this->queue->addAction(new CalxCoordActionGraphBuild(
+		this->queue->addAction(std::make_unique<CalxCoordActionGraphBuild>(
 		                           this->handle, trans, std::move(builder), speed),
 		                       ready);
 	}
@@ -199,7 +201,7 @@ namespace CalXUI {
 	                                  std::shared_ptr<CoordTranslator> trans,
 	                                  std::unique_ptr<GraphBuilder> builder,
 	                                  double speed, bool *ready) {
-		this->queue->addAction(new CalxCoordActionGraphPreview(
+		this->queue->addAction(std::make_unique<CalxCoordActionGraphPreview>(
 		                           dialog, trans, std::move(builder), speed),
 		                       ready);
 	}

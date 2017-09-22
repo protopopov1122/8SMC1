@@ -62,7 +62,8 @@ namespace CalXUI {
 			prms->port = (uint8_t) dialog->getPort();
 			prms->speed = (uint32_t) dialog->getSpeed();
 			prms->parity = dialog->getParity();
-			queue->addAction(new CalxSerialInstrumentConnectAction(pool, prms));
+			queue->addAction(
+			    std::make_unique<CalxSerialInstrumentConnectAction>(pool, prms));
 		}
 		dialog->Destroy();
 	}

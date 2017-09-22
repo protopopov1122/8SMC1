@@ -35,7 +35,6 @@ namespace CalX {
 	class EmuDeviceManager : public DeviceManager {
 	 public:
 		EmuDeviceManager();
-		virtual ~EmuDeviceManager();
 		virtual void refresh();
 		virtual Motor *connectMotor(DeviceConnectionPrms *);
 		virtual Instrument *connectInstrument(DeviceConnectionPrms *);

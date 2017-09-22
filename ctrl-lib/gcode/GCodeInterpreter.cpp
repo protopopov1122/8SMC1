@@ -27,11 +27,10 @@ namespace CalX {
 	     ? prm.value.real                                                        \
 	     : static_cast<double>(prm.value.integer))
 
-	ErrorCode GCodeInterpreter::execute(GCodeStream &input, CoordPlane *plane,
+	ErrorCode GCodeInterpreter::execute(GCodeStream &input, CoordPlane &plane,
 	                                    std::shared_ptr<CoordTranslator> trans,
 	                                    std::shared_ptr<ConfigManager> config,
-	                                    float speed,
-	                                    std::shared_ptr<TaskState> state) {
+	                                    float speed, TaskState &state) {
 		input.reset();
 
 		coord_point_t troffset = { 0, 0 };
@@ -53,15 +52,15 @@ namespace CalX {
 		const int_conf_t CHORD_COUNT =
 		    config->getEntry("core")->getInt("chord_count", 100);
 		ErrorCode errcode = ErrorCode::NoError;
-		while (input.hasNext() && state->work && errcode == ErrorCode::NoError) {
+		while (input.hasNext() && state.work && errcode == ErrorCode::NoError) {
 			motor_point_t rel_offset = { 0, 0 };
 			if (relative_pos) {
-				rel_offset = plane->getPosition();
+				rel_offset = plane.getPosition();
 			}
 			GCodeCmd cmd = input.next();
 			switch (cmd.getOperation()) {
 				case GCodeOperation::RapidMove: {
-					coord_point_t dest = translator->get(plane->getPosition());
+					coord_point_t dest = translator->get(plane.getPosition());
 					if (cmd.hasArgument('X')) {
 						GCodeParameter prm = cmd.getArgument('X');
 						dest.x = TO_REAL(prm);
@@ -73,10 +72,10 @@ namespace CalX {
 					motor_point_t mdest = translator->get(dest.x, dest.y);
 					mdest.x += rel_offset.x;
 					mdest.y += rel_offset.y;
-					errcode = plane->move(mdest, speed, false);
+					errcode = plane.move(mdest, speed, false);
 				} break;
 				case GCodeOperation::LinearMove: {
-					coord_point_t dest = translator->get(plane->getPosition());
+					coord_point_t dest = translator->get(plane.getPosition());
 					if (cmd.hasArgument('X')) {
 						GCodeParameter prm = cmd.getArgument('X');
 						dest.x = TO_REAL(prm);
@@ -88,11 +87,11 @@ namespace CalX {
 					motor_point_t mdest = translator->get(dest.x, dest.y);
 					mdest.x += rel_offset.x;
 					mdest.y += rel_offset.y;
-					errcode = plane->move(mdest, speed, true);
+					errcode = plane.move(mdest, speed, true);
 				} break;
 				case GCodeOperation::ClockwiseArc:
 					if (cmd.hasArgument('I') || cmd.hasArgument('J')) {
-						coord_point_t dest = translator->get(plane->getPosition());
+						coord_point_t dest = translator->get(plane.getPosition());
 						coord_point_t cen = { 0, 0 };
 						if (cmd.hasArgument('X')) {
 							GCodeParameter prm = cmd.getArgument('X');
@@ -110,7 +109,7 @@ namespace CalX {
 							GCodeParameter prm = cmd.getArgument('J');
 							cen.y = TO_REAL(prm);
 						}
-						motor_point_t current = plane->getPosition();
+						motor_point_t current = plane.getPosition();
 						motor_point_t mdest = translator->get(dest.x, dest.y);
 						motor_point_t mcen = translator->get(cen.x, cen.y);
 						mcen.x -= offset.x;
@@ -119,12 +118,12 @@ namespace CalX {
 						mcen.y += current.y;
 						mdest.x += rel_offset.x;
 						mdest.y += rel_offset.y;
-						errcode = plane->arc(mdest, mcen, CHORD_COUNT, speed, invert == 1);
+						errcode = plane.arc(mdest, mcen, CHORD_COUNT, speed, invert == 1);
 					}
 					break;
 				case GCodeOperation::CounterClockwiseArc:
 					if (cmd.hasArgument('I') || cmd.hasArgument('J')) {
-						coord_point_t dest = translator->get(plane->getPosition());
+						coord_point_t dest = translator->get(plane.getPosition());
 						coord_point_t cen = { 0, 0 };
 						if (cmd.hasArgument('X')) {
 							GCodeParameter prm = cmd.getArgument('X');
@@ -142,7 +141,7 @@ namespace CalX {
 							GCodeParameter prm = cmd.getArgument('J');
 							cen.y = TO_REAL(prm);
 						}
-						motor_point_t current = plane->getPosition();
+						motor_point_t current = plane.getPosition();
 						motor_point_t mdest = translator->get(dest.x, dest.y);
 						motor_point_t mcen = translator->get(cen.x, cen.y);
 						mcen.x -= offset.x;
@@ -151,7 +150,7 @@ namespace CalX {
 						mcen.y += current.y;
 						mdest.x += rel_offset.x;
 						mdest.y += rel_offset.y;
-						errcode = plane->arc(mdest, mcen, CHORD_COUNT, speed, invert != 1);
+						errcode = plane.arc(mdest, mcen, CHORD_COUNT, speed, invert != 1);
 					}
 					break;
 				case GCodeOperation::SwitchInches: {
@@ -164,7 +163,7 @@ namespace CalX {
 				} break;
 				case GCodeOperation::Home: {
 					coord_point_t dest = { 0, 0 };
-					errcode = plane->move(translator->get(dest.x, dest.y), speed, false);
+					errcode = plane.move(translator->get(dest.x, dest.y), speed, false);
 				} break;
 				case GCodeOperation::AbsolutePositioning: {
 					relative_pos = false;
@@ -173,7 +172,7 @@ namespace CalX {
 					relative_pos = true;
 				} break;
 				case GCodeOperation::SetPosition: {
-					coord_point_t curpos = unit_trans->get(plane->getPosition());
+					coord_point_t curpos = unit_trans->get(plane.getPosition());
 					coord_point_t offset = translator->getOffset();
 					if (cmd.hasArgument('X')) {
 						double newx = TO_REAL(cmd.getArgument('X'));

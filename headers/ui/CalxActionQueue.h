@@ -39,11 +39,16 @@ namespace CalXUI {
 		virtual void stop() = 0;
 	};
 
+	struct CalxActionHandle {
+		std::unique_ptr<CalxAction> action;
+		bool *status;
+	};
+
 	class CalxActionQueue : public wxThread {
 	 public:
 		CalxActionQueue(SystemManager *, wxEvtHandler *);
 		virtual ~CalxActionQueue();
-		void addAction(CalxAction *, bool * = nullptr);
+		void addAction(std::unique_ptr<CalxAction>, bool * = nullptr);
 		bool isEmpty();
 		bool isBusy();
 		void stop();
@@ -54,11 +59,11 @@ namespace CalXUI {
 
 	 private:
 		bool finished;
-		wxEvtHandler *handle;
+		wxEvtHandler *evtHandle;
 		wxMutex *mutex;
 		wxCondition *cond;
 		wxMutex condMutex;
-		std::vector<std::pair<CalxAction *, bool *>> queue;
+		std::vector<CalxActionHandle> queue;
 		CalxAction *current;
 		bool work;
 		SystemManager *sysman;

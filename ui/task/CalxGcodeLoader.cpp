@@ -132,8 +132,6 @@ namespace CalXUI {
 			wxFileDialog *dialog = new wxFileDialog(this);
 			if (dialog->ShowModal() == wxID_OK) {
 				this->gcodePath->SetValue(dialog->GetPath());
-			} else {
-				Hide();
 			}
 			dialog->Destroy();
 		}

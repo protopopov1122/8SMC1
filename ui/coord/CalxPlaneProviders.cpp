@@ -283,19 +283,19 @@ namespace CalXUI {
 
 	void calx_panel_init_resolvers(CalxCoordPanel *panel) {
 		CalxApp &app = wxGetApp();
-		app.getSystemManager()->getRequestResolver()->registerProvider(
+		app.getSystemManager()->getRequestResolver().registerProvider(
 		    new CalxCoordPlaneAddProvider(panel));
-		app.getSystemManager()->getRequestResolver()->registerProvider(
+		app.getSystemManager()->getRequestResolver().registerProvider(
 		    new CalxCoordPlaneMeasureProvider(panel));
-		app.getSystemManager()->getRequestResolver()->registerProvider(
+		app.getSystemManager()->getRequestResolver().registerProvider(
 		    new CalxCoordPlanePositionProvider(panel));
-		app.getSystemManager()->getRequestResolver()->registerProvider(
+		app.getSystemManager()->getRequestResolver().registerProvider(
 		    new CalxCoordPlanePositionAbsProvider(panel));
-		app.getSystemManager()->getRequestResolver()->registerProvider(
+		app.getSystemManager()->getRequestResolver().registerProvider(
 		    new CalxCoordPlaneCenterProvider(panel));
-		app.getSystemManager()->getRequestResolver()->registerProvider(
+		app.getSystemManager()->getRequestResolver().registerProvider(
 		    new CalxCoordPlaneInvertProvider(panel));
-		app.getSystemManager()->getRequestResolver()->registerProvider(
+		app.getSystemManager()->getRequestResolver().registerProvider(
 		    new CalxCoordPlaneWatcherProvider(panel));
 	}
 }  // namespace CalXUI

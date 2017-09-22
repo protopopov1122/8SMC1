@@ -27,28 +27,20 @@ namespace CalX {
 		this->instrumentConnectionType.push_back(DeviceConnectionType::SerialPort);
 	}
 
-	EmuDeviceManager::~EmuDeviceManager() {
-		for (size_t i = 0; i < this->motors.size(); i++) {
-			delete this->motors.at(i);
-		}
-		for (size_t i = 0; i < this->instruments.size(); i++) {
-			delete this->instruments.at(i);
-		}
-	}
-
 	void EmuDeviceManager::refresh() {}
 
 	Motor *EmuDeviceManager::connectMotor(DeviceConnectionPrms *prms) {
-		EmuMotor *motor = new EmuMotor((device_id_t) this->motors.size(), this);
-		this->motors.push_back(motor);
-		return motor;
+		std::unique_ptr<EmuMotor> motor =
+		    std::make_unique<EmuMotor>((device_id_t) this->motors.size(), this);
+		this->motors.push_back(std::move(motor));
+		return this->motors.at(this->motors.size() - 1).get();
 	}
 
 	Instrument *EmuDeviceManager::connectInstrument(DeviceConnectionPrms *prms) {
-		EmuInstrument *instr =
-		    new EmuInstrument((device_id_t) this->instruments.size(), this);
-		this->instruments.push_back(instr);
-		return instr;
+		std::unique_ptr<EmuInstrument> instr = std::make_unique<EmuInstrument>(
+		    (device_id_t) this->instruments.size(), this);
+		this->instruments.push_back(std::move(instr));
+		return this->instruments.at(this->instruments.size() - 1).get();
 	}
 
 	extern "C" LIBEXPORT DeviceManager *getDeviceManager() {

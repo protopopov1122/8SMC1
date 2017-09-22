@@ -50,7 +50,7 @@ namespace CalX {
 	                              std::shared_ptr<CoordTranslator> trans,
 	                              float speed, std::shared_ptr<TaskState> state) {
 		plane->use();
-		FunctionEngine *engine = sysman->getFunctionEngine();
+		FunctionEngine &engine = sysman->getFunctionEngine();
 		double nan = std::numeric_limits<double>::quiet_NaN();
 		double last = nan;
 		ErrorCode errcode;
@@ -60,8 +60,8 @@ namespace CalX {
 		for (double x = this->min.x;
 		     (step > 0 ? x <= this->max.x : x >= this->max.x) && state->work;
 		     x += step) {
-			engine->getScope().putVariable("x", x);
-			engine_value_t val = engine->eval(this->node.get());
+			engine.getScope().putVariable("x", x);
+			engine_value_t val = engine.eval(this->node.get());
 			if (val.err != MathError::MNoError) {
 				plane->unuse();
 				state->work = false;
@@ -108,7 +108,7 @@ namespace CalX {
 	                                   float speed,
 	                                   std::shared_ptr<TaskState> state) {
 		plane->use();
-		FunctionEngine *engine = sysman->getFunctionEngine();
+		FunctionEngine &engine = sysman->getFunctionEngine();
 		double nan = std::numeric_limits<double>::quiet_NaN();
 		double last = nan;
 		ErrorCode errcode;
@@ -118,8 +118,8 @@ namespace CalX {
 		for (double x = this->min.x;
 		     (step > 0 ? x <= this->max.x : x >= this->max.x) && state->work;
 		     x += step) {
-			engine->getScope().putVariable("x", x);
-			engine_value_t val = engine->eval(this->node.get());
+			engine.getScope().putVariable("x", x);
+			engine_value_t val = engine.eval(this->node.get());
 			if (val.err != MathError::MNoError) {
 				plane->unuse();
 				state->work = false;

@@ -42,6 +42,7 @@ namespace CalX {
 		DeviceConnectionPrms(DeviceConnectionType t) {
 			this->type = t;
 		}
+		virtual ~DeviceConnectionPrms() = default;
 
 		DeviceConnectionType type;
 	};

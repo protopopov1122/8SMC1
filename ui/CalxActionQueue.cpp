@@ -30,7 +30,7 @@ namespace CalXUI {
 	    : wxThread::wxThread(wxTHREAD_DETACHED) {
 		this->mutex = new wxMutex();
 		this->cond = new wxCondition(this->condMutex);
-		this->handle = handle;
+		this->evtHandle = handle;
 		this->work = true;
 		this->sysman = sysman;
 		this->current = nullptr;
@@ -41,21 +41,20 @@ namespace CalXUI {
 		delete this->mutex;
 		delete this->cond;
 		while (this->queue.size() > 0) {
-			std::pair<CalxAction *, bool *> pair = this->queue.at(0);
-			CalxAction *action = pair.first;
-			this->queue.erase(this->queue.begin());
-			delete action;
-			if (pair.second != nullptr) {
-				*pair.second = true;
+			CalxActionHandle &handle = this->queue.at(0);
+			if (handle.status != nullptr) {
+				*handle.status = true;
 			}
+			this->queue.erase(this->queue.begin());
 		}
 	}
 
-	void CalxActionQueue::addAction(CalxAction *act, bool *flag) {
+	void CalxActionQueue::addAction(std::unique_ptr<CalxAction> act, bool *flag) {
 		this->mutex->Lock();
-		this->queue.push_back(std::make_pair(act, flag));
+		CalxActionHandle handle = { std::move(act), flag };
+		this->queue.push_back(std::move(handle));
 		this->mutex->Unlock();
-		wxQueueEvent(handle, new wxThreadEvent(wxEVT_COMMAND_QUEUE_UPDATE));
+		wxQueueEvent(evtHandle, new wxThreadEvent(wxEVT_COMMAND_QUEUE_UPDATE));
 		cond->Broadcast();
 	}
 
@@ -86,18 +85,17 @@ namespace CalXUI {
 		while (work) {
 			while (!this->queue.empty() && work) {
 				this->mutex->Lock();
-				std::pair<CalxAction *, bool *> pair = this->queue.at(0);
-				CalxAction *action = pair.first;
+				CalxActionHandle &handle = this->queue.at(0);
+				CalxAction *action = handle.action.get();
 				this->current = action;
-				this->queue.erase(this->queue.begin());
 				this->mutex->Unlock();
 				action->perform(sysman);
 				this->current = nullptr;
-				delete action;
-				if (pair.second != nullptr) {
-					*pair.second = true;
+				if (handle.status != nullptr) {
+					*handle.status = true;
 				}
-				wxQueueEvent(handle, new wxThreadEvent(wxEVT_COMMAND_QUEUE_UPDATE));
+				this->queue.erase(this->queue.begin());
+				wxQueueEvent(evtHandle, new wxThreadEvent(wxEVT_COMMAND_QUEUE_UPDATE));
 			}
 			while (this->queue.empty() && work) {
 				cond->Wait();

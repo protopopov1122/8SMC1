@@ -75,8 +75,8 @@ namespace CalX {
 		return this->conf;
 	}
 
-	ExtEngine *SystemManager::getExtEngine() {
-		return this->ext_engine.get();
+	ExtEngine &SystemManager::getExtEngine() {
+		return *this->ext_engine.get();
 	}
 
 	std::shared_ptr<MotorController> SystemManager::getMotorController(
@@ -87,12 +87,12 @@ namespace CalX {
 		return this->dev.at((size_t) d);
 	}
 
-	FunctionEngine *SystemManager::getFunctionEngine() {
-		return &this->engine;
+	FunctionEngine &SystemManager::getFunctionEngine() {
+		return this->engine;
 	}
 
-	RequestResolver *SystemManager::getRequestResolver() {
-		return this->resolver.get();
+	RequestResolver &SystemManager::getRequestResolver() {
+		return *this->resolver.get();
 	}
 
 	size_t SystemManager::getMotorCount() {
@@ -113,7 +113,7 @@ namespace CalX {
 	size_t SystemManager::addTask(std::shared_ptr<CoordTask> task) {
 		this->tasks.push_back(std::move(task));
 		if (this->ext_engine != nullptr) {
-			this->ext_engine->taskAdded(this->tasks.at(this->tasks.size() - 1).get());
+			this->ext_engine->taskAdded(this->tasks.at(this->tasks.size() - 1));
 		}
 		LOG(SYSMAN_TAG, "Added new task #" +
 		                    std::to_string(this->tasks.size() - 1) +
@@ -126,7 +126,7 @@ namespace CalX {
 		    std::make_shared<ProgrammedCoordTask>();
 		this->tasks.push_back(ptr);
 		if (this->ext_engine != nullptr) {
-			this->ext_engine->taskAdded(ptr.get());
+			this->ext_engine->taskAdded(ptr);
 		}
 		LOG(SYSMAN_TAG, "Added new programmed task #" +
 		                    std::to_string(this->tasks.size() - 1) +
@@ -179,7 +179,7 @@ namespace CalX {
 		}
 		this->coords.push_back(handle);
 		if (this->ext_engine != nullptr) {
-			this->ext_engine->coordAdded(handle.get());
+			this->ext_engine->coordAdded(handle);
 		}
 		LOG(SYSMAN_TAG, "New coordinate plane #" +
 		                    std::to_string(this->coords.size() - 1) +
@@ -225,7 +225,7 @@ namespace CalX {
 		    std::make_shared<MotorController>(d, this->getConfiguration().get());
 		this->dev.push_back(ctrl);
 		if (this->ext_engine != nullptr) {
-			this->ext_engine->motorConnected(ctrl.get());
+			this->ext_engine->motorConnected(ctrl);
 		}
 		LOG(SYSMAN_TAG,
 		    "Connected new device #" + std::to_string(this->dev.size() - 1));
@@ -242,7 +242,7 @@ namespace CalX {
 		    std::make_shared<InstrumentController>(i);
 		this->instr.push_back(ctrl);
 		if (this->ext_engine != nullptr) {
-			this->ext_engine->instrumentConnected(ctrl.get());
+			this->ext_engine->instrumentConnected(ctrl);
 		}
 		LOG(SYSMAN_TAG,
 		    "Connected new instrument #" + std::to_string(this->instr.size() - 1));

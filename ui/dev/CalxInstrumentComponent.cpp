@@ -251,11 +251,13 @@ namespace CalXUI {
 	}
 
 	void CalxInstrumentComponent::OnEnableButton(wxCommandEvent &evt) {
-		queue->addAction(new CalxInstrumentEnableAction(this->ctrl.get()));
+		queue->addAction(
+		    std::make_unique<CalxInstrumentEnableAction>(this->ctrl.get()));
 	}
 
 	void CalxInstrumentComponent::OnSessionSwitch(wxCommandEvent &evt) {
-		queue->addAction(new CalxInstrumentSessionAction(this->ctrl.get()));
+		queue->addAction(
+		    std::make_unique<CalxInstrumentSessionAction>(this->ctrl.get()));
 	}
 
 	void CalxInstrumentComponent::OnConfClick(wxCommandEvent &evt) {
@@ -272,7 +274,8 @@ namespace CalXUI {
 			InstrumentMode mode = sel == 0 ? InstrumentMode::Off
 			                               : (sel == 1 ? InstrumentMode::Prepare
 			                                           : InstrumentMode::Full);
-			queue->addAction(new CalxInstrumentModeAction(this->ctrl.get(), mode));
+			queue->addAction(
+			    std::make_unique<CalxInstrumentModeAction>(this->ctrl.get(), mode));
 		}
 	}
 

@@ -294,7 +294,8 @@ namespace CalXUI {
 			        (size_t) plane->GetSelection());
 			float speed = this->speed->GetValue();
 			TaskParameters prms = { (float) speed };
-			queue->addAction(new CalxTaskAction(this, handle, task, prms));
+			queue->addAction(
+			    std::make_unique<CalxTaskAction>(this, handle, task, prms));
 		} else {
 			std::string message = __("Select coordinate plane");
 			if (taskList->GetSelection() == wxNOT_FOUND) {
@@ -324,7 +325,8 @@ namespace CalXUI {
 			TaskParameters prms = { (float) this->speed->GetValue() };
 			CalxVirtualPlaneDialog *dialog =
 			    new CalxVirtualPlaneDialog(this, wxID_ANY, handle, wxSize(500, 500));
-			queue->addAction(new CalxPreviewAction(this, dialog, task, prms));
+			queue->addAction(
+			    std::make_unique<CalxPreviewAction>(this, dialog, task, prms));
 			dialog->ShowModal();
 			delete dialog;
 		} else {

@@ -313,11 +313,13 @@ namespace CalXUI {
 	}
 
 	void CalxMotorComponent::rollToTrailer1(wxCommandEvent &evt) {
-		this->queue->addAction(new CalxMotorCalibrationAction(this, dev.get(), 1));
+		this->queue->addAction(
+		    std::make_unique<CalxMotorCalibrationAction>(this, dev.get(), 1));
 	}
 
 	void CalxMotorComponent::rollToTrailer2(wxCommandEvent &evt) {
-		this->queue->addAction(new CalxMotorCalibrationAction(this, dev.get(), 2));
+		this->queue->addAction(
+		    std::make_unique<CalxMotorCalibrationAction>(this, dev.get(), 2));
 	}
 
 	void CalxMotorComponent::stopClick(wxCommandEvent &evt) {
@@ -325,15 +327,15 @@ namespace CalXUI {
 	}
 
 	void CalxMotorComponent::moveClick(wxCommandEvent &evt) {
-		this->queue->addAction(
-		    new CalxMotorMoveAction(this, dev.get(), this->moveSpin->GetValue(),
-		                            this->moveSpeedSpin->GetValue(), false));
+		this->queue->addAction(std::make_unique<CalxMotorMoveAction>(
+		    this, dev.get(), this->moveSpin->GetValue(),
+		    this->moveSpeedSpin->GetValue(), false));
 	}
 
 	void CalxMotorComponent::rmoveClick(wxCommandEvent &evt) {
-		this->queue->addAction(
-		    new CalxMotorMoveAction(this, dev.get(), this->moveSpin->GetValue(),
-		                            this->moveSpeedSpin->GetValue(), true));
+		this->queue->addAction(std::make_unique<CalxMotorMoveAction>(
+		    this, dev.get(), this->moveSpin->GetValue(),
+		    this->moveSpeedSpin->GetValue(), true));
 	}
 
 	void CalxMotorComponent::threadUpdate(wxThreadEvent &evt) {}

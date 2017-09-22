@@ -53,9 +53,9 @@ namespace CalX {
 		size_t getMotorCount();
 		std::shared_ptr<InstrumentController> getInstrumentController(device_id_t);
 		size_t getInstrumentCount();
-		FunctionEngine *getFunctionEngine();
-		RequestResolver *getRequestResolver();
-		ExtEngine *getExtEngine();
+		FunctionEngine &getFunctionEngine();
+		RequestResolver &getRequestResolver();
+		ExtEngine &getExtEngine();
 		// Tasks control
 		size_t getTaskCount();
 		std::shared_ptr<CoordTask> getTask(size_t);

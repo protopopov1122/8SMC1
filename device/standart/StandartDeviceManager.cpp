@@ -29,19 +29,14 @@ namespace CalX {
 	    : DeviceManager::DeviceManager() {
 		this->refresh();
 		for (size_t i = 0; i < devs.NOD; i++) {
-			this->motors.push_back(new _8SMC1Motor((device_id_t) i, this));
+			this->motors.push_back(
+			    std::make_unique<_8SMC1Motor>((device_id_t) i, this));
 		}
 
 		this->instrumentConnectionType.push_back(DeviceConnectionType::SerialPort);
 	}
 
 	StandartDeviceManager::~StandartDeviceManager() {
-		for (size_t i = 0; i < this->motors.size(); i++) {
-			delete this->motors.at(i);
-		}
-		for (size_t i = 0; i < this->instruments.size(); i++) {
-			delete this->instruments.at(i);
-		}
 		this->instruments.clear();
 		this->motors.clear();
 		if (USMC_Close()) {
@@ -109,18 +104,17 @@ namespace CalX {
 		    (DeviceSerialPortConnectionPrms *) _prms;
 		this->log("Connecting NL300 instrument on COM" +
 		          std::to_string(prms->port));
-		NL300Instrument *instr =
-		    new NL300Instrument((device_id_t) this->instruments.size(), this);
+		std::unique_ptr<NL300Instrument> instr = std::make_unique<NL300Instrument>(
+		    (device_id_t) this->instruments.size(), this);
 		if (!instr->connect(prms) || instr->hasErrors()) {
 			this->log("Error during NL300 instrument connection on COM" +
 			          std::to_string(prms->port));
 			this->saveInstrumentError();
-			delete instr;
 			return nullptr;
 		}
-		this->instruments.push_back(instr);
+		this->instruments.push_back(std::move(instr));
 		this->log("Connected NL300 instrument on COM" + std::to_string(prms->port));
-		return instr;
+		return this->instruments.at(this->instruments.size() - 1).get();
 	}
 
 	extern "C" LIBEXPORT DeviceManager *getDeviceManager() {

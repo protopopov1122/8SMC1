@@ -33,10 +33,10 @@
 namespace CalX {
 	class GCodeInterpreter {
 	 public:
-		static ErrorCode execute(GCodeStream &, CoordPlane *,
+		static ErrorCode execute(GCodeStream &, CoordPlane &,
 		                         std::shared_ptr<CoordTranslator>,
 		                         std::shared_ptr<ConfigManager>, float,
-		                         std::shared_ptr<TaskState>);
+		                         TaskState &);
 	};
 }  // namespace CalX
 

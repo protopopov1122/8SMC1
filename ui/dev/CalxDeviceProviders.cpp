@@ -164,11 +164,11 @@ namespace CalXUI {
 
 	void calx_init_device_providers(CalxDevicePanel *panel) {
 		CalxApp &app = wxGetApp();
-		app.getSystemManager()->getRequestResolver()->registerProvider(
+		app.getSystemManager()->getRequestResolver().registerProvider(
 		    new CalxMotorSerialConnectProvider(panel));
-		app.getSystemManager()->getRequestResolver()->registerProvider(
+		app.getSystemManager()->getRequestResolver().registerProvider(
 		    new CalxInstrumentSerialConnectProvider(panel));
-		app.getSystemManager()->getRequestResolver()->registerProvider(
+		app.getSystemManager()->getRequestResolver().registerProvider(
 		    new CalxMotorPowerProvider(panel));
 	}
 }  // namespace CalXUI

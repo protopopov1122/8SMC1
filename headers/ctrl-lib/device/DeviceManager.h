@@ -39,7 +39,7 @@ namespace CalX {
 
 	class DeviceManager {
 	 public:
-		virtual ~DeviceManager();
+		virtual ~DeviceManager() = default;
 		virtual void refresh() = 0;  // Refresh device list, reinitialise them.
 		virtual Motor *getMotor(device_id_t);            // Return device by id
 		virtual size_t getMotorCount();                  // Get device count
@@ -64,8 +64,8 @@ namespace CalX {
 		virtual void log(std::string);
 
 		std::vector<std::string> error_queue;
-		std::vector<Motor *> motors;
-		std::vector<Instrument *> instruments;
+		std::vector<std::unique_ptr<Motor>> motors;
+		std::vector<std::unique_ptr<Instrument>> instruments;
 
 		std::vector<DeviceConnectionType> motorConnectionType;
 		std::vector<DeviceConnectionType> instrumentConnectionType;

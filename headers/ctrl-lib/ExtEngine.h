@@ -41,12 +41,13 @@ namespace CalX {
 		virtual bool init(SystemManager *) = 0;
 		virtual bool destroy() = 0;
 
-		virtual void taskAdded(CoordTask *task) {}
+		virtual void taskAdded(std::shared_ptr<CoordTask> task) {}
 		virtual void taskRemoving(size_t id) {}
-		virtual void coordAdded(CoordHandle *handle) {}
+		virtual void coordAdded(std::shared_ptr<CoordHandle> handle) {}
 		virtual void coordRemoving(size_t id) {}
-		virtual void motorConnected(MotorController *ctrl) {}
-		virtual void instrumentConnected(InstrumentController *ctrl) {}
+		virtual void motorConnected(std::shared_ptr<MotorController> ctrl) {}
+		virtual void instrumentConnected(
+		    std::shared_ptr<InstrumentController> ctrl) {}
 	};
 
 	typedef ExtEngine *(*ExtEngine_getter)();

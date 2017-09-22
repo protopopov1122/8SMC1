@@ -296,7 +296,7 @@ namespace CalXUI {
 	}
 
 	void CalxCoordAdjustDialog::adjust(CalxAdjustDirection dir) {
-		this->queue->addAction(new CalxCoordAdjustAction(
+		this->queue->addAction(std::make_unique<CalxCoordAdjustAction>(
 		    this, this->handle, dir, this->stepSpin->GetValue(),
 		    this->speedSpin->GetValue()));
 	}
@@ -376,7 +376,7 @@ namespace CalXUI {
 			    plane_size.h - mouse.y * plane_size.h / real_size.y + plane_size.y;
 
 			coord_point_t dest = { rx, ry };
-			this->queue->addAction(new CalxCoordAdjustMoveAction(
+			this->queue->addAction(std::make_unique<CalxCoordAdjustMoveAction>(
 			    this, this->handle, dest, this->speedSpin->GetValue()));
 		}
 	}
