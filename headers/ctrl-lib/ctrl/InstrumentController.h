@@ -21,10 +21,7 @@
 #ifndef CALX_CTRL_LIB_INSTRUMENT_CONTROLLER_H_
 #define CALX_CTRL_LIB_INSTRUMENT_CONTROLLER_H_
 
-#include "ctrl-lib/CtrlCore.h"
-#include "ctrl-lib/EventListener.h"
-#include "ctrl-lib/device/DeviceManager.h"
-#include <vector>
+#include "ctrl-lib/ctrl/DeviceController.h"
 
 /* Instrument controller is higher-level interface for
    interface drivers. It offers a bit more complex functionality
@@ -32,11 +29,10 @@
 
 namespace CalX {
 
-	class InstrumentController {
+	class InstrumentController : public DeviceController {
 	 public:
-		InstrumentController(Instrument *);
+		InstrumentController(Instrument *, std::shared_ptr<ConfigManager>);
 		Instrument *getInstrument();
-		device_id_t getID();
 		bool isSessionOpened();
 		ErrorCode open_session();
 		ErrorCode close_session();

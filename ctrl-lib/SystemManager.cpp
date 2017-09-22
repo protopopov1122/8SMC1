@@ -33,12 +33,12 @@ namespace CalX {
 		for (device_id_t d = 0; d < (device_id_t) this->devman->getMotorCount();
 		     d++) {
 			this->dev.push_back(std::make_shared<MotorController>(
-			    this->devman->getMotor(d), this->getConfiguration().get()));
+			    this->devman->getMotor(d), this->getConfiguration()));
 		}
 		for (device_id_t i = 0;
 		     i < (device_id_t) this->devman->getInstrumentCount(); i++) {
 			this->instr.push_back(std::make_shared<InstrumentController>(
-			    this->devman->getInstrument(i)));
+			    this->devman->getInstrument(i), this->getConfiguration()));
 		}
 		LOG(SYSMAN_TAG, "System startup. Found " +
 		                    std::to_string(this->devman->getMotorCount()) +
@@ -169,7 +169,7 @@ namespace CalX {
 
 		std::shared_ptr<CoordController> ctrl = std::make_shared<CoordController>(
 		    this->getMotorController(d1), this->getMotorController(d2),
-		    this->getConfiguration().get(), this->getInstrumentController(instr));
+		    this->getConfiguration(), this->getInstrumentController(instr));
 		std::shared_ptr<CoordHandle> handle =
 		    std::make_shared<CoordHandle>(this->coords.size(), ctrl);
 		if (getConfiguration()->getEntry("core")->getBool("auto_power_motors",
@@ -222,7 +222,7 @@ namespace CalX {
 		}
 		devman->refresh();
 		std::shared_ptr<MotorController> ctrl =
-		    std::make_shared<MotorController>(d, this->getConfiguration().get());
+		    std::make_shared<MotorController>(d, this->getConfiguration());
 		this->dev.push_back(ctrl);
 		if (this->ext_engine != nullptr) {
 			this->ext_engine->motorConnected(ctrl);
@@ -239,7 +239,7 @@ namespace CalX {
 			return nullptr;
 		}
 		std::shared_ptr<InstrumentController> ctrl =
-		    std::make_shared<InstrumentController>(i);
+		    std::make_shared<InstrumentController>(i, this->getConfiguration());
 		this->instr.push_back(ctrl);
 		if (this->ext_engine != nullptr) {
 			this->ext_engine->instrumentConnected(ctrl);

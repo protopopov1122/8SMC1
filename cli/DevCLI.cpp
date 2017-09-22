@@ -268,7 +268,7 @@ namespace CalX {
 				}
 			}
 			ctrl->pushPlane(std::make_shared<CoordPlaneLog>(ctrl->peekPlane(),
-			                                                &std::cout, prefix));
+			                                                std::cout, prefix));
 		} else if (com.compare("map") == 0) {
 			if (args.size() < 5) {
 				std::cout << "Provide arguments" << std::endl;

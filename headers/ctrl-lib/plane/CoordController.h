@@ -30,9 +30,9 @@ namespace CalX {
 	class CoordController : public CoordPlane {
 	 public:
 		CoordController(std::shared_ptr<MotorController>,
-		                std::shared_ptr<MotorController>, ConfigManager *,
+		                std::shared_ptr<MotorController>,
+		                std::shared_ptr<ConfigManager>,
 		                std::shared_ptr<InstrumentController> = nullptr);
-		virtual ~CoordController();
 		std::shared_ptr<MotorController> getXAxis();
 		std::shared_ptr<MotorController> getYAxis();
 		std::shared_ptr<InstrumentController> getInstrument();
@@ -53,8 +53,8 @@ namespace CalX {
 		virtual ErrorCode open_session();
 		virtual ErrorCode close_session();
 
-		void addEventListener(CoordEventListener *);
-		void removeEventListener(CoordEventListener *);
+		void addEventListener(std::shared_ptr<CoordEventListener>);
+		void removeEventListener(std::shared_ptr<CoordEventListener>);
 		virtual bool isUsed();
 		virtual void use();
 		virtual void unuse();
@@ -63,7 +63,7 @@ namespace CalX {
 		std::shared_ptr<MotorController> xAxis;
 		std::shared_ptr<MotorController> yAxis;
 		std::shared_ptr<InstrumentController> instr;
-		ConfigManager *config;
+		std::shared_ptr<ConfigManager> config;
 		bool work;
 		bool defWork;
 		bool session_opened;
@@ -71,7 +71,7 @@ namespace CalX {
 
 		motor_rect_t size;
 		bool measured;
-		std::vector<CoordEventListener *> listeners;
+		std::vector<std::shared_ptr<CoordEventListener>> listeners;
 
 		void sendMovingEvent(CoordMoveEvent &);
 		void sendMovedEvent(CoordMoveEvent &);

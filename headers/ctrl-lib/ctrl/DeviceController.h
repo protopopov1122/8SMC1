@@ -18,32 +18,30 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CALX_CTRL_LIB_PLANE_COORD_HANDLE_H_
-#define CALX_CTRL_LIB_PLANE_COORD_HANDLE_H_
+#ifndef CALX_CTRL_LIB_DEVICE_CONTROLLER_H_
+#define CALX_CTRL_LIB_DEVICE_CONTROLLER_H_
 
-#include "ctrl-lib/plane/CoordPlane.h"
+#include "ctrl-lib/CtrlCore.h"
+#include "ctrl-lib/EventListener.h"
+#include "ctrl-lib/conf/ConfigManager.h"
+#include "ctrl-lib/device/DeviceManager.h"
 #include <cinttypes>
+#include <vector>
 
 namespace CalX {
 
-	class CoordHandle : public CoordPlaneStack {
+	class DeviceController {
 	 public:
-		CoordHandle(size_t, std::shared_ptr<CoordController>);
+		DeviceController(std::shared_ptr<ConfigManager>, Device *);
+		virtual ~DeviceController() = default;
+		device_id_t getID();
+		Device *getDevice();
 
-		size_t getID();
-		std::shared_ptr<CoordController> getController();
-		std::shared_ptr<FloatCoordPlane> getFloatPlane();
-
-		virtual bool popPlane();
-		virtual void pushPlane(std::shared_ptr<CoordPlane>);
-
-		void addEventListener(std::shared_ptr<CoordEventListener>);
-		void removeEventListener(std::shared_ptr<CoordEventListener>);
+	 protected:
+		std::shared_ptr<ConfigManager> config;
 
 	 private:
-		size_t id;
-		std::shared_ptr<CoordController> root;
-		std::shared_ptr<FloatCoordPlane> floatPlane;
+		Device *device;
 	};
 }  // namespace CalX
 

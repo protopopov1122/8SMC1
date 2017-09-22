@@ -23,10 +23,10 @@
 namespace CalX {
 
 	CoordPlaneLog::CoordPlaneLog(std::shared_ptr<CoordPlane> cplane,
-	                             std::ostream *os, std::string prefix,
-	                             bool log_act, bool log_err) {
+	                             std::ostream &os, std::string prefix,
+	                             bool log_act, bool log_err)
+	    : out(os) {
 		this->plane = cplane;
-		this->out = os;
 		this->prefix = prefix;
 		this->log_actions = log_act;
 		this->log_errors = log_err;
@@ -62,13 +62,13 @@ namespace CalX {
 
 	ErrorCode CoordPlaneLog::move(motor_point_t dest, float speed, bool sync) {
 		if (this->log_actions) {
-			*out << this->prefix << "Linear moving to " << dest.x << "x" << dest.y
-			     << " with base speed " << speed << "; synchrone movement is "
-			     << (sync ? "on." : "off.") << std::endl;
+			out << this->prefix << "Linear moving to " << dest.x << "x" << dest.y
+			    << " with base speed " << speed << "; synchrone movement is "
+			    << (sync ? "on." : "off.") << std::endl;
 		}
 		ErrorCode err = this->plane->move(dest, speed, sync);
 		if (this->log_errors && err != ErrorCode::NoError) {
-			*out << this->prefix << "Error occured(" << err << ")" << std::endl;
+			out << this->prefix << "Error occured(" << err << ")" << std::endl;
 		}
 		return err;
 	}
@@ -77,39 +77,39 @@ namespace CalX {
 	                             int splitter, float speed, bool clockwise,
 	                             float scale) {
 		if (this->log_actions) {
-			*out << this->prefix << (clockwise ? "Clockwise" : "Counter-clockwise")
-			     << " arc moving to " << dest.x << "x" << dest.y << "; center "
-			     << center.x << "x" << center.y << " with base speed " << speed
-			     << "; splitter " << splitter << "." << std::endl;
+			out << this->prefix << (clockwise ? "Clockwise" : "Counter-clockwise")
+			    << " arc moving to " << dest.x << "x" << dest.y << "; center "
+			    << center.x << "x" << center.y << " with base speed " << speed
+			    << "; splitter " << splitter << "." << std::endl;
 		}
 		ErrorCode err =
 		    this->plane->arc(dest, center, splitter, speed, clockwise, scale);
 		if (this->log_errors && err != ErrorCode::NoError) {
-			*out << this->prefix << "Error occured(" << err << ")" << std::endl;
+			out << this->prefix << "Error occured(" << err << ")" << std::endl;
 		}
 		return err;
 	}
 
 	ErrorCode CoordPlaneLog::calibrate(TrailerId tr) {
 		if (this->log_actions) {
-			*out << this->prefix << "Calibrating to trailer #" << static_cast<int>(tr)
-			     << std::endl;
+			out << this->prefix << "Calibrating to trailer #" << static_cast<int>(tr)
+			    << std::endl;
 		}
 		ErrorCode err = this->plane->calibrate(tr);
 		if (this->log_errors && err != ErrorCode::NoError) {
-			*out << this->prefix << "Error occured(" << err << ")" << std::endl;
+			out << this->prefix << "Error occured(" << err << ")" << std::endl;
 		}
 		return err;
 	}
 
 	ErrorCode CoordPlaneLog::measure(TrailerId tr) {
 		if (this->log_actions) {
-			*out << this->prefix << "Measuring to trailer #" << static_cast<int>(tr)
-			     << std::endl;
+			out << this->prefix << "Measuring to trailer #" << static_cast<int>(tr)
+			    << std::endl;
 		}
 		ErrorCode err = this->plane->measure(tr);
 		if (this->log_errors && err != ErrorCode::NoError) {
-			*out << this->prefix << "Error occured(" << err << ")" << std::endl;
+			out << this->prefix << "Error occured(" << err << ")" << std::endl;
 		}
 		return err;
 	}

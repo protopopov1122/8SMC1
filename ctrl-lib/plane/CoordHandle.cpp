@@ -58,11 +58,11 @@ namespace CalX {
 		this->floatPlane->setBase(this->peekPlane());
 	}
 
-	void CoordHandle::addEventListener(CoordEventListener *l) {
+	void CoordHandle::addEventListener(std::shared_ptr<CoordEventListener> l) {
 		this->root->addEventListener(l);
 	}
 
-	void CoordHandle::removeEventListener(CoordEventListener *l) {
+	void CoordHandle::removeEventListener(std::shared_ptr<CoordEventListener> l) {
 		this->root->removeEventListener(l);
 	}
 }  // namespace CalX

@@ -18,15 +18,10 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CALX_CTRL_LIB_DEVICE_CONTROLLER_H_
-#define CALX_CTRL_LIB_DEVICE_CONTROLLER_H_
+#ifndef CALX_CTRL_LIB_MOTOR_CONTROLLER_H_
+#define CALX_CTRL_LIB_MOTOR_CONTROLLER_H_
 
-#include "ctrl-lib/CtrlCore.h"
-#include "ctrl-lib/EventListener.h"
-#include "ctrl-lib/conf/ConfigManager.h"
-#include "ctrl-lib/device/DeviceManager.h"
-#include <cinttypes>
-#include <vector>
+#include "ctrl-lib/ctrl/DeviceController.h"
 
 /* Motor controller offers some more complex actions on top of
    motor device drivers. */
@@ -37,11 +32,14 @@ namespace CalX {
 #define ROLL_SPEED 4000.0f
 #define TRAILER_COMEBACK 800
 
-	class MotorController {
+	class CoordController;  // Forward referencing
+
+	class MotorController : public DeviceController {
+		friend class CoordController;
+
 	 public:
-		MotorController(Motor *, ConfigManager *);
+		MotorController(Motor *, std::shared_ptr<ConfigManager>);
 		Motor *getMotor();
-		device_id_t getID();
 
 		Power getPowerState();
 		ErrorCode enablePower(bool);
@@ -62,6 +60,7 @@ namespace CalX {
 		ErrorCode waitWhileRunning();
 		ErrorCode checkTrailers();
 
+	 private:
 		void sendMovingEvent(MotorMoveEvent &);
 		void sendMovedEvent(MotorMoveEvent &);
 		void sendStoppedEvent(MotorErrorEvent &);
@@ -69,13 +68,8 @@ namespace CalX {
 		void sendRolledEvent(MotorRollEvent &);
 
 		MoveType dest;
-
-	 private:
 		bool work;
-
 		Motor *dev;
-		ConfigManager *config;
-
 		std::vector<std::shared_ptr<MotorEventListener>> listeners;
 	};
 }

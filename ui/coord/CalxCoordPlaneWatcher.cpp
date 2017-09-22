@@ -134,7 +134,8 @@ namespace CalXUI {
 		this->bitmap.Create(GetSize().x, GetSize().y);
 		this->rendering = false;
 		this->has_updates = true;
-		this->listener = new CalxCoordPlaneWatcherEvent(this, this->handle);
+		this->listener =
+		    std::make_shared<CalxCoordPlaneWatcherEvent>(this, this->handle);
 		this->handle->addEventListener(this->listener);
 	}
 

@@ -49,7 +49,7 @@ namespace CalXUI {
 		this->controller = new CalxCoordController(this->ctrl, this->queue);
 		this->watchers = new CalxWatcherPool(this, this->ctrl);
 
-		this->listener = new CalxCoordEventListener(this);
+		this->listener = std::make_shared<CalxCoordEventListener>(this);
 		this->ctrl->addEventListener(this->listener);
 		this->xListener = std::make_shared<CalxCoordMotorListener>(this);
 		this->yListener = std::make_shared<CalxCoordMotorListener>(this);

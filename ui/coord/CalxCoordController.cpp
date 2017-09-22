@@ -57,7 +57,7 @@ namespace CalXUI {
 		                                          handle->peekPlane());
 		handle->pushPlane(this->validator);
 		this->log = std::make_shared<CoordPlaneLog>(
-		    handle->peekPlane(), &std::cout,
+		    handle->peekPlane(), std::cout,
 		    "Plane #" + std::to_string(handle->getID()) + ": ", false);
 		handle->pushPlane(this->log);
 		motor_point_t mapOffset = { 0, 0 };

@@ -28,7 +28,6 @@ namespace CalX {
 	class MoveTaskStep : public TaskStep {
 	 public:
 		MoveTaskStep(motor_point_t, float, bool = false);
-		virtual ~MoveTaskStep();
 		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
 		                          SystemManager *, std::shared_ptr<TaskState>);
 
@@ -49,7 +48,6 @@ namespace CalX {
 	class JumpTaskStep : public TaskStep {
 	 public:
 		JumpTaskStep(motor_point_t, float, bool = false);
-		virtual ~JumpTaskStep();
 		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
 		                          SystemManager *, std::shared_ptr<TaskState>);
 
@@ -70,7 +68,6 @@ namespace CalX {
 	class CalibrateTaskStep : public TaskStep {
 	 public:
 		CalibrateTaskStep(TrailerId);
-		virtual ~CalibrateTaskStep();
 		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
 		                          SystemManager *, std::shared_ptr<TaskState>);
 
@@ -81,7 +78,6 @@ namespace CalX {
 	class ArcTaskStep : public TaskStep {
 	 public:
 		ArcTaskStep(motor_point_t, motor_point_t, int, float, bool = false);
-		virtual ~ArcTaskStep();
 		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
 		                          SystemManager *, std::shared_ptr<TaskState>);
 
@@ -112,7 +108,6 @@ namespace CalX {
 	class RelArcTaskStep : public TaskStep {
 	 public:
 		RelArcTaskStep(motor_point_t, motor_point_t, int, float, bool = false);
-		virtual ~RelArcTaskStep();
 		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
 		                          SystemManager *, std::shared_ptr<TaskState>);
 		void setClockwise(bool);

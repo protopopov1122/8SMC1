@@ -36,7 +36,8 @@ namespace CalX {
 
 	CoordController::CoordController(
 	    std::shared_ptr<MotorController> xaxis,
-	    std::shared_ptr<MotorController> yaxis, ConfigManager *config,
+	    std::shared_ptr<MotorController> yaxis,
+	    std::shared_ptr<ConfigManager> config,
 	    std::shared_ptr<InstrumentController> instr) {
 		this->xAxis = xaxis;
 		this->yAxis = yaxis;
@@ -54,14 +55,6 @@ namespace CalX {
 		        std::to_string(this->yAxis->getID()) + "; instrument: " +
 		        std::string(instr != nullptr ? std::to_string(instr->getID())
 		                                     : "no"));
-		INIT_LOG("CoordController");
-	}
-
-	CoordController::~CoordController() {
-		for (const auto &l : this->listeners) {
-			delete l;
-		}
-		DESTROY_LOG("CoordController");
 	}
 
 	void CoordController::dump(std::ostream &os) {
@@ -478,15 +471,16 @@ namespace CalX {
 		return errcode;
 	}
 
-	void CoordController::addEventListener(CoordEventListener *l) {
+	void CoordController::addEventListener(
+	    std::shared_ptr<CoordEventListener> l) {
 		this->listeners.push_back(l);
 	}
 
-	void CoordController::removeEventListener(CoordEventListener *l) {
+	void CoordController::removeEventListener(
+	    std::shared_ptr<CoordEventListener> l) {
 		this->listeners.erase(
 		    std::remove(this->listeners.begin(), this->listeners.end(), l),
 		    this->listeners.end());
-		delete l;
 	}
 
 	void CoordController::sendMovingEvent(CoordMoveEvent &evt) {

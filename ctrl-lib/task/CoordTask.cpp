@@ -96,11 +96,6 @@ namespace CalX {
 		this->pos = pos;
 		this->speed_coef = spc;
 		this->rel = rel;
-		INIT_LOG("MoveTaskStep");
-	}
-
-	MoveTaskStep::~MoveTaskStep() {
-		DESTROY_LOG("MoveTaskStep");
 	}
 
 	ErrorCode MoveTaskStep::perform(std::shared_ptr<CoordPlane> ctrl,
@@ -147,11 +142,6 @@ namespace CalX {
 		this->pos = pos;
 		this->speed_coef = spc;
 		this->rel = rel;
-		INIT_LOG("JumpTaskStep");
-	}
-
-	JumpTaskStep::~JumpTaskStep() {
-		DESTROY_LOG("JumpTaskStep");
 	}
 
 	ErrorCode JumpTaskStep::perform(std::shared_ptr<CoordPlane> ctrl,
@@ -196,11 +186,6 @@ namespace CalX {
 
 	CalibrateTaskStep::CalibrateTaskStep(TrailerId side) : TaskStep::TaskStep() {
 		this->side = side;
-		INIT_LOG("CalibrateTaskStep");
-	}
-
-	CalibrateTaskStep::~CalibrateTaskStep() {
-		DESTROY_LOG("CalibrateTaskStep");
 	}
 
 	ErrorCode CalibrateTaskStep::perform(std::shared_ptr<CoordPlane> ctrl,
@@ -223,11 +208,6 @@ namespace CalX {
 		this->speed = speed;
 		this->rel = rel;
 		this->clockwise = false;
-		INIT_LOG("ArcTaskStep");
-	}
-
-	ArcTaskStep::~ArcTaskStep() {
-		DESTROY_LOG("ArcTaskStep");
 	}
 
 	ErrorCode ArcTaskStep::perform(std::shared_ptr<CoordPlane> ctrl,
@@ -304,11 +284,6 @@ namespace CalX {
 		this->speed = speed;
 		this->rel = rel;
 		this->clockwise = false;
-		INIT_LOG("RelArcTaskStep");
-	}
-
-	RelArcTaskStep::~RelArcTaskStep() {
-		DESTROY_LOG("RelArcTaskStep");
 	}
 
 	ErrorCode RelArcTaskStep::perform(std::shared_ptr<CoordPlane> ctrl,

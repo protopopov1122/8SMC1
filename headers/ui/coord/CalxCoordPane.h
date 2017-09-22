@@ -74,7 +74,7 @@ namespace CalXUI {
 		CalxCoordController *controller;
 		std::shared_ptr<CoordHandle> ctrl;
 		CalxWatcherPool *watchers;
-		CoordEventListener *listener;
+		std::shared_ptr<CoordEventListener> listener;
 		std::shared_ptr<CalxCoordMotorListener> xListener;
 		std::shared_ptr<CalxCoordMotorListener> yListener;
 		std::shared_ptr<CalxCoordInstrumentListener> instrListener;

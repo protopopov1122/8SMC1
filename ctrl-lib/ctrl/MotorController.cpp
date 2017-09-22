@@ -24,19 +24,16 @@
 
 namespace CalX {
 
-	MotorController::MotorController(Motor *dev, ConfigManager *config) {
+	MotorController::MotorController(Motor *dev,
+	                                 std::shared_ptr<ConfigManager> config)
+	    : DeviceController::DeviceController(config, dev) {
 		this->dev = dev;
-		this->config = config;
 		this->dest = MoveType::Stop;
 		this->work = false;
 	}
 
 	Motor *MotorController::getMotor() {
 		return this->dev;
-	}
-
-	device_id_t MotorController::getID() {
-		return this->dev->getID();
 	}
 
 	Power MotorController::getPowerState() {

@@ -88,7 +88,7 @@ namespace CalXUI {
 		CalxCoordPlaneWatcherTimer *timer;
 		CalxCoordPlaneWatcherRepaintTimer *repaint_timer;
 		std::vector<std::pair<motor_point_t, bool>> history;
-		CalxCoordPlaneWatcherEvent *listener;
+		std::shared_ptr<CalxCoordPlaneWatcherEvent> listener;
 		bool rendering;
 		bool has_updates;
 
