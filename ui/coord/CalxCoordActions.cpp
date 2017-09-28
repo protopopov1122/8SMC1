@@ -108,7 +108,7 @@ namespace CalXUI {
 		    (motor_coord_t)(((double) size.h) * this->dest.y) + size.y;
 		motor_point_t dest = { x, y };
 		if (work) {
-			errcode = handle->move(dest, speed, false);
+			errcode = handle->getFloatPlane()->move(dest, speed, false);
 		}
 		if (work && errcode == ErrorCode::NoError) {
 			controller->setOffset(handle->getPosition());
