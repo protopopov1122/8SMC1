@@ -33,15 +33,22 @@ namespace CalXUI {
 	 public:
 		CalxFrame(std::string);
 		CalxPanel *getPanel();
+		CalxPanel *getQuickstart();
 
 	 private:
+		void switch_modes();
+
 		void OnClose(wxCloseEvent &);
 		void OnAboutMenuClick(wxCommandEvent &);
+		void OnSwitchClick(wxCommandEvent &);
 
 		wxMenuBar *menuBar;
 		wxMenu *aboutMenu;
 
 		CalxPanel *panel;
+		CalxPanel *quickstartPanel;
+
+		wxButton *switchButton;
 	};
 }  // namespace CalXUI
 

@@ -123,7 +123,11 @@ namespace CalXUI {
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		this->SetSizer(sizer);
 		this->panel = new CalxPanel(this, wxID_ANY);
+		this->quickstartPanel = new CalxPanel(this, wxID_ANY);
+		wxPanel *statusPanel = new wxPanel(this, wxID_ANY);
 		sizer->Add(this->panel, 1, wxEXPAND | wxALL);
+		sizer->Add(this->quickstartPanel, 1, wxEXPAND | wxALL);
+		sizer->Add(statusPanel, 0, wxEXPAND | wxALL);
 
 		Bind(wxEVT_CLOSE_WINDOW, &CalxFrame::OnClose, this);
 
@@ -142,12 +146,25 @@ namespace CalXUI {
 		panel->addPane(__("Tasks"), newTaskPanel(panel));
 		panel->addPane(__("Configuration"), newConfigPanel(panel));
 
+		wxBoxSizer *statusSizer = new wxBoxSizer(wxHORIZONTAL);
+		statusPanel->SetSizer(statusSizer);
+		this->switchButton =
+		    new wxButton(statusPanel, wxID_ANY, "Quickstart/Advanced");
+		statusSizer->Add(this->switchButton);
+		Bind(wxEVT_BUTTON, &CalxFrame::OnSwitchClick, this);
+
+		this->quickstartPanel->Show(false);
+
 		Layout();
 		Fit();
 	}
 
 	CalxPanel *CalxFrame::getPanel() {
 		return this->panel;
+	}
+
+	CalxPanel *CalxFrame::getQuickstart() {
+		return this->quickstartPanel;
 	}
 
 	void CalxFrame::OnClose(wxCloseEvent &evt) {
@@ -189,5 +206,15 @@ namespace CalXUI {
 		about.SetLicense(LICENSE);
 
 		wxAboutBox(about);
+	}
+
+	void CalxFrame::OnSwitchClick(wxCommandEvent &evt) {
+		this->switch_modes();
+	}
+
+	void CalxFrame::switch_modes() {
+		this->quickstartPanel->Show(!this->quickstartPanel->IsShown());
+		this->panel->Show(!this->panel->IsShown());
+		Layout();
 	}
 }  // namespace CalXUI
