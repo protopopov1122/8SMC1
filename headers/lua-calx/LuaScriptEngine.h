@@ -21,7 +21,7 @@
 #ifndef CALX_LUA_CALX_LUA_SCRIPT_ENGINE_H_
 #define CALX_LUA_CALX_LUA_SCRIPT_ENGINE_H_
 
-#include "ui/script/ScriptEngine.h"
+#include "ctrl-lib/script/ScriptEngine.h"
 #include "lua-calx/LuaCalXEnvironment.h"
 #include "selene.h"
 

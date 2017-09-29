@@ -18,8 +18,8 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CALX_UI_SCRIPT_SCRIPT_ENGINE_H_
-#define CALX_UI_SCRIPT_SCRIPT_ENGINE_H_
+#ifndef CALX_CTRL_LIB_SCRIPT_SCRIPT_ENGINE_H_
+#define CALX_CTRL_LIB_SCRIPT_SCRIPT_ENGINE_H_
 
 #include "ctrl-lib/SystemManager.h"
 #include "ctrl-lib/conf/ConfigManager.h"

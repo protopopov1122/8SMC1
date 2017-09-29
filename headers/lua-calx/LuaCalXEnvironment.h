@@ -21,7 +21,7 @@
 #ifndef CALX_LUA_CALX_LUA_CALX_ENVIRONMENT_H_
 #define CALX_LUA_CALX_LUA_CALX_ENVIRONMENT_H_
 
-#include "ui/script/ScriptEngine.h"
+#include "ctrl-lib/script/ScriptEngine.h"
 
 using namespace CalX;
 using namespace CalXUI;

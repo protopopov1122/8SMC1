@@ -18,7 +18,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/script/ScriptEngine.h"
+#include "ctrl-lib/script/ScriptEngine.h"
 
 namespace CalXUI {
 

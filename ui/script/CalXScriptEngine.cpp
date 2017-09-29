@@ -39,7 +39,7 @@ namespace CalXUI {
 		prms.parity = static_cast<SerialPortParity>(parity);
 		std::shared_ptr<MotorController> ctrl = sysman->connectMotor(&prms);
 		if (ctrl == nullptr) {
-			wxMessageBox(__("Instrument can't be connected"), __("Connection error"),
+			wxMessageBox(__("Motor can't be connected"), __("Connection error"),
 			             wxICON_WARNING);
 			return false;
 		} else {

@@ -23,7 +23,7 @@
 
 #include "ui/CalxFrame.h"
 #include "ui/UIExtEngine.h"
-#include "ui/script/ScriptEngine.h"
+#include "ctrl-lib/script/ScriptEngine.h"
 #include "ui/calx.h"
 #include <fstream>
 #include <iostream>

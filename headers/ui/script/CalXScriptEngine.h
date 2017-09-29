@@ -21,7 +21,7 @@
 #ifndef CALX_UI_SCRIPT_CALX_SCRIPT_ENGINE_H_
 #define CALX_UI_SCRIPT_CALX_SCRIPT_ENGINE_H_
 
-#include "ui/script/ScriptEngine.h"
+#include "ctrl-lib/script/ScriptEngine.h"
 #include "ui/CalxApp.h"
 #include "ui/dev/CalxDeviceHandle.h"
 
