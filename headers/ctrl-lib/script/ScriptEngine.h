@@ -48,6 +48,17 @@ namespace CalXUI {
 		virtual ErrorCode motorMoveToTrailer(device_id_t, TrailerId) = 0;
 		virtual bool motorCheckTrailers(device_id_t) = 0;
 		virtual ErrorCode motorWaitWhileRunning(device_id_t) = 0;
+		
+		virtual ErrorCode instrumentOpenSession(device_id_t) = 0;
+		virtual ErrorCode instrumentCloseSession(device_id_t) = 0;
+		virtual ErrorCode instrumentEnable(device_id_t, bool) = 0;
+		virtual bool instrumentIsEnabled(device_id_t) = 0;
+		virtual bool instrumentIsRunnable(device_id_t) = 0;
+		virtual void instrumentSetRunnable(device_id_t, bool) = 0;
+		virtual InstrumentMode instrumentGetMode(device_id_t) = 0;
+		virtual bool instrumentSetMode(device_id_t, InstrumentMode) = 0;
+		virtual bool instrumentIsSessionOpened(device_id_t) = 0;
+		virtual std::string instrumentGetInfo(device_id_t) = 0;
 
 	 private:
 		std::shared_ptr<ConfigManager> config;

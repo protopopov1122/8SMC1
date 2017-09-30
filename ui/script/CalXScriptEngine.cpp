@@ -193,5 +193,124 @@ namespace CalXUI {
 			return motor->waitWhileRunning();
 		}
 	}
+	
+	ErrorCode CalXAppScriptEnvironment::instrumentOpenSession(device_id_t id) {
+		std::shared_ptr<InstrumentController> instr =
+		    this->app.getSystemManager()->getInstrumentController(id);
+		if (instr == nullptr) {
+			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
+			             __("Script: Unknown instrument"), wxICON_WARNING);
+			return ErrorCode::NoError;
+		} else {
+			return instr->open_session();
+		}
+	}
+	
+	ErrorCode CalXAppScriptEnvironment::instrumentCloseSession(device_id_t id) {
+		std::shared_ptr<InstrumentController> instr =
+		    this->app.getSystemManager()->getInstrumentController(id);
+		if (instr == nullptr) {
+			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
+			             __("Script: Unknown instrument"), wxICON_WARNING);
+			return ErrorCode::NoError;
+		} else {
+			return instr->close_session();
+		}
+	}
+	
+	ErrorCode CalXAppScriptEnvironment::instrumentEnable(device_id_t id, bool en) {
+		std::shared_ptr<InstrumentController> instr =
+		    this->app.getSystemManager()->getInstrumentController(id);
+		if (instr == nullptr) {
+			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
+			             __("Script: Unknown instrument"), wxICON_WARNING);
+			return ErrorCode::NoError;
+		} else {
+			return instr->enable(en);
+		}
+	}
+	
+	bool CalXAppScriptEnvironment::instrumentIsEnabled(device_id_t id) {
+		std::shared_ptr<InstrumentController> instr =
+		    this->app.getSystemManager()->getInstrumentController(id);
+		if (instr == nullptr) {
+			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
+			             __("Script: Unknown instrument"), wxICON_WARNING);
+			return false;
+		} else {
+			return instr->isEnabled();
+		}
+	}
+	
+	void CalXAppScriptEnvironment::instrumentSetRunnable(device_id_t id, bool en) {
+		std::shared_ptr<InstrumentController> instr =
+		    this->app.getSystemManager()->getInstrumentController(id);
+		if (instr == nullptr) {
+			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
+			             __("Script: Unknown instrument"), wxICON_WARNING);
+		} else {
+			instr->setRunnable(en);
+		}
+	}
+	
+	bool CalXAppScriptEnvironment::instrumentIsRunnable(device_id_t id) {
+		std::shared_ptr<InstrumentController> instr =
+		    this->app.getSystemManager()->getInstrumentController(id);
+		if (instr == nullptr) {
+			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
+			             __("Script: Unknown instrument"), wxICON_WARNING);
+			return false;
+		} else {
+			return instr->isRunnable();
+		}
+	}
+	
+	InstrumentMode CalXAppScriptEnvironment::instrumentGetMode(device_id_t id) {
+		std::shared_ptr<InstrumentController> instr =
+		    this->app.getSystemManager()->getInstrumentController(id);
+		if (instr == nullptr) {
+			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
+			             __("Script: Unknown instrument"), wxICON_WARNING);
+			return InstrumentMode::Off;
+		} else {
+			return instr->getMode();
+		}
+	}
+	
+	bool CalXAppScriptEnvironment::instrumentSetMode(device_id_t id, InstrumentMode mode) {
+		std::shared_ptr<InstrumentController> instr =
+		    this->app.getSystemManager()->getInstrumentController(id);
+		if (instr == nullptr) {
+			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
+			             __("Script: Unknown instrument"), wxICON_WARNING);
+			return false;
+		} else {
+			return instr->setMode(mode);
+		}
+	}
+	
+	bool CalXAppScriptEnvironment::instrumentIsSessionOpened(device_id_t id) {
+		std::shared_ptr<InstrumentController> instr =
+		    this->app.getSystemManager()->getInstrumentController(id);
+		if (instr == nullptr) {
+			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
+			             __("Script: Unknown instrument"), wxICON_WARNING);
+			return false;
+		} else {
+			return instr->isSessionOpened();
+		}
+	}
+	
+	std::string CalXAppScriptEnvironment::instrumentGetInfo(device_id_t id) {
+		std::shared_ptr<InstrumentController> instr =
+		    this->app.getSystemManager()->getInstrumentController(id);
+		if (instr == nullptr) {
+			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
+			             __("Script: Unknown instrument"), wxICON_WARNING);
+			return "";
+		} else {
+			return instr->getInfo();
+		}
+	}
 
 }  // namespace CalXUI

@@ -45,6 +45,17 @@ namespace CalXLua {
 		int motorMoveToTrailer(int, int);
 		bool motorCheckTrailers(int);
 		int motorWaitWhileRunning(int);
+		
+		int instrumentOpenSession(int);
+		int instrumentCloseSession(int);
+		int instrumentEnable(int, bool);
+		bool instrumentIsEnabled(int);
+		void instrumentSetRunnable(int, bool);
+		bool instrumentIsRunnable(int);
+		int instrumentGetMode(int);
+		bool instrumentSetMode(int, int);
+		bool instrumentIsSessionOpened(int);
+		std::string instrumentGetInfo(int);
 
 	 private:
 		CalXScriptEnvironment &env;

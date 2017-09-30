@@ -24,10 +24,25 @@
 		calx.instrument                                   Instrument controller bindings
 		    .connectSerial(int, int, int)                 Connect instrument by serial port(pamaeters: port, baudrate, pairty)
 		    .getCount()                                   Return current connected instrument count
+			.openSession(int)                             Open selected instrument session
+			.closeSession(int)                            Close selected instrument session
+			.setRunnable(int, bool)                       Make selected instrument runnable
+			.isRunnable(int)                              Check if instrument is runnable
+			.enable(int, bool)                            Enable selected instrument
+			.isEnabled(int)                               Check if selected instrument is enabled
+			.getMode(int)                                 Get selected instrument mode
+			.setMode(int, int)                            Set selected instrument mode
+			.isSessionOpened(int)                         Check if instrument session opened
+			.getInfo(int)                                 Get instrument text info
+		
+		calx.instrument.mode                              Possible instrument working modes
+		    ["Off"], ["Prepare"], ["Full"]
 --]]
 
 
 function init()
+	calx.motor.connectSerial(1, 9600, calx.serial.parity["No"])
+	calx.motor.connectSerial(2, 9600, calx.serial.parity["No"])
     calx.instrument.connectSerial(4, 19200, calx.serial.parity["No"])
 	print("Connected " .. calx.motor.getCount() .. " motors and " .. calx.instrument.getCount() .. " instruments")
 	calx.motor.enablePower(0, true)
@@ -38,4 +53,10 @@ function init()
 	calx.motor.moveToTrailer(0, calx.motor.trailer["Top"])
 	calx.motor.moveToTrailer(1, calx.motor.trailer["Bottom"])
 	print(calx.motor.getPosition(0) .. "x" .. calx.motor.getPosition(1))
+	calx.instrument.setRunnable(0, true)
+	calx.instrument.setMode(0, calx.instrument.mode["Full"])
+	calx.instrument.openSession(0)
+	calx.instrument.enable(0, true)
+	print(calx.instrument.getInfo(0))
+	print(calx.instrument.isSessionOpened(0))
 end

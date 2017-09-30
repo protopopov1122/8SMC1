@@ -54,7 +54,17 @@ namespace CalXLua {
 		this->lua["calx"]["instrument"].SetObj(
 			lua_env,
 		    "connectSerial", &LuaCalXEnvironment::connectSerialInstrument,
-			"getCount", &LuaCalXEnvironment::getInstrumentCount
+			"getCount", &LuaCalXEnvironment::getInstrumentCount,
+			"openSession", &LuaCalXEnvironment::instrumentOpenSession,
+			"closeSession", &LuaCalXEnvironment::instrumentCloseSession,
+			"enable", &LuaCalXEnvironment::instrumentEnable,
+			"isEnabled", &LuaCalXEnvironment::instrumentIsEnabled,
+			"setRunnable", &LuaCalXEnvironment::instrumentSetRunnable,
+			"isRunnable", &LuaCalXEnvironment::instrumentIsRunnable,
+			"getMode", &LuaCalXEnvironment::instrumentGetMode,
+			"setMode", &LuaCalXEnvironment::instrumentSetMode,
+			"isSessionOpened", &LuaCalXEnvironment::instrumentIsSessionOpened,
+			"getInfo", &LuaCalXEnvironment::instrumentGetInfo
 		);
 	}
 
@@ -62,6 +72,14 @@ namespace CalXLua {
 		this->lua["calx"]["motor"]["power"]["No"] = static_cast<int>(Power::NoPower);
 		this->lua["calx"]["motor"]["power"]["Half"] = static_cast<int>(Power::HalfPower);
 		this->lua["calx"]["motor"]["power"]["Full"] = static_cast<int>(Power::FullPower);
+
+		this->lua["calx"]["motor"]["trailer"]["Top"] = static_cast<int>(TrailerId::Trailer1);
+		this->lua["calx"]["motor"]["trailer"]["Bottom"] =
+		    static_cast<int>(TrailerId::Trailer2);
+		
+		this->lua["calx"]["instrument"]["mode"]["Off"] = static_cast<int>(InstrumentMode::Off);
+		this->lua["calx"]["instrument"]["mode"]["Prepare"] = static_cast<int>(InstrumentMode::Prepare);
+		this->lua["calx"]["instrument"]["mode"]["Full"] = static_cast<int>(InstrumentMode::Full);
 
 		this->lua["calx"]["serial"]["parity"]["No"] = static_cast<int>(SerialPortParity::No);
 		this->lua["calx"]["serial"]["parity"]["Odd"] =
@@ -72,9 +90,5 @@ namespace CalXLua {
 		    static_cast<int>(SerialPortParity::Mark);
 		this->lua["calx"]["serial"]["parity"]["Space"] =
 		    static_cast<int>(SerialPortParity::Space);
-
-		this->lua["calx"]["motor"]["trailer"]["Top"] = static_cast<int>(TrailerId::Trailer1);
-		this->lua["calx"]["motor"]["trailer"]["Bottom"] =
-		    static_cast<int>(TrailerId::Trailer2);
 	}
 }  // namespace CalXLua

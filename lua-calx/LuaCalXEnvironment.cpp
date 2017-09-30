@@ -83,4 +83,44 @@ namespace CalXLua {
 		return static_cast<int>(
 		    env.motorWaitWhileRunning(static_cast<device_id_t>(id)));
 	}
+	
+	int LuaCalXEnvironment::instrumentOpenSession(int id) {
+		return static_cast<int>(env.instrumentOpenSession(static_cast<device_id_t>(id)));
+	}
+	
+	int LuaCalXEnvironment::instrumentCloseSession(int id) {
+		return static_cast<int>(env.instrumentCloseSession(static_cast<device_id_t>(id)));
+	}
+	
+	int LuaCalXEnvironment::instrumentEnable(int id, bool en) {
+		return static_cast<int>(env.instrumentEnable(static_cast<device_id_t>(id), en));
+	}
+	
+	bool LuaCalXEnvironment::instrumentIsEnabled(int id) {
+		return env.instrumentIsEnabled(static_cast<device_id_t>(id));
+	}
+	
+	void LuaCalXEnvironment::instrumentSetRunnable(int id, bool r) {
+		env.instrumentSetRunnable(static_cast<device_id_t>(id), r);
+	}
+	
+	bool LuaCalXEnvironment::instrumentIsRunnable(int id) {
+		return env.instrumentIsRunnable(static_cast<device_id_t>(id));
+	}
+	
+	int LuaCalXEnvironment::instrumentGetMode(int id) {
+		return static_cast<int>(env.instrumentGetMode(static_cast<device_id_t>(id)));
+	}
+	
+	bool LuaCalXEnvironment::instrumentSetMode(int id, int mode) {
+		return env.instrumentSetMode(static_cast<device_id_t>(id), static_cast<InstrumentMode>(mode));
+	}
+	
+	bool LuaCalXEnvironment::instrumentIsSessionOpened(int id) {
+		return env.instrumentIsSessionOpened(static_cast<device_id_t>(id));
+	}
+	
+	std::string LuaCalXEnvironment::instrumentGetInfo(int id) {
+		return env.instrumentGetInfo(static_cast<device_id_t>(id));
+	}
 }  // namespace CalXLua
