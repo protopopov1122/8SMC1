@@ -71,4 +71,14 @@ namespace CalXUI {
 			return true;
 		}
 	}
+	
+	uint32_t CalXAppScriptEnvironment::getMotorCount() {
+		return this->app.getSystemManager()->getMotorCount();
+	}
+	
+	uint32_t CalXAppScriptEnvironment::getInstrumentCount() {
+		return this->app.getSystemManager()->getInstrumentCount();
+	}
+	
+	
 }  // namespace CalXUI

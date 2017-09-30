@@ -41,6 +41,12 @@ namespace CalXUI {
 		virtual bool connectSerialInstrument(uint8_t, uint32_t, uint8_t) {
 			return true;
 		};
+		virtual uint32_t getMotorCount() {
+			return 0;
+		}
+		virtual uint32_t getInstrumentCount() {
+			return 0;
+		}
 
 	 private:
 		std::shared_ptr<ConfigManager> config;

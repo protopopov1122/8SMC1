@@ -33,6 +33,8 @@ namespace CalXUI {
 
 		virtual bool connectSerialMotor(uint8_t, uint32_t, uint8_t);
 		virtual bool connectSerialInstrument(uint8_t, uint32_t, uint8_t);
+		virtual uint32_t getMotorCount();
+		virtual uint32_t getInstrumentCount();
 
 	 private:
 		CalxApp &app;

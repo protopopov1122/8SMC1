@@ -34,4 +34,12 @@ namespace CalXLua {
 	                                                 int parity) {
 		return env.connectSerialInstrument(port, baudrate, parity);
 	}
+	
+	int LuaCalXEnvironment::getMotorCount() {
+		return env.getMotorCount();
+	}
+	
+	int LuaCalXEnvironment::getInstrumentCount() {
+		return env.getInstrumentCount();
+	}
 }  // namespace CalXLua

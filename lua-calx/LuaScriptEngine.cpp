@@ -27,7 +27,9 @@ namespace CalXLua {
 		this->lua["calx"].SetObj(lua_env, "connectSerialMotor",
 		                         &LuaCalXEnvironment::connectSerialMotor,
 		                         "connectSerialInstrument",
-		                         &LuaCalXEnvironment::connectSerialInstrument);
+		                         &LuaCalXEnvironment::connectSerialInstrument,
+								 "motorCount", &LuaCalXEnvironment::getMotorCount,
+								 "instrumentCount", &LuaCalXEnvironment::getInstrumentCount);
 		this->lua.Load(env.getConfiguration()->getEntry("script")->getString(
 		    "main", "scripts/main.lua"));
 	}
