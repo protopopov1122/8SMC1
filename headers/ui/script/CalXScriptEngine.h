@@ -33,8 +33,17 @@ namespace CalXUI {
 
 		virtual bool connectSerialMotor(uint8_t, uint32_t, uint8_t);
 		virtual bool connectSerialInstrument(uint8_t, uint32_t, uint8_t);
-		virtual uint32_t getMotorCount();
-		virtual uint32_t getInstrumentCount();
+		virtual size_t getMotorCount();
+		virtual size_t getInstrumentCount();
+		virtual Power getMotorPower(device_id_t);
+		virtual ErrorCode enableMotorPower(device_id_t, bool);
+		virtual ErrorCode motorMove(device_id_t, motor_coord_t, float);
+		virtual ErrorCode motorRelativeMove(device_id_t, motor_coord_t, float);
+		virtual ErrorCode motorStop(device_id_t);
+		virtual motor_coord_t getMotorPosition(device_id_t);
+		virtual ErrorCode motorMoveToTrailer(device_id_t, TrailerId);
+		virtual bool motorCheckTrailers(device_id_t);
+		virtual ErrorCode motorWaitWhileRunning(device_id_t);
 
 	 private:
 		CalxApp &app;

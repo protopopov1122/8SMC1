@@ -38,6 +38,9 @@ namespace CalXLua {
 		virtual void call(std::string);
 
 	 private:
+		void bind_functions();
+		void init_constants();
+	 
 		sel::State lua;
 		LuaCalXEnvironment lua_env;
 	};

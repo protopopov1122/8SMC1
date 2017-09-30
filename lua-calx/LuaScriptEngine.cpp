@@ -24,17 +24,49 @@ namespace CalXLua {
 
 	LuaCalXScript::LuaCalXScript(CalXScriptEnvironment &env)
 	    : CalXScript(env), lua(true), lua_env(env) {
-		this->lua["calx"].SetObj(lua_env, "connectSerialMotor",
-		                         &LuaCalXEnvironment::connectSerialMotor,
-		                         "connectSerialInstrument",
-		                         &LuaCalXEnvironment::connectSerialInstrument,
-								 "motorCount", &LuaCalXEnvironment::getMotorCount,
-								 "instrumentCount", &LuaCalXEnvironment::getInstrumentCount);
+		
+		this->bind_functions();
+		this->init_constants();
+		
 		this->lua.Load(env.getConfiguration()->getEntry("script")->getString(
 		    "main", "scripts/main.lua"));
 	}
 
 	void LuaCalXScript::call(std::string hook) {
 		this->lua[hook.c_str()]();
+	}
+	
+	void LuaCalXScript::bind_functions() {
+		this->lua["calx"].SetObj(lua_env, "connectSerialMotor",
+		                         &LuaCalXEnvironment::connectSerialMotor,
+		                         "connectSerialInstrument",
+		                         &LuaCalXEnvironment::connectSerialInstrument,
+								 "motorCount", &LuaCalXEnvironment::getMotorCount,
+								 "instrumentCount", &LuaCalXEnvironment::getInstrumentCount,
+								 "motorPower", &LuaCalXEnvironment::getMotorPower,
+								 "enableMotorPower", &LuaCalXEnvironment::enableMotorPower,
+								 "motorMove", &LuaCalXEnvironment::motorMove,
+								 "motorRelativeMove", &LuaCalXEnvironment::motorRelativeMove,
+								 "motorStop", &LuaCalXEnvironment::motorStop,
+								 "motorPosition", &LuaCalXEnvironment::motorPosition,
+								 "motorWaitWhileRunning", &LuaCalXEnvironment::motorWaitWhileRunning,
+								 "motorMoveToTrailer", &LuaCalXEnvironment::motorMoveToTrailer,
+								 "motorCheckTrailers", &LuaCalXEnvironment::motorCheckTrailers);
+		
+	}
+	
+	void LuaCalXScript::init_constants() {
+		this->lua["calx"]["power"]["No"] = static_cast<int>(Power::NoPower);
+		this->lua["calx"]["power"]["Half"] = static_cast<int>(Power::HalfPower);
+		this->lua["calx"]["power"]["Full"] = static_cast<int>(Power::FullPower);
+		
+		this->lua["calx"]["parity"]["No"] = static_cast<int>(SerialPortParity::No);
+		this->lua["calx"]["parity"]["Odd"] = static_cast<int>(SerialPortParity::Odd);
+		this->lua["calx"]["parity"]["Even"] = static_cast<int>(SerialPortParity::Even);
+		this->lua["calx"]["parity"]["Mark"] = static_cast<int>(SerialPortParity::Mark);
+		this->lua["calx"]["parity"]["Space"] = static_cast<int>(SerialPortParity::Space);
+		
+		this->lua["calx"]["trailer"]["Top"] = static_cast<int>(TrailerId::Trailer1);
+		this->lua["calx"]["trailer"]["Bottom"] = static_cast<int>(TrailerId::Trailer2);
 	}
 }  // namespace CalXLua

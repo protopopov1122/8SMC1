@@ -35,18 +35,19 @@ namespace CalXUI {
 
 		std::shared_ptr<ConfigManager> getConfiguration();
 
-		virtual bool connectSerialMotor(uint8_t, uint32_t, uint8_t) {
-			return true;
-		};
-		virtual bool connectSerialInstrument(uint8_t, uint32_t, uint8_t) {
-			return true;
-		};
-		virtual uint32_t getMotorCount() {
-			return 0;
-		}
-		virtual uint32_t getInstrumentCount() {
-			return 0;
-		}
+		virtual bool connectSerialMotor(uint8_t, uint32_t, uint8_t) = 0;
+		virtual bool connectSerialInstrument(uint8_t, uint32_t, uint8_t) = 0;
+		virtual size_t getMotorCount() = 0;
+		virtual size_t getInstrumentCount() = 0;
+		virtual Power getMotorPower(device_id_t) = 0;
+		virtual ErrorCode enableMotorPower(device_id_t, bool) = 0;
+		virtual ErrorCode motorMove(device_id_t, motor_coord_t, float) = 0;
+		virtual ErrorCode motorRelativeMove(device_id_t, motor_coord_t, float) = 0;
+		virtual ErrorCode motorStop(device_id_t) = 0;
+		virtual motor_coord_t getMotorPosition(device_id_t) = 0;
+		virtual ErrorCode motorMoveToTrailer(device_id_t, TrailerId) = 0;
+		virtual bool motorCheckTrailers(device_id_t) = 0;
+		virtual ErrorCode motorWaitWhileRunning(device_id_t) = 0;
 
 	 private:
 		std::shared_ptr<ConfigManager> config;

@@ -11,6 +11,7 @@ if (EXISTS ${CMAKE_SOURCE_DIR}/res/lua)
 	
 	if (CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-but-set-parameter -Wno-unused-variable")
 	endif ()
 	if (MINGW AND MINGW_STATIC_LINKAGE)
 		set(CMAKE_STATIC_LINKER_FLAGS "")

@@ -39,7 +39,7 @@ namespace CalXUI {
 		prms.parity = static_cast<SerialPortParity>(parity);
 		std::shared_ptr<MotorController> ctrl = sysman->connectMotor(&prms);
 		if (ctrl == nullptr) {
-			wxMessageBox(__("Motor can't be connected"), __("Connection error"),
+			wxMessageBox(__("Motor can't be connected"), __("Script: Connection error"),
 			             wxICON_WARNING);
 			return false;
 		} else {
@@ -61,7 +61,7 @@ namespace CalXUI {
 		std::shared_ptr<InstrumentController> ctrl =
 		    sysman->connectInstrument(&prms);
 		if (ctrl == nullptr) {
-			wxMessageBox(__("Instrument can't be connected"), __("Connection error"),
+			wxMessageBox(__("Instrument can't be connected"), __("Script: Connection error"),
 			             wxICON_WARNING);
 			return false;
 		} else {
@@ -72,12 +72,111 @@ namespace CalXUI {
 		}
 	}
 	
-	uint32_t CalXAppScriptEnvironment::getMotorCount() {
+	size_t CalXAppScriptEnvironment::getMotorCount() {
 		return this->app.getSystemManager()->getMotorCount();
 	}
 	
-	uint32_t CalXAppScriptEnvironment::getInstrumentCount() {
+	size_t CalXAppScriptEnvironment::getInstrumentCount() {
 		return this->app.getSystemManager()->getInstrumentCount();
+	}
+	
+	Power CalXAppScriptEnvironment::getMotorPower(device_id_t id) {
+		std::shared_ptr<MotorController> motor = this->app.getSystemManager()->getMotorController(id);
+		if (motor == nullptr) {
+			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id), __("Script: Unknown motor"),
+			                    wxICON_WARNING);
+			return Power::NoPower;
+		} else {
+			return motor->getPowerState();
+		}
+	}
+	
+	ErrorCode CalXAppScriptEnvironment::enableMotorPower(device_id_t id, bool power) {
+		std::shared_ptr<MotorController> motor = this->app.getSystemManager()->getMotorController(id);
+		if (motor == nullptr) {
+			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id), __("Script: Unknown motor"),
+			                    wxICON_WARNING);
+			return ErrorCode::LowLevelError;
+		} else {
+			return motor->enablePower(power);
+		}
+	}
+	
+	ErrorCode CalXAppScriptEnvironment::motorMove(device_id_t id, motor_coord_t pos, float speed) {	
+		std::shared_ptr<MotorController> motor = this->app.getSystemManager()->getMotorController(id);
+		if (motor == nullptr) {
+			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id), __("Script: Unknown motor"),
+			                    wxICON_WARNING);
+			return ErrorCode::LowLevelError;
+		} else {
+			return motor->startMove(pos, speed);
+		}
+	}
+	
+	ErrorCode CalXAppScriptEnvironment::motorRelativeMove(device_id_t id, motor_coord_t pos, float speed) {	
+		std::shared_ptr<MotorController> motor = this->app.getSystemManager()->getMotorController(id);
+		if (motor == nullptr) {
+			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id), __("Script: Unknown motor"),
+			                    wxICON_WARNING);
+			return ErrorCode::LowLevelError;
+		} else {
+			return motor->startRelativeMove(pos, speed);
+		}
+	}
+	
+	ErrorCode CalXAppScriptEnvironment::motorStop(device_id_t id) {
+		std::shared_ptr<MotorController> motor = this->app.getSystemManager()->getMotorController(id);
+		if (motor == nullptr) {
+			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id), __("Script: Unknown motor"),
+			                    wxICON_WARNING);
+		} else {
+			motor->stop();
+		}
+		return ErrorCode::NoError;
+	}
+	
+	motor_coord_t CalXAppScriptEnvironment::getMotorPosition(device_id_t id) {
+		std::shared_ptr<MotorController> motor = this->app.getSystemManager()->getMotorController(id);
+		if (motor == nullptr) {
+			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id), __("Script: Unknown motor"),
+			                    wxICON_WARNING);
+			return 0;
+		} else {
+			return motor->getPosition();
+		}
+	}
+	
+	ErrorCode CalXAppScriptEnvironment::motorMoveToTrailer(device_id_t id, TrailerId tr) {	
+		std::shared_ptr<MotorController> motor = this->app.getSystemManager()->getMotorController(id);
+		if (motor == nullptr) {
+			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id), __("Script: Unknown motor"),
+			                    wxICON_WARNING);
+			return ErrorCode::NoError;
+		} else {
+			return motor->moveToTrailer(static_cast<int>(tr));
+		}
+	}
+	
+	bool CalXAppScriptEnvironment::motorCheckTrailers(device_id_t id) {	
+		std::shared_ptr<MotorController> motor = this->app.getSystemManager()->getMotorController(id);
+		if (motor == nullptr) {
+			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id), __("Script: Unknown motor"),
+			                    wxICON_WARNING);
+			return false;
+		} else {
+			return motor->checkTrailers();
+		}
+	}
+	
+	ErrorCode CalXAppScriptEnvironment::motorWaitWhileRunning(device_id_t id) {	
+		std::shared_ptr<MotorController> motor = this->app.getSystemManager()->getMotorController(id);
+		if (motor == nullptr) {
+			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id), __("Script: Unknown motor"),
+			                    wxICON_WARNING);
+			return ErrorCode::NoError;
+		} else {
+			return motor->waitWhileRunning();
+		}
 	}
 	
 	

@@ -36,6 +36,15 @@ namespace CalXLua {
 		bool connectSerialInstrument(int, int, int);
 		int getMotorCount();
 		int getInstrumentCount();
+		int getMotorPower(int);
+		int enableMotorPower(int, bool);
+		int motorMove(int, int, double);
+		int motorRelativeMove(int, int, double);
+		int motorStop(int);
+		int motorPosition(int);
+		int motorMoveToTrailer(int, int);
+		bool motorCheckTrailers(int);
+		int motorWaitWhileRunning(int);
 
 	 private:
 		CalXScriptEnvironment &env;
