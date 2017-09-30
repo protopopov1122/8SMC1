@@ -18,44 +18,10 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CALX_UI_CALX_FRAME_H_
-#define CALX_UI_CALX_FRAME_H_
-
-#include "ui/CalxPanel.h"
-#include "ui/calx.h"
 #include <iostream>
-#include <string>
-#include <wx/menu.h>
+#include "selene.h"
+#include "lua-calx/LuaScriptEngine.h"
 
-namespace CalXUI {
-
-	class CalxDevicePool;  // Forward referencing
-
-	class CalxFrame : public wxFrame {
-	 public:
-		CalxFrame(std::string);
-		CalxPanel *getPanel();
-		CalxPanel *getQuickstart();
-
-		CalxDevicePool *getDevicePool();
-
-	 private:
-		void switch_modes();
-
-		void OnClose(wxCloseEvent &);
-		void OnAboutMenuClick(wxCommandEvent &);
-		void OnSwitchClick(wxCommandEvent &);
-
-		wxMenuBar *menuBar;
-		wxMenu *aboutMenu;
-
-		CalxPanel *panel;
-		CalxPanel *quickstartPanel;
-
-		wxButton *switchButton;
-
-		CalxDevicePool *device_pool;
-	};
-}  // namespace CalXUI
-
-#endif
+extern "C" LIBEXPORT CalXScript *getScriptEngine(CalXScriptEnvironment &env) {
+	return new CalXLua::LuaCalXScript(env);
+}

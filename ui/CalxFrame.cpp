@@ -141,7 +141,10 @@ namespace CalXUI {
 		this->menuBar->Append(this->aboutMenu, __("About"));
 		SetMenuBar(this->menuBar);
 
-		panel->addPane(__("Devices"), newDevicePanel(panel));
+		CalxDevicePanel *devicePanel = newDevicePanel(panel);
+		this->device_pool = devicePanel;
+
+		panel->addPane(__("Devices"), devicePanel);
 		panel->addPane(__("Coordinate planes"), newCoordPanel(panel));
 		panel->addPane(__("Tasks"), newTaskPanel(panel));
 		panel->addPane(__("Configuration"), newConfigPanel(panel));
@@ -165,6 +168,10 @@ namespace CalXUI {
 
 	CalxPanel *CalxFrame::getQuickstart() {
 		return this->quickstartPanel;
+	}
+
+	CalxDevicePool *CalxFrame::getDevicePool() {
+		return this->device_pool;
 	}
 
 	void CalxFrame::OnClose(wxCloseEvent &evt) {

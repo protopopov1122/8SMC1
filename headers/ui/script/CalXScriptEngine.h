@@ -18,43 +18,24 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CALX_UI_CALX_FRAME_H_
-#define CALX_UI_CALX_FRAME_H_
+#ifndef CALX_UI_SCRIPT_CALX_SCRIPT_ENGINE_H_
+#define CALX_UI_SCRIPT_CALX_SCRIPT_ENGINE_H_
 
-#include "ui/CalxPanel.h"
-#include "ui/calx.h"
-#include <iostream>
-#include <string>
-#include <wx/menu.h>
+#include "ui/script/ScriptEngine.h"
+#include "ui/CalxApp.h"
+#include "ui/dev/CalxDeviceHandle.h"
 
 namespace CalXUI {
 
-	class CalxDevicePool;  // Forward referencing
-
-	class CalxFrame : public wxFrame {
+	class CalXAppScriptEnvironment : public CalXScriptEnvironment {
 	 public:
-		CalxFrame(std::string);
-		CalxPanel *getPanel();
-		CalxPanel *getQuickstart();
+		CalXAppScriptEnvironment(CalxApp &);
 
-		CalxDevicePool *getDevicePool();
+		virtual bool connectSerialMotor(uint8_t, uint32_t, uint8_t);
+		virtual bool connectSerialInstrument(uint8_t, uint32_t, uint8_t);
 
 	 private:
-		void switch_modes();
-
-		void OnClose(wxCloseEvent &);
-		void OnAboutMenuClick(wxCommandEvent &);
-		void OnSwitchClick(wxCommandEvent &);
-
-		wxMenuBar *menuBar;
-		wxMenu *aboutMenu;
-
-		CalxPanel *panel;
-		CalxPanel *quickstartPanel;
-
-		wxButton *switchButton;
-
-		CalxDevicePool *device_pool;
+		CalxApp &app;
 	};
 }  // namespace CalXUI
 

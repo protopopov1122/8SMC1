@@ -18,44 +18,26 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CALX_UI_CALX_FRAME_H_
-#define CALX_UI_CALX_FRAME_H_
+#ifndef CALX_LUA_CALX_LUA_CALX_ENVIRONMENT_H_
+#define CALX_LUA_CALX_LUA_CALX_ENVIRONMENT_H_
 
-#include "ui/CalxPanel.h"
-#include "ui/calx.h"
-#include <iostream>
-#include <string>
-#include <wx/menu.h>
+#include "ui/script/ScriptEngine.h"
 
-namespace CalXUI {
+using namespace CalX;
+using namespace CalXUI;
 
-	class CalxDevicePool;  // Forward referencing
+namespace CalXLua {
 
-	class CalxFrame : public wxFrame {
+	class LuaCalXEnvironment {
 	 public:
-		CalxFrame(std::string);
-		CalxPanel *getPanel();
-		CalxPanel *getQuickstart();
+		LuaCalXEnvironment(CalXScriptEnvironment &);
 
-		CalxDevicePool *getDevicePool();
+		bool connectSerialMotor(int, int, int);
+		bool connectSerialInstrument(int, int, int);
 
 	 private:
-		void switch_modes();
-
-		void OnClose(wxCloseEvent &);
-		void OnAboutMenuClick(wxCommandEvent &);
-		void OnSwitchClick(wxCommandEvent &);
-
-		wxMenuBar *menuBar;
-		wxMenu *aboutMenu;
-
-		CalxPanel *panel;
-		CalxPanel *quickstartPanel;
-
-		wxButton *switchButton;
-
-		CalxDevicePool *device_pool;
+		CalXScriptEnvironment &env;
 	};
-}  // namespace CalXUI
+}  // namespace CalXLua
 
 #endif

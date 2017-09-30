@@ -18,44 +18,21 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CALX_UI_CALX_FRAME_H_
-#define CALX_UI_CALX_FRAME_H_
+#include "lua-calx/LuaScriptEngine.h"
 
-#include "ui/CalxPanel.h"
-#include "ui/calx.h"
-#include <iostream>
-#include <string>
-#include <wx/menu.h>
+namespace CalXLua {
 
-namespace CalXUI {
+	LuaCalXScript::LuaCalXScript(CalXScriptEnvironment &env)
+	    : CalXScript(env), lua(true), lua_env(env) {
+		this->lua["calx"].SetObj(lua_env, "connectSerialMotor",
+		                         &LuaCalXEnvironment::connectSerialMotor,
+		                         "connectSerialInstrument",
+		                         &LuaCalXEnvironment::connectSerialInstrument);
+		this->lua.Load(env.getConfiguration()->getEntry("script")->getString(
+		    "main", "scripts/main.lua"));
+	}
 
-	class CalxDevicePool;  // Forward referencing
-
-	class CalxFrame : public wxFrame {
-	 public:
-		CalxFrame(std::string);
-		CalxPanel *getPanel();
-		CalxPanel *getQuickstart();
-
-		CalxDevicePool *getDevicePool();
-
-	 private:
-		void switch_modes();
-
-		void OnClose(wxCloseEvent &);
-		void OnAboutMenuClick(wxCommandEvent &);
-		void OnSwitchClick(wxCommandEvent &);
-
-		wxMenuBar *menuBar;
-		wxMenu *aboutMenu;
-
-		CalxPanel *panel;
-		CalxPanel *quickstartPanel;
-
-		wxButton *switchButton;
-
-		CalxDevicePool *device_pool;
-	};
-}  // namespace CalXUI
-
-#endif
+	void LuaCalXScript::call(std::string hook) {
+		this->lua[hook.c_str()]();
+	}
+}  // namespace CalXLua

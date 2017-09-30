@@ -18,44 +18,29 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CALX_UI_CALX_FRAME_H_
-#define CALX_UI_CALX_FRAME_H_
+#ifndef CALX_LUA_CALX_LUA_SCRIPT_ENGINE_H_
+#define CALX_LUA_CALX_LUA_SCRIPT_ENGINE_H_
 
-#include "ui/CalxPanel.h"
-#include "ui/calx.h"
-#include <iostream>
-#include <string>
-#include <wx/menu.h>
+#include "ui/script/ScriptEngine.h"
+#include "lua-calx/LuaCalXEnvironment.h"
+#include "selene.h"
 
-namespace CalXUI {
+using namespace CalX;
+using namespace CalXUI;
 
-	class CalxDevicePool;  // Forward referencing
+namespace CalXLua {
 
-	class CalxFrame : public wxFrame {
+	class LuaCalXScript : public CalXScript {
 	 public:
-		CalxFrame(std::string);
-		CalxPanel *getPanel();
-		CalxPanel *getQuickstart();
+		LuaCalXScript(CalXScriptEnvironment &);
+		virtual ~LuaCalXScript() = default;
 
-		CalxDevicePool *getDevicePool();
+		virtual void call(std::string);
 
 	 private:
-		void switch_modes();
-
-		void OnClose(wxCloseEvent &);
-		void OnAboutMenuClick(wxCommandEvent &);
-		void OnSwitchClick(wxCommandEvent &);
-
-		wxMenuBar *menuBar;
-		wxMenu *aboutMenu;
-
-		CalxPanel *panel;
-		CalxPanel *quickstartPanel;
-
-		wxButton *switchButton;
-
-		CalxDevicePool *device_pool;
+		sel::State lua;
+		LuaCalXEnvironment lua_env;
 	};
-}  // namespace CalXUI
+}  // namespace CalXLua
 
 #endif

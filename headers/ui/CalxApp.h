@@ -23,6 +23,7 @@
 
 #include "ui/CalxFrame.h"
 #include "ui/UIExtEngine.h"
+#include "ui/script/ScriptEngine.h"
 #include "ui/calx.h"
 #include <fstream>
 #include <iostream>
@@ -59,6 +60,7 @@ namespace CalXUI {
 		SystemManager *getSystemManager();
 		CalxErrorHandler *getErrorHandler();
 		CalxFrame *getMainFrame();
+		bool callScriptHook(std::string);
 
 		std::string formatDouble(double);
 		std::string getUnits();
@@ -75,11 +77,15 @@ namespace CalXUI {
 		CalxFrame *frame;
 		wxDynamicLibrary *dynlib;
 		wxDynamicLibrary *extLib;
+		wxDynamicLibrary *scriptLib;
 		SystemManager *sysman;
 
 		bool debug_mode;
 		CalxDebugConsole *debug_console;
 		CalxErrorHandler *error_handler;
+
+		std::unique_ptr<CalXScriptEnvironment> script_env;
+		std::unique_ptr<CalXScript> script;
 
 		std::ofstream *errors_log;
 		std::ofstream *warnings_log;

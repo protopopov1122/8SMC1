@@ -28,6 +28,7 @@
 #include "ui/CalxDebugConsole.h"
 #include "ui/CalxErrorHandler.h"
 #include "ui/coord/CalxCoordPanel.h"
+#include "ui/script/CalXScriptEngine.h"
 #include <wx/filedlg.h>
 
 #include "ctrl-lib/SignalHandler.h"
@@ -205,7 +206,51 @@ namespace CalXUI {
 		wxPostEvent(this, evt);
 		setup_signals(this->sysman);
 
+		std::string script_eng_addr =
+		    conf->getEntry("script")->getString("engine", "");
+		this->script = nullptr;
+		this->script_env = nullptr;
+		this->scriptLib = nullptr;
+		if (!script_eng_addr.empty()) {
+			this->scriptLib =
+			    new wxDynamicLibrary(script_eng_addr, wxDL_DEFAULT | wxDL_QUIET);
+			if (!this->scriptLib->IsLoaded()) {
+				wxMessageBox(__("Scripting engine can't be loaded"), __("Warning"),
+				             wxOK | wxICON_WARNING);
+			} else {
+				bool scr_success;
+				if (this->scriptLib->HasSymbol("getScriptEngine")) {
+					void *scr_raw_getter =
+					    this->scriptLib->GetSymbol("getScriptEngine", &scr_success);
+					ScriptEngine_getter scr_getter =
+					    *((ScriptEngine_getter *) &scr_raw_getter);
+					this->script_env =
+					    std::make_unique<CalXAppScriptEnvironment>(wxGetApp());
+					this->script =
+					    std::unique_ptr<CalXScript>(scr_getter(*this->script_env));
+				} else {
+					wxMessageBox(__("Scripting engine can't be loaded"), __("Warning"),
+					             wxOK | wxICON_WARNING);
+				}
+			}
+		}
+		this->callScriptHook("init");
+
 		return true;
+	}
+
+	bool CalxApp::callScriptHook(std::string id) {
+		if (this->script == nullptr) {
+			wxMessageBox(
+			    FORMAT(
+			        __("Scripting engine is not loaded! Hook '%s' can\'t be called"),
+			        id),
+			    __("Warning"), wxOK | wxICON_WARNING);
+			return false;
+		} else {
+			this->script->call(id);
+			return true;
+		}
 	}
 
 	int CalxApp::OnExit() {
@@ -220,6 +265,10 @@ namespace CalXUI {
 		if (this->extLib != nullptr) {
 			this->extLib->Detach();
 			this->extLib->Unload();
+		}
+		if (this->scriptLib != nullptr) {
+			this->scriptLib->Detach();
+			this->scriptLib->Unload();
 		}
 
 #ifdef OS_WIN
