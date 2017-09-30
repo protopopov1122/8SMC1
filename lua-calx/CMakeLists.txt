@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.1)
 project(CalX)
 
+set(C_STANDART 99)
 
 if (EXISTS ${CMAKE_SOURCE_DIR}/res/lua)
 	if (MSVC)
@@ -8,6 +9,9 @@ if (EXISTS ${CMAKE_SOURCE_DIR}/res/lua)
 	endif ()
 	file(GLOB SRC ${CMAKE_SOURCE_DIR}/res/lua/*.c)
 	
+	if (CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+	endif ()
 	if (MINGW AND MINGW_STATIC_LINKAGE)
 		set(CMAKE_STATIC_LINKER_FLAGS "")
 	endif ()
