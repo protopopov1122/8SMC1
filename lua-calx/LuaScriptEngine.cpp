@@ -19,6 +19,10 @@
 */
 
 #include <exception>
+#include <lua.h>
+#include <lauxlib.h>
+#include <lualib.h>
+#include "selene.h"
 #include "lua-calx/LuaScriptEngine.h"
 
 namespace CalXLua {
@@ -26,15 +30,25 @@ namespace CalXLua {
 	LuaCalXScript::LuaCalXScript(CalXScriptEnvironment &env)
 	    : CalXScript(env), lua(true), lua_env(env) {
 			
+		this->lua.HandleExceptionsWith([](int s, std::string msg, std::exception_ptr exception) {
+			if(exception) {
+				std::rethrow_exception(exception);
+			}
+		});
+			
 		this->bind_functions();
 		this->init_constants();
 
 		this->lua.Load(env.getConfiguration()->getEntry("script")->getString(
 		    "main", "scripts/main.lua"));
 	}
-
+	
 	void LuaCalXScript::call(std::string hook) {
-		this->lua[hook.c_str()]();
+		try {
+			this->lua[hook.c_str()]();
+		} catch (CalXException &ex) {
+			std::cout << "Caught CalX error " << static_cast<int>(ex.getErrorCode()) << std::endl;
+		}
 	}
 
 	void LuaCalXScript::bind_functions() {

@@ -23,6 +23,9 @@
 
 #include "ctrl-lib/script/ScriptEngine.h"
 #include "lua-calx/LuaCalXEnvironment.h"
+#include <lua.h>
+#include <lualib.h>
+#include <lauxlib.h>
 #include "selene.h"
 
 using namespace CalX;

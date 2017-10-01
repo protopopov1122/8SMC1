@@ -22,11 +22,21 @@
 #define CALX_LUA_CALX_LUA_CALX_ENVIRONMENT_H_
 
 #include "ctrl-lib/script/ScriptEngine.h"
+#include <exception>
 
 using namespace CalX;
 using namespace CalXUI;
 
 namespace CalXLua {
+	
+	class CalXException : public std::exception {
+		public:
+			CalXException(ErrorCode);
+			ErrorCode getErrorCode();
+			virtual const char* what() const throw();
+		private:
+			ErrorCode errcode;
+	};
 
 	class LuaCalXEnvironment {
 	 public:

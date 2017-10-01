@@ -58,5 +58,5 @@ function init()
 	calx.instrument.openSession(0)
 	calx.instrument.enable(0, true)
 	print(calx.instrument.getInfo(0))
-	print(calx.instrument.isSessionOpened(10))
+	print(calx.instrument.isSessionOpened(0))
 end
