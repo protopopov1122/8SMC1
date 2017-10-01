@@ -1,8 +1,8 @@
 --[[
 	API reference
 	    calx.serial.pairty                                Holds possible serial port parity constants
-		    ["No"], ["Odd"], ["Even"],
-		    ["Mark"], ["Space"]
+		    .No, .Odd, Even,
+		    .Mark, .Space
 		calx.motor                                        Motor controller bindings
 		    .connectSerial(int, int, int)                 Connect motor by serial port(pamaeters: port, baudrate, pairty)
             .getCount()                                   Return current connected motor count
@@ -17,9 +17,9 @@
 			.checkTrailers(int)                           Check if motor reached one of trailers
 		
 		calx.motor.power                                  Holds power state constants
-		    ["No"], ["Half"], ["Full"]
+		    .No, .Half, .Full
 		calx.motor.trailer
-            ["Top"], ["Bottom"]
+            .Top, .Bottom
 					
 		calx.instrument                                   Instrument controller bindings
 		    .connectSerial(int, int, int)                 Connect instrument by serial port(pamaeters: port, baudrate, pairty)
@@ -36,27 +36,24 @@
 			.getInfo(int)                                 Get instrument text info
 		
 		calx.instrument.mode                              Possible instrument working modes
-		    ["Off"], ["Prepare"], ["Full"]
+		    .Off, .Prepare, .Full
+			
+		calx.plane.create(int, int, int)                  Create plane using 2 motors and 1 instrument(optional)
+		calx.plane.move(int, double x, double y,          Move plane to position (x;y) with speed S, synchroniously(sync), relatively(rel)
+		                double S, bool sync, bool rel)
+		calx.plane.arc(int, double x, double y,           Arc movement to point (x;y) with center on (cx; cy), splitter spl,
+		               double cx, double cy,              speed S, clockwise, relative
+					   int spl, double S,
+					   bool clockwise,
+					   bool rel)
 --]]
 
 
 function init()
-	calx.motor.connectSerial(1, 9600, calx.serial.parity["No"])
-	calx.motor.connectSerial(2, 9600, calx.serial.parity["No"])
-    calx.instrument.connectSerial(4, 19200, calx.serial.parity["No"])
-	print("Connected " .. calx.motor.getCount() .. " motors and " .. calx.instrument.getCount() .. " instruments")
-	calx.motor.enablePower(0, true)
-	calx.motor.enablePower(1, true)
-	print(calx.motor.getPower(0) ~= calx.motor.power["No"])
-	calx.motor.move(0, 0, 4000)
-	calx.motor.move(1, 0, 4000)
-	calx.motor.moveToTrailer(0, calx.motor.trailer["Top"])
-	calx.motor.moveToTrailer(1, calx.motor.trailer["Bottom"])
-	print(calx.motor.getPosition(0) .. "x" .. calx.motor.getPosition(1))
-	calx.instrument.setRunnable(0, true)
-	calx.instrument.setMode(0, calx.instrument.mode["Full"])
-	calx.instrument.openSession(0)
-	calx.instrument.enable(0, true)
-	print(calx.instrument.getInfo(0))
-	print(calx.instrument.isSessionOpened(0))
+	calx.motor.connectSerial(1, 9600, calx.serial.parity.No)
+	calx.motor.connectSerial(2, 9600, calx.serial.parity.No)
+    calx.instrument.connectSerial(4, 19200, calx.serial.parity.No)
+	calx.plane.create(0, 1, 0)
+	calx.plane.move(0, 10.5, 4.5, 1.25, false, false)
+	calx.plane.arc(0, 5000, 5000, 5000, 0, 1000, 1.25, false, true)
 end

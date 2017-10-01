@@ -234,7 +234,8 @@ namespace CalXUI {
 				}
 			}
 		}
-		this->callScriptHook("init");
+		CalXScriptHookThread *th = new CalXScriptHookThread("init");
+		th->Run();
 
 		return true;
 	}

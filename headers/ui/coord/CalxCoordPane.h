@@ -27,6 +27,7 @@
 #include "ui/coord/CalxCoordController.h"
 #include "ui/coord/CalxCoordPaneMisc.h"
 #include "ui/coord/CalxWatcherPool.h"
+#include "ui/coord/CalxPlaneList.h"
 #include <wx/checkbox.h>
 #include <wx/choice.h>
 #include <wx/collpane.h>
@@ -41,15 +42,16 @@ namespace CalXUI {
 	wxDECLARE_EVENT(wxEVT_COORD_CTRL_ENABLE, wxThreadEvent);
 
 	class CalxCoordPane : public wxScrolledWindow,
-	                      public CalxCoordFilterListener {
+	                      public CalxCoordFilterListener,
+						  public CalxPlaneHandle {
 	 public:
 		CalxCoordPane(wxWindow *, wxWindowID, std::shared_ptr<CoordHandle>, size_t);
 
 		void updateUI();
 		void shutdown();
 		std::shared_ptr<CoordHandle> getHandle();
-		CalxWatcherPool *getWatchers();
-		CalxCoordController *getController();
+		virtual CalxWatcherPool *getWatchers();
+		virtual CalxCoordController *getController();
 		bool addComponent(std::string, CalxCoordComponentFactory *, size_t,
 		                  bool = true);
 		size_t getComponentPaneCount();

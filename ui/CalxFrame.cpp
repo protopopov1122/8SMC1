@@ -28,6 +28,7 @@
 #include "ui/coord/CalxCoordOtherComponent.h"
 #include "ui/coord/CalxCoordPanel.h"
 #include "ui/coord/CalxCoordPositionComponent.h"
+#include "ui/coord/CalxPlaneList.h"
 #include "ui/dev/CalxDeviceConstructor.h"
 #include "ui/dev/CalxDevicePanel.h"
 #include "ui/dev/CalxSerialInstrument.h"
@@ -142,10 +143,12 @@ namespace CalXUI {
 		SetMenuBar(this->menuBar);
 
 		CalxDevicePanel *devicePanel = newDevicePanel(panel);
+		CalxCoordPanel *coordPanel = newCoordPanel(panel);
 		this->device_pool = devicePanel;
+		this->plane_list = coordPanel;
 
 		panel->addPane(__("Devices"), devicePanel);
-		panel->addPane(__("Coordinate planes"), newCoordPanel(panel));
+		panel->addPane(__("Coordinate planes"), coordPanel);
 		panel->addPane(__("Tasks"), newTaskPanel(panel));
 		panel->addPane(__("Configuration"), newConfigPanel(panel));
 
@@ -172,6 +175,10 @@ namespace CalXUI {
 
 	CalxDevicePool *CalxFrame::getDevicePool() {
 		return this->device_pool;
+	}
+	
+	CalxPlaneList *CalxFrame::getPlaneList() {
+		return this->plane_list;
 	}
 
 	void CalxFrame::OnClose(wxCloseEvent &evt) {

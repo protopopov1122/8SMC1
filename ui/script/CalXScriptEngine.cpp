@@ -23,6 +23,14 @@
 #include "ui/dev/CalxDeviceConstructor.h"
 
 namespace CalXUI {
+	
+	CalXScriptHookThread::CalXScriptHookThread(std::string hk)
+		: wxThread::wxThread(wxTHREAD_DETACHED), hook(hk) {}
+		
+	wxThread::ExitCode CalXScriptHookThread::Entry() {
+		wxGetApp().callScriptHook("init");
+		return nullptr;
+	}
 
 	CalXAppScriptEnvironment::CalXAppScriptEnvironment(CalxApp &app)
 	    : CalXScriptEnvironment::CalXScriptEnvironment(
@@ -324,6 +332,42 @@ namespace CalXUI {
 			return std::make_pair("", ErrorCode::UnknownResource);
 		} else {
 			return std::make_pair(instr->getInfo(), ErrorCode::NoError);
+		}
+	}
+	
+	bool CalXAppScriptEnvironment::createCoordPlane(device_id_t m1, device_id_t m2, device_id_t instr) {
+		std::shared_ptr<CoordHandle> handle = this->app.getSystemManager()->createCoord(m1, m2, instr);
+		if (handle == nullptr) {
+			return false;
+		} else {
+			bool ready = false;
+			this->app.getMainFrame()->getPlaneList()->updateList(handle, &ready);
+			while (!ready) {}
+			return true;
+		}
+	}
+	
+	ErrorCode CalXAppScriptEnvironment::planeMove(size_t id, coord_point_t dest, double speed, bool sync, bool relative) {
+		CalxPlaneHandle *handle = this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);
+		if (handle == nullptr) {
+			return ErrorCode::UnknownResource;
+		} else {
+			bool ready = false;
+			handle->getController()->move(dest, speed, sync, relative, &ready);
+			while (!ready) {}
+			return ErrorCode::NoError;
+		}
+	}
+	
+	ErrorCode CalXAppScriptEnvironment::planeArc(size_t id, coord_point_t dest, coord_point_t cen, int splitter, double speed, bool clockwise, bool relative) {
+		CalxPlaneHandle *handle = this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);
+		if (handle == nullptr) {
+			return ErrorCode::UnknownResource;
+		} else {
+			bool ready = false;
+			handle->getController()->arc(dest, cen, splitter, speed, clockwise, relative, &ready);
+			while (!ready) {}
+			return ErrorCode::NoError;
 		}
 	}
 

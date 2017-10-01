@@ -216,4 +216,32 @@ namespace CalXLua {
 		}
 		return res.first;
 	}
+	
+	bool LuaCalXEnvironment::planeCreate(int m1, int m2, int ins) {
+		return env.createCoordPlane(static_cast<device_id_t>(m1),
+		                            static_cast<device_id_t>(m2),
+									static_cast<device_id_t>(ins));
+	}
+	
+	int LuaCalXEnvironment::planeMove(int id, double x, double y, double speed, bool sync, bool relative) {
+		coord_point_t dest = {x, y};
+		ErrorCode errcode = env.planeMove(static_cast<size_t>(id),
+		                                  dest, speed, sync, relative);
+		if (errcode != ErrorCode::NoError) {
+			throw CalXException(errcode);
+		}
+		return static_cast<int>(errcode);
+	}
+	
+	int LuaCalXEnvironment::planeArc(int id, double x, double y, double cx, double cy, int splitter,
+	                                 double speed, bool clockwise, bool relative) {
+		coord_point_t dest = {x, y};
+		coord_point_t cen = {cx, cy};
+		ErrorCode errcode = env.planeArc(static_cast<size_t>(id),
+		                                  dest, cen, splitter, speed, clockwise, relative);
+		if (errcode != ErrorCode::NoError) {
+			throw CalXException(errcode);
+		}
+		return static_cast<int>(errcode);
+	}
 }  // namespace CalXLua

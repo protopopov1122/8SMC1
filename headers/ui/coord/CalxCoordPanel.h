@@ -23,6 +23,7 @@
 
 #include "ui/CalxApp.h"
 #include "ui/CalxPanelPane.h"
+#include "ui/coord/CalxPlaneList.h"
 #include "ui/coord/CalxCoordComponent.h"
 #include "ui/coord/CalxCoordPane.h"
 #include <cinttypes>
@@ -44,13 +45,14 @@ namespace CalXUI {
 		bool hidden;
 	};
 
-	class CalxCoordPanel : public CalxPanelPane {
+	class CalxCoordPanel : public CalxPanelPane, public CalxPlaneList {
 	 public:
 		CalxCoordPanel(wxWindow *, wxWindowID, size_t);
 
 		size_t getCoordCount();
 		CalxCoordPane *getCoordCtrl(size_t sz);
-		void updateList(std::shared_ptr<CoordHandle>, bool *);
+		virtual void updateList(std::shared_ptr<CoordHandle>, bool *);
+		virtual CalxPlaneHandle *getPlaneHandle(size_t);
 		virtual void updateUI();
 		virtual void shutdown();
 		virtual bool isBusy();

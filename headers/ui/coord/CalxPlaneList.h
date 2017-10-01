@@ -18,47 +18,28 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CALX_UI_CALX_FRAME_H_
-#define CALX_UI_CALX_FRAME_H_
+#ifndef CALX_UI_COORD_CALX_PLANE_LIST_H_
+#define CALX_UI_COORD_CALX_PLANE_LIST_H_
 
-#include "ui/CalxPanel.h"
-#include "ui/calx.h"
-#include <iostream>
-#include <string>
-#include <wx/menu.h>
+#include "ui/CalxApp.h"
+#include "ui/coord/CalxWatcherPool.h"
+#include "ui/coord/CalxCoordController.h"
 
 namespace CalXUI {
 
-	class CalxDevicePool;  // Forward referencing
-	class CalxPlaneList;   // Forward referencing
-
-	class CalxFrame : public wxFrame {
-	 public:
-		CalxFrame(std::string);
-		CalxPanel *getPanel();
-		CalxPanel *getQuickstart();
-
-		CalxDevicePool *getDevicePool();
-		CalxPlaneList *getPlaneList();
-
-	 private:
-		void switch_modes();
-
-		void OnClose(wxCloseEvent &);
-		void OnAboutMenuClick(wxCommandEvent &);
-		void OnSwitchClick(wxCommandEvent &);
-
-		wxMenuBar *menuBar;
-		wxMenu *aboutMenu;
-
-		CalxPanel *panel;
-		CalxPanel *quickstartPanel;
-
-		wxButton *switchButton;
-
-		CalxDevicePool *device_pool;
-		CalxPlaneList *plane_list;
+	class CalxPlaneHandle {
+		public:
+			virtual ~CalxPlaneHandle() = default;
+			virtual CalxWatcherPool *getWatchers() = 0;
+			virtual CalxCoordController *getController() = 0;
 	};
-}  // namespace CalXUI
+
+	class CalxPlaneList {
+		public:
+			virtual ~CalxPlaneList() = default;
+			virtual void updateList(std::shared_ptr<CoordHandle>, bool *) = 0;
+			virtual CalxPlaneHandle *getPlaneHandle(size_t) = 0;
+	};
+}
 
 #endif
