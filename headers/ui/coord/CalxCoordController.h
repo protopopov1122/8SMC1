@@ -27,7 +27,7 @@
 
 namespace CalXUI {
 
-	class ActionResult; // Forward referencing
+	class ActionResult;  // Forward referencing
 
 	class CalxCoordFilterListener {
 	 public:
@@ -62,7 +62,8 @@ namespace CalXUI {
 		float getValidateMaxSpeed();
 		void setValidateMaxSpeed(float);
 
-		void move(coord_point_t, double, bool, bool, bool * = nullptr, ActionResult * = nullptr);
+		void move(coord_point_t, double, bool, bool, bool * = nullptr,
+		          ActionResult * = nullptr);
 		void arc(coord_point_t, coord_point_t, int, double, bool, bool,
 		         bool * = nullptr, ActionResult * = nullptr);
 		void calibrate(TrailerId, bool * = nullptr);

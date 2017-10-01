@@ -58,10 +58,11 @@ namespace CalXUI {
 		                                                     InstrumentMode);
 		virtual std::pair<bool, ErrorCode> instrumentIsSessionOpened(device_id_t);
 		virtual std::pair<std::string, ErrorCode> instrumentGetInfo(device_id_t);
-		
+
 		virtual bool createCoordPlane(device_id_t, device_id_t, device_id_t);
 		virtual ErrorCode planeMove(size_t, coord_point_t, double, bool, bool);
-		virtual ErrorCode planeArc(size_t, coord_point_t, coord_point_t, int, double, bool, bool);
+		virtual ErrorCode planeArc(size_t, coord_point_t, coord_point_t, int,
+		                           double, bool, bool);
 		/*virtual ErrorCode planeCalibrate(size_t, TrailerId);
 		virtual ErrorCode planeMeasure(size_t, TrailerId);
 		virtual ErrorCode planeMove(size_t, coord_point_t, double);
@@ -70,14 +71,16 @@ namespace CalXUI {
 	 private:
 		CalxApp &app;
 	};
-	
+
 	class CalXScriptHookThread : public wxThread {
-		public:
-			CalXScriptHookThread(std::string);
-		protected:
-			virtual wxThread::ExitCode Entry();
-		private:
-			std::string hook;
+	 public:
+		CalXScriptHookThread(std::string);
+
+	 protected:
+		virtual wxThread::ExitCode Entry();
+
+	 private:
+		std::string hook;
 	};
 }  // namespace CalXUI
 

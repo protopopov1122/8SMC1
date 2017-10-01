@@ -67,7 +67,7 @@ namespace CalXLua {
 		bool instrumentSetMode(int, int);
 		bool instrumentIsSessionOpened(int);
 		std::string instrumentGetInfo(int);
-		
+
 		bool planeCreate(int, int, int);
 		int planeMove(int, double, double, double, bool, bool);
 		int planeArc(int, double, double, double, double, int, double, bool, bool);

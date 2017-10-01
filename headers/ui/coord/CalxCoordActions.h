@@ -27,7 +27,7 @@
 #include "ui/coord/CalxVirtualPlane.h"
 
 namespace CalXUI {
-	
+
 	struct ActionResult {
 		bool ready;
 		bool stopped;
@@ -55,7 +55,7 @@ namespace CalXUI {
 	 public:
 		CalxCoordActionArc(std::shared_ptr<CoordHandle>, coord_point_t,
 		                   coord_point_t, int, double, bool, bool,
-						   ActionResult * = nullptr);
+		                   ActionResult * = nullptr);
 
 		virtual void perform(SystemManager *);
 		virtual void stop();

@@ -43,7 +43,7 @@ namespace CalXUI {
 
 	class CalxCoordPane : public wxScrolledWindow,
 	                      public CalxCoordFilterListener,
-						  public CalxPlaneHandle {
+	                      public CalxPlaneHandle {
 	 public:
 		CalxCoordPane(wxWindow *, wxWindowID, std::shared_ptr<CoordHandle>, size_t);
 

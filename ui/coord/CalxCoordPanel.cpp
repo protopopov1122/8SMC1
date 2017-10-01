@@ -81,7 +81,7 @@ namespace CalXUI {
 		evt.SetPayload(std::make_pair(handle, ready));
 		wxPostEvent(this, evt);
 	}
-	
+
 	CalxPlaneHandle *CalxCoordPanel::getPlaneHandle(size_t sz) {
 		if (sz >= this->coords.size()) {
 			return nullptr;

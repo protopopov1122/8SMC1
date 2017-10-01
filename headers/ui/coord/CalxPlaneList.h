@@ -28,18 +28,18 @@
 namespace CalXUI {
 
 	class CalxPlaneHandle {
-		public:
-			virtual ~CalxPlaneHandle() = default;
-			virtual CalxWatcherPool *getWatchers() = 0;
-			virtual CalxCoordController *getController() = 0;
+	 public:
+		virtual ~CalxPlaneHandle() = default;
+		virtual CalxWatcherPool *getWatchers() = 0;
+		virtual CalxCoordController *getController() = 0;
 	};
 
 	class CalxPlaneList {
-		public:
-			virtual ~CalxPlaneList() = default;
-			virtual void updateList(std::shared_ptr<CoordHandle>, bool *) = 0;
-			virtual CalxPlaneHandle *getPlaneHandle(size_t) = 0;
+	 public:
+		virtual ~CalxPlaneList() = default;
+		virtual void updateList(std::shared_ptr<CoordHandle>, bool *) = 0;
+		virtual CalxPlaneHandle *getPlaneHandle(size_t) = 0;
 	};
-}
+}  // namespace CalXUI
 
 #endif

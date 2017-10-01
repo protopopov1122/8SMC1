@@ -7,13 +7,13 @@ namespace CalXUI {
 	CalxCoordActionMove::CalxCoordActionMove(std::shared_ptr<CoordHandle> handle,
 	                                         coord_point_t dest, double speed,
 	                                         bool jump, bool relative,
-											 ActionResult *act_res)
+	                                         ActionResult *act_res)
 	    : handle(handle),
 	      dest(dest),
 	      speed(speed),
 	      jump(jump),
 	      relative(relative),
-		  action_result(act_res) {
+	      action_result(act_res) {
 		if (this->action_result != nullptr) {
 			this->action_result->ready = false;
 			this->action_result->stopped = false;
@@ -48,7 +48,7 @@ namespace CalXUI {
 	                                       coord_point_t dest, coord_point_t cen,
 	                                       int splitter, double speed,
 	                                       bool clockwise, bool relative,
-										   ActionResult *act_res)
+	                                       ActionResult *act_res)
 	    : handle(handle),
 	      dest(dest),
 	      cen(cen),
@@ -56,7 +56,7 @@ namespace CalXUI {
 	      speed(speed),
 	      clockwise(clockwise),
 	      relative(relative),
-		  action_result(act_res) {
+	      action_result(act_res) {
 		if (this->action_result != nullptr) {
 			this->action_result->ready = false;
 			this->action_result->stopped = false;
@@ -68,10 +68,11 @@ namespace CalXUI {
 		ErrorCode errcode;
 		handle->open_session();
 		if (relative) {
-			errcode = handle->getFloatPlane()->relativeArc(
-			    dest, cen, splitter, speed, clockwise);
+			errcode = handle->getFloatPlane()->relativeArc(dest, cen, splitter, speed,
+			                                               clockwise);
 		} else {
-			errcode = handle->getFloatPlane()->arc(dest, cen, splitter, speed, clockwise);
+			errcode =
+			    handle->getFloatPlane()->arc(dest, cen, splitter, speed, clockwise);
 		}
 		wxGetApp().getErrorHandler()->handle(errcode);
 		handle->close_session();

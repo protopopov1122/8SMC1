@@ -176,7 +176,7 @@ namespace CalXUI {
 	CalxDevicePool *CalxFrame::getDevicePool() {
 		return this->device_pool;
 	}
-	
+
 	CalxPlaneList *CalxFrame::getPlaneList() {
 		return this->plane_list;
 	}
