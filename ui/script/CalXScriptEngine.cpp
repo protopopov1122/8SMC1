@@ -21,6 +21,7 @@
 #include <iostream>
 #include "ui/script/CalXScriptEngine.h"
 #include "ui/dev/CalxDeviceConstructor.h"
+#include "ui/coord/CalxCoordActions.h"
 
 namespace CalXUI {
 	
@@ -353,9 +354,14 @@ namespace CalXUI {
 			return ErrorCode::UnknownResource;
 		} else {
 			bool ready = false;
-			handle->getController()->move(dest, speed, sync, relative, &ready);
+			ActionResult res = {false, false, ErrorCode::NoError};
+			handle->getController()->move(dest, speed, sync, relative, &ready, &res);
 			while (!ready) {}
-			return ErrorCode::NoError;
+			if (res.stopped) {
+				return ErrorCode::Interrupted;
+			} else {
+				return res.errcode;
+			}
 		}
 	}
 	
@@ -365,9 +371,14 @@ namespace CalXUI {
 			return ErrorCode::UnknownResource;
 		} else {
 			bool ready = false;
-			handle->getController()->arc(dest, cen, splitter, speed, clockwise, relative, &ready);
+			ActionResult res = {false, false, ErrorCode::NoError};
+			handle->getController()->arc(dest, cen, splitter, speed, clockwise, relative, &ready, &res);
 			while (!ready) {}
-			return ErrorCode::NoError;
+			if (res.stopped) {
+				return ErrorCode::Interrupted;
+			} else {
+				return res.errcode;
+			}
 		}
 	}
 

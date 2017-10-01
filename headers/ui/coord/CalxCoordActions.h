@@ -27,11 +27,17 @@
 #include "ui/coord/CalxVirtualPlane.h"
 
 namespace CalXUI {
+	
+	struct ActionResult {
+		bool ready;
+		bool stopped;
+		ErrorCode errcode;
+	};
 
 	class CalxCoordActionMove : public CalxAction {
 	 public:
 		CalxCoordActionMove(std::shared_ptr<CoordHandle>, coord_point_t, double,
-		                    bool, bool);
+		                    bool, bool, ActionResult * = nullptr);
 
 		virtual void perform(SystemManager *);
 		virtual void stop();
@@ -42,12 +48,14 @@ namespace CalXUI {
 		double speed;
 		bool jump;
 		bool relative;
+		ActionResult *action_result;
 	};
 
 	class CalxCoordActionArc : public CalxAction {
 	 public:
 		CalxCoordActionArc(std::shared_ptr<CoordHandle>, coord_point_t,
-		                   coord_point_t, int, double, bool, bool);
+		                   coord_point_t, int, double, bool, bool,
+						   ActionResult * = nullptr);
 
 		virtual void perform(SystemManager *);
 		virtual void stop();
@@ -60,6 +68,7 @@ namespace CalXUI {
 		double speed;
 		bool clockwise;
 		bool relative;
+		ActionResult *action_result;
 	};
 
 	class CalxCoordActionCalibrate : public CalxAction {

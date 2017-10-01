@@ -56,4 +56,6 @@ function init()
 	calx.plane.create(0, 1, 0)
 	calx.plane.move(0, 10.5, 4.5, 1.25, false, false)
 	calx.plane.arc(0, 5000, 5000, 5000, 0, 1000, 1.25, false, true)
+	calx.plane.arc(0, 5000, 5000, 5000, 0, 1000, 1.25, false, true)
+	calx.plane.arc(0, 5000, 5000, 5000, 0, 1000, 1.25, false, true)
 end

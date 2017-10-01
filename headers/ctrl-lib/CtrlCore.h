@@ -38,18 +38,19 @@ namespace CalX {
 		PowerOff = 1,
 		LowLevelError = 2,
 		UnknownResource = 3,
-		WrongParameter = 4,
-		Trailer1Pressed = 5,
-		Trailer2Pressed = 6,
-		MotorRunning = 7,
-		MotorStopped = 8,
-		ArcError = 9,
-		InvalidCoordinates = 10,
-		InvalidSpeed = 11,
-		MathExprError = 12,
-		MathRuntimeNoVar = 13,
-		MathRuntimeNoFunction = 14,
-		MathRuntimeWrongPrms = 15
+		Interrupted = 4,
+		WrongParameter = 5,
+		Trailer1Pressed = 6,
+		Trailer2Pressed = 7,
+		MotorRunning = 8,
+		MotorStopped = 9,
+		ArcError = 10,
+		InvalidCoordinates = 11,
+		InvalidSpeed = 12,
+		MathExprError = 13,
+		MathRuntimeNoVar = 14,
+		MathRuntimeNoFunction = 15,
+		MathRuntimeWrongPrms = 16
 	};
 
 	/* Used in device controller. Describes current move type and state.*/

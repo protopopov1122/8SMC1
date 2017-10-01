@@ -6,55 +6,86 @@ namespace CalXUI {
 
 	CalxCoordActionMove::CalxCoordActionMove(std::shared_ptr<CoordHandle> handle,
 	                                         coord_point_t dest, double speed,
-	                                         bool jump, bool relative)
+	                                         bool jump, bool relative,
+											 ActionResult *act_res)
 	    : handle(handle),
 	      dest(dest),
 	      speed(speed),
 	      jump(jump),
-	      relative(relative) {}
+	      relative(relative),
+		  action_result(act_res) {
+		if (this->action_result != nullptr) {
+			this->action_result->ready = false;
+			this->action_result->stopped = false;
+			this->action_result->errcode = ErrorCode::NoError;
+		}
+	}
 
 	void CalxCoordActionMove::perform(SystemManager *sysman) {
+		ErrorCode errcode;
 		handle->open_session();
 		if (relative) {
-			wxGetApp().getErrorHandler()->handle(
-			    handle->getFloatPlane()->relativeMove(dest, speed, jump));
+			errcode = handle->getFloatPlane()->relativeMove(dest, speed, jump);
 		} else {
-			wxGetApp().getErrorHandler()->handle(
-			    handle->getFloatPlane()->move(dest, speed, jump));
+			errcode = handle->getFloatPlane()->move(dest, speed, jump);
 		}
+		wxGetApp().getErrorHandler()->handle(errcode);
 		handle->close_session();
+		if (this->action_result != nullptr) {
+			this->action_result->errcode = errcode;
+			this->action_result->ready = true;
+		}
 	}
 
 	void CalxCoordActionMove::stop() {
 		handle->stop();
+		if (this->action_result != nullptr) {
+			this->action_result->stopped = true;
+		}
 	}
 
 	CalxCoordActionArc::CalxCoordActionArc(std::shared_ptr<CoordHandle> handle,
 	                                       coord_point_t dest, coord_point_t cen,
 	                                       int splitter, double speed,
-	                                       bool clockwise, bool relative)
+	                                       bool clockwise, bool relative,
+										   ActionResult *act_res)
 	    : handle(handle),
 	      dest(dest),
 	      cen(cen),
 	      splitter(splitter),
 	      speed(speed),
 	      clockwise(clockwise),
-	      relative(relative) {}
+	      relative(relative),
+		  action_result(act_res) {
+		if (this->action_result != nullptr) {
+			this->action_result->ready = false;
+			this->action_result->stopped = false;
+			this->action_result->errcode = ErrorCode::NoError;
+		}
+	}
 
 	void CalxCoordActionArc::perform(SystemManager *sysman) {
+		ErrorCode errcode;
 		handle->open_session();
 		if (relative) {
-			wxGetApp().getErrorHandler()->handle(handle->getFloatPlane()->relativeArc(
-			    dest, cen, splitter, speed, clockwise));
+			errcode = handle->getFloatPlane()->relativeArc(
+			    dest, cen, splitter, speed, clockwise);
 		} else {
-			wxGetApp().getErrorHandler()->handle(
-			    handle->getFloatPlane()->arc(dest, cen, splitter, speed, clockwise));
+			errcode = handle->getFloatPlane()->arc(dest, cen, splitter, speed, clockwise);
 		}
+		wxGetApp().getErrorHandler()->handle(errcode);
 		handle->close_session();
+		if (this->action_result != nullptr) {
+			this->action_result->errcode = errcode;
+			this->action_result->ready = true;
+		}
 	}
 
 	void CalxCoordActionArc::stop() {
 		handle->stop();
+		if (this->action_result != nullptr) {
+			this->action_result->stopped = true;
+		}
 	}
 
 	CalxCoordActionCalibrate::CalxCoordActionCalibrate(

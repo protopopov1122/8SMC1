@@ -149,18 +149,20 @@ namespace CalXUI {
 	}
 
 	void CalxCoordController::move(coord_point_t dest, double speed, bool jump,
-	                               bool relative, bool *ready) {
+	                               bool relative, bool *ready, ActionResult *action_result) {
 		this->queue->addAction(std::make_unique<CalxCoordActionMove>(
-		                           this->handle, dest, speed, jump, relative),
+		                           this->handle, dest, speed, jump, relative, action_result),
 		                       ready);
 	}
 
 	void CalxCoordController::arc(coord_point_t dest, coord_point_t cen,
 	                              int splitter, double speed, bool clockwise,
-	                              bool relative, bool *ready) {
+	                              bool relative, bool *ready,
+								  ActionResult *action_result) {
 		this->queue->addAction(
 		    std::make_unique<CalxCoordActionArc>(this->handle, dest, cen, splitter,
-		                                         speed, clockwise, relative),
+		                                         speed, clockwise, relative,
+												 action_result),
 		    ready);
 	}
 
