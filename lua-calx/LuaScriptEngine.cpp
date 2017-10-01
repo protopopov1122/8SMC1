@@ -29,75 +29,80 @@ namespace CalXLua {
 
 	LuaCalXScript::LuaCalXScript(CalXScriptEnvironment &env)
 	    : CalXScript(env), lua(true), lua_env(env) {
-			
-		this->lua.HandleExceptionsWith([](int s, std::string msg, std::exception_ptr exception) {
-			if(exception) {
-				std::rethrow_exception(exception);
-			}
-		});
-			
+		this->lua.HandleExceptionsWith(
+		    [](int s, std::string msg, std::exception_ptr exception) {
+			    if (exception) {
+				    std::rethrow_exception(exception);
+			    }
+		    });
+
 		this->bind_functions();
 		this->init_constants();
 
 		this->lua.Load(env.getConfiguration()->getEntry("script")->getString(
 		    "main", "scripts/main.lua"));
 	}
-	
+
 	void LuaCalXScript::call(std::string hook) {
 		try {
 			this->lua[hook.c_str()]();
 		} catch (CalXException &ex) {
-			std::cout << "Caught CalX error " << static_cast<int>(ex.getErrorCode()) << std::endl;
+			std::cout << "Caught CalX error " << static_cast<int>(ex.getErrorCode())
+			          << std::endl;
 		}
 	}
 
 	void LuaCalXScript::bind_functions() {
 		this->lua["calx"]["motor"].SetObj(
-		    lua_env,
-			"connectSerial", &LuaCalXEnvironment::connectSerialMotor,
-		    "getCount", &LuaCalXEnvironment::getMotorCount,
-			"getPower", &LuaCalXEnvironment::getMotorPower,
-			"enablePower", &LuaCalXEnvironment::enableMotorPower,
-			"move", &LuaCalXEnvironment::motorMove,
-			"relativeMove", &LuaCalXEnvironment::motorRelativeMove,
-			"stop", &LuaCalXEnvironment::motorStop,
-			"getPosition", &LuaCalXEnvironment::motorPosition,
-			"waitWhileRunning", &LuaCalXEnvironment::motorWaitWhileRunning,
-			"moveToTrailer", &LuaCalXEnvironment::motorMoveToTrailer,
-			"checkTrailers", &LuaCalXEnvironment::motorCheckTrailers
-		);
-			
+		    lua_env, "connectSerial", &LuaCalXEnvironment::connectSerialMotor,
+		    "getCount", &LuaCalXEnvironment::getMotorCount, "getPower",
+		    &LuaCalXEnvironment::getMotorPower, "enablePower",
+		    &LuaCalXEnvironment::enableMotorPower, "move",
+		    &LuaCalXEnvironment::motorMove, "relativeMove",
+		    &LuaCalXEnvironment::motorRelativeMove, "stop",
+		    &LuaCalXEnvironment::motorStop, "getPosition",
+		    &LuaCalXEnvironment::motorPosition, "waitWhileRunning",
+		    &LuaCalXEnvironment::motorWaitWhileRunning, "moveToTrailer",
+		    &LuaCalXEnvironment::motorMoveToTrailer, "checkTrailers",
+		    &LuaCalXEnvironment::motorCheckTrailers);
+
 		this->lua["calx"]["instrument"].SetObj(
-			lua_env,
-		    "connectSerial", &LuaCalXEnvironment::connectSerialInstrument,
-			"getCount", &LuaCalXEnvironment::getInstrumentCount,
-			"openSession", &LuaCalXEnvironment::instrumentOpenSession,
-			"closeSession", &LuaCalXEnvironment::instrumentCloseSession,
-			"enable", &LuaCalXEnvironment::instrumentEnable,
-			"isEnabled", &LuaCalXEnvironment::instrumentIsEnabled,
-			"setRunnable", &LuaCalXEnvironment::instrumentSetRunnable,
-			"isRunnable", &LuaCalXEnvironment::instrumentIsRunnable,
-			"getMode", &LuaCalXEnvironment::instrumentGetMode,
-			"setMode", &LuaCalXEnvironment::instrumentSetMode,
-			"isSessionOpened", &LuaCalXEnvironment::instrumentIsSessionOpened,
-			"getInfo", &LuaCalXEnvironment::instrumentGetInfo
-		);
+		    lua_env, "connectSerial", &LuaCalXEnvironment::connectSerialInstrument,
+		    "getCount", &LuaCalXEnvironment::getInstrumentCount, "openSession",
+		    &LuaCalXEnvironment::instrumentOpenSession, "closeSession",
+		    &LuaCalXEnvironment::instrumentCloseSession, "enable",
+		    &LuaCalXEnvironment::instrumentEnable, "isEnabled",
+		    &LuaCalXEnvironment::instrumentIsEnabled, "setRunnable",
+		    &LuaCalXEnvironment::instrumentSetRunnable, "isRunnable",
+		    &LuaCalXEnvironment::instrumentIsRunnable, "getMode",
+		    &LuaCalXEnvironment::instrumentGetMode, "setMode",
+		    &LuaCalXEnvironment::instrumentSetMode, "isSessionOpened",
+		    &LuaCalXEnvironment::instrumentIsSessionOpened, "getInfo",
+		    &LuaCalXEnvironment::instrumentGetInfo);
 	}
 
 	void LuaCalXScript::init_constants() {
-		this->lua["calx"]["motor"]["power"]["No"] = static_cast<int>(Power::NoPower);
-		this->lua["calx"]["motor"]["power"]["Half"] = static_cast<int>(Power::HalfPower);
-		this->lua["calx"]["motor"]["power"]["Full"] = static_cast<int>(Power::FullPower);
+		this->lua["calx"]["motor"]["power"]["No"] =
+		    static_cast<int>(Power::NoPower);
+		this->lua["calx"]["motor"]["power"]["Half"] =
+		    static_cast<int>(Power::HalfPower);
+		this->lua["calx"]["motor"]["power"]["Full"] =
+		    static_cast<int>(Power::FullPower);
 
-		this->lua["calx"]["motor"]["trailer"]["Top"] = static_cast<int>(TrailerId::Trailer1);
+		this->lua["calx"]["motor"]["trailer"]["Top"] =
+		    static_cast<int>(TrailerId::Trailer1);
 		this->lua["calx"]["motor"]["trailer"]["Bottom"] =
 		    static_cast<int>(TrailerId::Trailer2);
-		
-		this->lua["calx"]["instrument"]["mode"]["Off"] = static_cast<int>(InstrumentMode::Off);
-		this->lua["calx"]["instrument"]["mode"]["Prepare"] = static_cast<int>(InstrumentMode::Prepare);
-		this->lua["calx"]["instrument"]["mode"]["Full"] = static_cast<int>(InstrumentMode::Full);
 
-		this->lua["calx"]["serial"]["parity"]["No"] = static_cast<int>(SerialPortParity::No);
+		this->lua["calx"]["instrument"]["mode"]["Off"] =
+		    static_cast<int>(InstrumentMode::Off);
+		this->lua["calx"]["instrument"]["mode"]["Prepare"] =
+		    static_cast<int>(InstrumentMode::Prepare);
+		this->lua["calx"]["instrument"]["mode"]["Full"] =
+		    static_cast<int>(InstrumentMode::Full);
+
+		this->lua["calx"]["serial"]["parity"]["No"] =
+		    static_cast<int>(SerialPortParity::No);
 		this->lua["calx"]["serial"]["parity"]["Odd"] =
 		    static_cast<int>(SerialPortParity::Odd);
 		this->lua["calx"]["serial"]["parity"]["Even"] =

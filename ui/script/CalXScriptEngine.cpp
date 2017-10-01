@@ -80,7 +80,8 @@ namespace CalXUI {
 		return this->app.getSystemManager()->getInstrumentCount();
 	}
 
-	std::pair<Power, ErrorCode> CalXAppScriptEnvironment::getMotorPower(device_id_t id) {
+	std::pair<Power, ErrorCode> CalXAppScriptEnvironment::getMotorPower(
+	    device_id_t id) {
 		std::shared_ptr<MotorController> motor =
 		    this->app.getSystemManager()->getMotorController(id);
 		if (motor == nullptr) {
@@ -146,7 +147,8 @@ namespace CalXUI {
 		}
 	}
 
-	std::pair<motor_coord_t, ErrorCode> CalXAppScriptEnvironment::getMotorPosition(device_id_t id) {
+	std::pair<motor_coord_t, ErrorCode>
+	    CalXAppScriptEnvironment::getMotorPosition(device_id_t id) {
 		std::shared_ptr<MotorController> motor =
 		    this->app.getSystemManager()->getMotorController(id);
 		if (motor == nullptr) {
@@ -171,7 +173,8 @@ namespace CalXUI {
 		}
 	}
 
-	std::pair<bool, ErrorCode> CalXAppScriptEnvironment::motorCheckTrailers(device_id_t id) {
+	std::pair<bool, ErrorCode> CalXAppScriptEnvironment::motorCheckTrailers(
+	    device_id_t id) {
 		std::shared_ptr<MotorController> motor =
 		    this->app.getSystemManager()->getMotorController(id);
 		if (motor == nullptr) {
@@ -194,7 +197,7 @@ namespace CalXUI {
 			return motor->waitWhileRunning();
 		}
 	}
-	
+
 	ErrorCode CalXAppScriptEnvironment::instrumentOpenSession(device_id_t id) {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()->getInstrumentController(id);
@@ -206,7 +209,7 @@ namespace CalXUI {
 			return instr->open_session();
 		}
 	}
-	
+
 	ErrorCode CalXAppScriptEnvironment::instrumentCloseSession(device_id_t id) {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()->getInstrumentController(id);
@@ -218,8 +221,9 @@ namespace CalXUI {
 			return instr->close_session();
 		}
 	}
-	
-	ErrorCode CalXAppScriptEnvironment::instrumentEnable(device_id_t id, bool en) {
+
+	ErrorCode CalXAppScriptEnvironment::instrumentEnable(device_id_t id,
+	                                                     bool en) {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()->getInstrumentController(id);
 		if (instr == nullptr) {
@@ -230,8 +234,9 @@ namespace CalXUI {
 			return instr->enable(en);
 		}
 	}
-	
-	std::pair<bool, ErrorCode> CalXAppScriptEnvironment::instrumentIsEnabled(device_id_t id) {
+
+	std::pair<bool, ErrorCode> CalXAppScriptEnvironment::instrumentIsEnabled(
+	    device_id_t id) {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()->getInstrumentController(id);
 		if (instr == nullptr) {
@@ -242,8 +247,9 @@ namespace CalXUI {
 			return std::make_pair(instr->isEnabled(), ErrorCode::NoError);
 		}
 	}
-	
-	ErrorCode CalXAppScriptEnvironment::instrumentSetRunnable(device_id_t id, bool en) {
+
+	ErrorCode CalXAppScriptEnvironment::instrumentSetRunnable(device_id_t id,
+	                                                          bool en) {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()->getInstrumentController(id);
 		if (instr == nullptr) {
@@ -255,8 +261,9 @@ namespace CalXUI {
 			return ErrorCode::NoError;
 		}
 	}
-	
-	std::pair<bool, ErrorCode> CalXAppScriptEnvironment::instrumentIsRunnable(device_id_t id) {
+
+	std::pair<bool, ErrorCode> CalXAppScriptEnvironment::instrumentIsRunnable(
+	    device_id_t id) {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()->getInstrumentController(id);
 		if (instr == nullptr) {
@@ -267,8 +274,9 @@ namespace CalXUI {
 			return std::make_pair(instr->isRunnable(), ErrorCode::NoError);
 		}
 	}
-	
-	std::pair<InstrumentMode, ErrorCode> CalXAppScriptEnvironment::instrumentGetMode(device_id_t id) {
+
+	std::pair<InstrumentMode, ErrorCode>
+	    CalXAppScriptEnvironment::instrumentGetMode(device_id_t id) {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()->getInstrumentController(id);
 		if (instr == nullptr) {
@@ -279,8 +287,9 @@ namespace CalXUI {
 			return std::make_pair(instr->getMode(), ErrorCode::NoError);
 		}
 	}
-	
-	std::pair<bool, ErrorCode> CalXAppScriptEnvironment::instrumentSetMode(device_id_t id, InstrumentMode mode) {
+
+	std::pair<bool, ErrorCode> CalXAppScriptEnvironment::instrumentSetMode(
+	    device_id_t id, InstrumentMode mode) {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()->getInstrumentController(id);
 		if (instr == nullptr) {
@@ -291,8 +300,9 @@ namespace CalXUI {
 			return std::make_pair(instr->setMode(mode), ErrorCode::NoError);
 		}
 	}
-	
-	std::pair<bool, ErrorCode> CalXAppScriptEnvironment::instrumentIsSessionOpened(device_id_t id) {
+
+	std::pair<bool, ErrorCode>
+	    CalXAppScriptEnvironment::instrumentIsSessionOpened(device_id_t id) {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()->getInstrumentController(id);
 		if (instr == nullptr) {
@@ -303,8 +313,9 @@ namespace CalXUI {
 			return std::make_pair(instr->isSessionOpened(), ErrorCode::NoError);
 		}
 	}
-	
-	std::pair<std::string, ErrorCode> CalXAppScriptEnvironment::instrumentGetInfo(device_id_t id) {
+
+	std::pair<std::string, ErrorCode> CalXAppScriptEnvironment::instrumentGetInfo(
+	    device_id_t id) {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()->getInstrumentController(id);
 		if (instr == nullptr) {

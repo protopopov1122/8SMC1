@@ -44,21 +44,26 @@ namespace CalXUI {
 		virtual ErrorCode motorMove(device_id_t, motor_coord_t, float) = 0;
 		virtual ErrorCode motorRelativeMove(device_id_t, motor_coord_t, float) = 0;
 		virtual ErrorCode motorStop(device_id_t) = 0;
-		virtual std::pair<motor_coord_t, ErrorCode> getMotorPosition(device_id_t) = 0;
+		virtual std::pair<motor_coord_t, ErrorCode> getMotorPosition(
+		    device_id_t) = 0;
 		virtual ErrorCode motorMoveToTrailer(device_id_t, TrailerId) = 0;
 		virtual std::pair<bool, ErrorCode> motorCheckTrailers(device_id_t) = 0;
 		virtual ErrorCode motorWaitWhileRunning(device_id_t) = 0;
-		
+
 		virtual ErrorCode instrumentOpenSession(device_id_t) = 0;
 		virtual ErrorCode instrumentCloseSession(device_id_t) = 0;
 		virtual ErrorCode instrumentEnable(device_id_t, bool) = 0;
 		virtual std::pair<bool, ErrorCode> instrumentIsEnabled(device_id_t) = 0;
 		virtual std::pair<bool, ErrorCode> instrumentIsRunnable(device_id_t) = 0;
 		virtual ErrorCode instrumentSetRunnable(device_id_t, bool) = 0;
-		virtual std::pair<InstrumentMode, ErrorCode> instrumentGetMode(device_id_t) = 0;
-		virtual std::pair<bool, ErrorCode> instrumentSetMode(device_id_t, InstrumentMode) = 0;
-		virtual std::pair<bool, ErrorCode> instrumentIsSessionOpened(device_id_t) = 0;
-		virtual std::pair<std::string, ErrorCode> instrumentGetInfo(device_id_t) = 0;
+		virtual std::pair<InstrumentMode, ErrorCode> instrumentGetMode(
+		    device_id_t) = 0;
+		virtual std::pair<bool, ErrorCode> instrumentSetMode(device_id_t,
+		                                                     InstrumentMode) = 0;
+		virtual std::pair<bool, ErrorCode> instrumentIsSessionOpened(
+		    device_id_t) = 0;
+		virtual std::pair<std::string, ErrorCode> instrumentGetInfo(
+		    device_id_t) = 0;
 
 	 private:
 		std::shared_ptr<ConfigManager> config;

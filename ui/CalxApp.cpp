@@ -251,9 +251,7 @@ namespace CalXUI {
 			try {
 				this->script->call(id);
 			} catch (...) {
-			wxMessageBox(
-			    __("Fuck it!"),
-			    __("Warning"), wxOK | wxICON_WARNING);
+				wxMessageBox(__("Fuck it!"), __("Warning"), wxOK | wxICON_WARNING);
 			}
 			return true;
 		}

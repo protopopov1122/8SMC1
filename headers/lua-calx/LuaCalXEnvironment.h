@@ -28,14 +28,15 @@ using namespace CalX;
 using namespace CalXUI;
 
 namespace CalXLua {
-	
+
 	class CalXException : public std::exception {
-		public:
-			CalXException(ErrorCode);
-			ErrorCode getErrorCode();
-			virtual const char* what() const throw();
-		private:
-			ErrorCode errcode;
+	 public:
+		CalXException(ErrorCode);
+		ErrorCode getErrorCode();
+		virtual const char *what() const throw();
+
+	 private:
+		ErrorCode errcode;
 	};
 
 	class LuaCalXEnvironment {
@@ -55,7 +56,7 @@ namespace CalXLua {
 		int motorMoveToTrailer(int, int);
 		bool motorCheckTrailers(int);
 		int motorWaitWhileRunning(int);
-		
+
 		int instrumentOpenSession(int);
 		int instrumentCloseSession(int);
 		int instrumentEnable(int, bool);
@@ -67,7 +68,7 @@ namespace CalXLua {
 		bool instrumentIsSessionOpened(int);
 		std::string instrumentGetInfo(int);
 
-	 private:	
+	 private:
 		CalXScriptEnvironment &env;
 	};
 }  // namespace CalXLua

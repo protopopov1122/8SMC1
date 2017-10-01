@@ -81,7 +81,8 @@ int main(int argc, char **argv) {
 		if (sysman->getDeviceManager()->hasError()) {
 			std::cout << "Errors occured during execution" << std::endl;
 			while (sysman->getDeviceManager()->hasError()) {
-				std::cout << "Error: " << sysman->getDeviceManager()->pollError() << std::endl;
+				std::cout << "Error: " << sysman->getDeviceManager()->pollError()
+				          << std::endl;
 			}
 		}
 	} while (cli.shell());

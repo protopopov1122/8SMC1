@@ -44,7 +44,7 @@ namespace CalXUI {
 		virtual ErrorCode motorMoveToTrailer(device_id_t, TrailerId);
 		virtual std::pair<bool, ErrorCode> motorCheckTrailers(device_id_t);
 		virtual ErrorCode motorWaitWhileRunning(device_id_t);
-		
+
 		virtual ErrorCode instrumentOpenSession(device_id_t);
 		virtual ErrorCode instrumentCloseSession(device_id_t);
 		virtual ErrorCode instrumentEnable(device_id_t, bool);
@@ -52,7 +52,8 @@ namespace CalXUI {
 		virtual std::pair<bool, ErrorCode> instrumentIsRunnable(device_id_t);
 		virtual ErrorCode instrumentSetRunnable(device_id_t, bool);
 		virtual std::pair<InstrumentMode, ErrorCode> instrumentGetMode(device_id_t);
-		virtual std::pair<bool, ErrorCode> instrumentSetMode(device_id_t, InstrumentMode);
+		virtual std::pair<bool, ErrorCode> instrumentSetMode(device_id_t,
+		                                                     InstrumentMode);
 		virtual std::pair<bool, ErrorCode> instrumentIsSessionOpened(device_id_t);
 		virtual std::pair<std::string, ErrorCode> instrumentGetInfo(device_id_t);
 
