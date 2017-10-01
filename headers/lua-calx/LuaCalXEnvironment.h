@@ -50,14 +50,14 @@ namespace CalXLua {
 		int instrumentCloseSession(int);
 		int instrumentEnable(int, bool);
 		bool instrumentIsEnabled(int);
-		void instrumentSetRunnable(int, bool);
+		int instrumentSetRunnable(int, bool);
 		bool instrumentIsRunnable(int);
 		int instrumentGetMode(int);
 		bool instrumentSetMode(int, int);
 		bool instrumentIsSessionOpened(int);
 		std::string instrumentGetInfo(int);
 
-	 private:
+	 private:	
 		CalXScriptEnvironment &env;
 	};
 }  // namespace CalXLua

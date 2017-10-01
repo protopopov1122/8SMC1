@@ -18,12 +18,14 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <exception>
 #include "lua-calx/LuaScriptEngine.h"
 
 namespace CalXLua {
 
 	LuaCalXScript::LuaCalXScript(CalXScriptEnvironment &env)
 	    : CalXScript(env), lua(true), lua_env(env) {
+			
 		this->bind_functions();
 		this->init_constants();
 

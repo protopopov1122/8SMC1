@@ -35,26 +35,26 @@ namespace CalXUI {
 		virtual bool connectSerialInstrument(uint8_t, uint32_t, uint8_t);
 		virtual size_t getMotorCount();
 		virtual size_t getInstrumentCount();
-		virtual Power getMotorPower(device_id_t);
+		virtual std::pair<Power, ErrorCode> getMotorPower(device_id_t);
 		virtual ErrorCode enableMotorPower(device_id_t, bool);
 		virtual ErrorCode motorMove(device_id_t, motor_coord_t, float);
 		virtual ErrorCode motorRelativeMove(device_id_t, motor_coord_t, float);
 		virtual ErrorCode motorStop(device_id_t);
-		virtual motor_coord_t getMotorPosition(device_id_t);
+		virtual std::pair<motor_coord_t, ErrorCode> getMotorPosition(device_id_t);
 		virtual ErrorCode motorMoveToTrailer(device_id_t, TrailerId);
-		virtual bool motorCheckTrailers(device_id_t);
+		virtual std::pair<bool, ErrorCode> motorCheckTrailers(device_id_t);
 		virtual ErrorCode motorWaitWhileRunning(device_id_t);
 		
 		virtual ErrorCode instrumentOpenSession(device_id_t);
 		virtual ErrorCode instrumentCloseSession(device_id_t);
 		virtual ErrorCode instrumentEnable(device_id_t, bool);
-		virtual bool instrumentIsEnabled(device_id_t);
-		virtual bool instrumentIsRunnable(device_id_t);
-		virtual void instrumentSetRunnable(device_id_t, bool);
-		virtual InstrumentMode instrumentGetMode(device_id_t);
-		virtual bool instrumentSetMode(device_id_t, InstrumentMode);
-		virtual bool instrumentIsSessionOpened(device_id_t);
-		virtual std::string instrumentGetInfo(device_id_t);
+		virtual std::pair<bool, ErrorCode> instrumentIsEnabled(device_id_t);
+		virtual std::pair<bool, ErrorCode> instrumentIsRunnable(device_id_t);
+		virtual ErrorCode instrumentSetRunnable(device_id_t, bool);
+		virtual std::pair<InstrumentMode, ErrorCode> instrumentGetMode(device_id_t);
+		virtual std::pair<bool, ErrorCode> instrumentSetMode(device_id_t, InstrumentMode);
+		virtual std::pair<bool, ErrorCode> instrumentIsSessionOpened(device_id_t);
+		virtual std::pair<std::string, ErrorCode> instrumentGetInfo(device_id_t);
 
 	 private:
 		CalxApp &app;

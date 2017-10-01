@@ -248,7 +248,13 @@ namespace CalXUI {
 			    __("Warning"), wxOK | wxICON_WARNING);
 			return false;
 		} else {
-			this->script->call(id);
+			try {
+				this->script->call(id);
+			} catch (...) {
+			wxMessageBox(
+			    __("Fuck it!"),
+			    __("Warning"), wxOK | wxICON_WARNING);
+			}
 			return true;
 		}
 	}

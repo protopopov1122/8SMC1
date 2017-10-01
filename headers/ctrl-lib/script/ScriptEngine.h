@@ -39,26 +39,26 @@ namespace CalXUI {
 		virtual bool connectSerialInstrument(uint8_t, uint32_t, uint8_t) = 0;
 		virtual size_t getMotorCount() = 0;
 		virtual size_t getInstrumentCount() = 0;
-		virtual Power getMotorPower(device_id_t) = 0;
+		virtual std::pair<Power, ErrorCode> getMotorPower(device_id_t) = 0;
 		virtual ErrorCode enableMotorPower(device_id_t, bool) = 0;
 		virtual ErrorCode motorMove(device_id_t, motor_coord_t, float) = 0;
 		virtual ErrorCode motorRelativeMove(device_id_t, motor_coord_t, float) = 0;
 		virtual ErrorCode motorStop(device_id_t) = 0;
-		virtual motor_coord_t getMotorPosition(device_id_t) = 0;
+		virtual std::pair<motor_coord_t, ErrorCode> getMotorPosition(device_id_t) = 0;
 		virtual ErrorCode motorMoveToTrailer(device_id_t, TrailerId) = 0;
-		virtual bool motorCheckTrailers(device_id_t) = 0;
+		virtual std::pair<bool, ErrorCode> motorCheckTrailers(device_id_t) = 0;
 		virtual ErrorCode motorWaitWhileRunning(device_id_t) = 0;
 		
 		virtual ErrorCode instrumentOpenSession(device_id_t) = 0;
 		virtual ErrorCode instrumentCloseSession(device_id_t) = 0;
 		virtual ErrorCode instrumentEnable(device_id_t, bool) = 0;
-		virtual bool instrumentIsEnabled(device_id_t) = 0;
-		virtual bool instrumentIsRunnable(device_id_t) = 0;
-		virtual void instrumentSetRunnable(device_id_t, bool) = 0;
-		virtual InstrumentMode instrumentGetMode(device_id_t) = 0;
-		virtual bool instrumentSetMode(device_id_t, InstrumentMode) = 0;
-		virtual bool instrumentIsSessionOpened(device_id_t) = 0;
-		virtual std::string instrumentGetInfo(device_id_t) = 0;
+		virtual std::pair<bool, ErrorCode> instrumentIsEnabled(device_id_t) = 0;
+		virtual std::pair<bool, ErrorCode> instrumentIsRunnable(device_id_t) = 0;
+		virtual ErrorCode instrumentSetRunnable(device_id_t, bool) = 0;
+		virtual std::pair<InstrumentMode, ErrorCode> instrumentGetMode(device_id_t) = 0;
+		virtual std::pair<bool, ErrorCode> instrumentSetMode(device_id_t, InstrumentMode) = 0;
+		virtual std::pair<bool, ErrorCode> instrumentIsSessionOpened(device_id_t) = 0;
+		virtual std::pair<std::string, ErrorCode> instrumentGetInfo(device_id_t) = 0;
 
 	 private:
 		std::shared_ptr<ConfigManager> config;
