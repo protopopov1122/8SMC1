@@ -32,6 +32,12 @@ wxDECLARE_EVENT(wxEVT_COMMAND_QUEUE_UPDATE, wxThreadEvent);
 
 namespace CalXUI {
 
+	struct ActionResult {
+		bool ready;
+		bool stopped;
+		ErrorCode errcode;
+	};
+
 	class CalxAction {
 	 public:
 		virtual ~CalxAction() = default;

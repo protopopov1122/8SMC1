@@ -21,6 +21,7 @@
 #ifndef CALX_UI_CALX_DEVICE_PANEL_H_
 #define CALX_UI_CALX_DEVICE_PANEL_H_
 
+#include <map>
 #include "ui/CalxActionQueue.h"
 #include "ui/CalxApp.h"
 #include "ui/CalxPanelPane.h"
@@ -37,8 +38,13 @@ namespace CalXUI {
 		virtual void shutdown();
 		virtual bool isBusy();
 		virtual void updateUI();
-		virtual void appendDevice(CalxDeviceConstructor *);
+		virtual void appendDevice(CalxDeviceConstructor *, bool * = nullptr);
 		virtual void appendDeviceFactory(std::string, CalxDeviceFactory *);
+		
+		virtual size_t getMotorCount();
+		virtual CalxMotorHandle *getMotor(device_id_t);
+		virtual size_t getInstrumentCount();
+		virtual CalxInstrumentHandle *getInstrument(device_id_t);
 
 	 private:
 		void OnExit(wxCloseEvent &);
@@ -51,6 +57,9 @@ namespace CalXUI {
 		CalxActionQueue *queue;
 
 		wxPanel *connectPanel;
+		
+		std::map<device_id_t, CalxMotorHandle *> motors;
+		std::map<device_id_t, CalxInstrumentHandle *> instrs;
 	};
 }  // namespace CalXUI
 

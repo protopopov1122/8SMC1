@@ -28,12 +28,6 @@
 
 namespace CalXUI {
 
-	struct ActionResult {
-		bool ready;
-		bool stopped;
-		ErrorCode errcode;
-	};
-
 	class CalxCoordActionMove : public CalxAction {
 	 public:
 		CalxCoordActionMove(std::shared_ptr<CoordHandle>, coord_point_t, double,

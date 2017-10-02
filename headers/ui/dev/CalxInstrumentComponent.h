@@ -33,13 +33,16 @@ namespace CalXUI {
 
 	wxDECLARE_EVENT(wxEVT_INSTRUMENT_CTRL_ENABLE, wxThreadEvent);
 
-	class CalxInstrumentComponent : public CalxDeviceHandle {
+	class CalxInstrumentComponent : public CalxDeviceHandle,
+	                                public CalxInstrumentHandle {
 	 public:
 		CalxInstrumentComponent(wxWindow *, wxWindowID,
 		                        std::shared_ptr<InstrumentController>);
 		virtual void stop();
 		virtual void updateUI();
 		virtual bool isBusy();
+		
+		virtual DeviceController *getController();
 
 	 private:
 		void OnExit(wxCloseEvent &);

@@ -22,6 +22,7 @@
 #define CALX_UI_DEV_CALX_DEVICE_HANDLE_H_
 
 #include "ui/CalxApp.h"
+#include "ui/CalxActionQueue.h"
 
 namespace CalXUI {
 
@@ -32,6 +33,21 @@ namespace CalXUI {
 		virtual void updateUI() = 0;
 		virtual void stop() = 0;
 		virtual bool isBusy() = 0;
+		virtual DeviceController *getController() = 0;
+	};
+	
+	class CalxMotorHandle {
+		public:
+			virtual ~CalxMotorHandle() = default;
+			virtual void stopMovement() = 0;
+			virtual ErrorCode setPower(bool) = 0;
+			virtual ErrorCode roll(TrailerId, ActionResult * = nullptr) = 0;
+			virtual ErrorCode move(motor_coord_t, float, bool, ActionResult * = nullptr) = 0;
+	};
+	
+	class CalxInstrumentHandle {
+		public:
+			virtual ~CalxInstrumentHandle() = default;
 	};
 
 	class CalxDeviceConstructor {
@@ -42,7 +58,11 @@ namespace CalXUI {
 
 	class CalxDevicePool {
 	 public:
-		virtual void appendDevice(CalxDeviceConstructor *) = 0;
+		virtual void appendDevice(CalxDeviceConstructor *, bool * = nullptr) = 0;
+		virtual size_t getMotorCount() = 0;
+		virtual CalxMotorHandle *getMotor(device_id_t) = 0;
+		virtual size_t getInstrumentCount() = 0;
+		virtual CalxInstrumentHandle *getInstrument(device_id_t) = 0;
 	};
 }  // namespace CalXUI
 

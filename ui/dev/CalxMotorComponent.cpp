@@ -62,27 +62,40 @@ namespace CalXUI {
 	class CalxMotorMoveAction : public CalxAction {
 	 public:
 		CalxMotorMoveAction(CalxMotorComponent *ctrl, MotorController *dev,
-		                    int dest, float speed, bool rel) {
+		                    int dest, float speed, bool rel,
+							ActionResult *act_res = nullptr) {
 			this->ctrl = ctrl;
 			this->dev = dev;
 			this->dest = dest;
 			this->speed = speed;
 			this->rel = rel;
+			this->action_result = act_res;
+			if (act_res != nullptr) {
+				this->action_result->ready = false;
+				this->action_result->stopped = false;
+				this->action_result->errcode = ErrorCode::NoError;
+			}
 		}
 
-		virtual ~CalxMotorMoveAction() {}
-
 		virtual void perform(SystemManager *sysman) {
+			ErrorCode errcode;
 			if (rel) {
-				wxGetApp().getErrorHandler()->handle(
-				    dev->startRelativeMove(dest, speed));
+				errcode = dev->startRelativeMove(dest, speed);
 			} else {
-				wxGetApp().getErrorHandler()->handle(dev->startMove(dest, speed));
+				errcode = dev->startMove(dest, speed);
+			}
+			wxGetApp().getErrorHandler()->handle(errcode);
+			if (this->action_result != nullptr) {
+				this->action_result->ready = true;
+				this->action_result->errcode = errcode;
 			}
 		}
 
 		virtual void stop() {
 			dev->stop();
+			if (this->action_result != nullptr) {
+				this->action_result->stopped = true;
+			}
 		}
 
 	 private:
@@ -91,31 +104,45 @@ namespace CalXUI {
 		int dest;
 		float speed;
 		bool rel;
+		ActionResult *action_result;
 	};
 
 	class CalxMotorCalibrationAction : public CalxAction {
 	 public:
 		CalxMotorCalibrationAction(CalxMotorComponent *ctrl, MotorController *dev,
-		                           int tr) {
+		                           int tr, ActionResult *act_res = nullptr) {
 			this->ctrl = ctrl;
 			this->dev = dev;
 			this->tr = tr;
+			this->action_result = act_res;
+			if (act_res != nullptr) {
+				this->action_result->ready = false;
+				this->action_result->stopped = false;
+				this->action_result->errcode = ErrorCode::NoError;
+			}
 		}
 
-		virtual ~CalxMotorCalibrationAction() {}
-
 		virtual void perform(SystemManager *sysman) {
-			wxGetApp().getErrorHandler()->handle(dev->moveToTrailer(tr));
+			ErrorCode errcode = dev->moveToTrailer(tr);
+			wxGetApp().getErrorHandler()->handle(errcode);
+			if (this->action_result != nullptr) {
+				this->action_result->errcode = errcode;
+				this->action_result->ready = true;
+			}
 		}
 
 		virtual void stop() {
 			dev->stop();
+			if (this->action_result != nullptr) {
+				this->action_result->stopped = true;
+			}
 		}
 
 	 private:
 		CalxMotorComponent *ctrl;
 		MotorController *dev;
 		int tr;
+		ActionResult *action_result;
 	};
 
 	CalxMotorComponent::CalxMotorComponent(
@@ -264,6 +291,10 @@ namespace CalXUI {
 		evt.SetPayload(e);
 		wxPostEvent(this, evt);
 	}
+	
+	DeviceController *CalxMotorComponent::getController() {
+		return this->dev.get();
+	}
 
 	void CalxMotorComponent::updateUI() {
 		std::string pos = __("Position") + std::string(": ") +
@@ -307,35 +338,52 @@ namespace CalXUI {
 	bool CalxMotorComponent::isBusy() {
 		return this->queue->isBusy();
 	}
+	
+	ErrorCode CalxMotorComponent::setPower(bool pw) {
+		return dev->enablePower(pw);
+	}
 
 	void CalxMotorComponent::switchPowerClick(wxCommandEvent &evt) {
 		wxGetApp().getErrorHandler()->handle(dev->flipPower());
 	}
+	
+	ErrorCode CalxMotorComponent::roll(TrailerId tr, ActionResult *act_res) {
+		this->queue->addAction(
+		    std::make_unique<CalxMotorCalibrationAction>(this, dev.get(), static_cast<int>(tr), act_res));
+		return ErrorCode::NoError;
+	}
 
 	void CalxMotorComponent::rollToTrailer1(wxCommandEvent &evt) {
-		this->queue->addAction(
-		    std::make_unique<CalxMotorCalibrationAction>(this, dev.get(), 1));
+		this->roll(TrailerId::Trailer1);
 	}
 
 	void CalxMotorComponent::rollToTrailer2(wxCommandEvent &evt) {
-		this->queue->addAction(
-		    std::make_unique<CalxMotorCalibrationAction>(this, dev.get(), 2));
+		this->roll(TrailerId::Trailer2);
 	}
 
-	void CalxMotorComponent::stopClick(wxCommandEvent &evt) {
+	void CalxMotorComponent::stopMovement() {
 		this->queue->stopCurrent();
+	}
+	
+	void CalxMotorComponent::stopClick(wxCommandEvent &evt) {
+		this->stopMovement();
+	}
+	
+	ErrorCode CalxMotorComponent::move(motor_coord_t dest, float speed, bool relative, ActionResult *act_res) {
+		this->queue->addAction(std::make_unique<CalxMotorMoveAction>(
+		    this, dev.get(), dest,
+		    speed, relative, act_res));
+		return ErrorCode::NoError;
 	}
 
 	void CalxMotorComponent::moveClick(wxCommandEvent &evt) {
-		this->queue->addAction(std::make_unique<CalxMotorMoveAction>(
-		    this, dev.get(), this->moveSpin->GetValue(),
-		    this->moveSpeedSpin->GetValue(), false));
+		this->move(this->moveSpin->GetValue(),
+		    this->moveSpeedSpin->GetValue(), false);
 	}
 
 	void CalxMotorComponent::rmoveClick(wxCommandEvent &evt) {
-		this->queue->addAction(std::make_unique<CalxMotorMoveAction>(
-		    this, dev.get(), this->moveSpin->GetValue(),
-		    this->moveSpeedSpin->GetValue(), true));
+		this->move(this->moveSpin->GetValue(),
+		    this->moveSpeedSpin->GetValue(), true);
 	}
 
 	void CalxMotorComponent::threadUpdate(wxThreadEvent &evt) {}

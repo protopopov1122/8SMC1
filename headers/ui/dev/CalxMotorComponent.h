@@ -58,7 +58,8 @@ namespace CalXUI {
 		CalxMotorComponent *ctrl;
 	};
 
-	class CalxMotorComponent : public CalxDeviceHandle {
+	class CalxMotorComponent : public CalxDeviceHandle,
+	                           public CalxMotorHandle {
 	 public:
 		friend class CalxMotorEventListener;
 		CalxMotorComponent(wxWindow *, wxWindowID,
@@ -67,6 +68,13 @@ namespace CalXUI {
 		virtual void stop();
 		virtual bool isBusy();
 		void setEnabled(bool);
+		
+		virtual void stopMovement();
+		virtual ErrorCode setPower(bool);
+		virtual ErrorCode roll(TrailerId, ActionResult * = nullptr);
+		virtual ErrorCode move(motor_coord_t, float, bool, ActionResult * = nullptr);
+		
+		virtual DeviceController *getController();
 
 	 private:
 		void switchPowerClick(wxCommandEvent &);

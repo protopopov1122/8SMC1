@@ -223,6 +223,10 @@ namespace CalXUI {
 		this->Bind(wxEVT_INSTRUMENT_CTRL_ENABLE,
 		           &CalxInstrumentComponent::OnEnableEvent, this);
 	}
+	
+	DeviceController *CalxInstrumentComponent::getController() {
+		return this->ctrl.get();
+	}
 
 	void CalxInstrumentComponent::stop() {
 		timer->Stop();

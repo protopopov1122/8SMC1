@@ -52,9 +52,11 @@ namespace CalXUI {
 			             __("Script: Connection error"), wxICON_WARNING);
 			return false;
 		} else {
+			bool ready = false;
 			this->app.getMainFrame()->getDevicePool()->appendDevice(
 			    new CalxMotorConstructor(this->app.getMainFrame()->getDevicePool(),
-			                             ctrl));
+			                             ctrl), &ready);
+			while (!ready) {}							 
 			return true;
 		}
 	}
@@ -74,19 +76,21 @@ namespace CalXUI {
 			             __("Script: Connection error"), wxICON_WARNING);
 			return false;
 		} else {
+			bool ready = false;
 			this->app.getMainFrame()->getDevicePool()->appendDevice(
 			    new CalxInstrumentConstructor(
-			        this->app.getMainFrame()->getDevicePool(), ctrl));
+			        this->app.getMainFrame()->getDevicePool(), ctrl), &ready);
+			while (!ready) {}
 			return true;
 		}
 	}
 
 	size_t CalXAppScriptEnvironment::getMotorCount() {
-		return this->app.getSystemManager()->getMotorCount();
+		return this->app.getMainFrame()->getDevicePool()->getMotorCount();
 	}
 
 	size_t CalXAppScriptEnvironment::getInstrumentCount() {
-		return this->app.getSystemManager()->getInstrumentCount();
+		return this->app.getMainFrame()->getDevicePool()->getInstrumentCount();
 	}
 
 	std::pair<Power, ErrorCode> CalXAppScriptEnvironment::getMotorPower(
@@ -104,54 +108,64 @@ namespace CalXUI {
 
 	ErrorCode CalXAppScriptEnvironment::enableMotorPower(device_id_t id,
 	                                                     bool power) {
-		std::shared_ptr<MotorController> motor =
-		    this->app.getSystemManager()->getMotorController(id);
+		CalxMotorHandle *motor = this->app.getMainFrame()->getDevicePool()->getMotor(id);
 		if (motor == nullptr) {
 			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
-			return motor->enablePower(power);
+			return motor->setPower(power);
 		}
 	}
 
 	ErrorCode CalXAppScriptEnvironment::motorMove(device_id_t id,
 	                                              motor_coord_t pos,
 	                                              float speed) {
-		std::shared_ptr<MotorController> motor =
-		    this->app.getSystemManager()->getMotorController(id);
+		CalxMotorHandle *motor = this->app.getMainFrame()->getDevicePool()->getMotor(id);
 		if (motor == nullptr) {
 			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
-			return motor->startMove(pos, speed);
+			ActionResult res = {false, false, ErrorCode::NoError};
+			motor->move(pos, speed, false, &res);
+			while (!res.ready) {}
+			if (res.stopped) {
+				return ErrorCode::Interrupted;
+			} else {
+				return res.errcode;;
+			}
 		}
 	}
 
 	ErrorCode CalXAppScriptEnvironment::motorRelativeMove(device_id_t id,
 	                                                      motor_coord_t pos,
 	                                                      float speed) {
-		std::shared_ptr<MotorController> motor =
-		    this->app.getSystemManager()->getMotorController(id);
+		CalxMotorHandle *motor = this->app.getMainFrame()->getDevicePool()->getMotor(id);
 		if (motor == nullptr) {
 			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
-			return motor->startRelativeMove(pos, speed);
+			ActionResult res = {false, false, ErrorCode::NoError};
+			motor->move(pos, speed, true, &res);
+			while (!res.ready) {}
+			if (res.stopped) {
+				return ErrorCode::Interrupted;
+			} else {
+				return res.errcode;;
+			}
 		}
 	}
 
 	ErrorCode CalXAppScriptEnvironment::motorStop(device_id_t id) {
-		std::shared_ptr<MotorController> motor =
-		    this->app.getSystemManager()->getMotorController(id);
+		CalxMotorHandle *motor = this->app.getMainFrame()->getDevicePool()->getMotor(id);
 		if (motor == nullptr) {
 			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
-			motor->stop();
+			motor->stopMovement();
 			return ErrorCode::NoError;
 		}
 	}
@@ -171,14 +185,20 @@ namespace CalXUI {
 
 	ErrorCode CalXAppScriptEnvironment::motorMoveToTrailer(device_id_t id,
 	                                                       TrailerId tr) {
-		std::shared_ptr<MotorController> motor =
-		    this->app.getSystemManager()->getMotorController(id);
+		CalxMotorHandle *motor = this->app.getMainFrame()->getDevicePool()->getMotor(id);
 		if (motor == nullptr) {
 			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
-			return motor->moveToTrailer(static_cast<int>(tr));
+			ActionResult res = {false, false, ErrorCode::NoError};
+			motor->roll(tr, &res);
+			while (!res.ready) {}
+			if (res.stopped) {
+				return ErrorCode::Interrupted;
+			} else {
+				return res.errcode;;
+			}
 		}
 	}
 

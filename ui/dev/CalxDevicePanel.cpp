@@ -85,9 +85,9 @@ namespace CalXUI {
 		}
 	}
 
-	void CalxDevicePanel::appendDevice(CalxDeviceConstructor *cnstr) {
+	void CalxDevicePanel::appendDevice(CalxDeviceConstructor *cnstr, bool *ready) {
 		wxThreadEvent evt(wxEVT_DEVICE_PANEL_DEVICE_APPEND);
-		evt.SetPayload(cnstr);
+		evt.SetPayload(std::make_pair(cnstr, ready));
 		wxPostEvent(this, evt);
 	}
 
@@ -110,12 +110,46 @@ namespace CalXUI {
 	}
 
 	void CalxDevicePanel::OnDeviceAppend(wxThreadEvent &evt) {
-		CalxDeviceConstructor *cnstr = evt.GetPayload<CalxDeviceConstructor *>();
+		std::pair<CalxDeviceConstructor *, bool *> pair = evt.GetPayload<std::pair<CalxDeviceConstructor *, bool *>>();
+		CalxDeviceConstructor *cnstr = pair.first;
 		CalxDeviceHandle *device = cnstr->construct(this);
+		if (device->getController()->getDevice()->getType() == DeviceType::Motor) {
+			device_id_t id = device->getController()->getID();
+			this->motors.insert(std::make_pair(id, dynamic_cast<CalxMotorHandle *>(device)));
+		} else {
+			this->instrs[device->getController()->getID()] = dynamic_cast<CalxInstrumentHandle *>(device);
+		}
 		delete cnstr;
 		GetSizer()->Add(device, 0, wxEXPAND | wxALL, 10);
 		this->devices.push_back(device);
+		if (pair.second != nullptr) {
+			*pair.second = true;
+		}
 		updateUI();
 		Refresh();
+	}
+	
+	size_t CalxDevicePanel::getMotorCount() {
+		return this->motors.size();
+	}
+	
+	CalxMotorHandle *CalxDevicePanel::getMotor(device_id_t id) {
+		if (this->motors.count(id) == 0) {
+			return nullptr;
+		} else {
+			return this->motors[id];
+		}
+	}
+	
+	size_t CalxDevicePanel::getInstrumentCount() {
+		return this->instrs.size();
+	}
+	
+	CalxInstrumentHandle *CalxDevicePanel::getInstrument(device_id_t id) {
+		if (this->instrs.count(id) == 0) {
+			return nullptr;
+		} else {
+			return this->instrs[id];
+		}
 	}
 }  // namespace CalXUI
