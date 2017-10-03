@@ -82,7 +82,11 @@ namespace CalXLua {
 
 		this->lua["calx"]["plane"].SetObj(
 		    lua_env, "create", &LuaCalXEnvironment::planeCreate, "move",
-		    &LuaCalXEnvironment::planeMove, "arc", &LuaCalXEnvironment::planeArc);
+		    &LuaCalXEnvironment::planeMove, "arc", &LuaCalXEnvironment::planeArc,
+			"calibrate", &LuaCalXEnvironment::planeCalibrate,
+			"measure", &LuaCalXEnvironment::planeMeasure,
+			"fmove", &LuaCalXEnvironment::planeFMove,
+			"configure", &LuaCalXEnvironment::planeConfigure);
 	}
 
 	void LuaCalXScript::init_constants() {

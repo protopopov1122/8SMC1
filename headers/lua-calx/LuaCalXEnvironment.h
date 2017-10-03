@@ -71,6 +71,10 @@ namespace CalXLua {
 		bool planeCreate(int, int, int);
 		int planeMove(int, double, double, double, bool, bool);
 		int planeArc(int, double, double, double, double, int, double, bool, bool);
+		int planeCalibrate(int, int);
+		int planeMeasure(int, int);
+		int planeFMove(int, double, double, double);
+		int planeConfigure(int, double, double, double);
 
 	 private:
 		CalXScriptEnvironment &env;

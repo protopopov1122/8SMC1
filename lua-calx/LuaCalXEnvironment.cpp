@@ -246,4 +246,42 @@ namespace CalXLua {
 		}
 		return static_cast<int>(errcode);
 	}
+	
+	int LuaCalXEnvironment::planeCalibrate(int id, int tid) {
+		ErrorCode errcode = env.planeCalibrate(static_cast<size_t>(id),
+		                                       static_cast<TrailerId>(tid));
+		if (errcode != ErrorCode::NoError) {
+			throw CalXException(errcode);
+		}
+		return static_cast<int>(errcode);
+	}
+	
+	int LuaCalXEnvironment::planeMeasure(int id, int tid) {
+		ErrorCode errcode = env.planeMeasure(static_cast<size_t>(id),
+		                                     static_cast<TrailerId>(tid));
+		if (errcode != ErrorCode::NoError) {
+			throw CalXException(errcode);
+		}
+		return static_cast<int>(errcode);
+	}
+	
+	int LuaCalXEnvironment::planeFMove(int id, double x, double y, double speed) {
+		coord_point_t dest = {x, y};
+		ErrorCode errcode = env.planeMove(static_cast<size_t>(id),
+		                                  dest, speed);
+		if (errcode != ErrorCode::NoError) {
+			throw CalXException(errcode);
+		}
+		return static_cast<int>(errcode);
+	}
+	
+	int LuaCalXEnvironment::planeConfigure(int id, double x, double y, double speed) {
+		coord_point_t dest = {x, y};
+		ErrorCode errcode = env.planeConfigure(static_cast<size_t>(id),
+		                                  dest, speed);
+		if (errcode != ErrorCode::NoError) {
+			throw CalXException(errcode);
+		}
+		return static_cast<int>(errcode);
+	}
 }  // namespace CalXLua

@@ -58,8 +58,6 @@ function init()
 	calx.plane.arc(0, 5000, 5000, 5000, 0, 1000, 1.25, false, true)
 	calx.plane.arc(0, 5000, 5000, 5000, 0, 1000, 1.25, false, true)
 	calx.plane.arc(0, 5000, 5000, 5000, 0, 1000, 1.25, false, true) ]]--
-	calx.motor.enablePower(0, true)
-	calx.motor.enablePower(1, true)
-	calx.motor.moveToTrailer(0, calx.motor.trailer.Top)
-	calx.motor.moveToTrailer(1, calx.motor.trailer.Bottom)
+	calx.plane.create(0, 1, 0)
+	calx.plane.configure(0, 0.5, 0.5, 1.25)
 end

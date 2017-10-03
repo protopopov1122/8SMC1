@@ -69,10 +69,10 @@ namespace CalXUI {
 		virtual ErrorCode planeMove(size_t, coord_point_t, double, bool, bool) = 0;
 		virtual ErrorCode planeArc(size_t, coord_point_t, coord_point_t, int,
 		                           double, bool, bool) = 0;
-		/*virtual ErrorCode planeCalibrate(size_t, TrailerId) = 0;
+		virtual ErrorCode planeCalibrate(size_t, TrailerId) = 0;
 		virtual ErrorCode planeMeasure(size_t, TrailerId) = 0;
 		virtual ErrorCode planeMove(size_t, coord_point_t, double) = 0;
-		virtual ErrorCode planeConfigure(size_t, coord_point_t, double) = 0;*/
+		virtual ErrorCode planeConfigure(size_t, coord_point_t, double) = 0;
 
 	 private:
 		std::shared_ptr<ConfigManager> config;

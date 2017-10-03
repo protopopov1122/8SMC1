@@ -90,39 +90,77 @@ namespace CalXUI {
 	}
 
 	CalxCoordActionCalibrate::CalxCoordActionCalibrate(
-	    std::shared_ptr<CoordHandle> handle, TrailerId tr)
-	    : handle(handle), trailer(tr) {}
+	    std::shared_ptr<CoordHandle> handle, TrailerId tr, ActionResult *act_res)
+	    : handle(handle), trailer(tr), action_result(act_res) {
+		
+		if (this->action_result != nullptr) {
+			this->action_result->ready = false;
+			this->action_result->stopped = false;
+			this->action_result->errcode = ErrorCode::NoError;
+		}
+	}
 
 	void CalxCoordActionCalibrate::perform(SystemManager *sysman) {
 		handle->open_session();
-		wxGetApp().getErrorHandler()->handle(handle->calibrate(trailer));
+		ErrorCode errcode = handle->calibrate(trailer);
+		wxGetApp().getErrorHandler()->handle(errcode);
 		handle->close_session();
+		if (this->action_result != nullptr) {
+			this->action_result->errcode = errcode;
+			this->action_result->ready = true;
+		}
 	}
 	void CalxCoordActionCalibrate::stop() {
 		this->handle->stop();
+		if (this->action_result != nullptr) {
+			this->action_result->stopped = true;
+		}
 	}
 
 	CalxCoordActionMeasure::CalxCoordActionMeasure(
-	    std::shared_ptr<CoordHandle> handle, TrailerId tr)
-	    : handle(handle), trailer(tr) {}
+	    std::shared_ptr<CoordHandle> handle, TrailerId tr, ActionResult *act_res)
+	    : handle(handle), trailer(tr), action_result(act_res) {
+		
+		if (this->action_result != nullptr) {
+			this->action_result->ready = false;
+			this->action_result->stopped = false;
+			this->action_result->errcode = ErrorCode::NoError;
+		}
+	}
 
 	void CalxCoordActionMeasure::perform(SystemManager *sysman) {
 		handle->open_session();
-		wxGetApp().getErrorHandler()->handle(handle->measure(trailer));
+		ErrorCode errcode = handle->measure(trailer);
+		wxGetApp().getErrorHandler()->handle(errcode);
 		handle->close_session();
+		if (this->action_result != nullptr) {
+			this->action_result->errcode = errcode;
+			this->action_result->ready = true;
+		}
 	}
 	void CalxCoordActionMeasure::stop() {
 		this->handle->stop();
+		if (this->action_result != nullptr) {
+			this->action_result->stopped = true;
+		}
 	}
 
 	CalxCoordActionConfigure::CalxCoordActionConfigure(
 	    std::shared_ptr<CoordHandle> handle, CalxCoordController *ctrl,
-	    coord_point_t dest, double speed)
+	    coord_point_t dest, double speed, ActionResult *act_res)
 	    : handle(handle),
 	      controller(ctrl),
 	      dest(dest),
 	      speed(speed),
-	      work(false) {}
+	      work(false),
+		  action_result(act_res) {
+		
+		if (this->action_result != nullptr) {
+			this->action_result->ready = false;
+			this->action_result->stopped = false;
+			this->action_result->errcode = ErrorCode::NoError;
+		}
+	}
 
 	void CalxCoordActionConfigure::perform(SystemManager *sysman) {
 		handle->open_session();
@@ -133,12 +171,12 @@ namespace CalXUI {
 		if (errcode != ErrorCode::NoError) {
 			work = false;
 		}
-		motor_rect_t size = this->handle->getSize();
-		motor_coord_t x =
-		    (motor_coord_t)(((double) size.w) * this->dest.x) + size.x;
-		motor_coord_t y =
-		    (motor_coord_t)(((double) size.h) * this->dest.y) + size.y;
-		motor_point_t dest = { x, y };
+		coord_rect_t size = this->handle->getFloatPlane()->getFloatSize();
+		double x =
+		    static_cast<double>((((double) size.w) * this->dest.x) + size.x);
+		double y =
+		    static_cast<double>((((double) size.h) * this->dest.y) + size.y);
+		coord_point_t dest = { x, y };
 		if (work) {
 			errcode = handle->getFloatPlane()->move(dest, speed, false);
 		}
@@ -147,11 +185,18 @@ namespace CalXUI {
 		}
 		wxGetApp().getErrorHandler()->handle(errcode);
 		handle->close_session();
+		if (this->action_result != nullptr) {
+			this->action_result->errcode = errcode;
+			this->action_result->ready = true;
+		}
 	}
 
 	void CalxCoordActionConfigure::stop() {
 		this->work = false;
 		handle->stop();
+		if (this->action_result != nullptr) {
+			this->action_result->stopped = true;
+		}
 	}
 
 	CalxCoordActionGraphBuild::CalxCoordActionGraphBuild(

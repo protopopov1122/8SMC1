@@ -416,4 +416,81 @@ namespace CalXUI {
 		}
 	}
 
+	ErrorCode CalXAppScriptEnvironment::planeCalibrate(size_t id, TrailerId tid) {
+		CalxPlaneHandle *handle =
+		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);
+		if (handle == nullptr) {
+			return ErrorCode::UnknownResource;
+		} else {
+			bool ready = false;
+			ActionResult res = { false, false, ErrorCode::NoError };
+			handle->getController()->calibrate(tid, &ready, &res);
+			while (!ready) {
+			}
+			if (res.stopped) {
+				return ErrorCode::Interrupted;
+			} else {
+				return res.errcode;
+			}
+		}
+	}
+
+	ErrorCode CalXAppScriptEnvironment::planeMeasure(size_t id, TrailerId tid) {
+		CalxPlaneHandle *handle =
+		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);
+		if (handle == nullptr) {
+			return ErrorCode::UnknownResource;
+		} else {
+			bool ready = false;
+			ActionResult res = { false, false, ErrorCode::NoError };
+			handle->getController()->measure(tid, &ready, &res);
+			while (!ready) {
+			}
+			if (res.stopped) {
+				return ErrorCode::Interrupted;
+			} else {
+				return res.errcode;
+			}
+		}
+	}
+
+	ErrorCode CalXAppScriptEnvironment::planeMove(size_t id, coord_point_t dest, double speed) {
+		CalxPlaneHandle *handle =
+		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);
+		if (handle == nullptr) {
+			return ErrorCode::UnknownResource;
+		} else {
+			bool ready = false;
+			ActionResult res = { false, false, ErrorCode::NoError };
+			handle->getController()->move(dest, speed, &ready, &res);
+			while (!ready) {
+			}
+			if (res.stopped) {
+				return ErrorCode::Interrupted;
+			} else {
+				return res.errcode;
+			}
+		}
+	}
+
+
+	ErrorCode CalXAppScriptEnvironment::planeConfigure(size_t id, coord_point_t dest, double speed) {
+		CalxPlaneHandle *handle =
+		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);
+		if (handle == nullptr) {
+			return ErrorCode::UnknownResource;
+		} else {
+			bool ready = false;
+			ActionResult res = { false, false, ErrorCode::NoError };
+			handle->getController()->configure(dest, speed, &ready, &res);
+			while (!ready) {
+			}
+			if (res.stopped) {
+				return ErrorCode::Interrupted;
+			} else {
+				return res.errcode;
+			}
+		}
+	}
+
 }  // namespace CalXUI

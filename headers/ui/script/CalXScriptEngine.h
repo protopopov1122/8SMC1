@@ -63,10 +63,10 @@ namespace CalXUI {
 		virtual ErrorCode planeMove(size_t, coord_point_t, double, bool, bool);
 		virtual ErrorCode planeArc(size_t, coord_point_t, coord_point_t, int,
 		                           double, bool, bool);
-		/*virtual ErrorCode planeCalibrate(size_t, TrailerId);
+		virtual ErrorCode planeCalibrate(size_t, TrailerId);
 		virtual ErrorCode planeMeasure(size_t, TrailerId);
 		virtual ErrorCode planeMove(size_t, coord_point_t, double);
-		virtual ErrorCode planeConfigure(size_t, coord_point_t, double);*/
+		virtual ErrorCode planeConfigure(size_t, coord_point_t, double);
 
 	 private:
 		CalxApp &app;
