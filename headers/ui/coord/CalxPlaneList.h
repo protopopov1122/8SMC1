@@ -30,8 +30,8 @@ namespace CalXUI {
 	class CalxPlaneHandle {
 	 public:
 		virtual ~CalxPlaneHandle() = default;
-		virtual CalxWatcherPool *getWatchers() = 0;
 		virtual CalxCoordController *getController() = 0;
+		virtual void newWatcher() = 0;
 	};
 
 	class CalxPlaneList {

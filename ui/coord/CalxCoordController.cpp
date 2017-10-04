@@ -187,6 +187,7 @@ namespace CalXUI {
 
 	void CalxCoordController::configure(coord_point_t pos, double speed,
 	                                    bool *ready, ActionResult *act_res) {
+
 		this->queue->addAction(std::make_unique<CalxCoordActionConfigure>(
 		                           this->handle, this, pos, speed, act_res),
 		                       ready);

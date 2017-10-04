@@ -86,7 +86,8 @@ namespace CalXLua {
 			"calibrate", &LuaCalXEnvironment::planeCalibrate,
 			"measure", &LuaCalXEnvironment::planeMeasure,
 			"fmove", &LuaCalXEnvironment::planeFMove,
-			"configure", &LuaCalXEnvironment::planeConfigure);
+			"configure", &LuaCalXEnvironment::planeConfigure,
+			"newWatcher", &LuaCalXEnvironment::planeNewWatcher);
 	}
 
 	void LuaCalXScript::init_constants() {

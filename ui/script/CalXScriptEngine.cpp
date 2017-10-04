@@ -38,7 +38,7 @@ namespace CalXUI {
 	          app.getSystemManager()->getConfiguration()),
 	      app(app) {}
 
-	bool CalXAppScriptEnvironment::connectSerialMotor(uint8_t port,
+	device_id_t CalXAppScriptEnvironment::connectSerialMotor(uint8_t port,
 	                                                  uint32_t baudrate,
 	                                                  uint8_t parity) {
 		SystemManager *sysman = this->app.getSystemManager();
@@ -50,18 +50,18 @@ namespace CalXUI {
 		if (ctrl == nullptr) {
 			wxMessageBox(__("Motor can't be connected"),
 			             __("Script: Connection error"), wxICON_WARNING);
-			return false;
+			return -1;
 		} else {
 			bool ready = false;
 			this->app.getMainFrame()->getDevicePool()->appendDevice(
 			    new CalxMotorConstructor(this->app.getMainFrame()->getDevicePool(),
 			                             ctrl), &ready);
 			while (!ready) {}							 
-			return true;
+			return ctrl->getID();
 		}
 	}
 
-	bool CalXAppScriptEnvironment::connectSerialInstrument(uint8_t port,
+	device_id_t CalXAppScriptEnvironment::connectSerialInstrument(uint8_t port,
 	                                                       uint32_t baudrate,
 	                                                       uint8_t parity) {
 		SystemManager *sysman = this->app.getSystemManager();
@@ -74,14 +74,14 @@ namespace CalXUI {
 		if (ctrl == nullptr) {
 			wxMessageBox(__("Instrument can't be connected"),
 			             __("Script: Connection error"), wxICON_WARNING);
-			return false;
+			return -1;
 		} else {
 			bool ready = false;
 			this->app.getMainFrame()->getDevicePool()->appendDevice(
 			    new CalxInstrumentConstructor(
 			        this->app.getMainFrame()->getDevicePool(), ctrl), &ready);
 			while (!ready) {}
-			return true;
+			return ctrl->getID();
 		}
 	}
 
@@ -356,19 +356,19 @@ namespace CalXUI {
 		}
 	}
 
-	bool CalXAppScriptEnvironment::createCoordPlane(device_id_t m1,
+	int32_t CalXAppScriptEnvironment::createCoordPlane(device_id_t m1,
 	                                                device_id_t m2,
 	                                                device_id_t instr) {
 		std::shared_ptr<CoordHandle> handle =
 		    this->app.getSystemManager()->createCoord(m1, m2, instr);
 		if (handle == nullptr) {
-			return false;
+			return -1;
 		} else {
 			bool ready = false;
 			this->app.getMainFrame()->getPlaneList()->updateList(handle, &ready);
 			while (!ready) {
 			}
-			return true;
+			return handle->getID();
 		}
 	}
 
@@ -490,6 +490,17 @@ namespace CalXUI {
 			} else {
 				return res.errcode;
 			}
+		}
+	}
+	
+	ErrorCode CalXAppScriptEnvironment::planeNewWatcher(size_t id) {
+		CalxPlaneHandle *handle =
+		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);
+		if (handle == nullptr) {
+			return ErrorCode::UnknownResource;
+		} else {
+			handle->newWatcher();
+			return ErrorCode::NoError;
 		}
 	}
 

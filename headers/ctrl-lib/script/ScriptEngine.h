@@ -35,8 +35,8 @@ namespace CalXUI {
 
 		std::shared_ptr<ConfigManager> getConfiguration();
 
-		virtual bool connectSerialMotor(uint8_t, uint32_t, uint8_t) = 0;
-		virtual bool connectSerialInstrument(uint8_t, uint32_t, uint8_t) = 0;
+		virtual device_id_t connectSerialMotor(uint8_t, uint32_t, uint8_t) = 0;
+		virtual device_id_t connectSerialInstrument(uint8_t, uint32_t, uint8_t) = 0;
 		virtual size_t getMotorCount() = 0;
 		virtual size_t getInstrumentCount() = 0;
 		virtual std::pair<Power, ErrorCode> getMotorPower(device_id_t) = 0;
@@ -65,7 +65,7 @@ namespace CalXUI {
 		virtual std::pair<std::string, ErrorCode> instrumentGetInfo(
 		    device_id_t) = 0;
 
-		virtual bool createCoordPlane(device_id_t, device_id_t, device_id_t) = 0;
+		virtual int32_t createCoordPlane(device_id_t, device_id_t, device_id_t) = 0;
 		virtual ErrorCode planeMove(size_t, coord_point_t, double, bool, bool) = 0;
 		virtual ErrorCode planeArc(size_t, coord_point_t, coord_point_t, int,
 		                           double, bool, bool) = 0;
@@ -73,6 +73,7 @@ namespace CalXUI {
 		virtual ErrorCode planeMeasure(size_t, TrailerId) = 0;
 		virtual ErrorCode planeMove(size_t, coord_point_t, double) = 0;
 		virtual ErrorCode planeConfigure(size_t, coord_point_t, double) = 0;
+		virtual ErrorCode planeNewWatcher(size_t) = 0;
 
 	 private:
 		std::shared_ptr<ConfigManager> config;

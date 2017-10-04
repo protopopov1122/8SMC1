@@ -50,14 +50,15 @@
 
 
 function init()
-	calx.motor.connectSerial(1, 9600, calx.serial.parity.No)
-	calx.motor.connectSerial(2, 9600, calx.serial.parity.No)
-    calx.instrument.connectSerial(4, 19200, calx.serial.parity.No)
+	m1 = calx.motor.connectSerial(1, 9600, calx.serial.parity.No)
+	m2 = calx.motor.connectSerial(2, 9600, calx.serial.parity.No)
+    i1= calx.instrument.connectSerial(4, 19200, calx.serial.parity.No)
 	--[[ calx.plane.create(0, 1, 0)
 	calx.plane.move(0, 10.5, 4.5, 1.25, false, false)
 	calx.plane.arc(0, 5000, 5000, 5000, 0, 1000, 1.25, false, true)
 	calx.plane.arc(0, 5000, 5000, 5000, 0, 1000, 1.25, false, true)
 	calx.plane.arc(0, 5000, 5000, 5000, 0, 1000, 1.25, false, true) ]]--
-	calx.plane.create(0, 1, 0)
-	calx.plane.configure(0, 0.5, 0.5, 1.25)
+	p1 = calx.plane.create(m1, m2, i1)
+	calx.plane.configure(p1, 0.5, 0.5, 1.25)
+	calx.plane.newWatcher(p1)
 end

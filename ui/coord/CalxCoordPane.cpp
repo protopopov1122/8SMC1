@@ -244,6 +244,11 @@ namespace CalXUI {
 		this->queue->stop();
 		ctrl->getController()->stop();
 	}
+	
+	void CalxCoordPane::newWatcher() {
+		wxCommandEvent evt(wxEVT_COORD_CTRL_WATCHER);
+		wxPostEvent(this, evt);
+	}
 
 	void CalxCoordPane::OnWatcherClick(wxCommandEvent &evt) {
 		this->watchers->newWatcher();

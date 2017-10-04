@@ -43,8 +43,8 @@ namespace CalXLua {
 	 public:
 		LuaCalXEnvironment(CalXScriptEnvironment &);
 
-		bool connectSerialMotor(int, int, int);
-		bool connectSerialInstrument(int, int, int);
+		int connectSerialMotor(int, int, int);
+		int connectSerialInstrument(int, int, int);
 		int getMotorCount();
 		int getInstrumentCount();
 		int getMotorPower(int);
@@ -68,13 +68,14 @@ namespace CalXLua {
 		bool instrumentIsSessionOpened(int);
 		std::string instrumentGetInfo(int);
 
-		bool planeCreate(int, int, int);
+		int planeCreate(int, int, int);
 		int planeMove(int, double, double, double, bool, bool);
 		int planeArc(int, double, double, double, double, int, double, bool, bool);
 		int planeCalibrate(int, int);
 		int planeMeasure(int, int);
 		int planeFMove(int, double, double, double);
 		int planeConfigure(int, double, double, double);
+		int planeNewWatcher(int);
 
 	 private:
 		CalXScriptEnvironment &env;

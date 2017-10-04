@@ -33,8 +33,8 @@ namespace CalXUI {
 	 public:
 		CalXAppScriptEnvironment(CalxApp &);
 
-		virtual bool connectSerialMotor(uint8_t, uint32_t, uint8_t);
-		virtual bool connectSerialInstrument(uint8_t, uint32_t, uint8_t);
+		virtual device_id_t connectSerialMotor(uint8_t, uint32_t, uint8_t);
+		virtual device_id_t connectSerialInstrument(uint8_t, uint32_t, uint8_t);
 		virtual size_t getMotorCount();
 		virtual size_t getInstrumentCount();
 		virtual std::pair<Power, ErrorCode> getMotorPower(device_id_t);
@@ -59,7 +59,7 @@ namespace CalXUI {
 		virtual std::pair<bool, ErrorCode> instrumentIsSessionOpened(device_id_t);
 		virtual std::pair<std::string, ErrorCode> instrumentGetInfo(device_id_t);
 
-		virtual bool createCoordPlane(device_id_t, device_id_t, device_id_t);
+		virtual int32_t createCoordPlane(device_id_t, device_id_t, device_id_t);
 		virtual ErrorCode planeMove(size_t, coord_point_t, double, bool, bool);
 		virtual ErrorCode planeArc(size_t, coord_point_t, coord_point_t, int,
 		                           double, bool, bool);
@@ -67,6 +67,7 @@ namespace CalXUI {
 		virtual ErrorCode planeMeasure(size_t, TrailerId);
 		virtual ErrorCode planeMove(size_t, coord_point_t, double);
 		virtual ErrorCode planeConfigure(size_t, coord_point_t, double);
+		virtual ErrorCode planeNewWatcher(size_t);
 
 	 private:
 		CalxApp &app;

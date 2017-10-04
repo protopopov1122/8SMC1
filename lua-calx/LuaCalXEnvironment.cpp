@@ -35,14 +35,14 @@ namespace CalXLua {
 	LuaCalXEnvironment::LuaCalXEnvironment(CalXScriptEnvironment& env)
 	    : env(env) {}
 
-	bool LuaCalXEnvironment::connectSerialMotor(int port, int baudrate,
+	int LuaCalXEnvironment::connectSerialMotor(int port, int baudrate,
 	                                            int parity) {
-		return env.connectSerialMotor(port, baudrate, parity);
+		return static_cast<int>(env.connectSerialMotor(port, baudrate, parity));
 	}
 
-	bool LuaCalXEnvironment::connectSerialInstrument(int port, int baudrate,
+	int LuaCalXEnvironment::connectSerialInstrument(int port, int baudrate,
 	                                                 int parity) {
-		return env.connectSerialInstrument(port, baudrate, parity);
+		return static_cast<int>(env.connectSerialInstrument(port, baudrate, parity));
 	}
 
 	int LuaCalXEnvironment::getMotorCount() {
@@ -217,10 +217,10 @@ namespace CalXLua {
 		return res.first;
 	}
 
-	bool LuaCalXEnvironment::planeCreate(int m1, int m2, int ins) {
-		return env.createCoordPlane(static_cast<device_id_t>(m1),
+	int LuaCalXEnvironment::planeCreate(int m1, int m2, int ins) {
+		return static_cast<int>(env.createCoordPlane(static_cast<device_id_t>(m1),
 		                            static_cast<device_id_t>(m2),
-		                            static_cast<device_id_t>(ins));
+		                            static_cast<device_id_t>(ins)));
 	}
 
 	int LuaCalXEnvironment::planeMove(int id, double x, double y, double speed,
@@ -279,6 +279,14 @@ namespace CalXLua {
 		coord_point_t dest = {x, y};
 		ErrorCode errcode = env.planeConfigure(static_cast<size_t>(id),
 		                                  dest, speed);
+		if (errcode != ErrorCode::NoError) {
+			throw CalXException(errcode);
+		}
+		return static_cast<int>(errcode);
+	}
+	
+	int LuaCalXEnvironment::planeNewWatcher(int id) {
+		ErrorCode errcode = env.planeNewWatcher(static_cast<size_t>(id));
 		if (errcode != ErrorCode::NoError) {
 			throw CalXException(errcode);
 		}
