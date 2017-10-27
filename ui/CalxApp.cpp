@@ -234,9 +234,10 @@ namespace CalXUI {
 				}
 			}
 		}
-		if (this->scriptFactory != nullptr) {
+		if (this->scriptFactory != nullptr &&
+		    this->sysman->getConfiguration()->getEntry("script")->getBool("autoinit", false)) {
 			CalXScriptHookThread *th = new CalXScriptHookThread(this->sysman->getConfiguration()->getEntry("script")->getString("main", "scripts/main.lua"),
-				"init");
+				this->sysman->getConfiguration()->getEntry("script")->getString("init_entry", "init"));
 			th->Run();
 		}
 
