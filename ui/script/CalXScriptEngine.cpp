@@ -25,11 +25,12 @@
 
 namespace CalXUI {
 
-	CalXScriptHookThread::CalXScriptHookThread(std::string hk)
-	    : wxThread::wxThread(wxTHREAD_DETACHED), hook(hk) {}
+	CalXScriptHookThread::CalXScriptHookThread(std::string path, std::string hook)
+	    : wxThread::wxThread(wxTHREAD_DETACHED), path(path), hook(hook) {}
 
 	wxThread::ExitCode CalXScriptHookThread::Entry() {
-		wxGetApp().callScriptHook("init");
+		std::unique_ptr<CalXScript> scr = wxGetApp().loadScript(this->path);
+		scr->call("init");
 		return nullptr;
 	}
 

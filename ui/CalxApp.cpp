@@ -208,7 +208,7 @@ namespace CalXUI {
 
 		std::string script_eng_addr =
 		    conf->getEntry("script")->getString("engine", "");
-		this->script = nullptr;
+		this->scriptFactory = nullptr;
 		this->script_env = nullptr;
 		this->scriptLib = nullptr;
 		if (!script_eng_addr.empty()) {
@@ -226,35 +226,33 @@ namespace CalXUI {
 					    *((ScriptEngine_getter *) &scr_raw_getter);
 					this->script_env =
 					    std::make_unique<CalXAppScriptEnvironment>(wxGetApp());
-					this->script =
-					    std::unique_ptr<CalXScript>(scr_getter(*this->script_env));
+					this->scriptFactory =
+					    std::unique_ptr<CalXScriptFactory>(scr_getter());
 				} else {
 					wxMessageBox(__("Scripting engine can't be loaded"), __("Warning"),
 					             wxOK | wxICON_WARNING);
 				}
 			}
 		}
-		CalXScriptHookThread *th = new CalXScriptHookThread("init");
-		th->Run();
+		if (this->scriptFactory != nullptr) {
+			CalXScriptHookThread *th = new CalXScriptHookThread(this->sysman->getConfiguration()->getEntry("script")->getString("main", "scripts/main.lua"),
+				"init");
+			th->Run();
+		}
 
 		return true;
 	}
 
-	bool CalxApp::callScriptHook(std::string id) {
-		if (this->script == nullptr) {
+	std::unique_ptr<CalXScript> CalxApp::loadScript(std::string path) {
+		if (this->scriptFactory == nullptr) {
 			wxMessageBox(
 			    FORMAT(
-			        __("Scripting engine is not loaded! Hook '%s' can\'t be called"),
-			        id),
+			        __("Scripting engine is not loaded! Script '%s' can\'t be loaded"),
+			        path),
 			    __("Warning"), wxOK | wxICON_WARNING);
-			return false;
+			return nullptr;
 		} else {
-			try {
-				this->script->call(id);
-			} catch (...) {
-				wxMessageBox(__("Fuck it!"), __("Warning"), wxOK | wxICON_WARNING);
-			}
-			return true;
+			return this->scriptFactory->create(*this->script_env, path);
 		}
 	}
 

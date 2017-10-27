@@ -26,8 +26,12 @@
 #include "lua-calx/LuaScriptEngine.h"
 
 namespace CalXLua {
+	
+	std::unique_ptr<CalXScript> LuaCalXScriptFactory::create(CalXScriptEnvironment &env, std::string path) {
+		return std::make_unique<LuaCalXScript>(env, path);
+	}
 
-	LuaCalXScript::LuaCalXScript(CalXScriptEnvironment &env)
+	LuaCalXScript::LuaCalXScript(CalXScriptEnvironment &env, std::string path)
 	    : CalXScript(env), lua(true), lua_env(env) {
 		this->lua.HandleExceptionsWith(
 		    [](int s, std::string msg, std::exception_ptr exception) {
@@ -39,8 +43,7 @@ namespace CalXLua {
 		this->bind_functions();
 		this->init_constants();
 
-		this->lua.Load(env.getConfiguration()->getEntry("script")->getString(
-		    "main", "scripts/main.lua"));
+		this->lua.Load(path);
 	}
 
 	void LuaCalXScript::call(std::string hook) {

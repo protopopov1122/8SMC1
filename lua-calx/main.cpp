@@ -22,6 +22,6 @@
 #include "selene.h"
 #include "lua-calx/LuaScriptEngine.h"
 
-extern "C" LIBEXPORT CalXScript *getScriptEngine(CalXScriptEnvironment &env) {
-	return new CalXLua::LuaCalXScript(env);
+extern "C" LIBEXPORT CalXScriptFactory *getScriptEngine() {
+	return new CalXLua::LuaCalXScriptFactory();
 }

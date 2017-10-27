@@ -89,9 +89,15 @@ namespace CalXUI {
 	 protected:
 		CalXScriptEnvironment &env;
 	};
+	
+	class CalXScriptFactory {
+	 public:
+		virtual ~CalXScriptFactory() = default;
+		virtual std::unique_ptr<CalXScript> create(CalXScriptEnvironment &, std::string) = 0;
+	};
 
-	typedef CalXScript *(*ScriptEngine_getter)(CalXScriptEnvironment &);
-	extern "C" LIBEXPORT CalXScript *getScriptEngine(CalXScriptEnvironment &);
+	typedef CalXScriptFactory *(*ScriptEngine_getter)();
+	extern "C" LIBEXPORT CalXScriptFactory *getScriptEngine();
 
 }  // namespace CalXUI
 

@@ -75,12 +75,13 @@ namespace CalXUI {
 
 	class CalXScriptHookThread : public wxThread {
 	 public:
-		CalXScriptHookThread(std::string);
+		CalXScriptHookThread(std::string, std::string);
 
 	 protected:
 		virtual wxThread::ExitCode Entry();
 
 	 private:
+		std::string path;
 		std::string hook;
 	};
 }  // namespace CalXUI

@@ -60,7 +60,7 @@ namespace CalXUI {
 		SystemManager *getSystemManager();
 		CalxErrorHandler *getErrorHandler();
 		CalxFrame *getMainFrame();
-		bool callScriptHook(std::string);
+		std::unique_ptr<CalXScript> loadScript(std::string);
 
 		std::string formatDouble(double);
 		std::string getUnits();
@@ -85,7 +85,7 @@ namespace CalXUI {
 		CalxErrorHandler *error_handler;
 
 		std::unique_ptr<CalXScriptEnvironment> script_env;
-		std::unique_ptr<CalXScript> script;
+		std::unique_ptr<CalXScriptFactory> scriptFactory;
 
 		std::ofstream *errors_log;
 		std::ofstream *warnings_log;

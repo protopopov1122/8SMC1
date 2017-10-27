@@ -35,8 +35,7 @@ namespace CalXLua {
 
 	class LuaCalXScript : public CalXScript {
 	 public:
-		LuaCalXScript(CalXScriptEnvironment &);
-		virtual ~LuaCalXScript() = default;
+		LuaCalXScript(CalXScriptEnvironment &, std::string);
 
 		virtual void call(std::string);
 
@@ -46,6 +45,11 @@ namespace CalXLua {
 
 		sel::State lua;
 		LuaCalXEnvironment lua_env;
+	};
+	
+	class LuaCalXScriptFactory : public CalXScriptFactory {
+	 public:
+		virtual std::unique_ptr<CalXScript> create(CalXScriptEnvironment &, std::string);
 	};
 }  // namespace CalXLua
 
