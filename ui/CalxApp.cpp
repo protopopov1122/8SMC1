@@ -198,14 +198,6 @@ namespace CalXUI {
 		}
 		this->Bind(wxEVT_APP_ERROR, &CalxApp::OnErrorEvent, this);
 
-		this->frame = new CalxFrame(__("CalX UI"));
-		this->frame->Show(true);
-		this->frame->Maximize(true);
-		this->Bind(wxEVT_APP_AUTOCONF, &CalxApp::OnAutoconfEvent, this);
-		wxThreadEvent evt(wxEVT_APP_AUTOCONF);
-		wxPostEvent(this, evt);
-		setup_signals(this->sysman);
-
 		std::string script_eng_addr =
 		    conf->getEntry("script")->getString("engine", "");
 		this->scriptFactory = nullptr;
@@ -234,6 +226,15 @@ namespace CalXUI {
 				}
 			}
 		}
+		
+		this->frame = new CalxFrame(__("CalX UI"));
+		this->frame->Show(true);
+		this->frame->Maximize(true);
+		this->Bind(wxEVT_APP_AUTOCONF, &CalxApp::OnAutoconfEvent, this);
+		wxThreadEvent evt(wxEVT_APP_AUTOCONF);
+		wxPostEvent(this, evt);
+		setup_signals(this->sysman);
+
 		if (this->scriptFactory != nullptr &&
 		    this->sysman->getConfiguration()->getEntry("script")->getBool("autoinit", false)) {
 			CalXScriptHookThread *th = new CalXScriptHookThread(this->sysman->getConfiguration()->getEntry("script")->getString("main", "scripts/main.lua"),
@@ -242,6 +243,18 @@ namespace CalXUI {
 		}
 
 		return true;
+	}
+	
+	bool CalxApp::hasScriptEngine() {
+		return this->scriptFactory != nullptr;
+	}
+	
+	std::shared_ptr<CalXScriptEnvironment> CalxApp::getScriptEnvironment() {
+		return this->script_env;
+	}
+	
+	std::shared_ptr<CalXScriptFactory> CalxApp::getScriptFactory() {
+		return this->scriptFactory;
 	}
 
 	std::unique_ptr<CalXScript> CalxApp::loadScript(std::string path) {
@@ -253,7 +266,7 @@ namespace CalXUI {
 			    __("Warning"), wxOK | wxICON_WARNING);
 			return nullptr;
 		} else {
-			return this->scriptFactory->create(*this->script_env, path);
+			return this->scriptFactory->openFile(*this->script_env, path);
 		}
 	}
 

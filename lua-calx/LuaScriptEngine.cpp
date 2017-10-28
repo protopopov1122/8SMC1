@@ -27,8 +27,12 @@
 
 namespace CalXLua {
 	
-	std::unique_ptr<CalXScript> LuaCalXScriptFactory::create(CalXScriptEnvironment &env, std::string path) {
+	std::unique_ptr<CalXScript> LuaCalXScriptFactory::openFile(CalXScriptEnvironment &env, std::string path) {
 		return std::make_unique<LuaCalXScript>(env, path);
+	}
+	
+	std::unique_ptr<CalXScript> LuaCalXScriptFactory::createShell(CalXScriptEnvironment &env) {
+		return std::make_unique<LuaCalXScript>(env, "");
 	}
 
 	LuaCalXScript::LuaCalXScript(CalXScriptEnvironment &env, std::string path)
@@ -43,15 +47,30 @@ namespace CalXLua {
 		this->bind_functions();
 		this->init_constants();
 
-		this->lua.Load(path);
+		if (!path.empty()) {
+			this->lua.Load(path);
+		}
+	}
+	
+	bool LuaCalXScript::execute(std::string code) {
+		try {
+			this->lua(code.c_str());
+			return true;
+		}  catch (CalXException &ex) {
+			std::cout << "Caught CalX error " << static_cast<int>(ex.getErrorCode())
+			          << std::endl;
+			return false;
+		}
 	}
 
-	void LuaCalXScript::call(std::string hook) {
+	bool LuaCalXScript::call(std::string hook) {
 		try {
 			this->lua[hook.c_str()]();
+			return true;
 		} catch (CalXException &ex) {
 			std::cout << "Caught CalX error " << static_cast<int>(ex.getErrorCode())
 			          << std::endl;
+			return false;
 		}
 	}
 

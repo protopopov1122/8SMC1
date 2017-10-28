@@ -37,7 +37,8 @@ namespace CalXLua {
 	 public:
 		LuaCalXScript(CalXScriptEnvironment &, std::string);
 
-		virtual void call(std::string);
+		virtual bool execute(std::string);
+		virtual bool call(std::string);
 
 	 private:
 		void bind_functions();
@@ -49,7 +50,8 @@ namespace CalXLua {
 	
 	class LuaCalXScriptFactory : public CalXScriptFactory {
 	 public:
-		virtual std::unique_ptr<CalXScript> create(CalXScriptEnvironment &, std::string);
+		virtual std::unique_ptr<CalXScript> openFile(CalXScriptEnvironment &, std::string);
+		virtual std::unique_ptr<CalXScript> createShell(CalXScriptEnvironment &);
 	};
 }  // namespace CalXLua
 

@@ -37,6 +37,7 @@
 #include "ui/task/CalxLinearTask.h"
 #include "ui/task/CalxProgrammedTask.h"
 #include "ui/task/CalxTaskPanel.h"
+#include "ui/script/CalxScriptPanel.h"
 #include <iostream>
 #include <wx/aboutdlg.h>
 #include <wx/app.h>
@@ -115,6 +116,17 @@ namespace CalXUI {
 		    win, wxID_ANY, wxGetApp().getSystemManager()->getConfiguration());
 		return editor;
 	}
+	
+	CalxScriptPanel *newScriptPanel(wxWindow *win) {
+		if (wxGetApp().hasScriptEngine()) {
+			CalxScriptPanel *scripts = new CalxScriptPanel(
+				win, wxID_ANY, *wxGetApp().getScriptEnvironment(),
+				*wxGetApp().getScriptFactory());
+			return scripts;
+		} else {
+			return nullptr;
+		}
+	}
 
 	CalxFrame::CalxFrame(std::string title)
 	    : wxFrame::wxFrame(nullptr, wxID_ANY, title) {
@@ -146,11 +158,16 @@ namespace CalXUI {
 		CalxCoordPanel *coordPanel = newCoordPanel(panel);
 		this->device_pool = devicePanel;
 		this->plane_list = coordPanel;
+		
+		CalxScriptPanel *scriptPanel = newScriptPanel(panel);
 
 		panel->addPane(__("Devices"), devicePanel);
 		panel->addPane(__("Coordinate planes"), coordPanel);
 		panel->addPane(__("Tasks"), newTaskPanel(panel));
 		panel->addPane(__("Configuration"), newConfigPanel(panel));
+		if (scriptPanel != nullptr) {
+			panel->addPane(__("Scripting"), scriptPanel);
+		}
 
 		wxBoxSizer *statusSizer = new wxBoxSizer(wxHORIZONTAL);
 		statusPanel->SetSizer(statusSizer);

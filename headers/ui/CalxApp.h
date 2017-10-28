@@ -60,6 +60,10 @@ namespace CalXUI {
 		SystemManager *getSystemManager();
 		CalxErrorHandler *getErrorHandler();
 		CalxFrame *getMainFrame();
+		
+		bool hasScriptEngine();
+		std::shared_ptr<CalXScriptEnvironment> getScriptEnvironment();
+		std::shared_ptr<CalXScriptFactory> getScriptFactory();
 		std::unique_ptr<CalXScript> loadScript(std::string);
 
 		std::string formatDouble(double);
@@ -84,8 +88,8 @@ namespace CalXUI {
 		CalxDebugConsole *debug_console;
 		CalxErrorHandler *error_handler;
 
-		std::unique_ptr<CalXScriptEnvironment> script_env;
-		std::unique_ptr<CalXScriptFactory> scriptFactory;
+		std::shared_ptr<CalXScriptEnvironment> script_env;
+		std::shared_ptr<CalXScriptFactory> scriptFactory;
 
 		std::ofstream *errors_log;
 		std::ofstream *warnings_log;
