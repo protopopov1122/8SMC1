@@ -45,6 +45,7 @@ namespace CalXUI {
 		virtual CalxMotorHandle *getMotor(device_id_t);
 		virtual size_t getInstrumentCount();
 		virtual CalxInstrumentHandle *getInstrument(device_id_t);
+		virtual void stop();
 
 	 private:
 		void OnExit(wxCloseEvent &);

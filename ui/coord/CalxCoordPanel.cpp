@@ -123,6 +123,12 @@ namespace CalXUI {
 			ctrl->shutdown();
 		}
 	}
+	
+	void CalxCoordPanel::stop() {
+		for (const auto &plane : this->coords) {
+			plane->stop();
+		}
+	}
 
 	size_t CalxCoordPanel::getLayoutColumnCount() {
 		return this->layout.size();

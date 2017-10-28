@@ -194,6 +194,10 @@ namespace CalXUI {
 	CalxWatcherPool *CalxCoordPane::getWatchers() {
 		return this->watchers;
 	}
+	
+	void CalxCoordPane::stop() {
+		this->queue->stopCurrent();
+	}
 
 	void CalxCoordPane::updateUI() {
 		std::string units = wxGetApp().getUnits();

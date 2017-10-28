@@ -133,7 +133,7 @@ namespace CalX {
 		return point;
 	}
 
-	bool Circle::skip(motor_point_t pnt) {
+	bool Circle::skip(motor_point_t pnt, bool *work) {
 		if (pnt.x == curx && pnt.y == cury) {
 			return false;
 		}
@@ -146,6 +146,9 @@ namespace CalX {
 		motor_point_t cur = start;
 
 		do {
+			if (work != nullptr && !*work) {
+				return true;
+			}
 			if (!cw) {
 				cur = this->getNextElement();
 			} else {

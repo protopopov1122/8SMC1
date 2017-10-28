@@ -232,6 +232,13 @@ namespace CalXUI {
 		timer->Stop();
 		this->queue->stop();
 	}
+	
+	void CalxInstrumentComponent::stopInstrument() {
+		if (this->ctrl->isSessionOpened()) {
+			this->ctrl->close_session();
+		}
+		this->queue->stopCurrent();
+	}
 
 	bool CalxInstrumentComponent::isBusy() {
 		return this->queue->isBusy();

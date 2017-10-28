@@ -75,7 +75,7 @@ namespace CalX {
 			splitter = 1;
 		}
 		Circle cir(center, (int64_t) sqrt(r1), clockwise, scale);
-		if (!cir.skip(src)) {
+		if (!cir.skip(src, nullptr)) {
 			return ErrorCode::ArcError;
 		}
 		motor_point_t pnt;

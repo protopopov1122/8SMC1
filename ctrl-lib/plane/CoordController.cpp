@@ -375,9 +375,11 @@ namespace CalX {
 			return ErrorCode::PowerOff;
 		}
 		motor_point_t src = this->getPosition();
+		work = defWork;
 		double r1 = pow(src.x - center.x, 2) + pow(src.y - center.y, 2);
 		double r2 = pow(dest.x - center.x, 2) + pow(dest.y - center.y, 2);
 		if (fabs(sqrt(r1) - sqrt(r2)) / scale >= COMPARISON_RADIUS) {
+			work = false;
 			return ErrorCode::ArcError;
 		}
 		double fullCircle = 2 * M_PI * sqrt(r1);
@@ -386,12 +388,12 @@ namespace CalX {
 			splitter = 1;
 		}
 		Circle cir(center, (int64_t) sqrt(r1), clockwise, scale);
-		if (!cir.skip(src)) {
+		if (!cir.skip(src, &work)) {
+			work = false;
 			return ErrorCode::ArcError;
 		}
 		motor_point_t pnt;
 		size_t count = 0;
-		work = defWork;
 		if (!work) {
 			return ErrorCode::NoError;
 		}

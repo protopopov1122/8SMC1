@@ -52,6 +52,7 @@ namespace CalXUI {
 		std::shared_ptr<CoordHandle> getHandle();
 		virtual CalxWatcherPool *getWatchers();
 		virtual void newWatcher();
+		virtual void stop();
 		virtual CalxCoordController *getController();
 		bool addComponent(std::string, CalxCoordComponentFactory *, size_t,
 		                  bool = true);

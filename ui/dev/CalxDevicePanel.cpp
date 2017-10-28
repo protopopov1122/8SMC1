@@ -152,4 +152,13 @@ namespace CalXUI {
 			return this->instrs[id];
 		}
 	}
+	
+	void CalxDevicePanel::stop() {
+		for (const auto &instr : this->instrs) {
+			instr.second->stopInstrument();
+		}
+		for (const auto &motor : this->motors) {
+			motor.second->stopMovement();
+		}
+	}
 }  // namespace CalXUI

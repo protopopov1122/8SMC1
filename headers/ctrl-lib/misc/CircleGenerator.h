@@ -41,7 +41,7 @@ namespace CalX {
 		motor_point_t getCenter();
 		motor_point_t getNextElement();
 		motor_point_t getPrevElement();
-		bool skip(motor_point_t);
+		bool skip(motor_point_t, bool *);
 
 	 private:
 		motor_point_t center;

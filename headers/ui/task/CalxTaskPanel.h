@@ -26,6 +26,7 @@
 #include "ui/CalxPanelPane.h"
 #include "ui/task/CalxTaskFactory.h"
 #include "ui/task/CalxTaskHandle.h"
+#include "ui/task/CalxTaskList.h"
 #include <vector>
 #include <wx/choice.h>
 #include <wx/listbox.h>
@@ -37,7 +38,7 @@ namespace CalXUI {
 
 	wxDECLARE_EVENT(wxEVT_TASK_PANEL_ENABLE, wxThreadEvent);
 
-	class CalxTaskPanel : public CalxPanelPane {
+	class CalxTaskPanel : public CalxPanelPane, public CalxTaskList {
 	 public:
 		CalxTaskPanel(wxWindow *, wxWindowID);
 
@@ -45,6 +46,7 @@ namespace CalXUI {
 		virtual void shutdown();
 		virtual bool isBusy();
 		void setEnabled(bool);
+		virtual void stop();
 
 		void attachTaskFactory(std::string, CalxTaskFactory *);
 

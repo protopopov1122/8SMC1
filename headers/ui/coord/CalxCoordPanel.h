@@ -56,6 +56,7 @@ namespace CalXUI {
 		virtual void updateUI();
 		virtual void shutdown();
 		virtual bool isBusy();
+		virtual void stop();
 		size_t getLayoutColumnCount();
 		bool addComponentFactory(std::string, CalxCoordComponentFactory *, size_t,
 		                         bool = true);

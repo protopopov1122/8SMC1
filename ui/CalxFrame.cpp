@@ -156,25 +156,30 @@ namespace CalXUI {
 
 		CalxDevicePanel *devicePanel = newDevicePanel(panel);
 		CalxCoordPanel *coordPanel = newCoordPanel(panel);
+		CalxTaskPanel *taskPanel = newTaskPanel(panel);
 		this->device_pool = devicePanel;
 		this->plane_list = coordPanel;
+		this->task_list = taskPanel;
 		
 		CalxScriptPanel *scriptPanel = newScriptPanel(panel);
 
 		panel->addPane(__("Devices"), devicePanel);
 		panel->addPane(__("Coordinate planes"), coordPanel);
-		panel->addPane(__("Tasks"), newTaskPanel(panel));
+		panel->addPane(__("Tasks"), taskPanel);
 		panel->addPane(__("Configuration"), newConfigPanel(panel));
 		if (scriptPanel != nullptr) {
-			panel->addPane(__("Scripting"), scriptPanel);
+			panel->addPane(__("Scripts"), scriptPanel);
 		}
 
 		wxBoxSizer *statusSizer = new wxBoxSizer(wxHORIZONTAL);
 		statusPanel->SetSizer(statusSizer);
-		this->switchButton =
-		    new wxButton(statusPanel, wxID_ANY, "Quickstart/Advanced");
+		/*this->switchButton =
+		    new wxButton(statusPanel, wxID_ANY, __("Quickstart/Advanced"));
 		statusSizer->Add(this->switchButton);
-		Bind(wxEVT_BUTTON, &CalxFrame::OnSwitchClick, this);
+		switchButton->Bind(wxEVT_BUTTON, &CalxFrame::OnSwitchClick, this);*/
+		wxButton *stopButton = new wxButton(statusPanel, wxID_ANY, __("Stop All"));
+		statusSizer->Add(stopButton);
+		stopButton->Bind(wxEVT_BUTTON, &CalxFrame::OnStopClick, this);
 
 		this->quickstartPanel->Show(false);
 
@@ -196,6 +201,16 @@ namespace CalXUI {
 
 	CalxPlaneList *CalxFrame::getPlaneList() {
 		return this->plane_list;
+	}
+	
+	CalxTaskList *CalxFrame::getTaskList() {
+		return this->task_list;
+	}
+	
+	void CalxFrame::OnStopClick(wxCommandEvent &evt) {
+		this->task_list->stop();
+		this->plane_list->stop();
+		this->device_pool->stop();
 	}
 
 	void CalxFrame::OnClose(wxCloseEvent &evt) {

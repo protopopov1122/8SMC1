@@ -18,30 +18,18 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CALX_UI_COORD_CALX_PLANE_LIST_H_
-#define CALX_UI_COORD_CALX_PLANE_LIST_H_
+#ifndef CALX_UI_TASK_CALX_TASK_LIST_H_
+#define CALX_UI_TASK_CALX_TASK_LIST_H_
 
 #include "ui/CalxApp.h"
-#include "ui/coord/CalxWatcherPool.h"
-#include "ui/coord/CalxCoordController.h"
 
 namespace CalXUI {
 
-	class CalxPlaneHandle {
+	class CalxTaskList {
 	 public:
-		virtual ~CalxPlaneHandle() = default;
-		virtual CalxCoordController *getController() = 0;
-		virtual void newWatcher() = 0;
+		virtual ~CalxTaskList() = default;
 		virtual void stop() = 0;
 	};
-
-	class CalxPlaneList {
-	 public:
-		virtual ~CalxPlaneList() = default;
-		virtual void updateList(std::shared_ptr<CoordHandle>, bool *) = 0;
-		virtual CalxPlaneHandle *getPlaneHandle(size_t) = 0;
-		virtual void stop() = 0;
-	};
-}  // namespace CalXUI
+}
 
 #endif

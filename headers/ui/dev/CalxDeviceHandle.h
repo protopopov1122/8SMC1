@@ -48,6 +48,7 @@ namespace CalXUI {
 	class CalxInstrumentHandle {
 		public:
 			virtual ~CalxInstrumentHandle() = default;
+			virtual void stopInstrument() = 0;
 	};
 
 	class CalxDeviceConstructor {
@@ -63,6 +64,7 @@ namespace CalXUI {
 		virtual CalxMotorHandle *getMotor(device_id_t) = 0;
 		virtual size_t getInstrumentCount() = 0;
 		virtual CalxInstrumentHandle *getInstrument(device_id_t) = 0;
+		virtual void stop() = 0;
 	};
 }  // namespace CalXUI
 
