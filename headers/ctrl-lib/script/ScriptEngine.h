@@ -90,12 +90,14 @@ namespace CalXUI {
 	 protected:
 		CalXScriptEnvironment &env;
 	};
-	
+
 	class CalXScriptFactory {
 	 public:
 		virtual ~CalXScriptFactory() = default;
-		virtual std::unique_ptr<CalXScript> openFile(CalXScriptEnvironment &, std::string) = 0;
-		virtual std::unique_ptr<CalXScript> createShell(CalXScriptEnvironment &) = 0;
+		virtual std::unique_ptr<CalXScript> openFile(CalXScriptEnvironment &,
+		                                             std::string) = 0;
+		virtual std::unique_ptr<CalXScript> createShell(
+		    CalXScriptEnvironment &) = 0;
 	};
 
 	typedef CalXScriptFactory *(*ScriptEngine_getter)();

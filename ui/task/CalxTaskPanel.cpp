@@ -207,7 +207,7 @@ namespace CalXUI {
 	bool CalxTaskPanel::isBusy() {
 		return queue->isBusy();
 	}
-	
+
 	void CalxTaskPanel::stop() {
 		this->queue->stopCurrent();
 	}

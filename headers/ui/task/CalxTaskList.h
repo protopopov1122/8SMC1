@@ -30,6 +30,6 @@ namespace CalXUI {
 		virtual ~CalxTaskList() = default;
 		virtual void stop() = 0;
 	};
-}
+}  // namespace CalXUI
 
 #endif

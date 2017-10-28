@@ -40,8 +40,8 @@ namespace CalXUI {
 	      app(app) {}
 
 	device_id_t CalXAppScriptEnvironment::connectSerialMotor(uint8_t port,
-	                                                  uint32_t baudrate,
-	                                                  uint8_t parity) {
+	                                                         uint32_t baudrate,
+	                                                         uint8_t parity) {
 		SystemManager *sysman = this->app.getSystemManager();
 		DeviceSerialPortConnectionPrms prms;
 		prms.port = port;
@@ -56,15 +56,16 @@ namespace CalXUI {
 			bool ready = false;
 			this->app.getMainFrame()->getDevicePool()->appendDevice(
 			    new CalxMotorConstructor(this->app.getMainFrame()->getDevicePool(),
-			                             ctrl), &ready);
-			while (!ready) {}							 
+			                             ctrl),
+			    &ready);
+			while (!ready) {
+			}
 			return ctrl->getID();
 		}
 	}
 
-	device_id_t CalXAppScriptEnvironment::connectSerialInstrument(uint8_t port,
-	                                                       uint32_t baudrate,
-	                                                       uint8_t parity) {
+	device_id_t CalXAppScriptEnvironment::connectSerialInstrument(
+	    uint8_t port, uint32_t baudrate, uint8_t parity) {
 		SystemManager *sysman = this->app.getSystemManager();
 		DeviceSerialPortConnectionPrms prms;
 		prms.port = port;
@@ -80,8 +81,10 @@ namespace CalXUI {
 			bool ready = false;
 			this->app.getMainFrame()->getDevicePool()->appendDevice(
 			    new CalxInstrumentConstructor(
-			        this->app.getMainFrame()->getDevicePool(), ctrl), &ready);
-			while (!ready) {}
+			        this->app.getMainFrame()->getDevicePool(), ctrl),
+			    &ready);
+			while (!ready) {
+			}
 			return ctrl->getID();
 		}
 	}
@@ -109,7 +112,8 @@ namespace CalXUI {
 
 	ErrorCode CalXAppScriptEnvironment::enableMotorPower(device_id_t id,
 	                                                     bool power) {
-		CalxMotorHandle *motor = this->app.getMainFrame()->getDevicePool()->getMotor(id);
+		CalxMotorHandle *motor =
+		    this->app.getMainFrame()->getDevicePool()->getMotor(id);
 		if (motor == nullptr) {
 			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
@@ -122,19 +126,22 @@ namespace CalXUI {
 	ErrorCode CalXAppScriptEnvironment::motorMove(device_id_t id,
 	                                              motor_coord_t pos,
 	                                              float speed) {
-		CalxMotorHandle *motor = this->app.getMainFrame()->getDevicePool()->getMotor(id);
+		CalxMotorHandle *motor =
+		    this->app.getMainFrame()->getDevicePool()->getMotor(id);
 		if (motor == nullptr) {
 			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
-			ActionResult res = {false, false, ErrorCode::NoError};
+			ActionResult res = { false, false, ErrorCode::NoError };
 			motor->move(pos, speed, false, &res);
-			while (!res.ready) {}
+			while (!res.ready) {
+			}
 			if (res.stopped) {
 				return ErrorCode::Interrupted;
 			} else {
-				return res.errcode;;
+				return res.errcode;
+				;
 			}
 		}
 	}
@@ -142,25 +149,29 @@ namespace CalXUI {
 	ErrorCode CalXAppScriptEnvironment::motorRelativeMove(device_id_t id,
 	                                                      motor_coord_t pos,
 	                                                      float speed) {
-		CalxMotorHandle *motor = this->app.getMainFrame()->getDevicePool()->getMotor(id);
+		CalxMotorHandle *motor =
+		    this->app.getMainFrame()->getDevicePool()->getMotor(id);
 		if (motor == nullptr) {
 			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
-			ActionResult res = {false, false, ErrorCode::NoError};
+			ActionResult res = { false, false, ErrorCode::NoError };
 			motor->move(pos, speed, true, &res);
-			while (!res.ready) {}
+			while (!res.ready) {
+			}
 			if (res.stopped) {
 				return ErrorCode::Interrupted;
 			} else {
-				return res.errcode;;
+				return res.errcode;
+				;
 			}
 		}
 	}
 
 	ErrorCode CalXAppScriptEnvironment::motorStop(device_id_t id) {
-		CalxMotorHandle *motor = this->app.getMainFrame()->getDevicePool()->getMotor(id);
+		CalxMotorHandle *motor =
+		    this->app.getMainFrame()->getDevicePool()->getMotor(id);
 		if (motor == nullptr) {
 			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
@@ -186,19 +197,22 @@ namespace CalXUI {
 
 	ErrorCode CalXAppScriptEnvironment::motorMoveToTrailer(device_id_t id,
 	                                                       TrailerId tr) {
-		CalxMotorHandle *motor = this->app.getMainFrame()->getDevicePool()->getMotor(id);
+		CalxMotorHandle *motor =
+		    this->app.getMainFrame()->getDevicePool()->getMotor(id);
 		if (motor == nullptr) {
 			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
-			ActionResult res = {false, false, ErrorCode::NoError};
+			ActionResult res = { false, false, ErrorCode::NoError };
 			motor->roll(tr, &res);
-			while (!res.ready) {}
+			while (!res.ready) {
+			}
 			if (res.stopped) {
 				return ErrorCode::Interrupted;
 			} else {
-				return res.errcode;;
+				return res.errcode;
+				;
 			}
 		}
 	}
@@ -358,8 +372,8 @@ namespace CalXUI {
 	}
 
 	int32_t CalXAppScriptEnvironment::createCoordPlane(device_id_t m1,
-	                                                device_id_t m2,
-	                                                device_id_t instr) {
+	                                                   device_id_t m2,
+	                                                   device_id_t instr) {
 		std::shared_ptr<CoordHandle> handle =
 		    this->app.getSystemManager()->createCoord(m1, m2, instr);
 		if (handle == nullptr) {
@@ -455,7 +469,8 @@ namespace CalXUI {
 		}
 	}
 
-	ErrorCode CalXAppScriptEnvironment::planeMove(size_t id, coord_point_t dest, double speed) {
+	ErrorCode CalXAppScriptEnvironment::planeMove(size_t id, coord_point_t dest,
+	                                              double speed) {
 		CalxPlaneHandle *handle =
 		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);
 		if (handle == nullptr) {
@@ -474,8 +489,9 @@ namespace CalXUI {
 		}
 	}
 
-
-	ErrorCode CalXAppScriptEnvironment::planeConfigure(size_t id, coord_point_t dest, double speed) {
+	ErrorCode CalXAppScriptEnvironment::planeConfigure(size_t id,
+	                                                   coord_point_t dest,
+	                                                   double speed) {
 		CalxPlaneHandle *handle =
 		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);
 		if (handle == nullptr) {
@@ -493,7 +509,7 @@ namespace CalXUI {
 			}
 		}
 	}
-	
+
 	ErrorCode CalXAppScriptEnvironment::planeNewWatcher(size_t id) {
 		CalxPlaneHandle *handle =
 		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);

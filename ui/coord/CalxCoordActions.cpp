@@ -92,7 +92,6 @@ namespace CalXUI {
 	CalxCoordActionCalibrate::CalxCoordActionCalibrate(
 	    std::shared_ptr<CoordHandle> handle, TrailerId tr, ActionResult *act_res)
 	    : handle(handle), trailer(tr), action_result(act_res) {
-		
 		if (this->action_result != nullptr) {
 			this->action_result->ready = false;
 			this->action_result->stopped = false;
@@ -120,7 +119,6 @@ namespace CalXUI {
 	CalxCoordActionMeasure::CalxCoordActionMeasure(
 	    std::shared_ptr<CoordHandle> handle, TrailerId tr, ActionResult *act_res)
 	    : handle(handle), trailer(tr), action_result(act_res) {
-		
 		if (this->action_result != nullptr) {
 			this->action_result->ready = false;
 			this->action_result->stopped = false;
@@ -153,8 +151,7 @@ namespace CalXUI {
 	      dest(dest),
 	      speed(speed),
 	      work(false),
-		  action_result(act_res) {
-		
+	      action_result(act_res) {
 		if (this->action_result != nullptr) {
 			this->action_result->ready = false;
 			this->action_result->stopped = false;
@@ -172,10 +169,8 @@ namespace CalXUI {
 			work = false;
 		}
 		coord_rect_t size = this->handle->getFloatPlane()->getFloatSize();
-		double x =
-		    static_cast<double>((((double) size.w) * this->dest.x) + size.x);
-		double y =
-		    static_cast<double>((((double) size.h) * this->dest.y) + size.y);
+		double x = static_cast<double>((((double) size.w) * this->dest.x) + size.x);
+		double y = static_cast<double>((((double) size.h) * this->dest.y) + size.y);
 		coord_point_t dest = { x, y };
 		if (work) {
 			errcode = handle->getFloatPlane()->move(dest, speed, false);

@@ -26,12 +26,14 @@
 #include "lua-calx/LuaScriptEngine.h"
 
 namespace CalXLua {
-	
-	std::unique_ptr<CalXScript> LuaCalXScriptFactory::openFile(CalXScriptEnvironment &env, std::string path) {
+
+	std::unique_ptr<CalXScript> LuaCalXScriptFactory::openFile(
+	    CalXScriptEnvironment &env, std::string path) {
 		return std::make_unique<LuaCalXScript>(env, path);
 	}
-	
-	std::unique_ptr<CalXScript> LuaCalXScriptFactory::createShell(CalXScriptEnvironment &env) {
+
+	std::unique_ptr<CalXScript> LuaCalXScriptFactory::createShell(
+	    CalXScriptEnvironment &env) {
 		return std::make_unique<LuaCalXScript>(env, "");
 	}
 
@@ -51,12 +53,12 @@ namespace CalXLua {
 			this->lua.Load(path);
 		}
 	}
-	
+
 	bool LuaCalXScript::execute(std::string code) {
 		try {
 			this->lua(code.c_str());
 			return true;
-		}  catch (CalXException &ex) {
+		} catch (CalXException &ex) {
 			std::cout << "Caught CalX error " << static_cast<int>(ex.getErrorCode())
 			          << std::endl;
 			return false;
@@ -105,11 +107,11 @@ namespace CalXLua {
 		this->lua["calx"]["plane"].SetObj(
 		    lua_env, "create", &LuaCalXEnvironment::planeCreate, "move",
 		    &LuaCalXEnvironment::planeMove, "arc", &LuaCalXEnvironment::planeArc,
-			"calibrate", &LuaCalXEnvironment::planeCalibrate,
-			"measure", &LuaCalXEnvironment::planeMeasure,
-			"fmove", &LuaCalXEnvironment::planeFMove,
-			"configure", &LuaCalXEnvironment::planeConfigure,
-			"newWatcher", &LuaCalXEnvironment::planeNewWatcher);
+		    "calibrate", &LuaCalXEnvironment::planeCalibrate, "measure",
+		    &LuaCalXEnvironment::planeMeasure, "fmove",
+		    &LuaCalXEnvironment::planeFMove, "configure",
+		    &LuaCalXEnvironment::planeConfigure, "newWatcher",
+		    &LuaCalXEnvironment::planeNewWatcher);
 	}
 
 	void LuaCalXScript::init_constants() {

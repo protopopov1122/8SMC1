@@ -47,10 +47,11 @@ namespace CalXLua {
 		sel::State lua;
 		LuaCalXEnvironment lua_env;
 	};
-	
+
 	class LuaCalXScriptFactory : public CalXScriptFactory {
 	 public:
-		virtual std::unique_ptr<CalXScript> openFile(CalXScriptEnvironment &, std::string);
+		virtual std::unique_ptr<CalXScript> openFile(CalXScriptEnvironment &,
+		                                             std::string);
 		virtual std::unique_ptr<CalXScript> createShell(CalXScriptEnvironment &);
 	};
 }  // namespace CalXLua

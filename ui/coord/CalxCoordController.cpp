@@ -167,17 +167,22 @@ namespace CalXUI {
 		                       ready);
 	}
 
-	void CalxCoordController::calibrate(TrailerId tr, bool *ready, ActionResult *act_res) {
+	void CalxCoordController::calibrate(TrailerId tr, bool *ready,
+	                                    ActionResult *act_res) {
 		this->queue->addAction(
-		    std::make_unique<CalxCoordActionCalibrate>(this->handle, tr, act_res), ready);
+		    std::make_unique<CalxCoordActionCalibrate>(this->handle, tr, act_res),
+		    ready);
 	}
 
-	void CalxCoordController::measure(TrailerId tr, bool *ready, ActionResult *act_res) {
+	void CalxCoordController::measure(TrailerId tr, bool *ready,
+	                                  ActionResult *act_res) {
 		this->queue->addAction(
-		    std::make_unique<CalxCoordActionMeasure>(this->handle, tr, act_res), ready);
+		    std::make_unique<CalxCoordActionMeasure>(this->handle, tr, act_res),
+		    ready);
 	}
 
-	void CalxCoordController::move(coord_point_t pos, double speed, bool *ready, ActionResult *act_res) {
+	void CalxCoordController::move(coord_point_t pos, double speed, bool *ready,
+	                               ActionResult *act_res) {
 		coord_rect_t size = handle->getFloatPlane()->getFloatSize();
 		double x = (((double) size.w) * pos.x) + size.x;
 		double y = (((double) size.h) * pos.y) + size.y;
@@ -187,7 +192,6 @@ namespace CalXUI {
 
 	void CalxCoordController::configure(coord_point_t pos, double speed,
 	                                    bool *ready, ActionResult *act_res) {
-
 		this->queue->addAction(std::make_unique<CalxCoordActionConfigure>(
 		                           this->handle, this, pos, speed, act_res),
 		                       ready);

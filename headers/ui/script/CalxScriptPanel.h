@@ -29,18 +29,19 @@
 #include <vector>
 
 namespace CalXUI {
-	
+
 	class CalxScriptPanel : public CalxPanelPane, CalxActionReceiver {
 	 public:
-		CalxScriptPanel(wxWindow *, wxWindowID,
-		                CalXScriptEnvironment &, CalXScriptFactory &);
-		
+		CalxScriptPanel(wxWindow *, wxWindowID, CalXScriptEnvironment &,
+		                CalXScriptFactory &);
+
 		virtual bool isBusy();
 		virtual void shutdown();
 		virtual void updateUI();
 		void setEnabled(bool);
-		
+
 		virtual void sendAction(std::unique_ptr<CalxAction>);
+
 	 private:
 		void OnListClick(wxCommandEvent &);
 		void OnLoadScriptClick(wxCommandEvent &);
@@ -48,15 +49,15 @@ namespace CalXUI {
 		void OnRemoveScriptClick(wxCommandEvent &);
 		void OnExit(wxCloseEvent &);
 		void addHandle(std::string, CalxScriptHandle *);
-	 
+
 		CalXScriptEnvironment &env;
 		CalXScriptFactory &scriptFactory;
 		CalxActionQueue *queue;
-		
+
 		wxListBox *scriptList;
 		wxPanel *scriptPanel;
-		std::vector<CalxScriptHandle *> scripts;	
+		std::vector<CalxScriptHandle *> scripts;
 	};
-}
+}  // namespace CalXUI
 
 #endif

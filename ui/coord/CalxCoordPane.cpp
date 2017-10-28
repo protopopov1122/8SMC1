@@ -194,7 +194,7 @@ namespace CalXUI {
 	CalxWatcherPool *CalxCoordPane::getWatchers() {
 		return this->watchers;
 	}
-	
+
 	void CalxCoordPane::stop() {
 		this->queue->stopCurrent();
 	}
@@ -248,7 +248,7 @@ namespace CalXUI {
 		this->queue->stop();
 		ctrl->getController()->stop();
 	}
-	
+
 	void CalxCoordPane::newWatcher() {
 		wxCommandEvent evt(wxEVT_COORD_CTRL_WATCHER);
 		wxPostEvent(this, evt);

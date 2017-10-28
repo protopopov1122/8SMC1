@@ -116,12 +116,12 @@ namespace CalXUI {
 		    win, wxID_ANY, wxGetApp().getSystemManager()->getConfiguration());
 		return editor;
 	}
-	
+
 	CalxScriptPanel *newScriptPanel(wxWindow *win) {
 		if (wxGetApp().hasScriptEngine()) {
-			CalxScriptPanel *scripts = new CalxScriptPanel(
-				win, wxID_ANY, *wxGetApp().getScriptEnvironment(),
-				*wxGetApp().getScriptFactory());
+			CalxScriptPanel *scripts =
+			    new CalxScriptPanel(win, wxID_ANY, *wxGetApp().getScriptEnvironment(),
+			                        *wxGetApp().getScriptFactory());
 			return scripts;
 		} else {
 			return nullptr;
@@ -160,7 +160,7 @@ namespace CalXUI {
 		this->device_pool = devicePanel;
 		this->plane_list = coordPanel;
 		this->task_list = taskPanel;
-		
+
 		CalxScriptPanel *scriptPanel = newScriptPanel(panel);
 
 		panel->addPane(__("Devices"), devicePanel);
@@ -202,11 +202,11 @@ namespace CalXUI {
 	CalxPlaneList *CalxFrame::getPlaneList() {
 		return this->plane_list;
 	}
-	
+
 	CalxTaskList *CalxFrame::getTaskList() {
 		return this->task_list;
 	}
-	
+
 	void CalxFrame::OnStopClick(wxCommandEvent &evt) {
 		this->task_list->stop();
 		this->plane_list->stop();

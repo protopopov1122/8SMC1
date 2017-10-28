@@ -60,7 +60,7 @@ namespace CalXUI {
 		SystemManager *getSystemManager();
 		CalxErrorHandler *getErrorHandler();
 		CalxFrame *getMainFrame();
-		
+
 		bool hasScriptEngine();
 		std::shared_ptr<CalXScriptEnvironment> getScriptEnvironment();
 		std::shared_ptr<CalXScriptFactory> getScriptFactory();

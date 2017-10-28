@@ -25,7 +25,7 @@
 #include "ui/CalxActionQueue.h"
 
 namespace CalXUI {
-	
+
 	class CalxActionReceiver {
 	 public:
 		virtual void sendAction(std::unique_ptr<CalxAction>) = 0;
@@ -35,33 +35,36 @@ namespace CalXUI {
 	 public:
 		CalxScriptHandle(wxWindow *, wxWindowID);
 	};
-	
+
 	class CalxFileScriptHandle : public CalxScriptHandle {
 	 public:
-		CalxFileScriptHandle(wxWindow *, wxWindowID, CalxActionReceiver *, std::string, std::unique_ptr<CalXScript>);
+		CalxFileScriptHandle(wxWindow *, wxWindowID, CalxActionReceiver *,
+		                     std::string, std::unique_ptr<CalXScript>);
+
 	 private:
 		void OnCallClick(wxCommandEvent &);
 		void OnExecuteClick(wxCommandEvent &);
 		void OnExit(wxCloseEvent &);
-	 
+
 		wxTextCtrl *hookText;
 		wxTextCtrl *shellText;
 		CalxActionReceiver *recv;
 		std::unique_ptr<CalXScript> script;
 	};
-	
+
 	class CalxScriptShellHandle : public CalxScriptHandle {
 	 public:
-		CalxScriptShellHandle(wxWindow *, wxWindowID, CalxActionReceiver *, std::unique_ptr<CalXScript>);
+		CalxScriptShellHandle(wxWindow *, wxWindowID, CalxActionReceiver *,
+		                      std::unique_ptr<CalXScript>);
+
 	 private:
 		void OnExecuteClick(wxCommandEvent &);
 		void OnExit(wxCloseEvent &);
-	 
+
 		wxTextCtrl *shellText;
 		CalxActionReceiver *recv;
 		std::unique_ptr<CalXScript> script;
 	};
-}
+}  // namespace CalXUI
 
 #endif
-

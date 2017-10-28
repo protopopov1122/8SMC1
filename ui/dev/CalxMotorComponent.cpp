@@ -63,7 +63,7 @@ namespace CalXUI {
 	 public:
 		CalxMotorMoveAction(CalxMotorComponent *ctrl, MotorController *dev,
 		                    int dest, float speed, bool rel,
-							ActionResult *act_res = nullptr) {
+		                    ActionResult *act_res = nullptr) {
 			this->ctrl = ctrl;
 			this->dev = dev;
 			this->dest = dest;
@@ -291,7 +291,7 @@ namespace CalXUI {
 		evt.SetPayload(e);
 		wxPostEvent(this, evt);
 	}
-	
+
 	DeviceController *CalxMotorComponent::getController() {
 		return this->dev.get();
 	}
@@ -338,7 +338,7 @@ namespace CalXUI {
 	bool CalxMotorComponent::isBusy() {
 		return this->queue->isBusy();
 	}
-	
+
 	ErrorCode CalxMotorComponent::setPower(bool pw) {
 		return dev->enablePower(pw);
 	}
@@ -346,10 +346,10 @@ namespace CalXUI {
 	void CalxMotorComponent::switchPowerClick(wxCommandEvent &evt) {
 		wxGetApp().getErrorHandler()->handle(dev->flipPower());
 	}
-	
+
 	ErrorCode CalxMotorComponent::roll(TrailerId tr, ActionResult *act_res) {
-		this->queue->addAction(
-		    std::make_unique<CalxMotorCalibrationAction>(this, dev.get(), static_cast<int>(tr), act_res));
+		this->queue->addAction(std::make_unique<CalxMotorCalibrationAction>(
+		    this, dev.get(), static_cast<int>(tr), act_res));
 		return ErrorCode::NoError;
 	}
 
@@ -364,26 +364,26 @@ namespace CalXUI {
 	void CalxMotorComponent::stopMovement() {
 		this->queue->stopCurrent();
 	}
-	
+
 	void CalxMotorComponent::stopClick(wxCommandEvent &evt) {
 		this->stopMovement();
 	}
-	
-	ErrorCode CalxMotorComponent::move(motor_coord_t dest, float speed, bool relative, ActionResult *act_res) {
+
+	ErrorCode CalxMotorComponent::move(motor_coord_t dest, float speed,
+	                                   bool relative, ActionResult *act_res) {
 		this->queue->addAction(std::make_unique<CalxMotorMoveAction>(
-		    this, dev.get(), dest,
-		    speed, relative, act_res));
+		    this, dev.get(), dest, speed, relative, act_res));
 		return ErrorCode::NoError;
 	}
 
 	void CalxMotorComponent::moveClick(wxCommandEvent &evt) {
-		this->move(this->moveSpin->GetValue(),
-		    this->moveSpeedSpin->GetValue(), false);
+		this->move(this->moveSpin->GetValue(), this->moveSpeedSpin->GetValue(),
+		           false);
 	}
 
 	void CalxMotorComponent::rmoveClick(wxCommandEvent &evt) {
-		this->move(this->moveSpin->GetValue(),
-		    this->moveSpeedSpin->GetValue(), true);
+		this->move(this->moveSpin->GetValue(), this->moveSpeedSpin->GetValue(),
+		           true);
 	}
 
 	void CalxMotorComponent::threadUpdate(wxThreadEvent &evt) {}

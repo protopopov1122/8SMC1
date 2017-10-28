@@ -40,7 +40,7 @@ namespace CalXUI {
 		virtual void updateUI();
 		virtual void appendDevice(CalxDeviceConstructor *, bool * = nullptr);
 		virtual void appendDeviceFactory(std::string, CalxDeviceFactory *);
-		
+
 		virtual size_t getMotorCount();
 		virtual CalxMotorHandle *getMotor(device_id_t);
 		virtual size_t getInstrumentCount();
@@ -58,7 +58,7 @@ namespace CalXUI {
 		CalxActionQueue *queue;
 
 		wxPanel *connectPanel;
-		
+
 		std::map<device_id_t, CalxMotorHandle *> motors;
 		std::map<device_id_t, CalxInstrumentHandle *> instrs;
 	};

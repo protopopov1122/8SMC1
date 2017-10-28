@@ -67,7 +67,8 @@ namespace CalXUI {
 
 	class CalxCoordActionCalibrate : public CalxAction {
 	 public:
-		CalxCoordActionCalibrate(std::shared_ptr<CoordHandle>, TrailerId, ActionResult * = nullptr);
+		CalxCoordActionCalibrate(std::shared_ptr<CoordHandle>, TrailerId,
+		                         ActionResult * = nullptr);
 
 		virtual void perform(SystemManager *);
 		virtual void stop();
@@ -80,7 +81,8 @@ namespace CalXUI {
 
 	class CalxCoordActionMeasure : public CalxAction {
 	 public:
-		CalxCoordActionMeasure(std::shared_ptr<CoordHandle>, TrailerId, ActionResult * = nullptr);
+		CalxCoordActionMeasure(std::shared_ptr<CoordHandle>, TrailerId,
+		                       ActionResult * = nullptr);
 
 		virtual void perform(SystemManager *);
 		virtual void stop();
@@ -94,7 +96,8 @@ namespace CalXUI {
 	class CalxCoordActionConfigure : public CalxAction {
 	 public:
 		CalxCoordActionConfigure(std::shared_ptr<CoordHandle>,
-		                         CalxCoordController *, coord_point_t, double, ActionResult * = nullptr);
+		                         CalxCoordController *, coord_point_t, double,
+		                         ActionResult * = nullptr);
 
 		virtual void perform(SystemManager *);
 		virtual void stop();

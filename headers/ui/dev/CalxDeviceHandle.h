@@ -35,20 +35,21 @@ namespace CalXUI {
 		virtual bool isBusy() = 0;
 		virtual DeviceController *getController() = 0;
 	};
-	
+
 	class CalxMotorHandle {
-		public:
-			virtual ~CalxMotorHandle() = default;
-			virtual void stopMovement() = 0;
-			virtual ErrorCode setPower(bool) = 0;
-			virtual ErrorCode roll(TrailerId, ActionResult * = nullptr) = 0;
-			virtual ErrorCode move(motor_coord_t, float, bool, ActionResult * = nullptr) = 0;
+	 public:
+		virtual ~CalxMotorHandle() = default;
+		virtual void stopMovement() = 0;
+		virtual ErrorCode setPower(bool) = 0;
+		virtual ErrorCode roll(TrailerId, ActionResult * = nullptr) = 0;
+		virtual ErrorCode move(motor_coord_t, float, bool,
+		                       ActionResult * = nullptr) = 0;
 	};
-	
+
 	class CalxInstrumentHandle {
-		public:
-			virtual ~CalxInstrumentHandle() = default;
-			virtual void stopInstrument() = 0;
+	 public:
+		virtual ~CalxInstrumentHandle() = default;
+		virtual void stopInstrument() = 0;
 	};
 
 	class CalxDeviceConstructor {

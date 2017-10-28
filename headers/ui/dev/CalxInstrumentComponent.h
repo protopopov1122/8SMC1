@@ -42,7 +42,7 @@ namespace CalXUI {
 		virtual void updateUI();
 		virtual bool isBusy();
 		virtual void stopInstrument();
-		
+
 		virtual DeviceController *getController();
 
 	 private:

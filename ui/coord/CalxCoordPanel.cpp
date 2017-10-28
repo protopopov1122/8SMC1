@@ -123,7 +123,7 @@ namespace CalXUI {
 			ctrl->shutdown();
 		}
 	}
-	
+
 	void CalxCoordPanel::stop() {
 		for (const auto &plane : this->coords) {
 			plane->stop();

@@ -62,7 +62,6 @@ namespace CalXUI {
 		CalxDevicePool *device_pool;
 		CalxPlaneList *plane_list;
 		CalxTaskList *task_list;
-		
 	};
 }  // namespace CalXUI
 

@@ -226,7 +226,7 @@ namespace CalXUI {
 				}
 			}
 		}
-		
+
 		this->frame = new CalxFrame(__("CalX UI"));
 		this->frame->Show(true);
 		this->frame->Maximize(true);
@@ -236,34 +236,37 @@ namespace CalXUI {
 		setup_signals(this->sysman);
 
 		if (this->scriptFactory != nullptr &&
-		    this->sysman->getConfiguration()->getEntry("script")->getBool("autoinit", false)) {
-			CalXScriptHookThread *th = new CalXScriptHookThread(this->sysman->getConfiguration()->getEntry("script")->getString("main", "scripts/main.lua"),
-				this->sysman->getConfiguration()->getEntry("script")->getString("init_entry", "init"));
+		    this->sysman->getConfiguration()->getEntry("script")->getBool(
+		        "autoinit", false)) {
+			CalXScriptHookThread *th = new CalXScriptHookThread(
+			    this->sysman->getConfiguration()->getEntry("script")->getString(
+			        "main", "scripts/main.lua"),
+			    this->sysman->getConfiguration()->getEntry("script")->getString(
+			        "init_entry", "init"));
 			th->Run();
 		}
 
 		return true;
 	}
-	
+
 	bool CalxApp::hasScriptEngine() {
 		return this->scriptFactory != nullptr;
 	}
-	
+
 	std::shared_ptr<CalXScriptEnvironment> CalxApp::getScriptEnvironment() {
 		return this->script_env;
 	}
-	
+
 	std::shared_ptr<CalXScriptFactory> CalxApp::getScriptFactory() {
 		return this->scriptFactory;
 	}
 
 	std::unique_ptr<CalXScript> CalxApp::loadScript(std::string path) {
 		if (this->scriptFactory == nullptr) {
-			wxMessageBox(
-			    FORMAT(
-			        __("Scripting engine is not loaded! Script '%s' can\'t be loaded"),
-			        path),
-			    __("Warning"), wxOK | wxICON_WARNING);
+			wxMessageBox(FORMAT(__("Scripting engine is not loaded! Script '%s' "
+			                       "can\'t be loaded"),
+			                    path),
+			             __("Warning"), wxOK | wxICON_WARNING);
 			return nullptr;
 		} else {
 			return this->scriptFactory->openFile(*this->script_env, path);

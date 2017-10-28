@@ -36,13 +36,14 @@ namespace CalXLua {
 	    : env(env) {}
 
 	int LuaCalXEnvironment::connectSerialMotor(int port, int baudrate,
-	                                            int parity) {
+	                                           int parity) {
 		return static_cast<int>(env.connectSerialMotor(port, baudrate, parity));
 	}
 
 	int LuaCalXEnvironment::connectSerialInstrument(int port, int baudrate,
-	                                                 int parity) {
-		return static_cast<int>(env.connectSerialInstrument(port, baudrate, parity));
+	                                                int parity) {
+		return static_cast<int>(
+		    env.connectSerialInstrument(port, baudrate, parity));
 	}
 
 	int LuaCalXEnvironment::getMotorCount() {
@@ -218,9 +219,9 @@ namespace CalXLua {
 	}
 
 	int LuaCalXEnvironment::planeCreate(int m1, int m2, int ins) {
-		return static_cast<int>(env.createCoordPlane(static_cast<device_id_t>(m1),
-		                            static_cast<device_id_t>(m2),
-		                            static_cast<device_id_t>(ins)));
+		return static_cast<int>(env.createCoordPlane(
+		    static_cast<device_id_t>(m1), static_cast<device_id_t>(m2),
+		    static_cast<device_id_t>(ins)));
 	}
 
 	int LuaCalXEnvironment::planeMove(int id, double x, double y, double speed,
@@ -246,7 +247,7 @@ namespace CalXLua {
 		}
 		return static_cast<int>(errcode);
 	}
-	
+
 	int LuaCalXEnvironment::planeCalibrate(int id, int tid) {
 		ErrorCode errcode = env.planeCalibrate(static_cast<size_t>(id),
 		                                       static_cast<TrailerId>(tid));
@@ -255,36 +256,36 @@ namespace CalXLua {
 		}
 		return static_cast<int>(errcode);
 	}
-	
+
 	int LuaCalXEnvironment::planeMeasure(int id, int tid) {
-		ErrorCode errcode = env.planeMeasure(static_cast<size_t>(id),
-		                                     static_cast<TrailerId>(tid));
+		ErrorCode errcode =
+		    env.planeMeasure(static_cast<size_t>(id), static_cast<TrailerId>(tid));
 		if (errcode != ErrorCode::NoError) {
 			throw CalXException(errcode);
 		}
 		return static_cast<int>(errcode);
 	}
-	
+
 	int LuaCalXEnvironment::planeFMove(int id, double x, double y, double speed) {
-		coord_point_t dest = {x, y};
-		ErrorCode errcode = env.planeMove(static_cast<size_t>(id),
-		                                  dest, speed);
+		coord_point_t dest = { x, y };
+		ErrorCode errcode = env.planeMove(static_cast<size_t>(id), dest, speed);
 		if (errcode != ErrorCode::NoError) {
 			throw CalXException(errcode);
 		}
 		return static_cast<int>(errcode);
 	}
-	
-	int LuaCalXEnvironment::planeConfigure(int id, double x, double y, double speed) {
-		coord_point_t dest = {x, y};
-		ErrorCode errcode = env.planeConfigure(static_cast<size_t>(id),
-		                                  dest, speed);
+
+	int LuaCalXEnvironment::planeConfigure(int id, double x, double y,
+	                                       double speed) {
+		coord_point_t dest = { x, y };
+		ErrorCode errcode =
+		    env.planeConfigure(static_cast<size_t>(id), dest, speed);
 		if (errcode != ErrorCode::NoError) {
 			throw CalXException(errcode);
 		}
 		return static_cast<int>(errcode);
 	}
-	
+
 	int LuaCalXEnvironment::planeNewWatcher(int id) {
 		ErrorCode errcode = env.planeNewWatcher(static_cast<size_t>(id));
 		if (errcode != ErrorCode::NoError) {
