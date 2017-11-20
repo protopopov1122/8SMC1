@@ -61,6 +61,7 @@ namespace CalXUI {
 		void OnQueueUpdate(wxThreadEvent &);
 		void OnStopClick(wxCommandEvent &);
 		void OnEnableEvent(wxThreadEvent &);
+		void OnMoveToStartClick(wxCommandEvent &);
 
 		wxListBox *taskList;
 		wxPanel *mainPanel;
