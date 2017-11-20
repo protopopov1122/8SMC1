@@ -36,7 +36,7 @@ namespace CalX {
 		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
 
 	 protected:
-		virtual void jump(motor_point_t, bool);
+		virtual bool jump(motor_point_t, bool);
 
 	 private:
 		std::shared_ptr<CoordTranslator> trans;

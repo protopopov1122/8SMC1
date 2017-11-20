@@ -41,8 +41,11 @@ namespace CalX {
 	ErrorCode VirtualCoordPlane::move(motor_point_t point, float speed,
 	                                  bool sync) {
 		this->position = point;
-		this->jump(point, sync);
-		return ErrorCode::NoError;
+		if (this->jump(point, sync)) {
+			return ErrorCode::NoError;
+		} else {
+			return ErrorCode::InternalInterrupted;
+		}
 	}
 
 	ErrorCode VirtualCoordPlane::calibrate(TrailerId tr) {

@@ -49,7 +49,7 @@ namespace CalX {
 		virtual void dump(std::ostream &);
 
 	 protected:
-		virtual void jump(motor_point_t, bool) = 0;
+		virtual bool jump(motor_point_t, bool) = 0;
 
 	 private:
 		motor_point_t position;

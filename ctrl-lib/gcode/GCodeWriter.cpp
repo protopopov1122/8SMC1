@@ -41,9 +41,10 @@ namespace CalX {
 		return writer;
 	}
 
-	void GCodeWriter::jump(motor_point_t pnt, bool move) {
+	bool GCodeWriter::jump(motor_point_t pnt, bool move) {
 		coord_point_t point = this->trans->get(pnt);
 		out << (move ? "G01" : "G00") << " X" << point.x << " Y" << point.y
 		    << std::endl;
+		return true;
 	}
 }  // namespace CalX

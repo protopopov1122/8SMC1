@@ -38,7 +38,7 @@ namespace CalXUI {
 		void reset();
 
 	 protected:
-		virtual void jump(motor_point_t, bool);
+		virtual bool jump(motor_point_t, bool);
 
 	 private:
 		std::vector<std::pair<motor_point_t, bool>> path;

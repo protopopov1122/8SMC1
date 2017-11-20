@@ -30,8 +30,9 @@ namespace CalXUI {
 
 	CalxPlaneTracker::~CalxPlaneTracker() {}
 
-	void CalxPlaneTracker::jump(motor_point_t point, bool move) {
+	bool CalxPlaneTracker::jump(motor_point_t point, bool move) {
 		this->path.push_back(std::pair<motor_point_t, bool>(point, move));
+		return true;
 	}
 
 	std::vector<std::pair<motor_point_t, bool>> *CalxPlaneTracker::getPath() {
