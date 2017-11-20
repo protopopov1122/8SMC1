@@ -40,7 +40,7 @@ namespace CalXUI {
 		std::shared_ptr<CoordHandle> handle;
 		coord_point_t dest;
 		double speed;
-		bool jump;
+		bool sync;
 		bool relative;
 		ActionResult *action_result;
 	};

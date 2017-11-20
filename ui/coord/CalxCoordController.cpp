@@ -148,11 +148,11 @@ namespace CalXUI {
 		    this->listeners.end());
 	}
 
-	void CalxCoordController::move(coord_point_t dest, double speed, bool jump,
+	void CalxCoordController::move(coord_point_t dest, double speed, bool sync,
 	                               bool relative, bool *ready,
 	                               ActionResult *action_result) {
 		this->queue->addAction(
-		    std::make_unique<CalxCoordActionMove>(this->handle, dest, speed, jump,
+		    std::make_unique<CalxCoordActionMove>(this->handle, dest, speed, sync,
 		                                          relative, action_result),
 		    ready);
 	}

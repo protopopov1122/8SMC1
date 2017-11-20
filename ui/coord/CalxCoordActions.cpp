@@ -6,12 +6,12 @@ namespace CalXUI {
 
 	CalxCoordActionMove::CalxCoordActionMove(std::shared_ptr<CoordHandle> handle,
 	                                         coord_point_t dest, double speed,
-	                                         bool jump, bool relative,
+	                                         bool sync, bool relative,
 	                                         ActionResult *act_res)
 	    : handle(handle),
 	      dest(dest),
 	      speed(speed),
-	      jump(jump),
+	      sync(sync),
 	      relative(relative),
 	      action_result(act_res) {
 		if (this->action_result != nullptr) {
@@ -25,9 +25,9 @@ namespace CalXUI {
 		ErrorCode errcode;
 		handle->open_session();
 		if (relative) {
-			errcode = handle->getFloatPlane()->relativeMove(dest, speed, jump);
+			errcode = handle->getFloatPlane()->relativeMove(dest, speed, sync);
 		} else {
-			errcode = handle->getFloatPlane()->move(dest, speed, jump);
+			errcode = handle->getFloatPlane()->move(dest, speed, sync);
 		}
 		wxGetApp().getErrorHandler()->handle(errcode);
 		handle->close_session();
