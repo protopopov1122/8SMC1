@@ -23,16 +23,13 @@
 
 namespace CalX {
 
-	EmuMotor::EmuMotor(device_id_t id, EmuDeviceManager *devman)
-	    : Motor::Motor(id) {
-		this->devman = devman;
+	EmuMotor::EmuMotor(device_id_t id, EmuDeviceManager &devman)
+	    : Motor::Motor(id), devman(devman) {
 		this->pos = 0;
 		this->power = Power::NoPower;
 	}
 
-	EmuMotor::~EmuMotor() {}
-
-	DeviceManager *EmuMotor::getDeviceManager() {
+	DeviceManager &EmuMotor::getDeviceManager() {
 		return this->devman;
 	}
 

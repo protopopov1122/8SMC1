@@ -36,7 +36,7 @@
 /* SystemManager is component that store and control most system
    objects like devices, coord planes, tasks and configuration.
    System manager was made to use with command line, so
-   in GUI application may duplicate its functions if it's
+   GUI application may duplicate some of manager's functions if it's
    necessary. */
 
 namespace CalX {
@@ -47,19 +47,15 @@ namespace CalX {
 		              std::shared_ptr<ConfigManager>,
 		              std::unique_ptr<ExtEngine> = nullptr);
 		virtual ~SystemManager();
-		DeviceManager *getDeviceManager();
+		// Main subsystems
+		DeviceManager &getDeviceManager();
 		std::shared_ptr<ConfigManager> getConfiguration();
-		std::shared_ptr<MotorController> getMotorController(device_id_t);
-		size_t getMotorCount();
-		std::shared_ptr<InstrumentController> getInstrumentController(device_id_t);
-		size_t getInstrumentCount();
 		FunctionEngine &getFunctionEngine();
 		RequestResolver &getRequestResolver();
 		ExtEngine &getExtEngine();
 		// Tasks control
 		size_t getTaskCount();
 		std::shared_ptr<CoordTask> getTask(size_t);
-		std::shared_ptr<ProgrammedCoordTask> createProgrammedTask();
 		size_t addTask(std::shared_ptr<CoordTask>);
 		bool removeTask(size_t);
 		// Coordinate plane control
@@ -68,10 +64,14 @@ namespace CalX {
 		std::shared_ptr<CoordHandle> createCoord(device_id_t, device_id_t,
 		                                         device_id_t = -1);
 		void removeCoord(size_t);
-		// Device connection
+		// Device control
 		std::shared_ptr<MotorController> connectMotor(DeviceConnectionPrms *);
 		std::shared_ptr<InstrumentController> connectInstrument(
 		    DeviceConnectionPrms *);
+		std::shared_ptr<MotorController> getMotorController(device_id_t);
+		size_t getMotorCount();
+		std::shared_ptr<InstrumentController> getInstrumentController(device_id_t);
+		size_t getInstrumentCount();
 
 	 private:
 		std::unique_ptr<DeviceManager> devman;

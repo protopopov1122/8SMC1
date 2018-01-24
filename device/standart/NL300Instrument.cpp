@@ -26,9 +26,8 @@
 namespace CalX {
 
 	NL300Instrument::NL300Instrument(device_id_t id,
-	                                 StandartDeviceManager *devman)
-	    : Instrument::Instrument(id) {
-		this->devman = devman;
+	                                 StandartDeviceManager &devman)
+	    : Instrument::Instrument(id), devman(devman) {
 		this->state = false;
 		this->handle = INVALID_HANDLE_VALUE;
 		this->listener = nullptr;
@@ -61,7 +60,7 @@ namespace CalX {
 		          "; baud rate: " + std::to_string(prms->speed) +
 		          "; parity: " + std::to_string(static_cast<int>(prms->parity)));
 		this->listener = nullptr;
-		getDeviceManager()->loadConfiguration("NL300.ini", this->config);
+		getDeviceManager().loadConfiguration("NL300.ini", this->config);
 		memcpy(&this->prms, prms, sizeof(DeviceSerialPortConnectionPrms));
 		this->log("Configuration sucessfully loaded");
 
@@ -185,7 +184,7 @@ namespace CalX {
 		return true;
 	}
 
-	DeviceManager *NL300Instrument::getDeviceManager() {
+	DeviceManager &NL300Instrument::getDeviceManager() {
 		return this->devman;
 	}
 
@@ -214,7 +213,7 @@ namespace CalX {
 			} else {
 				this->errors.push_back("NL300 start error: unknown");
 			}
-			devman->saveInstrumentError();
+			devman.saveInstrumentError();
 			NL300SystemCommand stopSyscom(NL300_LASER_NAME, "STOP", "",
 			                              NL300_PC_NAME);
 			writeMessage(stopSyscom);
@@ -501,7 +500,7 @@ namespace CalX {
 			handle = INVALID_HANDLE_VALUE;
 			this->errors.push_back("Error reading from COM" +
 			std::to_string(prms.port));
-			this->devman->saveInstrumentError();
+			this->devman.saveInstrumentError();
 			return EOF;*/
 			this->log("COM" + std::to_string(prms.port) +
 			          " read error, feedback: " + std::to_string(feedback));

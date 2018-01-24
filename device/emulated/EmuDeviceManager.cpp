@@ -31,14 +31,14 @@ namespace CalX {
 
 	Motor *EmuDeviceManager::connectMotor(DeviceConnectionPrms *prms) {
 		std::unique_ptr<EmuMotor> motor =
-		    std::make_unique<EmuMotor>((device_id_t) this->motors.size(), this);
+		    std::make_unique<EmuMotor>((device_id_t) this->motors.size(), *this);
 		this->motors.push_back(std::move(motor));
 		return this->motors.at(this->motors.size() - 1).get();
 	}
 
 	Instrument *EmuDeviceManager::connectInstrument(DeviceConnectionPrms *prms) {
 		std::unique_ptr<EmuInstrument> instr = std::make_unique<EmuInstrument>(
-		    (device_id_t) this->instruments.size(), this);
+		    (device_id_t) this->instruments.size(), *this);
 		this->instruments.push_back(std::move(instr));
 		return this->instruments.at(this->instruments.size() - 1).get();
 	}

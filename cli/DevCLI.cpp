@@ -33,9 +33,9 @@
 namespace CalX {
 	void LsCommand::execute(CLI *cli, std::vector<std::string> &args) {
 		if (args.empty()) {  // For empty args list all devices
-			for (unsigned int i = 0; i < sysman->getDeviceManager()->getMotorCount();
+			for (unsigned int i = 0; i < sysman->getDeviceManager().getMotorCount();
 			     i++) {
-				Motor *dev = sysman->getDeviceManager()->getMotor(i);
+				Motor *dev = sysman->getDeviceManager().getMotor(i);
 				std::cout << "Device - " << dev->getID() << "; "
 				          << "Info - " << dev->getDeviceInfo() << std::endl;
 			}
@@ -52,7 +52,7 @@ namespace CalX {
 					return;
 				}
 				Motor *dev =
-				    sysman->getDeviceManager()->getMotor(std::stoi(args.at(1)));
+				    sysman->getDeviceManager().getMotor(std::stoi(args.at(1)));
 				if (dev == nullptr) {
 					std::cout << "Device not found" << std::endl;
 					return;
@@ -105,9 +105,9 @@ namespace CalX {
 	}
 
 	void HaltCommand::execute(CLI *cli, std::vector<std::string> &args) {
-		DeviceManager *devman = sysman->getDeviceManager();
-		for (size_t i = 0; i < devman->getMotorCount(); i++) {
-			Motor *dev = devman->getMotor((device_id_t) i);
+		DeviceManager &devman = sysman->getDeviceManager();
+		for (size_t i = 0; i < devman.getMotorCount(); i++) {
+			Motor *dev = devman.getMotor((device_id_t) i);
 			dev->stop();
 		}
 	}
@@ -558,7 +558,7 @@ namespace CalX {
 	}
 
 	void RefreshCommand::execute(CLI *cli, std::vector<std::string> &args) {
-		sysman->getDeviceManager()->refresh();
+		sysman->getDeviceManager().refresh();
 	}
 
 	void TaskCommand::execute(CLI *cli, std::vector<std::string> &args) {
@@ -567,7 +567,8 @@ namespace CalX {
 			return;
 		}
 		if (args.at(0).compare("new") == 0) {
-			std::shared_ptr<CoordTask> task = sysman->createProgrammedTask();
+			std::shared_ptr<CoordTask> task = std::make_shared<ProgrammedCoordTask>();
+			sysman->addTask(task);
 			if (task == nullptr) {
 				std::cout << "Error occured" << std::endl;
 			} else {

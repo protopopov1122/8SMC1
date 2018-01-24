@@ -41,11 +41,11 @@ namespace CalX {
 
 	class NL300Instrument : public Instrument {
 	 public:
-		NL300Instrument(device_id_t, StandartDeviceManager *);
+		NL300Instrument(device_id_t, StandartDeviceManager &);
 		virtual ~NL300Instrument();
 		virtual void terminate();
 		bool connect(DeviceSerialPortConnectionPrms *);
-		virtual DeviceManager *getDeviceManager();
+		virtual DeviceManager &getDeviceManager();
 		virtual bool open_session();
 		virtual bool close_session();
 		virtual bool enable(bool);
@@ -71,7 +71,7 @@ namespace CalX {
 		std::shared_ptr<ConfigEntry> getCoreEntry();
 
 		bool aborting;
-		StandartDeviceManager *devman;
+		StandartDeviceManager &devman;
 		bool state;
 		InstrumentMode work_mode;
 		HANDLE handle;

@@ -90,7 +90,7 @@ namespace CalX {
 		virtual bool hasErrors();
 		virtual std::string pollError();
 		virtual std::shared_ptr<ConfigManager> getConfiguration();
-		virtual DeviceManager *getDeviceManager() = 0;
+		virtual DeviceManager &getDeviceManager() = 0;
 		virtual std::string getDeviceInfo() = 0;
 		virtual std::string getRuntimeInfo() = 0;
 		virtual void terminate() = 0;

@@ -23,9 +23,9 @@ namespace CalXUI {
 		}
 	};
 
-	CalxDebugConsole::CalxDebugConsole(SystemManager *sysman) {
+	CalxDebugConsole::CalxDebugConsole(SystemManager *sysman)
+		: devman(sysman->getDeviceManager()) {
 		this->sysman = sysman;
-		this->devman = sysman->getDeviceManager();
 	}
 
 	void *CalxDebugConsole::Entry() {
@@ -39,10 +39,10 @@ namespace CalXUI {
 		cli.addCommand("task", new TaskCommand(sysman));
 		cli.addCommand("help", new HelpCMD());
 		do {
-			if (devman->hasError()) {
+			if (devman.hasError()) {
 				std::cout << "Errors occured during execution" << std::endl;
-				while (devman->hasError()) {
-					std::cout << "Error: " << devman->pollError() << std::endl;
+				while (devman.hasError()) {
+					std::cout << "Error: " << devman.pollError() << std::endl;
 				}
 			}
 		} while (cli.shell());

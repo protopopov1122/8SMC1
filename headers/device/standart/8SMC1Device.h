@@ -40,10 +40,10 @@ namespace CalX {
 
 	class _8SMC1Motor : public Motor {
 	 public:
-		_8SMC1Motor(device_id_t, StandartDeviceManager *);
+		_8SMC1Motor(device_id_t, StandartDeviceManager &);
 		virtual ~_8SMC1Motor();
 		virtual void terminate();
-		virtual DeviceManager *getDeviceManager();
+		virtual DeviceManager &getDeviceManager();
 		virtual std::string getDeviceInfo();
 		virtual std::string getRuntimeInfo();
 		/* Methods that implement Device interface */
@@ -120,7 +120,7 @@ namespace CalX {
 
 	 private:
 		bool aborting;
-		StandartDeviceManager *devman;
+		StandartDeviceManager &devman;
 		// USMC API structures
 		USMC_State state;
 		USMC_StartParameters startPrms;

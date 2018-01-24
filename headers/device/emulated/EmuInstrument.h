@@ -33,9 +33,8 @@ namespace CalX {
 
 	class EmuInstrument : public Instrument {
 	 public:
-		EmuInstrument(device_id_t, EmuDeviceManager *);
-		virtual ~EmuInstrument();
-		virtual DeviceManager *getDeviceManager();
+		EmuInstrument(device_id_t, EmuDeviceManager &);
+		virtual DeviceManager &getDeviceManager();
 		virtual bool open_session();
 		virtual bool close_session();
 		virtual bool enable(bool);
@@ -47,7 +46,7 @@ namespace CalX {
 		virtual InstrumentMode getWorkingMode();
 
 	 private:
-		EmuDeviceManager *devman;
+		EmuDeviceManager &devman;
 		bool en;
 		InstrumentMode mode;
 	};

@@ -33,10 +33,9 @@ namespace CalX {
 
 	class EmuMotor : public Motor {
 	 public:
-		EmuMotor(device_id_t, EmuDeviceManager *);
-		virtual ~EmuMotor();
+		EmuMotor(device_id_t, EmuDeviceManager &);
 
-		virtual DeviceManager *getDeviceManager();
+		virtual DeviceManager &getDeviceManager();
 		virtual std::string getDeviceInfo();
 		virtual std::string getRuntimeInfo();
 		virtual void terminate();
@@ -50,7 +49,7 @@ namespace CalX {
 		virtual bool enablePower(bool);
 
 	 private:
-		EmuDeviceManager *devman;
+		EmuDeviceManager &devman;
 		motor_coord_t pos;
 		Power power;
 	};

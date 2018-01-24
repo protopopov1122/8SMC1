@@ -26,6 +26,17 @@
 
 using namespace CalX;
 
+/* Script engine is used to integrate different scripting languages into the system,
+   it consists of several abstract objects:
+     * Script environment - adapter between system manager and scripting language engine,
+		 converts hierarchy of real objects into plain interface that uses only scalars and pairs of them.
+		 It simplifies script-system interaction
+		 * Script object - represents scripting engine instance (its scope, environment, etc.)
+		 with a couple of common methods
+		 * Script factory - object used to produce scripts in two "modes" - script from file,
+		 script shell (allowing simple interactive step-by-step script execution)
+*/
+
 namespace CalXUI {
 
 	class CalXScriptEnvironment {

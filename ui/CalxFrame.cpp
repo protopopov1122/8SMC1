@@ -49,7 +49,7 @@ namespace CalXUI {
 		CalxDevicePanel *devPanel = new CalxDevicePanel(win, wxID_ANY);
 		std::vector<DeviceConnectionType> devConType;
 		std::vector<DeviceConnectionType> instrConType;
-		wxGetApp().getSystemManager()->getDeviceManager()->getConnectionTypes(
+		wxGetApp().getSystemManager()->getDeviceManager().getConnectionTypes(
 		    devConType, instrConType);
 		for (const auto &devCon : devConType) {
 			switch (devCon) {

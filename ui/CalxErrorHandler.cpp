@@ -41,9 +41,9 @@ namespace CalXUI {
 			switch (code) {
 				case ErrorCode::LowLevelError: {
 					text += "Device low level error log:\n";
-					DeviceManager *devman = this->sysman->getDeviceManager();
-					while (devman->hasError()) {
-						text += "\t" + devman->pollError() + "\n";
+					DeviceManager &devman = this->sysman->getDeviceManager();
+					while (devman.hasError()) {
+						text += "\t" + devman.pollError() + "\n";
 					}
 				} break;
 				default:

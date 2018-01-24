@@ -67,8 +67,8 @@ namespace CalX {
 		DESTROY_LOG("SystemManager");
 	}
 
-	DeviceManager *SystemManager::getDeviceManager() {
-		return this->devman.get();
+	DeviceManager &SystemManager::getDeviceManager() {
+		return *this->devman;
 	}
 
 	std::shared_ptr<ConfigManager> SystemManager::getConfiguration() {
@@ -119,19 +119,6 @@ namespace CalX {
 		                    std::to_string(this->tasks.size() - 1) +
 		                    ". Task count: " + std::to_string(this->tasks.size()));
 		return this->tasks.size() - 1;
-	}
-
-	std::shared_ptr<ProgrammedCoordTask> SystemManager::createProgrammedTask() {
-		std::shared_ptr<ProgrammedCoordTask> ptr =
-		    std::make_shared<ProgrammedCoordTask>();
-		this->tasks.push_back(ptr);
-		if (this->ext_engine != nullptr) {
-			this->ext_engine->taskAdded(ptr);
-		}
-		LOG(SYSMAN_TAG, "Added new programmed task #" +
-		                    std::to_string(this->tasks.size() - 1) +
-		                    ". Task count: " + std::to_string(this->tasks.size()));
-		return ptr;
 	}
 
 	bool SystemManager::removeTask(size_t i) {

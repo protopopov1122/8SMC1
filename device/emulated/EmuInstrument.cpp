@@ -23,16 +23,13 @@
 
 namespace CalX {
 
-	EmuInstrument::EmuInstrument(device_id_t id, EmuDeviceManager *devman)
-	    : Instrument::Instrument(id) {
-		this->devman = devman;
+	EmuInstrument::EmuInstrument(device_id_t id, EmuDeviceManager &devman)
+	    : Instrument::Instrument(id), devman(devman) {
 		this->en = false;
 		this->mode = InstrumentMode::Off;
 	}
 
-	EmuInstrument::~EmuInstrument() {}
-
-	DeviceManager *EmuInstrument::getDeviceManager() {
+	DeviceManager &EmuInstrument::getDeviceManager() {
 		return this->devman;
 	}
 

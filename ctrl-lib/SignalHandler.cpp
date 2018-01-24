@@ -32,7 +32,7 @@ extern "C" void calx_terminate() {
 		return;
 	}
 	fprintf(stderr, "FATAL error. Terminating application\n");
-	SYSMAN->getDeviceManager()->terminate();
+	SYSMAN->getDeviceManager().terminate();
 }
 
 extern "C" void signal_handle(int signum) {

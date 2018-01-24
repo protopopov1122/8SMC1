@@ -78,10 +78,10 @@ int main(int argc, char **argv) {
 	cli.addCommand("task", new TaskCommand(sysman));
 	cli.addCommand("help", new HelpCMD());
 	do {
-		if (sysman->getDeviceManager()->hasError()) {
+		if (sysman->getDeviceManager().hasError()) {
 			std::cout << "Errors occured during execution" << std::endl;
-			while (sysman->getDeviceManager()->hasError()) {
-				std::cout << "Error: " << sysman->getDeviceManager()->pollError()
+			while (sysman->getDeviceManager().hasError()) {
+				std::cout << "Error: " << sysman->getDeviceManager().pollError()
 				          << std::endl;
 			}
 		}

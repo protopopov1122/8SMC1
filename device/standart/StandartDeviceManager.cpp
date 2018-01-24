@@ -30,7 +30,7 @@ namespace CalX {
 		this->refresh();
 		for (size_t i = 0; i < devs.NOD; i++) {
 			this->motors.push_back(
-			    std::make_unique<_8SMC1Motor>((device_id_t) i, this));
+			    std::make_unique<_8SMC1Motor>((device_id_t) i, *this));
 		}
 
 		this->instrumentConnectionType.push_back(DeviceConnectionType::SerialPort);
@@ -105,7 +105,7 @@ namespace CalX {
 		this->log("Connecting NL300 instrument on COM" +
 		          std::to_string(prms->port));
 		std::unique_ptr<NL300Instrument> instr = std::make_unique<NL300Instrument>(
-		    (device_id_t) this->instruments.size(), this);
+		    (device_id_t) this->instruments.size(), *this);
 		if (!instr->connect(prms) || instr->hasErrors()) {
 			this->log("Error during NL300 instrument connection on COM" +
 			          std::to_string(prms->port));
