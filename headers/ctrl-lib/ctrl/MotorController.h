@@ -72,6 +72,6 @@ namespace CalX {
 		Motor *dev;
 		std::vector<std::shared_ptr<MotorEventListener>> listeners;
 	};
-}
+}  // namespace CalX
 
 #endif

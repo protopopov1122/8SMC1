@@ -35,7 +35,7 @@ namespace CalX {
 		DeviceController(ConfigManager &, Device *);
 		virtual ~DeviceController() = default;
 		device_id_t getID();
-                ConfigManager &getConfiguration();
+		ConfigManager &getConfiguration();
 		Device *getDevice();
 
 	 protected:

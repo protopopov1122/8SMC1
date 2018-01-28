@@ -68,4 +68,4 @@ namespace CalX {
 		engine->getScope().addFunction("floor", std::make_unique<FloorFunction>());
 		engine->getScope().addFunction("abs", std::make_unique<FabsFunction>());
 	}
-}
+}  // namespace CalX

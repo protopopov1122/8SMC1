@@ -226,7 +226,8 @@ namespace CalXUI {
 			             __("Script: Unknown motor"), wxICON_WARNING);
 			return std::make_pair(false, ErrorCode::UnknownResource);
 		} else {
-			return std::make_pair(motor->checkTrailers() != ErrorCode::NoError, ErrorCode::NoError);
+			return std::make_pair(motor->checkTrailers() != ErrorCode::NoError,
+			                      ErrorCode::NoError);
 		}
 	}
 

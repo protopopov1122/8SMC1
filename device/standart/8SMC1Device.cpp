@@ -357,7 +357,7 @@ namespace CalX {
 	bool _8SMC1Motor::n1() {                                                     \
 		lock();                                                                    \
 		if (this->autoSaveConfig && USMC_GetMode((DWORD) id, mode)) {              \
-			devman.saveMotorError();                                                \
+			devman.saveMotorError();                                                 \
 		}                                                                          \
 		unlock();                                                                  \
 		return this->mode.prop;                                                    \
@@ -366,13 +366,13 @@ namespace CalX {
 	void _8SMC1Motor::n2(bool sync) {                                            \
 		lock();                                                                    \
 		if (this->autoSaveConfig && USMC_GetMode((DWORD) id, mode)) {              \
-			devman.saveMotorError();                                                \
+			devman.saveMotorError();                                                 \
 			unlock();                                                                \
 			return;                                                                  \
 		}                                                                          \
 		mode.prop = sync;                                                          \
 		if (this->autoSaveConfig && USMC_SetMode((DWORD) id, mode)) {              \
-			devman.saveMotorError();                                                \
+			devman.saveMotorError();                                                 \
 		}                                                                          \
 		unlock();                                                                  \
 	}

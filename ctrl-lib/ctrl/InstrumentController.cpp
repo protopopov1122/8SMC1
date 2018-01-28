@@ -23,7 +23,8 @@
 
 namespace CalX {
 
-	InstrumentController::InstrumentController(ConfigManager &conf, Instrument *instr)
+	InstrumentController::InstrumentController(ConfigManager &conf,
+	                                           Instrument *instr)
 	    : DeviceController::DeviceController(conf, instr) {
 		this->instr = instr;
 		this->state = true;

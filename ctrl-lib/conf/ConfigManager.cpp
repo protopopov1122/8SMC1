@@ -283,8 +283,9 @@ namespace CalX {
 		}
 	}
 
-	std::unique_ptr<ConfigManager> ConfigManager::load(
-	    std::istream &is, std::ostream &err, ConfigManager *man) {
+	std::unique_ptr<ConfigManager> ConfigManager::load(std::istream &is,
+	                                                   std::ostream &err,
+	                                                   ConfigManager *man) {
 		std::unique_ptr<ConfigManager> new_man = nullptr;
 		if (man == nullptr) {
 			new_man = std::make_unique<ConfigManager>();

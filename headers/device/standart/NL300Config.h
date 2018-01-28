@@ -68,6 +68,6 @@ namespace CalX {
 
 		NL300Instrument *instr;
 	};
-}
+}  // namespace CalX
 
 #endif

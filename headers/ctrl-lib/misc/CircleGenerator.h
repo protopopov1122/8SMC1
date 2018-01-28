@@ -55,6 +55,6 @@ namespace CalX {
 		int stage;
 		bool cw;
 	};
-}
+}  // namespace CalX
 
 #endif

@@ -22,17 +22,16 @@
 
 namespace CalX {
 
-	DeviceController::DeviceController(ConfigManager &conf,
-	                                   Device *dev)
+	DeviceController::DeviceController(ConfigManager &conf, Device *dev)
 	    : config(conf), device(dev) {}
 
 	device_id_t DeviceController::getID() {
 		return this->device->getID();
 	}
 
-        ConfigManager &DeviceController::getConfiguration() {
-                return this->config;
-        }
+	ConfigManager &DeviceController::getConfiguration() {
+		return this->config;
+	}
 
 	Device *DeviceController::getDevice() {
 		return this->device;

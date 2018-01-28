@@ -165,9 +165,8 @@ namespace CalX {
 		void removeEventListener(std::shared_ptr<ConfigEventListener>);
 		std::vector<std::shared_ptr<ConfigEventListener>> &getEventListeners();
 
-		static std::unique_ptr<ConfigManager> load(
-		    std::istream &, std::ostream &,
-		    ConfigManager * = nullptr);
+		static std::unique_ptr<ConfigManager> load(std::istream &, std::ostream &,
+		                                           ConfigManager * = nullptr);
 		static std::unique_ptr<ConfigValue> parseValue(const char *);
 
 	 private:

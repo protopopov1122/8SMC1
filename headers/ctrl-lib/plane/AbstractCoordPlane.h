@@ -30,16 +30,16 @@
 
 /* Coordinate plane represents an abstraction of two moving axis
    (typically motors) and some cutting instrument (optional).
-	 It offers different movement/cutting modes based on simple motor
-	 and instrument abstractions.
-	 Coordinate plane has several elementar actions:
-	   * linear movement - synchrone and asynchrone
+   It offers different movement/cutting modes based on simple motor
+   and instrument abstractions.
+   Coordinate plane has several elementar actions:
+     * linear movement - synchrone and asynchrone
      * arc movement
      * relative linear and arc movement - all coordinates are calculated
-		 using current position and offset
+     using current position and offset
      * calibration - both motors are moved to the start or end of axis
      * measurement - plane performs double calibration to determine available
-		 axis length
+     axis length
     All actions should be performed during session. To open/close session use
     appropriate methods
 */
@@ -47,23 +47,26 @@
 namespace CalX {
 	enum class CoordPlaneStatus {
 		Idle, /* None of devices (motors/instruments) are enabled/moving */
-		Jump, /* Cutting instrument disabled, movement performed asynchroniously to achieve maximal speed */
-		Move  /* Cutting instrument may be enabled (depends on several different settings), motors move
-		         synchronously */
+		Jump, /* Cutting instrument disabled, movement performed asynchroniously to
+		         achieve maximal speed */
+		Move  /* Cutting instrument may be enabled (depends on several different
+		         settings), motors move  synchronously */
 	};
 
-  /* Abstract interface. By default it uses motor-specific units to operate,
+	/* Abstract interface. By default it uses motor-specific units to operate,
 	   See FloatCoordPlane that can use any-scale units */
 	class CoordPlane {
 	 public:
 		virtual ~CoordPlane() = default;
-		virtual ErrorCode move(motor_point_t, /* Destination point. Measured in motor-specific steps */
-		                       float,         /* Speed. Measured in motor-specific units */
-													 bool           /* Move/Jump mode */
-													 ) = 0;
-		virtual ErrorCode relativeMove(motor_point_t, float, bool); /* The same as above, but
-		                                                               destination point is calculated relatively
-																																	 to current position */
+		virtual ErrorCode move(
+		    motor_point_t, /* Destination point. Measured in motor-specific steps */
+		    float,         /* Speed. Measured in motor-specific units */
+		    bool           /* Move/Jump mode */
+		    ) = 0;
+		virtual ErrorCode relativeMove(motor_point_t, float,
+		                               bool); /* The same as above, but
+		                                         destination point is calculated
+		                                         relatively to current position */
 		virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,
 		                      float = 1.0f) = 0;
 		virtual ErrorCode relativeArc(motor_point_t, motor_point_t, int, float,

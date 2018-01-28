@@ -98,7 +98,8 @@ namespace CalX {
 		    config.getEntry("core")->getInt("trailer_comeback", TRAILER_COMEBACK);
 
 		int_conf_t dest = (tr == TrailerId::Trailer1 ? -roll_step : roll_step);
-		this->dest = (tr == TrailerId::Trailer1 ? MoveType::RollDown : MoveType::RollUp);
+		this->dest =
+		    (tr == TrailerId::Trailer1 ? MoveType::RollDown : MoveType::RollUp);
 		MotorRollEvent evt = { tr };
 		use();
 		this->sendRollingEvent(evt);

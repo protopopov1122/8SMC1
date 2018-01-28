@@ -51,8 +51,7 @@ namespace CalX {
 					std::cout << "Provide device id" << std::endl;
 					return;
 				}
-				Motor *dev =
-				    sysman->getDeviceManager().getMotor(std::stoi(args.at(1)));
+				Motor *dev = sysman->getDeviceManager().getMotor(std::stoi(args.at(1)));
 				if (dev == nullptr) {
 					std::cout << "Device not found" << std::endl;
 					return;

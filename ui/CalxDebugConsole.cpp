@@ -24,7 +24,7 @@ namespace CalXUI {
 	};
 
 	CalxDebugConsole::CalxDebugConsole(SystemManager *sysman)
-		: devman(sysman->getDeviceManager()) {
+	    : devman(sysman->getDeviceManager()) {
 		this->sysman = sysman;
 	}
 

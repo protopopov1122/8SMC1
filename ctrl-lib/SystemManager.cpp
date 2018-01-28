@@ -154,13 +154,13 @@ namespace CalX {
 			return nullptr;
 		}
 
-		std::shared_ptr<CoordController> ctrl = std::make_shared<CoordController>(this->getConfiguration(),
-		    this->getMotorController(d1), this->getMotorController(d2),
-		    this->getInstrumentController(instr));
+		std::shared_ptr<CoordController> ctrl = std::make_shared<CoordController>(
+		    this->getConfiguration(), this->getMotorController(d1),
+		    this->getMotorController(d2), this->getInstrumentController(instr));
 		std::shared_ptr<CoordHandle> handle =
 		    std::make_shared<CoordHandle>(this->coords.size(), ctrl);
 		if (getConfiguration().getEntry("core")->getBool("auto_power_motors",
-		                                                  false)) {
+		                                                 false)) {
 			ctrl->getXAxis()->enablePower(true);
 			ctrl->getYAxis()->enablePower(true);
 		}

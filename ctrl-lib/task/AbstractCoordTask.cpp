@@ -22,15 +22,15 @@
 #include "ctrl-lib/plane/CoordPlane.h"
 
 namespace CalX {
-	
+
 	class BarrierVirtualPlane : public VirtualCoordPlane {
 	 public:
 		BarrierVirtualPlane(motor_point_t offset, motor_rect_t size)
-			: VirtualCoordPlane::VirtualCoordPlane(offset, size) {
+		    : VirtualCoordPlane::VirtualCoordPlane(offset, size) {
 			this->actual = false;
-			this->res = {0, 0};
+			this->res = { 0, 0 };
 		}
-		
+
 		virtual bool jump(motor_point_t point, bool sync) {
 			if (sync) {
 				this->res = point;
@@ -40,26 +40,30 @@ namespace CalX {
 				return true;
 			}
 		}
-		
+
 		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane> pl) {
-			return std::make_unique<BarrierVirtualPlane>(pl->getPosition(), pl->getSize());
+			return std::make_unique<BarrierVirtualPlane>(pl->getPosition(),
+			                                             pl->getSize());
 		}
-		
-		std::pair<motor_point_t, bool> getResult () {
+
+		std::pair<motor_point_t, bool> getResult() {
 			return std::make_pair(this->res, this->actual);
 		}
+
 	 private:
 		bool actual;
 		motor_point_t res;
 	};
 
-	std::pair<motor_point_t, bool> CoordTask::getStartPoint(motor_point_t offset, motor_rect_t size, SystemManager *sysman) {
-		std::shared_ptr<BarrierVirtualPlane> plane = std::make_shared<BarrierVirtualPlane>(offset, size);
-		TaskParameters prms = {1.0f};
+	std::pair<motor_point_t, bool> CoordTask::getStartPoint(
+	    motor_point_t offset, motor_rect_t size, SystemManager *sysman) {
+		std::shared_ptr<BarrierVirtualPlane> plane =
+		    std::make_shared<BarrierVirtualPlane>(offset, size);
+		TaskParameters prms = { 1.0f };
 		std::shared_ptr<TaskState> state = std::make_shared<TaskState>();
 		state->work = false;
 		state->plane = plane;
 		this->perform(plane, prms, sysman, state);
 		return plane->getResult();
 	}
-}
+}  // namespace CalX

@@ -128,7 +128,7 @@ namespace CalXUI {
 #define SETUP_LOG(name, id, dest)                                              \
 	{                                                                            \
 		this->name = nullptr;                                                      \
-		std::string logger = conf.getEntry("log")->getString(id, "");             \
+		std::string logger = conf.getEntry("log")->getString(id, "");              \
 		if (logger.compare("stdout") == 0) {                                       \
 			SET_LOGGER(dest, &std::cout);                                            \
 		} else if (logger.length() > 0) {                                          \
@@ -187,7 +187,8 @@ namespace CalXUI {
 
 		std::unique_ptr<DeviceManager> devman =
 		    std::unique_ptr<DeviceManager>(getter());
-		this->sysman = new SystemManager(std::move(devman), conf_ptr, std::move(ext));
+		this->sysman =
+		    new SystemManager(std::move(devman), conf_ptr, std::move(ext));
 		this->error_handler = new CalxErrorHandler(this->sysman);
 
 		if (this->debug_mode &&
@@ -237,8 +238,8 @@ namespace CalXUI {
 		setup_signals(this->sysman);
 
 		if (this->scriptFactory != nullptr &&
-		    this->sysman->getConfiguration().getEntry("script")->getBool(
-		        "autoinit", false)) {
+		    this->sysman->getConfiguration().getEntry("script")->getBool("autoinit",
+		                                                                 false)) {
 			CalXScriptHookThread *th = new CalXScriptHookThread(
 			    this->sysman->getConfiguration().getEntry("script")->getString(
 			        "main", "scripts/main.lua"),

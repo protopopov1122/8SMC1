@@ -158,9 +158,8 @@ namespace CalXUI {
 	}
 
 	CalxNewEntryDialog::CalxNewEntryDialog(wxWindow *win, wxWindowID id,
-	                                      ConfigManager &config)
+	                                       ConfigManager &config)
 	    : wxDialog::wxDialog(win, id, __("Add new entry")), config(config) {
-
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(sizer);
 

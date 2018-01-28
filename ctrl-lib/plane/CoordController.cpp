@@ -34,12 +34,11 @@ namespace CalX {
 
 	const char *COORD_CTRL_TAG = "CoordCtrl";
 
-	CoordController::CoordController(
-			ConfigManager &config,
-	    std::shared_ptr<MotorController> xaxis,
-	    std::shared_ptr<MotorController> yaxis,
-	    std::shared_ptr<InstrumentController> instr)
-			: xAxis(xaxis), yAxis(yaxis), instr(instr), config(config) {
+	CoordController::CoordController(ConfigManager &config,
+	                                 std::shared_ptr<MotorController> xaxis,
+	                                 std::shared_ptr<MotorController> yaxis,
+	                                 std::shared_ptr<InstrumentController> instr)
+	    : xAxis(xaxis), yAxis(yaxis), instr(instr), config(config) {
 		this->size = { 0, 0, 0, 0 };
 		this->defWork = true;
 		this->work = false;
@@ -124,7 +123,7 @@ namespace CalX {
 
 		/* Check if one of the motors is currently running
 		   This situation should not be possible if planes are
-			 configured properly */
+		   configured properly */
 		if (xAxis->getMotor()->isRunning() || yAxis->getMotor()->isRunning()) {
 			return ErrorCode::MotorRunning;
 		}
@@ -133,9 +132,10 @@ namespace CalX {
 		xAxis->use();
 		yAxis->use();
 
-		/* Determine if instrument is present, mark it as used and enable it (if necesarry).
-		   Even if the instrument is enabled here, it will continue work after method finished
-			 (for optimisation purposes) and will be disabled on session close */
+		/* Determine if instrument is present, mark it as used and enable it (if
+		   necesarry). Even if the instrument is enabled here, it will continue work
+		   after method finished
+		   (for optimisation purposes) and will be disabled on session close */
 		if (this->instr != nullptr) {
 			this->instr->use();
 			ErrorCode errcode = this->instr->enable(sync);
@@ -155,7 +155,9 @@ namespace CalX {
 		xAxis->dest = point.x > xAxis->getMotor()->getPosition()
 		                  ? MoveType::MoveUp
 		                  : MoveType::MoveDown;
-		if (!xAxis->getMotor()->start(point.x, x_speed)) { /* Something went wrong. Unuse motors, set status to idle, halt */
+		if (!xAxis->getMotor()->start(
+		        point.x, x_speed)) { /* Something went wrong. Unuse motors, set
+			                              status to idle, halt */
 			this->status = CoordPlaneStatus::Idle;
 			xAxis->unuse();
 			yAxis->unuse();
@@ -170,7 +172,9 @@ namespace CalX {
 		                  ? MoveType::MoveUp
 		                  : MoveType::MoveDown;
 
-		if (!yAxis->getMotor()->start(point.y, y_speed)) { /* Something went wrong. Stop x-axis, unuse motors, etc. */
+		if (!yAxis->getMotor()->start(point.y,
+		                              y_speed)) { /* Something went wrong. Stop
+			                                           x-axis, unuse motors, etc. */
 			this->status = CoordPlaneStatus::Idle;
 			xAxis->unuse();
 			yAxis->unuse();
@@ -190,7 +194,8 @@ namespace CalX {
 		while (xDev->isRunning() || yDev->isRunning()) {
 			if (xDev->isRunning()) {
 				ErrorCode code = xAxis->checkTrailers();
-				if (code != ErrorCode::NoError) { /* Motor reached trailes, stop plane, unuse devices, produce error */
+				if (code != ErrorCode::NoError) { /* Motor reached trailes, stop plane,
+					                                   unuse devices, produce error */
 					this->status = CoordPlaneStatus::Idle;
 					xAxis->stop();
 					yAxis->stop();
@@ -199,7 +204,7 @@ namespace CalX {
 						this->instr->unuse();
 					}
 
-          /* Emit necesarry errors */
+					/* Emit necesarry errors */
 					MotorErrorEvent merrevt = { code };
 					xAxis->sendStoppedEvent(merrevt);
 					yAxis->sendStoppedEvent(merrevt);
@@ -237,7 +242,7 @@ namespace CalX {
 
 		/* Wait while one of the motors is still running.
 		   Normally this loop will never execute, however
-			 really motors can "lie" about their state */
+		   really motors can "lie" about their state */
 		while (xAxis->getMotor()->isRunning() || yAxis->getMotor()->isRunning()) {
 		}
 		/* Reset status, usunse devices, emit events */
@@ -272,7 +277,8 @@ namespace CalX {
 		if (tr != TrailerId::Trailer1 && tr != TrailerId::Trailer2) {
 			return ErrorCode::WrongParameter;
 		}
-		/* Reset work flag. Check if plane currently can be used. Set plane status */
+		/* Reset work flag. Check if plane currently can be used. Set plane status
+		 */
 		work = defWork;
 		if (!work) {
 			return ErrorCode::NoError;
@@ -370,7 +376,7 @@ namespace CalX {
 		}
 		/* Stop motors if they are still running.
 		   Again, normally it would not happen, but
-			 real motors may be more "complex" creatures */
+		   real motors may be more "complex" creatures */
 		if (xAxis->getMotor()->isRunning()) {
 			xAxis->getMotor()->stop();
 		}
@@ -383,7 +389,7 @@ namespace CalX {
 		yAxis->dest = MoveType::Stop;
 		/* Do a little comeback jump without checking trailers.
 		   Otherwise on the next movement software will detect trailer
-			 as pressed and movement will be aborted */
+		   as pressed and movement will be aborted */
 		if (tr == TrailerId::Trailer2) {
 			comeback *= -1;
 		}
@@ -416,8 +422,8 @@ namespace CalX {
 
 	/* Arc movement uses modified Bresenham's algorithm implementation.
 	   Movement is determined by destination point (must by on the circle)
-		 and circle center. Circle is split into chords according to spl parameter.
-		 Scale parameter determines possible "error" ranges in circle coordinates */
+	   and circle center. Circle is split into chords according to spl parameter.
+	   Scale parameter determines possible "error" ranges in circle coordinates */
 	ErrorCode CoordController::arc(motor_point_t dest, motor_point_t center,
 	                               int spl, float speed, bool clockwise,
 	                               float scale) {
@@ -426,7 +432,7 @@ namespace CalX {
 		    this->yAxis->getPowerState() == Power::NoPower) {
 			return ErrorCode::PowerOff;
 		}
-		/* Check given coordinates. Current point and destination point must be 
+		/* Check given coordinates. Current point and destination point must be
 		   on the same circle with center in given center point */
 		motor_point_t src = this->getPosition();
 		work = defWork;
@@ -463,9 +469,9 @@ namespace CalX {
 		yAxis->use();
 		use();
 		/* Execute algorithm until a point somewhere around destination is achieved.
-		   After that motors will simply move to the destination. Often destination point
-			 is not quite accurate (because of float-int conversions, scaling, etc), sp
-			 it is the only way to determine loop end */
+		   After that motors will simply move to the destination. Often destination
+		   point is not quite accurate (because of float-int conversions, scaling,
+		   etc), sp it is the only way to determine loop end */
 		do {
 			/* Work should be stopped */
 			if (!work) {
@@ -477,7 +483,7 @@ namespace CalX {
 			} else {
 				pnt = cir.getNextElement();
 			}
-			/* Check received point gives us new chord. If so, 
+			/* Check received point gives us new chord. If so,
 			   than move to it */
 			if (count++ % splitter == 0) {
 				ErrorCode err = this->move(pnt, speed, true);
@@ -630,8 +636,8 @@ namespace CalX {
 
 	std::unique_ptr<CoordPlane> CoordController::clone(
 	    std::shared_ptr<CoordPlane> base) {
-		return std::make_unique<CoordController>(this->config, this->xAxis, this->yAxis,
-		                                         this->instr);
+		return std::make_unique<CoordController>(this->config, this->xAxis,
+		                                         this->yAxis, this->instr);
 	}
 
 	CoordPlaneStatus CoordController::getStatus() {

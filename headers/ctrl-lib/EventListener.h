@@ -35,14 +35,15 @@ namespace CalX {
 	class ConfigEntry;    // Forward referencing
 
 	struct ErrorEvent {
-		ErrorEvent (ErrorCode e) : errcode(e) {}
-		ErrorEvent (const ErrorEvent &e) : errcode(e.errcode) {}
+		ErrorEvent(ErrorCode e) : errcode(e) {}
+		ErrorEvent(const ErrorEvent &e) : errcode(e.errcode) {}
 		ErrorCode errcode;
 	};
 
 	struct MotorMoveEvent {
-		MotorMoveEvent (motor_coord_t d, float s) : destination(d), speed(d) {}
-		MotorMoveEvent (const MotorMoveEvent &e) : destination(e.destination), speed(e.speed) {}
+		MotorMoveEvent(motor_coord_t d, float s) : destination(d), speed(d) {}
+		MotorMoveEvent(const MotorMoveEvent &e)
+		    : destination(e.destination), speed(e.speed) {}
 		motor_coord_t destination;
 		float speed;
 	};
@@ -50,8 +51,8 @@ namespace CalX {
 	typedef ErrorEvent MotorErrorEvent;
 
 	struct MotorRollEvent {
-		MotorRollEvent (TrailerId tr) : trailer(tr) {}
-		MotorRollEvent (const MotorRollEvent &e) : trailer(e.trailer) {}
+		MotorRollEvent(TrailerId tr) : trailer(tr) {}
+		MotorRollEvent(const MotorRollEvent &e) : trailer(e.trailer) {}
 		TrailerId trailer;
 	};
 
@@ -86,10 +87,10 @@ namespace CalX {
 	};
 
 	struct CoordMoveEvent {
-		CoordMoveEvent (motor_point_t p, float s, bool sy) 
-			: destination(p), speed(s), synchrone(sy) {}
-		CoordMoveEvent (const CoordMoveEvent &e)
-			: destination(e.destination), speed(e.speed), synchrone(e.synchrone) {}
+		CoordMoveEvent(motor_point_t p, float s, bool sy)
+		    : destination(p), speed(s), synchrone(sy) {}
+		CoordMoveEvent(const CoordMoveEvent &e)
+		    : destination(e.destination), speed(e.speed), synchrone(e.synchrone) {}
 		motor_point_t destination;
 		float speed;
 		bool synchrone;

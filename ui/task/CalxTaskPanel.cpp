@@ -174,13 +174,14 @@ namespace CalXUI {
 		    new wxButton(execPanel, wxID_ANY, __("Linearize to GCode"));
 		execSizer->Add(linearizeButton);
 		wxButton *moveToStartButton =
-			new wxButton(execPanel, wxID_ANY, __("Move to start"));
+		    new wxButton(execPanel, wxID_ANY, __("Move to start"));
 		execSizer->Add(moveToStartButton);
 		buildButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnBuildClick, this);
 		stopButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnStopClick, this);
 		previewButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnPreviewClick, this);
 		linearizeButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnLinearizeClick, this);
-		moveToStartButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnMoveToStartClick, this);
+		moveToStartButton->Bind(wxEVT_BUTTON, &CalxTaskPanel::OnMoveToStartClick,
+		                        this);
 
 		splitter->Initialize(mainPanel);
 		splitter->SplitVertically(taskPanel, mainPanel);
@@ -443,7 +444,7 @@ namespace CalXUI {
 		}
 		this->stopButton->Enable(!e);
 	}
-	
+
 	void CalxTaskPanel::OnMoveToStartClick(wxCommandEvent &evt) {
 		if (taskList->GetSelection() != wxNOT_FOUND &&
 		    plane->GetSelection() != wxNOT_FOUND) {
@@ -453,19 +454,27 @@ namespace CalXUI {
 			std::shared_ptr<CoordHandle> handle =
 			    wxGetApp().getSystemManager()->getCoord(
 			        (size_t) plane->GetSelection());
-			std::pair<motor_point_t, bool> start = task->getStartPoint(
-				handle->getPosition(),
-				handle->getSize(),
-				wxGetApp().getSystemManager());
+			std::pair<motor_point_t, bool> start =
+			    task->getStartPoint(handle->getPosition(), handle->getSize(),
+			                        wxGetApp().getSystemManager());
 			if (start.second) {
-				float scale = wxGetApp().getSystemManager()->getConfiguration().getEntry("units")->getReal("unit_scale", 1.0f);
-				float unit_speed = wxGetApp().getSystemManager()->getConfiguration().getEntry("units")->getReal("unit_speed", 1.25f);
-				coord_point_t dest = {
-					start.first.x / scale,
-					start.first.y / scale
-				};
-				wxGetApp().getMainFrame()->getPlaneList()->
-					getPlaneHandle((size_t) plane->GetSelection())->getController()->move(dest, unit_speed, false, false);
+				float scale = wxGetApp()
+				                  .getSystemManager()
+				                  ->getConfiguration()
+				                  .getEntry("units")
+				                  ->getReal("unit_scale", 1.0f);
+				float unit_speed = wxGetApp()
+				                       .getSystemManager()
+				                       ->getConfiguration()
+				                       .getEntry("units")
+				                       ->getReal("unit_speed", 1.25f);
+				coord_point_t dest = { start.first.x / scale, start.first.y / scale };
+				wxGetApp()
+				    .getMainFrame()
+				    ->getPlaneList()
+				    ->getPlaneHandle((size_t) plane->GetSelection())
+				    ->getController()
+				    ->move(dest, unit_speed, false, false);
 			}
 		} else {
 			std::string message = __("Select coordinate plane");

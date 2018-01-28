@@ -51,4 +51,4 @@ namespace CalX {
 		REG(EchoProvider);
 		REG(NullProvider);
 	}
-}
+}  // namespace CalX

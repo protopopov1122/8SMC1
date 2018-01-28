@@ -22,8 +22,7 @@
 
 namespace CalXUI {
 
-	CalXScriptEnvironment::CalXScriptEnvironment(
-	    ConfigManager &conf)
+	CalXScriptEnvironment::CalXScriptEnvironment(ConfigManager &conf)
 	    : config(conf) {}
 
 	ConfigManager &CalXScriptEnvironment::getConfiguration() {
