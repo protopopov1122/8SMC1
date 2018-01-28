@@ -33,7 +33,7 @@
 
 namespace CalX {
 
-	enum MathError {
+	enum class MathError {
 		MNoError = 0,
 		MNoVariable = 1,
 		MNoFunction = 2,
@@ -133,7 +133,7 @@ namespace CalX {
 		std::unique_ptr<Node> node;
 	};
 
-	enum BinaryOperation { Add, Subtract, Multiply, Divide, PowerOp };
+	enum class BinaryOperation { Add, Subtract, Multiply, Divide, PowerOp };
 
 	class BinaryNode : public Node {
 	 public:
