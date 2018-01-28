@@ -150,9 +150,9 @@ namespace CalX {
 		this->status = sync ? CoordPlaneStatus::Move : CoordPlaneStatus::Jump;
 		/* Start x-axis motor, emit event about it */
 		MotorMoveEvent xmevt = { point.x, x_speed };
-		if (xAxis->asyncMove(
-		        point.x, x_speed) != ErrorCode::NoError) { /* Something went wrong. Unuse motors, set
-			                              status to idle, halt */
+		if (xAxis->asyncMove(point.x, x_speed) !=
+		    ErrorCode::NoError) { /* Something went wrong. Unuse motors, set
+			     status to idle, halt */
 			this->status = CoordPlaneStatus::Idle;
 			xAxis->unuse();
 			yAxis->unuse();
@@ -163,8 +163,9 @@ namespace CalX {
 
 		/* Start y-axis motor, emit event about it */
 		MotorMoveEvent ymevt = { point.y, y_speed };
-		if (yAxis->asyncMove(point.y, y_speed) != ErrorCode::NoError) { /* Something went wrong. Stop
-			                                                                 x-axis, unuse motors, etc. */
+		if (yAxis->asyncMove(point.y, y_speed) !=
+		    ErrorCode::NoError) { /* Something went wrong. Stop
+			                           x-axis, unuse motors, etc. */
 			this->status = CoordPlaneStatus::Idle;
 			xAxis->unuse();
 			yAxis->unuse();
@@ -232,7 +233,8 @@ namespace CalX {
 		/* Wait while one of the motors is still running.
 		   Normally this loop will never execute, however
 		   really motors can "lie" about their state */
-		while (xAxis->isMoving() || yAxis->isMoving()) {}
+		while (xAxis->isMoving() || yAxis->isMoving()) {
+		}
 		xAxis->stop();
 		yAxis->stop();
 		/* Reset status, usunse devices, emit events */
@@ -254,8 +256,7 @@ namespace CalX {
 	ErrorCode CoordController::calibrate(TrailerId tr) {
 		/* Check if motors are idle. Otherwise return error
 		   This should not happen on properly configured planes */
-		if (this->xAxis->isMoving() ||
-		    this->yAxis->isMoving()) {
+		if (this->xAxis->isMoving() || this->yAxis->isMoving()) {
 			return ErrorCode::MotorRunning;
 		}
 		/* Check if motors are enabled */
@@ -306,8 +307,8 @@ namespace CalX {
 			if (!xAxis->isTrailerPressed(tr)) {
 				/* Trailer is not pressed, do one more motor jump if motor is idle */
 				if (!xpr && !xAxis->isMoving()) {
-					if (xAxis->asyncMove(xAxis->getPosition() + dest,
-					                              roll_speed) != ErrorCode::NoError) {
+					if (xAxis->asyncMove(xAxis->getPosition() + dest, roll_speed) !=
+					    ErrorCode::NoError) {
 						/* Error occured. Stop motors, emit errors, halt */
 						this->status = CoordPlaneStatus::Idle;
 						xAxis->stop();
@@ -336,8 +337,8 @@ namespace CalX {
 			/* Similar as above */
 			if (!yAxis->isTrailerPressed(tr)) {
 				if (!ypr && !yAxis->isMoving()) {
-					if (yAxis->asyncMove(yAxis->getPosition() + dest,
-					                              roll_speed) != ErrorCode::NoError) {
+					if (yAxis->asyncMove(yAxis->getPosition() + dest, roll_speed) !=
+					    ErrorCode::NoError) {
 						this->status = CoordPlaneStatus::Idle;
 						xAxis->stop();
 						yAxis->stop();

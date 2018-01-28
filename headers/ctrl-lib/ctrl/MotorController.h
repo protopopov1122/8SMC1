@@ -33,7 +33,6 @@ namespace CalX {
 #define TRAILER_COMEBACK 800
 
 	class MotorController : public DeviceController {
-
 	 public:
 		MotorController(ConfigManager &, Motor &);
 		Motor &getMotor();

@@ -40,9 +40,8 @@ namespace CalX {
 
 	ErrorCode InstrumentController::open_session() {
 		if (!this->session_state) {
-			ErrorCode errcode = this->instr.open_session()
-			                        ? ErrorCode::NoError
-			                        : ErrorCode::LowLevelError;
+			ErrorCode errcode = this->instr.open_session() ? ErrorCode::NoError
+			                                               : ErrorCode::LowLevelError;
 			if (errcode == ErrorCode::NoError) {
 				this->session_state = true;
 			}

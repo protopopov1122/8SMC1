@@ -309,15 +309,15 @@ namespace CalXUI {
 		std::string stat =
 		    __("State") + std::string(": ") +
 		    std::string(dev->getMotor().isRunning() ? __("Running")
-		                                             : __("Not running"));
+		                                            : __("Not running"));
 		std::string tra1 =
 		    __("Trailer 1") + std::string(": ") +
 		    std::string(dev->getMotor().isTrailerPressed(1) ? __("Pushed")
-		                                                     : __("Unpushed"));
+		                                                    : __("Unpushed"));
 		std::string tra2 =
 		    __("Trailer 2") + std::string(": ") +
 		    std::string(dev->getMotor().isTrailerPressed(2) ? __("Pushed")
-		                                                     : __("Unpushed"));
+		                                                    : __("Unpushed"));
 		std::string hwinf = dev->getMotor().getDeviceInfo();
 		std::string rtinf = dev->getMotor().getRuntimeInfo();
 		this->position->SetLabel(pos);

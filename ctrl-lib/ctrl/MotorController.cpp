@@ -132,8 +132,7 @@ namespace CalX {
 		}
 		ErrorCode errcode = ErrorCode::NoError;
 		if (work) {
-			errcode =
-			    this->startMove(this->dev.getPosition() + comeback, roll_speed);
+			errcode = this->startMove(this->dev.getPosition() + comeback, roll_speed);
 		}
 		this->sendRolledEvent(evt);
 		this->unuse();
@@ -182,17 +181,18 @@ namespace CalX {
 	ErrorCode MotorController::asyncMove(motor_coord_t dest, float speed) {
 		if (this->dev.start(dest, speed)) {
 			this->work = true;
-			this->dest =
-					dest > this->dev.getPosition() ? MoveType::MoveUp : MoveType::MoveDown;
+			this->dest = dest > this->dev.getPosition() ? MoveType::MoveUp
+			                                            : MoveType::MoveDown;
 			return ErrorCode::NoError;
 		} else {
 			return ErrorCode::LowLevelError;
 		}
 	}
 
-	ErrorCode MotorController::asyncRelativeMove(motor_coord_t reldest, float speed) {
+	ErrorCode MotorController::asyncRelativeMove(motor_coord_t reldest,
+	                                             float speed) {
 		motor_coord_t dest = getPosition() + reldest;
-		return asyncMove(dest, speed);	
+		return asyncMove(dest, speed);
 	}
 
 	void MotorController::stop() {

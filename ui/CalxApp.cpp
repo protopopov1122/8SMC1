@@ -162,8 +162,8 @@ namespace CalXUI {
 
 		std::unique_ptr<DeviceManager> devman =
 		    std::unique_ptr<DeviceManager>(getter());
-		this->sysman =
-		    new SystemManager(std::move(devman), std::move(conf_ptr), std::move(ext));
+		this->sysman = new SystemManager(std::move(devman), std::move(conf_ptr),
+		                                 std::move(ext));
 		this->error_handler = new CalxErrorHandler(this->sysman);
 
 		if (this->debug_mode &&

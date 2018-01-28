@@ -522,10 +522,13 @@ namespace CalXUI {
 		}
 	}
 
-	std::pair<coord_point_t, ErrorCode> CalXAppScriptEnvironment::planeGetPosition(size_t id) {
+	std::pair<coord_point_t, ErrorCode>
+	    CalXAppScriptEnvironment::planeGetPosition(size_t id) {
 		CalxPlaneHandle *planeHandle =
 		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);
-		std::shared_ptr<CoordHandle> handle = planeHandle != nullptr ? planeHandle->getController()->getHandle() : nullptr;
+		std::shared_ptr<CoordHandle> handle =
+		    planeHandle != nullptr ? planeHandle->getController()->getHandle()
+		                           : nullptr;
 		coord_point_t pos;
 		if (handle == nullptr) {
 			return std::make_pair(pos, ErrorCode::UnknownResource);
@@ -535,10 +538,13 @@ namespace CalXUI {
 		}
 	}
 
-	std::pair<coord_rect_t, ErrorCode> CalXAppScriptEnvironment::planeGetSize(size_t id) {
+	std::pair<coord_rect_t, ErrorCode> CalXAppScriptEnvironment::planeGetSize(
+	    size_t id) {
 		CalxPlaneHandle *planeHandle =
 		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);
-		std::shared_ptr<CoordHandle> handle = planeHandle != nullptr ? planeHandle->getController()->getHandle() : nullptr;
+		std::shared_ptr<CoordHandle> handle =
+		    planeHandle != nullptr ? planeHandle->getController()->getHandle()
+		                           : nullptr;
 		coord_rect_t rect;
 		if (handle == nullptr) {
 			return std::make_pair(rect, ErrorCode::UnknownResource);
@@ -550,10 +556,13 @@ namespace CalXUI {
 		}
 	}
 
-	std::pair<bool, ErrorCode> CalXAppScriptEnvironment::planeIsMeasured(size_t id) {
+	std::pair<bool, ErrorCode> CalXAppScriptEnvironment::planeIsMeasured(
+	    size_t id) {
 		CalxPlaneHandle *planeHandle =
 		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);
-		std::shared_ptr<CoordHandle> handle = planeHandle != nullptr ? planeHandle->getController()->getHandle() : nullptr;
+		std::shared_ptr<CoordHandle> handle =
+		    planeHandle != nullptr ? planeHandle->getController()->getHandle()
+		                           : nullptr;
 		coord_rect_t rect;
 		if (handle == nullptr) {
 			return std::make_pair(false, ErrorCode::UnknownResource);
