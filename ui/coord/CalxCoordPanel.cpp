@@ -22,7 +22,6 @@
 #include "ui/CalxErrorHandler.h"
 #include "ui/CalxPanel.h"
 #include "ui/coord/CalxCoordDialog.h"
-#include "ui/coord/CalxPlaneProviders.h"
 #include <wx/listbook.h>
 #include <wx/sizer.h>
 #include <wx/splitter.h>

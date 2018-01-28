@@ -24,7 +24,6 @@
 #include <memory>
 #include "ctrl-lib/ExtEngine.h"
 #include "ctrl-lib/conf/ConfigManager.h"
-#include "ctrl-lib/conf/RequestResolver.h"
 #include "ctrl-lib/ctrl/InstrumentController.h"
 #include "ctrl-lib/device/DeviceManager.h"
 #include "ctrl-lib/graph/FunctionEngine.h"
@@ -51,7 +50,6 @@ namespace CalX {
 		DeviceManager &getDeviceManager();
 		ConfigManager &getConfiguration();
 		FunctionEngine &getFunctionEngine();
-		RequestResolver &getRequestResolver();
 		ExtEngine &getExtEngine();
 		// Tasks control
 		size_t getTaskCount();
@@ -81,7 +79,6 @@ namespace CalX {
 		std::vector<std::shared_ptr<CoordTask>> tasks;
 		std::vector<std::shared_ptr<CoordHandle>> coords;
 		FunctionEngine engine;
-		std::unique_ptr<RequestResolver> resolver;
 		std::unique_ptr<ExtEngine> ext_engine;
 	};
 }  // namespace CalX

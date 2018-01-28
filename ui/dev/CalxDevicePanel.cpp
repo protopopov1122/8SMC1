@@ -21,7 +21,6 @@
 #include "ui/dev/CalxDevicePanel.h"
 #include "ui/CalxApp.h"
 #include "ui/dev/CalxDeviceFactory.h"
-#include "ui/dev/CalxDeviceProviders.h"
 #include <vector>
 #include <wx/listctrl.h>
 #include <wx/sizer.h>

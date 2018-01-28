@@ -47,7 +47,6 @@ namespace CalXUI {
 	class CalxErrorHandler;  // Forward referencing
 
 	wxDECLARE_EVENT(wxEVT_APP_ERROR, wxThreadEvent);
-	wxDECLARE_EVENT(wxEVT_APP_AUTOCONF, wxThreadEvent);
 
 	class CalxApp : public wxApp {
 	 public:
@@ -56,7 +55,6 @@ namespace CalXUI {
 		virtual void OnUnhandledException();
 		virtual void OnFatalException();
 		void OnErrorEvent(wxThreadEvent &);
-		void OnAutoconfEvent(wxThreadEvent &);
 		SystemManager *getSystemManager();
 		CalxErrorHandler *getErrorHandler();
 		CalxFrame *getMainFrame();

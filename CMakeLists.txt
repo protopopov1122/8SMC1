@@ -30,7 +30,6 @@ add_custom_target(make-build-directory ALL COMMAND ${CMAKE_COMMAND} -E make_dire
 add_custom_target(calx-init-target ALL
 	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/misc/main.conf.ini ${build_directory}
 	# COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/misc/emu.conf.ini ${build_directory}
-	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/misc/auto.conf ${build_directory}
 	DEPENDS make-build-directory
 )
 
@@ -40,11 +39,6 @@ add_subdirectory(cli)
 add_subdirectory(ui)
 add_subdirectory(ext)
 add_subdirectory(lua-calx)
-if (WIN32)
-	install(FILES ${build_directory}/main.conf.ini ${build_directory}/auto.conf DESTINATION / COMPONENT config)
-else (WIN32)
-	install(FILES ${build_directory}/main.conf.ini ${build_directory}/auto.conf DESTINATION /etc/calx COMPONENT config)
-endif (WIN32)
 set(CPACK_COMPONENT_CONFIG_DISPLAY_NAME "Configuration files" CACHE INTERNAL "")
 set(CPACK_COMPONENT_CONFIG_DESCRIPTION "Set of default configuration files" CACHE INTERNAL "")
 

@@ -13,7 +13,6 @@ CalX system contains few subsystems that can't be included in the hierarchy howe
 * Math engine - CalX allows building mathematical function graphs, so it includes a simple mathematical expression parser and an evaluator with some helper classes. See [math engine](math.md) description.
 * GCode parser - parses CNC programming language called GCode(which is an industry standart) into tasks.
 * Configuration manager - project contains .ini file parser and virtual ini-like structure manager to keep and modify configuration on the fly. See [configuration section](other.md).
-* Request resolver - CalX includes special configuration subsystem that allows calling different library components in the identical way.
 * Bresenham algorithm implementation for circles
 
 ### Concept combining
