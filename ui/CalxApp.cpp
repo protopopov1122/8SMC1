@@ -162,13 +162,13 @@ namespace CalXUI {
 
 		std::unique_ptr<DeviceManager> devman =
 		    std::unique_ptr<DeviceManager>(getter());
-		this->sysman = new SystemManager(std::move(devman), std::move(conf_ptr),
+		this->sysman = std::make_unique<SystemManager>(std::move(devman), std::move(conf_ptr),
 		                                 std::move(ext));
-		this->error_handler = new CalxErrorHandler(this->sysman);
+		this->error_handler = new CalxErrorHandler(this->sysman.get());
 
 		if (this->debug_mode &&
 		    sysman->getConfiguration().getEntry("ui")->getBool("console", false)) {
-			this->debug_console = new CalxDebugConsole(this->sysman);
+			this->debug_console = new CalxDebugConsole(this->sysman.get());
 			this->debug_console->Run();
 		} else {
 			this->debug_console = nullptr;
@@ -207,7 +207,7 @@ namespace CalXUI {
 		this->frame = new CalxFrame(__("CalX UI"));
 		this->frame->Show(true);
 		this->frame->Maximize(true);
-		setup_signals(this->sysman);
+		setup_signals(this->sysman.get());
 
 		if (this->scriptFactory != nullptr &&
 		    this->sysman->getConfiguration().getEntry("script")->getBool("autoinit",
@@ -253,7 +253,7 @@ namespace CalXUI {
 		}
 
 		delete this->error_handler;
-		delete this->sysman;
+		this->sysman.reset(nullptr);
 		this->dynlib->Detach();
 		this->dynlib->Unload();
 		if (this->extLib != nullptr) {
@@ -289,7 +289,7 @@ namespace CalXUI {
 	}
 
 	SystemManager *CalxApp::getSystemManager() {
-		return this->sysman;
+		return this->sysman.get();
 	}
 
 	CalxErrorHandler *CalxApp::getErrorHandler() {

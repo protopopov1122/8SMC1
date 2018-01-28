@@ -80,7 +80,7 @@ namespace CalXUI {
 		wxDynamicLibrary *dynlib;
 		wxDynamicLibrary *extLib;
 		wxDynamicLibrary *scriptLib;
-		SystemManager *sysman;
+		std::unique_ptr<SystemManager> sysman;
 
 		bool debug_mode;
 		CalxDebugConsole *debug_console;
