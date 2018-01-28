@@ -32,14 +32,11 @@ namespace CalX {
 #define ROLL_SPEED 4000.0f
 #define TRAILER_COMEBACK 800
 
-	class CoordController;  // Forward referencing
-
 	class MotorController : public DeviceController {
-		friend class CoordController;
 
 	 public:
-		MotorController(ConfigManager &, Motor *);
-		Motor *getMotor();
+		MotorController(ConfigManager &, Motor &);
+		Motor &getMotor();
 
 		Power getPowerState();
 		ErrorCode enablePower(bool);
@@ -48,9 +45,12 @@ namespace CalX {
 		ErrorCode moveToTrailer(TrailerId);
 		ErrorCode startMove(motor_coord_t, float);
 		ErrorCode startRelativeMove(motor_coord_t, float);
+		ErrorCode asyncMove(motor_coord_t, float);
+		ErrorCode asyncRelativeMove(motor_coord_t, float);
 		void stop();
 
 		motor_coord_t getPosition();
+		bool isMoving();
 
 		void addEventListener(std::shared_ptr<MotorEventListener>);
 		void removeEventListener(std::shared_ptr<MotorEventListener>);
@@ -59,17 +59,18 @@ namespace CalX {
 
 		ErrorCode waitWhileRunning();
 		ErrorCode checkTrailers();
+		bool isTrailerPressed(TrailerId);
 
-	 private:
 		void sendMovingEvent(MotorMoveEvent &);
 		void sendMovedEvent(MotorMoveEvent &);
 		void sendStoppedEvent(MotorErrorEvent &);
 		void sendRollingEvent(MotorRollEvent &);
 		void sendRolledEvent(MotorRollEvent &);
 
+	 private:
 		MoveType dest;
 		bool work;
-		Motor *dev;
+		Motor &dev;
 		std::vector<std::shared_ptr<MotorEventListener>> listeners;
 	};
 }  // namespace CalX

@@ -115,7 +115,7 @@ namespace CalXUI {
 		    evt.GetPayload<std::pair<CalxDeviceConstructor *, bool *>>();
 		CalxDeviceConstructor *cnstr = pair.first;
 		CalxDeviceHandle *device = cnstr->construct(this);
-		if (device->getController()->getDevice()->getType() == DeviceType::Motor) {
+		if (device->getController()->getDevice().getType() == DeviceType::Motor) {
 			device_id_t id = device->getController()->getID();
 			this->motors.insert(
 			    std::make_pair(id, dynamic_cast<CalxMotorHandle *>(device)));

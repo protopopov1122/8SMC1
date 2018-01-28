@@ -24,14 +24,13 @@
 namespace CalX {
 
 	InstrumentController::InstrumentController(ConfigManager &conf,
-	                                           Instrument *instr)
-	    : DeviceController::DeviceController(conf, instr) {
-		this->instr = instr;
+	                                           Instrument &instr)
+	    : DeviceController::DeviceController(conf, instr), instr(instr) {
 		this->state = true;
 		this->session_state = false;
 	}
 
-	Instrument *InstrumentController::getInstrument() {
+	Instrument &InstrumentController::getInstrument() {
 		return this->instr;
 	}
 
@@ -41,7 +40,7 @@ namespace CalX {
 
 	ErrorCode InstrumentController::open_session() {
 		if (!this->session_state) {
-			ErrorCode errcode = this->instr->open_session()
+			ErrorCode errcode = this->instr.open_session()
 			                        ? ErrorCode::NoError
 			                        : ErrorCode::LowLevelError;
 			if (errcode == ErrorCode::NoError) {
@@ -58,7 +57,7 @@ namespace CalX {
 			if (this->isEnabled()) {
 				this->enable(false);
 			}
-			ErrorCode errcode = this->instr->close_session()
+			ErrorCode errcode = this->instr.close_session()
 			                        ? ErrorCode::NoError
 			                        : ErrorCode::LowLevelError;
 			if (errcode == ErrorCode::NoError) {
@@ -71,7 +70,7 @@ namespace CalX {
 	}
 
 	bool InstrumentController::isEnabled() {
-		return this->instr->enabled();
+		return this->instr.enabled();
 	}
 
 	ErrorCode InstrumentController::enable(bool e) {
@@ -82,7 +81,7 @@ namespace CalX {
 					return errcode;
 				}
 			}
-			if (!this->instr->enable(e && this->state)) {
+			if (!this->instr.enable(e && this->state)) {
 				return ErrorCode::LowLevelError;
 			}
 			sendStateChanged();
@@ -107,15 +106,15 @@ namespace CalX {
 	}
 
 	std::string InstrumentController::getInfo() {
-		return this->instr->getDeviceInfo();
+		return this->instr.getDeviceInfo();
 	}
 
 	InstrumentMode InstrumentController::getMode() {
-		return this->instr->getWorkingMode();
+		return this->instr.getWorkingMode();
 	}
 
 	bool InstrumentController::setMode(InstrumentMode m) {
-		return this->instr->setWorkingMode(m);
+		return this->instr.setWorkingMode(m);
 	}
 
 	void InstrumentController::addEventListener(

@@ -72,10 +72,8 @@ namespace CalX {
 
 	ErrorCode CoordController::move(motor_point_t point, float speed, bool sync) {
 		/* Prepare motors and determine movement destination on each axis */
-		Motor *xDev = this->xAxis->getMotor();
-		Motor *yDev = this->yAxis->getMotor();
-		motor_coord_t dx = point.x - xDev->getPosition();
-		motor_coord_t dy = point.y - yDev->getPosition();
+		motor_coord_t dx = point.x - this->xAxis->getPosition();
+		motor_coord_t dy = point.y - this->yAxis->getPosition();
 		/* Check if motors are enabled */
 		if (this->xAxis->getPowerState() == Power::NoPower ||
 		    this->yAxis->getPowerState() == Power::NoPower) {
@@ -124,7 +122,7 @@ namespace CalX {
 		/* Check if one of the motors is currently running
 		   This situation should not be possible if planes are
 		   configured properly */
-		if (xAxis->getMotor()->isRunning() || yAxis->getMotor()->isRunning()) {
+		if (xAxis->isMoving() || yAxis->isMoving()) {
 			return ErrorCode::MotorRunning;
 		}
 
@@ -152,35 +150,26 @@ namespace CalX {
 		this->status = sync ? CoordPlaneStatus::Move : CoordPlaneStatus::Jump;
 		/* Start x-axis motor, emit event about it */
 		MotorMoveEvent xmevt = { point.x, x_speed };
-		xAxis->dest = point.x > xAxis->getMotor()->getPosition()
-		                  ? MoveType::MoveUp
-		                  : MoveType::MoveDown;
-		if (!xAxis->getMotor()->start(
-		        point.x, x_speed)) { /* Something went wrong. Unuse motors, set
+		if (xAxis->asyncMove(
+		        point.x, x_speed) != ErrorCode::NoError) { /* Something went wrong. Unuse motors, set
 			                              status to idle, halt */
 			this->status = CoordPlaneStatus::Idle;
 			xAxis->unuse();
 			yAxis->unuse();
-			xAxis->dest = MoveType::Stop;
+			xAxis->stop();
 			return ErrorCode::LowLevelError;
 		}
 		xAxis->sendMovingEvent(xmevt);
 
 		/* Start y-axis motor, emit event about it */
 		MotorMoveEvent ymevt = { point.y, y_speed };
-		yAxis->dest = point.y > yAxis->getMotor()->getPosition()
-		                  ? MoveType::MoveUp
-		                  : MoveType::MoveDown;
-
-		if (!yAxis->getMotor()->start(point.y,
-		                              y_speed)) { /* Something went wrong. Stop
-			                                           x-axis, unuse motors, etc. */
+		if (yAxis->asyncMove(point.y, y_speed) != ErrorCode::NoError) { /* Something went wrong. Stop
+			                                                                 x-axis, unuse motors, etc. */
 			this->status = CoordPlaneStatus::Idle;
 			xAxis->unuse();
 			yAxis->unuse();
-			yAxis->dest = MoveType::Stop;
 			xAxis->stop();
-			xAxis->dest = MoveType::Stop;
+			yAxis->stop();
 			xAxis->sendMovedEvent(xmevt);
 			return ErrorCode::LowLevelError;
 		}
@@ -191,8 +180,8 @@ namespace CalX {
 		sendMovingEvent(evt);
 		use();
 		/* Wait while one of motors (or both) is running, detect possible errors */
-		while (xDev->isRunning() || yDev->isRunning()) {
-			if (xDev->isRunning()) {
+		while (this->xAxis->isMoving() || this->yAxis->isMoving()) {
+			if (this->xAxis->isMoving()) {
 				ErrorCode code = xAxis->checkTrailers();
 				if (code != ErrorCode::NoError) { /* Motor reached trailes, stop plane,
 					                                   unuse devices, produce error */
@@ -216,7 +205,7 @@ namespace CalX {
 					return code;
 				}
 			}
-			if (yDev->isRunning()) { /* Similar to above */
+			if (this->yAxis->isMoving()) { /* Similar to above */
 				ErrorCode code = yAxis->checkTrailers();
 				if (code != ErrorCode::NoError) {
 					this->status = CoordPlaneStatus::Idle;
@@ -243,8 +232,9 @@ namespace CalX {
 		/* Wait while one of the motors is still running.
 		   Normally this loop will never execute, however
 		   really motors can "lie" about their state */
-		while (xAxis->getMotor()->isRunning() || yAxis->getMotor()->isRunning()) {
-		}
+		while (xAxis->isMoving() || yAxis->isMoving()) {}
+		xAxis->stop();
+		yAxis->stop();
 		/* Reset status, usunse devices, emit events */
 		this->status = CoordPlaneStatus::Idle;
 
@@ -264,8 +254,8 @@ namespace CalX {
 	ErrorCode CoordController::calibrate(TrailerId tr) {
 		/* Check if motors are idle. Otherwise return error
 		   This should not happen on properly configured planes */
-		if (this->xAxis->getMotor()->isRunning() ||
-		    this->yAxis->getMotor()->isRunning()) {
+		if (this->xAxis->isMoving() ||
+		    this->yAxis->isMoving()) {
 			return ErrorCode::MotorRunning;
 		}
 		/* Check if motors are enabled */
@@ -293,10 +283,6 @@ namespace CalX {
 		    config.getEntry("core")->getInt("trailer_comeback", TRAILER_COMEBACK);
 		/* Determine movement destination */
 		int_conf_t dest = (tr == TrailerId::Trailer1 ? -roll_step : roll_step);
-		xAxis->dest =
-		    (tr == TrailerId::Trailer1 ? MoveType::RollDown : MoveType::RollUp);
-		yAxis->dest =
-		    (tr == TrailerId::Trailer1 ? MoveType::RollDown : MoveType::RollUp);
 		/* Variables that are used to detect if motor reached trailer */
 		bool xpr = false;
 		bool ypr = false;
@@ -317,11 +303,11 @@ namespace CalX {
 		   Motors move by series of jumps, because it's easier to
 		   prevent corruption if trailer is not enough sensetive */
 		while (!(xpr && ypr) && work) {
-			if (!xAxis->getMotor()->isTrailerPressed(static_cast<int>(tr))) {
+			if (!xAxis->isTrailerPressed(tr)) {
 				/* Trailer is not pressed, do one more motor jump if motor is idle */
-				if (!xpr && !xAxis->getMotor()->isRunning()) {
-					if (!xAxis->getMotor()->start(xAxis->getMotor()->getPosition() + dest,
-					                              roll_speed)) {
+				if (!xpr && !xAxis->isMoving()) {
+					if (xAxis->asyncMove(xAxis->getPosition() + dest,
+					                              roll_speed) != ErrorCode::NoError) {
 						/* Error occured. Stop motors, emit errors, halt */
 						this->status = CoordPlaneStatus::Idle;
 						xAxis->stop();
@@ -342,16 +328,16 @@ namespace CalX {
 				/* Trailer is pressed, flip appropriate flag */
 				xpr = true;
 				/* Stop motor if it's running */
-				if (xAxis->getMotor()->isRunning()) {
-					xAxis->getMotor()->stop();
+				if (xAxis->isMoving()) {
+					xAxis->stop();
 				}
 			}
 
 			/* Similar as above */
-			if (!yAxis->getMotor()->isTrailerPressed(static_cast<int>(tr))) {
-				if (!ypr && !yAxis->getMotor()->isRunning()) {
-					if (!yAxis->getMotor()->start(yAxis->getMotor()->getPosition() + dest,
-					                              roll_speed)) {
+			if (!yAxis->isTrailerPressed(tr)) {
+				if (!ypr && !yAxis->isMoving()) {
+					if (yAxis->asyncMove(yAxis->getPosition() + dest,
+					                              roll_speed) != ErrorCode::NoError) {
 						this->status = CoordPlaneStatus::Idle;
 						xAxis->stop();
 						yAxis->stop();
@@ -369,24 +355,17 @@ namespace CalX {
 				}
 			} else {
 				ypr = true;
-				if (yAxis->getMotor()->isRunning()) {
-					yAxis->getMotor()->stop();
+				if (yAxis->isMoving()) {
+					yAxis->stop();
 				}
 			}
 		}
 		/* Stop motors if they are still running.
 		   Again, normally it would not happen, but
 		   real motors may be more "complex" creatures */
-		if (xAxis->getMotor()->isRunning()) {
-			xAxis->getMotor()->stop();
-		}
-		if (yAxis->getMotor()->isRunning()) {
-			yAxis->getMotor()->stop();
-		}
+		xAxis->stop();
+		yAxis->stop();
 
-		/* Mark motors as stopped */
-		xAxis->dest = MoveType::Stop;
-		yAxis->dest = MoveType::Stop;
 		/* Do a little comeback jump without checking trailers.
 		   Otherwise on the next movement software will detect trailer
 		   as pressed and movement will be aborted */
@@ -394,8 +373,8 @@ namespace CalX {
 			comeback *= -1;
 		}
 		if (work) {
-			xAxis->startMove(xAxis->getMotor()->getPosition() + comeback, roll_speed);
-			yAxis->startMove(yAxis->getMotor()->getPosition() + comeback, roll_speed);
+			xAxis->startMove(xAxis->getPosition() + comeback, roll_speed);
+			yAxis->startMove(yAxis->getPosition() + comeback, roll_speed);
 			xAxis->waitWhileRunning();
 			yAxis->waitWhileRunning();
 		}

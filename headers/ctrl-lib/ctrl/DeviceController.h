@@ -32,17 +32,17 @@ namespace CalX {
 
 	class DeviceController {
 	 public:
-		DeviceController(ConfigManager &, Device *);
+		DeviceController(ConfigManager &, Device &);
 		virtual ~DeviceController() = default;
 		device_id_t getID();
 		ConfigManager &getConfiguration();
-		Device *getDevice();
+		Device &getDevice();
 
 	 protected:
 		ConfigManager &config;
 
 	 private:
-		Device *device;
+		Device &device;
 	};
 }  // namespace CalX
 

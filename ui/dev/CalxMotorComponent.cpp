@@ -301,25 +301,25 @@ namespace CalXUI {
 		                  std::to_string(this->dev->getPosition());
 		std::string pwr =
 		    __("Power") + std::string(": ") +
-		    std::string(dev->getMotor()->getPowerState() == Power::FullPower
+		    std::string(dev->getMotor().getPowerState() == Power::FullPower
 		                    ? __("full")
-		                    : (dev->getMotor()->getPowerState() == Power::HalfPower
+		                    : (dev->getMotor().getPowerState() == Power::HalfPower
 		                           ? __("half")
 		                           : __("no")));
 		std::string stat =
 		    __("State") + std::string(": ") +
-		    std::string(dev->getMotor()->isRunning() ? __("Running")
+		    std::string(dev->getMotor().isRunning() ? __("Running")
 		                                             : __("Not running"));
 		std::string tra1 =
 		    __("Trailer 1") + std::string(": ") +
-		    std::string(dev->getMotor()->isTrailerPressed(1) ? __("Pushed")
+		    std::string(dev->getMotor().isTrailerPressed(1) ? __("Pushed")
 		                                                     : __("Unpushed"));
 		std::string tra2 =
 		    __("Trailer 2") + std::string(": ") +
-		    std::string(dev->getMotor()->isTrailerPressed(2) ? __("Pushed")
+		    std::string(dev->getMotor().isTrailerPressed(2) ? __("Pushed")
 		                                                     : __("Unpushed"));
-		std::string hwinf = dev->getMotor()->getDeviceInfo();
-		std::string rtinf = dev->getMotor()->getRuntimeInfo();
+		std::string hwinf = dev->getMotor().getDeviceInfo();
+		std::string rtinf = dev->getMotor().getRuntimeInfo();
 		this->position->SetLabel(pos);
 		this->power->SetLabel(pwr);
 		this->state->SetLabel(stat);
@@ -408,7 +408,7 @@ namespace CalXUI {
 
 	void CalxMotorComponent::OnConfigEvent(wxCommandEvent &evt) {
 		CalxConfigDialog *editor = new CalxConfigDialog(
-		    this, wxID_ANY, this->dev->getMotor()->getConfiguration());
+		    this, wxID_ANY, this->dev->getMotor().getConfiguration());
 		if (editor->ShowModal() == wxID_OK) {
 		}
 		delete editor;

@@ -152,7 +152,7 @@ namespace CalXUI {
 			bool power = ((BoolConfigValue *) PROVIDER_ARG(req, 1))->getValue();
 			std::shared_ptr<MotorController> ctrl = sysman->getMotorController(devid);
 			if (ctrl != nullptr) {
-				return ctrl->getMotor()->enablePower(power);
+				return ctrl->getMotor().enablePower(power);
 			} else {
 				return false;
 			}

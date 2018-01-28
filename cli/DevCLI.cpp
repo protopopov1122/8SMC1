@@ -151,7 +151,7 @@ namespace CalX {
 				}
 				int dest = std::stoi(args.at(1));
 				float speed = static_cast<float>(std::stod(args.at(2)));
-				std::cout << "\tStarted device #" << dev->getMotor()->getID() << " to "
+				std::cout << "\tStarted device #" << dev->getMotor().getID() << " to "
 				          << dest << " with speed " << speed << " steps/sec and "
 				          << std::endl;
 				dev->startMove(dest, speed);
@@ -172,7 +172,7 @@ namespace CalX {
 				}
 				int dest = std::stoi(args.at(1));
 				float speed = static_cast<float>(std::stod(args.at(2)));
-				std::cout << "\tStarted device #" << dev->getMotor()->getID() << " to "
+				std::cout << "\tStarted device #" << dev->getMotor().getID() << " to "
 				          << dest << " with speed " << speed << " steps/sec and "
 				          << std::endl;
 				dev->startRelativeMove(dest, speed);
@@ -188,7 +188,7 @@ namespace CalX {
 					return;
 				}
 				dev->stop();
-				std::cout << "\tStopped device #" << dev->getMotor()->getID()
+				std::cout << "\tStopped device #" << dev->getMotor().getID()
 				          << std::endl;
 			}
 		} else if (com.compare("power") == 0) {

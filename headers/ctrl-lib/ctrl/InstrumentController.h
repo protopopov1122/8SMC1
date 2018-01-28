@@ -31,8 +31,8 @@ namespace CalX {
 
 	class InstrumentController : public DeviceController {
 	 public:
-		InstrumentController(ConfigManager &, Instrument *);
-		Instrument *getInstrument();
+		InstrumentController(ConfigManager &, Instrument &);
+		Instrument &getInstrument();
 		bool isSessionOpened();
 		ErrorCode open_session();
 		ErrorCode close_session();
@@ -56,7 +56,7 @@ namespace CalX {
 		void sendStateChanged();
 
 	 private:
-		Instrument *instr;
+		Instrument &instr;
 		bool session_state;
 		bool state;
 		std::vector<std::shared_ptr<InstrumentEventListener>> listeners;
