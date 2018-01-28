@@ -89,7 +89,7 @@ namespace CalX {
 		virtual device_id_t getID();
 		virtual bool hasErrors();
 		virtual std::string pollError();
-		virtual std::shared_ptr<ConfigManager> getConfiguration();
+		virtual ConfigManager &getConfiguration();
 		virtual DeviceManager &getDeviceManager() = 0;
 		virtual std::string getDeviceInfo() = 0;
 		virtual std::string getRuntimeInfo() = 0;

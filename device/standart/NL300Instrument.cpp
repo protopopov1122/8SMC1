@@ -60,7 +60,7 @@ namespace CalX {
 		          "; baud rate: " + std::to_string(prms->speed) +
 		          "; parity: " + std::to_string(static_cast<int>(prms->parity)));
 		this->listener = nullptr;
-		getDeviceManager().loadConfiguration("NL300.ini", this->config);
+		getDeviceManager().loadConfiguration("NL300.ini", *this->config);
 		memcpy(&this->prms, prms, sizeof(DeviceSerialPortConnectionPrms));
 		this->log("Configuration sucessfully loaded");
 

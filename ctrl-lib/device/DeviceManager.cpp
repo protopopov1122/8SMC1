@@ -84,12 +84,12 @@ namespace CalX {
 	}
 
 	bool DeviceManager::loadConfiguration(std::string path,
-	                                      std::shared_ptr<ConfigManager> conf) {
+	                                      ConfigManager &conf) {
 		std::ifstream cnf(path);
 		if (!cnf.good()) {
 			return false;
 		} else {
-			ConfigManager::load(cnf, std::cout, conf);
+			ConfigManager::load(cnf, std::cout, &conf);
 		}
 		cnf.close();
 		return true;

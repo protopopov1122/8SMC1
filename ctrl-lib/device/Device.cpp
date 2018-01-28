@@ -38,8 +38,8 @@ namespace CalX {
 		return this->id;
 	}
 
-	std::shared_ptr<ConfigManager> Device::getConfiguration() {
-		return this->config;
+	ConfigManager &Device::getConfiguration() {
+		return *this->config;
 	}
 
 	bool Device::hasErrors() {

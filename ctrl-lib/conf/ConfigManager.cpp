@@ -283,10 +283,12 @@ namespace CalX {
 		}
 	}
 
-	std::shared_ptr<ConfigManager> ConfigManager::load(
-	    std::istream &is, std::ostream &err, std::shared_ptr<ConfigManager> man) {
+	std::unique_ptr<ConfigManager> ConfigManager::load(
+	    std::istream &is, std::ostream &err, ConfigManager *man) {
+		std::unique_ptr<ConfigManager> new_man = nullptr;
 		if (man == nullptr) {
-			man = std::make_shared<ConfigManager>();
+			new_man = std::make_unique<ConfigManager>();
+			man = new_man.get();
 		}
 		std::shared_ptr<ConfigEntry> entry = nullptr;
 		const int LINE_LEN = 256;
@@ -357,6 +359,6 @@ namespace CalX {
 				}
 			}
 		}
-		return man;
+		return new_man;
 	}
 }  // namespace CalX
