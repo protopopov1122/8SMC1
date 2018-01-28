@@ -105,12 +105,12 @@ namespace CalXUI {
 		                   (int) wxGetApp()
 		                       .getSystemManager()
 		                       ->getConfiguration()
-		                       ->getEntry("core")
+		                       .getEntry("core")
 		                       ->getInt("maxspeed", 4000),
 		                   (int) wxGetApp()
 		                       .getSystemManager()
 		                       ->getConfiguration()
-		                       ->getEntry("core")
+		                       .getEntry("core")
 		                       ->getInt("maxspeed", 4000));
 		validateSizer->Add(
 		    new wxStaticText(validatePanel, wxID_ANY,

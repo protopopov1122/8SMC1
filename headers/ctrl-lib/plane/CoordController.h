@@ -29,9 +29,9 @@ namespace CalX {
 
 	class CoordController : public CoordPlane {
 	 public:
-		CoordController(std::shared_ptr<MotorController>,
+		CoordController(ConfigManager &,
+										std::shared_ptr<MotorController>,
 		                std::shared_ptr<MotorController>,
-		                std::shared_ptr<ConfigManager>,
 		                std::shared_ptr<InstrumentController> = nullptr);
 		std::shared_ptr<MotorController> getXAxis();
 		std::shared_ptr<MotorController> getYAxis();
@@ -63,7 +63,7 @@ namespace CalX {
 		std::shared_ptr<MotorController> xAxis;
 		std::shared_ptr<MotorController> yAxis;
 		std::shared_ptr<InstrumentController> instr;
-		std::shared_ptr<ConfigManager> config;
+		ConfigManager &config;
 		bool work;
 		bool defWork;
 		bool session_opened;

@@ -41,10 +41,10 @@ namespace CalXUI {
 
 	class CalXScriptEnvironment {
 	 public:
-		CalXScriptEnvironment(std::shared_ptr<ConfigManager>);
+		CalXScriptEnvironment(ConfigManager &);
 		virtual ~CalXScriptEnvironment() = default;
 
-		std::shared_ptr<ConfigManager> getConfiguration();
+		ConfigManager &getConfiguration();
 
 		virtual device_id_t connectSerialMotor(uint8_t, uint32_t, uint8_t) = 0;
 		virtual device_id_t connectSerialInstrument(uint8_t, uint32_t, uint8_t) = 0;
@@ -87,7 +87,7 @@ namespace CalXUI {
 		virtual ErrorCode planeNewWatcher(size_t) = 0;
 
 	 private:
-		std::shared_ptr<ConfigManager> config;
+		ConfigManager &config;
 	};
 
 	class CalXScript {

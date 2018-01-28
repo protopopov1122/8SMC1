@@ -29,7 +29,7 @@ namespace CalX {
 
 	ErrorCode GCodeInterpreter::execute(GCodeStream &input, CoordPlane &plane,
 	                                    std::shared_ptr<CoordTranslator> trans,
-	                                    std::shared_ptr<ConfigManager> config,
+	                                    ConfigManager &config,
 	                                    float speed, TaskState &state) {
 		input.reset();
 
@@ -50,7 +50,7 @@ namespace CalX {
 		}
 		bool relative_pos = false;
 		const int_conf_t CHORD_COUNT =
-		    config->getEntry("core")->getInt("chord_count", 100);
+		    config.getEntry("core")->getInt("chord_count", 100);
 		ErrorCode errcode = ErrorCode::NoError;
 		while (input.hasNext() && state.work && errcode == ErrorCode::NoError) {
 			motor_point_t rel_offset = { 0, 0 };

@@ -32,13 +32,14 @@ namespace CalX {
 
 	class DeviceController {
 	 public:
-		DeviceController(std::shared_ptr<ConfigManager>, Device *);
+		DeviceController(ConfigManager &, Device *);
 		virtual ~DeviceController() = default;
 		device_id_t getID();
+                ConfigManager &getConfiguration();
 		Device *getDevice();
 
 	 protected:
-		std::shared_ptr<ConfigManager> config;
+		ConfigManager &config;
 
 	 private:
 		Device *device;

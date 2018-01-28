@@ -122,10 +122,10 @@ namespace CalXUI {
 			double y = ((RealConfigValue *) PROVIDER_ARG(req, 2))->getValue();
 			if (sysman->getCoord((size_t) plid) != nullptr) {
 				CalxCoordPane *ctrl = panel->getCoordCtrl((size_t) plid);
-				std::shared_ptr<ConfigManager> config =
+				ConfigManager &config =
 				    wxGetApp().getSystemManager()->getConfiguration();
 				coord_point_t dest = { x, y };
-				int_conf_t mspeed = config->getEntry("core")->getInt("maxspeed", 125);
+				int_conf_t mspeed = config.getEntry("core")->getInt("maxspeed", 125);
 				double speed = ((double) mspeed) / wxGetApp().getSpeedScale();
 				bool ready = false;
 				ctrl->getController()->move(dest, speed, &ready);
@@ -168,9 +168,9 @@ namespace CalXUI {
 			motor_point_t mdest = { x, y };
 			if (sysman->getCoord((size_t) plid) != nullptr) {
 				CalxCoordPane *ctrl = panel->getCoordCtrl((size_t) plid);
-				std::shared_ptr<ConfigManager> config =
+				ConfigManager &config =
 				    wxGetApp().getSystemManager()->getConfiguration();
-				int_conf_t mspeed = config->getEntry("core")->getInt("maxspeed", 125);
+				int_conf_t mspeed = config.getEntry("core")->getInt("maxspeed", 125);
 				coord_point_t dest = { mdest.x / wxGetApp().getUnitScale(),
 					                     mdest.y / wxGetApp().getUnitScale() };
 				double speed = ((double) mspeed) / wxGetApp().getSpeedScale();

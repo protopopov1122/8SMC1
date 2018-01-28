@@ -77,20 +77,21 @@ namespace CalXUI {
 		std::string path = confLoader->getFileName();
 		confLoader->Destroy();
 
-		std::shared_ptr<ConfigManager> conf = nullptr;
+		std::shared_ptr<ConfigManager> conf_ptr = nullptr;
 		std::ifstream cnf(path);
 		if (!cnf.good()) {
 			wxMessageBox(__("Can't open configuration. Using default values."),
 			             __("Warning"), wxICON_WARNING);
-			conf = std::make_shared<ConfigManager>();
+			conf_ptr = std::make_shared<ConfigManager>();
 		} else {
-			conf = ConfigManager::load(cnf, std::cout);
+			conf_ptr = ConfigManager::load(cnf, std::cout);
 		}
 		cnf.close();
+		ConfigManager &conf = *conf_ptr;
 
-		this->debug_mode = conf->getEntry("ui")->getBool("debug", false);
+		this->debug_mode = conf.getEntry("ui")->getBool("debug", false);
 		std::string lib_addr =
-		    conf->getEntry("ui")->getString("devicelib", STRINGIZE(DEVICES_LIB));
+		    conf.getEntry("ui")->getString("devicelib", STRINGIZE(DEVICES_LIB));
 
 		this->dynlib =
 		    new wxDynamicLibrary(wxDynamicLibrary::CanonicalizeName(lib_addr),
@@ -127,7 +128,7 @@ namespace CalXUI {
 #define SETUP_LOG(name, id, dest)                                              \
 	{                                                                            \
 		this->name = nullptr;                                                      \
-		std::string logger = conf->getEntry("log")->getString(id, "");             \
+		std::string logger = conf.getEntry("log")->getString(id, "");             \
 		if (logger.compare("stdout") == 0) {                                       \
 			SET_LOGGER(dest, &std::cout);                                            \
 		} else if (logger.length() > 0) {                                          \
@@ -145,7 +146,7 @@ namespace CalXUI {
 
 #undef SETUP_LOG
 
-		std::string ext_addr = conf->getEntry("ext")->getString("engine", "");
+		std::string ext_addr = conf.getEntry("ext")->getString("engine", "");
 		std::unique_ptr<ExtEngine> ext = nullptr;
 		if (!ext_addr.empty()) {
 			this->extLib =
@@ -186,11 +187,11 @@ namespace CalXUI {
 
 		std::unique_ptr<DeviceManager> devman =
 		    std::unique_ptr<DeviceManager>(getter());
-		this->sysman = new SystemManager(std::move(devman), conf, std::move(ext));
+		this->sysman = new SystemManager(std::move(devman), conf_ptr, std::move(ext));
 		this->error_handler = new CalxErrorHandler(this->sysman);
 
 		if (this->debug_mode &&
-		    sysman->getConfiguration()->getEntry("ui")->getBool("console", false)) {
+		    sysman->getConfiguration().getEntry("ui")->getBool("console", false)) {
 			this->debug_console = new CalxDebugConsole(this->sysman);
 			this->debug_console->Run();
 		} else {
@@ -199,7 +200,7 @@ namespace CalXUI {
 		this->Bind(wxEVT_APP_ERROR, &CalxApp::OnErrorEvent, this);
 
 		std::string script_eng_addr =
-		    conf->getEntry("script")->getString("engine", "");
+		    conf.getEntry("script")->getString("engine", "");
 		this->scriptFactory = nullptr;
 		this->script_env = nullptr;
 		this->scriptLib = nullptr;
@@ -236,12 +237,12 @@ namespace CalXUI {
 		setup_signals(this->sysman);
 
 		if (this->scriptFactory != nullptr &&
-		    this->sysman->getConfiguration()->getEntry("script")->getBool(
+		    this->sysman->getConfiguration().getEntry("script")->getBool(
 		        "autoinit", false)) {
 			CalXScriptHookThread *th = new CalXScriptHookThread(
-			    this->sysman->getConfiguration()->getEntry("script")->getString(
+			    this->sysman->getConfiguration().getEntry("script")->getString(
 			        "main", "scripts/main.lua"),
-			    this->sysman->getConfiguration()->getEntry("script")->getString(
+			    this->sysman->getConfiguration().getEntry("script")->getString(
 			        "init_entry", "init"));
 			th->Run();
 		}
@@ -316,7 +317,7 @@ namespace CalXUI {
 
 	void CalxApp::OnAutoconfEvent(wxThreadEvent &evt) {
 		std::string autoconf =
-		    sysman->getConfiguration()->getEntry("core")->getString("autoconf", "");
+		    sysman->getConfiguration().getEntry("core")->getString("autoconf", "");
 		if (!autoconf.empty()) {
 			this->frame->Enable(false);
 			CalxAutoconfDialog *waitDialog =
@@ -348,7 +349,7 @@ namespace CalXUI {
 		return wxGetApp()
 		    .getSystemManager()
 		    ->getConfiguration()
-		    ->getEntry("units")
+		    .getEntry("units")
 		    ->getString("unit_suffix", "");
 	}
 
@@ -357,7 +358,7 @@ namespace CalXUI {
 		std::string timing = wxGetApp()
 		                         .getSystemManager()
 		                         ->getConfiguration()
-		                         ->getEntry("units")
+		                         .getEntry("units")
 		                         ->getString("timing", "");
 		return units.empty() ? "" : units + timing;
 	}
@@ -374,7 +375,7 @@ namespace CalXUI {
 		return wxGetApp()
 		    .getSystemManager()
 		    ->getConfiguration()
-		    ->getEntry("units")
+		    .getEntry("units")
 		    ->getReal("unit_scale", 1.0f);
 	}
 
@@ -382,7 +383,7 @@ namespace CalXUI {
 		return wxGetApp()
 		    .getSystemManager()
 		    ->getConfiguration()
-		    ->getEntry("units")
+		    .getEntry("units")
 		    ->getReal("speed_scale", 1.0f);
 	}
 
@@ -390,12 +391,12 @@ namespace CalXUI {
 		coord_point_t offset = { wxGetApp()
 			                           .getSystemManager()
 			                           ->getConfiguration()
-			                           ->getEntry("units")
+			                           .getEntry("units")
 			                           ->getReal("unit_offset_x", 0.0f),
 			                       wxGetApp()
 			                           .getSystemManager()
 			                           ->getConfiguration()
-			                           ->getEntry("units")
+			                           .getEntry("units")
 			                           ->getReal("unit_offset_y", 0.0f) };
 		return offset;
 	}

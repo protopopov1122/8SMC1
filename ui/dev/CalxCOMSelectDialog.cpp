@@ -48,7 +48,7 @@ namespace CalXUI {
 		                   (int) wxGetApp()
 		                       .getSystemManager()
 		                       ->getConfiguration()
-		                       ->getEntry("serial")
+		                       .getEntry("serial")
 		                       ->getInt("port", 1));
 		mainSizer->Add(this->portSpin);
 		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY,
@@ -60,7 +60,7 @@ namespace CalXUI {
 		                   (int) wxGetApp()
 		                       .getSystemManager()
 		                       ->getConfiguration()
-		                       ->getEntry("serial")
+		                       .getEntry("serial")
 		                       ->getInt("speed", 9600));
 		mainSizer->Add(this->speedSpin);
 		mainSizer->Add(
@@ -75,7 +75,7 @@ namespace CalXUI {
 		this->parityCh->SetSelection((int) wxGetApp()
 		                                 .getSystemManager()
 		                                 ->getConfiguration()
-		                                 ->getEntry("serial")
+		                                 .getEntry("serial")
 		                                 ->getInt("parity", 0));
 		mainSizer->Add(this->parityCh);
 

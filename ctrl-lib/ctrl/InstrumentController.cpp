@@ -23,8 +23,7 @@
 
 namespace CalX {
 
-	InstrumentController::InstrumentController(
-	    Instrument *instr, std::shared_ptr<ConfigManager> conf)
+	InstrumentController::InstrumentController(ConfigManager &conf, Instrument *instr)
 	    : DeviceController::DeviceController(conf, instr) {
 		this->instr = instr;
 		this->state = true;
@@ -33,10 +32,6 @@ namespace CalX {
 
 	Instrument *InstrumentController::getInstrument() {
 		return this->instr;
-	}
-
-	std::shared_ptr<ConfigManager> InstrumentController::getConfiguration() {
-		return this->instr->getConfiguration();
 	}
 
 	bool InstrumentController::isSessionOpened() {

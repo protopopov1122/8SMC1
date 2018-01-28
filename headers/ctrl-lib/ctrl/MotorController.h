@@ -38,7 +38,7 @@ namespace CalX {
 		friend class CoordController;
 
 	 public:
-		MotorController(Motor *, std::shared_ptr<ConfigManager>);
+		MotorController(ConfigManager &, Motor *);
 		Motor *getMotor();
 
 		Power getPowerState();

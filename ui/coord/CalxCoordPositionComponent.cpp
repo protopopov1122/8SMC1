@@ -35,7 +35,7 @@ namespace CalXUI {
 		SetSizer(sizer);
 
 		std::shared_ptr<ConfigEntry> confEntry =
-		    wxGetApp().getSystemManager()->getConfiguration()->getEntry(
+		    wxGetApp().getSystemManager()->getConfiguration().getEntry(
 		        "relative_pos");
 		this->xPos = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
@@ -51,12 +51,12 @@ namespace CalXUI {
 		                         wxGetApp()
 		                             .getSystemManager()
 		                             ->getConfiguration()
-		                             ->getEntry("units")
+		                             .getEntry("units")
 		                             ->getReal("unit_speed", 4000.0),
 		                         wxGetApp()
 		                             .getSystemManager()
 		                             ->getConfiguration()
-		                             ->getEntry("units")
+		                             .getEntry("units")
 		                             ->getReal("unit_speed", 4000.0),
 		                         wxGetApp().getSpeedPrecision());
 		wxButton *moveButton = new wxButton(this, wxID_ANY, __("Move"));

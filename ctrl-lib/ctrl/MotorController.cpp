@@ -24,9 +24,8 @@
 
 namespace CalX {
 
-	MotorController::MotorController(Motor *dev,
-	                                 std::shared_ptr<ConfigManager> config)
-	    : DeviceController::DeviceController(config, dev) {
+	MotorController::MotorController(ConfigManager &conf, Motor *dev)
+	    : DeviceController::DeviceController(conf, dev) {
 		this->dev = dev;
 		this->dest = MoveType::Stop;
 		this->work = false;
@@ -92,11 +91,11 @@ namespace CalX {
 		}
 		this->work = true;
 		int_conf_t roll_step =
-		    config->getEntry("core")->getInt("roll_step", ROLL_STEP);
+		    config.getEntry("core")->getInt("roll_step", ROLL_STEP);
 		int_conf_t roll_speed =
-		    config->getEntry("core")->getInt("roll_speed", ROLL_SPEED);
+		    config.getEntry("core")->getInt("roll_speed", ROLL_SPEED);
 		int_conf_t comeback =
-		    config->getEntry("core")->getInt("trailer_comeback", TRAILER_COMEBACK);
+		    config.getEntry("core")->getInt("trailer_comeback", TRAILER_COMEBACK);
 
 		int_conf_t dest = (tr == TrailerId::Trailer1 ? -roll_step : roll_step);
 		this->dest = (tr == TrailerId::Trailer1 ? MoveType::RollDown : MoveType::RollUp);

@@ -64,7 +64,7 @@ namespace CalXUI {
 		this->base = base;
 		SetMinSize(min);
 		std::shared_ptr<ConfigEntry> colourEntry =
-		    wxGetApp().getSystemManager()->getConfiguration()->getEntry(
+		    wxGetApp().getSystemManager()->getConfiguration().getEntry(
 		        "watcher_color");
 		this->pointer_colour = wxColour(colourEntry->getInt("pointer_R", 255),
 		                                colourEntry->getInt("pointer_G", 0),

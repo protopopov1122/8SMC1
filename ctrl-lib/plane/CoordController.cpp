@@ -35,14 +35,11 @@ namespace CalX {
 	const char *COORD_CTRL_TAG = "CoordCtrl";
 
 	CoordController::CoordController(
+			ConfigManager &config,
 	    std::shared_ptr<MotorController> xaxis,
 	    std::shared_ptr<MotorController> yaxis,
-	    std::shared_ptr<ConfigManager> config,
-	    std::shared_ptr<InstrumentController> instr) {
-		this->xAxis = xaxis;
-		this->yAxis = yaxis;
-		this->instr = instr;
-		this->config = config;
+	    std::shared_ptr<InstrumentController> instr)
+			: xAxis(xaxis), yAxis(yaxis), instr(instr), config(config) {
 		this->size = { 0, 0, 0, 0 };
 		this->defWork = true;
 		this->work = false;
@@ -90,7 +87,7 @@ namespace CalX {
 		   Depending on configuration settings */
 		if (!sync) {
 			float maxspeed =
-			    this->config->getEntry("core")->getReal("jump_speed", 0.0f);
+			    this->config.getEntry("core")->getReal("jump_speed", 0.0f);
 			if (maxspeed > 0 && speed < maxspeed) {
 				LOG("CoordController", "Changing jump speed from " +
 				                           std::to_string(speed) + " to " +
@@ -283,11 +280,11 @@ namespace CalX {
 		this->status = CoordPlaneStatus::Jump;
 		/* Determne movement parameters. They are stored in configuration */
 		int_conf_t roll_step =
-		    config->getEntry("core")->getInt("roll_step", ROLL_STEP);
+		    config.getEntry("core")->getInt("roll_step", ROLL_STEP);
 		int_conf_t roll_speed =
-		    config->getEntry("core")->getInt("roll_speed", ROLL_SPEED);
+		    config.getEntry("core")->getInt("roll_speed", ROLL_SPEED);
 		int_conf_t comeback =
-		    config->getEntry("core")->getInt("trailer_comeback", TRAILER_COMEBACK);
+		    config.getEntry("core")->getInt("trailer_comeback", TRAILER_COMEBACK);
 		/* Determine movement destination */
 		int_conf_t dest = (tr == TrailerId::Trailer1 ? -roll_step : roll_step);
 		xAxis->dest =
@@ -633,8 +630,8 @@ namespace CalX {
 
 	std::unique_ptr<CoordPlane> CoordController::clone(
 	    std::shared_ptr<CoordPlane> base) {
-		return std::make_unique<CoordController>(this->xAxis, this->yAxis,
-		                                         this->config, this->instr);
+		return std::make_unique<CoordController>(this->config, this->xAxis, this->yAxis,
+		                                         this->instr);
 	}
 
 	CoordPlaneStatus CoordController::getStatus() {

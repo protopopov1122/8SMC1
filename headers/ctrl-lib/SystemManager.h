@@ -49,7 +49,7 @@ namespace CalX {
 		virtual ~SystemManager();
 		// Main subsystems
 		DeviceManager &getDeviceManager();
-		std::shared_ptr<ConfigManager> getConfiguration();
+		ConfigManager &getConfiguration();
 		FunctionEngine &getFunctionEngine();
 		RequestResolver &getRequestResolver();
 		ExtEngine &getExtEngine();

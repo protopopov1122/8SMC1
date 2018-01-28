@@ -38,7 +38,7 @@ namespace CalXUI {
 	      controller(controller) {
 		std::string units = wxGetApp().getUnits();
 		std::shared_ptr<ConfigEntry> graphconf =
-		    wxGetApp().getSystemManager()->getConfiguration()->getEntry("graph");
+		    wxGetApp().getSystemManager()->getConfiguration().getEntry("graph");
 		wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 		SetSizer(sizer);
 
@@ -75,12 +75,12 @@ namespace CalXUI {
 		                                   wxGetApp()
 		                                       .getSystemManager()
 		                                       ->getConfiguration()
-		                                       ->getEntry("units")
+		                                       .getEntry("units")
 		                                       ->getReal("unit_speed", 4000.0),
 		                                   wxGetApp()
 		                                       .getSystemManager()
 		                                       ->getConfiguration()
-		                                       ->getEntry("units")
+		                                       .getEntry("units")
 		                                       ->getReal("unit_speed", 4000.0),
 		                                   wxGetApp().getSpeedPrecision());
 		wxButton *buildButton = new wxButton(graphPanel, wxID_ANY, __("Build"));
@@ -126,15 +126,15 @@ namespace CalXUI {
 		graphSizer->Add(buildButton);
 		graphSizer->Add(previewButton);
 
-		std::shared_ptr<ConfigManager> conf =
+		ConfigManager &conf =
 		    wxGetApp().getSystemManager()->getConfiguration();
 		coord_point_t cen = {
-			static_cast<double>(conf->getEntry("coords")->getReal("offset_x", 0.0)),
-			static_cast<double>(conf->getEntry("coords")->getReal("offset_y", 0.0))
+			static_cast<double>(conf.getEntry("coords")->getReal("offset_x", 0.0)),
+			static_cast<double>(conf.getEntry("coords")->getReal("offset_y", 0.0))
 		};
 		coord_scale_t scl = {
-			static_cast<double>(conf->getEntry("coords")->getReal("scale_x", 1.0)),
-			static_cast<double>(conf->getEntry("coords")->getReal("scale_y", 1.0))
+			static_cast<double>(conf.getEntry("coords")->getReal("scale_x", 1.0)),
+			static_cast<double>(conf.getEntry("coords")->getReal("scale_y", 1.0))
 		};
 		std::shared_ptr<LinearCoordTranslator> basic =
 		    std::make_shared<LinearCoordTranslator>(cen, scl);

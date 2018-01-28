@@ -158,9 +158,8 @@ namespace CalXUI {
 	}
 
 	CalxNewEntryDialog::CalxNewEntryDialog(wxWindow *win, wxWindowID id,
-	                                       std::shared_ptr<ConfigManager> config)
-	    : wxDialog::wxDialog(win, id, __("Add new entry")) {
-		this->config = config;
+	                                      ConfigManager &config)
+	    : wxDialog::wxDialog(win, id, __("Add new entry")), config(config) {
 
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(sizer);
@@ -197,12 +196,12 @@ namespace CalXUI {
 			wxMessageBox(__("Entry name is empty"), __("Warning"), wxICON_WARNING);
 			return;
 		}
-		if (this->config->hasEntry(name)) {
+		if (this->config.hasEntry(name)) {
 			wxMessageBox(FORMAT(__("Entry '%s' already exists"), name.c_str()),
 			             __("Error"), wxICON_ERROR);
 			return;
 		}
-		this->config->getEntry(name);
+		this->config.getEntry(name);
 		Hide();
 	}
 
@@ -211,7 +210,7 @@ namespace CalXUI {
 	}
 
 	CalxConfigDialog::CalxConfigDialog(wxWindow *win, wxWindowID id,
-	                                   std::shared_ptr<ConfigManager> conf)
+	                                   ConfigManager &conf)
 	    : wxDialog::wxDialog(win, id, __("Configuration Editor"),
 	                         wxDefaultPosition, wxDefaultSize,
 	                         wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER) {
@@ -229,7 +228,7 @@ namespace CalXUI {
 		Fit();
 	}
 
-	std::shared_ptr<ConfigManager> CalxConfigDialog::getConfiguration() {
+	ConfigManager &CalxConfigDialog::getConfiguration() {
 		return this->editor->getConfiguration();
 	}
 

@@ -95,7 +95,7 @@ namespace CalXUI {
 	    : wxWindow::wxWindow(win, id), handle(handle), pointer_colour(255, 0, 0) {
 		SetMinSize(sz);
 		std::shared_ptr<ConfigEntry> colourEntry =
-		    wxGetApp().getSystemManager()->getConfiguration()->getEntry(
+		    wxGetApp().getSystemManager()->getConfiguration().getEntry(
 		        "watcher_color");
 		this->pointer_colour = wxColour(colourEntry->getInt("pointer_R", 255),
 		                                colourEntry->getInt("pointer_G", 0),
@@ -211,7 +211,7 @@ namespace CalXUI {
 		    wxGetApp()
 		        .getSystemManager()
 		        ->getConfiguration()
-		        ->getEntry("ui")
+		        .getEntry("ui")
 		        ->getReal("adjust_step", 2.5),
 		    wxGetApp().getUnitPrecision());
 		this->speedSpin = new wxSpinCtrlDouble(
@@ -220,12 +220,12 @@ namespace CalXUI {
 		    wxGetApp()
 		        .getSystemManager()
 		        ->getConfiguration()
-		        ->getEntry("units")
+		        .getEntry("units")
 		        ->getReal("unit_speed", 4000.0),
 		    wxGetApp()
 		        .getSystemManager()
 		        ->getConfiguration()
-		        ->getEntry("units")
+		        .getEntry("units")
 		        ->getReal("unit_speed", 4000.0),
 		    wxGetApp().getSpeedPrecision());
 		prmsSizer->Add(new wxStaticText(prmsPanel, wxID_ANY,
@@ -277,7 +277,7 @@ namespace CalXUI {
 		int_conf_t interval = wxGetApp()
 		                          .getSystemManager()
 		                          ->getConfiguration()
-		                          ->getEntry("ui")
+		                          .getEntry("ui")
 		                          ->getInt("watcher_render_interval", 50);
 		if (interval != -1) {
 			this->timer = new CalxCoordAdjustRepaintTimer(this);

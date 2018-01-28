@@ -149,12 +149,12 @@ namespace CalXUI {
 		                                   wxGetApp()
 		                                       .getSystemManager()
 		                                       ->getConfiguration()
-		                                       ->getEntry("units")
+		                                       .getEntry("units")
 		                                       ->getReal("unit_speed", 4000.0),
 		                                   wxGetApp()
 		                                       .getSystemManager()
 		                                       ->getConfiguration()
-		                                       ->getEntry("units")
+		                                       .getEntry("units")
 		                                       ->getReal("unit_speed", 4000.0),
 		                                   wxGetApp().getSpeedPrecision());
 		execSizer->Add(new wxStaticText(execPanel, wxID_ANY, __("on")), 0,
@@ -458,8 +458,8 @@ namespace CalXUI {
 				handle->getSize(),
 				wxGetApp().getSystemManager());
 			if (start.second) {
-				float scale = wxGetApp().getSystemManager()->getConfiguration()->getEntry("units")->getReal("unit_scale", 1.0f);
-				float unit_speed = wxGetApp().getSystemManager()->getConfiguration()->getEntry("units")->getReal("unit_speed", 1.25f);
+				float scale = wxGetApp().getSystemManager()->getConfiguration().getEntry("units")->getReal("unit_scale", 1.0f);
+				float unit_speed = wxGetApp().getSystemManager()->getConfiguration().getEntry("units")->getReal("unit_speed", 1.25f);
 				coord_point_t dest = {
 					start.first.x / scale,
 					start.first.y / scale

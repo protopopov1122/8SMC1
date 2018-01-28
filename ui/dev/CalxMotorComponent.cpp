@@ -212,12 +212,12 @@ namespace CalXUI {
 		                   (int) wxGetApp()
 		                       .getSystemManager()
 		                       ->getConfiguration()
-		                       ->getEntry("core")
+		                       .getEntry("core")
 		                       ->getInt("dev_speed", 4000),
 		                   (int) wxGetApp()
 		                       .getSystemManager()
 		                       ->getConfiguration()
-		                       ->getEntry("core")
+		                       .getEntry("core")
 		                       ->getInt("dev_speed", 4000));
 		moveSpeedSizer->Add(moveSpeedSpin, 1, wxEXPAND);
 		moveSpeedPanel->SetSizer(moveSpeedSizer);
@@ -408,7 +408,7 @@ namespace CalXUI {
 
 	void CalxMotorComponent::OnConfigEvent(wxCommandEvent &evt) {
 		CalxConfigDialog *editor = new CalxConfigDialog(
-		    this, wxID_ANY, this->dev->getMotor()->getConfiguration());
+		    this, wxID_ANY, *this->dev->getMotor()->getConfiguration());
 		if (editor->ShowModal() == wxID_OK) {
 		}
 		delete editor;

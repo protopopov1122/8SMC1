@@ -23,10 +23,10 @@
 namespace CalXUI {
 
 	CalXScriptEnvironment::CalXScriptEnvironment(
-	    std::shared_ptr<ConfigManager> conf)
+	    ConfigManager &conf)
 	    : config(conf) {}
 
-	std::shared_ptr<ConfigManager> CalXScriptEnvironment::getConfiguration() {
+	ConfigManager &CalXScriptEnvironment::getConfiguration() {
 		return this->config;
 	}
 
