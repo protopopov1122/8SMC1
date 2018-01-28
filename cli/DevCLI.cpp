@@ -134,7 +134,7 @@ namespace CalX {
 					return;
 				}
 				int dest = std::stoi(args.at(1));
-				dev->moveToTrailer(dest);
+				dev->moveToTrailer(static_cast<TrailerId>(dest));
 			}
 		} else if (com.compare("move") == 0) {
 			if (args.empty()) {
@@ -203,7 +203,7 @@ namespace CalX {
 						std::cout << "Device #" << i << " not found" << std::endl;
 						return;
 					}
-					if (dev->flipPower()) {
+					if (dev->flipPower() == ErrorCode::NoError) {
 						std::cout << "\tDevice #" << i << ": power\t"
 						          << (dev->getPowerState() == Power::FullPower
 						                  ? "full"

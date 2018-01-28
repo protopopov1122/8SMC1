@@ -76,7 +76,7 @@ namespace CalX {
 	}
 
 	ExtEngine &SystemManager::getExtEngine() {
-		return *this->ext_engine.get();
+		return *this->ext_engine;
 	}
 
 	std::shared_ptr<MotorController> SystemManager::getMotorController(
@@ -92,7 +92,7 @@ namespace CalX {
 	}
 
 	RequestResolver &SystemManager::getRequestResolver() {
-		return *this->resolver.get();
+		return *this->resolver;
 	}
 
 	size_t SystemManager::getMotorCount() {

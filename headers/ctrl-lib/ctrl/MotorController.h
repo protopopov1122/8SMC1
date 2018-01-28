@@ -45,7 +45,7 @@ namespace CalX {
 		ErrorCode enablePower(bool);
 		ErrorCode flipPower();
 
-		ErrorCode moveToTrailer(int);
+		ErrorCode moveToTrailer(TrailerId);
 		ErrorCode startMove(motor_coord_t, float);
 		ErrorCode startRelativeMove(motor_coord_t, float);
 		void stop();

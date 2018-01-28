@@ -37,7 +37,7 @@ namespace CalXUI {
 	void CalxErrorHandler::display(ErrorCode code) {
 		if (code != ErrorCode::NoError) {
 			std::string text = __("Error occured during execution.\nError code") +
-			                   std::string(": ") + std::to_string(code) + "\n";
+			                   std::string(": ") + std::to_string(static_cast<int>(code)) + "\n";
 			switch (code) {
 				case ErrorCode::LowLevelError: {
 					text += "Device low level error log:\n";

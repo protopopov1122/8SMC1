@@ -298,7 +298,7 @@ namespace CalX {
 		bool xpr = false;
 		bool ypr = false;
 		/* Mark motors as used. Emit events */
-		MotorRollEvent mevt = { static_cast<int>(tr) };
+		MotorRollEvent mevt = { tr };
 		if (this->instr != nullptr) {
 			this->instr->use();
 		}

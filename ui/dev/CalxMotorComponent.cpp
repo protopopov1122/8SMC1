@@ -110,7 +110,7 @@ namespace CalXUI {
 	class CalxMotorCalibrationAction : public CalxAction {
 	 public:
 		CalxMotorCalibrationAction(CalxMotorComponent *ctrl, MotorController *dev,
-		                           int tr, ActionResult *act_res = nullptr) {
+		                           TrailerId tr, ActionResult *act_res = nullptr) {
 			this->ctrl = ctrl;
 			this->dev = dev;
 			this->tr = tr;
@@ -141,7 +141,7 @@ namespace CalXUI {
 	 private:
 		CalxMotorComponent *ctrl;
 		MotorController *dev;
-		int tr;
+		TrailerId tr;
 		ActionResult *action_result;
 	};
 
@@ -349,7 +349,7 @@ namespace CalXUI {
 
 	ErrorCode CalxMotorComponent::roll(TrailerId tr, ActionResult *act_res) {
 		this->queue->addAction(std::make_unique<CalxMotorCalibrationAction>(
-		    this, dev.get(), static_cast<int>(tr), act_res));
+		    this, dev.get(), tr, act_res));
 		return ErrorCode::NoError;
 	}
 

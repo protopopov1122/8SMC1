@@ -83,15 +83,12 @@ namespace CalX {
 		return ErrorCode::NoError;
 	}
 
-	ErrorCode MotorController::moveToTrailer(int tr) {
+	ErrorCode MotorController::moveToTrailer(TrailerId tr) {
 		if (this->dev->isRunning()) {
 			return ErrorCode::MotorRunning;
 		}
 		if (this->dev->getPowerState() == Power::NoPower) {
 			return ErrorCode::PowerOff;
-		}
-		if (tr != 1 && tr != 2) {
-			return ErrorCode::WrongParameter;
 		}
 		this->work = true;
 		int_conf_t roll_step =
@@ -101,12 +98,12 @@ namespace CalX {
 		int_conf_t comeback =
 		    config->getEntry("core")->getInt("trailer_comeback", TRAILER_COMEBACK);
 
-		int_conf_t dest = (tr == 1 ? -roll_step : roll_step);
-		this->dest = (tr == 1 ? MoveType::RollDown : MoveType::RollUp);
+		int_conf_t dest = (tr == TrailerId::Trailer1 ? -roll_step : roll_step);
+		this->dest = (tr == TrailerId::Trailer1 ? MoveType::RollDown : MoveType::RollUp);
 		MotorRollEvent evt = { tr };
 		use();
 		this->sendRollingEvent(evt);
-		while (!dev->isTrailerPressed(tr) && work) {
+		while (!dev->isTrailerPressed(static_cast<int>(tr)) && work) {
 			if (!this->dev->isRunning()) {
 				if (!this->dev->start(this->dev->getPosition() + dest, roll_speed)) {
 					this->sendRolledEvent(evt);
@@ -127,7 +124,7 @@ namespace CalX {
 			}
 		}
 		this->dest = MoveType::Stop;
-		if (tr == 2) {
+		if (tr == TrailerId::Trailer2) {
 			comeback *= -1;
 		}
 		ErrorCode errcode = ErrorCode::NoError;
