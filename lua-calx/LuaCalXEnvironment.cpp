@@ -293,4 +293,60 @@ namespace CalXLua {
 		}
 		return static_cast<int>(errcode);
 	}
+
+	double LuaCalXEnvironment::planeGetPositionX(int id) {
+		std::pair<coord_point_t, ErrorCode> res = env.planeGetPosition(static_cast<size_t>(id));
+		if (res.second != ErrorCode::NoError) {
+			throw CalXException(res.second);
+		}
+		return res.first.x;
+	}
+
+	double LuaCalXEnvironment::planeGetPositionY(int id) {
+		std::pair<coord_point_t, ErrorCode> res = env.planeGetPosition(static_cast<size_t>(id));
+		if (res.second != ErrorCode::NoError) {
+			throw CalXException(res.second);
+		}
+		return res.first.y;
+	}
+
+	double LuaCalXEnvironment::planeGetSizeX(int id) {
+		std::pair<coord_rect_t, ErrorCode> res = env.planeGetSize(static_cast<size_t>(id));
+		if (res.second != ErrorCode::NoError) {
+			throw CalXException(res.second);
+		}
+		return res.first.x;
+	}
+
+	double LuaCalXEnvironment::planeGetSizeY(int id) {
+		std::pair<coord_rect_t, ErrorCode> res = env.planeGetSize(static_cast<size_t>(id));
+		if (res.second != ErrorCode::NoError) {
+			throw CalXException(res.second);
+		}
+		return res.first.y;
+	}
+
+	double LuaCalXEnvironment::planeGetSizeW(int id) {
+		std::pair<coord_rect_t, ErrorCode> res = env.planeGetSize(static_cast<size_t>(id));
+		if (res.second != ErrorCode::NoError) {
+			throw CalXException(res.second);
+		}
+		return res.first.w;
+	}
+
+	double LuaCalXEnvironment::planeGetSizeH(int id) {
+		std::pair<coord_rect_t, ErrorCode> res = env.planeGetSize(static_cast<size_t>(id));
+		if (res.second != ErrorCode::NoError) {
+			throw CalXException(res.second);
+		}
+		return res.first.h;
+	}
+
+	bool LuaCalXEnvironment::planeIsMeasured(int id) {
+		std::pair<bool, ErrorCode> res = env.planeIsMeasured(static_cast<size_t>(id));
+		if (res.second != ErrorCode::NoError) {
+			throw CalXException(res.second);
+		}
+		return res.first;
+	}
 }  // namespace CalXLua

@@ -76,6 +76,13 @@ namespace CalXLua {
 		int planeFMove(int, double, double, double);
 		int planeConfigure(int, double, double, double);
 		int planeNewWatcher(int);
+		double planeGetPositionX(int);
+		double planeGetPositionY(int);
+		double planeGetSizeX(int);
+		double planeGetSizeY(int);
+		double planeGetSizeW(int);
+		double planeGetSizeH(int);
+		bool planeIsMeasured(int);
 
 	 private:
 		CalXScriptEnvironment &env;

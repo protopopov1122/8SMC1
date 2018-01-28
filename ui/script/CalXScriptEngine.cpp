@@ -522,4 +522,44 @@ namespace CalXUI {
 		}
 	}
 
+	std::pair<coord_point_t, ErrorCode> CalXAppScriptEnvironment::planeGetPosition(size_t id) {
+		CalxPlaneHandle *planeHandle =
+		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);
+		std::shared_ptr<CoordHandle> handle = planeHandle != nullptr ? planeHandle->getController()->getHandle() : nullptr;
+		coord_point_t pos;
+		if (handle == nullptr) {
+			return std::make_pair(pos, ErrorCode::UnknownResource);
+		} else {
+			pos = handle->getFloatPlane()->getFloatPosition();
+			return std::make_pair(pos, ErrorCode::NoError);
+		}
+	}
+
+	std::pair<coord_rect_t, ErrorCode> CalXAppScriptEnvironment::planeGetSize(size_t id) {
+		CalxPlaneHandle *planeHandle =
+		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);
+		std::shared_ptr<CoordHandle> handle = planeHandle != nullptr ? planeHandle->getController()->getHandle() : nullptr;
+		coord_rect_t rect;
+		if (handle == nullptr) {
+			return std::make_pair(rect, ErrorCode::UnknownResource);
+		} else if (!handle->isMeasured()) {
+			return std::make_pair(rect, ErrorCode::OperationUnavailable);
+		} else {
+			coord_rect_t rect = handle->getFloatPlane()->getFloatSize();
+			return std::make_pair(rect, ErrorCode::NoError);
+		}
+	}
+
+	std::pair<bool, ErrorCode> CalXAppScriptEnvironment::planeIsMeasured(size_t id) {
+		CalxPlaneHandle *planeHandle =
+		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);
+		std::shared_ptr<CoordHandle> handle = planeHandle != nullptr ? planeHandle->getController()->getHandle() : nullptr;
+		coord_rect_t rect;
+		if (handle == nullptr) {
+			return std::make_pair(false, ErrorCode::UnknownResource);
+		} else {
+			return std::make_pair(handle->isMeasured(), ErrorCode::NoError);
+		}
+	}
+
 }  // namespace CalXUI

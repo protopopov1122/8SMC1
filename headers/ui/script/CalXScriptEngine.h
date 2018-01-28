@@ -68,6 +68,9 @@ namespace CalXUI {
 		virtual ErrorCode planeMove(size_t, coord_point_t, double);
 		virtual ErrorCode planeConfigure(size_t, coord_point_t, double);
 		virtual ErrorCode planeNewWatcher(size_t);
+		virtual std::pair<coord_point_t, ErrorCode> planeGetPosition(size_t);
+		virtual std::pair<coord_rect_t, ErrorCode> planeGetSize(size_t);
+		virtual std::pair<bool, ErrorCode> planeIsMeasured(size_t);
 
 	 private:
 		CalxApp &app;

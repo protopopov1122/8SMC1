@@ -111,7 +111,22 @@ namespace CalXLua {
 		    &LuaCalXEnvironment::planeMeasure, "fmove",
 		    &LuaCalXEnvironment::planeFMove, "configure",
 		    &LuaCalXEnvironment::planeConfigure, "newWatcher",
-		    &LuaCalXEnvironment::planeNewWatcher);
+		    &LuaCalXEnvironment::planeNewWatcher, "isMeasured",
+			&LuaCalXEnvironment::planeIsMeasured);
+		
+		this->lua["calx"]["plane"]["position"].SetObj(
+			lua_env,
+			"getX", &LuaCalXEnvironment::planeGetPositionX,
+			"getY", &LuaCalXEnvironment::planeGetPositionY
+		);
+
+		this->lua["calx"]["plane"]["size"].SetObj(
+			lua_env,
+			"getX", &LuaCalXEnvironment::planeGetSizeX,
+			"getY", &LuaCalXEnvironment::planeGetSizeY,
+			"getW", &LuaCalXEnvironment::planeGetSizeW,
+			"getH", &LuaCalXEnvironment::planeGetSizeH
+		);
 	}
 
 	void LuaCalXScript::init_constants() {
