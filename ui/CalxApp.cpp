@@ -42,16 +42,21 @@ namespace CalXUI {
 
 	wxDEFINE_EVENT(wxEVT_APP_ERROR, wxThreadEvent);
 
-	bool CalxApp::OnInit() {
+	// Utility startup methods
+	// System startup is quite complex action
+	// so it is split into several methods
+	std::unique_ptr<ConfigManager> CalxApp::loadConfiguration() {
+		// Determine which configuration to use
 		CalxConfigLoader *confLoader = new CalxConfigLoader(nullptr, wxID_ANY);
 		confLoader->load();
 		if (confLoader->isExiting()) {
 			confLoader->Destroy();
-			return false;
+			return nullptr;
 		}
 		std::string path = confLoader->getFileName();
 		confLoader->Destroy();
 
+		// Load selected configuration
 		std::unique_ptr<ConfigManager> conf_ptr = nullptr;
 		std::ifstream cnf(path);
 		if (!cnf.good()) {
@@ -62,11 +67,13 @@ namespace CalXUI {
 			conf_ptr = ConfigManager::load(cnf, std::cout);
 		}
 		cnf.close();
-		ConfigManager &conf = *conf_ptr;
+		return conf_ptr;
+	}
 
-		this->debug_mode = conf.getEntry("ui")->getBool("debug", false);
+	DeviceManager_getter CalxApp::loadDeviceDrivers(ConfigManager &conf) {
+		// Load specified dynamic library
 		std::string lib_addr =
-		    conf.getEntry("ui")->getString("devicelib", STRINGIZE(DEVICES_LIB));
+			conf.getEntry("ui")->getString("devicelib", STRINGIZE(DEVICES_LIB));
 
 		this->dynlib =
 		    new wxDynamicLibrary(wxDynamicLibrary::CanonicalizeName(lib_addr),
@@ -79,18 +86,23 @@ namespace CalXUI {
 		if (!dynlib->IsLoaded()) {
 			wxMessageBox(__("Dynamic library not found"), __("Error"),
 			             wxOK | wxICON_ERROR);
-			return false;
+			return nullptr;
 		}
 
+		// 
 		bool suc;
 		void *raw_getter = dynlib->GetSymbol("getDeviceManager", &suc);
 		DeviceManager_getter getter = *((DeviceManager_getter *) &raw_getter);
 		if (!suc) {
 			wxMessageBox(__("Dynamic library is corrupt"), __("Error"),
 			             wxOK | wxICON_ERROR);
-			return false;
+			return nullptr;
 		}
+		return getter;
+	}
 
+	void CalxApp::initDebugConsole(ConfigManager &conf) {
+		this->debug_mode = conf.getEntry("ui")->getBool("debug", false);
 		if (this->debug_mode) {
 #ifdef OS_WIN
 			AllocConsole();
@@ -100,6 +112,20 @@ namespace CalXUI {
 			freopen("CONOUT$", "w", stderr);
 #endif
 		}
+	}
+
+	void CalxApp::startDebugConsole(ConfigManager &conf) {
+		if (this->debug_mode &&
+		    sysman->getConfiguration().getEntry("ui")->getBool("console", false)) {
+			this->debug_console = new CalxDebugConsole(this->sysman.get());
+			this->debug_console->Run();
+		} else {
+			this->debug_console = nullptr;
+		}
+		this->Bind(wxEVT_APP_ERROR, &CalxApp::OnErrorEvent, this);
+	}
+
+	void CalxApp::initLogging(ConfigManager &conf) {
 #define SETUP_LOG(name, id, dest)                                              \
 	{                                                                            \
 		this->name = nullptr;                                                      \
@@ -120,7 +146,9 @@ namespace CalXUI {
 		SETUP_LOG(instruments_log, "instruments", INSTRUMENTS)
 
 #undef SETUP_LOG
+	}
 
+	std::unique_ptr<ExtEngine> CalxApp::loadExtensionEngine(ConfigManager &conf) {
 		std::string ext_addr = conf.getEntry("ext")->getString("engine", "");
 		std::unique_ptr<ExtEngine> ext = nullptr;
 		if (!ext_addr.empty()) {
@@ -159,22 +187,10 @@ namespace CalXUI {
 		} else {
 			this->extLib = nullptr;
 		}
+		return ext;
+	}
 
-		std::unique_ptr<DeviceManager> devman =
-		    std::unique_ptr<DeviceManager>(getter());
-		this->sysman = std::make_unique<SystemManager>(std::move(devman), std::move(conf_ptr),
-		                                 std::move(ext));
-		this->error_handler = new CalxErrorHandler(this->sysman.get());
-
-		if (this->debug_mode &&
-		    sysman->getConfiguration().getEntry("ui")->getBool("console", false)) {
-			this->debug_console = new CalxDebugConsole(this->sysman.get());
-			this->debug_console->Run();
-		} else {
-			this->debug_console = nullptr;
-		}
-		this->Bind(wxEVT_APP_ERROR, &CalxApp::OnErrorEvent, this);
-
+	void CalxApp::loadScriptEngine(ConfigManager &conf) {
 		std::string script_eng_addr =
 		    conf.getEntry("script")->getString("engine", "");
 		this->scriptFactory = nullptr;
@@ -203,12 +219,9 @@ namespace CalXUI {
 				}
 			}
 		}
+	}
 
-		this->frame = new CalxFrame(__("CalX UI"));
-		this->frame->Show(true);
-		this->frame->Maximize(true);
-		setup_signals(this->sysman.get());
-
+	void CalxApp::startInitScript(ConfigManager &conf) {
 		if (this->scriptFactory != nullptr &&
 		    this->sysman->getConfiguration().getEntry("script")->getBool("autoinit",
 		                                                                 false)) {
@@ -219,6 +232,56 @@ namespace CalXUI {
 			        "init_entry", "init"));
 			th->Run();
 		}
+	}
+
+	// Application entry-point. It performs system startup and
+	// calls methods above 
+	bool CalxApp::OnInit() {
+		// Load configuration
+		std::unique_ptr<ConfigManager> conf_ptr = this->loadConfiguration();
+		if (conf_ptr == nullptr) {
+			return false;
+		}
+		ConfigManager &conf = *conf_ptr;
+
+		// Init device drivers
+		DeviceManager_getter getter = this->loadDeviceDrivers(conf);
+		if (getter == nullptr) {
+			return false;
+		}
+
+		// Open debug console if necessary
+		this->initDebugConsole(conf);
+
+		// Init logging subsystem
+		this->initLogging(conf);
+
+		// Load extension engine
+		std::unique_ptr<ExtEngine> ext = this->loadExtensionEngine(conf);
+		
+		// Initialize main system structures
+		std::unique_ptr<DeviceManager> devman =
+		    std::unique_ptr<DeviceManager>(getter());
+		this->sysman = std::make_unique<SystemManager>(std::move(devman), std::move(conf_ptr),
+		                                 std::move(ext));
+		this->error_handler = new CalxErrorHandler(this->sysman.get());
+
+		// Start debug console if necessary
+		this->startDebugConsole(conf);
+
+		// Load script engine
+		this->loadScriptEngine(conf);
+
+		// Show main program window
+		this->frame = new CalxFrame(__("CalX UI"));
+		this->frame->Show(true);
+		this->frame->Maximize(true);
+
+		// Init signal and SEH handlers which perform emergency shutdown if needed
+		setup_signals(this->sysman.get());
+
+		// Start initialization script if it is defined
+		this->startInitScript(conf);
 
 		return true;
 	}
@@ -247,6 +310,8 @@ namespace CalXUI {
 		}
 	}
 
+	// This method is called before system shuts down
+	// So it frees resources and stops all actions
 	int CalxApp::OnExit() {
 		if (this->debug_console != nullptr) {
 			this->debug_console->Kill();

@@ -76,6 +76,15 @@ namespace CalXUI {
 	 private:
 		void loadDevicesPlugin();
 
+		std::unique_ptr<ConfigManager> loadConfiguration();
+		DeviceManager_getter loadDeviceDrivers(ConfigManager &);
+		void initDebugConsole(ConfigManager &);
+		void startDebugConsole(ConfigManager &);
+		void initLogging(ConfigManager &);
+		std::unique_ptr<ExtEngine> loadExtensionEngine(ConfigManager &);
+		void loadScriptEngine(ConfigManager &);
+		void startInitScript(ConfigManager &);
+
 		CalxFrame *frame;
 		wxDynamicLibrary *dynlib;
 		wxDynamicLibrary *extLib;
