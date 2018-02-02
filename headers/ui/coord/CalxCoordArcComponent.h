@@ -30,7 +30,6 @@
 #include <wx/spinctrl.h>
 #include <wx/stattext.h>
 
-using namespace CalX;
 
 namespace CalXUI {
 

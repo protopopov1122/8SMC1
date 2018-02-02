@@ -20,7 +20,7 @@
 
 #include "ctrl-lib/script/ScriptEngine.h"
 
-namespace CalXUI {
+namespace CalX {
 
 	CalXScriptEnvironment::CalXScriptEnvironment(ConfigManager &conf)
 	    : config(conf) {}

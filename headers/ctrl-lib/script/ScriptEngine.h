@@ -24,8 +24,6 @@
 #include "ctrl-lib/SystemManager.h"
 #include "ctrl-lib/conf/ConfigManager.h"
 
-using namespace CalX;
-
 /* Script engine is used to integrate different scripting languages into the
    system, it consists of several abstract objects:
      * Script environment - adapter between system manager and scripting
@@ -38,7 +36,7 @@ using namespace CalX;
    execution)
 */
 
-namespace CalXUI {
+namespace CalX {
 
 	class CalXScriptEnvironment {
 	 public:

@@ -29,7 +29,6 @@
 #include "selene.h"
 
 using namespace CalX;
-using namespace CalXUI;
 
 namespace CalXLua {
 

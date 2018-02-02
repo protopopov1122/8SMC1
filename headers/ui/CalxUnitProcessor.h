@@ -23,8 +23,6 @@
 
 #include "ui/calx.h"
 
-using namespace CalX;
-
 namespace CalXUI {
 
   class CalxUnitProcessor {

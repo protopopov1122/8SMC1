@@ -25,7 +25,6 @@
 #include <exception>
 
 using namespace CalX;
-using namespace CalXUI;
 
 namespace CalXLua {
 

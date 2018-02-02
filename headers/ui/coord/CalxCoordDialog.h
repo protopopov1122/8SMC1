@@ -25,7 +25,6 @@
 #include <string>
 #include <wx/choice.h>
 
-using namespace CalX;
 
 namespace CalXUI {
 

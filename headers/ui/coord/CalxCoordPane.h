@@ -34,8 +34,6 @@
 #include <wx/spinctrl.h>
 #include <wx/stattext.h>
 
-using namespace CalX;
-
 namespace CalXUI {
 
 	wxDECLARE_EVENT(wxEVT_COORD_CTRL_WATCHER, wxThreadEvent);

@@ -30,8 +30,6 @@
 #include <wx/spinctrl.h>
 #include <wx/textctrl.h>
 
-using namespace CalX;
-
 namespace CalXUI {
 
 	class CalxTaskHandle : public wxScrolledWindow {

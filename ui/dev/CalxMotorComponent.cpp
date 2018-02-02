@@ -29,8 +29,6 @@
 #include <signal.h>
 #include <wx/statbox.h>
 
-using namespace CalX;
-
 namespace CalXUI {
 	wxDEFINE_EVENT(wxEVT_MOTOR_CTRL_ENABLE, wxThreadEvent);
 

@@ -31,7 +31,6 @@
 #include <wx/dynlib.h>
 #include <wx/intl.h>
 
-using namespace CalX;
 
 #ifndef DEVICES_LIB
 #define DEVICES_LIB dev_standart
