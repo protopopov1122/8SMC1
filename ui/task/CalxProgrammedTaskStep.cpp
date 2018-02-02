@@ -27,7 +27,7 @@ namespace CalXUI {
 	CalxTaskLinearStepHandle::CalxTaskLinearStepHandle(wxWindow *win,
 	                                                   wxWindowID id)
 	    : CalxTaskStepHandle::CalxTaskStepHandle(win, id) {
-		std::string units = wxGetApp().getUnits();
+		std::string units = wxGetApp().getUnitProcessor().getUnits();
 
 		motor_point_t pos = { 0, 0 };
 		this->step = std::make_shared<MoveTaskStep>(pos, 1, false);
@@ -37,10 +37,10 @@ namespace CalXUI {
 
 		this->xCoord = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitPrecision());
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->yCoord = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitPrecision());
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->speed =
 		    new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
 		                         wxDefaultSize, wxSP_ARROW_KEYS, 0, 1, 1, 0.001);
@@ -64,7 +64,7 @@ namespace CalXUI {
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Speed") + std::string(":")),
 		           0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(speed);
-		sizer->Add(new wxStaticText(this, wxID_ANY, wxGetApp().getSpeedUnits()));
+		sizer->Add(new wxStaticText(this, wxID_ANY, wxGetApp().getUnitProcessor().getSpeedUnits()));
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""), 0, wxALIGN_RIGHT | wxRIGHT,
 		           5);
 		sizer->Add(relative);
@@ -86,7 +86,7 @@ namespace CalXUI {
 	}
 
 	void CalxTaskLinearStepHandle::update() {
-		double scale = wxGetApp().getUnitScale();
+		double scale = wxGetApp().getUnitProcessor().getUnitScale();
 		motor_point_t pos = {
 			static_cast<motor_coord_t>(xCoord->GetValue() * scale),
 			static_cast<motor_coord_t>(yCoord->GetValue() * scale)
@@ -104,7 +104,7 @@ namespace CalXUI {
 	CalxTaskLinearJumpStepHandle::CalxTaskLinearJumpStepHandle(wxWindow *win,
 	                                                           wxWindowID id)
 	    : CalxTaskStepHandle::CalxTaskStepHandle(win, id) {
-		std::string units = wxGetApp().getUnits();
+		std::string units = wxGetApp().getUnitProcessor().getUnits();
 
 		motor_point_t pos = { 0, 0 };
 		this->step = std::make_shared<JumpTaskStep>(pos, 1, false);
@@ -114,10 +114,10 @@ namespace CalXUI {
 
 		this->xCoord = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitPrecision());
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->yCoord = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitPrecision());
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->speed =
 		    new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
 		                         wxDefaultSize, wxSP_ARROW_KEYS, 0, 1, 1, 0.001);
@@ -164,7 +164,7 @@ namespace CalXUI {
 	}
 
 	void CalxTaskLinearJumpStepHandle::update() {
-		double scale = wxGetApp().getUnitScale();
+		double scale = wxGetApp().getUnitProcessor().getUnitScale();
 		motor_point_t pos = {
 			static_cast<motor_coord_t>(xCoord->GetValue() * scale),
 			static_cast<motor_coord_t>(yCoord->GetValue() * scale)
@@ -181,7 +181,7 @@ namespace CalXUI {
 
 	CalxTaskArcStepHandle::CalxTaskArcStepHandle(wxWindow *win, wxWindowID id)
 	    : CalxTaskStepHandle::CalxTaskStepHandle(win, id) {
-		std::string units = wxGetApp().getUnits();
+		std::string units = wxGetApp().getUnitProcessor().getUnits();
 
 		motor_point_t pnt = { 0, 0 };
 		this->step = std::make_shared<ArcTaskStep>(pnt, pnt, 200, 1.0f, false);
@@ -191,19 +191,19 @@ namespace CalXUI {
 
 		this->destXCoord = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitPrecision());
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->destYCoord =
 		    new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
 		                         wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX,
-		                         (int) pnt.y, wxGetApp().getUnitPrecision());
+		                         (int) pnt.y, wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->cenXCoord =
 		    new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
 		                         wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX,
-		                         (int) pnt.x, wxGetApp().getUnitPrecision());
+		                         (int) pnt.x, wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->cenYCoord =
 		    new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
 		                         wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX,
-		                         (int) pnt.y, wxGetApp().getUnitPrecision());
+		                         (int) pnt.y, wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->splitter = new wxSpinCtrl(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
 		    wxSP_ARROW_KEYS, 0, 1000, step->getSplitter());
@@ -279,7 +279,7 @@ namespace CalXUI {
 	}
 
 	void CalxTaskArcStepHandle::update() {
-		double scale = wxGetApp().getUnitScale();
+		double scale = wxGetApp().getUnitProcessor().getUnitScale();
 		motor_point_t dest = {
 			static_cast<motor_coord_t>(destXCoord->GetValue() * scale),
 			static_cast<motor_coord_t>(destYCoord->GetValue() * scale)

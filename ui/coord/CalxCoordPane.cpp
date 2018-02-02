@@ -200,7 +200,7 @@ namespace CalXUI {
 	}
 
 	void CalxCoordPane::updateUI() {
-		std::string units = wxGetApp().getUnits();
+		std::string units = wxGetApp().getUnitProcessor().getUnits();
 		std::string general =
 		    FORMAT(__("Name: Coordinate plane #%s"),
 		           std::to_string(ctrl->getID())) +
@@ -216,26 +216,26 @@ namespace CalXUI {
 		         : __("Instrument: no")) +
 		    "\n" +
 		    FORMAT(__("Position: %sx%s %s"),
-		           wxGetApp().formatDouble(
+		           wxGetApp().getUnitProcessor().formatDouble(
 		               ctrl->getFloatPlane()->getFloatPosition().x),
-		           wxGetApp().formatDouble(
+		           wxGetApp().getUnitProcessor().formatDouble(
 		               ctrl->getFloatPlane()->getFloatPosition().y),
 		           units) +
 		    "\n" +
 		    (ctrl->isMeasured()
 		         ? FORMAT(__("Start: %sx%s %s"),
-		                  wxGetApp().formatDouble(
+		                  wxGetApp().getUnitProcessor().formatDouble(
 		                      ctrl->getFloatPlane()->getFloatSize().x),
-		                  wxGetApp().formatDouble(
+		                  wxGetApp().getUnitProcessor().formatDouble(
 		                      ctrl->getFloatPlane()->getFloatSize().y),
 		                  units)
 		         : __("Start: Not measured")) +
 		    "\n" +
 		    (ctrl->isMeasured()
 		         ? FORMAT(__("Size: %sx%s %s"),
-		                  wxGetApp().formatDouble(
+		                  wxGetApp().getUnitProcessor().formatDouble(
 		                      ctrl->getFloatPlane()->getFloatSize().w),
-		                  wxGetApp().formatDouble(
+		                  wxGetApp().getUnitProcessor().formatDouble(
 		                      ctrl->getFloatPlane()->getFloatSize().h),
 		                  units)
 		         : __("Size: Not measured"));

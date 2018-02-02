@@ -269,6 +269,9 @@ namespace CalXUI {
 		// Start debug console if necessary
 		this->startDebugConsole(conf);
 
+		// Init unit processor
+		this->unit_processor = std::make_unique<CalxUnitProcessor>(conf);
+
 		// Load script engine
 		this->loadScriptEngine(conf);
 
@@ -343,6 +346,8 @@ namespace CalXUI {
 		return 0;
 	}
 
+	// Fatal exception handlers. They will try to gently stop all actions
+	// to prevent physical corruption
 	void CalxApp::OnUnhandledException() {
 		calx_terminate();
 		exit(-1);
@@ -361,66 +366,8 @@ namespace CalXUI {
 		return this->error_handler;
 	}
 
-	std::string CalxApp::formatDouble(double d) {
-		std::ostringstream os;
-		os << d;
-		return os.str();
-	}
-
-	std::string CalxApp::getUnits() {
-		return wxGetApp()
-		    .getSystemManager()
-		    ->getConfiguration()
-		    .getEntry("units")
-		    ->getString("unit_suffix", "");
-	}
-
-	std::string CalxApp::getSpeedUnits() {
-		std::string units = this->getUnits();
-		std::string timing = wxGetApp()
-		                         .getSystemManager()
-		                         ->getConfiguration()
-		                         .getEntry("units")
-		                         ->getString("timing", "");
-		return units.empty() ? "" : units + timing;
-	}
-
-	double CalxApp::getUnitPrecision() {
-		return 1.0 / this->getUnitScale();
-	}
-
-	double CalxApp::getSpeedPrecision() {
-		return 1.0 / this->getSpeedScale();
-	}
-
-	double CalxApp::getUnitScale() {
-		return wxGetApp()
-		    .getSystemManager()
-		    ->getConfiguration()
-		    .getEntry("units")
-		    ->getReal("unit_scale", 1.0f);
-	}
-
-	double CalxApp::getSpeedScale() {
-		return wxGetApp()
-		    .getSystemManager()
-		    ->getConfiguration()
-		    .getEntry("units")
-		    ->getReal("speed_scale", 1.0f);
-	}
-
-	coord_point_t CalxApp::getUnitOffset() {
-		coord_point_t offset = { wxGetApp()
-			                           .getSystemManager()
-			                           ->getConfiguration()
-			                           .getEntry("units")
-			                           ->getReal("unit_offset_x", 0.0f),
-			                       wxGetApp()
-			                           .getSystemManager()
-			                           ->getConfiguration()
-			                           .getEntry("units")
-			                           ->getReal("unit_offset_y", 0.0f) };
-		return offset;
+	CalxUnitProcessor &CalxApp::getUnitProcessor() {
+		return *this->unit_processor;
 	}
 
 	CalxFrame *CalxApp::getMainFrame() {

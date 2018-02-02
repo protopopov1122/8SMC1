@@ -32,22 +32,22 @@ namespace CalXUI {
 	                                             CalxCoordController *controller)
 	    : CalxCoordComponent::CalxCoordComponent(win, id),
 	      controller(controller) {
-		std::string units = wxGetApp().getUnits();
+		std::string units = wxGetApp().getUnitProcessor().getUnits();
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 		SetSizer(sizer);
 
 		this->xCoord = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitPrecision());
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->yCoord = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitPrecision());
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->cxCoord = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitPrecision());
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->cyCoord = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitPrecision());
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->speed =
 		    new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
 		                         wxDefaultSize, wxSP_ARROW_KEYS, 0,
@@ -61,7 +61,7 @@ namespace CalXUI {
 		                             ->getConfiguration()
 		                             .getEntry("units")
 		                             ->getReal("unit_speed", 4000.0),
-		                         wxGetApp().getSpeedPrecision());
+		                         wxGetApp().getUnitProcessor().getSpeedPrecision());
 		this->splitter =
 		    new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
 		                   wxDefaultSize, wxSP_ARROW_KEYS, 0, 1000, 200);
@@ -96,7 +96,7 @@ namespace CalXUI {
 		sizer->Add(
 		    new wxStaticText(this, wxID_ANY, __("Speed") + std::string(":")));
 		sizer->Add(speed, 0, wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, wxGetApp().getSpeedUnits()));
+		sizer->Add(new wxStaticText(this, wxID_ANY, wxGetApp().getUnitProcessor().getSpeedUnits()));
 		sizer->Add(
 		    new wxStaticText(this, wxID_ANY, __("Splitter") + std::string(":")));
 		sizer->Add(splitter, 0, wxEXPAND);

@@ -58,7 +58,7 @@ namespace CalXUI {
 		                             ->getConfiguration()
 		                             .getEntry("units")
 		                             ->getReal("unit_speed", 4000.0),
-		                         wxGetApp().getSpeedPrecision());
+		                         wxGetApp().getUnitProcessor().getSpeedPrecision());
 		wxButton *moveButton = new wxButton(this, wxID_ANY, __("Move"));
 		wxButton *configureButton = new wxButton(this, wxID_ANY, __("Configure"));
 
@@ -77,7 +77,7 @@ namespace CalXUI {
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Speed") + std::string(":")),
 		           0, wxALIGN_RIGHT | wxRIGHT, 10);
 		sizer->Add(speed, 0, wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, wxGetApp().getSpeedUnits()));
+		sizer->Add(new wxStaticText(this, wxID_ANY, wxGetApp().getUnitProcessor().getSpeedUnits()));
 		sizer->Add(moveButton);
 		sizer->Add(configureButton);
 

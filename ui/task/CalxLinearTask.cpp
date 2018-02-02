@@ -26,7 +26,7 @@ namespace CalXUI {
 	                                           size_t tid)
 	    : CalxTaskHandle(win, id) {
 		this->id = tid;
-		std::string units = wxGetApp().getUnits();
+		std::string units = wxGetApp().getUnitProcessor().getUnits();
 
 		std::shared_ptr<ConfigEntry> confEntry =
 		    wxGetApp().getSystemManager()->getConfiguration().getEntry(
@@ -42,29 +42,29 @@ namespace CalXUI {
 		motor_coord_t mspac = 0;
 		bool mvert = true;
 		this->task = std::make_shared<LinearCoordTask>(mrect, mspac, mvert);
-		coord_point_t offset = wxGetApp().getUnitOffset();
-		coord_scale_t size = { wxGetApp().getUnitScale(),
-			                     wxGetApp().getUnitScale() };
+		coord_point_t offset = wxGetApp().getUnitProcessor().getUnitOffset();
+		coord_scale_t size = { wxGetApp().getUnitProcessor().getUnitScale(),
+			                     wxGetApp().getUnitProcessor().getUnitScale() };
 		this->trans = std::make_shared<LinearCoordTranslator>(offset, size);
 
 		this->xCoord =
 		    new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
 		                         wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX,
-		                         rect.x, wxGetApp().getUnitPrecision());
+		                         rect.x, wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->yCoord =
 		    new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
 		                         wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX,
-		                         rect.y, wxGetApp().getUnitPrecision());
+		                         rect.y, wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->wDim = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, 1, INT_MAX, rect.w, wxGetApp().getUnitPrecision());
+		    wxSP_ARROW_KEYS, 1, INT_MAX, rect.w, wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->hDim = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, 1, INT_MAX, rect.h, wxGetApp().getUnitPrecision());
+		    wxSP_ARROW_KEYS, 1, INT_MAX, rect.h, wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->spacing = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, wxGetApp().getUnitPrecision(), INT_MAX, spac,
-		    wxGetApp().getUnitPrecision());
+		    wxSP_ARROW_KEYS, wxGetApp().getUnitProcessor().getUnitPrecision(), INT_MAX, spac,
+		    wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->vertical = new wxCheckBox(this, wxID_ANY, __("Vertical"));
 		this->vertical->SetValue(vert);
 
@@ -133,7 +133,7 @@ namespace CalXUI {
 		double spacing = this->spacing->GetValue();
 		bool vert = this->vertical->GetValue();
 
-		double scale = wxGetApp().getUnitScale();
+		double scale = wxGetApp().getUnitProcessor().getUnitScale();
 		motor_rect_t mrect = {
 			static_cast<motor_coord_t>(rect.x * scale),
 			static_cast<motor_coord_t>(rect.y * scale),
@@ -148,7 +148,7 @@ namespace CalXUI {
 	}
 
 	void CalxLinearTaskHandle::setRectangle(coord_rect_t rect) {
-		double scale = wxGetApp().getUnitScale();
+		double scale = wxGetApp().getUnitProcessor().getUnitScale();
 		motor_rect_t mrect = {
 			static_cast<motor_coord_t>(rect.x * scale),
 			static_cast<motor_coord_t>(rect.y * scale),

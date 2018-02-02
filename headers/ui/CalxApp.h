@@ -24,6 +24,7 @@
 #include "ui/CalxFrame.h"
 #include "ui/UIExtEngine.h"
 #include "ctrl-lib/script/ScriptEngine.h"
+#include "ui/CalxUnitProcessor.h"
 #include "ui/calx.h"
 #include <fstream>
 #include <iostream>
@@ -64,14 +65,7 @@ namespace CalXUI {
 		std::shared_ptr<CalXScriptFactory> getScriptFactory();
 		std::unique_ptr<CalXScript> loadScript(std::string);
 
-		std::string formatDouble(double);
-		std::string getUnits();
-		std::string getSpeedUnits();
-		double getUnitPrecision();
-		double getSpeedPrecision();
-		double getUnitScale();
-		double getSpeedScale();
-		coord_point_t getUnitOffset();
+		CalxUnitProcessor &getUnitProcessor();
 
 	 private:
 		void loadDevicesPlugin();
@@ -90,6 +84,7 @@ namespace CalXUI {
 		wxDynamicLibrary *extLib;
 		wxDynamicLibrary *scriptLib;
 		std::unique_ptr<SystemManager> sysman;
+		std::unique_ptr<CalxUnitProcessor> unit_processor;
 
 		bool debug_mode;
 		CalxDebugConsole *debug_console;

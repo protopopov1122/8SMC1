@@ -27,9 +27,9 @@ namespace CalXUI {
 		this->task = std::make_shared<ProgrammedCoordTask>();
 		this->id = tid;
 
-		coord_point_t offset = wxGetApp().getUnitOffset();
-		coord_scale_t size = { wxGetApp().getUnitScale(),
-			                     wxGetApp().getUnitScale() };
+		coord_point_t offset = wxGetApp().getUnitProcessor().getUnitOffset();
+		coord_scale_t size = { wxGetApp().getUnitProcessor().getUnitScale(),
+			                     wxGetApp().getUnitProcessor().getUnitScale() };
 		this->trans = std::make_shared<LinearCoordTranslator>(offset, size);
 
 		wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);

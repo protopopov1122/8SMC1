@@ -36,7 +36,7 @@ namespace CalXUI {
 	    wxWindow *win, wxWindowID id, CalxCoordController *controller)
 	    : CalxCoordComponent::CalxCoordComponent(win, id),
 	      controller(controller) {
-		std::string units = wxGetApp().getUnits();
+		std::string units = wxGetApp().getUnitProcessor().getUnits();
 		std::shared_ptr<ConfigEntry> graphconf =
 		    wxGetApp().getSystemManager()->getConfiguration().getEntry("graph");
 		wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
@@ -82,7 +82,7 @@ namespace CalXUI {
 		                                       ->getConfiguration()
 		                                       .getEntry("units")
 		                                       ->getReal("unit_speed", 4000.0),
-		                                   wxGetApp().getSpeedPrecision());
+		                                   wxGetApp().getUnitProcessor().getSpeedPrecision());
 		wxButton *buildButton = new wxButton(graphPanel, wxID_ANY, __("Build"));
 		wxButton *previewButton = new wxButton(graphPanel, wxID_ANY, __("Preview"));
 
@@ -122,7 +122,7 @@ namespace CalXUI {
 		                0, wxALIGN_RIGHT | wxRIGHT, 10);
 		graphSizer->Add(speed, 0, wxEXPAND);
 		graphSizer->Add(
-		    new wxStaticText(this, wxID_ANY, wxGetApp().getSpeedUnits()));
+		    new wxStaticText(this, wxID_ANY, wxGetApp().getUnitProcessor().getSpeedUnits()));
 		graphSizer->Add(buildButton);
 		graphSizer->Add(previewButton);
 

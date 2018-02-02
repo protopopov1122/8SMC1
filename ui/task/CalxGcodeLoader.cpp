@@ -58,9 +58,9 @@ namespace CalXUI {
 			static_cast<double>(conf.getEntry("coords")->getReal("scale_x", 1.0)),
 			static_cast<double>(conf.getEntry("coords")->getReal("scale_y", 1.0))
 		};
-		coord_point_t unit_offset = wxGetApp().getUnitOffset();
-		coord_scale_t unit_scale = { wxGetApp().getUnitScale(),
-			                           wxGetApp().getUnitScale() };
+		coord_point_t unit_offset = wxGetApp().getUnitProcessor().getUnitOffset();
+		coord_scale_t unit_scale = { wxGetApp().getUnitProcessor().getUnitScale(),
+			                           wxGetApp().getUnitProcessor().getUnitScale() };
 		std::shared_ptr<LinearCoordTranslator> unit_trans =
 		    std::make_shared<LinearCoordTranslator>(unit_offset, unit_scale);
 		std::shared_ptr<LinearCoordTranslator> trans =

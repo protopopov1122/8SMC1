@@ -66,9 +66,9 @@ namespace CalXUI {
 		                                            handle->peekPlane());
 		handle->pushPlane(this->map);
 
-		coord_scale_t unit_scale = { wxGetApp().getUnitScale(),
-			                           wxGetApp().getUnitScale() };
-		float unit_speed_scale = static_cast<float>(wxGetApp().getSpeedScale());
+		coord_scale_t unit_scale = { wxGetApp().getUnitProcessor().getUnitScale(),
+			                           wxGetApp().getUnitProcessor().getUnitScale() };
+		float unit_speed_scale = static_cast<float>(wxGetApp().getUnitProcessor().getSpeedScale());
 		handle->getFloatPlane()->setScale(unit_scale);
 		handle->getFloatPlane()->setSpeedScale(unit_speed_scale);
 	}

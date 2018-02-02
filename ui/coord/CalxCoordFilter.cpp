@@ -98,19 +98,19 @@ namespace CalXUI {
 		this->xoffset = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
 		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, ctrl->getOffset().x,
-		    wxGetApp().getUnitPrecision());
+		    wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->yoffset = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
 		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, ctrl->getOffset().y,
-		    wxGetApp().getUnitPrecision());
+		    wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->xscale =
 		    new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
 		                         wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX,
-		                         ctrl->getScale().x, wxGetApp().getUnitPrecision());
+		                         ctrl->getScale().x, wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->yscale =
 		    new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
 		                         wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX,
-		                         ctrl->getScale().y, wxGetApp().getUnitPrecision());
+		                         ctrl->getScale().y, wxGetApp().getUnitProcessor().getUnitPrecision());
 
 		sizer->Add(
 		    new wxStaticText(this, wxID_ANY, __("X offset") + std::string(":")), 0,
@@ -170,11 +170,11 @@ namespace CalXUI {
 		this->xscale = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
 		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, trans->getScale().x,
-		    wxGetApp().getUnitPrecision());
+		    wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->yscale = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
 		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, trans->getScale().x,
-		    wxGetApp().getUnitPrecision());
+		    wxGetApp().getUnitProcessor().getUnitPrecision());
 
 		sizer->Add(
 		    new wxStaticText(this, wxID_ANY, __("X scale") + std::string(":")), 0,
@@ -268,9 +268,9 @@ namespace CalXUI {
 		this->trans = tr;
 
 		if (this->trans == nullptr) {
-			coord_point_t cen = wxGetApp().getUnitOffset();
-			coord_scale_t scl = { wxGetApp().getUnitScale(),
-				                    wxGetApp().getUnitScale() };
+			coord_point_t cen = wxGetApp().getUnitProcessor().getUnitOffset();
+			coord_scale_t scl = { wxGetApp().getUnitProcessor().getUnitScale(),
+				                    wxGetApp().getUnitProcessor().getUnitScale() };
 			std::shared_ptr<LinearCoordTranslator> basic =
 			    std::make_shared<LinearCoordTranslator>(cen, scl);
 			this->trans = std::make_shared<ComplexCoordTranslator>(basic);
