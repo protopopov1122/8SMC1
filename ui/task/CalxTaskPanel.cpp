@@ -143,20 +143,20 @@ namespace CalXUI {
 		wxButton *buildButton = new wxButton(execPanel, wxID_ANY, __("Build"));
 		execSizer->Add(buildButton, 0, wxALL | wxALIGN_CENTER);
 		this->plane = new wxChoice(execPanel, wxID_ANY);
-		this->speed = new wxSpinCtrlDouble(execPanel, wxID_ANY, wxEmptyString,
-		                                   wxDefaultPosition, wxDefaultSize,
-		                                   wxSP_ARROW_KEYS, 0,
-		                                   wxGetApp()
-		                                       .getSystemManager()
-		                                       ->getConfiguration()
-		                                       .getEntry("units")
-		                                       ->getReal("unit_speed", 4000.0),
-		                                   wxGetApp()
-		                                       .getSystemManager()
-		                                       ->getConfiguration()
-		                                       .getEntry("units")
-		                                       ->getReal("unit_speed", 4000.0),
-		                                   wxGetApp().getUnitProcessor().getSpeedPrecision());
+		this->speed = new wxSpinCtrlDouble(
+		    execPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+		    wxSP_ARROW_KEYS, 0,
+		    wxGetApp()
+		        .getSystemManager()
+		        ->getConfiguration()
+		        .getEntry("units")
+		        ->getReal("unit_speed", 4000.0),
+		    wxGetApp()
+		        .getSystemManager()
+		        ->getConfiguration()
+		        .getEntry("units")
+		        ->getReal("unit_speed", 4000.0),
+		    wxGetApp().getUnitProcessor().getSpeedPrecision());
 		execSizer->Add(new wxStaticText(execPanel, wxID_ANY, __("on")), 0,
 		               wxLEFT | wxRIGHT | wxALIGN_CENTER, 5);
 		execSizer->Add(plane, 0, wxALL, 5);
@@ -164,8 +164,9 @@ namespace CalXUI {
 		               wxLEFT | wxRIGHT | wxALIGN_CENTER, 5);
 		execSizer->Add(speed, 0, wxALL, 5);
 		execSizer->Add(
-		    new wxStaticText(execPanel, wxID_ANY, wxGetApp().getUnitProcessor().getSpeedUnits()), 0,
-		    wxLEFT | wxRIGHT | wxALIGN_CENTER, 5);
+		    new wxStaticText(execPanel, wxID_ANY,
+		                     wxGetApp().getUnitProcessor().getSpeedUnits()),
+		    0, wxLEFT | wxRIGHT | wxALIGN_CENTER, 5);
 		this->stopButton = new wxButton(execPanel, wxID_ANY, __("Stop"));
 		execSizer->Add(stopButton);
 		wxButton *previewButton = new wxButton(execPanel, wxID_ANY, __("Preview"));

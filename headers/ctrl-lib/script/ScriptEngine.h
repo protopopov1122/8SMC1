@@ -116,6 +116,6 @@ namespace CalX {
 	typedef CalXScriptFactory *(*ScriptEngine_getter)();
 	extern "C" LIBEXPORT CalXScriptFactory *getScriptEngine();
 
-}  // namespace CalXUI
+}  // namespace CalX
 
 #endif

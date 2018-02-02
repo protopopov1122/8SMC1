@@ -30,7 +30,6 @@
 #include <wx/spinctrl.h>
 #include <wx/stattext.h>
 
-
 namespace CalXUI {
 
 	class CalxCoordArcComponentFactory : public CalxCoordComponentFactory {

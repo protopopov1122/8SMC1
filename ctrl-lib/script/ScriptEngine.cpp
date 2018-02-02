@@ -30,4 +30,4 @@ namespace CalX {
 	}
 
 	CalXScript::CalXScript(CalXScriptEnvironment &env) : env(env) {}
-}  // namespace CalXUI
+}  // namespace CalX

@@ -73,7 +73,7 @@ namespace CalXUI {
 	DeviceManager_getter CalxApp::loadDeviceDrivers(ConfigManager &conf) {
 		// Load specified dynamic library
 		std::string lib_addr =
-			conf.getEntry("ui")->getString("devicelib", STRINGIZE(DEVICES_LIB));
+		    conf.getEntry("ui")->getString("devicelib", STRINGIZE(DEVICES_LIB));
 
 		this->dynlib =
 		    new wxDynamicLibrary(wxDynamicLibrary::CanonicalizeName(lib_addr),
@@ -89,7 +89,7 @@ namespace CalXUI {
 			return nullptr;
 		}
 
-		// 
+		//
 		bool suc;
 		void *raw_getter = dynlib->GetSymbol("getDeviceManager", &suc);
 		DeviceManager_getter getter = *((DeviceManager_getter *) &raw_getter);
@@ -125,7 +125,7 @@ namespace CalXUI {
 		this->Bind(wxEVT_APP_ERROR, &CalxApp::OnErrorEvent, this);
 	}
 
-	void CalxApp::initLogging(ConfigManager &conf) {
+	void CalxApp::initLogging(ConfigManager &conf){
 #define SETUP_LOG(name, id, dest)                                              \
 	{                                                                            \
 		this->name = nullptr;                                                      \
@@ -138,12 +138,11 @@ namespace CalXUI {
 		}                                                                          \
 	}
 
-		SETUP_LOG(errors_log, "errors", ERRORS)
-		SETUP_LOG(warnings_log, "warnings", WARNINGS)
-		SETUP_LOG(debug_log, "debug", DEBUG)
-		SETUP_LOG(info_log, "info", INFO)
-		SETUP_LOG(resources_log, "resources", RESOURCES)
-		SETUP_LOG(instruments_log, "instruments", INSTRUMENTS)
+		SETUP_LOG(errors_log, "errors", ERRORS) SETUP_LOG(warnings_log, "warnings",
+		                                                  WARNINGS)
+		    SETUP_LOG(debug_log, "debug", DEBUG) SETUP_LOG(info_log, "info", INFO)
+		        SETUP_LOG(resources_log, "resources", RESOURCES)
+		            SETUP_LOG(instruments_log, "instruments", INSTRUMENTS)
 
 #undef SETUP_LOG
 	}
@@ -235,7 +234,7 @@ namespace CalXUI {
 	}
 
 	// Application entry-point. It performs system startup and
-	// calls methods above 
+	// calls methods above
 	bool CalxApp::OnInit() {
 		// Load configuration
 		std::unique_ptr<ConfigManager> conf_ptr = this->loadConfiguration();
@@ -258,12 +257,12 @@ namespace CalXUI {
 
 		// Load extension engine
 		std::unique_ptr<ExtEngine> ext = this->loadExtensionEngine(conf);
-		
+
 		// Initialize main system structures
 		std::unique_ptr<DeviceManager> devman =
 		    std::unique_ptr<DeviceManager>(getter());
-		this->sysman = std::make_unique<SystemManager>(std::move(devman), std::move(conf_ptr),
-		                                 std::move(ext));
+		this->sysman = std::make_unique<SystemManager>(
+		    std::move(devman), std::move(conf_ptr), std::move(ext));
 		this->error_handler = new CalxErrorHandler(this->sysman.get());
 
 		// Start debug console if necessary

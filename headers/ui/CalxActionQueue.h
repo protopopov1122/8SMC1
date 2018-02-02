@@ -26,7 +26,6 @@
 #include <wx/event.h>
 #include <wx/thread.h>
 
-
 wxDECLARE_EVENT(wxEVT_COMMAND_QUEUE_UPDATE, wxThreadEvent);
 
 namespace CalXUI {

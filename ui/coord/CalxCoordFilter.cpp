@@ -103,14 +103,14 @@ namespace CalXUI {
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
 		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, ctrl->getOffset().y,
 		    wxGetApp().getUnitProcessor().getUnitPrecision());
-		this->xscale =
-		    new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		                         wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX,
-		                         ctrl->getScale().x, wxGetApp().getUnitProcessor().getUnitPrecision());
-		this->yscale =
-		    new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		                         wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX,
-		                         ctrl->getScale().y, wxGetApp().getUnitProcessor().getUnitPrecision());
+		this->xscale = new wxSpinCtrlDouble(
+		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, ctrl->getScale().x,
+		    wxGetApp().getUnitProcessor().getUnitPrecision());
+		this->yscale = new wxSpinCtrlDouble(
+		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, ctrl->getScale().y,
+		    wxGetApp().getUnitProcessor().getUnitPrecision());
 
 		sizer->Add(
 		    new wxStaticText(this, wxID_ANY, __("X offset") + std::string(":")), 0,

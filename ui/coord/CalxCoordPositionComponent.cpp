@@ -77,7 +77,8 @@ namespace CalXUI {
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Speed") + std::string(":")),
 		           0, wxALIGN_RIGHT | wxRIGHT, 10);
 		sizer->Add(speed, 0, wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, wxGetApp().getUnitProcessor().getSpeedUnits()));
+		sizer->Add(new wxStaticText(this, wxID_ANY,
+		                            wxGetApp().getUnitProcessor().getSpeedUnits()));
 		sizer->Add(moveButton);
 		sizer->Add(configureButton);
 

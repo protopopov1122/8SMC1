@@ -69,20 +69,20 @@ namespace CalXUI {
 		    wxSP_ARROW_KEYS, graphconf->getReal("step_step", 0.001), INT_MAX,
 		    graphconf->getReal("step", 0.1),
 		    graphconf->getReal("step_step", 0.001));
-		this->speed = new wxSpinCtrlDouble(graphPanel, wxID_ANY, wxEmptyString,
-		                                   wxDefaultPosition, wxDefaultSize,
-		                                   wxSP_ARROW_KEYS, 0,
-		                                   wxGetApp()
-		                                       .getSystemManager()
-		                                       ->getConfiguration()
-		                                       .getEntry("units")
-		                                       ->getReal("unit_speed", 4000.0),
-		                                   wxGetApp()
-		                                       .getSystemManager()
-		                                       ->getConfiguration()
-		                                       .getEntry("units")
-		                                       ->getReal("unit_speed", 4000.0),
-		                                   wxGetApp().getUnitProcessor().getSpeedPrecision());
+		this->speed = new wxSpinCtrlDouble(
+		    graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+		    wxSP_ARROW_KEYS, 0,
+		    wxGetApp()
+		        .getSystemManager()
+		        ->getConfiguration()
+		        .getEntry("units")
+		        ->getReal("unit_speed", 4000.0),
+		    wxGetApp()
+		        .getSystemManager()
+		        ->getConfiguration()
+		        .getEntry("units")
+		        ->getReal("unit_speed", 4000.0),
+		    wxGetApp().getUnitProcessor().getSpeedPrecision());
 		wxButton *buildButton = new wxButton(graphPanel, wxID_ANY, __("Build"));
 		wxButton *previewButton = new wxButton(graphPanel, wxID_ANY, __("Preview"));
 
@@ -121,8 +121,8 @@ namespace CalXUI {
 		graphSizer->Add(new wxStaticText(graphPanel, wxID_ANY, __("Build speed")),
 		                0, wxALIGN_RIGHT | wxRIGHT, 10);
 		graphSizer->Add(speed, 0, wxEXPAND);
-		graphSizer->Add(
-		    new wxStaticText(this, wxID_ANY, wxGetApp().getUnitProcessor().getSpeedUnits()));
+		graphSizer->Add(new wxStaticText(
+		    this, wxID_ANY, wxGetApp().getUnitProcessor().getSpeedUnits()));
 		graphSizer->Add(buildButton);
 		graphSizer->Add(previewButton);
 

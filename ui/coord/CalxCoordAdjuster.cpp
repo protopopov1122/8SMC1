@@ -143,35 +143,43 @@ namespace CalXUI {
 		}
 		wxCoord x, y;
 		dc.DrawText(
-		    FORMAT("%s%s", wxGetApp().getUnitProcessor().formatDouble(float_plane_size.x), units), 0,
-		    (wxCoord)((top_plane_size.h + top_plane_size.y) * top_scaleY));
+		    FORMAT("%s%s",
+		           wxGetApp().getUnitProcessor().formatDouble(float_plane_size.x),
+		           units),
+		    0, (wxCoord)((top_plane_size.h + top_plane_size.y) * top_scaleY));
 		dc.GetMultiLineTextExtent(
 		    FORMAT("%s%s",
-		           wxGetApp().getUnitProcessor().formatDouble(float_plane_size.x + float_plane_size.w),
+		           wxGetApp().getUnitProcessor().formatDouble(float_plane_size.x +
+		                                                      float_plane_size.w),
+		           units),
+		    &x, &y);
+		dc.DrawText(FORMAT("%s%s",
+		                   wxGetApp().getUnitProcessor().formatDouble(
+		                       float_plane_size.x + float_plane_size.w),
+		                   units),
+		            real_size.x - x,
+		            (wxCoord)((top_plane_size.h + top_plane_size.y) * top_scaleY));
+		dc.GetMultiLineTextExtent(
+		    FORMAT("%s%s",
+		           wxGetApp().getUnitProcessor().formatDouble(float_plane_size.y),
 		           units),
 		    &x, &y);
 		dc.DrawText(
 		    FORMAT("%s%s",
-		           wxGetApp().getUnitProcessor().formatDouble(float_plane_size.x + float_plane_size.w),
+		           wxGetApp().getUnitProcessor().formatDouble(float_plane_size.y),
 		           units),
-		    real_size.x - x,
-		    (wxCoord)((top_plane_size.h + top_plane_size.y) * top_scaleY));
-		dc.GetMultiLineTextExtent(
-		    FORMAT("%s%s", wxGetApp().getUnitProcessor().formatDouble(float_plane_size.y), units), &x,
-		    &y);
-		dc.DrawText(
-		    FORMAT("%s%s", wxGetApp().getUnitProcessor().formatDouble(float_plane_size.y), units),
 		    (wxCoord)((-top_plane_size.x) * top_scaleX) - x / 2, real_size.y - y);
 		dc.GetMultiLineTextExtent(
 		    FORMAT("%s%s",
-		           wxGetApp().getUnitProcessor().formatDouble(float_plane_size.y + float_plane_size.h),
+		           wxGetApp().getUnitProcessor().formatDouble(float_plane_size.y +
+		                                                      float_plane_size.h),
 		           units),
 		    &x, &y);
-		dc.DrawText(
-		    FORMAT("%s%s",
-		           wxGetApp().getUnitProcessor().formatDouble(float_plane_size.y + float_plane_size.h),
-		           units),
-		    (wxCoord)((-top_plane_size.x) * top_scaleX) - x / 2, 0);
+		dc.DrawText(FORMAT("%s%s",
+		                   wxGetApp().getUnitProcessor().formatDouble(
+		                       float_plane_size.y + float_plane_size.h),
+		                   units),
+		            (wxCoord)((-top_plane_size.x) * top_scaleX) - x / 2, 0);
 
 		wxPen pen(this->pointer_colour);
 		wxBrush brush(this->pointer_colour);
@@ -207,7 +215,8 @@ namespace CalXUI {
 		this->position = new wxStaticText(prmsPanel, wxID_ANY, "");
 		this->stepSpin = new wxSpinCtrlDouble(
 		    prmsPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, wxGetApp().getUnitProcessor().getUnitPrecision(), INT_MAX,
+		    wxSP_ARROW_KEYS, wxGetApp().getUnitProcessor().getUnitPrecision(),
+		    INT_MAX,
 		    wxGetApp()
 		        .getSystemManager()
 		        ->getConfiguration()
@@ -237,14 +246,14 @@ namespace CalXUI {
 		    new wxStaticText(prmsPanel, wxID_ANY, __("Step") + std::string(":")), 0,
 		    wxALIGN_RIGHT | wxRIGHT, 5);
 		prmsSizer->Add(this->stepSpin, 0, wxALL | wxEXPAND);
-		prmsSizer->Add(
-		    new wxStaticText(prmsPanel, wxID_ANY, wxGetApp().getUnitProcessor().getUnits()));
+		prmsSizer->Add(new wxStaticText(prmsPanel, wxID_ANY,
+		                                wxGetApp().getUnitProcessor().getUnits()));
 		prmsSizer->Add(
 		    new wxStaticText(prmsPanel, wxID_ANY, __("Speed") + std::string(":")),
 		    0, wxALIGN_RIGHT | wxRIGHT, 5);
 		prmsSizer->Add(this->speedSpin, 0, wxALL | wxEXPAND);
-		prmsSizer->Add(
-		    new wxStaticText(prmsPanel, wxID_ANY, wxGetApp().getUnitProcessor().getSpeedUnits()));
+		prmsSizer->Add(new wxStaticText(
+		    prmsPanel, wxID_ANY, wxGetApp().getUnitProcessor().getSpeedUnits()));
 
 		buttonPanel = new wxPanel(this, wxID_ANY);
 		sizer->Add(buttonPanel, 0, wxALL | wxALIGN_CENTER);
@@ -359,7 +368,8 @@ namespace CalXUI {
 			double ry =
 			    plane_size.h - mouse.y * plane_size.h / real_size.y + plane_size.y;
 			std::string res =
-			    FORMAT(__("x: %s%s; y: %s%s"), wxGetApp().getUnitProcessor().formatDouble(rx), units,
+			    FORMAT(__("x: %s%s; y: %s%s"),
+			           wxGetApp().getUnitProcessor().formatDouble(rx), units,
 			           wxGetApp().getUnitProcessor().formatDouble(ry), units);
 			this->mouseCoords->SetLabel(res);
 		}
@@ -384,8 +394,9 @@ namespace CalXUI {
 	void CalxCoordAdjustDialog::updateUI() {
 		this->viewer->Refresh();
 		coord_point_t pos = this->handle->getFloatPlane()->getFloatPosition();
-		this->position->SetLabel(
-		    FORMAT(__("%sx%s %s"), wxGetApp().getUnitProcessor().formatDouble(pos.x),
-		           wxGetApp().getUnitProcessor().formatDouble(pos.y), wxGetApp().getUnitProcessor().getUnits()));
+		this->position->SetLabel(FORMAT(
+		    __("%sx%s %s"), wxGetApp().getUnitProcessor().formatDouble(pos.x),
+		    wxGetApp().getUnitProcessor().formatDouble(pos.y),
+		    wxGetApp().getUnitProcessor().getUnits()));
 	}
 }  // namespace CalXUI

@@ -25,7 +25,6 @@
 #include <string>
 #include <wx/choice.h>
 
-
 namespace CalXUI {
 
 	extern std::string ABOUT_TEXT;

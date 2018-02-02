@@ -38,10 +38,12 @@ namespace CalXUI {
 
 		this->xCoord = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitProcessor().getUnitPrecision());
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0,
+		    wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->yCoord = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitProcessor().getUnitPrecision());
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0,
+		    wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->speed =
 		    new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
 		                         wxDefaultSize, wxSP_ARROW_KEYS, 0,
@@ -75,7 +77,8 @@ namespace CalXUI {
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Speed") + std::string(":")),
 		           0, wxALIGN_RIGHT | wxRIGHT, 10);
 		sizer->Add(speed, 0, wxEXPAND);
-		sizer->Add(new wxStaticText(this, wxID_ANY, wxGetApp().getUnitProcessor().getSpeedUnits()));
+		sizer->Add(new wxStaticText(this, wxID_ANY,
+		                            wxGetApp().getUnitProcessor().getSpeedUnits()));
 		sizer->Add(relative, 0, wxALIGN_CENTER);
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""));

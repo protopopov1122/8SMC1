@@ -47,24 +47,26 @@ namespace CalXUI {
 			                     wxGetApp().getUnitProcessor().getUnitScale() };
 		this->trans = std::make_shared<LinearCoordTranslator>(offset, size);
 
-		this->xCoord =
-		    new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		                         wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX,
-		                         rect.x, wxGetApp().getUnitProcessor().getUnitPrecision());
-		this->yCoord =
-		    new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		                         wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX,
-		                         rect.y, wxGetApp().getUnitProcessor().getUnitPrecision());
-		this->wDim = new wxSpinCtrlDouble(
+		this->xCoord = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, 1, INT_MAX, rect.w, wxGetApp().getUnitProcessor().getUnitPrecision());
-		this->hDim = new wxSpinCtrlDouble(
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, rect.x,
+		    wxGetApp().getUnitProcessor().getUnitPrecision());
+		this->yCoord = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, 1, INT_MAX, rect.h, wxGetApp().getUnitProcessor().getUnitPrecision());
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, rect.y,
+		    wxGetApp().getUnitProcessor().getUnitPrecision());
+		this->wDim =
+		    new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+		                         wxDefaultSize, wxSP_ARROW_KEYS, 1, INT_MAX, rect.w,
+		                         wxGetApp().getUnitProcessor().getUnitPrecision());
+		this->hDim =
+		    new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+		                         wxDefaultSize, wxSP_ARROW_KEYS, 1, INT_MAX, rect.h,
+		                         wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->spacing = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, wxGetApp().getUnitProcessor().getUnitPrecision(), INT_MAX, spac,
-		    wxGetApp().getUnitProcessor().getUnitPrecision());
+		    wxSP_ARROW_KEYS, wxGetApp().getUnitProcessor().getUnitPrecision(),
+		    INT_MAX, spac, wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->vertical = new wxCheckBox(this, wxID_ANY, __("Vertical"));
 		this->vertical->SetValue(vert);
 

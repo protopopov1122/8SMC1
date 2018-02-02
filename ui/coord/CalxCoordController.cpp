@@ -68,7 +68,8 @@ namespace CalXUI {
 
 		coord_scale_t unit_scale = { wxGetApp().getUnitProcessor().getUnitScale(),
 			                           wxGetApp().getUnitProcessor().getUnitScale() };
-		float unit_speed_scale = static_cast<float>(wxGetApp().getUnitProcessor().getSpeedScale());
+		float unit_speed_scale =
+		    static_cast<float>(wxGetApp().getUnitProcessor().getSpeedScale());
 		handle->getFloatPlane()->setScale(unit_scale);
 		handle->getFloatPlane()->setSpeedScale(unit_speed_scale);
 	}

@@ -37,10 +37,12 @@ namespace CalXUI {
 
 		this->xCoord = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitProcessor().getUnitPrecision());
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0,
+		    wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->yCoord = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitProcessor().getUnitPrecision());
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0,
+		    wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->speed =
 		    new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
 		                         wxDefaultSize, wxSP_ARROW_KEYS, 0, 1, 1, 0.001);
@@ -64,7 +66,8 @@ namespace CalXUI {
 		sizer->Add(new wxStaticText(this, wxID_ANY, __("Speed") + std::string(":")),
 		           0, wxALIGN_RIGHT | wxRIGHT, 5);
 		sizer->Add(speed);
-		sizer->Add(new wxStaticText(this, wxID_ANY, wxGetApp().getUnitProcessor().getSpeedUnits()));
+		sizer->Add(new wxStaticText(this, wxID_ANY,
+		                            wxGetApp().getUnitProcessor().getSpeedUnits()));
 		sizer->Add(new wxStaticText(this, wxID_ANY, ""), 0, wxALIGN_RIGHT | wxRIGHT,
 		           5);
 		sizer->Add(relative);
@@ -114,10 +117,12 @@ namespace CalXUI {
 
 		this->xCoord = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitProcessor().getUnitPrecision());
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0,
+		    wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->yCoord = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitProcessor().getUnitPrecision());
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0,
+		    wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->speed =
 		    new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
 		                         wxDefaultSize, wxSP_ARROW_KEYS, 0, 1, 1, 0.001);
@@ -191,19 +196,20 @@ namespace CalXUI {
 
 		this->destXCoord = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0, wxGetApp().getUnitProcessor().getUnitPrecision());
-		this->destYCoord =
-		    new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		                         wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX,
-		                         (int) pnt.y, wxGetApp().getUnitProcessor().getUnitPrecision());
-		this->cenXCoord =
-		    new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		                         wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX,
-		                         (int) pnt.x, wxGetApp().getUnitProcessor().getUnitPrecision());
-		this->cenYCoord =
-		    new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		                         wxDefaultSize, wxSP_ARROW_KEYS, INT_MIN, INT_MAX,
-		                         (int) pnt.y, wxGetApp().getUnitProcessor().getUnitPrecision());
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0,
+		    wxGetApp().getUnitProcessor().getUnitPrecision());
+		this->destYCoord = new wxSpinCtrlDouble(
+		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, (int) pnt.y,
+		    wxGetApp().getUnitProcessor().getUnitPrecision());
+		this->cenXCoord = new wxSpinCtrlDouble(
+		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, (int) pnt.x,
+		    wxGetApp().getUnitProcessor().getUnitPrecision());
+		this->cenYCoord = new wxSpinCtrlDouble(
+		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, (int) pnt.y,
+		    wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->splitter = new wxSpinCtrl(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
 		    wxSP_ARROW_KEYS, 0, 1000, step->getSplitter());
