@@ -104,13 +104,11 @@ namespace CalX {
 		this->dest =
 		    (tr == TrailerId::Trailer1 ? MoveType::RollDown : MoveType::RollUp);
 		MotorRollEvent evt = { tr };
-		use();
 		this->sendRollingEvent(evt);
 		while (!dev.isTrailerPressed(static_cast<int>(tr)) && work) {
 			if (!this->dev.isRunning()) {
 				if (!this->dev.start(this->dev.getPosition() + dest, roll_speed)) {
 					this->sendRolledEvent(evt);
-					this->unuse();
 					this->dest = MoveType::Stop;
 					this->work = false;
 					return ErrorCode::LowLevelError;
@@ -120,7 +118,6 @@ namespace CalX {
 		if (this->dev.isRunning()) {
 			if (!this->dev.stop()) {
 				this->sendRolledEvent(evt);
-				this->unuse();
 				this->dest = MoveType::Stop;
 				this->work = false;
 				return ErrorCode::LowLevelError;
@@ -135,7 +132,6 @@ namespace CalX {
 			errcode = this->startMove(this->dev.getPosition() + comeback, roll_speed);
 		}
 		this->sendRolledEvent(evt);
-		this->unuse();
 		this->work = false;
 
 		return errcode;
@@ -152,7 +148,6 @@ namespace CalX {
 		this->dest =
 		    dest > this->dev.getPosition() ? MoveType::MoveUp : MoveType::MoveDown;
 		MotorMoveEvent evt = { dest, speed };
-		this->use();
 		this->sendMovingEvent(evt);
 		ErrorCode errcode = ErrorCode::NoError;
 		if (!this->dev.start(dest, speed)) {
@@ -168,7 +163,6 @@ namespace CalX {
 			this->sendMovedEvent(evt);
 		}
 		this->dest = MoveType::Stop;
-		this->unuse();
 		this->work = false;
 		return errcode;
 	}

@@ -282,7 +282,6 @@ namespace CalX {
 		yAxis->use();
 		CoordCalibrateEvent evt = { tr };
 		sendCalibratingEvent(evt);
-		use();
 		/* Run loop while at least one motor have not reached trailer
 		   and further work is allowed.
 		   Motors move by series of jumps, because it's easier to
@@ -304,7 +303,6 @@ namespace CalX {
 						xAxis->unuse();
 						yAxis->unuse();
 						sendCalibratedEvent(evt);
-						unuse();
 						return ErrorCode::LowLevelError;
 					}
 				}
@@ -331,7 +329,6 @@ namespace CalX {
 						xAxis->unuse();
 						yAxis->unuse();
 						sendCalibratedEvent(evt);
-						unuse();
 						return ErrorCode::LowLevelError;
 					}
 				}
@@ -368,7 +365,6 @@ namespace CalX {
 		xAxis->unuse();
 		yAxis->unuse();
 		sendCalibratedEvent(evt);
-		unuse();
 		return ErrorCode::NoError;
 	}
 
@@ -426,7 +422,6 @@ namespace CalX {
 		}
 		xAxis->use();
 		yAxis->use();
-		use();
 		/* Execute algorithm until a point somewhere around destination is achieved.
 		   After that motors will simply move to the destination. Often destination
 		   point is not quite accurate (because of float-int conversions, scaling,
@@ -453,7 +448,6 @@ namespace CalX {
 					}
 					xAxis->unuse();
 					yAxis->unuse();
-					unuse();
 					return err;
 				}
 				/* Update position */
@@ -467,7 +461,6 @@ namespace CalX {
 		}
 		xAxis->unuse();
 		yAxis->unuse();
-		unuse();
 		/* Make final move to the destination point */
 		ErrorCode code = ErrorCode::NoError;
 		if (work) {

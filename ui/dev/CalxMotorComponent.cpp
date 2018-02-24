@@ -77,11 +77,13 @@ namespace CalXUI {
 
 		virtual void perform(SystemManager *sysman) {
 			ErrorCode errcode;
+			dev->use();
 			if (rel) {
 				errcode = dev->startRelativeMove(dest, speed);
 			} else {
 				errcode = dev->startMove(dest, speed);
 			}
+			dev->unuse();
 			wxGetApp().getErrorHandler()->handle(errcode);
 			if (this->action_result != nullptr) {
 				this->action_result->ready = true;
@@ -121,7 +123,9 @@ namespace CalXUI {
 		}
 
 		virtual void perform(SystemManager *sysman) {
+			dev->use();
 			ErrorCode errcode = dev->moveToTrailer(tr);
+			dev->unuse();
 			wxGetApp().getErrorHandler()->handle(errcode);
 			if (this->action_result != nullptr) {
 				this->action_result->errcode = errcode;
