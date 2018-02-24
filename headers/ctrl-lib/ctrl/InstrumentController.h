@@ -49,8 +49,8 @@ namespace CalX {
 
 		void addEventListener(std::shared_ptr<InstrumentEventListener>);
 		void removeEventListener(std::shared_ptr<InstrumentEventListener>);
-		void use();
-		void unuse();
+		virtual void use();
+		virtual void unuse();
 
 	 protected:
 		void sendStateChanged();

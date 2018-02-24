@@ -54,8 +54,8 @@ namespace CalX {
 
 		void addEventListener(std::shared_ptr<MotorEventListener>);
 		void removeEventListener(std::shared_ptr<MotorEventListener>);
-		void use();
-		void unuse();
+		virtual void use();
+		virtual void unuse();
 
 		ErrorCode waitWhileRunning();
 		ErrorCode checkTrailers();

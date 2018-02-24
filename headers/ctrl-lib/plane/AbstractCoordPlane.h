@@ -21,6 +21,7 @@
 #ifndef CALX_CTRL_LIB_PLANE_ABSTRACT_COORD_PLANE_H_
 #define CALX_CTRL_LIB_PLANE_ABSTRACT_COORD_PLANE_H_
 
+#include "ctrl-lib/Resource.h"
 #include "ctrl-lib/EventListener.h"
 #include "ctrl-lib/conf/ConfigManager.h"
 #include <iostream>
@@ -55,7 +56,7 @@ namespace CalX {
 
 	/* Abstract interface. By default it uses motor-specific units to operate,
 	   See FloatCoordPlane that can use any-scale units */
-	class CoordPlane {
+	class CoordPlane : public UsableResource {
 	 public:
 		virtual ~CoordPlane() = default;
 		virtual ErrorCode move(
@@ -77,8 +78,6 @@ namespace CalX {
 		virtual motor_rect_t getSize() = 0;
 		virtual bool isMeasured() = 0;
 		virtual bool isUsed() = 0;
-		virtual void use() = 0;
-		virtual void unuse() = 0;
 		virtual void stop() = 0;
 		virtual void dump(std::ostream &) = 0;
 		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>) = 0;

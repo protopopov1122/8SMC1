@@ -22,6 +22,7 @@
 #define CALX_CTRL_LIB_DEVICE_CONTROLLER_H_
 
 #include "ctrl-lib/CtrlCore.h"
+#include "ctrl-lib/Resource.h"
 #include "ctrl-lib/EventListener.h"
 #include "ctrl-lib/conf/ConfigManager.h"
 #include "ctrl-lib/device/DeviceManager.h"
@@ -30,7 +31,7 @@
 
 namespace CalX {
 
-	class DeviceController {
+	class DeviceController : public UsableResource {
 	 public:
 		DeviceController(ConfigManager &, Device &);
 		virtual ~DeviceController() = default;

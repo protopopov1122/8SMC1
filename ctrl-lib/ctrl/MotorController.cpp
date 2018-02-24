@@ -280,12 +280,14 @@ namespace CalX {
 	}
 
 	void MotorController::use() {
+		UsableResource::use();
 		for (const auto &l : this->listeners) {
 			l->use();
 		}
 	}
 
 	void MotorController::unuse() {
+		UsableResource::unuse();
 		for (const auto &l : this->listeners) {
 			l->unuse();
 		}

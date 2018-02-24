@@ -129,12 +129,14 @@ namespace CalX {
 	}
 
 	void InstrumentController::use() {
+		UsableResource::use();
 		for (const auto &l : this->listeners) {
 			l->use();
 		}
 	}
 
 	void InstrumentController::unuse() {
+		UsableResource::unuse();
 		for (const auto &l : this->listeners) {
 			l->unuse();
 		}

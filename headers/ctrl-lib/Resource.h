@@ -18,22 +18,36 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/ctrl/DeviceController.h"
+#ifndef CALX_CTRL_LIB_RESOURCE_H_
+#define CALX_CTRL_LIB_RESOURCE_H_
+
+#include "ctrl-lib/CtrlCore.h"
 
 namespace CalX {
 
-	DeviceController::DeviceController(ConfigManager &conf, Device &dev)
-	    : UsableResource::UsableResource(), config(conf), device(dev) {}
+  class UsableResource {
+   public:
+    UsableResource();
+    virtual ~UsableResource() = default;
+    virtual void use();
+    virtual void unuse();
+   protected:
+    uint8_t getResourceCounter();
+    bool isResourceUsed();
+   private:
+    uint8_t counter;
+  };
 
-	device_id_t DeviceController::getID() {
-		return this->device.getID();
-	}
+  class ResourceUse {
+   public:
+    ResourceUse(UsableResource &);
+    ResourceUse(UsableResource * = nullptr);
+    ~ResourceUse();
+    UsableResource *swap(UsableResource &);
+    UsableResource *swap(UsableResource *);
+   private:
+    UsableResource *resource;
+  };
+}
 
-	ConfigManager &DeviceController::getConfiguration() {
-		return this->config;
-	}
-
-	Device &DeviceController::getDevice() {
-		return this->device;
-	}
-}  // namespace CalX
+#endif
