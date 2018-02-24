@@ -25,53 +25,59 @@
 
 namespace CalX {
 
-  class UsableResource {
-   public:
-    UsableResource();
-    virtual ~UsableResource() = default;
-    virtual void use();
-    virtual void unuse();
-   protected:
-    uint8_t getResourceCounter();
-    bool isResourceUsed();
-   private:
-    uint8_t counter;
-  };
+	class UsableResource {
+	 public:
+		UsableResource();
+		virtual ~UsableResource() = default;
+		virtual void use();
+		virtual void unuse();
 
-  class SessionableResource {
-   public:
-    SessionableResource();
-    virtual ~SessionableResource() = default;
-    virtual ErrorCode open_session();
-    virtual ErrorCode close_session();
-   protected:
-    bool isSessionOpened();
-   private:
-    bool session_state;
-  };
+	 protected:
+		uint8_t getResourceCounter();
+		bool isResourceUsed();
 
-  class ResourceUse {
-   public:
-    ResourceUse(UsableResource &);
-    ResourceUse(UsableResource * = nullptr);
-    ~ResourceUse();
-    UsableResource *swap(UsableResource &);
-    UsableResource *swap(UsableResource *);
-   private:
-    UsableResource *resource;
-  };
+	 private:
+		uint8_t counter;
+	};
 
-  class ResourceSession {
-   public:
-    ResourceSession(SessionableResource &);
-    ResourceSession(SessionableResource *);
-    ~ResourceSession();
-    ErrorCode getStatus();
-    ErrorCode close();
-   private:
-    SessionableResource *resource;
-    ErrorCode errcode;
-  };
-}
+	class SessionableResource {
+	 public:
+		SessionableResource();
+		virtual ~SessionableResource() = default;
+		virtual ErrorCode open_session();
+		virtual ErrorCode close_session();
+
+	 protected:
+		bool isSessionOpened();
+
+	 private:
+		bool session_state;
+	};
+
+	class ResourceUse {
+	 public:
+		ResourceUse(UsableResource &);
+		ResourceUse(UsableResource * = nullptr);
+		~ResourceUse();
+		UsableResource *swap(UsableResource &);
+		UsableResource *swap(UsableResource *);
+
+	 private:
+		UsableResource *resource;
+	};
+
+	class ResourceSession {
+	 public:
+		ResourceSession(SessionableResource &);
+		ResourceSession(SessionableResource *);
+		~ResourceSession();
+		ErrorCode getStatus();
+		ErrorCode close();
+
+	 private:
+		SessionableResource *resource;
+		ErrorCode errcode;
+	};
+}  // namespace CalX
 
 #endif

@@ -22,109 +22,112 @@
 
 namespace CalX {
 
-  UsableResource::UsableResource() : counter(0) {}
+	UsableResource::UsableResource() : counter(0) {}
 
-  void UsableResource::use() {
-    this->counter++;
-  }
+	void UsableResource::use() {
+		this->counter++;
+	}
 
-  void UsableResource::unuse() {
-    if (this->counter == 0) {
-      LOG_ERROR("UsableResource", "Decrement of zero use counter. Must be an algorithm issue");
-    } else {
-      this->counter--;
-    }
-  }
+	void UsableResource::unuse() {
+		if (this->counter == 0) {
+			LOG_ERROR("UsableResource",
+			          "Decrement of zero use counter. Must be an algorithm issue");
+		} else {
+			this->counter--;
+		}
+	}
 
-  uint8_t UsableResource::getResourceCounter() {
-    return this->counter;
-  }
+	uint8_t UsableResource::getResourceCounter() {
+		return this->counter;
+	}
 
-  bool UsableResource::isResourceUsed() {
-    return this->counter != 0;
-  }
+	bool UsableResource::isResourceUsed() {
+		return this->counter != 0;
+	}
 
-  SessionableResource::SessionableResource() : session_state(false) {}
+	SessionableResource::SessionableResource() : session_state(false) {}
 
-  ErrorCode SessionableResource::open_session() {
-    if (this->session_state) {
-      LOG_ERROR("SessionableResource", "Opening already opened session. Must be an algorithm error");
-    }
-    this->session_state = true;
-    return ErrorCode::NoError;
-  }
+	ErrorCode SessionableResource::open_session() {
+		if (this->session_state) {
+			LOG_ERROR("SessionableResource",
+			          "Opening already opened session. Must be an algorithm error");
+		}
+		this->session_state = true;
+		return ErrorCode::NoError;
+	}
 
-  ErrorCode SessionableResource::close_session() {
-    if (!this->session_state) {
-      LOG_ERROR("SessionableResource", "Closing already closed session. Must be an algorithm error");
-    }
-    this->session_state = false;
-    return ErrorCode::NoError;
-  }
+	ErrorCode SessionableResource::close_session() {
+		if (!this->session_state) {
+			LOG_ERROR("SessionableResource",
+			          "Closing already closed session. Must be an algorithm error");
+		}
+		this->session_state = false;
+		return ErrorCode::NoError;
+	}
 
-  bool SessionableResource::isSessionOpened() {
-    return this->session_state;
-  }
+	bool SessionableResource::isSessionOpened() {
+		return this->session_state;
+	}
 
-  ResourceUse::ResourceUse(UsableResource &res) : resource(&res) {
-    this->resource->use();
-  }
+	ResourceUse::ResourceUse(UsableResource &res) : resource(&res) {
+		this->resource->use();
+	}
 
-  ResourceUse::ResourceUse(UsableResource *res) : resource(res) {
-    if (this->resource != nullptr) {
-      this->resource->use();
-    }
-  }
+	ResourceUse::ResourceUse(UsableResource *res) : resource(res) {
+		if (this->resource != nullptr) {
+			this->resource->use();
+		}
+	}
 
-  ResourceUse::~ResourceUse() {
-    if (this->resource != nullptr) {
-      this->resource->unuse();
-    }
-  }
+	ResourceUse::~ResourceUse() {
+		if (this->resource != nullptr) {
+			this->resource->unuse();
+		}
+	}
 
-  UsableResource *ResourceUse::swap(UsableResource &res) {
-    return this->swap(&res);
-  }
+	UsableResource *ResourceUse::swap(UsableResource &res) {
+		return this->swap(&res);
+	}
 
-  UsableResource *ResourceUse::swap(UsableResource *res) {
-    UsableResource *oldRes = this->resource;
-    this->resource = res;
-    if (this->resource != nullptr) {
-      this->resource->use();
-    }
-    if (oldRes != nullptr) {
-      oldRes->unuse();
-    }
-    return oldRes;
-  }
+	UsableResource *ResourceUse::swap(UsableResource *res) {
+		UsableResource *oldRes = this->resource;
+		this->resource = res;
+		if (this->resource != nullptr) {
+			this->resource->use();
+		}
+		if (oldRes != nullptr) {
+			oldRes->unuse();
+		}
+		return oldRes;
+	}
 
-  ResourceSession::ResourceSession(SessionableResource &res) : resource(&res) {
-    this->errcode = this->resource->open_session();
-  }
+	ResourceSession::ResourceSession(SessionableResource &res) : resource(&res) {
+		this->errcode = this->resource->open_session();
+	}
 
-  ResourceSession::ResourceSession(SessionableResource *res) : resource(res) {
-    if (this->resource) {
-      this->errcode = this->resource->open_session();
-    } else {
-      this->errcode = ErrorCode::NoError;
-    }
-  }
+	ResourceSession::ResourceSession(SessionableResource *res) : resource(res) {
+		if (this->resource) {
+			this->errcode = this->resource->open_session();
+		} else {
+			this->errcode = ErrorCode::NoError;
+		}
+	}
 
-  ResourceSession::~ResourceSession() {
-    if (this->resource) {
-      this->resource->close_session();
-      this->resource = nullptr;
-    }
-  }
+	ResourceSession::~ResourceSession() {
+		if (this->resource) {
+			this->resource->close_session();
+			this->resource = nullptr;
+		}
+	}
 
-  ErrorCode ResourceSession::getStatus() {
-    return this->errcode;
-  }
+	ErrorCode ResourceSession::getStatus() {
+		return this->errcode;
+	}
 
-  ErrorCode ResourceSession::close() {
-    if (this->resource != nullptr) {
-      this->errcode = this->resource->close_session();
-    }
-    return this->errcode;
-  }
-}
+	ErrorCode ResourceSession::close() {
+		if (this->resource != nullptr) {
+			this->errcode = this->resource->close_session();
+		}
+		return this->errcode;
+	}
+}  // namespace CalX

@@ -29,7 +29,8 @@
 
 namespace CalX {
 
-	class InstrumentController : public DeviceController, public SessionableResource {
+	class InstrumentController : public DeviceController,
+	                             public SessionableResource {
 	 public:
 		InstrumentController(ConfigManager &, Instrument &);
 		Instrument &getInstrument();

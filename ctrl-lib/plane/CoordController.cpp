@@ -36,12 +36,14 @@ namespace CalX {
 
 	class CoordStatusHandle {
 	 public:
-		CoordStatusHandle(CoordPlaneStatus *status, CoordPlaneStatus current) : status(status) {
+		CoordStatusHandle(CoordPlaneStatus *status, CoordPlaneStatus current)
+		    : status(status) {
 			*this->status = current;
 		}
 		~CoordStatusHandle() {
 			*this->status = CoordPlaneStatus::Idle;
 		}
+
 	 private:
 		CoordPlaneStatus *status;
 	};
@@ -156,7 +158,8 @@ namespace CalX {
 		}
 
 		/* Update current plane status */
-		CoordStatusHandle statusHandle(&this->status, sync ? CoordPlaneStatus::Move : CoordPlaneStatus::Jump);
+		CoordStatusHandle statusHandle(
+		    &this->status, sync ? CoordPlaneStatus::Move : CoordPlaneStatus::Jump);
 		/* Start x-axis motor, emit event about it */
 		ErrorCode errcode = ErrorCode::NoError;
 		if ((errcode = xAxis->asyncMove(point.x, x_speed)) !=
@@ -271,8 +274,8 @@ namespace CalX {
 			if (!xAxis->isTrailerPressed(tr)) {
 				/* Trailer is not pressed, do one more motor jump if motor is idle */
 				if (!xpr && !xAxis->isMoving()) {
-					if ((errcode = xAxis->asyncMove(xAxis->getPosition() + dest, roll_speed)) !=
-					    ErrorCode::NoError) {
+					if ((errcode = xAxis->asyncMove(xAxis->getPosition() + dest,
+					                                roll_speed)) != ErrorCode::NoError) {
 						/* Error occured. Stop motors, emit errors, halt */;
 						xAxis->asyncStop(errcode, xAxis->getPosition() + dest, roll_speed);
 						yAxis->asyncStop(errcode, yAxis->getPosition() + dest, roll_speed);
@@ -292,8 +295,8 @@ namespace CalX {
 			/* Similar as above */
 			if (!yAxis->isTrailerPressed(tr)) {
 				if (!ypr && !yAxis->isMoving()) {
-					if ((errcode = yAxis->asyncMove(yAxis->getPosition() + dest, roll_speed)) !=
-					    ErrorCode::NoError) {
+					if ((errcode = yAxis->asyncMove(yAxis->getPosition() + dest,
+					                                roll_speed)) != ErrorCode::NoError) {
 						xAxis->asyncStop(errcode, xAxis->getPosition() + dest, roll_speed);
 						yAxis->asyncStop(errcode, yAxis->getPosition() + dest, roll_speed);
 						sendCalibratedEvent(evt);

@@ -33,7 +33,7 @@
 namespace CalX {
 
 	CoordPlaneLinearizer::CoordPlaneLinearizer(std::shared_ptr<CoordPlane> base)
-		: ProxyCoordPlane::ProxyCoordPlane(base) {
+	    : ProxyCoordPlane::ProxyCoordPlane(base) {
 		this->work = false;
 		this->defWork = true;
 	}

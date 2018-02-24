@@ -25,7 +25,10 @@ namespace CalX {
 
 	FloatCoordPlane::FloatCoordPlane(coord_point_t offs, coord_scale_t scl,
 	                                 double sp, std::shared_ptr<CoordPlane> bs)
-	    : ProxyCoordPlane::ProxyCoordPlane(bs), offset(offs), scale(scl), speed(sp) {}
+	    : ProxyCoordPlane::ProxyCoordPlane(bs),
+	      offset(offs),
+	      scale(scl),
+	      speed(sp) {}
 
 	coord_point_t FloatCoordPlane::getOffset() {
 		return this->offset;
@@ -78,7 +81,7 @@ namespace CalX {
 
 		scale *= (this->scale.x + this->scale.y) / 2;
 		return this->base->arc(dest, center, splitter, speed * this->speed,
-		                        clockwise, scale);
+		                       clockwise, scale);
 	}
 
 	motor_point_t FloatCoordPlane::getPosition() {
@@ -120,7 +123,7 @@ namespace CalX {
 			static_cast<motor_coord_t>(round(dest.y * this->scale.y + this->offset.y))
 		};
 		return this->base->move(pdest, static_cast<float>(speed * this->speed),
-		                         sync);
+		                        sync);
 	}
 
 	ErrorCode FloatCoordPlane::arc(coord_point_t dest, coord_point_t center,
@@ -138,8 +141,8 @@ namespace CalX {
 			                         center.y * this->scale.y + this->offset.y)) };
 
 		return this->base->arc(pdest, pcen, splitter,
-		                        static_cast<float>(speed * this->speed), clockwise,
-		                        scale);
+		                       static_cast<float>(speed * this->speed), clockwise,
+		                       scale);
 	}
 
 	coord_point_t FloatCoordPlane::getFloatPosition() {

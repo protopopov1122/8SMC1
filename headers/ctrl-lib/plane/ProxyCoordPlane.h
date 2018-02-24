@@ -25,11 +25,11 @@
 
 namespace CalX {
 
-  class ProxyCoordPlane : public CoordPlane {
-   public:
-    ProxyCoordPlane(std::shared_ptr<CoordPlane>);
-    std::shared_ptr<CoordPlane> getBase();
-    virtual ErrorCode move(motor_point_t, float, bool);
+	class ProxyCoordPlane : public CoordPlane {
+	 public:
+		ProxyCoordPlane(std::shared_ptr<CoordPlane>);
+		std::shared_ptr<CoordPlane> getBase();
+		virtual ErrorCode move(motor_point_t, float, bool);
 		virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,
 		                      float = 1.0f);
 		virtual ErrorCode calibrate(TrailerId);
@@ -44,11 +44,12 @@ namespace CalX {
 		virtual CoordPlaneStatus getStatus();
 		virtual ErrorCode open_session();
 		virtual ErrorCode close_session();
-    virtual void use();
-    virtual void unuse();
-   protected:
-    std::shared_ptr<CoordPlane> base;
-  };
-}
+		virtual void use();
+		virtual void unuse();
+
+	 protected:
+		std::shared_ptr<CoordPlane> base;
+	};
+}  // namespace CalX
 
 #endif

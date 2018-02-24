@@ -173,7 +173,8 @@ namespace CalX {
 		return startMove(dest, speed);
 	}
 
-	ErrorCode MotorController::asyncMove(motor_coord_t dest, float speed, bool rollEvent) {
+	ErrorCode MotorController::asyncMove(motor_coord_t dest, float speed,
+	                                     bool rollEvent) {
 		if (this->dev.isRunning()) {
 			return ErrorCode::MotorRunning;
 		}
@@ -187,7 +188,8 @@ namespace CalX {
 			MotorMoveEvent evt = { dest, speed };
 			this->sendMovingEvent(evt);
 		} else {
-			TrailerId tid = this->dest == MoveType::MoveUp ? TrailerId::Trailer2 : TrailerId::Trailer1;
+			TrailerId tid = this->dest == MoveType::MoveUp ? TrailerId::Trailer2
+			                                               : TrailerId::Trailer1;
 			MotorRollEvent evt = { tid };
 			this->sendRollingEvent(evt);
 		}
@@ -206,7 +208,8 @@ namespace CalX {
 		return asyncMove(dest, speed, rollEvent);
 	}
 
-	void MotorController::asyncStop(ErrorCode errcode, motor_coord_t dest, float speed, bool rollEvent) {
+	void MotorController::asyncStop(ErrorCode errcode, motor_coord_t dest,
+	                                float speed, bool rollEvent) {
 		if (errcode != ErrorCode::NoError) {
 			MotorErrorEvent sevt = { errcode };
 			this->sendStoppedEvent(sevt);
@@ -214,7 +217,8 @@ namespace CalX {
 			MotorMoveEvent evt = { dest, speed };
 			this->sendMovedEvent(evt);
 		} else {
-			TrailerId tid = this->dest == MoveType::MoveUp ? TrailerId::Trailer2 : TrailerId::Trailer1;
+			TrailerId tid = this->dest == MoveType::MoveUp ? TrailerId::Trailer2
+			                                               : TrailerId::Trailer1;
 			MotorRollEvent evt = { tid };
 			this->sendRolledEvent(evt);
 		}

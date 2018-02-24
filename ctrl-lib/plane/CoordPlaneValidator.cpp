@@ -24,7 +24,8 @@ namespace CalX {
 
 	CoordPlaneValidator::CoordPlaneValidator(motor_point_t min, motor_point_t max,
 	                                         float maxspeed,
-	                                         std::shared_ptr<CoordPlane> cplane) : ProxyCoordPlane::ProxyCoordPlane(cplane) {
+	                                         std::shared_ptr<CoordPlane> cplane)
+	    : ProxyCoordPlane::ProxyCoordPlane(cplane) {
 		this->min = min;
 		this->max = max;
 		this->max_speed = maxspeed;

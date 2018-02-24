@@ -23,8 +23,8 @@
 namespace CalX {
 
 	CoordPlaneMap::CoordPlaneMap(motor_point_t offset, motor_scale_t scale,
-	                             float speedSc,
-	                             std::shared_ptr<CoordPlane> plane) : ProxyCoordPlane::ProxyCoordPlane(plane) {
+	                             float speedSc, std::shared_ptr<CoordPlane> plane)
+	    : ProxyCoordPlane::ProxyCoordPlane(plane) {
 		this->offset = offset;
 		this->scale = scale;
 		this->speedScale = speedSc;
@@ -77,7 +77,7 @@ namespace CalX {
 
 		scale *= (this->scale.x + this->scale.y) / 2;
 		return this->base->arc(dest, center, splitter, speed * this->speedScale,
-		                        clockwise, scale);
+		                       clockwise, scale);
 	}
 
 	motor_point_t CoordPlaneMap::getPosition() {

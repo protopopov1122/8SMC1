@@ -97,7 +97,7 @@ namespace CalX {
 
 	void EmuMotor::motorThread() {
 		const int MOTOR_SPEED = 10000;
-		const int DISCR = 50; // times per second
+		const int DISCR = 50;  // times per second
 		const int MOTOR_STEP = MOTOR_SPEED / DISCR;
 		while (this->motorWorks) {
 			if (this->destination != this->pos) {
