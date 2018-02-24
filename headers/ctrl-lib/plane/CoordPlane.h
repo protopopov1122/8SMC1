@@ -31,6 +31,7 @@
    to free filter memory, otherwise you are responsible to free memroy. */
 
 #include "ctrl-lib/plane/AbstractCoordPlane.h"
+#include "ctrl-lib/plane/ProxyCoordPlane.h"
 #include "ctrl-lib/plane/CoordController.h"
 #include "ctrl-lib/plane/CoordPlaneLinearizer.h"
 #include "ctrl-lib/plane/CoordPlaneLog.h"

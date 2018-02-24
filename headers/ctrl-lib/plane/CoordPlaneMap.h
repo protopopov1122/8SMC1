@@ -21,15 +21,14 @@
 #ifndef CALX_CTRL_LIB_PLANE_COORD_PLANE_MAP_H_
 #define CALX_CTRL_LIB_PLANE_COORD_PLANE_MAP_H_
 
-#include "ctrl-lib/plane/AbstractCoordPlane.h"
+#include "ctrl-lib/plane/ProxyCoordPlane.h"
 
 namespace CalX {
 
-	class CoordPlaneMap : public CoordPlane {
+	class CoordPlaneMap : public ProxyCoordPlane {
 	 public:
 		CoordPlaneMap(motor_point_t, motor_scale_t, float,
 		              std::shared_ptr<CoordPlane>);
-		std::shared_ptr<CoordPlane> getBase();
 		motor_point_t getOffset();
 		motor_scale_t getScale();
 		float getSpeedScale();
@@ -40,23 +39,12 @@ namespace CalX {
 		virtual ErrorCode move(motor_point_t, float, bool);
 		virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,
 		                      float = 1.0f);
-		virtual ErrorCode calibrate(TrailerId);
-		virtual ErrorCode measure(TrailerId);
 		virtual motor_point_t getPosition();
 		virtual motor_rect_t getSize();
-		virtual bool isMeasured();
-		virtual void use();
-		virtual void unuse();
-		virtual void stop();
 		virtual void dump(std::ostream &);
 		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
-		virtual CoordPlaneStatus getStatus();
-		virtual ErrorCode open_session();
-		virtual ErrorCode close_session();
-		virtual bool isUsed();
 
 	 private:
-		std::shared_ptr<CoordPlane> plane;
 		motor_point_t offset;
 		motor_scale_t scale;
 		float speedScale;

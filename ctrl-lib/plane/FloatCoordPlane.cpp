@@ -25,11 +25,7 @@ namespace CalX {
 
 	FloatCoordPlane::FloatCoordPlane(coord_point_t offs, coord_scale_t scl,
 	                                 double sp, std::shared_ptr<CoordPlane> bs)
-	    : offset(offs), scale(scl), speed(sp), plane(bs) {}
-
-	std::shared_ptr<CoordPlane> FloatCoordPlane::getBase() {
-		return this->plane;
-	}
+	    : ProxyCoordPlane::ProxyCoordPlane(bs), offset(offs), scale(scl), speed(sp) {}
 
 	coord_point_t FloatCoordPlane::getOffset() {
 		return this->offset;
@@ -44,7 +40,7 @@ namespace CalX {
 	}
 
 	void FloatCoordPlane::setBase(std::shared_ptr<CoordPlane> pl) {
-		this->plane = pl;
+		this->base = pl;
 	}
 
 	void FloatCoordPlane::setOffset(coord_point_t offset) {
@@ -64,7 +60,7 @@ namespace CalX {
 		dest.y *= this->scale.y;
 		dest.x += this->offset.x;
 		dest.y += this->offset.y;
-		return this->plane->move(dest, speed * this->speed, sync);
+		return this->base->move(dest, speed * this->speed, sync);
 	}
 
 	ErrorCode FloatCoordPlane::arc(motor_point_t dest, motor_point_t center,
@@ -81,20 +77,12 @@ namespace CalX {
 		center.y += this->offset.y;
 
 		scale *= (this->scale.x + this->scale.y) / 2;
-		return this->plane->arc(dest, center, splitter, speed * this->speed,
+		return this->base->arc(dest, center, splitter, speed * this->speed,
 		                        clockwise, scale);
 	}
 
-	ErrorCode FloatCoordPlane::calibrate(TrailerId tr) {
-		return this->plane->calibrate(tr);
-	}
-
-	ErrorCode FloatCoordPlane::measure(TrailerId tr) {
-		return this->plane->measure(tr);
-	}
-
 	motor_point_t FloatCoordPlane::getPosition() {
-		motor_point_t pnt = this->plane->getPosition();
+		motor_point_t pnt = this->base->getPosition();
 		pnt.x -= this->offset.x;
 		pnt.y -= this->offset.y;
 		pnt.x /= this->scale.x;
@@ -103,7 +91,7 @@ namespace CalX {
 	}
 
 	motor_rect_t FloatCoordPlane::getSize() {
-		motor_rect_t sz = this->plane->getSize();
+		motor_rect_t sz = this->base->getSize();
 		sz.x -= this->offset.x;
 		sz.y -= this->offset.y;
 		sz.x /= this->scale.x;
@@ -113,26 +101,10 @@ namespace CalX {
 		return sz;
 	}
 
-	bool FloatCoordPlane::isMeasured() {
-		return this->plane->isMeasured();
-	}
-
 	void FloatCoordPlane::dump(std::ostream &os) {
 		os << "float(offset=" << this->offset.x << "x" << this->offset.y
 		   << "; scale=" << this->scale.x << "x" << this->scale.y
 		   << "; speed=" << this->speed << ")";
-	}
-
-	void FloatCoordPlane::use() {
-		this->plane->use();
-	}
-
-	void FloatCoordPlane::unuse() {
-		this->plane->unuse();
-	}
-
-	void FloatCoordPlane::stop() {
-		this->plane->stop();
 	}
 
 	std::unique_ptr<CoordPlane> FloatCoordPlane::clone(
@@ -141,29 +113,13 @@ namespace CalX {
 		                                         this->speed, base);
 	}
 
-	CoordPlaneStatus FloatCoordPlane::getStatus() {
-		return this->plane->getStatus();
-	}
-
-	ErrorCode FloatCoordPlane::open_session() {
-		return this->plane->open_session();
-	}
-
-	ErrorCode FloatCoordPlane::close_session() {
-		return this->plane->close_session();
-	}
-
-	bool FloatCoordPlane::isUsed() {
-		return this->plane->isUsed();
-	}
-
 	ErrorCode FloatCoordPlane::move(coord_point_t dest, double speed, bool sync) {
 		motor_point_t pdest = {
 			static_cast<motor_coord_t>(
 			    round(dest.x * this->scale.x + this->offset.x)),
 			static_cast<motor_coord_t>(round(dest.y * this->scale.y + this->offset.y))
 		};
-		return this->plane->move(pdest, static_cast<float>(speed * this->speed),
+		return this->base->move(pdest, static_cast<float>(speed * this->speed),
 		                         sync);
 	}
 
@@ -181,13 +137,13 @@ namespace CalX {
 			                     static_cast<motor_coord_t>(round(
 			                         center.y * this->scale.y + this->offset.y)) };
 
-		return this->plane->arc(pdest, pcen, splitter,
+		return this->base->arc(pdest, pcen, splitter,
 		                        static_cast<float>(speed * this->speed), clockwise,
 		                        scale);
 	}
 
 	coord_point_t FloatCoordPlane::getFloatPosition() {
-		motor_point_t pnt = this->plane->getPosition();
+		motor_point_t pnt = this->base->getPosition();
 		coord_point_t out = {
 			(static_cast<double>(pnt.x) - this->offset.x) / this->scale.x,
 			(static_cast<double>(pnt.y) - this->offset.y) / this->scale.y
@@ -196,7 +152,7 @@ namespace CalX {
 	}
 
 	coord_rect_t FloatCoordPlane::getFloatSize() {
-		motor_rect_t sz = this->plane->getSize();
+		motor_rect_t sz = this->base->getSize();
 		coord_rect_t out = {
 			(static_cast<double>(sz.x) - this->offset.x) / this->scale.x,
 			(static_cast<double>(sz.y) - this->offset.y) / this->scale.y,

@@ -32,19 +32,10 @@
 
 namespace CalX {
 
-	CoordPlaneLinearizer::CoordPlaneLinearizer(std::shared_ptr<CoordPlane> base) {
-		this->base = base;
+	CoordPlaneLinearizer::CoordPlaneLinearizer(std::shared_ptr<CoordPlane> base)
+		: ProxyCoordPlane::ProxyCoordPlane(base) {
 		this->work = false;
 		this->defWork = true;
-	}
-
-	std::shared_ptr<CoordPlane> CoordPlaneLinearizer::getBase() {
-		return this->base;
-	}
-
-	ErrorCode CoordPlaneLinearizer::move(motor_point_t dest, float speed,
-	                                     bool sync) {
-		return this->base->move(dest, speed, sync);
 	}
 
 	ErrorCode CoordPlaneLinearizer::arc(motor_point_t dest, motor_point_t center,
@@ -102,60 +93,12 @@ namespace CalX {
 		return code;
 	}
 
-	ErrorCode CoordPlaneLinearizer::calibrate(TrailerId tr) {
-		return this->base->calibrate(tr);
-	}
-
-	ErrorCode CoordPlaneLinearizer::measure(TrailerId tr) {
-		return this->base->measure(tr);
-	}
-
-	motor_point_t CoordPlaneLinearizer::getPosition() {
-		return this->base->getPosition();
-	}
-
-	motor_rect_t CoordPlaneLinearizer::getSize() {
-		return this->base->getSize();
-	}
-
-	bool CoordPlaneLinearizer::isMeasured() {
-		return this->base->isMeasured();
-	}
-
-	void CoordPlaneLinearizer::dump(std::ostream &os) {
-		os << "linearizer";
-	}
-
-	void CoordPlaneLinearizer::use() {
-		this->base->use();
-	}
-
-	void CoordPlaneLinearizer::unuse() {
-		this->base->unuse();
-	}
-
-	void CoordPlaneLinearizer::stop() {
-		this->base->stop();
-	}
-
 	std::unique_ptr<CoordPlane> CoordPlaneLinearizer::clone(
 	    std::shared_ptr<CoordPlane> base) {
 		return std::make_unique<CoordPlaneLinearizer>(base);
 	}
 
-	CoordPlaneStatus CoordPlaneLinearizer::getStatus() {
-		return this->base->getStatus();
-	}
-
-	ErrorCode CoordPlaneLinearizer::open_session() {
-		return this->base->open_session();
-	}
-
-	ErrorCode CoordPlaneLinearizer::close_session() {
-		return this->base->close_session();
-	}
-
-	bool CoordPlaneLinearizer::isUsed() {
-		return this->base->isUsed();
+	void CoordPlaneLinearizer::dump(std::ostream &os) {
+		os << "linearizer";
 	}
 }  // namespace CalX

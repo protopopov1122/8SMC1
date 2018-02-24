@@ -18,35 +18,37 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CALX_CTRL_LIB_PLANE_COORD_PLANE_VALIDATOR_H_
-#define CALX_CTRL_LIB_PLANE_COORD_PLANE_VALIDATOR_H_
+#ifndef CALX_CTRL_LIB_PLANE_PROXY_COORD_PLANE_H_
+#define CALX_CTRL_LIB_PLANE_PROXY_COORD_PLANE_H_
 
-#include "ctrl-lib/plane/ProxyCoordPlane.h"
+#include "ctrl-lib/plane/AbstractCoordPlane.h"
 
 namespace CalX {
 
-	class CoordPlaneValidator : public ProxyCoordPlane {
-	 public:
-		CoordPlaneValidator(motor_point_t, motor_point_t, float,
-		                    std::shared_ptr<CoordPlane>);
-		motor_point_t getMinimum();
-		motor_point_t getMaximum();
-		float getMaxSpeed();
-		void setMinimum(motor_point_t);
-		void setMaximum(motor_point_t);
-		void setMaxSpeed(float);
-
-		virtual ErrorCode move(motor_point_t, float, bool);
+  class ProxyCoordPlane : public CoordPlane {
+   public:
+    ProxyCoordPlane(std::shared_ptr<CoordPlane>);
+    std::shared_ptr<CoordPlane> getBase();
+    virtual ErrorCode move(motor_point_t, float, bool);
 		virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,
 		                      float = 1.0f);
+		virtual ErrorCode calibrate(TrailerId);
+		virtual ErrorCode measure(TrailerId);
+		virtual motor_point_t getPosition();
+		virtual motor_rect_t getSize();
+		virtual bool isMeasured();
+		virtual bool isUsed();
+		virtual void stop();
 		virtual void dump(std::ostream &);
 		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
-
-	 private:
-		motor_point_t min;
-		motor_point_t max;
-		float max_speed;
-	};
-}  // namespace CalX
+		virtual CoordPlaneStatus getStatus();
+		virtual ErrorCode open_session();
+		virtual ErrorCode close_session();
+    virtual void use();
+    virtual void unuse();
+   protected:
+    std::shared_ptr<CoordPlane> base;
+  };
+}
 
 #endif

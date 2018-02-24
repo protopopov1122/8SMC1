@@ -24,15 +24,10 @@ namespace CalX {
 
 	CoordPlaneMap::CoordPlaneMap(motor_point_t offset, motor_scale_t scale,
 	                             float speedSc,
-	                             std::shared_ptr<CoordPlane> plane) {
+	                             std::shared_ptr<CoordPlane> plane) : ProxyCoordPlane::ProxyCoordPlane(plane) {
 		this->offset = offset;
 		this->scale = scale;
-		this->plane = plane;
 		this->speedScale = speedSc;
-	}
-
-	std::shared_ptr<CoordPlane> CoordPlaneMap::getBase() {
-		return this->plane;
 	}
 
 	motor_point_t CoordPlaneMap::getOffset() {
@@ -64,7 +59,7 @@ namespace CalX {
 		dest.y *= this->scale.y;
 		dest.x += this->offset.x;
 		dest.y += this->offset.y;
-		return this->plane->move(dest, speed * this->speedScale, sync);
+		return this->base->move(dest, speed * this->speedScale, sync);
 	}
 
 	ErrorCode CoordPlaneMap::arc(motor_point_t dest, motor_point_t center,
@@ -81,20 +76,12 @@ namespace CalX {
 		center.y += this->offset.y;
 
 		scale *= (this->scale.x + this->scale.y) / 2;
-		return this->plane->arc(dest, center, splitter, speed * this->speedScale,
+		return this->base->arc(dest, center, splitter, speed * this->speedScale,
 		                        clockwise, scale);
 	}
 
-	ErrorCode CoordPlaneMap::calibrate(TrailerId tr) {
-		return this->plane->calibrate(tr);
-	}
-
-	ErrorCode CoordPlaneMap::measure(TrailerId tr) {
-		return this->plane->measure(tr);
-	}
-
 	motor_point_t CoordPlaneMap::getPosition() {
-		motor_point_t pnt = this->plane->getPosition();
+		motor_point_t pnt = this->base->getPosition();
 		pnt.x -= this->offset.x;
 		pnt.y -= this->offset.y;
 		pnt.x /= this->scale.x;
@@ -103,7 +90,7 @@ namespace CalX {
 	}
 
 	motor_rect_t CoordPlaneMap::getSize() {
-		motor_rect_t sz = this->plane->getSize();
+		motor_rect_t sz = this->base->getSize();
 		sz.x -= this->offset.x;
 		sz.y -= this->offset.y;
 		sz.x /= this->scale.x;
@@ -113,47 +100,15 @@ namespace CalX {
 		return sz;
 	}
 
-	bool CoordPlaneMap::isMeasured() {
-		return this->plane->isMeasured();
-	}
-
 	void CoordPlaneMap::dump(std::ostream &os) {
 		os << "map(offset=" << this->offset.x << "x" << this->offset.y
 		   << "; scale=" << this->scale.x << "x" << this->scale.y
 		   << "; speed=" << this->speedScale << ")";
 	}
 
-	void CoordPlaneMap::use() {
-		this->plane->use();
-	}
-
-	void CoordPlaneMap::unuse() {
-		this->plane->unuse();
-	}
-
-	void CoordPlaneMap::stop() {
-		this->plane->stop();
-	}
-
 	std::unique_ptr<CoordPlane> CoordPlaneMap::clone(
 	    std::shared_ptr<CoordPlane> base) {
 		return std::make_unique<CoordPlaneMap>(this->offset, this->scale,
 		                                       this->speedScale, base);
-	}
-
-	CoordPlaneStatus CoordPlaneMap::getStatus() {
-		return this->plane->getStatus();
-	}
-
-	ErrorCode CoordPlaneMap::open_session() {
-		return this->plane->open_session();
-	}
-
-	ErrorCode CoordPlaneMap::close_session() {
-		return this->plane->close_session();
-	}
-
-	bool CoordPlaneMap::isUsed() {
-		return this->plane->isUsed();
 	}
 }  // namespace CalX

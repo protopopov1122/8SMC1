@@ -24,15 +24,10 @@ namespace CalX {
 
 	CoordPlaneValidator::CoordPlaneValidator(motor_point_t min, motor_point_t max,
 	                                         float maxspeed,
-	                                         std::shared_ptr<CoordPlane> cplane) {
-		this->plane = cplane;
+	                                         std::shared_ptr<CoordPlane> cplane) : ProxyCoordPlane::ProxyCoordPlane(cplane) {
 		this->min = min;
 		this->max = max;
 		this->max_speed = maxspeed;
-	}
-
-	std::shared_ptr<CoordPlane> CoordPlaneValidator::getBase() {
-		return this->plane;
 	}
 
 	motor_point_t CoordPlaneValidator::getMinimum() {
@@ -68,7 +63,7 @@ namespace CalX {
 		    dest.y >= this->max.y) {
 			return ErrorCode::InvalidCoordinates;
 		}
-		return this->plane->move(dest, speed, sync);
+		return this->base->move(dest, speed, sync);
 	}
 
 	ErrorCode CoordPlaneValidator::arc(motor_point_t dest, motor_point_t center,
@@ -85,27 +80,7 @@ namespace CalX {
 		    center.x >= this->max.x || center.y >= this->max.y) {
 			return ErrorCode::InvalidCoordinates;
 		}
-		return this->plane->arc(dest, center, splitter, speed, clockwise, scale);
-	}
-
-	ErrorCode CoordPlaneValidator::calibrate(TrailerId tr) {
-		return this->plane->calibrate(tr);
-	}
-
-	ErrorCode CoordPlaneValidator::measure(TrailerId tr) {
-		return this->plane->measure(tr);
-	}
-
-	motor_point_t CoordPlaneValidator::getPosition() {
-		return this->plane->getPosition();
-	}
-
-	motor_rect_t CoordPlaneValidator::getSize() {
-		return this->plane->getSize();
-	}
-
-	bool CoordPlaneValidator::isMeasured() {
-		return this->plane->isMeasured();
+		return this->base->arc(dest, center, splitter, speed, clockwise, scale);
 	}
 
 	void CoordPlaneValidator::dump(std::ostream &os) {
@@ -114,37 +89,9 @@ namespace CalX {
 		   << "; speed=" << this->max_speed << ")";
 	}
 
-	void CoordPlaneValidator::use() {
-		this->plane->use();
-	}
-
-	void CoordPlaneValidator::unuse() {
-		this->plane->unuse();
-	}
-
-	void CoordPlaneValidator::stop() {
-		this->plane->stop();
-	}
-
 	std::unique_ptr<CoordPlane> CoordPlaneValidator::clone(
 	    std::shared_ptr<CoordPlane> base) {
 		return std::make_unique<CoordPlaneValidator>(this->min, this->max,
 		                                             this->max_speed, base);
-	}
-
-	CoordPlaneStatus CoordPlaneValidator::getStatus() {
-		return this->plane->getStatus();
-	}
-
-	ErrorCode CoordPlaneValidator::open_session() {
-		return this->plane->open_session();
-	}
-
-	ErrorCode CoordPlaneValidator::close_session() {
-		return this->plane->close_session();
-	}
-
-	bool CoordPlaneValidator::isUsed() {
-		return this->plane->isUsed();
 	}
 }  // namespace CalX

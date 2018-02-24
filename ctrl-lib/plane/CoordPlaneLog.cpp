@@ -25,15 +25,10 @@ namespace CalX {
 	CoordPlaneLog::CoordPlaneLog(std::shared_ptr<CoordPlane> cplane,
 	                             std::ostream &os, std::string prefix,
 	                             bool log_act, bool log_err)
-	    : out(os) {
-		this->plane = cplane;
+	    : ProxyCoordPlane(cplane), out(os) {
 		this->prefix = prefix;
 		this->log_actions = log_act;
 		this->log_errors = log_err;
-	}
-
-	std::shared_ptr<CoordPlane> CoordPlaneLog::getBase() {
-		return this->plane;
 	}
 
 	std::string CoordPlaneLog::getPrefix() {
@@ -66,7 +61,7 @@ namespace CalX {
 			    << " with base speed " << speed << "; synchrone movement is "
 			    << (sync ? "on." : "off.") << std::endl;
 		}
-		ErrorCode err = this->plane->move(dest, speed, sync);
+		ErrorCode err = this->base->move(dest, speed, sync);
 		if (this->log_errors && err != ErrorCode::NoError) {
 			out << this->prefix << "Error occured(" << err << ")" << std::endl;
 		}
@@ -83,7 +78,7 @@ namespace CalX {
 			    << "; splitter " << splitter << "." << std::endl;
 		}
 		ErrorCode err =
-		    this->plane->arc(dest, center, splitter, speed, clockwise, scale);
+		    this->base->arc(dest, center, splitter, speed, clockwise, scale);
 		if (this->log_errors && err != ErrorCode::NoError) {
 			out << this->prefix << "Error occured(" << err << ")" << std::endl;
 		}
@@ -95,7 +90,7 @@ namespace CalX {
 			out << this->prefix << "Calibrating to trailer #" << static_cast<int>(tr)
 			    << std::endl;
 		}
-		ErrorCode err = this->plane->calibrate(tr);
+		ErrorCode err = this->base->calibrate(tr);
 		if (this->log_errors && err != ErrorCode::NoError) {
 			out << this->prefix << "Error occured(" << err << ")" << std::endl;
 		}
@@ -107,23 +102,11 @@ namespace CalX {
 			out << this->prefix << "Measuring to trailer #" << static_cast<int>(tr)
 			    << std::endl;
 		}
-		ErrorCode err = this->plane->measure(tr);
+		ErrorCode err = this->base->measure(tr);
 		if (this->log_errors && err != ErrorCode::NoError) {
 			out << this->prefix << "Error occured(" << err << ")" << std::endl;
 		}
 		return err;
-	}
-
-	motor_point_t CoordPlaneLog::getPosition() {
-		return this->plane->getPosition();
-	}
-
-	motor_rect_t CoordPlaneLog::getSize() {
-		return this->plane->getSize();
-	}
-
-	bool CoordPlaneLog::isMeasured() {
-		return this->plane->isMeasured();
 	}
 
 	void CoordPlaneLog::dump(std::ostream &os) {
@@ -132,38 +115,10 @@ namespace CalX {
 		   << "; log_errors=" << this->log_errors << ")";
 	}
 
-	void CoordPlaneLog::use() {
-		this->plane->use();
-	}
-
-	void CoordPlaneLog::unuse() {
-		this->plane->unuse();
-	}
-
-	void CoordPlaneLog::stop() {
-		this->plane->stop();
-	}
-
 	std::unique_ptr<CoordPlane> CoordPlaneLog::clone(
 	    std::shared_ptr<CoordPlane> base) {
 		std::unique_ptr<CoordPlaneLog> log = std::make_unique<CoordPlaneLog>(
 		    base, this->out, this->prefix, this->log_actions, this->log_errors);
 		return log;
-	}
-
-	CoordPlaneStatus CoordPlaneLog::getStatus() {
-		return this->plane->getStatus();
-	}
-
-	ErrorCode CoordPlaneLog::open_session() {
-		return this->plane->open_session();
-	}
-
-	ErrorCode CoordPlaneLog::close_session() {
-		return this->plane->close_session();
-	}
-
-	bool CoordPlaneLog::isUsed() {
-		return this->plane->isUsed();
 	}
 }  // namespace CalX

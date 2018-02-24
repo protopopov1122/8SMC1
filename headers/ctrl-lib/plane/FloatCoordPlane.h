@@ -21,19 +21,18 @@
 #ifndef CALX_CTRL_LIB_PLANE_FLOAT_COORD_PLANE_H_
 #define CALX_CTRL_LIB_PLANE_FLOAT_COORD_PLANE_H_
 
-#include "ctrl-lib/plane/AbstractCoordPlane.h"
+#include "ctrl-lib/plane/ProxyCoordPlane.h"
 
 /* Adds floating point coordinate support to coordinate plane by
    implementing according methods for all elementar coordinate actions */
 
 namespace CalX {
 
-	class FloatCoordPlane : public CoordPlane {
+	class FloatCoordPlane : public ProxyCoordPlane {
 	 public:
 		FloatCoordPlane(coord_point_t, coord_scale_t, double,
 		                std::shared_ptr<CoordPlane>);
 
-		std::shared_ptr<CoordPlane> getBase();
 		coord_point_t getOffset();
 		coord_scale_t getScale();
 		double getSpeedScale();
@@ -48,18 +47,8 @@ namespace CalX {
 		                      float = 1.0f);
 		virtual motor_point_t getPosition();
 		virtual motor_rect_t getSize();
-		virtual ErrorCode calibrate(TrailerId);
-		virtual ErrorCode measure(TrailerId);
-		virtual bool isMeasured();
-		virtual void use();
-		virtual void unuse();
-		virtual void stop();
 		virtual void dump(std::ostream &);
 		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
-		virtual CoordPlaneStatus getStatus();
-		virtual ErrorCode open_session();
-		virtual ErrorCode close_session();
-		virtual bool isUsed();
 		// Floating-point methods
 		virtual ErrorCode move(coord_point_t, double, bool);
 		virtual ErrorCode arc(coord_point_t, coord_point_t, int, double, bool,
@@ -74,7 +63,6 @@ namespace CalX {
 		coord_point_t offset;
 		coord_scale_t scale;
 		double speed;
-		std::shared_ptr<CoordPlane> plane;
 	};
 }  // namespace CalX
 
