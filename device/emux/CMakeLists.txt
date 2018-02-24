@@ -1,0 +1,22 @@
+cmake_minimum_required(VERSION 3.1)
+project(CalX)
+
+include_directories(${CMAKE_SOURCE_DIR}/headers)
+add_library(dev_emux SHARED EmuMotor.cpp EmuInstrument.cpp EmuDeviceManager.cpp)
+target_link_libraries(dev_emux calx)
+if (MINGW)
+	SET_TARGET_PROPERTIES(dev_emux PROPERTIES PREFIX "")
+endif (MINGW)
+add_custom_command(TARGET dev_emux POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:dev_emux> ${build_directory}
+)
+add_dependencies(dev_emux calx-init-target)
+if (WIN32)
+	install(TARGETS dev_emux DESTINATION / COMPONENT devapi_emux)
+else (WIN32)
+	install(TARGETS dev_emux DESTINATION lib/calx_devapi COMPONENT devapi_emux)
+endif (WIN32)
+set(CPACK_COMPONENT_DEVAPI_EMUX_DISPLAY_NAME "EmuX Device API" CACHE INTERNAL "")
+set(CPACK_COMPONENT_DEVAPI_EMUX_DEPENDS calx_ctrl_lib CACHE INTERNAL "")
+set(CPACK_COMPONENT_DEVAPI_EMUX_GROUP "Device API" CACHE INTERNAL "")
+set(CPACK_COMPONENT_CONFIG_DESCRIPTION "Minimal extended Device API implementation. Used for development and porting." CACHE INTERNAL "")
