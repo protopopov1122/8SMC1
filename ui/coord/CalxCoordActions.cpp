@@ -23,14 +23,13 @@ namespace CalXUI {
 
 	void CalxCoordActionMove::perform(SystemManager *sysman) {
 		ErrorCode errcode;
-		handle->open_session();
+		ResourceSession session(*this->handle);
 		if (relative) {
 			errcode = handle->getFloatPlane()->relativeMove(dest, speed, sync);
 		} else {
 			errcode = handle->getFloatPlane()->move(dest, speed, sync);
 		}
 		wxGetApp().getErrorHandler()->handle(errcode);
-		handle->close_session();
 		if (this->action_result != nullptr) {
 			this->action_result->errcode = errcode;
 			this->action_result->ready = true;
@@ -66,7 +65,7 @@ namespace CalXUI {
 
 	void CalxCoordActionArc::perform(SystemManager *sysman) {
 		ErrorCode errcode;
-		handle->open_session();
+		ResourceSession session(*this->handle);
 		if (relative) {
 			errcode = handle->getFloatPlane()->relativeArc(dest, cen, splitter, speed,
 			                                               clockwise);
@@ -75,7 +74,6 @@ namespace CalXUI {
 			    handle->getFloatPlane()->arc(dest, cen, splitter, speed, clockwise);
 		}
 		wxGetApp().getErrorHandler()->handle(errcode);
-		handle->close_session();
 		if (this->action_result != nullptr) {
 			this->action_result->errcode = errcode;
 			this->action_result->ready = true;
@@ -100,10 +98,9 @@ namespace CalXUI {
 	}
 
 	void CalxCoordActionCalibrate::perform(SystemManager *sysman) {
-		handle->open_session();
+		ResourceSession session(*this->handle);
 		ErrorCode errcode = handle->calibrate(trailer);
 		wxGetApp().getErrorHandler()->handle(errcode);
-		handle->close_session();
 		if (this->action_result != nullptr) {
 			this->action_result->errcode = errcode;
 			this->action_result->ready = true;
@@ -127,10 +124,9 @@ namespace CalXUI {
 	}
 
 	void CalxCoordActionMeasure::perform(SystemManager *sysman) {
-		handle->open_session();
+		ResourceSession session(*this->handle);
 		ErrorCode errcode = handle->measure(trailer);
 		wxGetApp().getErrorHandler()->handle(errcode);
-		handle->close_session();
 		if (this->action_result != nullptr) {
 			this->action_result->errcode = errcode;
 			this->action_result->ready = true;
@@ -160,7 +156,7 @@ namespace CalXUI {
 	}
 
 	void CalxCoordActionConfigure::perform(SystemManager *sysman) {
-		handle->open_session();
+		ResourceSession session(*this->handle);
 		work = true;
 		motor_point_t offset = { 0, 0 };
 		controller->setOffset(offset);
@@ -179,7 +175,6 @@ namespace CalXUI {
 			controller->setOffset(handle->getPosition());
 		}
 		wxGetApp().getErrorHandler()->handle(errcode);
-		handle->close_session();
 		if (this->action_result != nullptr) {
 			this->action_result->errcode = errcode;
 			this->action_result->ready = true;
@@ -208,10 +203,9 @@ namespace CalXUI {
 	}
 
 	void CalxCoordActionGraphBuild::perform(SystemManager *sysman) {
-		handle->open_session();
+		ResourceSession session(*this->handle);
 		wxGetApp().getErrorHandler()->handle(builder->floatBuild(
 		    sysman, handle->getFloatPlane(), translator, speed, state));
-		handle->close_session();
 	}
 
 	void CalxCoordActionGraphBuild::stop() {

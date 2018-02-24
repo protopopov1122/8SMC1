@@ -65,7 +65,6 @@ namespace CalX {
 		ConfigManager &config;
 		bool work;
 		bool defWork;
-		bool session_opened;
 		CoordPlaneStatus status;
 
 		motor_rect_t size;

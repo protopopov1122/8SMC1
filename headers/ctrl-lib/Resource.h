@@ -38,6 +38,18 @@ namespace CalX {
     uint8_t counter;
   };
 
+  class SessionableResource {
+   public:
+    SessionableResource();
+    virtual ~SessionableResource() = default;
+    virtual ErrorCode open_session();
+    virtual ErrorCode close_session();
+   protected:
+    bool isSessionOpened();
+   private:
+    bool session_state;
+  };
+
   class ResourceUse {
    public:
     ResourceUse(UsableResource &);
@@ -47,6 +59,18 @@ namespace CalX {
     UsableResource *swap(UsableResource *);
    private:
     UsableResource *resource;
+  };
+
+  class ResourceSession {
+   public:
+    ResourceSession(SessionableResource &);
+    ResourceSession(SessionableResource *);
+    ~ResourceSession();
+    ErrorCode getStatus();
+    ErrorCode close();
+   private:
+    SessionableResource *resource;
+    ErrorCode errcode;
   };
 }
 

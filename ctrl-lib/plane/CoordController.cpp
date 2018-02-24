@@ -34,6 +34,18 @@ namespace CalX {
 
 	const char *COORD_CTRL_TAG = "CoordCtrl";
 
+	class CoordStatusHandle {
+	 public:
+		CoordStatusHandle(CoordPlaneStatus *status, CoordPlaneStatus current) : status(status) {
+			*this->status = current;
+		}
+		~CoordStatusHandle() {
+			*this->status = CoordPlaneStatus::Idle;
+		}
+	 private:
+		CoordPlaneStatus *status;
+	};
+
 	CoordController::CoordController(ConfigManager &config,
 	                                 std::shared_ptr<MotorController> xaxis,
 	                                 std::shared_ptr<MotorController> yaxis,
@@ -43,7 +55,6 @@ namespace CalX {
 		this->defWork = true;
 		this->work = false;
 		this->measured = false;
-		this->session_opened = false;
 		this->status = CoordPlaneStatus::Idle;
 		LOG(COORD_CTRL_TAG,
 		    "New coordinate controller. X Axis: #" +
@@ -127,35 +138,30 @@ namespace CalX {
 		}
 
 		/* Mark motors as active used */
-		xAxis->use();
-		yAxis->use();
+		ResourceUse xAxisUse(*this->xAxis);
+		ResourceUse yAxisUse(*this->yAxis);
+		ResourceUse instrUse;
 
 		/* Determine if instrument is present, mark it as used and enable it (if
 		   necesarry). Even if the instrument is enabled here, it will continue work
 		   after method finished
 		   (for optimisation purposes) and will be disabled on session close */
 		if (this->instr != nullptr) {
-			this->instr->use();
+			instrUse.swap(*this->instr);
 			ErrorCode errcode = this->instr->enable(sync);
 			/* Error while enabling instrument, unuse all, halt */
 			if (errcode != ErrorCode::NoError) {
-				xAxis->unuse();
-				yAxis->unuse();
-				instr->unuse();
 				return errcode;
 			}
 		}
 
 		/* Update current plane status */
-		this->status = sync ? CoordPlaneStatus::Move : CoordPlaneStatus::Jump;
+		CoordStatusHandle statusHandle(&this->status, sync ? CoordPlaneStatus::Move : CoordPlaneStatus::Jump);
 		/* Start x-axis motor, emit event about it */
 		ErrorCode errcode = ErrorCode::NoError;
 		if ((errcode = xAxis->asyncMove(point.x, x_speed)) !=
 		    ErrorCode::NoError) { /* Something went wrong. Unuse motors, set
 			     status to idle, halt */
-			this->status = CoordPlaneStatus::Idle;
-			xAxis->unuse();
-			yAxis->unuse();
 			xAxis->asyncStop(errcode, point.x, x_speed);
 			return errcode;
 		}
@@ -164,9 +170,6 @@ namespace CalX {
 		if ((errcode = yAxis->asyncMove(point.y, y_speed)) !=
 		    ErrorCode::NoError) { /* Something went wrong. Stop
 			                           x-axis, unuse motors, etc. */
-			this->status = CoordPlaneStatus::Idle;
-			xAxis->unuse();
-			yAxis->unuse();
 			xAxis->asyncStop(errcode, point.x, x_speed);
 			yAxis->asyncStop(errcode, point.y, y_speed);
 			return errcode;
@@ -175,46 +178,29 @@ namespace CalX {
 		/* Emit event about coordinate plane using, mark it as used */
 		CoordMoveEvent evt = { point, speed, sync };
 		sendMovingEvent(evt);
-		use();
 		/* Wait while one of motors (or both) is running, detect possible errors */
 		while (this->xAxis->isMoving() || this->yAxis->isMoving()) {
 			if (this->xAxis->isMoving()) {
 				ErrorCode code = xAxis->checkTrailers();
 				if (code != ErrorCode::NoError) { /* Motor reached trailes, stop plane,
 					                                   unuse devices, produce error */
-					this->status = CoordPlaneStatus::Idle;
 					xAxis->asyncStop(code, point.x, x_speed);
 					yAxis->asyncStop(code, point.y, y_speed);
-
-					if (this->instr != nullptr) {
-						this->instr->unuse();
-					}
 
 					/* Emit necesarry errors */
 					CoordErrorEvent eevt = { code };
 					sendStoppedEvent(eevt);
-					xAxis->unuse();
-					yAxis->unuse();
-					unuse();
 					return code;
 				}
 			}
 			if (this->yAxis->isMoving()) { /* Similar to above */
 				ErrorCode code = yAxis->checkTrailers();
 				if (code != ErrorCode::NoError) {
-					this->status = CoordPlaneStatus::Idle;
 					xAxis->asyncStop(code, point.x, x_speed);
 					yAxis->asyncStop(code, point.y, y_speed);
 
-					if (this->instr != nullptr) {
-						this->instr->unuse();
-					}
-
 					CoordErrorEvent eevt = { code };
 					sendStoppedEvent(eevt);
-					xAxis->unuse();
-					yAxis->unuse();
-					unuse();
 					return code;
 				}
 			}
@@ -228,15 +214,8 @@ namespace CalX {
 		xAxis->asyncStop(ErrorCode::NoError, point.x, x_speed);
 		yAxis->asyncStop(ErrorCode::NoError, point.y, y_speed);
 		/* Reset status, usunse devices, emit events */
-		this->status = CoordPlaneStatus::Idle;
 
-		if (this->instr != nullptr) {
-			this->instr->unuse();
-		}
 		sendMovedEvent(evt);
-		xAxis->unuse();
-		yAxis->unuse();
-		unuse();
 		return ErrorCode::NoError;
 	}
 
@@ -261,7 +240,7 @@ namespace CalX {
 		if (!work) {
 			return ErrorCode::NoError;
 		}
-		this->status = CoordPlaneStatus::Jump;
+		CoordStatusHandle statusHandle(&this->status, CoordPlaneStatus::Jump);
 		/* Determne movement parameters. They are stored in configuration */
 		int_conf_t roll_step =
 		    config.getEntry("core")->getInt("roll_step", ROLL_STEP);
@@ -275,11 +254,12 @@ namespace CalX {
 		bool xpr = false;
 		bool ypr = false;
 		/* Mark motors as used. Emit events */
+		ResourceUse xAxisUse(*this->xAxis);
+		ResourceUse yAxisUse(*this->yAxis);
+		ResourceUse instrUse;
 		if (this->instr != nullptr) {
-			this->instr->use();
+			instrUse.swap(*this->instr);
 		}
-		xAxis->use();
-		yAxis->use();
 		CoordCalibrateEvent evt = { tr };
 		sendCalibratingEvent(evt);
 		/* Run loop while at least one motor have not reached trailer
@@ -293,15 +273,9 @@ namespace CalX {
 				if (!xpr && !xAxis->isMoving()) {
 					if ((errcode = xAxis->asyncMove(xAxis->getPosition() + dest, roll_speed)) !=
 					    ErrorCode::NoError) {
-						/* Error occured. Stop motors, emit errors, halt */
-						this->status = CoordPlaneStatus::Idle;
+						/* Error occured. Stop motors, emit errors, halt */;
 						xAxis->asyncStop(errcode, xAxis->getPosition() + dest, roll_speed);
 						yAxis->asyncStop(errcode, yAxis->getPosition() + dest, roll_speed);
-						if (this->instr != nullptr) {
-							this->instr->unuse();
-						}
-						xAxis->unuse();
-						yAxis->unuse();
 						sendCalibratedEvent(evt);
 						return ErrorCode::LowLevelError;
 					}
@@ -320,14 +294,8 @@ namespace CalX {
 				if (!ypr && !yAxis->isMoving()) {
 					if ((errcode = yAxis->asyncMove(yAxis->getPosition() + dest, roll_speed)) !=
 					    ErrorCode::NoError) {
-						this->status = CoordPlaneStatus::Idle;
 						xAxis->asyncStop(errcode, xAxis->getPosition() + dest, roll_speed);
 						yAxis->asyncStop(errcode, yAxis->getPosition() + dest, roll_speed);
-						if (this->instr != nullptr) {
-							this->instr->unuse();
-						}
-						xAxis->unuse();
-						yAxis->unuse();
 						sendCalibratedEvent(evt);
 						return ErrorCode::LowLevelError;
 					}
@@ -358,12 +326,6 @@ namespace CalX {
 			yAxis->waitWhileRunning();
 		}
 		/* Mark plane as idle, emit events, unuse devices */
-		this->status = CoordPlaneStatus::Idle;
-		if (this->instr != nullptr) {
-			this->instr->unuse();
-		}
-		xAxis->unuse();
-		yAxis->unuse();
 		sendCalibratedEvent(evt);
 		return ErrorCode::NoError;
 	}
@@ -417,11 +379,12 @@ namespace CalX {
 			return ErrorCode::NoError;
 		}
 		/* Mark all devices as actively used */
+		ResourceUse xAxisUse(*this->xAxis);
+		ResourceUse yAxisUse(*this->yAxis);
+		ResourceUse instrUse;
 		if (this->instr != nullptr) {
-			this->instr->use();
+			instrUse.swap(*this->instr);
 		}
-		xAxis->use();
-		yAxis->use();
 		/* Execute algorithm until a point somewhere around destination is achieved.
 		   After that motors will simply move to the destination. Often destination
 		   point is not quite accurate (because of float-int conversions, scaling,
@@ -443,11 +406,6 @@ namespace CalX {
 				ErrorCode err = this->move(pnt, speed, true);
 				if (err != ErrorCode::NoError) {
 					/* Something went wrong. Unuse devices, halt */
-					if (this->instr != nullptr) {
-						this->instr->unuse();
-					}
-					xAxis->unuse();
-					yAxis->unuse();
 					return err;
 				}
 				/* Update position */
@@ -455,12 +413,6 @@ namespace CalX {
 			}
 		} while (abs(dest.x - pnt.x) / scale > COMPARISON_RADIUS ||
 		         abs(dest.y - pnt.y) / scale > COMPARISON_RADIUS);
-		/* Unuse devices */
-		if (this->instr != nullptr) {
-			this->instr->unuse();
-		}
-		xAxis->unuse();
-		yAxis->unuse();
 		/* Make final move to the destination point */
 		ErrorCode code = ErrorCode::NoError;
 		if (work) {
@@ -599,13 +551,13 @@ namespace CalX {
 	}
 
 	bool CoordController::isUsed() {
-		return this->session_opened;
+		return SessionableResource::isSessionOpened();
 	}
 
 	/* Mark session as opened */
 	ErrorCode CoordController::open_session() {
 		use();
-		this->session_opened = true;
+		SessionableResource::open_session();
 		LOG("CoordController", "Session opened");
 		return ErrorCode::NoError;
 	}
@@ -623,7 +575,7 @@ namespace CalX {
 			}
 		}
 		unuse();
-		this->session_opened = false;
+		SessionableResource::close_session();
 		LOG("CoordController", "Session closed");
 		return err;
 	}

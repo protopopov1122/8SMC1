@@ -29,13 +29,13 @@
 
 namespace CalX {
 
-	class InstrumentController : public DeviceController {
+	class InstrumentController : public DeviceController, public SessionableResource {
 	 public:
 		InstrumentController(ConfigManager &, Instrument &);
 		Instrument &getInstrument();
-		bool isSessionOpened();
-		ErrorCode open_session();
-		ErrorCode close_session();
+		virtual bool isSessionOpened();
+		virtual ErrorCode open_session();
+		virtual ErrorCode close_session();
 		bool isEnabled();
 		ErrorCode enable(bool);
 		ErrorCode flipState();
@@ -57,7 +57,6 @@ namespace CalX {
 
 	 private:
 		Instrument &instr;
-		bool session_state;
 		bool state;
 		std::vector<std::shared_ptr<InstrumentEventListener>> listeners;
 	};

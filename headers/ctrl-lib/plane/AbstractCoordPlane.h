@@ -56,7 +56,7 @@ namespace CalX {
 
 	/* Abstract interface. By default it uses motor-specific units to operate,
 	   See FloatCoordPlane that can use any-scale units */
-	class CoordPlane : public UsableResource {
+	class CoordPlane : public UsableResource, public SessionableResource {
 	 public:
 		virtual ~CoordPlane() = default;
 		virtual ErrorCode move(

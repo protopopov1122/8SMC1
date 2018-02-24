@@ -27,7 +27,6 @@ namespace CalX {
 	                                           Instrument &instr)
 	    : DeviceController::DeviceController(conf, instr), instr(instr) {
 		this->state = true;
-		this->session_state = false;
 	}
 
 	Instrument &InstrumentController::getInstrument() {
@@ -35,16 +34,14 @@ namespace CalX {
 	}
 
 	bool InstrumentController::isSessionOpened() {
-		return this->session_state;
+		return SessionableResource::isSessionOpened();
 	}
 
 	ErrorCode InstrumentController::open_session() {
-		if (!this->session_state) {
+		if (!this->isSessionOpened()) {
+			SessionableResource::open_session();
 			ErrorCode errcode = this->instr.open_session() ? ErrorCode::NoError
 			                                               : ErrorCode::LowLevelError;
-			if (errcode == ErrorCode::NoError) {
-				this->session_state = true;
-			}
 			return errcode;
 		} else {
 			return ErrorCode::NoError;
@@ -52,16 +49,14 @@ namespace CalX {
 	}
 
 	ErrorCode InstrumentController::close_session() {
-		if (this->session_state) {
+		if (this->isSessionOpened()) {
+			SessionableResource::close_session();
 			if (this->isEnabled()) {
 				this->enable(false);
 			}
 			ErrorCode errcode = this->instr.close_session()
 			                        ? ErrorCode::NoError
 			                        : ErrorCode::LowLevelError;
-			if (errcode == ErrorCode::NoError) {
-				this->session_state = false;
-			}
 			return errcode;
 		} else {
 			return ErrorCode::NoError;
@@ -74,7 +69,7 @@ namespace CalX {
 
 	ErrorCode InstrumentController::enable(bool e) {
 		if ((e && this->state) != isEnabled()) {
-			if (e && this->state && !this->session_state) {
+			if (e && this->state && !this->isSessionOpened()) {
 				ErrorCode errcode = this->open_session();
 				if (errcode != ErrorCode::NoError) {
 					return errcode;
