@@ -67,7 +67,7 @@ namespace CalX {
 	}
 
 	bool EmuMotor::isRunning() {
-		return false;
+		return this->pos != this->destination;
 	}
 
 	Power EmuMotor::getPowerState() {
@@ -84,6 +84,7 @@ namespace CalX {
 	}
 
 	bool EmuMotor::stop() {
+		this->destination = this->pos;
 		return true;
 	}
 
