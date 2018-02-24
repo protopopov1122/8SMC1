@@ -167,6 +167,7 @@ namespace CalX {
 		} else {
 			this->sendMovedEvent(evt);
 		}
+		this->dest = MoveType::Stop;
 		this->unuse();
 		this->work = false;
 		return errcode;
@@ -178,21 +179,54 @@ namespace CalX {
 		return startMove(dest, speed);
 	}
 
-	ErrorCode MotorController::asyncMove(motor_coord_t dest, float speed) {
-		if (this->dev.start(dest, speed)) {
-			this->work = true;
-			this->dest = dest > this->dev.getPosition() ? MoveType::MoveUp
-			                                            : MoveType::MoveDown;
-			return ErrorCode::NoError;
-		} else {
-			return ErrorCode::LowLevelError;
+	ErrorCode MotorController::asyncMove(motor_coord_t dest, float speed, bool rollEvent) {
+		if (this->dev.isRunning()) {
+			return ErrorCode::MotorRunning;
 		}
+		if (this->dev.getPowerState() == Power::NoPower) {
+			return ErrorCode::PowerOff;
+		}
+		this->work = true;
+		this->dest =
+		    dest > this->dev.getPosition() ? MoveType::MoveUp : MoveType::MoveDown;
+		if (!rollEvent) {
+			MotorMoveEvent evt = { dest, speed };
+			this->sendMovingEvent(evt);
+		} else {
+			TrailerId tid = this->dest == MoveType::MoveUp ? TrailerId::Trailer2 : TrailerId::Trailer1;
+			MotorRollEvent evt = { tid };
+			this->sendRollingEvent(evt);
+		}
+		ErrorCode errcode = ErrorCode::NoError;
+		if (!this->dev.start(dest, speed)) {
+			errcode = ErrorCode::LowLevelError;
+			MotorErrorEvent sevt = { errcode };
+			this->sendStoppedEvent(sevt);
+		}
+		return errcode;
 	}
 
 	ErrorCode MotorController::asyncRelativeMove(motor_coord_t reldest,
-	                                             float speed) {
+	                                             float speed, bool rollEvent) {
 		motor_coord_t dest = getPosition() + reldest;
-		return asyncMove(dest, speed);
+		return asyncMove(dest, speed, rollEvent);
+	}
+
+	void MotorController::asyncStop(ErrorCode errcode, motor_coord_t dest, float speed, bool rollEvent) {
+		if (errcode != ErrorCode::NoError) {
+			MotorErrorEvent sevt = { errcode };
+			this->sendStoppedEvent(sevt);
+		} else if (!rollEvent) {
+			MotorMoveEvent evt = { dest, speed };
+			this->sendMovedEvent(evt);
+		} else {
+			TrailerId tid = this->dest == MoveType::MoveUp ? TrailerId::Trailer2 : TrailerId::Trailer1;
+			MotorRollEvent evt = { tid };
+			this->sendRolledEvent(evt);
+		}
+		this->dest = MoveType::Stop;
+		this->dev.stop();
+		this->work = false;
 	}
 
 	void MotorController::stop() {

@@ -44,8 +44,9 @@ namespace CalX {
 		ErrorCode moveToTrailer(TrailerId);
 		ErrorCode startMove(motor_coord_t, float);
 		ErrorCode startRelativeMove(motor_coord_t, float);
-		ErrorCode asyncMove(motor_coord_t, float);
-		ErrorCode asyncRelativeMove(motor_coord_t, float);
+		ErrorCode asyncMove(motor_coord_t, float, bool = false);
+		ErrorCode asyncRelativeMove(motor_coord_t, float, bool = false);
+		void asyncStop(ErrorCode, motor_coord_t, float, bool = false);
 		void stop();
 
 		motor_coord_t getPosition();
@@ -60,13 +61,13 @@ namespace CalX {
 		ErrorCode checkTrailers();
 		bool isTrailerPressed(TrailerId);
 
+	 private:
 		void sendMovingEvent(MotorMoveEvent &);
 		void sendMovedEvent(MotorMoveEvent &);
 		void sendStoppedEvent(MotorErrorEvent &);
 		void sendRollingEvent(MotorRollEvent &);
 		void sendRolledEvent(MotorRollEvent &);
 
-	 private:
 		MoveType dest;
 		bool work;
 		Motor &dev;
