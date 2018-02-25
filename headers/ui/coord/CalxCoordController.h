@@ -27,7 +27,7 @@
 
 namespace CalXUI {
 
-	class ActionResult;  // Forward referencing
+	struct ActionResult;  // Forward referencing
 
 	class CalxCoordFilterListener {
 	 public:

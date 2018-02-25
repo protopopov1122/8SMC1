@@ -57,8 +57,6 @@ namespace CalXUI {
 		CalxPanel *panel;
 		CalxPanel *quickstartPanel;
 
-		wxButton *switchButton;
-
 		CalxDevicePool *device_pool;
 		CalxPlaneList *plane_list;
 		CalxTaskList *task_list;
