@@ -61,7 +61,7 @@ namespace CalX {
 		     (step > 0 ? x <= this->max.x : x >= this->max.x) && state->work;
 		     x += step) {
 			engine.getScope().putVariable("x", x);
-			engine_value_t val = engine.eval(this->node.get());
+			engine_value_t val = engine.eval(*this->node);
 			if (val.err != MathError::MNoError) {
 				plane->unuse();
 				state->work = false;
@@ -119,7 +119,7 @@ namespace CalX {
 		     (step > 0 ? x <= this->max.x : x >= this->max.x) && state->work;
 		     x += step) {
 			engine.getScope().putVariable("x", x);
-			engine_value_t val = engine.eval(this->node.get());
+			engine_value_t val = engine.eval(*this->node);
 			if (val.err != MathError::MNoError) {
 				plane->unuse();
 				state->work = false;

@@ -61,13 +61,13 @@ namespace CalX {
 		FunctionEngine();
 		virtual ~FunctionEngine() = default;
 		EngineScope &getScope();
-		engine_value_t eval(Node *);
+		engine_value_t eval(Node &);
 
 	 private:
 		EngineScope scope;
 	};
 
-	void FunctionEngine_add_default_functions(FunctionEngine *);
+	void FunctionEngine_add_default_functions(FunctionEngine &);
 }  // namespace CalX
 
 #endif

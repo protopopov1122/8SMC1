@@ -44,7 +44,7 @@ namespace CalX {
 		                    " motors and " +
 		                    std::to_string(this->devman->getInstrumentCount()) +
 		                    " instruments.");
-		FunctionEngine_add_default_functions(&this->engine);
+		FunctionEngine_add_default_functions(this->engine);
 		if (this->ext_engine != nullptr) {
 			this->ext_engine->init(this);
 		}

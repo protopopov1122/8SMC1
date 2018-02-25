@@ -23,8 +23,8 @@
 
 namespace CalX {
 
-	engine_value_t VariableNode::eval(FunctionEngine *eng) const {
-		return eng->getScope().getVariable(id);
+	engine_value_t VariableNode::eval(FunctionEngine &eng) const {
+		return eng.getScope().getVariable(id);
 	}
 
 	BinaryNode::BinaryNode(BinaryOperation op, std::unique_ptr<Node> left,
@@ -34,14 +34,14 @@ namespace CalX {
 	      left(std::move(left)),
 	      right(std::move(right)) {}
 
-	engine_value_t BinaryNode::eval(FunctionEngine *eng) const {
+	engine_value_t BinaryNode::eval(FunctionEngine &eng) const {
 		engine_value_t res = { 0, MathError::MNoError };
-		engine_value_t leftv = eng->eval(this->left.get());
+		engine_value_t leftv = eng.eval(*this->left);
 		if (leftv.err != MathError::MNoError) {
 			res.err = leftv.err;
 			return res;
 		}
-		engine_value_t rightv = eng->eval(this->right.get());
+		engine_value_t rightv = eng.eval(*this->right);
 		if (rightv.err != MathError::MNoError) {
 			res.err = rightv.err;
 			return res;
@@ -72,16 +72,16 @@ namespace CalX {
 	    std::string id, std::unique_ptr<std::vector<std::unique_ptr<Node>>> args)
 	    : Node::Node(NodeType::Function), id(id), args(std::move(args)) {}
 
-	engine_value_t FunctionNode::eval(FunctionEngine *eng) const {
+	engine_value_t FunctionNode::eval(FunctionEngine &eng) const {
 		std::vector<double> vec;
 		for (size_t i = 0; i < this->args->size(); i++) {
-			engine_value_t val = eng->eval(this->args->at(i).get());
+			engine_value_t val = eng.eval(*this->args->at(i));
 			if (val.err != MathError::MNoError) {
 				val.value = 0;
 				return val;
 			}
 			vec.push_back(val.value);
 		}
-		return eng->getScope().evalFunction(this->id, vec);
+		return eng.getScope().evalFunction(this->id, vec);
 	}
 }  // namespace CalX

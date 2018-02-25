@@ -51,21 +51,21 @@ namespace CalX {
 	                            DefFun1(FabsFunction, fabs)
 
 	                                void FunctionEngine_add_default_functions(
-	                                    FunctionEngine *engine) {
-		engine->getScope().addFunction("sin", std::make_unique<SinFunction>());
-		engine->getScope().addFunction("cos", std::make_unique<CosFunction>());
-		engine->getScope().addFunction("tan", std::make_unique<TanFunction>());
-		engine->getScope().addFunction("asin", std::make_unique<AsinFunction>());
-		engine->getScope().addFunction("acos", std::make_unique<AcosFunction>());
-		engine->getScope().addFunction("atan", std::make_unique<AtanFunction>());
-		engine->getScope().addFunction("exp", std::make_unique<ExpFunction>());
-		engine->getScope().addFunction("log", std::make_unique<LogFunction>());
-		engine->getScope().addFunction("log10", std::make_unique<Log10Function>());
-		engine->getScope().addFunction("log2", std::make_unique<Log2Function>());
-		engine->getScope().addFunction("sqrt", std::make_unique<SqrtFunction>());
-		engine->getScope().addFunction("cbrt", std::make_unique<CbrtFunction>());
-		engine->getScope().addFunction("ceil", std::make_unique<CeilFunction>());
-		engine->getScope().addFunction("floor", std::make_unique<FloorFunction>());
-		engine->getScope().addFunction("abs", std::make_unique<FabsFunction>());
+	                                    FunctionEngine &engine) {
+		engine.getScope().addFunction("sin", std::make_unique<SinFunction>());
+		engine.getScope().addFunction("cos", std::make_unique<CosFunction>());
+		engine.getScope().addFunction("tan", std::make_unique<TanFunction>());
+		engine.getScope().addFunction("asin", std::make_unique<AsinFunction>());
+		engine.getScope().addFunction("acos", std::make_unique<AcosFunction>());
+		engine.getScope().addFunction("atan", std::make_unique<AtanFunction>());
+		engine.getScope().addFunction("exp", std::make_unique<ExpFunction>());
+		engine.getScope().addFunction("log", std::make_unique<LogFunction>());
+		engine.getScope().addFunction("log10", std::make_unique<Log10Function>());
+		engine.getScope().addFunction("log2", std::make_unique<Log2Function>());
+		engine.getScope().addFunction("sqrt", std::make_unique<SqrtFunction>());
+		engine.getScope().addFunction("cbrt", std::make_unique<CbrtFunction>());
+		engine.getScope().addFunction("ceil", std::make_unique<CeilFunction>());
+		engine.getScope().addFunction("floor", std::make_unique<FloorFunction>());
+		engine.getScope().addFunction("abs", std::make_unique<FabsFunction>());
 	}
 }  // namespace CalX

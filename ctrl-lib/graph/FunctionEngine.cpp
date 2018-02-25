@@ -70,7 +70,7 @@ namespace CalX {
 		return this->scope;
 	}
 
-	engine_value_t FunctionEngine::eval(Node *node) {
-		return node->eval(this);
+	engine_value_t FunctionEngine::eval(Node &node) {
+		return node.eval(*this);
 	}
 }  // namespace CalX
