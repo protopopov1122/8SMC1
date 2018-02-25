@@ -29,6 +29,7 @@ namespace CalX {
 	EmuMotor::EmuMotor(device_id_t id, EmuDeviceManager &devman)
 	    : Motor::Motor(id), devman(devman) {
 		this->pos = 0;
+		this->destination = 0;
 		this->power = Power::NoPower;
 		this->motorWorks = true;
 
@@ -96,8 +97,8 @@ namespace CalX {
 	void EmuMotor::terminate() {}
 
 	void EmuMotor::motorThread() {
-		const int MOTOR_SPEED = 10000;
-		const int DISCR = 50;  // times per second
+		const int MOTOR_SPEED = 20000;
+		const int DISCR = 100;  // times per second
 		const int MOTOR_STEP = MOTOR_SPEED / DISCR;
 		while (this->motorWorks) {
 			if (this->destination != this->pos) {
