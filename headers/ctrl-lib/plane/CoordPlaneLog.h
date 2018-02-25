@@ -41,7 +41,7 @@ namespace CalX {
 		                      float = 1.0f);
 		virtual ErrorCode calibrate(TrailerId);
 		virtual ErrorCode measure(TrailerId);
-		virtual void dump(std::ostream &);
+		virtual std::ostream &operator<<(std::ostream &);
 		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
 
 	 private:

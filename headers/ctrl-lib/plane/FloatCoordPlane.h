@@ -47,7 +47,7 @@ namespace CalX {
 		                      float = 1.0f);
 		virtual motor_point_t getPosition();
 		virtual motor_rect_t getSize();
-		virtual void dump(std::ostream &);
+		virtual std::ostream &operator<<(std::ostream &);
 		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
 		// Floating-point methods
 		virtual ErrorCode move(coord_point_t, double, bool);

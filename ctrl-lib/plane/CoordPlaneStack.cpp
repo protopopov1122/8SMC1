@@ -78,13 +78,12 @@ namespace CalX {
 		return this->peekPlane()->isMeasured();
 	}
 
-	void CoordPlaneStack::dump(std::ostream &os) {
+	std::ostream &CoordPlaneStack::operator<<(std::ostream &os) {
 		for (size_t i = this->stack.size() - 1; i < this->stack.size(); i--) {
 			std::shared_ptr<CoordPlane> plane = this->stack.at(i);
-			os << "\t";
-			plane->dump(os);
-			os << std::endl;
+			os << "\t" << plane << std::endl;
 		}
+		return os;
 	}
 
 	void CoordPlaneStack::use() {
@@ -121,7 +120,7 @@ namespace CalX {
 		return this->peekPlane()->close_session();
 	}
 
-	bool CoordPlaneStack::isUsed() {
-		return this->peekPlane()->isUsed();
+	bool CoordPlaneStack::isSessionOpened() {
+		return this->peekPlane()->isSessionOpened();
 	}
 }  // namespace CalX

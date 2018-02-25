@@ -39,7 +39,7 @@ namespace CalX {
 		virtual ErrorCode move(motor_point_t, float, bool);
 		virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,
 		                      float = 1.0f);
-		virtual void dump(std::ostream &);
+		virtual std::ostream &operator<<(std::ostream &);
 		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
 
 	 private:

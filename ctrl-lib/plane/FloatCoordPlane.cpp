@@ -104,10 +104,11 @@ namespace CalX {
 		return sz;
 	}
 
-	void FloatCoordPlane::dump(std::ostream &os) {
+	std::ostream &FloatCoordPlane::operator<<(std::ostream &os) {
 		os << "float(offset=" << this->offset.x << "x" << this->offset.y
 		   << "; scale=" << this->scale.x << "x" << this->scale.y
 		   << "; speed=" << this->speed << ")";
+		return os;
 	}
 
 	std::unique_ptr<CoordPlane> FloatCoordPlane::clone(

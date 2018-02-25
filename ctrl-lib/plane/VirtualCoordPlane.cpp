@@ -34,8 +34,9 @@ namespace CalX {
 		this->size = size;
 	}
 
-	void VirtualCoordPlane::dump(std::ostream &os) {
+	std::ostream &VirtualCoordPlane::operator<<(std::ostream &os) {
 		os << "virtual_coord";
+		return os;
 	}
 
 	ErrorCode VirtualCoordPlane::move(motor_point_t point, float speed,
@@ -131,7 +132,7 @@ namespace CalX {
 		return ErrorCode::NoError;
 	}
 
-	bool VirtualCoordPlane::isUsed() {
+	bool VirtualCoordPlane::isSessionOpened() {
 		return false;
 	}
 }  // namespace CalX

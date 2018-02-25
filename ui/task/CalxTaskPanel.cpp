@@ -229,7 +229,7 @@ namespace CalXUI {
 		plane->Clear();
 		for (size_t i = 0; i < wxGetApp().getSystemManager()->getCoordCount();
 		     i++) {
-			if (wxGetApp().getSystemManager()->getCoord(i)->isUsed()) {
+			if (wxGetApp().getSystemManager()->getCoord(i)->isSessionOpened()) {
 				continue;
 			}
 			std::shared_ptr<CoordHandle> handle =

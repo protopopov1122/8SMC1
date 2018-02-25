@@ -100,10 +100,11 @@ namespace CalX {
 		return sz;
 	}
 
-	void CoordPlaneMap::dump(std::ostream &os) {
+	std::ostream &CoordPlaneMap::operator<<(std::ostream &os) {
 		os << "map(offset=" << this->offset.x << "x" << this->offset.y
 		   << "; scale=" << this->scale.x << "x" << this->scale.y
 		   << "; speed=" << this->speedScale << ")";
+		return os;
 	}
 
 	std::unique_ptr<CoordPlane> CoordPlaneMap::clone(

@@ -66,9 +66,10 @@ namespace CalX {
 		                                     : "no"));
 	}
 
-	void CoordController::dump(std::ostream &os) {
+	std::ostream &CoordController::operator<<(std::ostream &os) {
 		os << "coord(" << this->xAxis->getID() << "; " << this->yAxis->getID()
 		   << ")";
+		return os;
 	}
 
 	std::shared_ptr<MotorController> CoordController::getXAxis() {
@@ -553,7 +554,7 @@ namespace CalX {
 		return this->status;
 	}
 
-	bool CoordController::isUsed() {
+	bool CoordController::isSessionOpened() {
 		return SessionableResource::isSessionOpened();
 	}
 

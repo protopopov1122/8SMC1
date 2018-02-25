@@ -82,8 +82,7 @@ namespace CalX {
 					          << "; Dimension: start=" << plane->getSize().x << "x"
 					          << plane->getSize().y << "; size=" << plane->getSize().w
 					          << "x" << plane->getSize().h << std::endl;
-					plane->dump(std::cout);
-					std::cout << std::endl;
+					std::cout << plane << std::endl;
 				}
 			} else if (cmp(TASKS)) {
 				for (size_t i = 0; i < sysman->getTaskCount(); i++) {

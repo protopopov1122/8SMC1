@@ -84,10 +84,11 @@ namespace CalX {
 		return this->base->arc(dest, center, splitter, speed, clockwise, scale);
 	}
 
-	void CoordPlaneValidator::dump(std::ostream &os) {
+	std::ostream &CoordPlaneValidator::operator<<(std::ostream &os) {
 		os << "validator(min=" << this->min.x << "x" << this->min.y
 		   << "; max=" << this->max.x << "x" << this->max.y
 		   << "; speed=" << this->max_speed << ")";
+		return os;
 	}
 
 	std::unique_ptr<CoordPlane> CoordPlaneValidator::clone(

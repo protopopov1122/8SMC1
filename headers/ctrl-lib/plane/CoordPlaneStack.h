@@ -46,12 +46,12 @@ namespace CalX {
 		virtual void use();
 		virtual void unuse();
 		virtual void stop();
-		virtual void dump(std::ostream &);
+		virtual std::ostream &operator<<(std::ostream &);
 		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
 		virtual CoordPlaneStatus getStatus();
 		virtual ErrorCode open_session();
 		virtual ErrorCode close_session();
-		virtual bool isUsed();
+		virtual bool isSessionOpened();
 
 	 private:
 		std::vector<std::shared_ptr<CoordPlane>> stack;

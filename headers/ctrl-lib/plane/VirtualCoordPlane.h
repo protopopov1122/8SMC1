@@ -41,12 +41,12 @@ namespace CalX {
 		virtual CoordPlaneStatus getStatus();
 		virtual ErrorCode open_session();
 		virtual ErrorCode close_session();
-		virtual bool isUsed();
+		virtual bool isSessionOpened();
 
 		virtual void use();
 		virtual void unuse();
 		virtual void stop();
-		virtual void dump(std::ostream &);
+		virtual std::ostream &operator<<(std::ostream &);
 
 	 protected:
 		virtual bool jump(motor_point_t, bool) = 0;

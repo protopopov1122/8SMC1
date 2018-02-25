@@ -58,16 +58,17 @@ namespace CalX {
 		return this->base->isMeasured();
 	}
 
-	bool ProxyCoordPlane::isUsed() {
-		return this->base->isUsed();
+	bool ProxyCoordPlane::isSessionOpened() {
+		return this->base->isSessionOpened();
 	}
 
 	void ProxyCoordPlane::stop() {
 		this->base->stop();
 	}
 
-	void ProxyCoordPlane::dump(std::ostream &os) {
-		this->base->dump(os);
+	std::ostream &ProxyCoordPlane::operator<<(std::ostream &os) {
+		os << this->base;
+		return os;
 	}
 
 	std::unique_ptr<CoordPlane> ProxyCoordPlane::clone(

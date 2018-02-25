@@ -109,10 +109,11 @@ namespace CalX {
 		return err;
 	}
 
-	void CoordPlaneLog::dump(std::ostream &os) {
+	std::ostream &CoordPlaneLog::operator<<(std::ostream &os) {
 		os << "log(prefix=\"" << this->prefix
 		   << "\"; log_actions=" << this->log_actions
 		   << "; log_errors=" << this->log_errors << ")";
+		return os;
 	}
 
 	std::unique_ptr<CoordPlane> CoordPlaneLog::clone(

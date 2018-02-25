@@ -46,7 +46,7 @@ namespace CalX {
 		virtual bool isMeasured();
 		virtual void stop();
 		void kill();
-		virtual void dump(std::ostream &);
+		virtual std::ostream &operator<<(std::ostream &);
 		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
 		virtual CoordPlaneStatus getStatus();
 		virtual ErrorCode open_session();
@@ -54,7 +54,7 @@ namespace CalX {
 
 		void addEventListener(std::shared_ptr<CoordEventListener>);
 		void removeEventListener(std::shared_ptr<CoordEventListener>);
-		virtual bool isUsed();
+		virtual bool isSessionOpened();
 		virtual void use();
 		virtual void unuse();
 
