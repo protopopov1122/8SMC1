@@ -36,11 +36,11 @@ namespace CalX {
 		this->cw = cw;
 	}
 
-	motor_point_t Circle::getCenter() {
+	motor_point_t Circle::getCenter() const {
 		return this->center;
 	}
 
-	int64_t Circle::getRadius() {
+	int64_t Circle::getRadius() const {
 		return this->radius;
 	}
 

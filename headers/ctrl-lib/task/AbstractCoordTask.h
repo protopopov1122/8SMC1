@@ -60,7 +60,7 @@ namespace CalX {
 	 public:
 		CoordTask(CoordTaskType tp) : type(tp) {}
 		virtual ~CoordTask() = default;
-		CoordTaskType getType() {
+		CoordTaskType getType() const {
 			return this->type;
 		}
 		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,

@@ -34,7 +34,7 @@ namespace CalX {
 		this->size = size;
 	}
 
-	std::ostream &VirtualCoordPlane::operator<<(std::ostream &os) {
+	std::ostream &VirtualCoordPlane::operator<<(std::ostream &os) const {
 		os << "virtual_coord";
 		return os;
 	}
@@ -60,7 +60,7 @@ namespace CalX {
 		return ErrorCode::NoError;
 	}
 
-	motor_point_t VirtualCoordPlane::getPosition() {
+	motor_point_t VirtualCoordPlane::getPosition() const {
 		return this->position;
 	}
 
@@ -102,11 +102,11 @@ namespace CalX {
 		return this->move(dest, speed, true);
 	}
 
-	motor_rect_t VirtualCoordPlane::getSize() {
+	motor_rect_t VirtualCoordPlane::getSize() const {
 		return this->size;
 	}
 
-	bool VirtualCoordPlane::isMeasured() {
+	bool VirtualCoordPlane::isMeasured() const {
 		return true;
 	}
 
@@ -120,7 +120,7 @@ namespace CalX {
 
 	void VirtualCoordPlane::stop() {}
 
-	CoordPlaneStatus VirtualCoordPlane::getStatus() {
+	CoordPlaneStatus VirtualCoordPlane::getStatus() const {
 		return CoordPlaneStatus::Idle;
 	}
 
@@ -132,7 +132,7 @@ namespace CalX {
 		return ErrorCode::NoError;
 	}
 
-	bool VirtualCoordPlane::isSessionOpened() {
+	bool VirtualCoordPlane::isSessionOpened() const {
 		return false;
 	}
 }  // namespace CalX

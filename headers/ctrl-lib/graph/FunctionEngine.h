@@ -45,9 +45,9 @@ namespace CalX {
 	 public:
 		EngineScope();
 		engine_value_t getVariable(std::string);
-		bool hasVariable(std::string);
+		bool hasVariable(std::string) const;
 		void putVariable(std::string, double);
-		bool hasFunction(std::string);
+		bool hasFunction(std::string) const;
 		engine_value_t evalFunction(std::string, std::vector<double> &);
 		bool addFunction(std::string, std::unique_ptr<EngineFunction>);
 

@@ -34,7 +34,7 @@ namespace CalX {
 	class FunctionLexer {
 	 public:
 		FunctionLexer(std::istream &);
-		std::unique_ptr<Token> lex();
+		std::unique_ptr<Token> lex() const;
 
 	 private:
 		std::istream &in;

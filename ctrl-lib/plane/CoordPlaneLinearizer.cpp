@@ -98,7 +98,7 @@ namespace CalX {
 		return std::make_unique<CoordPlaneLinearizer>(base);
 	}
 
-	std::ostream &CoordPlaneLinearizer::operator<<(std::ostream &os) {
+	std::ostream &CoordPlaneLinearizer::operator<<(std::ostream &os) const {
 		os << "linearizer";
 		return os;
 	}

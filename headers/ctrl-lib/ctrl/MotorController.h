@@ -35,9 +35,9 @@ namespace CalX {
 	class MotorController : public DeviceController {
 	 public:
 		MotorController(ConfigManager &, Motor &);
-		Motor &getMotor();
+		Motor &getMotor() const;
 
-		Power getPowerState();
+		Power getPowerState() const;
 		ErrorCode enablePower(bool);
 		ErrorCode flipPower();
 
@@ -49,8 +49,8 @@ namespace CalX {
 		void asyncStop(ErrorCode, motor_coord_t, float, bool = false);
 		void stop();
 
-		motor_coord_t getPosition();
-		bool isMoving();
+		motor_coord_t getPosition() const;
+		bool isMoving() const;
 
 		void addEventListener(std::shared_ptr<MotorEventListener>);
 		void removeEventListener(std::shared_ptr<MotorEventListener>);
@@ -59,7 +59,7 @@ namespace CalX {
 
 		ErrorCode waitWhileRunning();
 		ErrorCode checkTrailers();
-		bool isTrailerPressed(TrailerId);
+		bool isTrailerPressed(TrailerId) const;
 
 	 private:
 		void sendMovingEvent(MotorMoveEvent &);

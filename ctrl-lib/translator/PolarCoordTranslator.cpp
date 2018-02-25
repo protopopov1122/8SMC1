@@ -27,7 +27,7 @@ namespace CalX {
 	    std::shared_ptr<CoordTranslator> bs)
 	    : CoordTranslator::CoordTranslator(CoordType::PolarCoord), base(bs) {}
 
-	std::shared_ptr<CoordTranslator> PolarCoordTranslator::getBase() {
+	std::shared_ptr<CoordTranslator> PolarCoordTranslator::getBase() const {
 		return this->base;
 	}
 
@@ -35,7 +35,7 @@ namespace CalX {
 		this->base = t;
 	}
 
-	motor_point_t PolarCoordTranslator::get(double x, double y) {
+	motor_point_t PolarCoordTranslator::get(double x, double y) const {
 		double nx = x * cos(y);
 		double ny = x * sin(y);
 		if (this->base == nullptr) {
@@ -46,7 +46,7 @@ namespace CalX {
 		}
 	}
 
-	coord_point_t PolarCoordTranslator::get(motor_point_t pnt) {
+	coord_point_t PolarCoordTranslator::get(motor_point_t pnt) const {
 		coord_point_t out;
 		if (this->base == nullptr) {
 			out = { (double) pnt.x, (double) pnt.y };
@@ -59,7 +59,7 @@ namespace CalX {
 		return out;
 	}
 
-	coord_point_t PolarCoordTranslator::floatGet(double x, double y) {
+	coord_point_t PolarCoordTranslator::floatGet(double x, double y) const {
 		double nx = x * cos(y);
 		double ny = x * sin(y);
 		if (this->base == nullptr) {
@@ -70,7 +70,7 @@ namespace CalX {
 		}
 	}
 
-	coord_point_t PolarCoordTranslator::floatGet(coord_point_t pnt) {
+	coord_point_t PolarCoordTranslator::floatGet(coord_point_t pnt) const {
 		coord_point_t out;
 		if (this->base == nullptr) {
 			out = pnt;

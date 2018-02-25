@@ -29,15 +29,15 @@ namespace CalX {
 	      offset(cen),
 	      scale(sc) {}
 
-	coord_point_t LinearCoordTranslator::getOffset() {
+	coord_point_t LinearCoordTranslator::getOffset() const {
 		return this->offset;
 	}
 
-	coord_scale_t LinearCoordTranslator::getScale() {
+	coord_scale_t LinearCoordTranslator::getScale() const {
 		return this->scale;
 	}
 
-	std::shared_ptr<CoordTranslator> LinearCoordTranslator::getBase() {
+	std::shared_ptr<CoordTranslator> LinearCoordTranslator::getBase() const {
 		return this->base;
 	}
 
@@ -53,7 +53,7 @@ namespace CalX {
 		this->scale = s;
 	}
 
-	motor_point_t LinearCoordTranslator::get(double x, double y) {
+	motor_point_t LinearCoordTranslator::get(double x, double y) const {
 		double nx = x * this->scale.x + this->offset.x;
 		double ny = y * this->scale.y + this->offset.y;
 		if (this->base == nullptr) {
@@ -64,7 +64,7 @@ namespace CalX {
 		}
 	}
 
-	coord_point_t LinearCoordTranslator::get(motor_point_t pnt) {
+	coord_point_t LinearCoordTranslator::get(motor_point_t pnt) const {
 		coord_point_t out;
 		if (this->base == nullptr) {
 			out = { (double) pnt.x, (double) pnt.y };
@@ -78,7 +78,7 @@ namespace CalX {
 		return out;
 	}
 
-	coord_point_t LinearCoordTranslator::floatGet(double x, double y) {
+	coord_point_t LinearCoordTranslator::floatGet(double x, double y) const {
 		coord_point_t pnt = { x, y };
 		pnt.x *= this->scale.x;
 		pnt.y *= this->scale.y;
@@ -91,7 +91,7 @@ namespace CalX {
 		}
 	}
 
-	coord_point_t LinearCoordTranslator::floatGet(coord_point_t pnt) {
+	coord_point_t LinearCoordTranslator::floatGet(coord_point_t pnt) const {
 		coord_point_t out;
 		if (this->base == nullptr) {
 			out = pnt;

@@ -65,8 +65,8 @@ namespace CalX {
 	 public:
 		GCodeCmd(GCodeOperation);
 
-		GCodeOperation getOperation();
-		bool hasArgument(char);
+		GCodeOperation getOperation() const;
+		bool hasArgument(char) const;
 		void putArgument(char, GCodeParameter);
 		GCodeParameter getArgument(char);
 
@@ -79,8 +79,8 @@ namespace CalX {
 	 public:
 		GCodeToken(char, GCodeParameter);
 
-		char getOperation();
-		GCodeParameter getParameter();
+		char getOperation() const;
+		GCodeParameter getParameter() const;
 
 	 private:
 		char operation;

@@ -33,9 +33,9 @@ namespace CalX {
 		FloatCoordPlane(coord_point_t, coord_scale_t, double,
 		                std::shared_ptr<CoordPlane>);
 
-		coord_point_t getOffset();
-		coord_scale_t getScale();
-		double getSpeedScale();
+		coord_point_t getOffset() const;
+		coord_scale_t getScale() const;
+		double getSpeedScale() const;
 		void setBase(std::shared_ptr<CoordPlane>);
 		void setOffset(coord_point_t);
 		void setScale(coord_scale_t);
@@ -45,9 +45,9 @@ namespace CalX {
 		virtual ErrorCode move(motor_point_t, float, bool);
 		virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,
 		                      float = 1.0f);
-		virtual motor_point_t getPosition();
-		virtual motor_rect_t getSize();
-		virtual std::ostream &operator<<(std::ostream &);
+		virtual motor_point_t getPosition() const;
+		virtual motor_rect_t getSize() const;
+		virtual std::ostream &operator<<(std::ostream &) const;
 		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
 		// Floating-point methods
 		virtual ErrorCode move(coord_point_t, double, bool);
@@ -56,8 +56,8 @@ namespace CalX {
 		virtual ErrorCode relativeMove(coord_point_t, float, bool);
 		virtual ErrorCode relativeArc(coord_point_t, coord_point_t, int, float,
 		                              bool, float = 1.0f);
-		virtual coord_point_t getFloatPosition();
-		virtual coord_rect_t getFloatSize();
+		virtual coord_point_t getFloatPosition() const;
+		virtual coord_rect_t getFloatSize() const;
 
 	 private:
 		coord_point_t offset;

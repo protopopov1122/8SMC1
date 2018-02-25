@@ -39,11 +39,11 @@ namespace CalX {
 		this->stack.push_back(plane);
 	}
 
-	std::shared_ptr<CoordPlane> CoordPlaneStack::peekPlane() {
+	std::shared_ptr<CoordPlane> CoordPlaneStack::peekPlane() const {
 		return this->stack.at(this->stack.size() - 1);
 	}
 
-	std::shared_ptr<CoordPlane> CoordPlaneStack::getBase() {
+	std::shared_ptr<CoordPlane> CoordPlaneStack::getBase() const {
 		return this->stack.at(0);
 	}
 
@@ -66,19 +66,19 @@ namespace CalX {
 		return this->peekPlane()->measure(tr);
 	}
 
-	motor_point_t CoordPlaneStack::getPosition() {
+	motor_point_t CoordPlaneStack::getPosition() const {
 		return this->peekPlane()->getPosition();
 	}
 
-	motor_rect_t CoordPlaneStack::getSize() {
+	motor_rect_t CoordPlaneStack::getSize() const {
 		return this->peekPlane()->getSize();
 	}
 
-	bool CoordPlaneStack::isMeasured() {
+	bool CoordPlaneStack::isMeasured() const {
 		return this->peekPlane()->isMeasured();
 	}
 
-	std::ostream &CoordPlaneStack::operator<<(std::ostream &os) {
+	std::ostream &CoordPlaneStack::operator<<(std::ostream &os) const {
 		for (size_t i = this->stack.size() - 1; i < this->stack.size(); i--) {
 			std::shared_ptr<CoordPlane> plane = this->stack.at(i);
 			os << "\t" << plane << std::endl;
@@ -108,7 +108,7 @@ namespace CalX {
 		return stack;
 	}
 
-	CoordPlaneStatus CoordPlaneStack::getStatus() {
+	CoordPlaneStatus CoordPlaneStack::getStatus() const {
 		return this->peekPlane()->getStatus();
 	}
 
@@ -120,7 +120,7 @@ namespace CalX {
 		return this->peekPlane()->close_session();
 	}
 
-	bool CoordPlaneStack::isSessionOpened() {
+	bool CoordPlaneStack::isSessionOpened() const {
 		return this->peekPlane()->isSessionOpened();
 	}
 }  // namespace CalX

@@ -30,11 +30,11 @@ namespace CalX {
 		this->work = false;
 	}
 
-	Motor &MotorController::getMotor() {
+	Motor &MotorController::getMotor() const {
 		return this->dev;
 	}
 
-	Power MotorController::getPowerState() {
+	Power MotorController::getPowerState() const {
 		return this->dev.getPowerState();
 	}
 
@@ -71,7 +71,7 @@ namespace CalX {
 		return ErrorCode::NoError;
 	}
 
-	bool MotorController::isTrailerPressed(TrailerId tr) {
+	bool MotorController::isTrailerPressed(TrailerId tr) const {
 		return this->dev.isTrailerPressed(static_cast<int>(tr));
 	}
 
@@ -233,11 +233,11 @@ namespace CalX {
 		this->work = false;
 	}
 
-	motor_coord_t MotorController::getPosition() {
+	motor_coord_t MotorController::getPosition() const {
 		return this->dev.getPosition();
 	}
 
-	bool MotorController::isMoving() {
+	bool MotorController::isMoving() const {
 		return this->dev.isRunning();
 	}
 

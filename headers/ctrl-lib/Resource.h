@@ -33,8 +33,8 @@ namespace CalX {
 		virtual void unuse();
 
 	 protected:
-		uint8_t getResourceCounter();
-		bool isResourceUsed();
+		uint8_t getResourceCounter() const;
+		bool isResourceUsed() const;
 
 	 private:
 		uint8_t counter;
@@ -48,7 +48,7 @@ namespace CalX {
 		virtual ErrorCode close_session();
 
 	 protected:
-		bool isSessionOpened();
+		bool isSessionOpened() const;
 
 	 private:
 		bool session_state;
@@ -71,7 +71,7 @@ namespace CalX {
 		ResourceSession(SessionableResource &);
 		ResourceSession(SessionableResource *);
 		~ResourceSession();
-		ErrorCode getStatus();
+		ErrorCode getStatus() const;
 		ErrorCode close();
 
 	 private:

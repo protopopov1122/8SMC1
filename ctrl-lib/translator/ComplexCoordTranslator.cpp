@@ -28,12 +28,12 @@ namespace CalX {
 		this->list.push_back(root);
 	}
 
-	size_t ComplexCoordTranslator::getSize() {
+	size_t ComplexCoordTranslator::getSize() const {
 		return this->list.size();
 	}
 
 	std::shared_ptr<CoordTranslator> ComplexCoordTranslator::getTranslator(
-	    size_t i) {
+	    size_t i) const {
 		if (i >= this->list.size()) {
 			return nullptr;
 		}
@@ -75,23 +75,23 @@ namespace CalX {
 		return true;
 	}
 
-	motor_point_t ComplexCoordTranslator::get(double x, double y) {
+	motor_point_t ComplexCoordTranslator::get(double x, double y) const {
 		return this->list.at(this->list.size() - 1)->get(x, y);
 	}
 
-	coord_point_t ComplexCoordTranslator::get(motor_point_t pnt) {
+	coord_point_t ComplexCoordTranslator::get(motor_point_t pnt) const {
 		return this->list.at(this->list.size() - 1)->get(pnt);
 	}
 
-	coord_point_t ComplexCoordTranslator::floatGet(double x, double y) {
+	coord_point_t ComplexCoordTranslator::floatGet(double x, double y) const {
 		return this->list.at(this->list.size() - 1)->floatGet(x, y);
 	}
 
-	coord_point_t ComplexCoordTranslator::floatGet(coord_point_t pnt) {
+	coord_point_t ComplexCoordTranslator::floatGet(coord_point_t pnt) const {
 		return this->list.at(this->list.size() - 1)->floatGet(pnt);
 	}
 
-	std::shared_ptr<CoordTranslator> ComplexCoordTranslator::getBase() {
+	std::shared_ptr<CoordTranslator> ComplexCoordTranslator::getBase() const {
 		if (this->list.empty()) {
 			return nullptr;
 		}

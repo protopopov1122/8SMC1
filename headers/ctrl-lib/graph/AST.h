@@ -64,10 +64,10 @@ namespace CalX {
 		virtual ~Node() {
 			DESTROY_LOG("Node" + std::to_string(static_cast<int>(type)));
 		}
-		NodeType getType() {
+		NodeType getType() const {
 			return this->type;
 		}
-		virtual engine_value_t eval(FunctionEngine *) = 0;
+		virtual engine_value_t eval(FunctionEngine *) const = 0;
 
 	 private:
 		NodeType type;
@@ -78,10 +78,10 @@ namespace CalX {
 		IntegerConstantNode(int64_t v) : Node::Node(NodeType::IntegerConstant) {
 			this->value = v;
 		}
-		int64_t getValue() {
+		int64_t getValue() const {
 			return this->value;
 		}
-		virtual engine_value_t eval(FunctionEngine *eng) {
+		virtual engine_value_t eval(FunctionEngine *eng) const {
 			return { (double) this->value, MathError::MNoError };
 		}
 
@@ -94,10 +94,10 @@ namespace CalX {
 		RealConstantNode(double v) : Node::Node(NodeType::RealConstant) {
 			this->value = v;
 		}
-		double getValue() {
+		double getValue() const {
 			return this->value;
 		}
-		virtual engine_value_t eval(FunctionEngine *eng) {
+		virtual engine_value_t eval(FunctionEngine *eng) const {
 			return { this->value, MathError::MNoError };
 		}
 
@@ -110,10 +110,10 @@ namespace CalX {
 		VariableNode(std::string i) : Node::Node(NodeType::Variable) {
 			this->id = i;
 		}
-		std::string getId() {
+		std::string getId() const {
 			return this->id;
 		}
-		virtual engine_value_t eval(FunctionEngine *);
+		virtual engine_value_t eval(FunctionEngine *) const;
 
 	 private:
 		std::string id;
@@ -123,7 +123,7 @@ namespace CalX {
 	 public:
 		InvertNode(std::unique_ptr<Node> n)
 		    : Node::Node(NodeType::Invert), node(std::move(n)) {}
-		virtual engine_value_t eval(FunctionEngine *eng) {
+		virtual engine_value_t eval(FunctionEngine *eng) const {
 			engine_value_t val = this->node->eval(eng);
 			val.value *= -1;
 			return val;
@@ -138,7 +138,7 @@ namespace CalX {
 	class BinaryNode : public Node {
 	 public:
 		BinaryNode(BinaryOperation, std::unique_ptr<Node>, std::unique_ptr<Node>);
-		virtual engine_value_t eval(FunctionEngine *eng);
+		virtual engine_value_t eval(FunctionEngine *eng) const;
 
 	 private:
 		BinaryOperation oper;
@@ -150,7 +150,7 @@ namespace CalX {
 	 public:
 		FunctionNode(std::string,
 		             std::unique_ptr<std::vector<std::unique_ptr<Node>>>);
-		virtual engine_value_t eval(FunctionEngine *eng);
+		virtual engine_value_t eval(FunctionEngine *eng) const;
 
 	 private:
 		std::string id;

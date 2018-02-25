@@ -29,16 +29,16 @@ namespace CalX {
 	class ComplexCoordTranslator : public CoordTranslator {
 	 public:
 		ComplexCoordTranslator(std::shared_ptr<CoordTranslator>);
-		virtual motor_point_t get(double, double);
-		virtual coord_point_t get(motor_point_t);
-		virtual coord_point_t floatGet(double, double);
-		virtual coord_point_t floatGet(coord_point_t);
-		size_t getSize();
-		std::shared_ptr<CoordTranslator> getTranslator(size_t);
+		virtual motor_point_t get(double, double) const;
+		virtual coord_point_t get(motor_point_t) const;
+		virtual coord_point_t floatGet(double, double) const;
+		virtual coord_point_t floatGet(coord_point_t) const;
+		size_t getSize() const;
+		std::shared_ptr<CoordTranslator> getTranslator(size_t) const;
 		void add(std::shared_ptr<CoordTranslator>);
 		bool remove(size_t);
 		bool insert(size_t, std::shared_ptr<CoordTranslator>);
-		virtual std::shared_ptr<CoordTranslator> getBase();
+		virtual std::shared_ptr<CoordTranslator> getBase() const;
 		virtual void setBase(std::shared_ptr<CoordTranslator>);
 		virtual std::unique_ptr<CoordTranslator> clone(
 		    std::shared_ptr<CoordTranslator>);

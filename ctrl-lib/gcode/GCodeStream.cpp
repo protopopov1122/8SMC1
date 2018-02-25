@@ -41,11 +41,11 @@ namespace CalX {
 		this->parameter = prm;
 	}
 
-	char GCodeToken::getOperation() {
+	char GCodeToken::getOperation() const {
 		return this->operation;
 	}
 
-	GCodeParameter GCodeToken::getParameter() {
+	GCodeParameter GCodeToken::getParameter() const {
 		return this->parameter;
 	}
 
@@ -53,11 +53,11 @@ namespace CalX {
 		this->operation = oper;
 	}
 
-	GCodeOperation GCodeCmd::getOperation() {
+	GCodeOperation GCodeCmd::getOperation() const {
 		return this->operation;
 	}
 
-	bool GCodeCmd::hasArgument(char arg) {
+	bool GCodeCmd::hasArgument(char arg) const {
 		return this->args.count(arg) != 0;
 	}
 

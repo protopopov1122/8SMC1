@@ -37,11 +37,11 @@ namespace CalX {
 		}
 	}
 
-	uint8_t UsableResource::getResourceCounter() {
+	uint8_t UsableResource::getResourceCounter() const {
 		return this->counter;
 	}
 
-	bool UsableResource::isResourceUsed() {
+	bool UsableResource::isResourceUsed() const {
 		return this->counter != 0;
 	}
 
@@ -65,7 +65,7 @@ namespace CalX {
 		return ErrorCode::NoError;
 	}
 
-	bool SessionableResource::isSessionOpened() {
+	bool SessionableResource::isSessionOpened() const {
 		return this->session_state;
 	}
 
@@ -120,7 +120,7 @@ namespace CalX {
 		}
 	}
 
-	ErrorCode ResourceSession::getStatus() {
+	ErrorCode ResourceSession::getStatus() const {
 		return this->errcode;
 	}
 

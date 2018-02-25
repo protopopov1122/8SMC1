@@ -30,28 +30,28 @@ namespace CalX {
 	 public:
 		CoordPlaneStack(std::shared_ptr<CoordPlane>);
 
-		virtual std::shared_ptr<CoordPlane> peekPlane();
+		virtual std::shared_ptr<CoordPlane> peekPlane() const;
 		virtual bool popPlane();
 		virtual void pushPlane(std::shared_ptr<CoordPlane>);
-		virtual std::shared_ptr<CoordPlane> getBase();
+		virtual std::shared_ptr<CoordPlane> getBase() const;
 
 		virtual ErrorCode move(motor_point_t, float, bool);
 		virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,
 		                      float = 1.0f);
 		virtual ErrorCode calibrate(TrailerId);
 		virtual ErrorCode measure(TrailerId);
-		virtual motor_point_t getPosition();
-		virtual motor_rect_t getSize();
-		virtual bool isMeasured();
+		virtual motor_point_t getPosition() const;
+		virtual motor_rect_t getSize() const;
+		virtual bool isMeasured() const;
 		virtual void use();
 		virtual void unuse();
 		virtual void stop();
-		virtual std::ostream &operator<<(std::ostream &);
+		virtual std::ostream &operator<<(std::ostream &) const;
 		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
-		virtual CoordPlaneStatus getStatus();
+		virtual CoordPlaneStatus getStatus() const;
 		virtual ErrorCode open_session();
 		virtual ErrorCode close_session();
-		virtual bool isSessionOpened();
+		virtual bool isSessionOpened() const;
 
 	 private:
 		std::vector<std::shared_ptr<CoordPlane>> stack;

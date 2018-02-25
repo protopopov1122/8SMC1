@@ -37,16 +37,16 @@ namespace CalX {
 	 public:
 		GraphBuilder(std::unique_ptr<Node>, coord_point_t, coord_point_t, double);
 
-		coord_point_t getMinimum();
-		coord_point_t getMaximum();
-		double getStep();
+		coord_point_t getMinimum() const;
+		coord_point_t getMaximum() const;
+		double getStep() const;
 
 		ErrorCode build(SystemManager *, std::shared_ptr<CoordPlane>,
 		                std::shared_ptr<CoordTranslator>, float,
-		                std::shared_ptr<TaskState>);
+		                std::shared_ptr<TaskState>) const;
 		ErrorCode floatBuild(SystemManager *, std::shared_ptr<FloatCoordPlane>,
 		                     std::shared_ptr<CoordTranslator>, float,
-		                     std::shared_ptr<TaskState>);
+		                     std::shared_ptr<TaskState>) const;
 
 	 private:
 		std::unique_ptr<Node> node;

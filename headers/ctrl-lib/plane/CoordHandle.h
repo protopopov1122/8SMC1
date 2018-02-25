@@ -30,9 +30,9 @@ namespace CalX {
 	 public:
 		CoordHandle(size_t, std::shared_ptr<CoordController>);
 
-		size_t getID();
-		std::shared_ptr<CoordController> getController();
-		std::shared_ptr<FloatCoordPlane> getFloatPlane();
+		size_t getID() const;
+		std::shared_ptr<CoordController> getController() const;
+		std::shared_ptr<FloatCoordPlane> getFloatPlane() const;
 
 		virtual bool popPlane();
 		virtual void pushPlane(std::shared_ptr<CoordPlane>);

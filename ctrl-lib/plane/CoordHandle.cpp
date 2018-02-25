@@ -32,15 +32,15 @@ namespace CalX {
 		    std::make_shared<FloatCoordPlane>(offset, scale, 1.0, root);
 	}
 
-	size_t CoordHandle::getID() {
+	size_t CoordHandle::getID() const {
 		return this->id;
 	}
 
-	std::shared_ptr<CoordController> CoordHandle::getController() {
+	std::shared_ptr<CoordController> CoordHandle::getController() const {
 		return this->root;
 	}
 
-	std::shared_ptr<FloatCoordPlane> CoordHandle::getFloatPlane() {
+	std::shared_ptr<FloatCoordPlane> CoordHandle::getFloatPlane() const {
 		return this->floatPlane;
 	}
 

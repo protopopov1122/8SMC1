@@ -29,9 +29,9 @@ namespace CalX {
 	 public:
 		CoordPlaneValidator(motor_point_t, motor_point_t, float,
 		                    std::shared_ptr<CoordPlane>);
-		motor_point_t getMinimum();
-		motor_point_t getMaximum();
-		float getMaxSpeed();
+		motor_point_t getMinimum() const;
+		motor_point_t getMaximum() const;
+		float getMaxSpeed() const;
 		void setMinimum(motor_point_t);
 		void setMaximum(motor_point_t);
 		void setMaxSpeed(float);
@@ -39,7 +39,7 @@ namespace CalX {
 		virtual ErrorCode move(motor_point_t, float, bool);
 		virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,
 		                      float = 1.0f);
-		virtual std::ostream &operator<<(std::ostream &);
+		virtual std::ostream &operator<<(std::ostream &) const;
 		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
 
 	 private:

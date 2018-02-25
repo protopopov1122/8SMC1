@@ -30,15 +30,15 @@ namespace CalX {
 		this->speedScale = speedSc;
 	}
 
-	motor_point_t CoordPlaneMap::getOffset() {
+	motor_point_t CoordPlaneMap::getOffset() const {
 		return this->offset;
 	}
 
-	motor_scale_t CoordPlaneMap::getScale() {
+	motor_scale_t CoordPlaneMap::getScale() const {
 		return this->scale;
 	}
 
-	float CoordPlaneMap::getSpeedScale() {
+	float CoordPlaneMap::getSpeedScale() const {
 		return this->speedScale;
 	}
 
@@ -80,7 +80,7 @@ namespace CalX {
 		                       clockwise, scale);
 	}
 
-	motor_point_t CoordPlaneMap::getPosition() {
+	motor_point_t CoordPlaneMap::getPosition() const {
 		motor_point_t pnt = this->base->getPosition();
 		pnt.x -= this->offset.x;
 		pnt.y -= this->offset.y;
@@ -89,7 +89,7 @@ namespace CalX {
 		return pnt;
 	}
 
-	motor_rect_t CoordPlaneMap::getSize() {
+	motor_rect_t CoordPlaneMap::getSize() const {
 		motor_rect_t sz = this->base->getSize();
 		sz.x -= this->offset.x;
 		sz.y -= this->offset.y;
@@ -100,7 +100,7 @@ namespace CalX {
 		return sz;
 	}
 
-	std::ostream &CoordPlaneMap::operator<<(std::ostream &os) {
+	std::ostream &CoordPlaneMap::operator<<(std::ostream &os) const {
 		os << "map(offset=" << this->offset.x << "x" << this->offset.y
 		   << "; scale=" << this->scale.x << "x" << this->scale.y
 		   << "; speed=" << this->speedScale << ")";

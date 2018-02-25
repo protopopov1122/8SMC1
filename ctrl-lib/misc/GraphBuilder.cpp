@@ -33,22 +33,22 @@ namespace CalX {
 		this->step = step;
 	}
 
-	coord_point_t GraphBuilder::getMinimum() {
+	coord_point_t GraphBuilder::getMinimum() const {
 		return this->min;
 	}
 
-	coord_point_t GraphBuilder::getMaximum() {
+	coord_point_t GraphBuilder::getMaximum() const {
 		return this->max;
 	}
 
-	double GraphBuilder::getStep() {
+	double GraphBuilder::getStep() const {
 		return this->step;
 	}
 
 	ErrorCode GraphBuilder::build(SystemManager *sysman,
 	                              std::shared_ptr<CoordPlane> plane,
 	                              std::shared_ptr<CoordTranslator> trans,
-	                              float speed, std::shared_ptr<TaskState> state) {
+	                              float speed, std::shared_ptr<TaskState> state) const {
 		plane->use();
 		FunctionEngine &engine = sysman->getFunctionEngine();
 		double nan = std::numeric_limits<double>::quiet_NaN();
@@ -106,7 +106,7 @@ namespace CalX {
 	                                   std::shared_ptr<FloatCoordPlane> plane,
 	                                   std::shared_ptr<CoordTranslator> trans,
 	                                   float speed,
-	                                   std::shared_ptr<TaskState> state) {
+	                                   std::shared_ptr<TaskState> state) const {
 		plane->use();
 		FunctionEngine &engine = sysman->getFunctionEngine();
 		double nan = std::numeric_limits<double>::quiet_NaN();

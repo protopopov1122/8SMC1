@@ -25,15 +25,15 @@ namespace CalX {
 	DeviceController::DeviceController(ConfigManager &conf, Device &dev)
 	    : UsableResource::UsableResource(), config(conf), device(dev) {}
 
-	device_id_t DeviceController::getID() {
+	device_id_t DeviceController::getID() const {
 		return this->device.getID();
 	}
 
-	ConfigManager &DeviceController::getConfiguration() {
+	ConfigManager &DeviceController::getConfiguration() const {
 		return this->config;
 	}
 
-	Device &DeviceController::getDevice() {
+	Device &DeviceController::getDevice() const {
 		return this->device;
 	}
 }  // namespace CalX

@@ -26,7 +26,7 @@
 
 namespace CalX {
 
-	bool DeviceManager::hasError() {
+	bool DeviceManager::hasError() const {
 		return !this->error_queue.empty();
 	}
 
@@ -39,22 +39,22 @@ namespace CalX {
 		return err;
 	}
 
-	Motor *DeviceManager::getMotor(device_id_t d) {
+	Motor *DeviceManager::getMotor(device_id_t d) const {
 		if (d >= (device_id_t) this->motors.size() || d < 0) {
 			return nullptr;
 		}
 		return this->motors.at((size_t) d).get();
 	}
 
-	size_t DeviceManager::getMotorCount() {
+	size_t DeviceManager::getMotorCount() const {
 		return this->motors.size();
 	}
 
-	size_t DeviceManager::getInstrumentCount() {
+	size_t DeviceManager::getInstrumentCount() const {
 		return this->instruments.size();
 	}
 
-	Instrument *DeviceManager::getInstrument(device_id_t id) {
+	Instrument *DeviceManager::getInstrument(device_id_t id) const {
 		if (id >= (device_id_t) this->instruments.size() || id < 0) {
 			return nullptr;
 		}
@@ -63,7 +63,7 @@ namespace CalX {
 
 	void DeviceManager::getConnectionTypes(
 	    std::vector<DeviceConnectionType> &dev,
-	    std::vector<DeviceConnectionType> &instr) {
+	    std::vector<DeviceConnectionType> &instr) const {
 		for (const auto &d : this->motorConnectionType) {
 			dev.push_back(d);
 		}
@@ -72,12 +72,12 @@ namespace CalX {
 		}
 	}
 
-	bool DeviceManager::canMotorConnect(DeviceConnectionType d) {
+	bool DeviceManager::canMotorConnect(DeviceConnectionType d) const {
 		return std::find(motorConnectionType.begin(), motorConnectionType.end(),
 		                 d) != motorConnectionType.end();
 	}
 
-	bool DeviceManager::canInstrumentConnect(DeviceConnectionType d) {
+	bool DeviceManager::canInstrumentConnect(DeviceConnectionType d) const {
 		return std::find(instrumentConnectionType.begin(),
 		                 instrumentConnectionType.end(),
 		                 d) != instrumentConnectionType.end();

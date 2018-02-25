@@ -82,14 +82,14 @@ namespace CalX {
 	 public:
 		Device(DeviceType, device_id_t);
 		virtual ~Device() = default;
-		DeviceType getType();
+		DeviceType getType() const;
 		void lock();
 		void unlock();
 		bool tryLock();
-		virtual device_id_t getID();
-		virtual bool hasErrors();
+		virtual device_id_t getID() const;
+		virtual bool hasErrors() const;
 		virtual std::string pollError();
-		virtual ConfigManager &getConfiguration();
+		virtual ConfigManager &getConfiguration() const;
 		virtual DeviceManager &getDeviceManager() = 0;
 		virtual std::string getDeviceInfo() = 0;
 		virtual std::string getRuntimeInfo() = 0;

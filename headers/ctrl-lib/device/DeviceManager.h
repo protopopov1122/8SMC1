@@ -41,20 +41,20 @@ namespace CalX {
 	 public:
 		virtual ~DeviceManager() = default;
 		virtual void refresh() = 0;  // Refresh device list, reinitialise them.
-		virtual Motor *getMotor(device_id_t);            // Return device by id
-		virtual size_t getMotorCount();                  // Get device count
-		virtual size_t getInstrumentCount();             // Get instrument count
-		virtual Instrument *getInstrument(device_id_t);  // Get instrument by id
-		virtual bool hasError();                         // Check errors
+		virtual Motor *getMotor(device_id_t) const;            // Return device by id
+		virtual size_t getMotorCount() const;                  // Get device count
+		virtual size_t getInstrumentCount() const;             // Get instrument count
+		virtual Instrument *getInstrument(device_id_t) const;  // Get instrument by id
+		virtual bool hasError() const;                         // Check errors
 		virtual std::string pollError();                 // Return error from queue
 
 		virtual void terminate();
 		virtual Motor *connectMotor(DeviceConnectionPrms *) = 0;
 		virtual Instrument *connectInstrument(DeviceConnectionPrms *) = 0;
 		virtual void getConnectionTypes(std::vector<DeviceConnectionType> &,
-		                                std::vector<DeviceConnectionType> &);
-		virtual bool canMotorConnect(DeviceConnectionType);
-		virtual bool canInstrumentConnect(DeviceConnectionType);
+		                                std::vector<DeviceConnectionType> &) const;
+		virtual bool canMotorConnect(DeviceConnectionType) const;
+		virtual bool canInstrumentConnect(DeviceConnectionType) const;
 		virtual bool loadConfiguration(std::string, ConfigManager &);
 		void lock();
 		void unlock();

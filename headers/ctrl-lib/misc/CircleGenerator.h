@@ -37,8 +37,8 @@ namespace CalX {
 	class Circle {
 	 public:
 		Circle(motor_point_t, int64_t, bool, float);
-		int64_t getRadius();
-		motor_point_t getCenter();
+		int64_t getRadius() const;
+		motor_point_t getCenter() const;
 		motor_point_t getNextElement();
 		motor_point_t getPrevElement();
 		bool skip(motor_point_t, bool *);

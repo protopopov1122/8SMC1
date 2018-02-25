@@ -66,21 +66,21 @@ namespace CalX {
 		                                     : "no"));
 	}
 
-	std::ostream &CoordController::operator<<(std::ostream &os) {
+	std::ostream &CoordController::operator<<(std::ostream &os) const {
 		os << "coord(" << this->xAxis->getID() << "; " << this->yAxis->getID()
 		   << ")";
 		return os;
 	}
 
-	std::shared_ptr<MotorController> CoordController::getXAxis() {
+	std::shared_ptr<MotorController> CoordController::getXAxis() const {
 		return this->xAxis;
 	}
 
-	std::shared_ptr<MotorController> CoordController::getYAxis() {
+	std::shared_ptr<MotorController> CoordController::getYAxis() const {
 		return this->yAxis;
 	}
 
-	std::shared_ptr<InstrumentController> CoordController::getInstrument() {
+	std::shared_ptr<InstrumentController> CoordController::getInstrument() const {
 		return this->instr;
 	}
 
@@ -334,7 +334,7 @@ namespace CalX {
 		return ErrorCode::NoError;
 	}
 
-	motor_point_t CoordController::getPosition() {
+	motor_point_t CoordController::getPosition() const {
 		motor_point_t pos;
 		pos.x = xAxis->getPosition();
 		pos.y = yAxis->getPosition();
@@ -425,11 +425,11 @@ namespace CalX {
 		return code;
 	}
 
-	motor_rect_t CoordController::getSize() {
+	motor_rect_t CoordController::getSize() const {
 		return this->size;
 	}
 
-	bool CoordController::isMeasured() {
+	bool CoordController::isMeasured() const {
 		return this->measured;
 	}
 
@@ -477,31 +477,31 @@ namespace CalX {
 		    this->listeners.end());
 	}
 
-	void CoordController::sendMovingEvent(CoordMoveEvent &evt) {
+	void CoordController::sendMovingEvent(CoordMoveEvent &evt) const {
 		for (const auto &l : this->listeners) {
 			l->moving(evt);
 		}
 	}
 
-	void CoordController::sendMovedEvent(CoordMoveEvent &evt) {
+	void CoordController::sendMovedEvent(CoordMoveEvent &evt) const {
 		for (const auto &l : this->listeners) {
 			l->moved(evt);
 		}
 	}
 
-	void CoordController::sendStoppedEvent(CoordErrorEvent &evt) {
+	void CoordController::sendStoppedEvent(CoordErrorEvent &evt) const {
 		for (const auto &l : this->listeners) {
 			l->stopped(evt);
 		}
 	}
 
-	void CoordController::sendCalibratingEvent(CoordCalibrateEvent &evt) {
+	void CoordController::sendCalibratingEvent(CoordCalibrateEvent &evt) const {
 		for (const auto &l : this->listeners) {
 			l->calibrating(evt);
 		}
 	}
 
-	void CoordController::sendCalibratedEvent(CoordCalibrateEvent &evt) {
+	void CoordController::sendCalibratedEvent(CoordCalibrateEvent &evt) const {
 		for (const auto &l : this->listeners) {
 			l->calibrated(evt);
 		}
@@ -550,11 +550,11 @@ namespace CalX {
 		                                         this->yAxis, this->instr);
 	}
 
-	CoordPlaneStatus CoordController::getStatus() {
+	CoordPlaneStatus CoordController::getStatus() const {
 		return this->status;
 	}
 
-	bool CoordController::isSessionOpened() {
+	bool CoordController::isSessionOpened() const {
 		return SessionableResource::isSessionOpened();
 	}
 

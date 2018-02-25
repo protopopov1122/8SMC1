@@ -34,7 +34,7 @@ namespace CalX {
 		return val;
 	}
 
-	bool EngineScope::hasVariable(std::string id) {
+	bool EngineScope::hasVariable(std::string id) const {
 		return this->vars.count(id) != 0;
 	}
 
@@ -42,7 +42,7 @@ namespace CalX {
 		this->vars[id] = val;
 	}
 
-	bool EngineScope::hasFunction(std::string id) {
+	bool EngineScope::hasFunction(std::string id) const {
 		return this->func.count(id) != 0;
 	}
 

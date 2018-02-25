@@ -30,19 +30,19 @@ namespace CalX {
 		this->config = std::make_shared<ConfigManager>();
 	}
 
-	DeviceType Device::getType() {
+	DeviceType Device::getType() const {
 		return this->type;
 	}
 
-	device_id_t Device::getID() {
+	device_id_t Device::getID() const {
 		return this->id;
 	}
 
-	ConfigManager &Device::getConfiguration() {
+	ConfigManager &Device::getConfiguration() const {
 		return *this->config;
 	}
 
-	bool Device::hasErrors() {
+	bool Device::hasErrors() const {
 		return !this->errors.empty();
 	}
 

@@ -25,7 +25,7 @@ namespace CalX {
 	ProxyCoordPlane::ProxyCoordPlane(std::shared_ptr<CoordPlane> base)
 	    : base(base) {}
 
-	std::shared_ptr<CoordPlane> ProxyCoordPlane::getBase() {
+	std::shared_ptr<CoordPlane> ProxyCoordPlane::getBase() const {
 		return this->base;
 	}
 
@@ -46,19 +46,19 @@ namespace CalX {
 		return this->base->measure(id);
 	}
 
-	motor_point_t ProxyCoordPlane::getPosition() {
+	motor_point_t ProxyCoordPlane::getPosition() const {
 		return this->base->getPosition();
 	}
 
-	motor_rect_t ProxyCoordPlane::getSize() {
+	motor_rect_t ProxyCoordPlane::getSize() const {
 		return this->base->getSize();
 	}
 
-	bool ProxyCoordPlane::isMeasured() {
+	bool ProxyCoordPlane::isMeasured() const {
 		return this->base->isMeasured();
 	}
 
-	bool ProxyCoordPlane::isSessionOpened() {
+	bool ProxyCoordPlane::isSessionOpened() const {
 		return this->base->isSessionOpened();
 	}
 
@@ -66,7 +66,7 @@ namespace CalX {
 		this->base->stop();
 	}
 
-	std::ostream &ProxyCoordPlane::operator<<(std::ostream &os) {
+	std::ostream &ProxyCoordPlane::operator<<(std::ostream &os) const {
 		os << this->base;
 		return os;
 	}
@@ -76,7 +76,7 @@ namespace CalX {
 		return std::make_unique<ProxyCoordPlane>(this->base->clone(base));
 	}
 
-	CoordPlaneStatus ProxyCoordPlane::getStatus() {
+	CoordPlaneStatus ProxyCoordPlane::getStatus() const {
 		return this->base->getStatus();
 	}
 

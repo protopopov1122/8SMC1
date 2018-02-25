@@ -31,15 +31,15 @@ namespace CalX {
 		this->max_speed = maxspeed;
 	}
 
-	motor_point_t CoordPlaneValidator::getMinimum() {
+	motor_point_t CoordPlaneValidator::getMinimum() const {
 		return this->min;
 	}
 
-	motor_point_t CoordPlaneValidator::getMaximum() {
+	motor_point_t CoordPlaneValidator::getMaximum() const {
 		return this->max;
 	}
 
-	float CoordPlaneValidator::getMaxSpeed() {
+	float CoordPlaneValidator::getMaxSpeed() const {
 		return this->max_speed;
 	}
 
@@ -84,7 +84,7 @@ namespace CalX {
 		return this->base->arc(dest, center, splitter, speed, clockwise, scale);
 	}
 
-	std::ostream &CoordPlaneValidator::operator<<(std::ostream &os) {
+	std::ostream &CoordPlaneValidator::operator<<(std::ostream &os) const {
 		os << "validator(min=" << this->min.x << "x" << this->min.y
 		   << "; max=" << this->max.x << "x" << this->max.y
 		   << "; speed=" << this->max_speed << ")";

@@ -29,9 +29,9 @@ namespace CalX {
 	 public:
 		CoordPlaneMap(motor_point_t, motor_scale_t, float,
 		              std::shared_ptr<CoordPlane>);
-		motor_point_t getOffset();
-		motor_scale_t getScale();
-		float getSpeedScale();
+		motor_point_t getOffset() const;
+		motor_scale_t getScale() const;
+		float getSpeedScale() const;
 		void setOffset(motor_point_t);
 		void setScale(motor_scale_t);
 		void setSpeedScale(float);
@@ -39,9 +39,9 @@ namespace CalX {
 		virtual ErrorCode move(motor_point_t, float, bool);
 		virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,
 		                      float = 1.0f);
-		virtual motor_point_t getPosition();
-		virtual motor_rect_t getSize();
-		virtual std::ostream &operator<<(std::ostream &);
+		virtual motor_point_t getPosition() const;
+		virtual motor_rect_t getSize() const;
+		virtual std::ostream &operator<<(std::ostream &) const;
 		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
 
 	 private:

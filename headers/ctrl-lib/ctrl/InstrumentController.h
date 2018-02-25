@@ -33,19 +33,19 @@ namespace CalX {
 	                             public SessionableResource {
 	 public:
 		InstrumentController(ConfigManager &, Instrument &);
-		Instrument &getInstrument();
-		virtual bool isSessionOpened();
+		Instrument &getInstrument() const;
+		virtual bool isSessionOpened() const;
 		virtual ErrorCode open_session();
 		virtual ErrorCode close_session();
-		bool isEnabled();
+		bool isEnabled() const;
 		ErrorCode enable(bool);
 		ErrorCode flipState();
 
-		bool isRunnable();
+		bool isRunnable() const;
 		void setRunnable(bool);
-		std::string getInfo();
+		std::string getInfo() const;
 
-		InstrumentMode getMode();
+		InstrumentMode getMode() const;
 		bool setMode(InstrumentMode);
 
 		void addEventListener(std::shared_ptr<InstrumentEventListener>);

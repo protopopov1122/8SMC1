@@ -29,11 +29,11 @@ namespace CalX {
 		this->state = true;
 	}
 
-	Instrument &InstrumentController::getInstrument() {
+	Instrument &InstrumentController::getInstrument() const {
 		return this->instr;
 	}
 
-	bool InstrumentController::isSessionOpened() {
+	bool InstrumentController::isSessionOpened() const {
 		return SessionableResource::isSessionOpened();
 	}
 
@@ -63,7 +63,7 @@ namespace CalX {
 		}
 	}
 
-	bool InstrumentController::isEnabled() {
+	bool InstrumentController::isEnabled() const {
 		return this->instr.enabled();
 	}
 
@@ -87,7 +87,7 @@ namespace CalX {
 		return enable(!isEnabled());
 	}
 
-	bool InstrumentController::isRunnable() {
+	bool InstrumentController::isRunnable() const {
 		return this->state;
 	}
 
@@ -99,11 +99,11 @@ namespace CalX {
 		sendStateChanged();
 	}
 
-	std::string InstrumentController::getInfo() {
+	std::string InstrumentController::getInfo() const {
 		return this->instr.getDeviceInfo();
 	}
 
-	InstrumentMode InstrumentController::getMode() {
+	InstrumentMode InstrumentController::getMode() const {
 		return this->instr.getWorkingMode();
 	}
 

@@ -63,17 +63,17 @@ namespace CalX {
 			this->type = t;
 		}
 		virtual ~CoordTranslator() = default;
-		CoordType getType() {
+		CoordType getType() const {
 			return this->type;
 		}
-		virtual motor_point_t get(coord_point_t pnt) {
+		virtual motor_point_t get(coord_point_t pnt) const {
 			return this->get(pnt.x, pnt.y);
 		}
-		virtual motor_point_t get(double, double) = 0;
-		virtual coord_point_t get(motor_point_t) = 0;
-		virtual coord_point_t floatGet(double, double) = 0;
-		virtual coord_point_t floatGet(coord_point_t) = 0;
-		virtual std::shared_ptr<CoordTranslator> getBase() {
+		virtual motor_point_t get(double, double) const = 0;
+		virtual coord_point_t get(motor_point_t) const = 0;
+		virtual coord_point_t floatGet(double, double) const = 0;
+		virtual coord_point_t floatGet(coord_point_t) const = 0;
+		virtual std::shared_ptr<CoordTranslator> getBase() const {
 			return nullptr;
 		}
 		virtual void setBase(std::shared_ptr<CoordTranslator>) {}

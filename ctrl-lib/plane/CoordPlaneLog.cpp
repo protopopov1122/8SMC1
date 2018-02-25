@@ -31,15 +31,15 @@ namespace CalX {
 		this->log_errors = log_err;
 	}
 
-	std::string CoordPlaneLog::getPrefix() {
+	std::string CoordPlaneLog::getPrefix() const {
 		return this->prefix;
 	}
 
-	bool CoordPlaneLog::isLoggingActions() {
+	bool CoordPlaneLog::isLoggingActions() const {
 		return this->log_actions;
 	}
 
-	bool CoordPlaneLog::isLoggingErrors() {
+	bool CoordPlaneLog::isLoggingErrors() const {
 		return this->log_errors;
 	}
 
@@ -109,7 +109,7 @@ namespace CalX {
 		return err;
 	}
 
-	std::ostream &CoordPlaneLog::operator<<(std::ostream &os) {
+	std::ostream &CoordPlaneLog::operator<<(std::ostream &os) const {
 		os << "log(prefix=\"" << this->prefix
 		   << "\"; log_actions=" << this->log_actions
 		   << "; log_errors=" << this->log_errors << ")";

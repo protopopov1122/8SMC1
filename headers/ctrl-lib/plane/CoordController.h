@@ -32,29 +32,29 @@ namespace CalX {
 		CoordController(ConfigManager &, std::shared_ptr<MotorController>,
 		                std::shared_ptr<MotorController>,
 		                std::shared_ptr<InstrumentController> = nullptr);
-		std::shared_ptr<MotorController> getXAxis();
-		std::shared_ptr<MotorController> getYAxis();
-		std::shared_ptr<InstrumentController> getInstrument();
+		std::shared_ptr<MotorController> getXAxis() const;
+		std::shared_ptr<MotorController> getYAxis() const;
+		std::shared_ptr<InstrumentController> getInstrument() const;
 
 		virtual ErrorCode move(motor_point_t, float, bool);
 		virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,
 		                      float = 1.0f);
 		virtual ErrorCode calibrate(TrailerId);
 		virtual ErrorCode measure(TrailerId);
-		virtual motor_point_t getPosition();
-		virtual motor_rect_t getSize();
-		virtual bool isMeasured();
+		virtual motor_point_t getPosition() const;
+		virtual motor_rect_t getSize() const;
+		virtual bool isMeasured() const;
 		virtual void stop();
 		void kill();
-		virtual std::ostream &operator<<(std::ostream &);
+		virtual std::ostream &operator<<(std::ostream &) const;
 		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
-		virtual CoordPlaneStatus getStatus();
+		virtual CoordPlaneStatus getStatus() const;
 		virtual ErrorCode open_session();
 		virtual ErrorCode close_session();
 
 		void addEventListener(std::shared_ptr<CoordEventListener>);
 		void removeEventListener(std::shared_ptr<CoordEventListener>);
-		virtual bool isSessionOpened();
+		virtual bool isSessionOpened() const;
 		virtual void use();
 		virtual void unuse();
 
@@ -71,11 +71,11 @@ namespace CalX {
 		bool measured;
 		std::vector<std::shared_ptr<CoordEventListener>> listeners;
 
-		void sendMovingEvent(CoordMoveEvent &);
-		void sendMovedEvent(CoordMoveEvent &);
-		void sendStoppedEvent(CoordErrorEvent &);
-		void sendCalibratingEvent(CoordCalibrateEvent &);
-		void sendCalibratedEvent(CoordCalibrateEvent &);
+		void sendMovingEvent(CoordMoveEvent &) const;
+		void sendMovedEvent(CoordMoveEvent &) const;
+		void sendStoppedEvent(CoordErrorEvent &) const;
+		void sendCalibratingEvent(CoordCalibrateEvent &) const;
+		void sendCalibratedEvent(CoordCalibrateEvent &) const;
 	};
 }  // namespace CalX
 

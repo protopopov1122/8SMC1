@@ -28,14 +28,14 @@ namespace CalX {
 	class BasicCoordTranslator : public CoordTranslator {
 	 public:
 		BasicCoordTranslator(motor_point_t, motor_size_t);
-		motor_point_t getCenter();
-		motor_size_t getScale();
+		motor_point_t getCenter() const;
+		motor_size_t getScale() const;
 		void setCenter(motor_point_t);
 		void setScale(motor_size_t);
-		virtual motor_point_t get(double, double);
-		virtual coord_point_t get(motor_point_t);
-		virtual coord_point_t floatGet(double, double);
-		virtual coord_point_t floatGet(coord_point_t);
+		virtual motor_point_t get(double, double) const;
+		virtual coord_point_t get(motor_point_t) const;
+		virtual coord_point_t floatGet(double, double) const;
+		virtual coord_point_t floatGet(coord_point_t) const;
 		virtual std::unique_ptr<CoordTranslator> clone(
 		    std::shared_ptr<CoordTranslator>);
 

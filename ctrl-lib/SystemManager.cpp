@@ -26,10 +26,9 @@ namespace CalX {
 
 	SystemManager::SystemManager(std::unique_ptr<DeviceManager> devman,
 	                             std::unique_ptr<ConfigManager> conf,
-	                             std::unique_ptr<ExtEngine> ext_eng) {
-		this->devman = std::move(devman);
-		this->conf = std::move(conf);
-		this->ext_engine = std::move(ext_eng);
+	                             std::unique_ptr<ExtEngine> ext_eng)
+		: devman(std::move(devman)), conf(std::move(conf)),
+			ext_engine(std::move(ext_eng)) {
 		for (device_id_t d = 0; d < (device_id_t) this->devman->getMotorCount();
 		     d++) {
 			this->dev.push_back(std::make_shared<MotorController>(
@@ -65,20 +64,20 @@ namespace CalX {
 		DESTROY_LOG("SystemManager");
 	}
 
-	DeviceManager &SystemManager::getDeviceManager() {
+	DeviceManager &SystemManager::getDeviceManager() const {
 		return *this->devman;
 	}
 
-	ConfigManager &SystemManager::getConfiguration() {
+	ConfigManager &SystemManager::getConfiguration() const {
 		return *this->conf;
 	}
 
-	ExtEngine &SystemManager::getExtEngine() {
+	ExtEngine &SystemManager::getExtEngine() const {
 		return *this->ext_engine;
 	}
 
 	std::shared_ptr<MotorController> SystemManager::getMotorController(
-	    device_id_t d) {
+	    device_id_t d) const {
 		if (d >= (device_id_t) this->devman->getMotorCount() || d < 0) {
 			return nullptr;
 		}
@@ -89,15 +88,15 @@ namespace CalX {
 		return this->engine;
 	}
 
-	size_t SystemManager::getMotorCount() {
+	size_t SystemManager::getMotorCount() const {
 		return this->devman->getMotorCount();
 	}
 
-	size_t SystemManager::getTaskCount() {
+	size_t SystemManager::getTaskCount() const {
 		return this->tasks.size();
 	}
 
-	std::shared_ptr<CoordTask> SystemManager::getTask(size_t i) {
+	std::shared_ptr<CoordTask> SystemManager::getTask(size_t i) const {
 		if (i >= this->tasks.size()) {
 			return nullptr;
 		}
@@ -129,11 +128,11 @@ namespace CalX {
 		return true;
 	}
 
-	size_t SystemManager::getCoordCount() {
+	size_t SystemManager::getCoordCount() const {
 		return this->coords.size();
 	}
 
-	std::shared_ptr<CoordHandle> SystemManager::getCoord(size_t c) {
+	std::shared_ptr<CoordHandle> SystemManager::getCoord(size_t c) const {
 		if (c >= this->coords.size()) {
 			return nullptr;
 		}
@@ -183,12 +182,12 @@ namespace CalX {
 		}
 	}
 
-	size_t SystemManager::getInstrumentCount() {
+	size_t SystemManager::getInstrumentCount() const {
 		return this->devman->getInstrumentCount();
 	}
 
 	std::shared_ptr<InstrumentController> SystemManager::getInstrumentController(
-	    device_id_t i) {
+	    device_id_t i) const {
 		if (i >= (device_id_t) this->devman->getInstrumentCount() || i < 0) {
 			return nullptr;
 		}

@@ -31,7 +31,7 @@ namespace CalX {
 	      base(bs),
 	      scale(sc) {}
 
-	std::shared_ptr<CoordTranslator> LogarithmicCoordTranslator::getBase() {
+	std::shared_ptr<CoordTranslator> LogarithmicCoordTranslator::getBase() const {
 		return this->base;
 	}
 
@@ -39,7 +39,7 @@ namespace CalX {
 		this->base = t;
 	}
 
-	coord_scale_t LogarithmicCoordTranslator::getScale() {
+	coord_scale_t LogarithmicCoordTranslator::getScale() const {
 		return this->scale;
 	}
 
@@ -47,7 +47,7 @@ namespace CalX {
 		this->scale = s;
 	}
 
-	motor_point_t LogarithmicCoordTranslator::get(double x, double y) {
+	motor_point_t LogarithmicCoordTranslator::get(double x, double y) const {
 		if (this->scale.x > 0) {
 			x = log(x) / log(this->scale.x);
 		}
@@ -62,7 +62,7 @@ namespace CalX {
 		}
 	}
 
-	coord_point_t LogarithmicCoordTranslator::get(motor_point_t pnt) {
+	coord_point_t LogarithmicCoordTranslator::get(motor_point_t pnt) const {
 		coord_point_t out;
 		if (this->base == nullptr) {
 			out = { (double) pnt.x, (double) pnt.y };
@@ -78,7 +78,7 @@ namespace CalX {
 		return out;
 	}
 
-	coord_point_t LogarithmicCoordTranslator::floatGet(double x, double y) {
+	coord_point_t LogarithmicCoordTranslator::floatGet(double x, double y) const {
 		if (this->scale.x > 0) {
 			x = log(x) / log(this->scale.x);
 		}
@@ -93,7 +93,7 @@ namespace CalX {
 		}
 	}
 
-	coord_point_t LogarithmicCoordTranslator::floatGet(coord_point_t pnt) {
+	coord_point_t LogarithmicCoordTranslator::floatGet(coord_point_t pnt) const {
 		coord_point_t out;
 		if (this->base == nullptr) {
 			out = pnt;

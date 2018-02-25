@@ -29,9 +29,9 @@ namespace CalX {
 	 public:
 		CoordPlaneLog(std::shared_ptr<CoordPlane>, std::ostream &, std::string,
 		              bool = true, bool = true);
-		std::string getPrefix();
-		bool isLoggingActions();
-		bool isLoggingErrors();
+		std::string getPrefix() const;
+		bool isLoggingActions() const;
+		bool isLoggingErrors() const;
 		void setPrefix(std::string);
 		void setLoggingActions(bool);
 		void setLoggingErrors(bool);
@@ -41,7 +41,7 @@ namespace CalX {
 		                      float = 1.0f);
 		virtual ErrorCode calibrate(TrailerId);
 		virtual ErrorCode measure(TrailerId);
-		virtual std::ostream &operator<<(std::ostream &);
+		virtual std::ostream &operator<<(std::ostream &) const;
 		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
 
 	 private:

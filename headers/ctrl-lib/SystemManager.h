@@ -47,18 +47,18 @@ namespace CalX {
 		              std::unique_ptr<ExtEngine> = nullptr);
 		virtual ~SystemManager();
 		// Main subsystems
-		DeviceManager &getDeviceManager();
-		ConfigManager &getConfiguration();
+		DeviceManager &getDeviceManager() const;
+		ConfigManager &getConfiguration() const;
 		FunctionEngine &getFunctionEngine();
-		ExtEngine &getExtEngine();
+		ExtEngine &getExtEngine() const;
 		// Tasks control
-		size_t getTaskCount();
-		std::shared_ptr<CoordTask> getTask(size_t);
+		size_t getTaskCount() const;
+		std::shared_ptr<CoordTask> getTask(size_t) const;
 		size_t addTask(std::shared_ptr<CoordTask>);
 		bool removeTask(size_t);
 		// Coordinate plane control
-		size_t getCoordCount();
-		std::shared_ptr<CoordHandle> getCoord(size_t);
+		size_t getCoordCount() const;
+		std::shared_ptr<CoordHandle> getCoord(size_t) const;
 		std::shared_ptr<CoordHandle> createCoord(device_id_t, device_id_t,
 		                                         device_id_t = -1);
 		void removeCoord(size_t);
@@ -66,20 +66,20 @@ namespace CalX {
 		std::shared_ptr<MotorController> connectMotor(DeviceConnectionPrms *);
 		std::shared_ptr<InstrumentController> connectInstrument(
 		    DeviceConnectionPrms *);
-		std::shared_ptr<MotorController> getMotorController(device_id_t);
-		size_t getMotorCount();
-		std::shared_ptr<InstrumentController> getInstrumentController(device_id_t);
-		size_t getInstrumentCount();
+		std::shared_ptr<MotorController> getMotorController(device_id_t) const;
+		size_t getMotorCount() const;
+		std::shared_ptr<InstrumentController> getInstrumentController(device_id_t) const;
+		size_t getInstrumentCount() const;
 
 	 private:
-		std::unique_ptr<DeviceManager> devman;
-		std::unique_ptr<ConfigManager> conf;
+		const std::unique_ptr<DeviceManager> devman;
+		const std::unique_ptr<ConfigManager> conf;
 		std::vector<std::shared_ptr<MotorController>> dev;
 		std::vector<std::shared_ptr<InstrumentController>> instr;
 		std::vector<std::shared_ptr<CoordTask>> tasks;
 		std::vector<std::shared_ptr<CoordHandle>> coords;
 		FunctionEngine engine;
-		std::unique_ptr<ExtEngine> ext_engine;
+		const std::unique_ptr<ExtEngine> ext_engine;
 	};
 }  // namespace CalX
 

@@ -30,19 +30,19 @@ namespace CalX {
 		this->name = name;
 	}
 
-	std::string ConfigEntry::getEntryName() {
+	std::string ConfigEntry::getEntryName() const {
 		return this->name;
 	}
 
-	std::shared_ptr<ConfigValue> ConfigEntry::get(std::string id) {
+	std::shared_ptr<ConfigValue> ConfigEntry::get(std::string id) const {
 		if (this->content.count(id) != 0) {
-			return this->content[id];
+			return this->content.at(id);
 		} else {
 			return nullptr;
 		}
 	}
 
-	bool ConfigEntry::has(std::string id) {
+	bool ConfigEntry::has(std::string id) const {
 		return this->content.count(id) != 0;
 	}
 
@@ -77,15 +77,15 @@ namespace CalX {
 		return true;
 	}
 
-	bool ConfigEntry::is(std::string id, ConfigValueType type) {
+	bool ConfigEntry::is(std::string id, ConfigValueType type) const {
 		if (this->content.count(id) == 0) {
 			return false;
 		}
-		std::shared_ptr<ConfigValue> val = this->content[id];
+		std::shared_ptr<ConfigValue> val = this->content.at(id);
 		return val->getType() == type;
 	}
 
-	int_conf_t ConfigEntry::getInt(std::string key, int_conf_t def) {
+	int_conf_t ConfigEntry::getInt(std::string key, int_conf_t def) const {
 		if (this->is(key, ConfigValueType::Integer)) {
 			return ((IntegerConfigValue *) this->get(key).get())->getValue();
 		} else {
@@ -93,7 +93,7 @@ namespace CalX {
 		}
 	}
 
-	real_conf_t ConfigEntry::getReal(std::string key, real_conf_t def) {
+	real_conf_t ConfigEntry::getReal(std::string key, real_conf_t def) const {
 		if (this->is(key, ConfigValueType::Real)) {
 			return ((RealConfigValue *) this->get(key).get())->getValue();
 		} else {
@@ -101,7 +101,7 @@ namespace CalX {
 		}
 	}
 
-	bool ConfigEntry::getBool(std::string key, bool def) {
+	bool ConfigEntry::getBool(std::string key, bool def) const {
 		if (this->is(key, ConfigValueType::Boolean)) {
 			return ((BoolConfigValue *) this->get(key).get())->getValue();
 		} else {
@@ -109,7 +109,7 @@ namespace CalX {
 		}
 	}
 
-	std::string ConfigEntry::getString(std::string key, std::string def) {
+	std::string ConfigEntry::getString(std::string key, std::string def) const {
 		if (this->is(key, ConfigValueType::String)) {
 			return ((StringConfigValue *) this->get(key).get())->getValue();
 		} else {
@@ -118,13 +118,13 @@ namespace CalX {
 	}
 
 	void ConfigEntry::getContent(
-	    std::vector<std::pair<std::string, std::shared_ptr<ConfigValue>>> &vec) {
+	    std::vector<std::pair<std::string, std::shared_ptr<ConfigValue>>> &vec) const {
 		for (const auto &kv : this->content) {
 			vec.push_back(make_pair(kv.first, kv.second));
 		}
 	}
 
-	void ConfigEntry::store(std::ostream &os) {
+	void ConfigEntry::store(std::ostream &os) const {
 		for (const auto &kv : this->content) {
 			os << kv.first << '=';
 			ConfigValue *value = kv.second.get();
@@ -167,7 +167,7 @@ namespace CalX {
 		}
 	}
 
-	bool ConfigManager::hasEntry(std::string id) {
+	bool ConfigManager::hasEntry(std::string id) const {
 		return this->entries.count(id) != 0;
 	}
 
@@ -183,13 +183,13 @@ namespace CalX {
 	}
 
 	void ConfigManager::getEntries(
-	    std::vector<std::shared_ptr<ConfigEntry>> &vec) {
+	    std::vector<std::shared_ptr<ConfigEntry>> &vec) const {
 		for (const auto &kv : this->entries) {
 			vec.push_back(kv.second);
 		}
 	}
 
-	std::shared_ptr<ConfigValidator> ConfigManager::getValidator() {
+	std::shared_ptr<ConfigValidator> ConfigManager::getValidator() const {
 		return this->validator;
 	}
 
@@ -204,7 +204,7 @@ namespace CalX {
 		return v->validate(this);
 	}
 
-	void ConfigManager::store(std::ostream &os) {
+	void ConfigManager::store(std::ostream &os) const {
 		for (const auto &kv : this->entries) {
 			os << '[' << kv.first << ']' << std::endl;
 			kv.second->store(os);

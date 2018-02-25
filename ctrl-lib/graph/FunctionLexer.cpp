@@ -27,7 +27,7 @@ namespace CalX {
 
 	FunctionLexer::FunctionLexer(std::istream &is) : in(is) {}
 
-	std::unique_ptr<Token> FunctionLexer::lex() {
+	std::unique_ptr<Token> FunctionLexer::lex() const {
 		int chr = in.get();
 		while (isspace(chr)) {
 			if (chr == EOF) {
