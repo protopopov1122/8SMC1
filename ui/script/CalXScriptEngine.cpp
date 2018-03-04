@@ -47,7 +47,7 @@ namespace CalXUI {
 		prms.port = port;
 		prms.speed = baudrate;
 		prms.parity = static_cast<SerialPortParity>(parity);
-		std::shared_ptr<MotorController> ctrl = sysman->connectMotor(&prms);
+		std::shared_ptr<MotorController> ctrl = sysman->connectMotor(&prms).lock();
 		if (ctrl == nullptr) {
 			wxMessageBox(__("Motor can't be connected"),
 			             __("Script: Connection error"), wxICON_WARNING);
@@ -72,7 +72,7 @@ namespace CalXUI {
 		prms.speed = baudrate;
 		prms.parity = static_cast<SerialPortParity>(parity);
 		std::shared_ptr<InstrumentController> ctrl =
-		    sysman->connectInstrument(&prms);
+		    sysman->connectInstrument(&prms).lock();
 		if (ctrl == nullptr) {
 			wxMessageBox(__("Instrument can't be connected"),
 			             __("Script: Connection error"), wxICON_WARNING);
@@ -100,7 +100,7 @@ namespace CalXUI {
 	std::pair<Power, ErrorCode> CalXAppScriptEnvironment::getMotorPower(
 	    device_id_t id) {
 		std::shared_ptr<MotorController> motor =
-		    this->app.getSystemManager()->getMotorController(id);
+		    this->app.getSystemManager()->getMotorController(id).lock();
 		if (motor == nullptr) {
 			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
@@ -185,7 +185,7 @@ namespace CalXUI {
 	std::pair<motor_coord_t, ErrorCode>
 	    CalXAppScriptEnvironment::getMotorPosition(device_id_t id) {
 		std::shared_ptr<MotorController> motor =
-		    this->app.getSystemManager()->getMotorController(id);
+		    this->app.getSystemManager()->getMotorController(id).lock();
 		if (motor == nullptr) {
 			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
@@ -220,7 +220,7 @@ namespace CalXUI {
 	std::pair<bool, ErrorCode> CalXAppScriptEnvironment::motorCheckTrailers(
 	    device_id_t id) {
 		std::shared_ptr<MotorController> motor =
-		    this->app.getSystemManager()->getMotorController(id);
+		    this->app.getSystemManager()->getMotorController(id).lock();
 		if (motor == nullptr) {
 			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
@@ -233,7 +233,7 @@ namespace CalXUI {
 
 	ErrorCode CalXAppScriptEnvironment::motorWaitWhileRunning(device_id_t id) {
 		std::shared_ptr<MotorController> motor =
-		    this->app.getSystemManager()->getMotorController(id);
+		    this->app.getSystemManager()->getMotorController(id).lock();
 		if (motor == nullptr) {
 			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
@@ -245,7 +245,7 @@ namespace CalXUI {
 
 	ErrorCode CalXAppScriptEnvironment::instrumentOpenSession(device_id_t id) {
 		std::shared_ptr<InstrumentController> instr =
-		    this->app.getSystemManager()->getInstrumentController(id);
+		    this->app.getSystemManager()->getInstrumentController(id).lock();
 		if (instr == nullptr) {
 			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
 			             __("Script: Unknown instrument"), wxICON_WARNING);
@@ -257,7 +257,7 @@ namespace CalXUI {
 
 	ErrorCode CalXAppScriptEnvironment::instrumentCloseSession(device_id_t id) {
 		std::shared_ptr<InstrumentController> instr =
-		    this->app.getSystemManager()->getInstrumentController(id);
+		    this->app.getSystemManager()->getInstrumentController(id).lock();
 		if (instr == nullptr) {
 			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
 			             __("Script: Unknown instrument"), wxICON_WARNING);
@@ -270,7 +270,7 @@ namespace CalXUI {
 	ErrorCode CalXAppScriptEnvironment::instrumentEnable(device_id_t id,
 	                                                     bool en) {
 		std::shared_ptr<InstrumentController> instr =
-		    this->app.getSystemManager()->getInstrumentController(id);
+		    this->app.getSystemManager()->getInstrumentController(id).lock();
 		if (instr == nullptr) {
 			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
 			             __("Script: Unknown instrument"), wxICON_WARNING);
@@ -283,7 +283,7 @@ namespace CalXUI {
 	std::pair<bool, ErrorCode> CalXAppScriptEnvironment::instrumentIsEnabled(
 	    device_id_t id) {
 		std::shared_ptr<InstrumentController> instr =
-		    this->app.getSystemManager()->getInstrumentController(id);
+		    this->app.getSystemManager()->getInstrumentController(id).lock();
 		if (instr == nullptr) {
 			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
 			             __("Script: Unknown instrument"), wxICON_WARNING);
@@ -296,7 +296,7 @@ namespace CalXUI {
 	ErrorCode CalXAppScriptEnvironment::instrumentSetRunnable(device_id_t id,
 	                                                          bool en) {
 		std::shared_ptr<InstrumentController> instr =
-		    this->app.getSystemManager()->getInstrumentController(id);
+		    this->app.getSystemManager()->getInstrumentController(id).lock();
 		if (instr == nullptr) {
 			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
 			             __("Script: Unknown instrument"), wxICON_WARNING);
@@ -310,7 +310,7 @@ namespace CalXUI {
 	std::pair<bool, ErrorCode> CalXAppScriptEnvironment::instrumentIsRunnable(
 	    device_id_t id) {
 		std::shared_ptr<InstrumentController> instr =
-		    this->app.getSystemManager()->getInstrumentController(id);
+		    this->app.getSystemManager()->getInstrumentController(id).lock();
 		if (instr == nullptr) {
 			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
 			             __("Script: Unknown instrument"), wxICON_WARNING);
@@ -323,7 +323,7 @@ namespace CalXUI {
 	std::pair<InstrumentMode, ErrorCode>
 	    CalXAppScriptEnvironment::instrumentGetMode(device_id_t id) {
 		std::shared_ptr<InstrumentController> instr =
-		    this->app.getSystemManager()->getInstrumentController(id);
+		    this->app.getSystemManager()->getInstrumentController(id).lock();
 		if (instr == nullptr) {
 			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
 			             __("Script: Unknown instrument"), wxICON_WARNING);
@@ -336,7 +336,7 @@ namespace CalXUI {
 	std::pair<bool, ErrorCode> CalXAppScriptEnvironment::instrumentSetMode(
 	    device_id_t id, InstrumentMode mode) {
 		std::shared_ptr<InstrumentController> instr =
-		    this->app.getSystemManager()->getInstrumentController(id);
+		    this->app.getSystemManager()->getInstrumentController(id).lock();
 		if (instr == nullptr) {
 			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
 			             __("Script: Unknown instrument"), wxICON_WARNING);
@@ -349,7 +349,7 @@ namespace CalXUI {
 	std::pair<bool, ErrorCode>
 	    CalXAppScriptEnvironment::instrumentIsSessionOpened(device_id_t id) {
 		std::shared_ptr<InstrumentController> instr =
-		    this->app.getSystemManager()->getInstrumentController(id);
+		    this->app.getSystemManager()->getInstrumentController(id).lock();
 		if (instr == nullptr) {
 			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
 			             __("Script: Unknown instrument"), wxICON_WARNING);
@@ -362,7 +362,7 @@ namespace CalXUI {
 	std::pair<std::string, ErrorCode> CalXAppScriptEnvironment::instrumentGetInfo(
 	    device_id_t id) {
 		std::shared_ptr<InstrumentController> instr =
-		    this->app.getSystemManager()->getInstrumentController(id);
+		    this->app.getSystemManager()->getInstrumentController(id).lock();
 		if (instr == nullptr) {
 			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
 			             __("Script: Unknown instrument"), wxICON_WARNING);
@@ -376,7 +376,7 @@ namespace CalXUI {
 	                                                   device_id_t m2,
 	                                                   device_id_t instr) {
 		std::shared_ptr<CoordHandle> handle =
-		    this->app.getSystemManager()->createCoord(m1, m2, instr);
+		    this->app.getSystemManager()->createCoord(m1, m2, instr).lock();
 		if (handle == nullptr) {
 			return -1;
 		} else {

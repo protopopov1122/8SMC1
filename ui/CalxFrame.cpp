@@ -72,14 +72,14 @@ namespace CalXUI {
 		     i++) {
 			devPanel->appendDevice(new CalxMotorConstructor(
 			    devPanel,
-			    wxGetApp().getSystemManager()->getMotorController((device_id_t) i)));
+			    wxGetApp().getSystemManager()->getMotorController((device_id_t) i).lock()));
 		}
 
 		for (size_t i = 0; i < wxGetApp().getSystemManager()->getInstrumentCount();
 		     i++) {
 			devPanel->appendDevice(new CalxInstrumentConstructor(
 			    devPanel, wxGetApp().getSystemManager()->getInstrumentController(
-			                  (device_id_t) i)));
+			                  (device_id_t) i).lock()));
 		}
 		devPanel->updateUI();
 		return devPanel;

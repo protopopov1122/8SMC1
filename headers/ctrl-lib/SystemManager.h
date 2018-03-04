@@ -53,22 +53,22 @@ namespace CalX {
 		ExtEngine &getExtEngine() const;
 		// Tasks control
 		size_t getTaskCount() const;
-		std::shared_ptr<CoordTask> getTask(size_t) const;
+		std::weak_ptr<CoordTask> getTask(size_t) const;
 		size_t addTask(std::shared_ptr<CoordTask>);
 		bool removeTask(size_t);
 		// Coordinate plane control
 		size_t getCoordCount() const;
-		std::shared_ptr<CoordHandle> getCoord(size_t) const;
-		std::shared_ptr<CoordHandle> createCoord(device_id_t, device_id_t,
+		std::weak_ptr<CoordHandle> getCoord(size_t) const;
+		std::weak_ptr<CoordHandle> createCoord(device_id_t, device_id_t,
 		                                         device_id_t = -1);
-		void removeCoord(size_t);
+		bool removeCoord(size_t);
 		// Device control
-		std::shared_ptr<MotorController> connectMotor(DeviceConnectionPrms *);
-		std::shared_ptr<InstrumentController> connectInstrument(
+		std::weak_ptr<MotorController> connectMotor(DeviceConnectionPrms *);
+		std::weak_ptr<InstrumentController> connectInstrument(
 		    DeviceConnectionPrms *);
-		std::shared_ptr<MotorController> getMotorController(device_id_t) const;
+		std::weak_ptr<MotorController> getMotorController(device_id_t) const;
 		size_t getMotorCount() const;
-		std::shared_ptr<InstrumentController> getInstrumentController(device_id_t) const;
+		std::weak_ptr<InstrumentController> getInstrumentController(device_id_t) const;
 		size_t getInstrumentCount() const;
 
 	 private:

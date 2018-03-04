@@ -117,7 +117,7 @@ namespace CalXUI {
 				return;
 			}
 			this->ctrl =
-			    sysman->createCoord(x, y, i == wxNOT_FOUND || i == 0 ? -1 : (i - 1));
+			    sysman->createCoord(x, y, i == wxNOT_FOUND || i == 0 ? -1 : (i - 1)).lock();
 		}
 		Hide();
 	}

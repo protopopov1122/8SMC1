@@ -229,12 +229,12 @@ namespace CalXUI {
 		plane->Clear();
 		for (size_t i = 0; i < wxGetApp().getSystemManager()->getCoordCount();
 		     i++) {
-			if (wxGetApp().getSystemManager()->getCoord(i)->isSessionOpened()) {
-				continue;
+			if (std::shared_ptr<CoordHandle> handle =
+				wxGetApp().getSystemManager()->getCoord(i).lock()) {
+				if (!handle->isSessionOpened()) {
+					plane->Append("Plane #" + std::to_string(handle->getID()));
+				}
 			}
-			std::shared_ptr<CoordHandle> handle =
-			    wxGetApp().getSystemManager()->getCoord(i);
-			plane->Append("Plane #" + std::to_string(handle->getID()));
 		}
 		if (wxGetApp().getSystemManager()->getCoordCount() > 0) {
 			plane->SetSelection(0);
@@ -300,13 +300,14 @@ namespace CalXUI {
 			list.at((size_t) taskList->GetSelection())->update();
 			std::shared_ptr<CoordTask> task =
 			    list.at((size_t) taskList->GetSelection())->getTask();
-			std::shared_ptr<CoordHandle> handle =
+			if (std::shared_ptr<CoordHandle> handle =
 			    wxGetApp().getSystemManager()->getCoord(
-			        (size_t) plane->GetSelection());
-			float speed = this->speed->GetValue();
-			TaskParameters prms = { (float) speed };
-			queue->addAction(
-			    std::make_unique<CalxTaskAction>(this, handle, task, prms));
+			        (size_t) plane->GetSelection()).lock()) {
+				float speed = this->speed->GetValue();
+				TaskParameters prms = { (float) speed };
+				queue->addAction(
+					std::make_unique<CalxTaskAction>(this, handle, task, prms));
+			}
 		} else {
 			std::string message = __("Select coordinate plane");
 			if (taskList->GetSelection() == wxNOT_FOUND) {
@@ -325,21 +326,22 @@ namespace CalXUI {
 			list.at((size_t) taskList->GetSelection())->update();
 			std::shared_ptr<CoordTask> task =
 			    list.at((size_t) taskList->GetSelection())->getTask();
-			std::shared_ptr<CoordHandle> handle =
+			if (std::shared_ptr<CoordHandle> handle =
 			    wxGetApp().getSystemManager()->getCoord(
-			        (size_t) plane->GetSelection());
-			if (!handle->isMeasured()) {
-				wxMessageBox(__("Plane need to be measured before preview"),
-				             __("Warning"), wxICON_WARNING);
-				return;
+			        (size_t) plane->GetSelection()).lock()) {
+				if (!handle->isMeasured()) {
+					wxMessageBox(__("Plane need to be measured before preview"),
+								__("Warning"), wxICON_WARNING);
+					return;
+				}
+				TaskParameters prms = { (float) this->speed->GetValue() };
+				CalxVirtualPlaneDialog *dialog =
+					new CalxVirtualPlaneDialog(this, wxID_ANY, handle, wxSize(500, 500));
+				queue->addAction(
+					std::make_unique<CalxPreviewAction>(this, dialog, task, prms));
+				dialog->ShowModal();
+				delete dialog;
 			}
-			TaskParameters prms = { (float) this->speed->GetValue() };
-			CalxVirtualPlaneDialog *dialog =
-			    new CalxVirtualPlaneDialog(this, wxID_ANY, handle, wxSize(500, 500));
-			queue->addAction(
-			    std::make_unique<CalxPreviewAction>(this, dialog, task, prms));
-			dialog->ShowModal();
-			delete dialog;
 		} else {
 			std::string message = __("Select coordinate plane");
 			if (taskList->GetSelection() == wxNOT_FOUND) {
@@ -358,63 +360,64 @@ namespace CalXUI {
 			list.at((size_t) taskList->GetSelection())->update();
 			std::shared_ptr<CoordTask> task =
 			    list.at((size_t) taskList->GetSelection())->getTask();
-			std::shared_ptr<CoordHandle> handle =
+			if (std::shared_ptr<CoordHandle> handle =
 			    wxGetApp().getSystemManager()->getCoord(
-			        (size_t) plane->GetSelection());
-			if (!handle->isMeasured()) {
-				wxMessageBox(__("Plane need to be measured to linearize"),
-				             __("Warning"), wxICON_WARNING);
-				return;
+			        (size_t) plane->GetSelection()).lock()) {
+				if (!handle->isMeasured()) {
+					wxMessageBox(__("Plane need to be measured to linearize"),
+								__("Warning"), wxICON_WARNING);
+					return;
+				}
+				TaskParameters prms = { (float) this->speed->GetValue() };
+
+				std::stringstream ss;
+				std::shared_ptr<TaskState> state = std::make_shared<TaskState>();
+				std::shared_ptr<GCodeWriter> writer = std::make_shared<GCodeWriter>(
+					handle->getPosition(), handle->getSize(),
+					list.at((size_t) taskList->GetSelection())->getTranslator(), ss);
+				this->setEnabled(false);
+				wxGetApp().getErrorHandler()->handle(
+					task->perform(writer, prms, wxGetApp().getSystemManager(), state));
+				this->setEnabled(true);
+				writer->close();
+
+				wxFileDialog *dialog =
+					new wxFileDialog(this, __("Export linearized GCode"), "", "", "",
+									wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+				if (dialog->ShowModal() == wxID_OK) {
+					std::string path = dialog->GetPath().ToStdString();
+					std::ofstream out(path);
+					out << ss.str();
+					out.close();
+				}
+				ss.seekg(0);
+
+				std::unique_ptr<CoordTranslator> translator =
+					list.at((size_t) taskList->GetSelection())
+						->getTranslator()
+						->clone(nullptr);
+				std::shared_ptr<ComplexCoordTranslator> trans = nullptr;
+				if (translator->getType() == ComplexCoord) {
+					std::shared_ptr<CoordTranslator> shtrans = std::move(translator);
+					trans = std::static_pointer_cast<ComplexCoordTranslator>(shtrans);
+				} else {
+					std::shared_ptr<CoordTranslator> shtrans = std::move(translator);
+					trans = std::make_shared<ComplexCoordTranslator>(shtrans);
+				}
+				CalxGcodeHandle *gcodeHandle = new CalxGcodeHandle(
+					mainPanel, wxID_ANY,
+					__("Linear ") + taskList->GetStringSelection().ToStdString(), &ss,
+					trans);
+
+				list.push_back(gcodeHandle);
+				taskList->Append(__("Linear ") +
+								taskList->GetStringSelection().ToStdString());
+				mainPanel->GetSizer()->Add(gcodeHandle, 1, wxALL | wxEXPAND, 5);
+				taskList->SetSelection((int) list.size() - 1);
+				Layout();
+				updateUI();
+				dialog->Destroy();
 			}
-			TaskParameters prms = { (float) this->speed->GetValue() };
-
-			std::stringstream ss;
-			std::shared_ptr<TaskState> state = std::make_shared<TaskState>();
-			std::shared_ptr<GCodeWriter> writer = std::make_shared<GCodeWriter>(
-			    handle->getPosition(), handle->getSize(),
-			    list.at((size_t) taskList->GetSelection())->getTranslator(), ss);
-			this->setEnabled(false);
-			wxGetApp().getErrorHandler()->handle(
-			    task->perform(writer, prms, wxGetApp().getSystemManager(), state));
-			this->setEnabled(true);
-			writer->close();
-
-			wxFileDialog *dialog =
-			    new wxFileDialog(this, __("Export linearized GCode"), "", "", "",
-			                     wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
-			if (dialog->ShowModal() == wxID_OK) {
-				std::string path = dialog->GetPath().ToStdString();
-				std::ofstream out(path);
-				out << ss.str();
-				out.close();
-			}
-			ss.seekg(0);
-
-			std::unique_ptr<CoordTranslator> translator =
-			    list.at((size_t) taskList->GetSelection())
-			        ->getTranslator()
-			        ->clone(nullptr);
-			std::shared_ptr<ComplexCoordTranslator> trans = nullptr;
-			if (translator->getType() == ComplexCoord) {
-				std::shared_ptr<CoordTranslator> shtrans = std::move(translator);
-				trans = std::static_pointer_cast<ComplexCoordTranslator>(shtrans);
-			} else {
-				std::shared_ptr<CoordTranslator> shtrans = std::move(translator);
-				trans = std::make_shared<ComplexCoordTranslator>(shtrans);
-			}
-			CalxGcodeHandle *gcodeHandle = new CalxGcodeHandle(
-			    mainPanel, wxID_ANY,
-			    __("Linear ") + taskList->GetStringSelection().ToStdString(), &ss,
-			    trans);
-
-			list.push_back(gcodeHandle);
-			taskList->Append(__("Linear ") +
-			                 taskList->GetStringSelection().ToStdString());
-			mainPanel->GetSizer()->Add(gcodeHandle, 1, wxALL | wxEXPAND, 5);
-			taskList->SetSelection((int) list.size() - 1);
-			Layout();
-			updateUI();
-			dialog->Destroy();
 		} else {
 			std::string message = __("Select coordinate plane");
 			if (taskList->GetSelection() == wxNOT_FOUND) {
@@ -452,30 +455,31 @@ namespace CalXUI {
 			list.at((size_t) taskList->GetSelection())->update();
 			std::shared_ptr<CoordTask> task =
 			    list.at((size_t) taskList->GetSelection())->getTask();
-			std::shared_ptr<CoordHandle> handle =
+			if (std::shared_ptr<CoordHandle> handle =
 			    wxGetApp().getSystemManager()->getCoord(
-			        (size_t) plane->GetSelection());
-			std::pair<motor_point_t, bool> start =
-			    task->getStartPoint(handle->getPosition(), handle->getSize(),
-			                        wxGetApp().getSystemManager());
-			if (start.second) {
-				float scale = wxGetApp()
-				                  .getSystemManager()
-				                  ->getConfiguration()
-				                  .getEntry("units")
-				                  ->getReal("unit_scale", 1.0f);
-				float unit_speed = wxGetApp()
-				                       .getSystemManager()
-				                       ->getConfiguration()
-				                       .getEntry("units")
-				                       ->getReal("unit_speed", 1.25f);
-				coord_point_t dest = { start.first.x / scale, start.first.y / scale };
-				wxGetApp()
-				    .getMainFrame()
-				    ->getPlaneList()
-				    ->getPlaneHandle((size_t) plane->GetSelection())
-				    ->getController()
-				    ->move(dest, unit_speed, false, false);
+			        (size_t) plane->GetSelection()).lock()) {
+				std::pair<motor_point_t, bool> start =
+					task->getStartPoint(handle->getPosition(), handle->getSize(),
+										wxGetApp().getSystemManager());
+				if (start.second) {
+					float scale = wxGetApp()
+									.getSystemManager()
+									->getConfiguration()
+									.getEntry("units")
+									->getReal("unit_scale", 1.0f);
+					float unit_speed = wxGetApp()
+										.getSystemManager()
+										->getConfiguration()
+										.getEntry("units")
+										->getReal("unit_speed", 1.25f);
+					coord_point_t dest = { start.first.x / scale, start.first.y / scale };
+					wxGetApp()
+						.getMainFrame()
+						->getPlaneList()
+						->getPlaneHandle((size_t) plane->GetSelection())
+						->getController()
+						->move(dest, unit_speed, false, false);
+				}
 			}
 		} else {
 			std::string message = __("Select coordinate plane");

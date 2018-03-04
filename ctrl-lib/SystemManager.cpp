@@ -76,10 +76,10 @@ namespace CalX {
 		return *this->ext_engine;
 	}
 
-	std::shared_ptr<MotorController> SystemManager::getMotorController(
+	std::weak_ptr<MotorController> SystemManager::getMotorController(
 	    device_id_t d) const {
 		if (d >= (device_id_t) this->devman->getMotorCount() || d < 0) {
-			return nullptr;
+			return std::weak_ptr<MotorController>();
 		}
 		return this->dev.at((size_t) d);
 	}
@@ -96,9 +96,9 @@ namespace CalX {
 		return this->tasks.size();
 	}
 
-	std::shared_ptr<CoordTask> SystemManager::getTask(size_t i) const {
+	std::weak_ptr<CoordTask> SystemManager::getTask(size_t i) const {
 		if (i >= this->tasks.size()) {
-			return nullptr;
+			return std::weak_ptr<CoordTask>();
 		}
 		return this->tasks.at(i);
 	}
@@ -132,24 +132,24 @@ namespace CalX {
 		return this->coords.size();
 	}
 
-	std::shared_ptr<CoordHandle> SystemManager::getCoord(size_t c) const {
+	std::weak_ptr<CoordHandle> SystemManager::getCoord(size_t c) const {
 		if (c >= this->coords.size()) {
-			return nullptr;
+			return std::weak_ptr<CoordHandle>();
 		}
 		return this->coords.at(c);
 	}
 
-	std::shared_ptr<CoordHandle> SystemManager::createCoord(device_id_t d1,
+	std::weak_ptr<CoordHandle> SystemManager::createCoord(device_id_t d1,
 	                                                        device_id_t d2,
 	                                                        device_id_t instr) {
 		if (d1 >= (device_id_t) this->devman->getMotorCount() ||
 		    d2 >= (device_id_t) this->devman->getMotorCount()) {
-			return nullptr;
+			return std::weak_ptr<CoordHandle>();
 		}
 
 		std::shared_ptr<CoordController> ctrl = std::make_shared<CoordController>(
-		    this->getConfiguration(), this->getMotorController(d1),
-		    this->getMotorController(d2), this->getInstrumentController(instr));
+		    this->getConfiguration(), this->getMotorController(d1).lock(),
+		    this->getMotorController(d2).lock(), this->getInstrumentController(instr).lock());
 		std::shared_ptr<CoordHandle> handle =
 		    std::make_shared<CoordHandle>(this->coords.size(), ctrl);
 		if (getConfiguration().getEntry("core")->getBool("auto_power_motors",
@@ -165,20 +165,23 @@ namespace CalX {
 		                    std::to_string(this->coords.size() - 1) +
 		                    ". Devices: #" + std::to_string(d1) + ", #" +
 		                    std::to_string(d2) + "; instrument: " +
-		                    std::string(getInstrumentController(instr) != nullptr
+		                    std::string(!getInstrumentController(instr).expired()
 		                                    ? "#" + std::to_string(instr)
 		                                    : "no") +
 		                    ".");
 		return handle;
 	}
 
-	void SystemManager::removeCoord(size_t id) {
+	bool SystemManager::removeCoord(size_t id) {
 		if (id < this->coords.size()) {
 			if (this->ext_engine != nullptr) {
 				this->ext_engine->coordRemoving(id);
 			}
 			this->coords.erase(this->coords.begin() + (std::ptrdiff_t) id);
 			LOG(SYSMAN_TAG, "Removed coord #" + std::to_string(id));
+			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -186,19 +189,19 @@ namespace CalX {
 		return this->devman->getInstrumentCount();
 	}
 
-	std::shared_ptr<InstrumentController> SystemManager::getInstrumentController(
+	std::weak_ptr<InstrumentController> SystemManager::getInstrumentController(
 	    device_id_t i) const {
 		if (i >= (device_id_t) this->devman->getInstrumentCount() || i < 0) {
-			return nullptr;
+			return std::weak_ptr<InstrumentController>();
 		}
 		return this->instr.at((size_t) i);
 	}
 
-	std::shared_ptr<MotorController> SystemManager::connectMotor(
+	std::weak_ptr<MotorController> SystemManager::connectMotor(
 	    DeviceConnectionPrms *prms) {
 		Motor *d = devman->connectMotor(prms);
 		if (d == nullptr) {
-			return nullptr;
+			return std::weak_ptr<MotorController>();
 		}
 		devman->refresh();
 		std::shared_ptr<MotorController> ctrl =
@@ -212,11 +215,11 @@ namespace CalX {
 		return ctrl;
 	}
 
-	std::shared_ptr<InstrumentController> SystemManager::connectInstrument(
+	std::weak_ptr<InstrumentController> SystemManager::connectInstrument(
 	    DeviceConnectionPrms *prms) {
 		Instrument *i = devman->connectInstrument(prms);
 		if (i == nullptr) {
-			return nullptr;
+			return std::weak_ptr<InstrumentController>();
 		}
 		std::shared_ptr<InstrumentController> ctrl =
 		    std::make_shared<InstrumentController>(this->getConfiguration(), *i);

@@ -36,7 +36,7 @@ namespace CalXUI {
 		}
 		virtual void perform(SystemManager *sysman) {
 			std::shared_ptr<InstrumentController> ctrl =
-			    sysman->connectInstrument(prms);
+			    sysman->connectInstrument(prms).lock();
 			if (ctrl == nullptr) {
 				wxMessageBox(__("Instrument can't be connected"),
 				             __("Connection error"), wxICON_WARNING);
