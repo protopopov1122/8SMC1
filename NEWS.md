@@ -135,3 +135,13 @@ Project mostly ported on Linux and some refractoring was performed. TODO: retest
 
 ##### 25/05/2017
 Project is fully functional and working.
+
+##### 28/09/2018
+Here I go again.\
+I was allowed to use this system as my bachelor project, so I will continue work.\
+Currently there are some TODOs:
+* contact users of system to collect bug reports and improvement recommendations
+* perform extensive testing
+* make use of new C++17 features
+* do a slight refactoring of Ctrl-lib
+* fix documentation
