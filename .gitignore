@@ -56,7 +56,7 @@ dkms.conf
 .settings
 
 # Project related
-res
+third-party
 build
 *.manifest
 *.res

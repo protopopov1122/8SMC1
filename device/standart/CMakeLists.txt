@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 3.1)
 project(CalX)
 
-if (WIN32)
+# Build standard Device API only on Windows if USMCDLL header is present
+if (WIN32 AND EXISTS ${THIRD_PARTY}/USMCDLL.h)
 
-	if (EXISTS ${CMAKE_SOURCE_DIR}/res/USMCDLL.h)
-		include_directories(${CMAKE_SOURCE_DIR}/res)
+	include_directories(${THIRD_PARTY})
+	if (NOT EXCLUDE_USMC_STUB)
 		add_library(USMCDLL SHARED stub.cpp)
 		if (MINGW)
 			SET_TARGET_PROPERTIES(USMCDLL PROPERTIES PREFIX "")
@@ -18,9 +19,9 @@ if (WIN32)
 		set(CPACK_COMPONENT_USMC_STUB_GROUP "Libraries" CACHE INTERNAL "")
 		set(CPACK_COMPONENT_USMC_STUB_DISABLED TRUE CACHE INTERNAL "")
 		set(CPACK_COMPONENT_USMC_STUB_DESCRIPTION "Standa 8SMC1 motor emulator. Install only if you haven't installed 8SMC1 motor drivers." CACHE INTERNAL "")
-	else (EXISTS ${CMAKE_SOURCE_DIR}/res/USMCDLL.h)
+	else (NOT EXCLUDE_USMC_STUB)
 		add_library(USMCDLL SHARED IMPORTED)
-	endif (EXISTS ${CMAKE_SOURCE_DIR}/res/USMCDLL.h)
+	endif (NOT EXCLUDE_USMC_STUB)
 
 
 	include_directories(${CMAKE_SOURCE_DIR}/headers)
@@ -44,4 +45,4 @@ if (WIN32)
 	set(CPACK_COMPONENT_DEVAPI_STANDART_DEPENDS calx_ctrl_lib CACHE INTERNAL "")
 	set(CPACK_COMPONENT_DEVAPI_STANDART_GROUP "Device API" CACHE INTERNAL "")
 	set(CPACK_COMPONENT_DEVAPI_STANDART_DESCRIPTION "Standart Device API implementation. Contains Standa 8SMC1 stepper motor and EKSPLA NL300 laser drivers." CACHE INTERNAL "")
-endif (WIN32)
+endif (WIN32 AND EXISTS ${THIRD_PARTY}/USMCDLL.h)

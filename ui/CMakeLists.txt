@@ -32,7 +32,7 @@ if (wxWidgets_FOUND)
 	if(MSVC)
 		set_target_properties(calx_ui PROPERTIES LINK_FLAGS "/SUBSYSTEM:WINDOWS")
 	endif (MSVC)
-	target_link_libraries(calx_ui ${wxWidgets_LIBRARIES} calx)
+	target_link_libraries(calx_ui ${wxWidgets_LIBRARIES} calx uxtheme)
 	add_custom_command(TARGET calx_ui POST_BUILD
     	COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:calx_ui> ${build_directory}
 	)
