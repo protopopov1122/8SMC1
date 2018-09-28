@@ -18,14 +18,14 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "device/standart/StandartDeviceManager.h"
+#include "device/standard/StandardDeviceManager.h"
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
 
 namespace CalX {
 
-	StandartDeviceManager::StandartDeviceManager()
+	StandardDeviceManager::StandardDeviceManager()
 	    : DeviceManager::DeviceManager() {
 		this->refresh();
 		for (size_t i = 0; i < devs.NOD; i++) {
@@ -36,7 +36,7 @@ namespace CalX {
 		this->instrumentConnectionType.push_back(DeviceConnectionType::SerialPort);
 	}
 
-	StandartDeviceManager::~StandartDeviceManager() {
+	StandardDeviceManager::~StandardDeviceManager() {
 		this->instruments.clear();
 		this->motors.clear();
 		if (USMC_Close()) {
@@ -44,13 +44,13 @@ namespace CalX {
 		}
 	}
 
-	void StandartDeviceManager::refresh() {
+	void StandardDeviceManager::refresh() {
 		if (USMC_Init(this->devs)) {
 			saveMotorError();
 		}
 	}
 
-	void StandartDeviceManager::saveMotorError() {
+	void StandardDeviceManager::saveMotorError() {
 		char er[101];
 		do {
 			USMC_GetLastErr(er, 100);
@@ -68,7 +68,7 @@ namespace CalX {
 		}
 	}
 
-	void StandartDeviceManager::saveInstrumentError() {
+	void StandardDeviceManager::saveInstrumentError() {
 		for (size_t i = 0; i < this->instruments.size(); i++) {
 			Instrument *ins = this->instruments.at(i).get();
 			while (ins->hasErrors()) {
@@ -77,25 +77,25 @@ namespace CalX {
 		}
 	}
 
-	std::string StandartDeviceManager::getMotorSerial(device_id_t id) {
+	std::string StandardDeviceManager::getMotorSerial(device_id_t id) {
 		if (id >= this->devs.NOD) {
 			return "";
 		}
 		return std::string(this->devs.Serial[id]);
 	}
 
-	std::string StandartDeviceManager::getMotorVersion(device_id_t id) {
+	std::string StandardDeviceManager::getMotorVersion(device_id_t id) {
 		if (id >= this->devs.NOD) {
 			return "";
 		}
 		return std::string(this->devs.Version[id]);
 	}
 
-	Motor *StandartDeviceManager::connectMotor(DeviceConnectionPrms *prms) {
+	Motor *StandardDeviceManager::connectMotor(DeviceConnectionPrms *prms) {
 		return nullptr;
 	}
 
-	Instrument *StandartDeviceManager::connectInstrument(
+	Instrument *StandardDeviceManager::connectInstrument(
 	    DeviceConnectionPrms *_prms) {
 		if (_prms->type != DeviceConnectionType::SerialPort) {
 			return nullptr;
@@ -118,6 +118,6 @@ namespace CalX {
 	}
 
 	extern "C" LIBEXPORT DeviceManager *getDeviceManager() {
-		return new StandartDeviceManager();
+		return new StandardDeviceManager();
 	}
 }  // namespace CalX

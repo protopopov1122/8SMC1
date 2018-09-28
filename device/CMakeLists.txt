@@ -3,4 +3,4 @@ project(CalX)
 
 add_subdirectory(emulated)
 add_subdirectory(emux)
-add_subdirectory(standart)
+add_subdirectory(standard)

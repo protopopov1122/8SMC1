@@ -18,8 +18,8 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "device/standart/NL300Instrument.h"
-#include "device/standart/StandartDeviceManager.h"
+#include "device/standard/NL300Instrument.h"
+#include "device/standard/StandardDeviceManager.h"
 #include <string.h>
 #include <string>
 

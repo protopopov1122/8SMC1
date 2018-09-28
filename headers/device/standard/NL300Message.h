@@ -18,8 +18,8 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CALX_NL300_MESSAGE_H_
-#define CALX_NL300_MESSAGE_H_
+#ifndef CALX_DEVICE_STANDARD_NL300_MESSAGE_H_
+#define CALX_DEVICE_STANDARD_NL300_MESSAGE_H_
 
 #include "ctrl-lib/device/Device.h"
 #include "ctrl-lib/device/DeviceManager.h"
@@ -32,7 +32,7 @@
 
 namespace CalX {
 
-	class StandartDeviceManager;  // Forward referencing
+	class StandardDeviceManager;  // Forward referencing
 
 	enum class NL300MessageType { System, General };
 

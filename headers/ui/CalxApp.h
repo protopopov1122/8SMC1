@@ -32,7 +32,7 @@
 #include <wx/intl.h>
 
 #ifndef DEVICES_LIB
-#define DEVICES_LIB dev_standart
+#define DEVICES_LIB dev_standard
 #endif
 
 // For internatization purposes

@@ -1,9 +1,9 @@
-#ifndef CALX_STANDART_DEVICE_MANAGER_H_
-#define CALX_STANDART_DEVICE_MANAGER_H_
+#ifndef CALX_DEVICE_STANDARD_STANDARD_DEVICE_MANAGER_H_
+#define CALX_DEVICE_STANDARD_STANDARD_DEVICE_MANAGER_H_
 
 #include "ctrl-lib/device/DeviceManager.h"
-#include "device/standart/8SMC1Device.h"
-#include "device/standart/NL300Instrument.h"
+#include "device/standard/8SMC1Device.h"
+#include "device/standard/NL300Instrument.h"
 #include <cinttypes>
 #include <stdlib.h>
 #include <string.h>
@@ -15,10 +15,10 @@
 
 namespace CalX {
 
-	class StandartDeviceManager : public DeviceManager {
+	class StandardDeviceManager : public DeviceManager {
 	 public:
-		StandartDeviceManager();
-		virtual ~StandartDeviceManager();
+		StandardDeviceManager();
+		virtual ~StandardDeviceManager();
 		virtual void refresh();  // USMC_Init
 		virtual std::string getMotorSerial(device_id_t);
 		virtual std::string getMotorVersion(device_id_t);

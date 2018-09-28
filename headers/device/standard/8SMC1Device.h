@@ -18,11 +18,11 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CALX_8SMC1_DEVICE_H_
-#define CALX_8SMC1_DEVICE_H_
+#ifndef CALX_DEVICE_STANDARD_8SMC1_DEVICE_H_
+#define CALX_DEVICE_STANDARD_8SMC1_DEVICE_H_
 
 #include "ctrl-lib/device/Device.h"
-#include "device/standart/NL300Instrument.h"
+#include "device/standard/NL300Instrument.h"
 #include <string>
 #include <vector>
 
@@ -36,11 +36,11 @@
 
 namespace CalX {
 
-	class StandartDeviceManager;  // Forward referencing
+	class StandardDeviceManager;  // Forward referencing
 
 	class _8SMC1Motor : public Motor {
 	 public:
-		_8SMC1Motor(device_id_t, StandartDeviceManager &);
+		_8SMC1Motor(device_id_t, StandardDeviceManager &);
 		virtual ~_8SMC1Motor();
 		virtual void terminate();
 		virtual DeviceManager &getDeviceManager();
@@ -120,7 +120,7 @@ namespace CalX {
 
 	 private:
 		bool aborting;
-		StandartDeviceManager &devman;
+		StandardDeviceManager &devman;
 		// USMC API structures
 		USMC_State state;
 		USMC_StartParameters startPrms;

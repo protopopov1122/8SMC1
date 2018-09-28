@@ -18,8 +18,8 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CALX_NL300_CONFIG_H_
-#define CALX_NL300_CONFIG_H_
+#ifndef CALX_DEVICE_STANDARD_NL300_CONFIG_H_
+#define CALX_DEVICE_STANDARD_NL300_CONFIG_H_
 
 #include "ctrl-lib/device/Device.h"
 #include "ctrl-lib/device/DeviceManager.h"
@@ -51,7 +51,7 @@ namespace CalX {
 #define NL300_CORE_MAX_DELAY "max_mode_delay"
 
 	class NL300Instrument;        // Forward referencing
-	class StandartDeviceManager;  // Forward referencing
+	class StandardDeviceManager;  // Forward referencing
 
 	class NL300ConfigEventListener : public ConfigEventListener {
 	 public:

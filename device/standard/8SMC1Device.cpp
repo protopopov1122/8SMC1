@@ -18,13 +18,13 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "device/standart/StandartDeviceManager.h"
+#include "device/standard/StandardDeviceManager.h"
 #include <iostream>
 #include <string.h>
 
 namespace CalX {
 
-	_8SMC1Motor::_8SMC1Motor(device_id_t id, StandartDeviceManager &devman)
+	_8SMC1Motor::_8SMC1Motor(device_id_t id, StandardDeviceManager &devman)
 	    : Motor::Motor(id), devman(devman) {
 		this->speed = 1500;
 		this->slow_start = false;

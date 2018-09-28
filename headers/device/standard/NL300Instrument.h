@@ -18,14 +18,14 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CALX_NL300_INSTRUMENT_H_
-#define CALX_NL300_INSTRUMENT_H_
+#ifndef CALX_STANDARD_NL300_INSTRUMENT_H_
+#define CALX_STANDARD_NL300_INSTRUMENT_H_
 
 #include "ctrl-lib/device/Device.h"
 #include "ctrl-lib/device/DeviceManager.h"
-#include "device/standart/NL300Command.h"
-#include "device/standart/NL300Config.h"
-#include "device/standart/NL300Message.h"
+#include "device/standard/NL300Command.h"
+#include "device/standard/NL300Config.h"
+#include "device/standard/NL300Message.h"
 #include <cinttypes>
 #include <string>
 #include <vector>
@@ -35,13 +35,13 @@
 
 namespace CalX {
 
-	class StandartDeviceManager;  // Forward referencing
+	class StandardDeviceManager;  // Forward referencing
 
 	enum class NL300InstrumentMode { Adjustment = 0, FullPower = 1 };
 
 	class NL300Instrument : public Instrument {
 	 public:
-		NL300Instrument(device_id_t, StandartDeviceManager &);
+		NL300Instrument(device_id_t, StandardDeviceManager &);
 		virtual ~NL300Instrument();
 		virtual void terminate();
 		bool connect(DeviceSerialPortConnectionPrms *);
@@ -71,7 +71,7 @@ namespace CalX {
 		std::shared_ptr<ConfigEntry> getCoreEntry();
 
 		bool aborting;
-		StandartDeviceManager &devman;
+		StandardDeviceManager &devman;
 		bool state;
 		InstrumentMode work_mode;
 		HANDLE handle;
