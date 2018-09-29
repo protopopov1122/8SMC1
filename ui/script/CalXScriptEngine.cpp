@@ -376,7 +376,9 @@ namespace CalXUI {
 	                                                   device_id_t m2,
 	                                                   device_id_t instr) {
 		std::shared_ptr<CoordHandle> handle =
-		    this->app.getSystemManager()->createCoord(m1, m2, instr).lock();
+		    this->app.getSystemManager()->getCoordPlaneSet().createCoord(this->app.getSystemManager()->getMotorController(m1).lock(),
+				this->app.getSystemManager()->getMotorController(m2).lock(),
+				this->app.getSystemManager()->getInstrumentController(instr).lock()).lock();
 		if (handle == nullptr) {
 			return -1;
 		} else {

@@ -227,16 +227,16 @@ namespace CalXUI {
 			this->list.at((size_t) taskList->GetSelection())->Show(true);
 		}
 		plane->Clear();
-		for (size_t i = 0; i < wxGetApp().getSystemManager()->getCoordCount();
+		for (size_t i = 0; i < wxGetApp().getSystemManager()->getCoordPlaneSet().getCoordCount();
 		     i++) {
 			if (std::shared_ptr<CoordHandle> handle =
-				wxGetApp().getSystemManager()->getCoord(i).lock()) {
+				wxGetApp().getSystemManager()->getCoordPlaneSet().getCoord(i).lock()) {
 				if (!handle->isSessionOpened()) {
 					plane->Append("Plane #" + std::to_string(handle->getID()));
 				}
 			}
 		}
-		if (wxGetApp().getSystemManager()->getCoordCount() > 0) {
+		if (wxGetApp().getSystemManager()->getCoordPlaneSet().getCoordCount() > 0) {
 			plane->SetSelection(0);
 		}
 		this->mainPanel->Layout();
@@ -301,7 +301,7 @@ namespace CalXUI {
 			std::shared_ptr<CoordTask> task =
 			    list.at((size_t) taskList->GetSelection())->getTask();
 			if (std::shared_ptr<CoordHandle> handle =
-			    wxGetApp().getSystemManager()->getCoord(
+			    wxGetApp().getSystemManager()->getCoordPlaneSet().getCoord(
 			        (size_t) plane->GetSelection()).lock()) {
 				float speed = this->speed->GetValue();
 				TaskParameters prms = { (float) speed };
@@ -327,7 +327,7 @@ namespace CalXUI {
 			std::shared_ptr<CoordTask> task =
 			    list.at((size_t) taskList->GetSelection())->getTask();
 			if (std::shared_ptr<CoordHandle> handle =
-			    wxGetApp().getSystemManager()->getCoord(
+			    wxGetApp().getSystemManager()->getCoordPlaneSet().getCoord(
 			        (size_t) plane->GetSelection()).lock()) {
 				if (!handle->isMeasured()) {
 					wxMessageBox(__("Plane need to be measured before preview"),
@@ -361,7 +361,7 @@ namespace CalXUI {
 			std::shared_ptr<CoordTask> task =
 			    list.at((size_t) taskList->GetSelection())->getTask();
 			if (std::shared_ptr<CoordHandle> handle =
-			    wxGetApp().getSystemManager()->getCoord(
+			    wxGetApp().getSystemManager()->getCoordPlaneSet().getCoord(
 			        (size_t) plane->GetSelection()).lock()) {
 				if (!handle->isMeasured()) {
 					wxMessageBox(__("Plane need to be measured to linearize"),
@@ -456,7 +456,7 @@ namespace CalXUI {
 			std::shared_ptr<CoordTask> task =
 			    list.at((size_t) taskList->GetSelection())->getTask();
 			if (std::shared_ptr<CoordHandle> handle =
-			    wxGetApp().getSystemManager()->getCoord(
+			    wxGetApp().getSystemManager()->getCoordPlaneSet().getCoord(
 			        (size_t) plane->GetSelection()).lock()) {
 				std::pair<motor_point_t, bool> start =
 					task->getStartPoint(handle->getPosition(), handle->getSize(),

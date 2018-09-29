@@ -75,8 +75,8 @@ namespace CalX {
 				std::cout << (dev->isRunning() ? "\tRunning" : "\tNot running")
 				          << std::endl;
 			} else if (cmp(COORDS)) {
-				for (size_t i = 0; i < sysman->getCoordCount(); i++) {
-					if (std::shared_ptr<CoordPlane> plane = sysman->getCoord(i).lock()) {
+				for (size_t i = 0; i < sysman->getCoordPlaneSet().getCoordCount(); i++) {
+					if (std::shared_ptr<CoordPlane> plane = sysman->getCoordPlaneSet().getCoord(i).lock()) {
 						std::cout << i << "\tPosition: " << plane->getPosition().x << "x"
 											<< plane->getPosition().y
 											<< "; Dimension: start=" << plane->getSize().x << "x"
@@ -230,10 +230,10 @@ namespace CalX {
 			} else {
 				device_id_t d1 = std::stoi(args.at(0));
 				device_id_t d2 = std::stoi(args.at(1));
-				if (sysman->createCoord(d1, d2).lock() == nullptr) {
+				if (sysman->getCoordPlaneSet().createCoord(sysman->getMotorController(d1).lock(), sysman->getMotorController(d2).lock()).lock() == nullptr) {
 					std::cout << "Wrong device ids" << std::endl;
 				} else {
-					std::cout << "Created coord #" << sysman->getCoordCount() - 1
+					std::cout << "Created coord #" << sysman->getCoordPlaneSet().getCoordCount() - 1
 					          << std::endl;
 				}
 			}
@@ -243,7 +243,7 @@ namespace CalX {
 				return;
 			}
 			if (std::shared_ptr<CoordHandle> ctrl =
-			    sysman->getCoord((size_t) std::stoul(args.at(0))).lock())  {
+			    sysman->getCoordPlaneSet().getCoord((size_t) std::stoul(args.at(0))).lock())  {
 				if (ctrl->popPlane()) {
 					std::cout << "\tOk" << std::endl;
 				} else {
@@ -256,7 +256,7 @@ namespace CalX {
 				return;
 			}
 			std::shared_ptr<CoordHandle> ctrl =
-			    sysman->getCoord((size_t) std::stoul(args.at(0))).lock();
+			    sysman->getCoordPlaneSet().getCoord((size_t) std::stoul(args.at(0))).lock();
 			if (ctrl == nullptr) {
 				std::cout << "Wrong coord id" << std::endl;
 				return;
@@ -276,7 +276,7 @@ namespace CalX {
 				return;
 			}
 			std::shared_ptr<CoordHandle> ctrl =
-			    sysman->getCoord((size_t) std::stoul(args.at(0))).lock();
+			    sysman->getCoordPlaneSet().getCoord((size_t) std::stoul(args.at(0))).lock();
 			if (ctrl == nullptr) {
 				std::cout << "Wrong coord id" << std::endl;
 				return;
@@ -291,7 +291,7 @@ namespace CalX {
 				return;
 			}
 			std::shared_ptr<CoordHandle> ctrl =
-			    sysman->getCoord((size_t) std::stoul(args.at(0))).lock();
+			    sysman->getCoordPlaneSet().getCoord((size_t) std::stoul(args.at(0))).lock();
 			if (ctrl == nullptr) {
 				std::cout << "Wrong coord id" << std::endl;
 				return;
@@ -306,7 +306,7 @@ namespace CalX {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
 				std::shared_ptr<CoordHandle> ctrl =
-				    sysman->getCoord((size_t) std::stoul(args.at(0))).lock();
+				    sysman->getCoordPlaneSet().getCoord((size_t) std::stoul(args.at(0))).lock();
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
 				float speed = static_cast<float>(std::stod(args.at(3)));
@@ -325,7 +325,7 @@ namespace CalX {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
 				std::shared_ptr<CoordHandle> ctrl =
-				    sysman->getCoord((size_t) std::stoul(args.at(0))).lock();
+				    sysman->getCoordPlaneSet().getCoord((size_t) std::stoul(args.at(0))).lock();
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
 				float speed = static_cast<float>(std::stod(args.at(3)));
@@ -344,7 +344,7 @@ namespace CalX {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
 				std::shared_ptr<CoordHandle> ctrl =
-				    sysman->getCoord((size_t) std::stoul(args.at(0))).lock();
+				    sysman->getCoordPlaneSet().getCoord((size_t) std::stoul(args.at(0))).lock();
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
 				float speed = static_cast<float>(std::stod(args.at(3)));
@@ -363,7 +363,7 @@ namespace CalX {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
 				std::shared_ptr<CoordHandle> ctrl =
-				    sysman->getCoord((size_t) std::stoul(args.at(0))).lock();
+				    sysman->getCoordPlaneSet().getCoord((size_t) std::stoul(args.at(0))).lock();
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
 				float speed = static_cast<float>(std::stod(args.at(3)));
@@ -382,7 +382,7 @@ namespace CalX {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
 				std::shared_ptr<CoordHandle> ctrl =
-				    sysman->getCoord((size_t) std::stoul(args.at(0))).lock();
+				    sysman->getCoordPlaneSet().getCoord((size_t) std::stoul(args.at(0))).lock();
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
 				int cx = std::stoi(args.at(3));
@@ -407,7 +407,7 @@ namespace CalX {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
 				std::shared_ptr<CoordHandle> ctrl =
-				    sysman->getCoord((size_t) std::stoi(args.at(0))).lock();
+				    sysman->getCoordPlaneSet().getCoord((size_t) std::stoi(args.at(0))).lock();
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
 				int cx = std::stoi(args.at(3));
@@ -433,7 +433,7 @@ namespace CalX {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
 				std::shared_ptr<CoordHandle> ctrl =
-				    sysman->getCoord((size_t) std::stoul(args.at(0))).lock();
+				    sysman->getCoordPlaneSet().getCoord((size_t) std::stoul(args.at(0))).lock();
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
 				int cx = std::stoi(args.at(3));
@@ -459,7 +459,7 @@ namespace CalX {
 				std::cout << "Provide arguments" << std::endl;
 			} else {
 				std::shared_ptr<CoordHandle> ctrl =
-				    sysman->getCoord((size_t) std::stoul(args.at(0))).lock();
+				    sysman->getCoordPlaneSet().getCoord((size_t) std::stoul(args.at(0))).lock();
 				int x = std::stoi(args.at(1));
 				int y = std::stoi(args.at(2));
 				int cx = std::stoi(args.at(3));
@@ -487,7 +487,7 @@ namespace CalX {
 			}
 			size_t coordNum = (size_t) std::stoul(args.at(0));
 			int coordTrailer = std::stoi(args.at(1));
-			std::shared_ptr<CoordHandle> coordController = sysman->getCoord(coordNum).lock();
+			std::shared_ptr<CoordHandle> coordController = sysman->getCoordPlaneSet().getCoord(coordNum).lock();
 			if (coordController == nullptr) {
 				std::cout << "Wrong coord id" << std::endl;
 				return;
@@ -505,7 +505,7 @@ namespace CalX {
 			}
 			size_t coordNum = (size_t) std::stoul(args.at(0));
 			int coordTrailer = std::stoi(args.at(1));
-			std::shared_ptr<CoordHandle> coordHandle = sysman->getCoord(coordNum).lock();
+			std::shared_ptr<CoordHandle> coordHandle = sysman->getCoordPlaneSet().getCoord(coordNum).lock();
 			if (coordHandle == nullptr) {\
 				std::cout << "Wrong coord id" << std::endl;
 				return;
@@ -527,7 +527,7 @@ namespace CalX {
 				return;
 			}
 			std::shared_ptr<CoordPlane> plane =
-			    sysman->getCoord((size_t) std::stoul(args.at(0))).lock();
+			    sysman->getCoordPlaneSet().getCoord((size_t) std::stoul(args.at(0))).lock();
 			if (plane == nullptr) {
 				std::cout << "Wrong coord id" << std::endl;
 				return;
@@ -766,7 +766,7 @@ namespace CalX {
 			if (std::shared_ptr<CoordTask> task =
 			    sysman->getTaskSet().getTask((size_t) std::stoul(args.at(1))).lock()) {
 				std::shared_ptr<CoordHandle> coord =
-						sysman->getCoord((size_t) std::stoul(args.at(2))).lock();
+						sysman->getCoordPlaneSet().getCoord((size_t) std::stoul(args.at(2))).lock();
 				float speed = static_cast<float>(std::stod(args.at(3)));
 				if (task == nullptr) {
 					std::cout << "Wrong task id" << std::endl;

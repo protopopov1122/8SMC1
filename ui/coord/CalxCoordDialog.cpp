@@ -117,7 +117,10 @@ namespace CalXUI {
 				return;
 			}
 			this->ctrl =
-			    sysman->createCoord(x, y, i == wxNOT_FOUND || i == 0 ? -1 : (i - 1)).lock();
+			    sysman->getCoordPlaneSet().createCoord(
+					sysman->getMotorController(x).lock(),
+					sysman->getMotorController(y).lock(),
+					sysman->getInstrumentController(i == wxNOT_FOUND || i == 0 ? -1 : (i - 1)).lock()).lock();
 		}
 		Hide();
 	}

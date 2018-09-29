@@ -30,6 +30,7 @@
 #include "ctrl-lib/misc/GraphBuilder.h"
 #include "ctrl-lib/plane/CoordHandle.h"
 #include "ctrl-lib/plane/CoordPlane.h"
+#include "ctrl-lib/plane/CoordPlaneSet.h"
 #include "ctrl-lib/task/CoordTask.h"
 #include "ctrl-lib/task/TaskSet.h"
 
@@ -41,7 +42,7 @@
 
 namespace CalX {
 
-	class SystemManager : public TaskSetEventListener {
+	class SystemManager : public TaskSetEventListener, public CoordPlaneSetListener {
 	 public:
 		SystemManager(std::unique_ptr<DeviceManager>,
 		              std::unique_ptr<ConfigManager>,
@@ -55,11 +56,7 @@ namespace CalX {
 		// Tasks control
 		TaskSet &getTaskSet();
 		// Coordinate plane control
-		size_t getCoordCount() const;
-		std::weak_ptr<CoordHandle> getCoord(size_t) const;
-		std::weak_ptr<CoordHandle> createCoord(device_id_t, device_id_t,
-		                                         device_id_t = -1);
-		bool removeCoord(size_t);
+		CoordPlaneSet &getCoordPlaneSet();
 		// Device control
 		std::weak_ptr<MotorController> connectMotor(DeviceConnectionPrms *);
 		std::weak_ptr<InstrumentController> connectInstrument(
@@ -69,17 +66,19 @@ namespace CalX {
 		std::weak_ptr<InstrumentController> getInstrumentController(device_id_t) const;
 		size_t getInstrumentCount() const;
 
-		void taskAdded(std::shared_ptr<CoordTask>);
-		void taskRemoved(std::size_t);
-	 private:
-	 
+		void taskAdded(std::shared_ptr<CoordTask>) override;
+		void taskRemoved(std::size_t) override;
+		
+		void planeAdded(std::shared_ptr<CoordHandle>) override;
+		void planeRemoved(std::size_t) override;
+	 private:	 
 		const std::unique_ptr<DeviceManager> devman;
 		const std::unique_ptr<ConfigManager> conf;
 		std::vector<std::shared_ptr<MotorController>> dev;
 		std::vector<std::shared_ptr<InstrumentController>> instr;
-		std::vector<std::shared_ptr<CoordHandle>> coords;
 		FunctionEngine engine;
 		const std::unique_ptr<ExtEngine> ext_engine;
+		VectorCoordPlaneSet planeSet;
 		VectorTaskSet taskSet;
 	};
 }  // namespace CalX

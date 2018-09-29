@@ -29,7 +29,7 @@ namespace CalX {
 	                             std::unique_ptr<ExtEngine> ext_eng)
 		: devman(std::move(devman)), conf(std::move(conf)),
 			ext_engine(std::move(ext_eng)),
-			taskSet(this) {
+			planeSet(*this->conf, this), taskSet(this) {
 		for (device_id_t d = 0; d < (device_id_t) this->devman->getMotorCount();
 		     d++) {
 			this->dev.push_back(std::make_shared<MotorController>(
@@ -57,7 +57,6 @@ namespace CalX {
 		if (this->ext_engine != nullptr) {
 			this->ext_engine->destroy();
 		}
-		this->coords.clear();
 		this->instr.clear();
 		this->dev.clear();
 		LOG(SYSMAN_TAG, "Sysman exited");
@@ -96,61 +95,8 @@ namespace CalX {
 		return this->taskSet;
 	}
 
-	size_t SystemManager::getCoordCount() const {
-		return this->coords.size();
-	}
-
-	std::weak_ptr<CoordHandle> SystemManager::getCoord(size_t c) const {
-		if (c >= this->coords.size()) {
-			return std::weak_ptr<CoordHandle>();
-		}
-		return this->coords.at(c);
-	}
-
-	std::weak_ptr<CoordHandle> SystemManager::createCoord(device_id_t d1,
-	                                                        device_id_t d2,
-	                                                        device_id_t instr) {
-		if (d1 >= (device_id_t) this->devman->getMotorCount() ||
-		    d2 >= (device_id_t) this->devman->getMotorCount()) {
-			return std::weak_ptr<CoordHandle>();
-		}
-
-		std::shared_ptr<CoordController> ctrl = std::make_shared<CoordController>(
-		    this->getConfiguration(), this->getMotorController(d1).lock(),
-		    this->getMotorController(d2).lock(), this->getInstrumentController(instr).lock());
-		std::shared_ptr<CoordHandle> handle =
-		    std::make_shared<CoordHandle>(this->coords.size(), ctrl);
-		if (getConfiguration().getEntry("core")->getBool("auto_power_motors",
-		                                                 false)) {
-			ctrl->getXAxis()->enablePower(true);
-			ctrl->getYAxis()->enablePower(true);
-		}
-		this->coords.push_back(handle);
-		if (this->ext_engine != nullptr) {
-			this->ext_engine->coordAdded(handle);
-		}
-		LOG(SYSMAN_TAG, "New coordinate plane #" +
-		                    std::to_string(this->coords.size() - 1) +
-		                    ". Devices: #" + std::to_string(d1) + ", #" +
-		                    std::to_string(d2) + "; instrument: " +
-		                    std::string(!getInstrumentController(instr).expired()
-		                                    ? "#" + std::to_string(instr)
-		                                    : "no") +
-		                    ".");
-		return handle;
-	}
-
-	bool SystemManager::removeCoord(size_t id) {
-		if (id < this->coords.size()) {
-			if (this->ext_engine != nullptr) {
-				this->ext_engine->coordRemoving(id);
-			}
-			this->coords.erase(this->coords.begin() + (std::ptrdiff_t) id);
-			LOG(SYSMAN_TAG, "Removed coord #" + std::to_string(id));
-			return true;
-		} else {
-			return false;
-		}
+	CoordPlaneSet &SystemManager::getCoordPlaneSet() {
+		return this->planeSet;
 	}
 
 	size_t SystemManager::getInstrumentCount() const {
@@ -216,5 +162,27 @@ namespace CalX {
 
 		LOG(SYSMAN_TAG, "Removed task # " + std::to_string(index) +
 		                    ". Task count: " + std::to_string(this->taskSet.getTaskCount()));
+	}
+	
+	void SystemManager::planeAdded(std::shared_ptr<CoordHandle> handle) {
+		if (this->ext_engine != nullptr) {
+			this->ext_engine->coordAdded(handle);
+		}
+
+		LOG(SYSMAN_TAG, "New coordinate plane #" +
+		                    std::to_string(handle->getID()) +
+		                    ". Devices: #" + std::to_string(handle->getController()->getXAxis()->getID()) + ", #" +
+		                    std::to_string(handle->getController()->getYAxis()->getID()) + "; instrument: " +
+		                    std::string(handle->getController()->getInstrument() != nullptr
+		                                    ? "#" + std::to_string(handle->getController()->getInstrument()->getID())
+		                                    : "no") +
+		                    ".");
+	}
+	
+	void SystemManager::planeRemoved(std::size_t index) {		
+		if (this->ext_engine != nullptr) {
+			this->ext_engine->coordRemoving(index);
+		}
+		LOG(SYSMAN_TAG, "Removed coord #" + std::to_string(index));
 	}
 }  // namespace CalX
