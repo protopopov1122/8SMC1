@@ -68,17 +68,17 @@ namespace CalXUI {
 			}
 		}
 
-		for (size_t i = 0; i < wxGetApp().getSystemManager()->getMotorCount();
+		for (size_t i = 0; i < wxGetApp().getSystemManager()->getMotorControllerSet().getDeviceCount();
 		     i++) {
 			devPanel->appendDevice(new CalxMotorConstructor(
 			    devPanel,
-			    wxGetApp().getSystemManager()->getMotorController((device_id_t) i).lock()));
+			    wxGetApp().getSystemManager()->getMotorControllerSet().getDeviceController((device_id_t) i).lock()));
 		}
 
-		for (size_t i = 0; i < wxGetApp().getSystemManager()->getInstrumentCount();
+		for (size_t i = 0; i < wxGetApp().getSystemManager()->getInstrumentControllerSet().getDeviceCount();
 		     i++) {
 			devPanel->appendDevice(new CalxInstrumentConstructor(
-			    devPanel, wxGetApp().getSystemManager()->getInstrumentController(
+			    devPanel, wxGetApp().getSystemManager()->getInstrumentControllerSet().getDeviceController(
 			                  (device_id_t) i).lock()));
 		}
 		devPanel->updateUI();

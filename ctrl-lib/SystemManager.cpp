@@ -29,21 +29,13 @@ namespace CalX {
 	                             std::unique_ptr<ExtEngine> ext_eng)
 		: devman(std::move(devman)), conf(std::move(conf)),
 			ext_engine(std::move(ext_eng)),
+			motorControllerSet(*this->conf, *this->devman, this),
+			instrumentControllerSet(*this->conf, *this->devman, this),
 			planeSet(*this->conf, this), taskSet(this) {
-		for (device_id_t d = 0; d < (device_id_t) this->devman->getMotorCount();
-		     d++) {
-			this->dev.push_back(std::make_shared<MotorController>(
-			    this->getConfiguration(), *this->devman->getMotor(d)));
-		}
-		for (device_id_t i = 0;
-		     i < (device_id_t) this->devman->getInstrumentCount(); i++) {
-			this->instr.push_back(std::make_shared<InstrumentController>(
-			    this->getConfiguration(), *this->devman->getInstrument(i)));
-		}
 		LOG(SYSMAN_TAG, "System startup. Found " +
-		                    std::to_string(this->devman->getMotorCount()) +
+		                    std::to_string(this->motorControllerSet.getDeviceCount()) +
 		                    " motors and " +
-		                    std::to_string(this->devman->getInstrumentCount()) +
+		                    std::to_string(this->instrumentControllerSet.getDeviceCount()) +
 		                    " instruments.");
 		FunctionEngine_add_default_functions(this->engine);
 		if (this->ext_engine != nullptr) {
@@ -57,8 +49,6 @@ namespace CalX {
 		if (this->ext_engine != nullptr) {
 			this->ext_engine->destroy();
 		}
-		this->instr.clear();
-		this->dev.clear();
 		LOG(SYSMAN_TAG, "Sysman exited");
 		DESTROY_LOG("SystemManager");
 	}
@@ -75,20 +65,8 @@ namespace CalX {
 		return *this->ext_engine;
 	}
 
-	std::weak_ptr<MotorController> SystemManager::getMotorController(
-	    device_id_t d) const {
-		if (d >= (device_id_t) this->devman->getMotorCount() || d < 0) {
-			return std::weak_ptr<MotorController>();
-		}
-		return this->dev.at((size_t) d);
-	}
-
 	FunctionEngine &SystemManager::getFunctionEngine() {
 		return this->engine;
-	}
-
-	size_t SystemManager::getMotorCount() const {
-		return this->devman->getMotorCount();
 	}
 	
 	TaskSet &SystemManager::getTaskSet() {
@@ -98,52 +76,13 @@ namespace CalX {
 	CoordPlaneSet &SystemManager::getCoordPlaneSet() {
 		return this->planeSet;
 	}
-
-	size_t SystemManager::getInstrumentCount() const {
-		return this->devman->getInstrumentCount();
+	
+	MotorControllerSet &SystemManager::getMotorControllerSet() {
+		return this->motorControllerSet;
 	}
-
-	std::weak_ptr<InstrumentController> SystemManager::getInstrumentController(
-	    device_id_t i) const {
-		if (i >= (device_id_t) this->devman->getInstrumentCount() || i < 0) {
-			return std::weak_ptr<InstrumentController>();
-		}
-		return this->instr.at((size_t) i);
-	}
-
-	std::weak_ptr<MotorController> SystemManager::connectMotor(
-	    DeviceConnectionPrms *prms) {
-		Motor *d = devman->connectMotor(prms);
-		if (d == nullptr) {
-			return std::weak_ptr<MotorController>();
-		}
-		devman->refresh();
-		std::shared_ptr<MotorController> ctrl =
-		    std::make_shared<MotorController>(this->getConfiguration(), *d);
-		this->dev.push_back(ctrl);
-		if (this->ext_engine != nullptr) {
-			this->ext_engine->motorConnected(ctrl);
-		}
-		LOG(SYSMAN_TAG,
-		    "Connected new device #" + std::to_string(this->dev.size() - 1));
-		return ctrl;
-	}
-
-	std::weak_ptr<InstrumentController> SystemManager::connectInstrument(
-	    DeviceConnectionPrms *prms) {
-		Instrument *i = devman->connectInstrument(prms);
-		if (i == nullptr) {
-			return std::weak_ptr<InstrumentController>();
-		}
-		std::shared_ptr<InstrumentController> ctrl =
-		    std::make_shared<InstrumentController>(this->getConfiguration(), *i);
-		this->instr.push_back(ctrl);
-		if (this->ext_engine != nullptr) {
-			this->ext_engine->instrumentConnected(ctrl);
-		}
-		LOG(SYSMAN_TAG,
-		    "Connected new instrument #" + std::to_string(this->instr.size() - 1));
-		return ctrl;
+	
+	InstrumentControllerSet &SystemManager::getInstrumentControllerSet() {
+		return this->instrumentControllerSet;
 	}
 	
 	void SystemManager::taskAdded(std::shared_ptr<CoordTask> task) {
@@ -184,5 +123,21 @@ namespace CalX {
 			this->ext_engine->coordRemoving(index);
 		}
 		LOG(SYSMAN_TAG, "Removed coord #" + std::to_string(index));
+	}
+	
+	void SystemManager::deviceAdded(std::shared_ptr<DeviceController> controller) {
+		if (controller->getDevice().getType() == DeviceType::Motor) {
+			if (this->ext_engine != nullptr) {
+				this->ext_engine->motorConnected(std::dynamic_pointer_cast<MotorController>(controller));
+			}
+			LOG(SYSMAN_TAG,
+				"Connected new motor #" + std::to_string(controller->getID()));
+		} else {
+			if (this->ext_engine != nullptr) {
+				this->ext_engine->instrumentConnected(std::dynamic_pointer_cast<InstrumentController>(controller));
+			}
+			LOG(SYSMAN_TAG,
+				"Connected new instrument #" + std::to_string(controller->getID()));
+		}
 	}
 }  // namespace CalX

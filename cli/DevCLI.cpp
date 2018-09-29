@@ -128,7 +128,7 @@ namespace CalX {
 					return;
 				}
 				std::shared_ptr<MotorController> dev =
-				    sysman->getMotorController(std::stoi(args.at(0))).lock();
+				    sysman->getMotorControllerSet().getDeviceController(std::stoi(args.at(0))).lock();
 				if (dev == nullptr) {
 					std::cout << "Device not found" << std::endl;
 					return;
@@ -145,7 +145,7 @@ namespace CalX {
 					return;
 				}
 				std::shared_ptr<MotorController> dev =
-				    sysman->getMotorController(std::stoi(args.at(0))).lock();
+				    sysman->getMotorControllerSet().getDeviceController(std::stoi(args.at(0))).lock();
 				if (dev == nullptr) {
 					std::cout << "Device not found" << std::endl;
 					return;
@@ -166,7 +166,7 @@ namespace CalX {
 					return;
 				}
 				std::shared_ptr<MotorController> dev =
-				    sysman->getMotorController(std::stoi(args.at(0))).lock();
+				    sysman->getMotorControllerSet().getDeviceController(std::stoi(args.at(0))).lock();
 				if (dev == nullptr) {
 					std::cout << "Device not found" << std::endl;
 					return;
@@ -183,7 +183,7 @@ namespace CalX {
 				std::cout << "Provide device id" << std::endl;
 			} else {
 				std::shared_ptr<MotorController> dev =
-				    sysman->getMotorController(std::stoi(args.at(0))).lock();
+				    sysman->getMotorControllerSet().getDeviceController(std::stoi(args.at(0))).lock();
 				if (dev == nullptr) {
 					std::cout << "Device not found" << std::endl;
 					return;
@@ -198,7 +198,7 @@ namespace CalX {
 			} else
 				for (size_t i = 0; i < args.size(); i++) {
 					std::shared_ptr<MotorController> dev =
-					    sysman->getMotorController(std::stoi(args.at(i))).lock();
+					    sysman->getMotorControllerSet().getDeviceController(std::stoi(args.at(i))).lock();
 					if (dev == nullptr) {
 						std::cout << "Device #" << i << " not found" << std::endl;
 						return;
@@ -230,7 +230,7 @@ namespace CalX {
 			} else {
 				device_id_t d1 = std::stoi(args.at(0));
 				device_id_t d2 = std::stoi(args.at(1));
-				if (sysman->getCoordPlaneSet().createCoord(sysman->getMotorController(d1).lock(), sysman->getMotorController(d2).lock()).lock() == nullptr) {
+				if (sysman->getCoordPlaneSet().createCoord(sysman->getMotorControllerSet().getDeviceController(d1).lock(), sysman->getMotorControllerSet().getDeviceController(d2).lock()).lock() == nullptr) {
 					std::cout << "Wrong device ids" << std::endl;
 				} else {
 					std::cout << "Created coord #" << sysman->getCoordPlaneSet().getCoordCount() - 1

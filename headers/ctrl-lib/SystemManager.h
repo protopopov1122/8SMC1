@@ -24,8 +24,8 @@
 #include <memory>
 #include "ctrl-lib/ExtEngine.h"
 #include "ctrl-lib/conf/ConfigManager.h"
-#include "ctrl-lib/ctrl/InstrumentController.h"
 #include "ctrl-lib/device/DeviceManager.h"
+#include "ctrl-lib/ctrl/DeviceControllerSet.h"
 #include "ctrl-lib/graph/FunctionEngine.h"
 #include "ctrl-lib/misc/GraphBuilder.h"
 #include "ctrl-lib/plane/CoordHandle.h"
@@ -42,7 +42,7 @@
 
 namespace CalX {
 
-	class SystemManager : public TaskSetEventListener, public CoordPlaneSetListener {
+	class SystemManager : public TaskSetEventListener, public CoordPlaneSetListener, public DeviceControllerSetListener {
 	 public:
 		SystemManager(std::unique_ptr<DeviceManager>,
 		              std::unique_ptr<ConfigManager>,
@@ -58,26 +58,23 @@ namespace CalX {
 		// Coordinate plane control
 		CoordPlaneSet &getCoordPlaneSet();
 		// Device control
-		std::weak_ptr<MotorController> connectMotor(DeviceConnectionPrms *);
-		std::weak_ptr<InstrumentController> connectInstrument(
-		    DeviceConnectionPrms *);
-		std::weak_ptr<MotorController> getMotorController(device_id_t) const;
-		size_t getMotorCount() const;
-		std::weak_ptr<InstrumentController> getInstrumentController(device_id_t) const;
-		size_t getInstrumentCount() const;
+		MotorControllerSet &getMotorControllerSet();
+		InstrumentControllerSet &getInstrumentControllerSet();
 
 		void taskAdded(std::shared_ptr<CoordTask>) override;
 		void taskRemoved(std::size_t) override;
 		
 		void planeAdded(std::shared_ptr<CoordHandle>) override;
 		void planeRemoved(std::size_t) override;
-	 private:	 
+		
+		void deviceAdded(std::shared_ptr<DeviceController>) override;
+	 private:		
 		const std::unique_ptr<DeviceManager> devman;
 		const std::unique_ptr<ConfigManager> conf;
-		std::vector<std::shared_ptr<MotorController>> dev;
-		std::vector<std::shared_ptr<InstrumentController>> instr;
 		FunctionEngine engine;
 		const std::unique_ptr<ExtEngine> ext_engine;
+		MotorControllerSet motorControllerSet;
+		InstrumentControllerSet instrumentControllerSet;
 		VectorCoordPlaneSet planeSet;
 		VectorTaskSet taskSet;
 	};
