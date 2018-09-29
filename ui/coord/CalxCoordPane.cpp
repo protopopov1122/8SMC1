@@ -1,6 +1,6 @@
 
 /*
-        Copyright (c) 2017 Jevgenijs Protopopovs
+        Copyright (c) 2017-2018 Jevgenijs Protopopovs
 
         This file is part of CalX project.
 
