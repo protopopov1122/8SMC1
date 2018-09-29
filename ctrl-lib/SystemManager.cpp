@@ -28,7 +28,8 @@ namespace CalX {
 	                             std::unique_ptr<ConfigManager> conf,
 	                             std::unique_ptr<ExtEngine> ext_eng)
 		: devman(std::move(devman)), conf(std::move(conf)),
-			ext_engine(std::move(ext_eng)) {
+			ext_engine(std::move(ext_eng)),
+			taskSet(this) {
 		for (device_id_t d = 0; d < (device_id_t) this->devman->getMotorCount();
 		     d++) {
 			this->dev.push_back(std::make_shared<MotorController>(
@@ -56,7 +57,6 @@ namespace CalX {
 		if (this->ext_engine != nullptr) {
 			this->ext_engine->destroy();
 		}
-		this->tasks.clear();
 		this->coords.clear();
 		this->instr.clear();
 		this->dev.clear();
@@ -91,41 +91,9 @@ namespace CalX {
 	size_t SystemManager::getMotorCount() const {
 		return this->devman->getMotorCount();
 	}
-
-	size_t SystemManager::getTaskCount() const {
-		return this->tasks.size();
-	}
-
-	std::weak_ptr<CoordTask> SystemManager::getTask(size_t i) const {
-		if (i >= this->tasks.size()) {
-			return std::weak_ptr<CoordTask>();
-		}
-		return this->tasks.at(i);
-	}
-
-	size_t SystemManager::addTask(std::shared_ptr<CoordTask> task) {
-		this->tasks.push_back(std::move(task));
-		if (this->ext_engine != nullptr) {
-			this->ext_engine->taskAdded(this->tasks.at(this->tasks.size() - 1));
-		}
-		LOG(SYSMAN_TAG, "Added new task #" +
-		                    std::to_string(this->tasks.size() - 1) +
-		                    ". Task count: " + std::to_string(this->tasks.size()));
-		return this->tasks.size() - 1;
-	}
-
-	bool SystemManager::removeTask(size_t i) {
-		if (i >= this->tasks.size()) {
-			return false;
-		}
-		if (this->ext_engine != nullptr) {
-			this->ext_engine->taskRemoving(i);
-		}
-
-		this->tasks.erase(this->tasks.begin() + (std::ptrdiff_t) i);
-		LOG(SYSMAN_TAG, "Removed task # " + std::to_string(i) +
-		                    ". Task count: " + std::to_string(this->tasks.size()));
-		return true;
+	
+	TaskSet &SystemManager::getTaskSet() {
+		return this->taskSet;
 	}
 
 	size_t SystemManager::getCoordCount() const {
@@ -230,5 +198,23 @@ namespace CalX {
 		LOG(SYSMAN_TAG,
 		    "Connected new instrument #" + std::to_string(this->instr.size() - 1));
 		return ctrl;
+	}
+	
+	void SystemManager::taskAdded(std::shared_ptr<CoordTask> task) {
+		if (this->ext_engine != nullptr) {
+			this->ext_engine->taskAdded(task);
+		}
+		LOG(SYSMAN_TAG, "Added new task #" +
+		                    std::to_string(this->taskSet.getTaskCount() - 1) +
+		                    ". Task count: " + std::to_string(this->taskSet.getTaskCount()));
+	}
+	
+	void SystemManager::taskRemoved(std::size_t index) {
+		if (this->ext_engine != nullptr) {
+			this->ext_engine->taskRemoving(index);
+		}
+
+		LOG(SYSMAN_TAG, "Removed task # " + std::to_string(index) +
+		                    ". Task count: " + std::to_string(this->taskSet.getTaskCount()));
 	}
 }  // namespace CalX

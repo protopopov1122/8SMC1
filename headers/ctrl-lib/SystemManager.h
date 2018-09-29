@@ -31,6 +31,7 @@
 #include "ctrl-lib/plane/CoordHandle.h"
 #include "ctrl-lib/plane/CoordPlane.h"
 #include "ctrl-lib/task/CoordTask.h"
+#include "ctrl-lib/task/TaskSet.h"
 
 /* SystemManager is component that store and control most system
    objects like devices, coord planes, tasks and configuration.
@@ -40,7 +41,7 @@
 
 namespace CalX {
 
-	class SystemManager {
+	class SystemManager : public TaskSetEventListener {
 	 public:
 		SystemManager(std::unique_ptr<DeviceManager>,
 		              std::unique_ptr<ConfigManager>,
@@ -52,10 +53,7 @@ namespace CalX {
 		FunctionEngine &getFunctionEngine();
 		ExtEngine &getExtEngine() const;
 		// Tasks control
-		size_t getTaskCount() const;
-		std::weak_ptr<CoordTask> getTask(size_t) const;
-		size_t addTask(std::shared_ptr<CoordTask>);
-		bool removeTask(size_t);
+		TaskSet &getTaskSet();
 		// Coordinate plane control
 		size_t getCoordCount() const;
 		std::weak_ptr<CoordHandle> getCoord(size_t) const;
@@ -71,15 +69,18 @@ namespace CalX {
 		std::weak_ptr<InstrumentController> getInstrumentController(device_id_t) const;
 		size_t getInstrumentCount() const;
 
+		void taskAdded(std::shared_ptr<CoordTask>);
+		void taskRemoved(std::size_t);
 	 private:
+	 
 		const std::unique_ptr<DeviceManager> devman;
 		const std::unique_ptr<ConfigManager> conf;
 		std::vector<std::shared_ptr<MotorController>> dev;
 		std::vector<std::shared_ptr<InstrumentController>> instr;
-		std::vector<std::shared_ptr<CoordTask>> tasks;
 		std::vector<std::shared_ptr<CoordHandle>> coords;
 		FunctionEngine engine;
 		const std::unique_ptr<ExtEngine> ext_engine;
+		VectorTaskSet taskSet;
 	};
 }  // namespace CalX
 

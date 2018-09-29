@@ -86,8 +86,8 @@ namespace CalX {
 					}
 				}
 			} else if (cmp(TASKS)) {
-				for (size_t i = 0; i < sysman->getTaskCount(); i++) {
-					if (std::shared_ptr<CoordTask> task = sysman->getTask(i).lock()) {
+				for (size_t i = 0; i < sysman->getTaskSet().getTaskCount(); i++) {
+					if (std::shared_ptr<CoordTask> task = sysman->getTaskSet().getTask(i).lock()) {
 						std::cout << i;
 						if (task->getType() == CoordTaskType::ProgrammedTask) {
 							std::shared_ptr<ProgrammedCoordTask> pct =
@@ -573,11 +573,11 @@ namespace CalX {
 		}
 		if (args.at(0).compare("new") == 0) {
 			std::shared_ptr<CoordTask> task = std::make_shared<ProgrammedCoordTask>();
-			sysman->addTask(task);
+			sysman->getTaskSet().addTask(task);
 			if (task == nullptr) {
 				std::cout << "Error occured" << std::endl;
 			} else {
-				std::cout << "Created task #" << (this->sysman->getTaskCount() - 1)
+				std::cout << "Created task #" << (this->sysman->getTaskSet().getTaskCount() - 1)
 				          << std::endl;
 			}
 		} else if (args.at(0).compare("rm") == 0) {
@@ -585,7 +585,7 @@ namespace CalX {
 				std::cout << "Provide task id" << std::endl;
 				return;
 			}
-			if (!sysman->removeTask((size_t) std::stoul(args.at(1)))) {
+			if (!sysman->getTaskSet().removeTask((size_t) std::stoul(args.at(1)))) {
 				std::cout << "Wrong task id" << std::endl;
 			} else {
 				std::cout << "Ok" << std::endl;
@@ -593,7 +593,7 @@ namespace CalX {
 		} else if (args.at(0).compare("add") == 0) {
 			args.erase(args.begin());
 			if (std::shared_ptr<CoordTask> tsk =
-			    sysman->getTask((size_t) std::stoul(args.at(0))).lock()) {
+			    sysman->getTaskSet().getTask((size_t) std::stoul(args.at(0))).lock()) {
 				args.erase(args.begin());
 				std::string com = args.at(0);
 				args.erase(args.begin());
@@ -764,7 +764,7 @@ namespace CalX {
 				return;
 			}
 			if (std::shared_ptr<CoordTask> task =
-			    sysman->getTask((size_t) std::stoul(args.at(1))).lock()) {
+			    sysman->getTaskSet().getTask((size_t) std::stoul(args.at(1))).lock()) {
 				std::shared_ptr<CoordHandle> coord =
 						sysman->getCoord((size_t) std::stoul(args.at(2))).lock();
 				float speed = static_cast<float>(std::stod(args.at(3)));
@@ -791,7 +791,7 @@ namespace CalX {
 			    std::make_shared<BasicCoordTranslator>(center, scale);
 			std::string path = args.at(5);
 			std::ifstream is(path, std::ifstream::in);
-			sysman->addTask(std::make_unique<GCodeCoordTask>(is, trans));
+			sysman->getTaskSet().addTask(std::make_unique<GCodeCoordTask>(is, trans));
 			is.close();
 		} else if (args.at(0).compare("graph") == 0) {
 			if (args.size() < 12) {
@@ -816,7 +816,7 @@ namespace CalX {
 			std::unique_ptr<GraphBuilder> graph =
 			    std::make_unique<GraphBuilder>(std::move(node), min, max, step);
 			std::cout << "New graph task #"
-			          << sysman->addTask(std::make_unique<GraphCoordTask>(
+			          << sysman->getTaskSet().addTask(std::make_unique<GraphCoordTask>(
 			                 std::move(graph), trans, speed))
 			          << std::endl;
 		} else {
