@@ -20,7 +20,7 @@ namespace CalX {
 	std::size_t VectorTaskSet::addTask(std::shared_ptr<CoordTask> task) {
 		this->tasks.push_back(task);
 		if (this->listener) {
-			this->listener->taskAdded(task);
+			this->listener->onTaskAdded(task);
 		}
 		return this->tasks.size() - 1;
 	}
@@ -30,7 +30,7 @@ namespace CalX {
 			return false;
 		}
 		if (this->listener) {
-			this->listener->taskRemoved(index);
+			this->listener->onTaskRemoving(index);
 		}
 		this->tasks.erase(this->tasks.begin() + static_cast<std::ptrdiff_t>(index));
 		return true;

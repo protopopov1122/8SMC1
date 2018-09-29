@@ -20,13 +20,13 @@ namespace CalX {
 	class TaskSetEventListener {
 	 public:
 		virtual ~TaskSetEventListener() = default;
-		virtual void taskAdded(std::shared_ptr<CoordTask>) = 0;
-		virtual void taskRemoved(std::size_t) = 0;
+		virtual void onTaskAdded(std::shared_ptr<CoordTask>) = 0;
+		virtual void onTaskRemoving(std::size_t) = 0;
 	};
 	
 	class VectorTaskSet : public TaskSet {
 	 public:
-		VectorTaskSet(TaskSetEventListener *);
+		VectorTaskSet(TaskSetEventListener * = nullptr);
 		std::size_t getTaskCount() const override;
 		std::weak_ptr<CoordTask> getTask(std::size_t) const override;
 		std::size_t addTask(std::shared_ptr<CoordTask>) override;

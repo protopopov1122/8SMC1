@@ -36,7 +36,7 @@ namespace CalX {
 		}
 		this->planes.push_back(handle);
 		if (this->listener) {
-			this->listener->planeAdded(handle);
+			this->listener->onPlaneAdded(handle);
 		}
 		return handle;
 	}
@@ -44,7 +44,7 @@ namespace CalX {
 	bool VectorCoordPlaneSet::removeCoord(std::size_t index) {
 		if (index < this->planes.size()) {
 			if (this->listener) {
-				this->listener->planeRemoved(index);
+				this->listener->onPlaneRemoving(index);
 			}
 			this->planes.erase(this->planes.begin() + (std::ptrdiff_t) index);
 			return true;

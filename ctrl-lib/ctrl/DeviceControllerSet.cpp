@@ -22,7 +22,7 @@ namespace CalX {
 		    std::make_shared<MotorController>(this->config, *motorDevice);
 		this->motors.push_back(motorController);
 		if (this->listener) {
-			this->listener->deviceAdded(motorController);
+			this->listener->onDeviceConnected(motorController);
 		}
 		return motorController;
 	}
@@ -59,7 +59,7 @@ namespace CalX {
 		    std::make_shared<InstrumentController>(this->config, *instrumentDevice);
 		this->instruments.push_back(instrumentController);
 		if (this->listener) {
-			this->listener->deviceAdded(instrumentController);
+			this->listener->onDeviceConnected(instrumentController);
 		}
 		return instrumentController;
 	}

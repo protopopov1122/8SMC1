@@ -42,37 +42,43 @@
 
 namespace CalX {
 
-	class SystemManager : public TaskSetEventListener, public CoordPlaneSetListener, public DeviceControllerSetListener {
+	class SystemManager; // Forward referencing
+
+	class SystemManagerEventLogger : public TaskSetEventListener, public CoordPlaneSetListener, public DeviceControllerSetListener {
+	 public:
+		SystemManagerEventLogger(SystemManager &);
+		
+		void onTaskAdded(std::shared_ptr<CoordTask>) override;
+		void onTaskRemoving(std::size_t) override;
+		
+		void onPlaneAdded(std::shared_ptr<CoordHandle>) override;
+		void onPlaneRemoving(std::size_t) override;
+		
+		void onDeviceConnected(std::shared_ptr<DeviceController>) override;
+	 private:
+		SystemManager &sysman;
+	};
+
+	class SystemManager {
 	 public:
 		SystemManager(std::unique_ptr<DeviceManager>,
 		              std::unique_ptr<ConfigManager>,
 		              std::unique_ptr<ExtEngine> = nullptr);
 		virtual ~SystemManager();
-		// Main subsystems
 		DeviceManager &getDeviceManager() const;
 		ConfigManager &getConfiguration() const;
 		FunctionEngine &getFunctionEngine();
-		ExtEngine &getExtEngine() const;
-		// Tasks control
+		ExtEngine *getExtensionEngine() const;
 		TaskSet &getTaskSet();
-		// Coordinate plane control
 		CoordPlaneSet &getCoordPlaneSet();
-		// Device control
 		MotorControllerSet &getMotorControllerSet();
 		InstrumentControllerSet &getInstrumentControllerSet();
-
-		void taskAdded(std::shared_ptr<CoordTask>) override;
-		void taskRemoved(std::size_t) override;
-		
-		void planeAdded(std::shared_ptr<CoordHandle>) override;
-		void planeRemoved(std::size_t) override;
-		
-		void deviceAdded(std::shared_ptr<DeviceController>) override;
 	 private:		
 		const std::unique_ptr<DeviceManager> devman;
 		const std::unique_ptr<ConfigManager> conf;
 		FunctionEngine engine;
 		const std::unique_ptr<ExtEngine> ext_engine;
+		SystemManagerEventLogger eventLogger;
 		MotorControllerSet motorControllerSet;
 		InstrumentControllerSet instrumentControllerSet;
 		VectorCoordPlaneSet planeSet;

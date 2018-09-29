@@ -21,12 +21,12 @@ namespace CalX {
 	class DeviceControllerSetListener {
 	 public:
 		virtual ~DeviceControllerSetListener() = default;
-		virtual void deviceAdded(std::shared_ptr<DeviceController>) = 0;
+		virtual void onDeviceConnected(std::shared_ptr<DeviceController>) = 0;
 	};
 	
 	class MotorControllerSet : public DeviceControllerSet<MotorController> {
 	 public:
-		MotorControllerSet(ConfigManager &, DeviceManager &, DeviceControllerSetListener *);
+		MotorControllerSet(ConfigManager &, DeviceManager &, DeviceControllerSetListener * = nullptr);
 		std::weak_ptr<MotorController> connectDevice(DeviceConnectionPrms *) override;
 		std::weak_ptr<MotorController> getDeviceController(device_id_t) const override;
 		std::size_t getDeviceCount() const override;

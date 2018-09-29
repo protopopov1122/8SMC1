@@ -20,13 +20,13 @@ namespace CalX {
 	class CoordPlaneSetListener {
 	 public:
 		virtual ~CoordPlaneSetListener() = default;
-		virtual void planeAdded(std::shared_ptr<CoordHandle>) = 0;
-		virtual void planeRemoved(std::size_t) = 0;
+		virtual void onPlaneAdded(std::shared_ptr<CoordHandle>) = 0;
+		virtual void onPlaneRemoving(std::size_t) = 0;
 	};
 	
 	class VectorCoordPlaneSet : public CoordPlaneSet {
 	 public:
-		VectorCoordPlaneSet(ConfigManager &, CoordPlaneSetListener *);
+		VectorCoordPlaneSet(ConfigManager &, CoordPlaneSetListener * = nullptr);
 		std::size_t getCoordCount() const override;
 		std::weak_ptr<CoordHandle> getCoord(std::size_t) const override;
 		std::weak_ptr<CoordHandle> createCoord(
