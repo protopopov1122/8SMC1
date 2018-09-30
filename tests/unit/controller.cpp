@@ -13,7 +13,10 @@ TEST_CASE("Motor controller state", "[controller]") {
   MotorController controller(config, *motor);
   controller.enablePower(true);
   SECTION("Controller-motor proxies") {
+    REQUIRE(&controller.getDevice() == motor);
     REQUIRE(&controller.getMotor() == motor);
+    REQUIRE(controller.getID() == motor->getID());
+    REQUIRE(&controller.getConfiguration() == &config);
     REQUIRE(controller.getPowerState() == motor->getPowerState());
     REQUIRE(controller.getPosition() == motor->getPosition());
     REQUIRE(controller.isMoving() == motor->isRunning());
