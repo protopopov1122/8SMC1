@@ -196,8 +196,9 @@ namespace CalXUI {
 		this->script_env = nullptr;
 		this->scriptLib = nullptr;
 		if (!script_eng_addr.empty()) {
-			this->scriptLib =
-			    new wxDynamicLibrary(wxDynamicLibrary::CanonicalizeName(script_eng_addr), wxDL_DEFAULT | wxDL_QUIET);
+			this->scriptLib = new wxDynamicLibrary(
+			    wxDynamicLibrary::CanonicalizeName(script_eng_addr),
+			    wxDL_DEFAULT | wxDL_QUIET);
 			if (!this->scriptLib->IsLoaded()) {
 				wxMessageBox(__("Scripting engine can't be loaded"), __("Warning"),
 				             wxOK | wxICON_WARNING);

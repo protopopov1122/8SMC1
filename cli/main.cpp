@@ -66,7 +66,8 @@ int main(int argc, char **argv) {
 		conf = ConfigManager::load(cnf, std::cout);
 	}
 	cnf.close();
-	SystemManager *sysman = new DefaultSystemManager(std::move(devman), std::move(conf));
+	SystemManager *sysman =
+	    new DefaultSystemManager(std::move(devman), std::move(conf));
 	setup_signals(sysman);
 	CLI cli(std::cout, std::cin);
 	cli.addCommand("echo", new EchoCMD());

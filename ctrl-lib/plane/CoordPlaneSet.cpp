@@ -22,15 +22,17 @@
 #include "ctrl-lib/plane/CoordPlane.h"
 
 namespace CalX {
-	
-	VectorCoordPlaneSet::VectorCoordPlaneSet(ConfigManager &config, CoordPlaneSetListener *listener)
-		: config(config), listener(listener) {}
+
+	VectorCoordPlaneSet::VectorCoordPlaneSet(ConfigManager &config,
+	                                         CoordPlaneSetListener *listener)
+	    : config(config), listener(listener) {}
 
 	std::size_t VectorCoordPlaneSet::getCoordCount() const {
 		return this->planes.size();
 	}
 
-	std::weak_ptr<CoordHandle> VectorCoordPlaneSet::getCoord(std::size_t index) const {
+	std::weak_ptr<CoordHandle> VectorCoordPlaneSet::getCoord(
+	    std::size_t index) const {
 		if (index >= this->planes.size()) {
 			return std::weak_ptr<CoordHandle>();
 		}
@@ -38,9 +40,9 @@ namespace CalX {
 	}
 
 	std::weak_ptr<CoordHandle> VectorCoordPlaneSet::createCoord(
-	                                                        std::shared_ptr<MotorController> motor1,
-	                                                        std::shared_ptr<MotorController> motor2,
-	                                                        std::shared_ptr<InstrumentController> instrument) {
+	    std::shared_ptr<MotorController> motor1,
+	    std::shared_ptr<MotorController> motor2,
+	    std::shared_ptr<InstrumentController> instrument) {
 		if (motor1 == nullptr || motor2 == nullptr) {
 			return std::weak_ptr<CoordHandle>();
 		}
@@ -49,8 +51,7 @@ namespace CalX {
 		    this->config, motor1, motor2, instrument);
 		std::shared_ptr<CoordHandle> handle =
 		    std::make_shared<CoordHandle>(this->planes.size(), plane);
-		if (this->config.getEntry("core")->getBool("auto_power_motors",
-		                                                        false)) {
+		if (this->config.getEntry("core")->getBool("auto_power_motors", false)) {
 			plane->getXAxis()->enablePower(true);
 			plane->getYAxis()->enablePower(true);
 		}
@@ -72,4 +73,4 @@ namespace CalX {
 			return false;
 		}
 	}
-}
+}  // namespace CalX

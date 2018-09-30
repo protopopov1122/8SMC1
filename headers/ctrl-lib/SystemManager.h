@@ -42,19 +42,22 @@
 
 namespace CalX {
 
-	class SystemManager; // Forward referencing
+	class SystemManager;  // Forward referencing
 
-	class SystemManagerEventLogger : public TaskSetEventListener, public CoordPlaneSetListener, public DeviceControllerSetListener {
+	class SystemManagerEventLogger : public TaskSetEventListener,
+	                                 public CoordPlaneSetListener,
+	                                 public DeviceControllerSetListener {
 	 public:
 		SystemManagerEventLogger(SystemManager &);
-		
+
 		void onTaskAdded(std::shared_ptr<CoordTask>) override;
 		void onTaskRemoving(std::size_t) override;
-		
+
 		void onPlaneAdded(std::shared_ptr<CoordHandle>) override;
 		void onPlaneRemoving(std::size_t) override;
-		
+
 		void onDeviceConnected(std::shared_ptr<DeviceController>) override;
+
 	 private:
 		SystemManager &sysman;
 	};
@@ -75,8 +78,8 @@ namespace CalX {
 	class DefaultSystemManager : public SystemManager {
 	 public:
 		DefaultSystemManager(std::unique_ptr<DeviceManager>,
-		              std::unique_ptr<ConfigManager>,
-		              std::unique_ptr<ExtEngine> = nullptr);
+		                     std::unique_ptr<ConfigManager>,
+		                     std::unique_ptr<ExtEngine> = nullptr);
 		virtual ~DefaultSystemManager();
 		DeviceManager &getDeviceManager() const override;
 		ConfigManager &getConfiguration() const override;
@@ -86,7 +89,8 @@ namespace CalX {
 		CoordPlaneSet &getCoordPlaneSet() override;
 		MotorControllerSet &getMotorControllerSet() override;
 		InstrumentControllerSet &getInstrumentControllerSet() override;
-	 private:		
+
+	 private:
 		const std::unique_ptr<DeviceManager> devman;
 		const std::unique_ptr<ConfigManager> conf;
 		DefaultMathEngine engine;

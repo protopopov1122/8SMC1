@@ -35,7 +35,8 @@ namespace CalXUI {
 			delete this->prms;
 		}
 		virtual void perform(SystemManager *sysman) {
-			std::shared_ptr<MotorController> ctrl = sysman->getMotorControllerSet().connectDevice(prms).lock();
+			std::shared_ptr<MotorController> ctrl =
+			    sysman->getMotorControllerSet().connectDevice(prms).lock();
 			if (ctrl == nullptr) {
 				wxMessageBox(__("Motor can't be connected"), __("Connection error"),
 				             wxICON_WARNING);

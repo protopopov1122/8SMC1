@@ -48,7 +48,8 @@ namespace CalX {
 	ErrorCode GraphBuilder::build(SystemManager *sysman,
 	                              std::shared_ptr<CoordPlane> plane,
 	                              std::shared_ptr<CoordTranslator> trans,
-	                              float speed, std::shared_ptr<TaskState> state) const {
+	                              float speed,
+	                              std::shared_ptr<TaskState> state) const {
 		plane->use();
 		MathEngine &engine = sysman->getMathEngine();
 		double nan = std::numeric_limits<double>::quiet_NaN();

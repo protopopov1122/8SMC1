@@ -118,7 +118,8 @@ namespace CalX {
 	}
 
 	void ConfigEntry::getContent(
-	    std::vector<std::pair<std::string, std::shared_ptr<ConfigValue>>> &vec) const {
+	    std::vector<std::pair<std::string, std::shared_ptr<ConfigValue>>> &vec)
+	    const {
 		for (const auto &kv : this->content) {
 			vec.push_back(make_pair(kv.first, kv.second));
 		}

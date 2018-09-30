@@ -21,14 +21,14 @@
 #include "ctrl-lib/task/TaskSet.h"
 
 namespace CalX {
-	
+
 	VectorTaskSet::VectorTaskSet(TaskSetEventListener *listener)
-		: listener(listener) {}
+	    : listener(listener) {}
 
 	std::size_t VectorTaskSet::getTaskCount() const {
 		return this->tasks.size();
 	}
-	
+
 	std::weak_ptr<CoordTask> VectorTaskSet::getTask(std::size_t index) const {
 		if (index >= this->tasks.size()) {
 			return std::weak_ptr<CoordTask>();
@@ -36,7 +36,7 @@ namespace CalX {
 			return this->tasks.at(index);
 		}
 	}
-	
+
 	std::size_t VectorTaskSet::addTask(std::shared_ptr<CoordTask> task) {
 		this->tasks.push_back(task);
 		if (this->listener) {
@@ -55,4 +55,4 @@ namespace CalX {
 		this->tasks.erase(this->tasks.begin() + static_cast<std::ptrdiff_t>(index));
 		return true;
 	}
-}
+}  // namespace CalX

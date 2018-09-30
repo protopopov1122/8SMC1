@@ -48,7 +48,8 @@ namespace CalX {
 		virtual bool hasVariable(std::string) const = 0;
 		virtual void putVariable(std::string, double) = 0;
 		virtual bool hasFunction(std::string) const = 0;
-		virtual engine_value_t evalFunction(std::string, std::vector<double> &) const = 0;
+		virtual engine_value_t evalFunction(std::string,
+		                                    std::vector<double> &) const = 0;
 		virtual bool addFunction(std::string, std::unique_ptr<EngineFunction>) = 0;
 	};
 
@@ -65,7 +66,8 @@ namespace CalX {
 		bool hasVariable(std::string) const override;
 		void putVariable(std::string, double) override;
 		bool hasFunction(std::string) const override;
-		engine_value_t evalFunction(std::string, std::vector<double> &) const override;
+		engine_value_t evalFunction(std::string,
+		                            std::vector<double> &) const override;
 		bool addFunction(std::string, std::unique_ptr<EngineFunction>) override;
 
 	 private:

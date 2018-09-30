@@ -46,7 +46,7 @@ namespace CalX {
 	}
 
 	bool MapEngineScope::addFunction(std::string id,
-	                              std::unique_ptr<EngineFunction> func) {
+	                                 std::unique_ptr<EngineFunction> func) {
 		if (this->func.count(id) != 0) {
 			return false;
 		}
@@ -55,7 +55,7 @@ namespace CalX {
 	}
 
 	engine_value_t MapEngineScope::evalFunction(std::string id,
-	                                         std::vector<double> &args) const {
+	                                            std::vector<double> &args) const {
 		if (this->func.count(id) == 0) {
 			engine_value_t val = { 0, MathError::MNoFunction };
 			return val;

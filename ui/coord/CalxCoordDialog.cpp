@@ -68,7 +68,8 @@ namespace CalXUI {
 		buttonSizer->Add(okButton);
 		buttonSizer->Add(cancelButton);
 
-		for (size_t i = 0; i < sysman->getMotorControllerSet().getDeviceCount(); i++) {
+		for (size_t i = 0; i < sysman->getMotorControllerSet().getDeviceCount();
+		     i++) {
 			std::string id = FORMAT(__("Device #%s"), std::to_string(i));
 			xChoice->Append(id);
 			yChoice->Append(id);
@@ -76,7 +77,8 @@ namespace CalXUI {
 
 		instrChoice->Append(__("No instrument"));
 
-		for (size_t i = 0; i < sysman->getInstrumentControllerSet().getDeviceCount(); i++) {
+		for (size_t i = 0;
+		     i < sysman->getInstrumentControllerSet().getDeviceCount(); i++) {
 			std::string id = FORMAT(__("Instrument #%s"), std::to_string(i));
 			instrChoice->Append(id);
 		}
@@ -117,10 +119,15 @@ namespace CalXUI {
 				return;
 			}
 			this->ctrl =
-			    sysman->getCoordPlaneSet().createCoord(
-					sysman->getMotorControllerSet().getDeviceController(x).lock(),
-					sysman->getMotorControllerSet().getDeviceController(y).lock(),
-					sysman->getInstrumentControllerSet().getDeviceController(i == wxNOT_FOUND || i == 0 ? -1 : (i - 1)).lock()).lock();
+			    sysman->getCoordPlaneSet()
+			        .createCoord(
+			            sysman->getMotorControllerSet().getDeviceController(x).lock(),
+			            sysman->getMotorControllerSet().getDeviceController(y).lock(),
+			            sysman->getInstrumentControllerSet()
+			                .getDeviceController(i == wxNOT_FOUND || i == 0 ? -1
+			                                                                : (i - 1))
+			                .lock())
+			        .lock();
 		}
 		Hide();
 	}

@@ -139,7 +139,8 @@ namespace CalX {
 		std::string getString(std::string, std::string = "") const;
 
 		void getContent(
-		    std::vector<std::pair<std::string, std::shared_ptr<ConfigValue>>> &) const;
+		    std::vector<std::pair<std::string, std::shared_ptr<ConfigValue>>> &)
+		    const;
 
 	 private:
 		ConfigManager *config;

@@ -29,7 +29,7 @@
 
 namespace CalX {
 
-	template <typename T>
+	template<typename T>
 	class DeviceControllerSet {
 	 public:
 		virtual ~DeviceControllerSet() = default;
@@ -37,7 +37,7 @@ namespace CalX {
 		virtual std::weak_ptr<T> getDeviceController(device_id_t) const = 0;
 		virtual std::size_t getDeviceCount() const = 0;
 	};
-	
+
 	class DeviceControllerSetListener {
 	 public:
 		virtual ~DeviceControllerSetListener() = default;
@@ -46,32 +46,41 @@ namespace CalX {
 
 	typedef DeviceControllerSet<MotorController> MotorControllerSet;
 	typedef DeviceControllerSet<InstrumentController> InstrumentControllerSet;
-	
+
 	class VectorMotorControllerSet : public DeviceControllerSet<MotorController> {
 	 public:
-		VectorMotorControllerSet(ConfigManager &, DeviceManager &, DeviceControllerSetListener * = nullptr);
-		std::weak_ptr<MotorController> connectDevice(DeviceConnectionPrms *) override;
-		std::weak_ptr<MotorController> getDeviceController(device_id_t) const override;
+		VectorMotorControllerSet(ConfigManager &, DeviceManager &,
+		                         DeviceControllerSetListener * = nullptr);
+		std::weak_ptr<MotorController> connectDevice(
+		    DeviceConnectionPrms *) override;
+		std::weak_ptr<MotorController> getDeviceController(
+		    device_id_t) const override;
 		std::size_t getDeviceCount() const override;
+
 	 private:
 		ConfigManager &config;
 		DeviceManager &devman;
 		DeviceControllerSetListener *listener;
 		std::vector<std::shared_ptr<MotorController>> motors;
 	};
-	
-	class VectorInstrumentControllerSet : public DeviceControllerSet<InstrumentController> {
+
+	class VectorInstrumentControllerSet
+	    : public DeviceControllerSet<InstrumentController> {
 	 public:
-		VectorInstrumentControllerSet(ConfigManager &, DeviceManager &, DeviceControllerSetListener *);
-		std::weak_ptr<InstrumentController> connectDevice(DeviceConnectionPrms *) override;
-		std::weak_ptr<InstrumentController> getDeviceController(device_id_t) const override;
+		VectorInstrumentControllerSet(ConfigManager &, DeviceManager &,
+		                              DeviceControllerSetListener *);
+		std::weak_ptr<InstrumentController> connectDevice(
+		    DeviceConnectionPrms *) override;
+		std::weak_ptr<InstrumentController> getDeviceController(
+		    device_id_t) const override;
 		std::size_t getDeviceCount() const override;
+
 	 private:
 		ConfigManager &config;
 		DeviceManager &devman;
 		DeviceControllerSetListener *listener;
 		std::vector<std::shared_ptr<InstrumentController>> instruments;
 	};
-}
+}  // namespace CalX
 
 #endif
