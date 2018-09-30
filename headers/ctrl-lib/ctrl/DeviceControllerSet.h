@@ -43,10 +43,13 @@ namespace CalX {
 		virtual ~DeviceControllerSetListener() = default;
 		virtual void onDeviceConnected(std::shared_ptr<DeviceController>) = 0;
 	};
+
+	typedef DeviceControllerSet<MotorController> MotorControllerSet;
+	typedef DeviceControllerSet<InstrumentController> InstrumentControllerSet;
 	
-	class MotorControllerSet : public DeviceControllerSet<MotorController> {
+	class VectorMotorControllerSet : public DeviceControllerSet<MotorController> {
 	 public:
-		MotorControllerSet(ConfigManager &, DeviceManager &, DeviceControllerSetListener * = nullptr);
+		VectorMotorControllerSet(ConfigManager &, DeviceManager &, DeviceControllerSetListener * = nullptr);
 		std::weak_ptr<MotorController> connectDevice(DeviceConnectionPrms *) override;
 		std::weak_ptr<MotorController> getDeviceController(device_id_t) const override;
 		std::size_t getDeviceCount() const override;
@@ -57,9 +60,9 @@ namespace CalX {
 		std::vector<std::shared_ptr<MotorController>> motors;
 	};
 	
-	class InstrumentControllerSet : public DeviceControllerSet<InstrumentController> {
+	class VectorInstrumentControllerSet : public DeviceControllerSet<InstrumentController> {
 	 public:
-		InstrumentControllerSet(ConfigManager &, DeviceManager &, DeviceControllerSetListener *);
+		VectorInstrumentControllerSet(ConfigManager &, DeviceManager &, DeviceControllerSetListener *);
 		std::weak_ptr<InstrumentController> connectDevice(DeviceConnectionPrms *) override;
 		std::weak_ptr<InstrumentController> getDeviceController(device_id_t) const override;
 		std::size_t getDeviceCount() const override;

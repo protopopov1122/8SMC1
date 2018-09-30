@@ -19,7 +19,7 @@
 */
 
 #include "ui/coord/CalxCoordGraphComponent.h"
-#include "ctrl-lib/graph/FunctionEngine.h"
+#include "ctrl-lib/graph/MathEngine.h"
 #include "ctrl-lib/graph/FunctionParser.h"
 #include "ctrl-lib/misc/GraphBuilder.h"
 #include "ui/CalxErrorHandler.h"

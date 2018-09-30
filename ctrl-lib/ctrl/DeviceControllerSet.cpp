@@ -21,7 +21,7 @@
 #include "ctrl-lib/ctrl/DeviceControllerSet.h"
 
 namespace CalX {
-	MotorControllerSet::MotorControllerSet(ConfigManager &config, DeviceManager &devman, DeviceControllerSetListener *listener)
+	VectorMotorControllerSet::VectorMotorControllerSet(ConfigManager &config, DeviceManager &devman, DeviceControllerSetListener *listener)
 		: config(config), devman(devman), listener(listener) {
 		for (device_id_t deviceId = 0;
 		     deviceId < static_cast<device_id_t>(this->devman.getMotorCount());
@@ -31,7 +31,7 @@ namespace CalX {
 		}
 	}
 	
-	std::weak_ptr<MotorController> MotorControllerSet::connectDevice(
+	std::weak_ptr<MotorController> VectorMotorControllerSet::connectDevice(
 	    DeviceConnectionPrms *prms) {
 		Motor *motorDevice = this->devman.connectMotor(prms);
 		if (motorDevice == nullptr) {
@@ -47,7 +47,7 @@ namespace CalX {
 		return motorController;
 	}
 	
-	std::weak_ptr<MotorController> MotorControllerSet::getDeviceController(device_id_t deviceId) const {
+	std::weak_ptr<MotorController> VectorMotorControllerSet::getDeviceController(device_id_t deviceId) const {
 		if (deviceId < 0 || static_cast<std::size_t>(deviceId) >= this->motors.size()) {
 			return std::weak_ptr<MotorController>();
 		} else {
@@ -55,11 +55,11 @@ namespace CalX {
 		}
 	}
 	
-	std::size_t MotorControllerSet::getDeviceCount() const {
+	std::size_t VectorMotorControllerSet::getDeviceCount() const {
 		return this->motors.size();
 	}
 	
-	InstrumentControllerSet::InstrumentControllerSet(ConfigManager &config, DeviceManager &devman, DeviceControllerSetListener *listener)
+	VectorInstrumentControllerSet::VectorInstrumentControllerSet(ConfigManager &config, DeviceManager &devman, DeviceControllerSetListener *listener)
 		: config(config), devman(devman), listener(listener) {
 		for (device_id_t deviceId = 0;
 		     deviceId < static_cast<device_id_t>(this->devman.getInstrumentCount());
@@ -69,7 +69,7 @@ namespace CalX {
 		}	
 	}
 		
-	std::weak_ptr<InstrumentController> InstrumentControllerSet::connectDevice(
+	std::weak_ptr<InstrumentController> VectorInstrumentControllerSet::connectDevice(
 		DeviceConnectionPrms *prms) {
 		Instrument *instrumentDevice = this->devman.connectInstrument(prms);
 		if (instrumentDevice == nullptr) {
@@ -84,7 +84,7 @@ namespace CalX {
 		return instrumentController;
 	}
 	
-	std::weak_ptr<InstrumentController> InstrumentControllerSet::getDeviceController(device_id_t deviceId) const {
+	std::weak_ptr<InstrumentController> VectorInstrumentControllerSet::getDeviceController(device_id_t deviceId) const {
 		if (deviceId < 0 || static_cast<std::size_t>(deviceId) >= this->instruments.size()) {
 			return std::weak_ptr<InstrumentController>();
 		} else {
@@ -92,7 +92,7 @@ namespace CalX {
 		}
 	}
 	
-	std::size_t InstrumentControllerSet::getDeviceCount() const {
+	std::size_t VectorInstrumentControllerSet::getDeviceCount() const {
 		return this->instruments.size();
 	}
 }

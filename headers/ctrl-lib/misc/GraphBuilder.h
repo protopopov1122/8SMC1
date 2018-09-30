@@ -21,7 +21,7 @@
 #ifndef CALX_CTRL_LIB_GRAPH_BUILDER_H_
 #define CALX_CTRL_LIB_GRAPH_BUILDER_H_
 
-#include "ctrl-lib/graph/FunctionEngine.h"
+#include "ctrl-lib/graph/MathEngine.h"
 #include "ctrl-lib/plane/CoordPlane.h"
 #include "ctrl-lib/translator/CoordTranslator.h"
 

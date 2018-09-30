@@ -26,7 +26,7 @@
 #include "ctrl-lib/conf/ConfigManager.h"
 #include "ctrl-lib/device/DeviceManager.h"
 #include "ctrl-lib/ctrl/DeviceControllerSet.h"
-#include "ctrl-lib/graph/FunctionEngine.h"
+#include "ctrl-lib/graph/MathEngine.h"
 #include "ctrl-lib/misc/GraphBuilder.h"
 #include "ctrl-lib/plane/CoordHandle.h"
 #include "ctrl-lib/plane/CoordPlane.h"
@@ -61,26 +61,39 @@ namespace CalX {
 
 	class SystemManager {
 	 public:
-		SystemManager(std::unique_ptr<DeviceManager>,
+		virtual ~SystemManager() = default;
+		virtual DeviceManager &getDeviceManager() const = 0;
+		virtual ConfigManager &getConfiguration() const = 0;
+		virtual MathEngine &getMathEngine() = 0;
+		virtual ExtEngine *getExtensionEngine() const = 0;
+		virtual TaskSet &getTaskSet() = 0;
+		virtual CoordPlaneSet &getCoordPlaneSet() = 0;
+		virtual MotorControllerSet &getMotorControllerSet() = 0;
+		virtual InstrumentControllerSet &getInstrumentControllerSet() = 0;
+	};
+
+	class DefaultSystemManager : public SystemManager {
+	 public:
+		DefaultSystemManager(std::unique_ptr<DeviceManager>,
 		              std::unique_ptr<ConfigManager>,
 		              std::unique_ptr<ExtEngine> = nullptr);
-		virtual ~SystemManager();
-		DeviceManager &getDeviceManager() const;
-		ConfigManager &getConfiguration() const;
-		FunctionEngine &getFunctionEngine();
-		ExtEngine *getExtensionEngine() const;
-		TaskSet &getTaskSet();
-		CoordPlaneSet &getCoordPlaneSet();
-		MotorControllerSet &getMotorControllerSet();
-		InstrumentControllerSet &getInstrumentControllerSet();
+		virtual ~DefaultSystemManager();
+		DeviceManager &getDeviceManager() const override;
+		ConfigManager &getConfiguration() const override;
+		MathEngine &getMathEngine() override;
+		ExtEngine *getExtensionEngine() const override;
+		TaskSet &getTaskSet() override;
+		CoordPlaneSet &getCoordPlaneSet() override;
+		MotorControllerSet &getMotorControllerSet() override;
+		InstrumentControllerSet &getInstrumentControllerSet() override;
 	 private:		
 		const std::unique_ptr<DeviceManager> devman;
 		const std::unique_ptr<ConfigManager> conf;
-		FunctionEngine engine;
+		DefaultMathEngine engine;
 		const std::unique_ptr<ExtEngine> ext_engine;
 		SystemManagerEventLogger eventLogger;
-		MotorControllerSet motorControllerSet;
-		InstrumentControllerSet instrumentControllerSet;
+		VectorMotorControllerSet motorControllerSet;
+		VectorInstrumentControllerSet instrumentControllerSet;
 		VectorCoordPlaneSet planeSet;
 		VectorTaskSet taskSet;
 	};

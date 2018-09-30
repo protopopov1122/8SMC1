@@ -21,7 +21,7 @@
 #include "cli/DevCLI.h"
 #include "ctrl-lib/gcode/GCodeInterpreter.h"
 #include "ctrl-lib/gcode/GCodeStream.h"
-#include "ctrl-lib/graph/FunctionEngine.h"
+#include "ctrl-lib/graph/MathEngine.h"
 #include "ctrl-lib/graph/FunctionParser.h"
 #include "ctrl-lib/misc/CircleGenerator.h"
 #include "ctrl-lib/misc/GraphBuilder.h"

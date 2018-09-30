@@ -50,7 +50,7 @@ namespace CalX {
 	                              std::shared_ptr<CoordTranslator> trans,
 	                              float speed, std::shared_ptr<TaskState> state) const {
 		plane->use();
-		FunctionEngine &engine = sysman->getFunctionEngine();
+		MathEngine &engine = sysman->getMathEngine();
 		double nan = std::numeric_limits<double>::quiet_NaN();
 		double last = nan;
 		ErrorCode errcode;
@@ -108,7 +108,7 @@ namespace CalX {
 	                                   float speed,
 	                                   std::shared_ptr<TaskState> state) const {
 		plane->use();
-		FunctionEngine &engine = sysman->getFunctionEngine();
+		MathEngine &engine = sysman->getMathEngine();
 		double nan = std::numeric_limits<double>::quiet_NaN();
 		double last = nan;
 		ErrorCode errcode;

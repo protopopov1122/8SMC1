@@ -18,12 +18,12 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/graph/FunctionEngine.h"
+#include "ctrl-lib/graph/MathEngine.h"
 #include <math.h>
 
 namespace CalX {
 
-	engine_value_t VariableNode::eval(FunctionEngine &eng) const {
+	engine_value_t VariableNode::eval(MathEngine &eng) const {
 		return eng.getScope().getVariable(id);
 	}
 
@@ -34,7 +34,7 @@ namespace CalX {
 	      left(std::move(left)),
 	      right(std::move(right)) {}
 
-	engine_value_t BinaryNode::eval(FunctionEngine &eng) const {
+	engine_value_t BinaryNode::eval(MathEngine &eng) const {
 		engine_value_t res = { 0, MathError::MNoError };
 		engine_value_t leftv = eng.eval(*this->left);
 		if (leftv.err != MathError::MNoError) {
@@ -72,7 +72,7 @@ namespace CalX {
 	    std::string id, std::unique_ptr<std::vector<std::unique_ptr<Node>>> args)
 	    : Node::Node(NodeType::Function), id(id), args(std::move(args)) {}
 
-	engine_value_t FunctionNode::eval(FunctionEngine &eng) const {
+	engine_value_t FunctionNode::eval(MathEngine &eng) const {
 		std::vector<double> vec;
 		for (size_t i = 0; i < this->args->size(); i++) {
 			engine_value_t val = eng.eval(*this->args->at(i));

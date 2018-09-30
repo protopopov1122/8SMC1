@@ -83,7 +83,7 @@ namespace CalX {
 		}
 	}
 
-	SystemManager::SystemManager(std::unique_ptr<DeviceManager> devman,
+	DefaultSystemManager::DefaultSystemManager(std::unique_ptr<DeviceManager> devman,
 	                             std::unique_ptr<ConfigManager> conf,
 	                             std::unique_ptr<ExtEngine> ext_eng)
 		: devman(std::move(devman)), conf(std::move(conf)),
@@ -97,51 +97,50 @@ namespace CalX {
 		                    " motors and " +
 		                    std::to_string(this->instrumentControllerSet.getDeviceCount()) +
 		                    " instruments.");
-		FunctionEngine_add_default_functions(this->engine);
 		if (this->ext_engine != nullptr) {
 			this->ext_engine->init(this);
 		}
-		INIT_LOG("SystemManager");
+		INIT_LOG("DefaultSystemManager");
 	}
 
-	SystemManager::~SystemManager() {
+	DefaultSystemManager::~DefaultSystemManager() {
 		LOG(SYSMAN_TAG, "System exiting");
 		if (this->ext_engine != nullptr) {
 			this->ext_engine->destroy();
 		}
 		LOG(SYSMAN_TAG, "Sysman exited");
-		DESTROY_LOG("SystemManager");
+		DESTROY_LOG("DefaultSystemManager");
 	}
 
-	DeviceManager &SystemManager::getDeviceManager() const {
+	DeviceManager &DefaultSystemManager::getDeviceManager() const {
 		return *this->devman;
 	}
 
-	ConfigManager &SystemManager::getConfiguration() const {
+	ConfigManager &DefaultSystemManager::getConfiguration() const {
 		return *this->conf;
 	}
 	
-	ExtEngine *SystemManager::getExtensionEngine() const {
+	ExtEngine *DefaultSystemManager::getExtensionEngine() const {
 		return this->ext_engine.get();
 	}
 
-	FunctionEngine &SystemManager::getFunctionEngine() {
+	MathEngine &DefaultSystemManager::getMathEngine() {
 		return this->engine;
 	}
 	
-	TaskSet &SystemManager::getTaskSet() {
+	TaskSet &DefaultSystemManager::getTaskSet() {
 		return this->taskSet;
 	}
 
-	CoordPlaneSet &SystemManager::getCoordPlaneSet() {
+	CoordPlaneSet &DefaultSystemManager::getCoordPlaneSet() {
 		return this->planeSet;
 	}
 	
-	MotorControllerSet &SystemManager::getMotorControllerSet() {
+	MotorControllerSet &DefaultSystemManager::getMotorControllerSet() {
 		return this->motorControllerSet;
 	}
 	
-	InstrumentControllerSet &SystemManager::getInstrumentControllerSet() {
+	InstrumentControllerSet &DefaultSystemManager::getInstrumentControllerSet() {
 		return this->instrumentControllerSet;
 	}
 }  // namespace CalX

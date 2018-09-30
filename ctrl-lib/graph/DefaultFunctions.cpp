@@ -18,7 +18,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/graph/FunctionEngine.h"
+#include "ctrl-lib/graph/MathEngine.h"
 #include <math.h>
 
 /* This file contains implementation of some mathematical functions*
@@ -50,8 +50,8 @@ namespace CalX {
 	                        DefFun1(FloorFunction, floor)
 	                            DefFun1(FabsFunction, fabs)
 
-	                                void FunctionEngine_add_default_functions(
-	                                    FunctionEngine &engine) {
+	                                void MathEngine_add_default_functions(
+	                                    MathEngine &engine) {
 		engine.getScope().addFunction("sin", std::make_unique<SinFunction>());
 		engine.getScope().addFunction("cos", std::make_unique<CosFunction>());
 		engine.getScope().addFunction("tan", std::make_unique<TanFunction>());

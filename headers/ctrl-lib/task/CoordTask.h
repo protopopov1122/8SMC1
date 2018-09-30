@@ -22,7 +22,7 @@
 #define CALX_CTRL_LIB_TASK_COORD_TASK_H_
 
 #include "ctrl-lib/gcode/GCodeStream.h"
-#include "ctrl-lib/graph/FunctionEngine.h"
+#include "ctrl-lib/graph/MathEngine.h"
 #include "ctrl-lib/misc/GraphBuilder.h"
 #include "ctrl-lib/task/AbstractCoordTask.h"
 #include "ctrl-lib/task/CoordTaskStep.h"
