@@ -19,6 +19,7 @@
 */
 
 #include "ctrl-lib/CtrlCore.h"
+#include <iostream>
 
 namespace CalX {
 

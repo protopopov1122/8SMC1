@@ -22,7 +22,7 @@
 #define CALX_CTRL_LIB_GCODE_GCODE_LEXER_H_
 
 #include "ctrl-lib/CtrlCore.h"
-#include <iostream>
+#include <iosfwd>
 #include <map>
 #include <set>
 #include <string>

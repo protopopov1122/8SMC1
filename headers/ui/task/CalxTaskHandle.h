@@ -23,7 +23,7 @@
 
 #include "ui/CalxApp.h"
 #include "ui/coord/CalxCoordFilter.h"
-#include <iostream>
+#include <iosfwd>
 #include <vector>
 #include <wx/checkbox.h>
 #include <wx/listbox.h>

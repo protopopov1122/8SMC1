@@ -19,6 +19,7 @@
 */
 
 #include "ctrl-lib/gcode/GCodeWriter.h"
+#include <iostream>
 
 namespace CalX {
 

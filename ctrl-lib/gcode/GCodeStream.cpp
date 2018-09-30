@@ -20,6 +20,7 @@
 
 #include "ctrl-lib/gcode/GCodeStream.h"
 #include <string.h>
+#include <iostream>
 
 namespace CalX {
 

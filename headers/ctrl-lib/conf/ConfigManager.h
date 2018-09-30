@@ -24,7 +24,7 @@
 #include "ctrl-lib/CtrlCore.h"
 #include "ctrl-lib/EventListener.h"
 #include <cinttypes>
-#include <iostream>
+#include <iosfwd>
 #include <map>
 #include <string>
 #include <vector>

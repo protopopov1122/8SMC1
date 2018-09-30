@@ -19,6 +19,7 @@
 */
 
 #include "ctrl-lib/plane/ProxyCoordPlane.h"
+#include <iostream>
 
 namespace CalX {
 

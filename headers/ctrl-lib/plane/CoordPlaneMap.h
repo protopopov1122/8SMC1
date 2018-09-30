@@ -36,13 +36,13 @@ namespace CalX {
 		void setScale(motor_scale_t);
 		void setSpeedScale(float);
 
-		virtual ErrorCode move(motor_point_t, float, bool);
-		virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,
-		                      float = 1.0f);
-		virtual motor_point_t getPosition() const;
-		virtual motor_rect_t getSize() const;
-		virtual std::ostream &operator<<(std::ostream &) const;
-		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
+		ErrorCode move(motor_point_t, float, bool) override;
+		ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,
+		                      float = 1.0f) override;
+		motor_point_t getPosition() const override;
+		motor_rect_t getSize() const override;
+		std::ostream &operator<<(std::ostream &) const override;
+		std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>) override;
 
 	 private:
 		motor_point_t offset;

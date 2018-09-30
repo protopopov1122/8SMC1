@@ -28,7 +28,19 @@
 
 namespace CalX {
 
-	class FloatCoordPlane : public ProxyCoordPlane {
+	class FloatingCoordPlane : public virtual CoordPlane {
+	 public:
+		virtual ErrorCode move(coord_point_t, double, bool) = 0;
+		virtual ErrorCode arc(coord_point_t, coord_point_t, int, double, bool,
+		                      float = 1.0f) = 0;
+		virtual ErrorCode relativeMove(coord_point_t, float, bool) = 0;
+		virtual ErrorCode relativeArc(coord_point_t, coord_point_t, int, float,
+		                              bool, float = 1.0f) = 0;
+		virtual coord_point_t getFloatPosition() const = 0;
+		virtual coord_rect_t getFloatSize() const = 0;
+	};
+
+	class FloatCoordPlane : public ProxyCoordPlane, public FloatingCoordPlane {
 	 public:
 		FloatCoordPlane(coord_point_t, coord_scale_t, double,
 		                std::shared_ptr<CoordPlane>);
@@ -42,23 +54,22 @@ namespace CalX {
 		void setSpeedScale(double);
 
 		// Proxy methods
-		virtual ErrorCode move(motor_point_t, float, bool);
-		virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,
-		                      float = 1.0f);
-		virtual motor_point_t getPosition() const;
-		virtual motor_rect_t getSize() const;
-		virtual std::ostream &operator<<(std::ostream &) const;
-		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
+		ErrorCode move(motor_point_t, float, bool) override;
+		ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,
+		                      float = 1.0f) override;
+		motor_point_t getPosition() const override;
+		motor_rect_t getSize() const override;
+		std::ostream &operator<<(std::ostream &) const override;
+		std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>) override;
 		// Floating-point methods
-		virtual ErrorCode move(coord_point_t, double, bool);
-		virtual ErrorCode arc(coord_point_t, coord_point_t, int, double, bool,
-		                      float = 1.0f);
-		virtual ErrorCode relativeMove(coord_point_t, float, bool);
-		virtual ErrorCode relativeArc(coord_point_t, coord_point_t, int, float,
-		                              bool, float = 1.0f);
-		virtual coord_point_t getFloatPosition() const;
-		virtual coord_rect_t getFloatSize() const;
-
+		ErrorCode move(coord_point_t, double, bool) override;
+		ErrorCode arc(coord_point_t, coord_point_t, int, double, bool,
+		                      float = 1.0f) override;
+		ErrorCode relativeMove(coord_point_t, float, bool) override;
+		ErrorCode relativeArc(coord_point_t, coord_point_t, int, float,
+		                              bool, float = 1.0f) override;
+		coord_point_t getFloatPosition() const override;
+		coord_rect_t getFloatSize() const override;
 	 private:
 		coord_point_t offset;
 		coord_scale_t scale;

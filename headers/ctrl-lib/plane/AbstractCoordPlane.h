@@ -24,7 +24,7 @@
 #include "ctrl-lib/Resource.h"
 #include "ctrl-lib/EventListener.h"
 #include "ctrl-lib/conf/ConfigManager.h"
-#include <iostream>
+#include <iosfwd>
 #include <memory>
 #include <string>
 #include <vector>
@@ -82,8 +82,8 @@ namespace CalX {
 		virtual std::ostream &operator<<(std::ostream &) const = 0;
 		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>) = 0;
 		virtual CoordPlaneStatus getStatus() const = 0;
-		virtual ErrorCode open_session();
-		virtual ErrorCode close_session();
+		ErrorCode open_session() override;
+		ErrorCode close_session() override;
 	};
 
 	struct TaskState {

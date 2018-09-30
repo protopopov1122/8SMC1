@@ -29,24 +29,24 @@ namespace CalX {
 	 public:
 		VirtualCoordPlane(motor_point_t, motor_rect_t);
 
-		virtual ErrorCode move(motor_point_t, float, bool);
-		virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,
-		                      float = 1.0f);
-		virtual ErrorCode calibrate(TrailerId);
-		virtual ErrorCode measure(TrailerId);
-		virtual motor_point_t getPosition() const;
-		virtual motor_rect_t getSize() const;
-		virtual bool isMeasured() const;
+		ErrorCode move(motor_point_t, float, bool) override;
+		ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,
+		                      float = 1.0f) override;
+		ErrorCode calibrate(TrailerId) override;
+		ErrorCode measure(TrailerId) override;
+		motor_point_t getPosition() const override;
+		motor_rect_t getSize() const override;
+		bool isMeasured() const override;
 		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>) = 0;
-		virtual CoordPlaneStatus getStatus() const;
-		virtual ErrorCode open_session();
-		virtual ErrorCode close_session();
-		virtual bool isSessionOpened() const;
+		CoordPlaneStatus getStatus() const override;
+		ErrorCode open_session() override;
+		ErrorCode close_session() override;
+		bool isSessionOpened() const override;
 
-		virtual void use();
-		virtual void unuse();
-		virtual void stop();
-		virtual std::ostream &operator<<(std::ostream &) const;
+		void use() override;
+		void unuse() override;
+		void stop() override;
+		std::ostream &operator<<(std::ostream &) const override;
 
 	 protected:
 		virtual bool jump(motor_point_t, bool) = 0;

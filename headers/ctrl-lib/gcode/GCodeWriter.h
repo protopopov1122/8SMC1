@@ -24,7 +24,7 @@
 #include "ctrl-lib/CtrlCore.h"
 #include "ctrl-lib/plane/CoordPlane.h"
 #include "ctrl-lib/translator/CoordTranslator.h"
-#include <iostream>
+#include <iosfwd>
 
 namespace CalX {
 

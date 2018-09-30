@@ -24,7 +24,7 @@
 #include "ui/CalxActionQueue.h"
 #include "ui/CalxApp.h"
 #include "ui/dev/CalxDeviceHandle.h"
-#include <iostream>
+#include <iosfwd>
 #include <wx/choice.h>
 #include <wx/stattext.h>
 #include <wx/timer.h>

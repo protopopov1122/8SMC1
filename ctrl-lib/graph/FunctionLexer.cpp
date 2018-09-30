@@ -22,6 +22,7 @@
 #include <cinttypes>
 #include <stdio.h>
 #include <string.h>
+#include <iostream>
 
 namespace CalX {
 

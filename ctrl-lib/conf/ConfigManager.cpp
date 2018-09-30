@@ -22,6 +22,7 @@
 #include "ctrl-lib/conf/ConfigValidator.h"
 #include <algorithm>
 #include <string.h>
+#include <iostream>
 
 namespace CalX {
 

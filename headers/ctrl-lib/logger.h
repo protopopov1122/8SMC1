@@ -32,7 +32,8 @@
         To enable loggins define LOGGING macro */
 
 #include "platform.h"
-#include <iostream>
+#include <iosfwd>
+#include <string>
 
 #define ERRORS "errors"
 #define WARNINGS "warnings"
@@ -41,7 +42,7 @@
 #define RESOURCES "resources"
 #define INSTRUMENTS "instruments"
 
-std::ostream **getStreamPtr(std::string);
+void LOGGER_LOG(std::string, std::string, std::string, const char *, int);
 void SET_LOGGER(std::string, std::ostream *);
 
 #ifdef LOGGING
@@ -49,15 +50,7 @@ void SET_LOGGER(std::string, std::ostream *);
 	do {                                                                         \
 		const char *__file = __FILE__;                                             \
 		int __line = __LINE__;                                                     \
-		std::ostream **output = getStreamPtr(__output);                            \
-		if (output != nullptr && *output != nullptr) {                             \
-			try {                                                                    \
-				**(output) << __file << ':' << __line << '(' << __DATE__ << ' '        \
-				           << __TIME__ << ')' << ' ' << (tag) << ": " << (msg)         \
-				           << std::endl;                                               \
-			} catch (...) {                                                          \
-			}                                                                        \
-		}                                                                          \
+		LOGGER_LOG(__output, tag, msg, __file, __line);                            \
 	} while (false)
 #else
 #define WRITE_LOG(output, tag, msg)

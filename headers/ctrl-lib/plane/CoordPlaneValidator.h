@@ -36,11 +36,11 @@ namespace CalX {
 		void setMaximum(motor_point_t);
 		void setMaxSpeed(float);
 
-		virtual ErrorCode move(motor_point_t, float, bool);
-		virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,
-		                      float = 1.0f);
-		virtual std::ostream &operator<<(std::ostream &) const;
-		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
+		ErrorCode move(motor_point_t, float, bool) override;
+		ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,
+		                      float = 1.0f) override;
+		std::ostream &operator<<(std::ostream &) const override;
+		std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>) override;
 
 	 private:
 		motor_point_t min;

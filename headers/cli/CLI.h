@@ -22,7 +22,7 @@
 #define CALX_CLI_H_
 
 #include <cinttypes>
-#include <iostream>
+#include <iosfwd>
 #include <map>
 #include <string>
 #include <vector>

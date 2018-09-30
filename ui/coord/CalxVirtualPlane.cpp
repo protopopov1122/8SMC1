@@ -60,7 +60,7 @@ namespace CalXUI {
 		    base->getBase()->getPosition(), base->getBase()->getSize());
 		this->stack = std::make_shared<CoordPlaneStack>(base->clone(this->tracker));
 		std::shared_ptr<CoordPlane> shflt(base->getFloatPlane()->clone(stack));
-		this->float_plane = std::static_pointer_cast<FloatCoordPlane>(shflt);
+		this->float_plane = std::dynamic_pointer_cast<FloatCoordPlane>(shflt);
 		this->base = base;
 		SetMinSize(min);
 		std::shared_ptr<ConfigEntry> colourEntry =

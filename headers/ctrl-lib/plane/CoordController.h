@@ -36,27 +36,27 @@ namespace CalX {
 		std::shared_ptr<MotorController> getYAxis() const;
 		std::shared_ptr<InstrumentController> getInstrument() const;
 
-		virtual ErrorCode move(motor_point_t, float, bool);
-		virtual ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,
-		                      float = 1.0f);
-		virtual ErrorCode calibrate(TrailerId);
-		virtual ErrorCode measure(TrailerId);
-		virtual motor_point_t getPosition() const;
-		virtual motor_rect_t getSize() const;
-		virtual bool isMeasured() const;
-		virtual void stop();
+		ErrorCode move(motor_point_t, float, bool) override;
+		ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,
+		                      float = 1.0f) override;
+		ErrorCode calibrate(TrailerId) override;
+		ErrorCode measure(TrailerId) override;
+		motor_point_t getPosition() const override;
+		motor_rect_t getSize() const override;
+		bool isMeasured() const override;
+		void stop() override;
 		void kill();
-		virtual std::ostream &operator<<(std::ostream &) const;
-		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
-		virtual CoordPlaneStatus getStatus() const;
-		virtual ErrorCode open_session();
-		virtual ErrorCode close_session();
+		std::ostream &operator<<(std::ostream &) const override;
+		std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>) override;
+		CoordPlaneStatus getStatus() const override;
+		ErrorCode open_session() override;
+		ErrorCode close_session() override;
 
 		void addEventListener(std::shared_ptr<CoordEventListener>);
 		void removeEventListener(std::shared_ptr<CoordEventListener>);
-		virtual bool isSessionOpened() const;
-		virtual void use();
-		virtual void unuse();
+		bool isSessionOpened() const override;
+		void use() override;
+		void unuse() override;
 
 	 private:
 		std::shared_ptr<MotorController> xAxis;

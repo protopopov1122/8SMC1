@@ -25,7 +25,7 @@
 #include "ctrl-lib/graph/Lexem.h"
 #include <cinttypes>
 #include <memory>
-#include <iostream>
+#include <iosfwd>
 #include <map>
 #include <string>
 

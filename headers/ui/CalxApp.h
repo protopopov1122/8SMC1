@@ -27,7 +27,7 @@
 #include "ui/CalxUnitProcessor.h"
 #include "ui/calx.h"
 #include <fstream>
-#include <iostream>
+#include <iosfwd>
 #include <wx/dynlib.h>
 #include <wx/intl.h>
 

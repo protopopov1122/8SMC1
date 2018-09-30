@@ -19,6 +19,7 @@
 */
 
 #include "ctrl-lib/SystemManager.h"
+#include <iostream>
 
 using namespace CalX;
 

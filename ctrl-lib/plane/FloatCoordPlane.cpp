@@ -19,6 +19,7 @@
 */
 
 #include "ctrl-lib/plane/CoordPlane.h"
+#include <iostream>
 #include <cmath>
 
 namespace CalX {

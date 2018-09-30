@@ -23,7 +23,7 @@
 
 #include "ui/CalxPanel.h"
 #include "ui/calx.h"
-#include <iostream>
+#include <iosfwd>
 #include <string>
 #include <wx/menu.h>
 

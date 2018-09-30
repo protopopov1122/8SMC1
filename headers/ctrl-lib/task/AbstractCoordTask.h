@@ -23,7 +23,7 @@
 
 #include "ctrl-lib/plane/CoordPlane.h"
 #include "ctrl-lib/translator/CoordTranslator.h"
-#include <iostream>
+#include <iosfwd>
 #include <memory>
 #include <sstream>
 #include <vector>

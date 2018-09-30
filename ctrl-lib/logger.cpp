@@ -46,6 +46,18 @@ std::ostream **getStreamPtr(std::string str) {
 	}
 }
 
+void LOGGER_LOG(std::string outputName, std::string tag, std::string message, const char *file, int line) {
+	std::ostream **output = getStreamPtr(outputName);
+		if (output != nullptr && *output != nullptr) {
+			try {
+				**(output) << file << ':' << line << '(' << __DATE__ << ' '
+				           << __TIME__ << ')' << ' ' << (tag) << ": " << (message)
+				           << std::endl;
+			} catch (...) {
+			}
+		}   
+}
+
 void SET_LOGGER(std::string str, std::ostream *s) {
 	std::ostream **ptr = getStreamPtr(str);
 	if (ptr != nullptr) {
