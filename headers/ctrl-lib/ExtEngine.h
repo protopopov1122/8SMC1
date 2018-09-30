@@ -36,17 +36,16 @@ namespace CalX {
 
 	class ExtEngine {
 	 public:
-		ExtEngine() {}
 		virtual ~ExtEngine() = default;
 		virtual bool init(SystemManager *) = 0;
 		virtual bool destroy() = 0;
 
-		virtual void taskAdded(std::shared_ptr<CoordTask> task) {}
-		virtual void taskRemoving(size_t id) {}
-		virtual void coordAdded(std::shared_ptr<CoordHandle> handle) {}
-		virtual void coordRemoving(size_t id) {}
-		virtual void motorConnected(std::shared_ptr<MotorController> ctrl) {}
-		virtual void instrumentConnected(
+		virtual void onTaskAdded(std::shared_ptr<CoordTask> task) {}
+		virtual void onTaskRemoving(std::size_t id) {}
+		virtual void onPlaneAdded(std::shared_ptr<CoordHandle> handle) {}
+		virtual void onPlaneRemoving(std::size_t id) {}
+		virtual void onMotorConnected(std::shared_ptr<MotorController> ctrl) {}
+		virtual void onInstrumentConnected(
 		    std::shared_ptr<InstrumentController> ctrl) {}
 	};
 

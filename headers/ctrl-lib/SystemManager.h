@@ -42,7 +42,18 @@
 
 namespace CalX {
 
-	class SystemManager;  // Forward referencing
+	class SystemManager {
+	 public:
+		virtual ~SystemManager() = default;
+		virtual DeviceManager &getDeviceManager() const = 0;
+		virtual ConfigManager &getConfiguration() const = 0;
+		virtual MathEngine &getMathEngine() = 0;
+		virtual ExtEngine *getExtensionEngine() const = 0;
+		virtual TaskSet &getTaskSet() = 0;
+		virtual CoordPlaneSet &getCoordPlaneSet() = 0;
+		virtual MotorControllerSet &getMotorControllerSet() = 0;
+		virtual InstrumentControllerSet &getInstrumentControllerSet() = 0;
+	};
 
 	class SystemManagerEventLogger : public TaskSetEventListener,
 	                                 public CoordPlaneSetListener,
@@ -60,19 +71,6 @@ namespace CalX {
 
 	 private:
 		SystemManager &sysman;
-	};
-
-	class SystemManager {
-	 public:
-		virtual ~SystemManager() = default;
-		virtual DeviceManager &getDeviceManager() const = 0;
-		virtual ConfigManager &getConfiguration() const = 0;
-		virtual MathEngine &getMathEngine() = 0;
-		virtual ExtEngine *getExtensionEngine() const = 0;
-		virtual TaskSet &getTaskSet() = 0;
-		virtual CoordPlaneSet &getCoordPlaneSet() = 0;
-		virtual MotorControllerSet &getMotorControllerSet() = 0;
-		virtual InstrumentControllerSet &getInstrumentControllerSet() = 0;
 	};
 
 	class DefaultSystemManager : public SystemManager {

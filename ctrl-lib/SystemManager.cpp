@@ -29,7 +29,7 @@ namespace CalX {
 
 	void SystemManagerEventLogger::onTaskAdded(std::shared_ptr<CoordTask> task) {
 		if (this->sysman.getExtensionEngine() != nullptr) {
-			this->sysman.getExtensionEngine()->taskAdded(task);
+			this->sysman.getExtensionEngine()->onTaskAdded(task);
 		}
 		LOG(SYSMAN_TAG,
 		    "Added new task #" +
@@ -40,7 +40,7 @@ namespace CalX {
 
 	void SystemManagerEventLogger::onTaskRemoving(std::size_t index) {
 		if (this->sysman.getExtensionEngine() != nullptr) {
-			this->sysman.getExtensionEngine()->taskRemoving(index);
+			this->sysman.getExtensionEngine()->onTaskRemoving(index);
 		}
 
 		LOG(SYSMAN_TAG,
@@ -51,7 +51,7 @@ namespace CalX {
 	void SystemManagerEventLogger::onPlaneAdded(
 	    std::shared_ptr<CoordHandle> handle) {
 		if (this->sysman.getExtensionEngine() != nullptr) {
-			this->sysman.getExtensionEngine()->coordAdded(handle);
+			this->sysman.getExtensionEngine()->onPlaneAdded(handle);
 		}
 
 		LOG(SYSMAN_TAG,
@@ -72,7 +72,7 @@ namespace CalX {
 
 	void SystemManagerEventLogger::onPlaneRemoving(std::size_t index) {
 		if (this->sysman.getExtensionEngine() != nullptr) {
-			this->sysman.getExtensionEngine()->coordRemoving(index);
+			this->sysman.getExtensionEngine()->onPlaneRemoving(index);
 		}
 		LOG(SYSMAN_TAG, "Removed coord #" + std::to_string(index));
 	}
@@ -81,14 +81,14 @@ namespace CalX {
 	    std::shared_ptr<DeviceController> controller) {
 		if (controller->getDevice().getType() == DeviceType::Motor) {
 			if (this->sysman.getExtensionEngine() != nullptr) {
-				this->sysman.getExtensionEngine()->motorConnected(
+				this->sysman.getExtensionEngine()->onMotorConnected(
 				    std::dynamic_pointer_cast<MotorController>(controller));
 			}
 			LOG(SYSMAN_TAG,
 			    "Connected new motor #" + std::to_string(controller->getID()));
 		} else {
 			if (this->sysman.getExtensionEngine() != nullptr) {
-				this->sysman.getExtensionEngine()->instrumentConnected(
+				this->sysman.getExtensionEngine()->onInstrumentConnected(
 				    std::dynamic_pointer_cast<InstrumentController>(controller));
 			}
 			LOG(SYSMAN_TAG,
