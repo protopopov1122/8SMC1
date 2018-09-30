@@ -140,7 +140,7 @@ namespace CalXUI {
 
 		SETUP_LOG(errors_log, "errors", ERRORS) SETUP_LOG(warnings_log, "warnings",
 		                                                  WARNINGS)
-		    SETUP_LOG(debug_log, "debug", DEBUG) SETUP_LOG(info_log, "info", INFO)
+		    SETUP_LOG(debug_log, "debug", DEBUG) SETUP_LOG(info_log, "info", INFORMATION)
 		        SETUP_LOG(resources_log, "resources", RESOURCES)
 		            SETUP_LOG(instruments_log, "instruments", INSTRUMENTS)
 

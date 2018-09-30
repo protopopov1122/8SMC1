@@ -33,7 +33,7 @@ std::ostream **getStreamPtr(std::string str) {
 		return &__ERRORS;
 	} else if (str.compare(WARNINGS) == 0) {
 		return &__WARNINGS;
-	} else if (str.compare(INFO) == 0) {
+	} else if (str.compare(INFORMATION) == 0) {
 		return &__INFO;
 	} else if (str.compare(RESOURCES) == 0) {
 		return &__RESOURCES;

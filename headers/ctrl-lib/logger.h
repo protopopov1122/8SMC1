@@ -38,7 +38,7 @@
 #define ERRORS "errors"
 #define WARNINGS "warnings"
 #define DEBUG "debug"
-#define INFO "info"
+#define INFORMATION "info"
 #define RESOURCES "resources"
 #define INSTRUMENTS "instruments"
 
@@ -59,7 +59,7 @@ void SET_LOGGER(std::string, std::ostream *);
 #define LOG_ERROR(tag, msg) WRITE_LOG(ERRORS, tag, msg)
 #define LOG_WARNING(tag, msg) WRITE_LOG(WARNINGS, tag, msg)
 #define LOG_DEBUG(tag, msg) WRITE_LOG(DEBUG, tag, msg)
-#define LOG(tag, msg) WRITE_LOG(INFO, tag, msg)
+#define LOG(tag, msg) WRITE_LOG(INFORMATION, tag, msg)
 #define LOG_INSTR(id, msg)                                                     \
 	WRITE_LOG(INSTRUMENTS, "Instrument #" + std::to_string(id), msg)
 
