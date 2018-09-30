@@ -42,6 +42,7 @@ add_subdirectory(cli)
 add_subdirectory(ui)
 add_subdirectory(ext)
 add_subdirectory(lua-calx)
+add_subdirectory(tests/unit)
 
 # CPack configuration
 set(CPACK_COMPONENT_CONFIG_DISPLAY_NAME "Configuration files" CACHE INTERNAL "")
