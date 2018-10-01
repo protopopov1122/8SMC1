@@ -24,9 +24,7 @@
 
 namespace CalX {
 
-	Device::Device(DeviceType t, device_id_t id) {
-		this->type = t;
-		this->id = id;
+	Device::Device(DeviceType type, device_id_t id) : id(id), type(type) {
 		this->config = std::make_shared<ConfigManager>();
 	}
 

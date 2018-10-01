@@ -57,12 +57,18 @@ namespace CalX {
 
 	struct DeviceSerialPortConnectionPrms : public DeviceConnectionPrms {
 	 public:
-		DeviceSerialPortConnectionPrms()
+		DeviceSerialPortConnectionPrms(uint8_t port = 0, uint32_t speed = 0, SerialPortParity parity = SerialPortParity::No)
 		    : DeviceConnectionPrms::DeviceConnectionPrms(
 		          DeviceConnectionType::SerialPort),
-		      port(0),
-		      speed(0),
-		      parity(SerialPortParity::No) {}
+		      port(port),
+		      speed(speed),
+		      parity(parity) {}
+		DeviceSerialPortConnectionPrms(const DeviceSerialPortConnectionPrms &prms)
+			: DeviceConnectionPrms::DeviceConnectionPrms(DeviceConnectionType::SerialPort),
+				port(prms.port),
+				speed(prms.speed),
+				parity(prms.parity) {}
+		DeviceSerialPortConnectionPrms &operator=(const DeviceSerialPortConnectionPrms &) = default;
 
 		uint8_t port;
 		uint32_t speed;
@@ -98,12 +104,12 @@ namespace CalX {
 	 protected:
 		virtual void log(std::string);
 
-		device_id_t id;
+		const device_id_t id;
 		std::shared_ptr<ConfigManager> config;
 		std::vector<std::string> errors;
 
 	 private:
-		DeviceType type;
+		const DeviceType type;
 		std::mutex dev_mutex;
 	};
 

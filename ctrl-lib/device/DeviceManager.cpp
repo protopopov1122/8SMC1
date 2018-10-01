@@ -62,13 +62,13 @@ namespace CalX {
 	}
 
 	void DeviceManager::getConnectionTypes(
-	    std::vector<DeviceConnectionType> &dev,
-	    std::vector<DeviceConnectionType> &instr) const {
-		for (const auto &d : this->motorConnectionType) {
-			dev.push_back(d);
+	    std::vector<DeviceConnectionType> &motors,
+	    std::vector<DeviceConnectionType> &instruments) const {
+		for (const auto &motor : this->motorConnectionType) {
+			motors.push_back(motor);
 		}
-		for (const auto &i : this->instrumentConnectionType) {
-			instr.push_back(i);
+		for (const auto &instrument : this->instrumentConnectionType) {
+			instruments.push_back(instrument);
 		}
 	}
 
