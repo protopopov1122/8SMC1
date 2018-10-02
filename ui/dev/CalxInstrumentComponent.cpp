@@ -34,7 +34,7 @@ namespace CalXUI {
 			this->used = 0;
 		}
 
-		virtual void use() {
+		void onUse() override {
 			if (used == 0) {
 				wxThreadEvent evt(wxEVT_INSTRUMENT_CTRL_ENABLE);
 				evt.SetPayload(false);
@@ -43,7 +43,7 @@ namespace CalXUI {
 			used++;
 		}
 
-		virtual void unuse() {
+		void onUnuse() override {
 			used--;
 			if (used == 0) {
 				wxThreadEvent evt(wxEVT_INSTRUMENT_CTRL_ENABLE);

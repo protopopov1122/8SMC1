@@ -38,8 +38,8 @@ namespace CalXUI {
 		CalxMotorEventListener(CalxMotorComponent *);
 		virtual ~CalxMotorEventListener();
 
-		virtual void use();
-		virtual void unuse();
+		void onUse() override;
+		void onUnuse() override;
 
 	 private:
 		CalxMotorComponent *dev;

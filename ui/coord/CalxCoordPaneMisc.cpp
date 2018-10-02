@@ -34,11 +34,11 @@ namespace CalXUI {
 
 	CalxCoordEventListener::~CalxCoordEventListener() {}
 
-	void CalxCoordEventListener::use() {
+	void CalxCoordEventListener::onUse() {
 		ctrl->use();
 	}
 
-	void CalxCoordEventListener::unuse() {
+	void CalxCoordEventListener::onUnuse() {
 		ctrl->unuse();
 	}
 
@@ -48,11 +48,11 @@ namespace CalXUI {
 
 	CalxCoordMotorListener::~CalxCoordMotorListener() {}
 
-	void CalxCoordMotorListener::use() {
+	void CalxCoordMotorListener::onUse() {
 		ctrl->use();
 	}
 
-	void CalxCoordMotorListener::unuse() {
+	void CalxCoordMotorListener::onUnuse() {
 		ctrl->unuse();
 	}
 
@@ -63,11 +63,11 @@ namespace CalXUI {
 
 	CalxCoordInstrumentListener::~CalxCoordInstrumentListener() {}
 
-	void CalxCoordInstrumentListener::use() {
+	void CalxCoordInstrumentListener::onUse() {
 		ctrl->use();
 	}
 
-	void CalxCoordInstrumentListener::unuse() {
+	void CalxCoordInstrumentListener::onUnuse() {
 		ctrl->unuse();
 	}
 }  // namespace CalXUI

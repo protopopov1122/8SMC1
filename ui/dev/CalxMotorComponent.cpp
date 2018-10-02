@@ -43,14 +43,14 @@ namespace CalXUI {
 
 	CalxMotorEventListener::~CalxMotorEventListener() {}
 
-	void CalxMotorEventListener::use() {
+	void CalxMotorEventListener::onUse() {
 		if (this->used == 0) {
 			dev->setEnabled(false);
 		}
 		this->used++;
 	}
 
-	void CalxMotorEventListener::unuse() {
+	void CalxMotorEventListener::onUnuse() {
 		this->used--;
 		if (this->used == 0) {
 			dev->setEnabled(true);

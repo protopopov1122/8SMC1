@@ -153,7 +153,7 @@ namespace CalX {
 		if (!this->dev.start(dest, speed)) {
 			errcode = ErrorCode::LowLevelError;
 		}
-		if (errcode != ErrorCode::NoError) {
+		if (errcode == ErrorCode::NoError) {
 			errcode = this->waitWhileRunning();
 		}
 		if (errcode != ErrorCode::NoError) {
@@ -286,14 +286,14 @@ namespace CalX {
 	void MotorController::use() {
 		UsableResource::use();
 		for (const auto &l : this->listeners) {
-			l->use();
+			l->onUse();
 		}
 	}
 
 	void MotorController::unuse() {
 		UsableResource::unuse();
 		for (const auto &l : this->listeners) {
-			l->unuse();
+			l->onUnuse();
 		}
 	}
 }  // namespace CalX

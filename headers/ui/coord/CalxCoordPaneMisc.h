@@ -36,8 +36,8 @@ namespace CalXUI {
 	 public:
 		CalxCoordEventListener(CalxCoordPane *);
 		virtual ~CalxCoordEventListener();
-		virtual void use();
-		virtual void unuse();
+		void onUse() override;
+		void onUnuse() override;
 
 	 private:
 		CalxCoordPane *ctrl;
@@ -47,8 +47,8 @@ namespace CalXUI {
 	 public:
 		CalxCoordMotorListener(CalxCoordPane *);
 		virtual ~CalxCoordMotorListener();
-		virtual void use();
-		virtual void unuse();
+		void onUse() override;
+		void onUnuse() override;
 
 	 private:
 		CalxCoordPane *ctrl;
@@ -58,8 +58,8 @@ namespace CalXUI {
 	 public:
 		CalxCoordInstrumentListener(CalxCoordPane *);
 		virtual ~CalxCoordInstrumentListener();
-		virtual void use();
-		virtual void unuse();
+		void onUse() override;
+		void onUnuse() override;
 
 	 private:
 		CalxCoordPane *ctrl;

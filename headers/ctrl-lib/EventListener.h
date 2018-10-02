@@ -34,16 +34,18 @@ namespace CalX {
 	class ConfigManager;  // Forward referencing
 	class ConfigEntry;    // Forward referencing
 
+	class UsageEventListener {
+	 public:
+		virtual ~UsageEventListener() = default;
+		virtual void onUse() {}
+		virtual void onUnuse() {}
+	};
+
 	struct ErrorEvent {
-		ErrorEvent(ErrorCode e) : errcode(e) {}
-		ErrorEvent(const ErrorEvent &e) : errcode(e.errcode) {}
 		ErrorCode errcode;
 	};
 
 	struct MotorMoveEvent {
-		MotorMoveEvent(motor_coord_t d, float s) : destination(d), speed(d) {}
-		MotorMoveEvent(const MotorMoveEvent &e)
-		    : destination(e.destination), speed(e.speed) {}
 		motor_coord_t destination;
 		float speed;
 	};
@@ -51,12 +53,10 @@ namespace CalX {
 	typedef ErrorEvent MotorErrorEvent;
 
 	struct MotorRollEvent {
-		MotorRollEvent(TrailerId tr) : trailer(tr) {}
-		MotorRollEvent(const MotorRollEvent &e) : trailer(e.trailer) {}
 		TrailerId trailer;
 	};
 
-	class MotorEventListener {
+	class MotorEventListener : public UsageEventListener {
 	 public:
 		MotorEventListener() {
 			INIT_LOG("MotorEventListener");
@@ -64,8 +64,6 @@ namespace CalX {
 		virtual ~MotorEventListener() {
 			DESTROY_LOG("MotorEventListener");
 		}
-		virtual void use() {}
-		virtual void unuse() {}
 		virtual void moving(MotorMoveEvent &) {}
 		virtual void moved(MotorMoveEvent &) {}
 		virtual void stopped(MotorErrorEvent &) {}
@@ -73,7 +71,7 @@ namespace CalX {
 		virtual void rolled(MotorRollEvent &) {}
 	};
 
-	class InstrumentEventListener {
+	class InstrumentEventListener : public UsageEventListener {
 	 public:
 		InstrumentEventListener() {
 			INIT_LOG("InstrumentEventListener");
@@ -81,16 +79,10 @@ namespace CalX {
 		virtual ~InstrumentEventListener() {
 			DESTROY_LOG("InstrumentEventListener");
 		}
-		virtual void use() {}
-		virtual void unuse() {}
 		virtual void stateChanged(bool state, bool enabled) {}
 	};
 
 	struct CoordMoveEvent {
-		CoordMoveEvent(motor_point_t p, float s, bool sy)
-		    : destination(p), speed(s), synchrone(sy) {}
-		CoordMoveEvent(const CoordMoveEvent &e)
-		    : destination(e.destination), speed(e.speed), synchrone(e.synchrone) {}
 		motor_point_t destination;
 		float speed;
 		bool synchrone;
@@ -99,7 +91,7 @@ namespace CalX {
 	typedef ErrorEvent CoordErrorEvent;
 	typedef MotorRollEvent CoordCalibrateEvent;
 
-	class CoordEventListener {
+	class CoordEventListener : public UsageEventListener {
 	 public:
 		CoordEventListener() {
 			INIT_LOG("CoordEventListener");
@@ -107,8 +99,6 @@ namespace CalX {
 		virtual ~CoordEventListener() {
 			DESTROY_LOG("CoordEventListener");
 		}
-		virtual void use() {}
-		virtual void unuse() {}
 		virtual void moving(CoordMoveEvent &) {}
 		virtual void moved(CoordMoveEvent &) {}
 		virtual void stopped(CoordErrorEvent &) {}
@@ -129,6 +119,14 @@ namespace CalX {
 		virtual void keyAdded(ConfigManager *, ConfigEntry *, std::string) {}
 		virtual void keyRemoved(ConfigManager *, ConfigEntry *, std::string) {}
 		virtual void keyChanged(ConfigManager *, ConfigEntry *, std::string) {}
+	};
+
+	template<typename T>
+	class EventSource {
+	 public:
+		virtual ~EventSource() = default;
+		virtual void addEventListener(T) = 0;
+		virtual void removeEventListener(T) = 0;
 	};
 }  // namespace CalX
 

@@ -510,7 +510,7 @@ namespace CalX {
 	void CoordController::use() {
 		UsableResource::use();
 		for (const auto &l : this->listeners) {
-			l->use();
+			l->onUse();
 		}
 		xAxis->use();
 		yAxis->use();
@@ -522,7 +522,7 @@ namespace CalX {
 	void CoordController::unuse() {
 		UsableResource::unuse();
 		for (const auto &l : this->listeners) {
-			l->unuse();
+			l->onUnuse();
 		}
 		xAxis->unuse();
 		yAxis->unuse();
