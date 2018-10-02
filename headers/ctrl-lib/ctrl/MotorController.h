@@ -68,9 +68,9 @@ namespace CalX {
 		void sendRollingEvent(MotorRollEvent &);
 		void sendRolledEvent(MotorRollEvent &);
 
-		MoveType dest;
+		MoveType destination;
 		bool work;
-		Motor &dev;
+		Motor &motor;
 		std::vector<std::shared_ptr<MotorEventListener>> listeners;
 	};
 }  // namespace CalX

@@ -25,21 +25,21 @@
 namespace CalX {
 
 	MotorController::MotorController(ConfigManager &conf, Motor &dev)
-	    : DeviceController::DeviceController(conf, dev), dev(dev) {
-		this->dest = MoveType::Stop;
+	    : DeviceController::DeviceController(conf, dev), motor(dev) {
+		this->destination = MoveType::Stop;
 		this->work = false;
 	}
 
 	Motor &MotorController::getMotor() const {
-		return this->dev;
+		return this->motor;
 	}
 
 	Power MotorController::getPowerState() const {
-		return this->dev.getPowerState();
+		return this->motor.getPowerState();
 	}
 
 	ErrorCode MotorController::enablePower(bool p) {
-		bool res = this->dev.enablePower(p);
+		bool res = this->motor.enablePower(p);
 		return res ? ErrorCode::NoError : ErrorCode::LowLevelError;
 	}
 
@@ -49,34 +49,34 @@ namespace CalX {
 
 	ErrorCode MotorController::checkTrailers() {
 		ErrorCode errcode = ErrorCode::NoError;
-		if (!this->dev.isRunning()) {
+		if (!this->motor.isRunning()) {
 			return errcode;
 		}
-		if (this->dest == MoveType::MoveUp && this->dev.isTrailerPressed(2)) {
+		if (this->destination == MoveType::MoveUp && this->motor.isTrailerPressed(2)) {
 			errcode = ErrorCode::Trailer2Pressed;
-			if (!this->dev.stop()) {
+			if (!this->motor.stop()) {
 				errcode = ErrorCode::LowLevelError;
 			}
-			this->dest = MoveType::Stop;
+			this->destination = MoveType::Stop;
 			return errcode;
 		}
-		if (this->dest == MoveType::MoveDown && this->dev.isTrailerPressed(1)) {
+		if (this->destination == MoveType::MoveDown && this->motor.isTrailerPressed(1)) {
 			errcode = ErrorCode::Trailer1Pressed;
-			if (!this->dev.stop()) {
+			if (!this->motor.stop()) {
 				errcode = ErrorCode::LowLevelError;
 			}
-			this->dest = MoveType::Stop;
+			this->destination = MoveType::Stop;
 			return errcode;
 		}
 		return ErrorCode::NoError;
 	}
 
 	bool MotorController::isTrailerPressed(TrailerId tr) const {
-		return this->dev.isTrailerPressed(static_cast<int>(tr));
+		return this->motor.isTrailerPressed(static_cast<int>(tr));
 	}
 
 	ErrorCode MotorController::waitWhileRunning() {
-		while (this->dev.isRunning()) {
+		while (this->motor.isRunning()) {
 			ErrorCode code = this->checkTrailers();
 			if (code != ErrorCode::NoError) {
 				return code;
@@ -86,10 +86,10 @@ namespace CalX {
 	}
 
 	ErrorCode MotorController::moveToTrailer(TrailerId tr) {
-		if (this->dev.isRunning()) {
+		if (this->motor.isRunning()) {
 			return ErrorCode::MotorRunning;
 		}
-		if (this->dev.getPowerState() == Power::NoPower) {
+		if (this->motor.getPowerState() == Power::NoPower) {
 			return ErrorCode::PowerOff;
 		}
 		this->work = true;
@@ -101,35 +101,35 @@ namespace CalX {
 		    config.getEntry("core")->getInt("trailer_comeback", TRAILER_COMEBACK);
 
 		int_conf_t dest = (tr == TrailerId::Trailer1 ? -roll_step : roll_step);
-		this->dest =
+		this->destination =
 		    (tr == TrailerId::Trailer1 ? MoveType::RollDown : MoveType::RollUp);
 		MotorRollEvent evt = { tr };
 		this->sendRollingEvent(evt);
-		while (!dev.isTrailerPressed(static_cast<int>(tr)) && work) {
-			if (!this->dev.isRunning()) {
-				if (!this->dev.start(this->dev.getPosition() + dest, roll_speed)) {
+		while (!motor.isTrailerPressed(static_cast<int>(tr)) && work) {
+			if (!this->motor.isRunning()) {
+				if (!this->motor.start(this->motor.getPosition() + dest, roll_speed)) {
 					this->sendRolledEvent(evt);
-					this->dest = MoveType::Stop;
+					this->destination = MoveType::Stop;
 					this->work = false;
 					return ErrorCode::LowLevelError;
 				}
 			}
 		}
-		if (this->dev.isRunning()) {
-			if (!this->dev.stop()) {
+		if (this->motor.isRunning()) {
+			if (!this->motor.stop()) {
 				this->sendRolledEvent(evt);
-				this->dest = MoveType::Stop;
+				this->destination = MoveType::Stop;
 				this->work = false;
 				return ErrorCode::LowLevelError;
 			}
 		}
-		this->dest = MoveType::Stop;
+		this->destination = MoveType::Stop;
 		if (tr == TrailerId::Trailer2) {
 			comeback *= -1;
 		}
 		ErrorCode errcode = ErrorCode::NoError;
 		if (work) {
-			errcode = this->startMove(this->dev.getPosition() + comeback, roll_speed);
+			errcode = this->startMove(this->motor.getPosition() + comeback, roll_speed);
 		}
 		this->sendRolledEvent(evt);
 		this->work = false;
@@ -138,19 +138,19 @@ namespace CalX {
 	}
 
 	ErrorCode MotorController::startMove(motor_coord_t dest, float speed) {
-		if (this->dev.isRunning()) {
+		if (this->motor.isRunning()) {
 			return ErrorCode::MotorRunning;
 		}
-		if (this->dev.getPowerState() == Power::NoPower) {
+		if (this->motor.getPowerState() == Power::NoPower) {
 			return ErrorCode::PowerOff;
 		}
 		this->work = true;
-		this->dest =
-		    dest > this->dev.getPosition() ? MoveType::MoveUp : MoveType::MoveDown;
+		this->destination =
+		    dest > this->motor.getPosition() ? MoveType::MoveUp : MoveType::MoveDown;
 		MotorMoveEvent evt = { dest, speed };
 		this->sendMovingEvent(evt);
 		ErrorCode errcode = ErrorCode::NoError;
-		if (!this->dev.start(dest, speed)) {
+		if (!this->motor.start(dest, speed)) {
 			errcode = ErrorCode::LowLevelError;
 		}
 		if (errcode == ErrorCode::NoError) {
@@ -162,7 +162,7 @@ namespace CalX {
 		} else {
 			this->sendMovedEvent(evt);
 		}
-		this->dest = MoveType::Stop;
+		this->destination = MoveType::Stop;
 		this->work = false;
 		return errcode;
 	}
@@ -175,26 +175,26 @@ namespace CalX {
 
 	ErrorCode MotorController::asyncMove(motor_coord_t dest, float speed,
 	                                     bool rollEvent) {
-		if (this->dev.isRunning()) {
+		if (this->motor.isRunning()) {
 			return ErrorCode::MotorRunning;
 		}
-		if (this->dev.getPowerState() == Power::NoPower) {
+		if (this->motor.getPowerState() == Power::NoPower) {
 			return ErrorCode::PowerOff;
 		}
 		this->work = true;
-		this->dest =
-		    dest > this->dev.getPosition() ? MoveType::MoveUp : MoveType::MoveDown;
+		this->destination =
+		    dest > this->motor.getPosition() ? MoveType::MoveUp : MoveType::MoveDown;
 		if (!rollEvent) {
 			MotorMoveEvent evt = { dest, speed };
 			this->sendMovingEvent(evt);
 		} else {
-			TrailerId tid = this->dest == MoveType::MoveUp ? TrailerId::Trailer2
+			TrailerId tid = this->destination == MoveType::MoveUp ? TrailerId::Trailer2
 			                                               : TrailerId::Trailer1;
 			MotorRollEvent evt = { tid };
 			this->sendRollingEvent(evt);
 		}
 		ErrorCode errcode = ErrorCode::NoError;
-		if (!this->dev.start(dest, speed)) {
+		if (!this->motor.start(dest, speed)) {
 			errcode = ErrorCode::LowLevelError;
 			MotorErrorEvent sevt = { errcode };
 			this->sendStoppedEvent(sevt);
@@ -217,28 +217,28 @@ namespace CalX {
 			MotorMoveEvent evt = { dest, speed };
 			this->sendMovedEvent(evt);
 		} else {
-			TrailerId tid = this->dest == MoveType::MoveUp ? TrailerId::Trailer2
+			TrailerId tid = this->destination == MoveType::MoveUp ? TrailerId::Trailer2
 			                                               : TrailerId::Trailer1;
 			MotorRollEvent evt = { tid };
 			this->sendRolledEvent(evt);
 		}
-		this->dest = MoveType::Stop;
-		this->dev.stop();
+		this->destination = MoveType::Stop;
+		this->motor.stop();
 		this->work = false;
 	}
 
 	void MotorController::stop() {
-		this->dest = MoveType::Stop;
-		this->dev.stop();
+		this->destination = MoveType::Stop;
+		this->motor.stop();
 		this->work = false;
 	}
 
 	motor_coord_t MotorController::getPosition() const {
-		return this->dev.getPosition();
+		return this->motor.getPosition();
 	}
 
 	bool MotorController::isMoving() const {
-		return this->dev.isRunning();
+		return this->motor.isRunning();
 	}
 
 	void MotorController::addEventListener(
