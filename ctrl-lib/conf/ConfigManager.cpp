@@ -35,13 +35,14 @@ namespace CalX {
 		if (this->entries.count(id) != 0) {
 			return this->entries[id].get();
 		} else if (createNew) {
-			std::shared_ptr<ConfigEntry> entry =
-			    std::make_shared<ConfigEntry>(*this, id);
-			this->entries[id] = entry;
+			std::unique_ptr<ConfigEntry> entry =
+			    std::make_unique<ConfigEntry>(*this, id);
+			ConfigEntry *entry_ptr = entry.get();
+			this->entries[id] = std::move(entry);
 			for (const auto &l : this->listeners) {
 				l->entryAdded(this, id);
 			}
-			return entry.get();
+			return entry_ptr;
 		} else {
 			return nullptr;
 		}

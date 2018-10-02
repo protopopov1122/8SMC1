@@ -133,7 +133,7 @@ namespace CalX {
 	 private:
 		static ConfigurationValue parseValue(const char *);
 
-		std::map<std::string, std::shared_ptr<ConfigEntry>> entries;
+		std::map<std::string, std::unique_ptr<ConfigEntry>> entries;
 		std::shared_ptr<ConfigValidator> validator;
 		std::vector<std::shared_ptr<ConfigEventListener>> listeners;
 	};
