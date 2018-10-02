@@ -83,7 +83,7 @@ namespace CalXUI {
 		this->pool = pool;
 		pool->bindWatcher(this);
 
-		std::shared_ptr<ConfigEntry> colourEntry =
+		ConfigEntry *colourEntry =
 		    wxGetApp().getSystemManager()->getConfiguration().getEntry(
 		        "watcher_color");
 		this->pointer_colour = wxColour(colourEntry->getInt("pointer_R", 255),

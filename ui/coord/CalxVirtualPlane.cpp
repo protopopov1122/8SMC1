@@ -63,7 +63,7 @@ namespace CalXUI {
 		this->float_plane = std::dynamic_pointer_cast<FloatCoordPlane>(shflt);
 		this->base = base;
 		SetMinSize(min);
-		std::shared_ptr<ConfigEntry> colourEntry =
+		ConfigEntry *colourEntry =
 		    wxGetApp().getSystemManager()->getConfiguration().getEntry(
 		        "watcher_color");
 		this->pointer_colour = wxColour(colourEntry->getInt("pointer_R", 255),

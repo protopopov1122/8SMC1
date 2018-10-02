@@ -31,7 +31,7 @@ namespace CalXUI {
 
 	class CalxNewKeyDialog : public wxDialog {
 	 public:
-		CalxNewKeyDialog(wxWindow *, wxWindowID, std::shared_ptr<ConfigEntry>);
+		CalxNewKeyDialog(wxWindow *, wxWindowID, ConfigEntry *);
 
 	 private:
 		void updateUI();
@@ -40,7 +40,7 @@ namespace CalXUI {
 		void OnCancelClick(wxCommandEvent &);
 		void OnTypeChange(wxCommandEvent &);
 
-		std::shared_ptr<ConfigEntry> entry;
+		ConfigEntry *entry;
 		wxTextCtrl *key;
 		wxComboBox *type;
 

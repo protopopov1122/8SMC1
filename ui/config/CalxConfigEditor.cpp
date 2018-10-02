@@ -315,7 +315,7 @@ namespace CalXUI {
 
 	void CalxConfigEditor::OnNewKeyClick(wxCommandEvent &evt) {
 		if (this->entryList->GetSelection() != wxNOT_FOUND) {
-			std::shared_ptr<ConfigEntry> entry = this->config.getEntry(
+			ConfigEntry *entry = this->config.getEntry(
 			    this->entryList->GetStringSelection().ToStdString());
 			CalxNewKeyDialog *dialog = new CalxNewKeyDialog(this, wxID_ANY, entry);
 			dialog->ShowModal();
@@ -336,7 +336,7 @@ namespace CalXUI {
 			this->editorPanel->Layout();
 			this->valuePanel->Layout();
 			this->currentValue = ConfigurationValue::Empty;
-			std::shared_ptr<ConfigEntry> entry = this->config.getEntry(
+			ConfigEntry *entry = this->config.getEntry(
 			    this->entryList->GetStringSelection().ToStdString());
 			wxVariant vrt;
 			this->valueList->GetValue(
@@ -355,7 +355,7 @@ namespace CalXUI {
 
 	void CalxConfigEditor::updateEntries() {
 		this->entryList->Clear();
-		std::vector<std::shared_ptr<ConfigEntry>> entries;
+		std::vector<ConfigEntry *> entries;
 		config.getEntries(entries);
 		for (const auto &entry : entries) {
 			this->entryList->Append(entry->getEntryName());
@@ -371,7 +371,7 @@ namespace CalXUI {
 		}
 
 		std::string entryName = this->entryList->GetStringSelection().ToStdString();
-		std::shared_ptr<ConfigEntry> entry = this->config.getEntry(entryName);
+		ConfigEntry *entry = this->config.getEntry(entryName);
 		std::vector<std::pair<std::string, ConfigurationValue>> content;
 		entry->getContent(content);
 		for (const auto &kv : content) {
@@ -441,7 +441,7 @@ namespace CalXUI {
 	void CalxConfigEditor::updateKey() {
 		if (this->entryList->GetSelection() != wxNOT_FOUND &&
 		    this->valueList->GetSelectedRow() != wxNOT_FOUND) {
-			std::shared_ptr<ConfigEntry> entry = this->config.getEntry(
+			ConfigEntry *entry = this->config.getEntry(
 			    this->entryList->GetStringSelection().ToStdString());
 			wxVariant vrt;
 			this->valueList->GetValue(

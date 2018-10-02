@@ -57,7 +57,7 @@ namespace CalX {
 		                   bool = false);
 		std::string getKey();
 		ConfigValueValidator *getValue();
-		bool validate(std::shared_ptr<ConfigEntry>);
+		bool validate(ConfigEntry *);
 
 	 private:
 		std::string key;

@@ -161,7 +161,7 @@ namespace CalX {
 		this->listener = std::make_shared<NL300ConfigEventListener>(this);
 		this->config->addEventListener(this->listener);
 
-		std::shared_ptr<ConfigEntry> core =
+		ConfigEntry *core =
 		    this->config->getEntry(NL300_ENTRY_NAME);
 		core->put(NL300_PACK_PULSES, ConfigurationValue(
 		                                 inquireIntegerParameter('P', 0, 1)));
@@ -632,7 +632,7 @@ namespace CalX {
 		return val;
 	}
 
-	std::shared_ptr<ConfigEntry> NL300Instrument::getCoreEntry() {
+	ConfigEntry *NL300Instrument::getCoreEntry() {
 		std::string name = this->config->getEntry(NL300_CORE_NAME)
 		                       ->getString(NL300_CORE_MODE, "default");
 		return this->config->getEntry(name);

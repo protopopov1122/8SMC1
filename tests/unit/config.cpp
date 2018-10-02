@@ -5,7 +5,7 @@ using namespace CalX;
 
 TEST_CASE("Configuration manager entry management") {
   ConfigManager config;
-  std::vector<std::shared_ptr<ConfigEntry>> entries;
+  std::vector<ConfigEntry *> entries;
   const std::string ENTRY = "test_entry";
   REQUIRE(!config.hasEntry(ENTRY));
   config.getEntries(entries);
@@ -13,10 +13,10 @@ TEST_CASE("Configuration manager entry management") {
   REQUIRE(!config.removeEntry(ENTRY));
   REQUIRE(config.getEntry(ENTRY, false) == nullptr);
 
-  std::shared_ptr<ConfigEntry> entry = config.getEntry(ENTRY);
+  ConfigEntry *entry = config.getEntry(ENTRY);
   REQUIRE(entry != nullptr);
   REQUIRE(config.hasEntry(ENTRY));
-  REQUIRE(entry.get() == config.getEntry(ENTRY).get());
+  REQUIRE(entry == config.getEntry(ENTRY));
   for (int i = 0; i < 10; i++) {
     config.getEntry(ENTRY);
   }
@@ -71,9 +71,9 @@ TEST_CASE("Configuration manager value objects") {
 TEST_CASE("Configuration manager entry") {
   ConfigManager config;
   const std::string ENTRY = "test_entry";
-  std::shared_ptr<ConfigEntry> entry = config.getEntry(ENTRY);
+  ConfigEntry *entry = config.getEntry(ENTRY);
   SECTION("Entry parameters") {
-    REQUIRE(entry.get() != nullptr);
+    REQUIRE(entry != nullptr);
     REQUIRE(ENTRY.compare(entry->getEntryName()) == 0);
   }
   SECTION("Operations with entry variables") {

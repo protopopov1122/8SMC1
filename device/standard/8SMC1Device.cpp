@@ -40,7 +40,7 @@ namespace CalX {
 		this->updateMode();
 		this->updateParameters();
 		getDeviceManager().loadConfiguration("8SMC1.ini", *this->config);
-		std::shared_ptr<ConfigEntry> motor_sect = this->config->getEntry("motor");
+		ConfigEntry *motor_sect = this->config->getEntry("motor");
 		this->divisor = motor_sect->getInt("divisor", 8);
 	}
 

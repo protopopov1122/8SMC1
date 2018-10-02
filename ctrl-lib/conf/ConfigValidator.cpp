@@ -57,7 +57,7 @@ namespace CalX {
 		return this->value.get();
 	}
 
-	bool ConfigKeyValidator::validate(std::shared_ptr<ConfigEntry> entry) {
+	bool ConfigKeyValidator::validate(ConfigEntry *entry) {
 		if (entry == nullptr || !entry->has(key)) {
 			return this->isOptional();
 		}
@@ -82,7 +82,7 @@ namespace CalX {
 			return this->isOptional();
 		}
 
-		std::shared_ptr<ConfigEntry> entry = conf->getEntry(this->name, false);
+		ConfigEntry *entry = conf->getEntry(this->name, false);
 		for (const auto &k : this->keys) {
 			if (!k->validate(entry)) {
 				return false;

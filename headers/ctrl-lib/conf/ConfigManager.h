@@ -114,11 +114,11 @@ namespace CalX {
 	 public:
 		ConfigManager();
 
-		std::shared_ptr<ConfigEntry> getEntry(std::string, bool = true);
+		ConfigEntry *getEntry(std::string, bool = true);
 		bool hasEntry(std::string) const;
 		bool removeEntry(std::string);
 		void store(std::ostream &) const;
-		void getEntries(std::vector<std::shared_ptr<ConfigEntry>> &) const;
+		void getEntries(std::vector<ConfigEntry *> &) const;
 		void setValidator(std::shared_ptr<ConfigValidator>);
 		std::shared_ptr<ConfigValidator> getValidator() const;
 		bool validate(std::shared_ptr<ConfigValidator> = nullptr);

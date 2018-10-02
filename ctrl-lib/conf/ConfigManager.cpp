@@ -30,10 +30,10 @@ namespace CalX {
 		this->validator = nullptr;
 	}
 
-	std::shared_ptr<ConfigEntry> ConfigManager::getEntry(std::string id,
+	ConfigEntry *ConfigManager::getEntry(std::string id,
 	                                                     bool createNew) {
 		if (this->entries.count(id) != 0) {
-			return this->entries[id];
+			return this->entries[id].get();
 		} else if (createNew) {
 			std::shared_ptr<ConfigEntry> entry =
 			    std::make_shared<ConfigEntry>(*this, id);
@@ -41,7 +41,7 @@ namespace CalX {
 			for (const auto &l : this->listeners) {
 				l->entryAdded(this, id);
 			}
-			return entry;
+			return entry.get();
 		} else {
 			return nullptr;
 		}
@@ -63,9 +63,9 @@ namespace CalX {
 	}
 
 	void ConfigManager::getEntries(
-	    std::vector<std::shared_ptr<ConfigEntry>> &vec) const {
+	    std::vector<ConfigEntry *> &vec) const {
 		for (const auto &kv : this->entries) {
-			vec.push_back(kv.second);
+			vec.push_back(kv.second.get());
 		}
 	}
 
@@ -171,7 +171,7 @@ namespace CalX {
 			new_man = std::make_unique<ConfigManager>();
 			man = new_man.get();
 		}
-		std::shared_ptr<ConfigEntry> entry = nullptr;
+		ConfigEntry *entry = nullptr;
 		const int LINE_LEN = 256;
 		char rawline[LINE_LEN];
 		int line_num = 0;

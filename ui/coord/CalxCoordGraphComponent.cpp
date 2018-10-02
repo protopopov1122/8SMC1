@@ -37,7 +37,7 @@ namespace CalXUI {
 	    : CalxCoordComponent::CalxCoordComponent(win, id),
 	      controller(controller) {
 		std::string units = wxGetApp().getUnitProcessor().getUnits();
-		std::shared_ptr<ConfigEntry> graphconf =
+		ConfigEntry *graphconf =
 		    wxGetApp().getSystemManager()->getConfiguration().getEntry("graph");
 		wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 		SetSizer(sizer);

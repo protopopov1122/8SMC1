@@ -28,7 +28,7 @@ namespace CalXUI {
 		this->id = tid;
 		std::string units = wxGetApp().getUnitProcessor().getUnits();
 
-		std::shared_ptr<ConfigEntry> confEntry =
+		ConfigEntry *confEntry =
 		    wxGetApp().getSystemManager()->getConfiguration().getEntry(
 		        "linear_task");
 		coord_rect_t rect = { confEntry->getReal("x_start", 0.0),
