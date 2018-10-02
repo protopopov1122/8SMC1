@@ -61,7 +61,7 @@ namespace CalX {
 		          "; parity: " + std::to_string(static_cast<int>(prms->parity)));
 		this->listener = nullptr;
 		getDeviceManager().loadConfiguration("NL300.ini", *this->config);
-		memcpy(&this->prms, prms, sizeof(DeviceSerialPortConnectionPrms));
+		this->prms = *prms;
 		this->log("Configuration sucessfully loaded");
 
 		int baudrate = prms->speed;
