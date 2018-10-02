@@ -83,7 +83,7 @@ namespace CalXUI {
 		wxPanel *valuePanel;
 		wxPanel *editorPanel;
 
-		std::shared_ptr<ConfigValue> currentValue;
+		ConfigurationValue currentValue;
 		wxPanel *integerEditor;
 		wxSpinCtrl *integerSpin;
 		wxPanel *realEditor;

@@ -45,7 +45,7 @@ namespace CalX {
 	 public:
 		ConfigValueValidator(ConfigValueType, bool = false);
 		ConfigValueType getType();
-		virtual bool validate(std::shared_ptr<ConfigValue>);
+		virtual bool validate(const ConfigurationValue &);
 
 	 private:
 		ConfigValueType type;

@@ -29,6 +29,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <variant>
 
 /* This file contains configuration manager - configuration parameter storage.
    It represents structure similar to INI file, but all values have types.
@@ -42,93 +43,54 @@ namespace CalX {
 	typedef int64_t int_conf_t;
 	typedef double real_conf_t;
 
-	enum class ConfigValueType { Integer, Real, String, Boolean };
+	enum class ConfigValueType { Integer, Real, String, Boolean, None };
 
-	class ConfigValue {
+	class ConfigurationValue {
 	 public:
-		ConfigValue(ConfigValueType tp) : type(tp) {}
-		virtual ~ConfigValue() = default;
-		ConfigValueType getType() const {
-			return this->type;
-		}
-		virtual std::string toString() const = 0;
+	 	ConfigurationValue();
+		ConfigurationValue(int_conf_t);
+		ConfigurationValue(real_conf_t);
+		ConfigurationValue(bool);
+		ConfigurationValue(std::string);
 
-	 protected:
+		ConfigValueType getType() const;
+		bool is(ConfigValueType) const;
+
+		int_conf_t getInt(int_conf_t = 0) const;
+		real_conf_t getReal(real_conf_t = 0.0) const;
+		bool getBool(bool = false) const;
+		std::string getString(std::string = "") const;
+		std::string toString() const;
+
+		operator int_conf_t() const {
+			return this->getInt();
+		}
+
+		operator real_conf_t() const {
+			return this->getReal();
+		}
+		
+		operator bool() const {
+			return this->getBool();
+		}
+		operator std::string () const {
+			return this->toString();
+		}
+
+		static ConfigurationValue Empty;
+	 private:
 		ConfigValueType type;
-	};
-
-	class IntegerConfigValue : public ConfigValue {
-	 public:
-		IntegerConfigValue(int_conf_t v)
-		    : ConfigValue::ConfigValue(ConfigValueType::Integer), value(v) {}
-
-		int_conf_t getValue() const {
-			return this->value;
-		}
-		virtual std::string toString() const {
-			return std::to_string(this->value);
-		}
-
-	 private:
-		int_conf_t value;
-	};
-
-	class RealConfigValue : public ConfigValue {
-	 public:
-		RealConfigValue(real_conf_t v)
-		    : ConfigValue::ConfigValue(ConfigValueType::Real), value(v) {}
-
-		real_conf_t getValue() const {
-			return this->value;
-		}
-		virtual std::string toString() const {
-			return std::to_string(this->value);
-		}
-
-	 private:
-		real_conf_t value;
-	};
-
-	class BoolConfigValue : public ConfigValue {
-	 public:
-		BoolConfigValue(bool v)
-		    : ConfigValue::ConfigValue(ConfigValueType::Boolean), value(v) {}
-
-		bool getValue() const {
-			return this->value;
-		}
-		virtual std::string toString() const {
-			return std::string(this->value ? "true" : "false");
-		}
-
-	 private:
-		bool value;
-	};
-
-	class StringConfigValue : public ConfigValue {
-	 public:
-		StringConfigValue(std::string v)
-		    : ConfigValue::ConfigValue(ConfigValueType::String), value(v) {}
-
-		std::string getValue() const {
-			return this->value;
-		}
-		virtual std::string toString() const {
-			return this->value;
-		}
-
-	 private:
-		std::string value;
+		std::variant<int_conf_t, real_conf_t, bool, std::string> value;
 	};
 
 	class ConfigEntry {
 	 public:
-		ConfigEntry(ConfigManager *, std::string);
-		std::string getEntryName() const;
+		ConfigEntry(ConfigManager &, std::string);
+		const std::string &getEntryName() const;
 
-		std::shared_ptr<ConfigValue> get(std::string) const;
+		const ConfigurationValue &get(std::string) const;
 		bool has(std::string) const;
-		bool put(std::string, std::shared_ptr<ConfigValue>);
+		bool put(std::string, ConfigurationValue);
 		bool remove(std::string);
 		bool is(std::string, ConfigValueType) const;
 		void store(std::ostream &) const;
@@ -139,19 +101,18 @@ namespace CalX {
 		std::string getString(std::string, std::string = "") const;
 
 		void getContent(
-		    std::vector<std::pair<std::string, std::shared_ptr<ConfigValue>>> &)
+		    std::vector<std::pair<std::string, ConfigurationValue>> &)
 		    const;
 
 	 private:
-		ConfigManager *config;
+		ConfigManager &config;
 		std::string name;
-		std::map<std::string, std::shared_ptr<ConfigValue>> content;
+		std::map<std::string, ConfigurationValue> content;
 	};
 
 	class ConfigManager {
 	 public:
 		ConfigManager();
-		virtual ~ConfigManager() = default;
 
 		std::shared_ptr<ConfigEntry> getEntry(std::string, bool = true);
 		bool hasEntry(std::string) const;
@@ -168,9 +129,10 @@ namespace CalX {
 
 		static std::unique_ptr<ConfigManager> load(std::istream &, std::ostream &,
 		                                           ConfigManager * = nullptr);
-		static std::unique_ptr<ConfigValue> parseValue(const char *);
 
 	 private:
+		static ConfigurationValue parseValue(const char *);
+
 		std::map<std::string, std::shared_ptr<ConfigEntry>> entries;
 		std::shared_ptr<ConfigValidator> validator;
 		std::vector<std::shared_ptr<ConfigEventListener>> listeners;

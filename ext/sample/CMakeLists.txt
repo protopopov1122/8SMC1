@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.1)
 project(CalX)
 
-set (CMAKE_CXX_STANDARD 11)
+set (CMAKE_CXX_STANDARD 17)
 include_directories(${CMAKE_SOURCE_DIR}/headers)
 file(GLOB SRC *.cpp)
 add_library(ext_sample SHARED ${SRC})

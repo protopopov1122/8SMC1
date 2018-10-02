@@ -49,20 +49,21 @@ TEST_CASE("Configuration manager value objects") {
   const bool BOOLEAN = true;
   const std::string STRING = "Hello, world!";
 
-  IntegerConfigValue integer(INTEGER);
-  REQUIRE(integer.getValue() == INTEGER);
+  ConfigurationValue integer(INTEGER);
+  ConfigurationValue real(REAL);
+  ConfigurationValue boolean(BOOLEAN);
+  ConfigurationValue str(STRING);
+
+  REQUIRE(integer.getInt() == INTEGER);
   REQUIRE(integer.getType() == ConfigValueType::Integer);
   REQUIRE(integer.toString().compare(std::to_string(INTEGER)) == 0);
-  RealConfigValue real(REAL);
-  REQUIRE(real.getValue() == REAL);
+  REQUIRE(real.getReal() == REAL);
   REQUIRE(real.getType() == ConfigValueType::Real);
   REQUIRE(real.toString().compare(std::to_string(REAL)) == 0);
-  BoolConfigValue boolean(BOOLEAN);
-  REQUIRE(boolean.getValue() == BOOLEAN);
+  REQUIRE(boolean.getBool() == BOOLEAN);
   REQUIRE(boolean.getType() == ConfigValueType::Boolean);
   REQUIRE(boolean.toString().compare(BOOLEAN ? "true" : "false") == 0);
-  StringConfigValue str(STRING);
-  REQUIRE(str.getValue().compare(STRING) == 0);
+  REQUIRE(str.getString().compare(STRING) == 0);
   REQUIRE(str.getType() == ConfigValueType::String);
   REQUIRE(str.toString().compare(STRING) == 0);
 }
@@ -95,10 +96,10 @@ TEST_CASE("Configuration manager entry") {
     REQUIRE(!entry->remove(BOOLEAN_KEY));
     REQUIRE(!entry->remove(STRING_KEY));
 
-    entry->put(INTEGER_KEY, std::make_shared<IntegerConfigValue>(INTEGER_VALUE));
-    entry->put(REAL_KEY, std::make_shared<RealConfigValue>(REAL_VALUE));
-    entry->put(BOOLEAN_KEY, std::make_shared<BoolConfigValue>(BOOLEAN_VALUE));
-    entry->put(STRING_KEY, std::make_shared<StringConfigValue>(STRING_VALUE));
+    entry->put(INTEGER_KEY, ConfigurationValue(INTEGER_VALUE));
+    entry->put(REAL_KEY, ConfigurationValue(REAL_VALUE));
+    entry->put(BOOLEAN_KEY, ConfigurationValue(BOOLEAN_VALUE));
+    entry->put(STRING_KEY, ConfigurationValue(STRING_VALUE));
 
     REQUIRE(entry->has(INTEGER_KEY));
     REQUIRE(entry->has(REAL_KEY));
@@ -115,7 +116,7 @@ TEST_CASE("Configuration manager entry") {
     REQUIRE(entry->getBool(BOOLEAN_KEY) == BOOLEAN_VALUE);
     REQUIRE(STRING_VALUE.compare(entry->getString(STRING_KEY)) == 0);
 
-    std::vector<std::pair<std::string, std::shared_ptr<ConfigValue>>> content;
+    std::vector<std::pair<std::string, ConfigurationValue>> content;
     entry->getContent(content);
     REQUIRE(content.size() == 4);
 

@@ -126,7 +126,7 @@ namespace CalXUI {
 		switch (this->type->GetSelection()) {
 			case 0: {
 				int_conf_t value = this->integer->GetValue();
-				this->entry->put(key, std::make_shared<IntegerConfigValue>(value));
+				this->entry->put(key, ConfigurationValue(value));
 			} break;
 			case 1: {
 				wxString raw = this->real->GetValue();
@@ -135,15 +135,15 @@ namespace CalXUI {
 					wxMessageBox(__("Enter valid real value"), __("Error"), wxICON_ERROR);
 					return;
 				}
-				this->entry->put(key, std::make_shared<RealConfigValue>(val));
+				this->entry->put(key, ConfigurationValue(val));
 			} break;
 			case 2: {
 				bool value = this->boolean->GetValue();
-				this->entry->put(key, std::make_shared<BoolConfigValue>(value));
+				this->entry->put(key, ConfigurationValue(value));
 			} break;
 			case 3: {
 				std::string value = this->string->GetValue().ToStdString();
-				this->entry->put(key, std::make_shared<StringConfigValue>(value));
+				this->entry->put(key, ConfigurationValue(value));
 			} break;
 		}
 		Hide();
