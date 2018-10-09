@@ -18,6 +18,9 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef CALX_UI_TASK_CALX_LINEAR_TASK_H_
+#define CALX_UI_TASK_CALX_LINEAR_TASK_H_
+
 #include "ui/task/CalxTaskFactory.h"
 
 namespace CalXUI {
@@ -53,3 +56,5 @@ namespace CalXUI {
 		wxCheckBox *vertical;
 	};
 }  // namespace CalXUI
+
+#endif

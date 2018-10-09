@@ -117,7 +117,7 @@ namespace CalXUI {
 	void CalxApp::startDebugConsole(ConfigManager &conf) {
 		if (this->debug_mode &&
 		    sysman->getConfiguration().getEntry("ui")->getBool("console", false)) {
-			this->debug_console = new CalxDebugConsole(this->sysman.get());
+			this->debug_console = std::make_unique<CalxDebugConsole>(this->sysman.get());
 			this->debug_console->Run();
 		} else {
 			this->debug_console = nullptr;
@@ -264,7 +264,9 @@ namespace CalXUI {
 		    std::unique_ptr<DeviceManager>(getter());
 		this->sysman = std::make_unique<DefaultSystemManager>(
 		    std::move(devman), std::move(conf_ptr), std::move(ext));
-		this->error_handler = new CalxErrorHandler(this->sysman.get());
+		
+		// Error handler will be released in the OnExit method 
+		this->error_handler = new CalxErrorHandler(this->sysman.get());	// lgtm [cpp/resource-not-released-in-destructor]
 
 		// Start debug console if necessary
 		this->startDebugConsole(conf);
@@ -276,7 +278,8 @@ namespace CalXUI {
 		this->loadScriptEngine(conf);
 
 		// Show main program window
-		this->frame = new CalxFrame(__("CalX UI"));
+		// wxWidgets will release it automatically
+		this->frame = new CalxFrame(__("CalX UI"));	// lgtm [cpp/resource-not-released-in-destructor]
 		this->frame->Show(true);
 		this->frame->Maximize(true);
 

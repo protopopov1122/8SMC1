@@ -148,6 +148,7 @@ namespace CalX {
 						break;
 					}
 				} else if ((val[i] == '+' || val[i] == '-') && i == 0) {
+					// +/- on the first place is allowed for both integers and reals
 				} else if (!isdigit(val[i])) {
 					integer = false;
 					break;

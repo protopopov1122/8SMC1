@@ -73,6 +73,11 @@ namespace CalX {
 		motor_point_t(motor_coord_t x, motor_coord_t y) : x(x), y(y) {}
 		motor_point_t(const motor_point_t &p) : x(p.x), y(p.y) {}
 		motor_point_t() : x(0), y(0) {}
+		motor_point_t &operator=(const motor_point_t &p) {
+			this->x = p.x;
+			this->y = p.y;
+			return *this;
+		}
 		motor_coord_t x;
 		motor_coord_t y;
 	};
@@ -81,6 +86,11 @@ namespace CalX {
 		motor_size_t(motor_coord_t w, motor_coord_t h) : w(w), h(h) {}
 		motor_size_t(const motor_size_t &p) : w(p.w), h(p.h) {}
 		motor_size_t() : w(0), h(0) {}
+		motor_size_t &operator=(const motor_size_t &s) {
+			this->w = s.w;
+			this->h = s.h;
+			return *this;
+		}
 		motor_coord_t w;
 		motor_coord_t h;
 	};
@@ -94,6 +104,13 @@ namespace CalX {
 		motor_rect_t(const motor_rect_t &r)
 		    : motor_point_t(r.x, r.y), motor_size_t(r.w, r.h) {}
 		motor_rect_t() : motor_point_t(), motor_size_t() {}
+		motor_rect_t &operator=(const motor_rect_t &r) {
+			this->x = r.x;
+			this->y = r.y;
+			this->w = r.w;
+			this->h = r.h;
+			return *this;
+		}
 	};
 
 	enum class TrailerId { Trailer1 = 1, Trailer2 = 2 };
@@ -103,6 +120,11 @@ namespace CalX {
 		coord_point_t(double x, double y) : x(x), y(y) {}
 		coord_point_t(const coord_point_t &p) : x(p.x), y(p.y) {}
 		coord_point_t() : x(0.0), y(0.0) {}
+		coord_point_t &operator=(const coord_point_t &c) {
+			this->x = c.x;
+			this->y = c.y;
+			return *this;
+		}
 		double x;
 		double y;
 	};
@@ -114,6 +136,11 @@ namespace CalX {
 		coord_size_t(double w, double h) : w(w), h(h) {}
 		coord_size_t(const coord_size_t &s) : w(s.w), h(s.h) {}
 		coord_size_t() : w(0.0), h(0.0) {}
+		coord_size_t &operator=(const coord_size_t &s) {
+			this->w = s.w;
+			this->h = s.h;
+			return *this;
+		}
 		double w;
 		double h;
 	};
@@ -126,6 +153,13 @@ namespace CalX {
 		coord_rect_t(const coord_rect_t &r)
 		    : coord_point_t(r.x, r.y), coord_size_t(r.w, r.h) {}
 		coord_rect_t() : coord_point_t(), coord_size_t() {}
+		coord_rect_t &operator=(const coord_rect_t &r) {
+			this->x = r.x;
+			this->y = r.y;
+			this->w = r.w;
+			this->h = r.h;
+			return *this;
+		}
 	};
 }  // namespace CalX
 

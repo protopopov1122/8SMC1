@@ -411,8 +411,7 @@ namespace CalXUI {
 	void CalxMotorComponent::OnConfigEvent(wxCommandEvent &evt) {
 		CalxConfigDialog *editor = new CalxConfigDialog(
 		    this, wxID_ANY, this->dev->getMotor().getConfiguration());
-		if (editor->ShowModal() == wxID_OK) {
-		}
+		editor->ShowModal();
 		delete editor;
 	}
 }  // namespace CalXUI

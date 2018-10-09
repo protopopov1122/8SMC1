@@ -87,6 +87,8 @@ namespace CalXUI {
 			fname = this->filesys.FindNext().ToStdString();
 		}
 		if (this->found.size() == 0) {
+			// Configuration not found
+			// Configuration file path will be empty
 		} else if (this->found.size() == 1) {
 			this->filename = this->found.at(0).path;
 		} else {

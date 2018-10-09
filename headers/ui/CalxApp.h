@@ -85,7 +85,7 @@ namespace CalXUI {
 		std::unique_ptr<CalxUnitProcessor> unit_processor;
 
 		bool debug_mode;
-		CalxDebugConsole *debug_console;
+		std::unique_ptr<CalxDebugConsole> debug_console;
 		CalxErrorHandler *error_handler;
 
 		std::shared_ptr<CalXScriptEnvironment> script_env;

@@ -70,17 +70,17 @@ namespace CalXUI {
 
 		for (size_t i = 0; i < sysman->getMotorControllerSet().getDeviceCount();
 		     i++) {
-			std::string id = FORMAT(__("Device #%s"), std::to_string(i));
-			xChoice->Append(id);
-			yChoice->Append(id);
+			std::string devId = FORMAT(__("Device #%s"), std::to_string(i));
+			xChoice->Append(devId);
+			yChoice->Append(devId);
 		}
 
 		instrChoice->Append(__("No instrument"));
 
 		for (size_t i = 0;
 		     i < sysman->getInstrumentControllerSet().getDeviceCount(); i++) {
-			std::string id = FORMAT(__("Instrument #%s"), std::to_string(i));
-			instrChoice->Append(id);
+			std::string devId = FORMAT(__("Instrument #%s"), std::to_string(i));
+			instrChoice->Append(devId);
 		}
 
 		if (sysman->getMotorControllerSet().getDeviceCount() >= 2) {
