@@ -1,5 +1,4 @@
 #include "ctrl-lib/conf/ConfigManager.h"
-#include <iostream>
 
 namespace CalX {
 

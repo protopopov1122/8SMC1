@@ -273,7 +273,7 @@ namespace CalXUI {
 
 	void CalxInstrumentComponent::OnConfClick(wxCommandEvent &evt) {
 		CalxConfigDialog *editor =
-		    new CalxConfigDialog(this, wxID_ANY, this->ctrl->getConfiguration());
+		    new CalxConfigDialog(this, wxID_ANY, this->ctrl->getInstrument().getConfiguration());
 		editor->ShowModal();
 		delete editor;
 	}
