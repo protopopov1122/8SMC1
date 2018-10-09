@@ -321,7 +321,7 @@ namespace CalX {
 	ErrorCode GraphCoordTask::perform(std::shared_ptr<CoordPlane> plane,
 	                                  TaskParameters &prms, SystemManager *sysman,
 	                                  std::shared_ptr<TaskState> state) {
-		return this->graph->build(sysman, plane, this->trans,
-		                          this->scale * prms.speed, state);
+		return this->graph->build(*sysman, plane, *this->trans,
+		                          this->scale * prms.speed, *state);
 	}
 }  // namespace CalX

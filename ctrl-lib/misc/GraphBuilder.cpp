@@ -45,27 +45,27 @@ namespace CalX {
 		return this->step;
 	}
 
-	ErrorCode GraphBuilder::build(SystemManager *sysman,
+	ErrorCode GraphBuilder::build(SystemManager &sysman,
 	                              std::shared_ptr<CoordPlane> plane,
-	                              std::shared_ptr<CoordTranslator> trans,
+	                              CoordTranslator &trans,
 	                              float speed,
-	                              std::shared_ptr<TaskState> state) const {
+	                              TaskState &state) const {
 		plane->use();
-		MathEngine &engine = sysman->getMathEngine();
+		MathEngine &engine = sysman.getMathEngine();
 		double nan = std::numeric_limits<double>::quiet_NaN();
 		double last = nan;
 		ErrorCode errcode;
-		state->work = true;
-		state->plane = plane;
+		state.work = true;
+		state.plane = plane;
 		double step = fabs(this->step) * (this->max.x > this->min.x ? 1 : -1);
 		for (double x = this->min.x;
-		     (step > 0 ? x <= this->max.x : x >= this->max.x) && state->work;
+		     (step > 0 ? x <= this->max.x : x >= this->max.x) && state.work;
 		     x += step) {
 			engine.getScope().putVariable("x", x);
 			engine_value_t val = engine.eval(*this->node);
 			if (val.err != MathError::MNoError) {
 				plane->unuse();
-				state->work = false;
+				state.work = false;
 				switch (val.err) {
 					case MathError::MNoVariable:
 						return ErrorCode::MathRuntimeNoVar;
@@ -85,7 +85,7 @@ namespace CalX {
 				last = y;
 				continue;
 			}
-			motor_point_t pnt = trans->get(x, y);
+			motor_point_t pnt = trans.get(x, y);
 			if (isnan(last)) {
 				errcode = plane->move(pnt, speed, false);
 			} else {
@@ -93,37 +93,37 @@ namespace CalX {
 			}
 			if (errcode != ErrorCode::NoError) {
 				plane->unuse();
-				state->work = false;
+				state.work = false;
 				return errcode;
 			}
 			last = y;
 		}
-		state->work = false;
+		state.work = false;
 		plane->unuse();
 		return ErrorCode::NoError;
 	}
 
-	ErrorCode GraphBuilder::floatBuild(SystemManager *sysman,
+	ErrorCode GraphBuilder::floatBuild(SystemManager &sysman,
 	                                   std::shared_ptr<FloatCoordPlane> plane,
-	                                   std::shared_ptr<CoordTranslator> trans,
+	                                   CoordTranslator &trans,
 	                                   float speed,
-	                                   std::shared_ptr<TaskState> state) const {
+	                                   TaskState &state) const {
 		plane->use();
-		MathEngine &engine = sysman->getMathEngine();
+		MathEngine &engine = sysman.getMathEngine();
 		double nan = std::numeric_limits<double>::quiet_NaN();
 		double last = nan;
 		ErrorCode errcode;
-		state->work = true;
-		state->plane = plane;
+		state.work = true;
+		state.plane = plane;
 		double step = fabs(this->step) * (this->max.x > this->min.x ? 1 : -1);
 		for (double x = this->min.x;
-		     (step > 0 ? x <= this->max.x : x >= this->max.x) && state->work;
+		     (step > 0 ? x <= this->max.x : x >= this->max.x) && state.work;
 		     x += step) {
 			engine.getScope().putVariable("x", x);
 			engine_value_t val = engine.eval(*this->node);
 			if (val.err != MathError::MNoError) {
 				plane->unuse();
-				state->work = false;
+				state.work = false;
 				switch (val.err) {
 					case MathError::MNoVariable:
 						return ErrorCode::MathRuntimeNoVar;
@@ -143,7 +143,7 @@ namespace CalX {
 				last = y;
 				continue;
 			}
-			coord_point_t pnt = trans->floatGet(x, y);
+			coord_point_t pnt = trans.floatGet(x, y);
 			if (isnan(last)) {
 				errcode = plane->move(pnt, speed, false);
 			} else {
@@ -151,12 +151,12 @@ namespace CalX {
 			}
 			if (errcode != ErrorCode::NoError) {
 				plane->unuse();
-				state->work = false;
+				state.work = false;
 				return errcode;
 			}
 			last = y;
 		}
-		state->work = false;
+		state.work = false;
 		plane->unuse();
 		return ErrorCode::NoError;
 	}

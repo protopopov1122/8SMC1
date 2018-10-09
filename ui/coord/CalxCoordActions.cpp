@@ -205,7 +205,7 @@ namespace CalXUI {
 	void CalxCoordActionGraphBuild::perform(SystemManager *sysman) {
 		ResourceSession session(*this->handle);
 		wxGetApp().getErrorHandler()->handle(builder->floatBuild(
-		    sysman, handle->getFloatPlane(), translator, speed, state));
+		    *sysman, handle->getFloatPlane(), *translator, speed, *state));
 	}
 
 	void CalxCoordActionGraphBuild::stop() {
@@ -227,7 +227,7 @@ namespace CalXUI {
 	void CalxCoordActionGraphPreview::perform(SystemManager *sysman) {
 		dialog->Enable(false);
 		wxGetApp().getErrorHandler()->handle(builder->floatBuild(
-		    sysman, dialog->getFloatPlane(), translator, speed, state));
+		    *sysman, dialog->getFloatPlane(), *translator, speed, *state));
 		;
 		dialog->Refresh();
 		dialog->Enable(true);

@@ -597,13 +597,12 @@ namespace CalX {
 			double maxy = std::stod(args.at(9));
 			double step = std::stod(args.at(10));
 			float speed = static_cast<float>(std::stod(args.at(11)));
-			std::shared_ptr<BasicCoordTranslator> trans =
-			    std::make_shared<BasicCoordTranslator>(toffset, tsize);
+			BasicCoordTranslator trans(toffset, tsize);
 			coord_point_t min = { minx, miny };
 			coord_point_t max = { maxx, maxy };
 			GraphBuilder graph(std::move(node), min, max, step);
-			std::shared_ptr<TaskState> state = std::make_shared<TaskState>();
-			ErrorCode errcode = graph.build(sysman, plane, trans, speed, state);
+			TaskState state;
+			ErrorCode errcode = graph.build(*sysman, plane, trans, speed, state);
 			if (errcode != ErrorCode::NoError) {
 				std::cout << "Graph build error(" << errcode << ")" << std::endl;
 			}

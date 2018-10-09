@@ -35,13 +35,14 @@ namespace CalX {
 		if (this->entries.count(id) != 0) {
 			return this->entries[id].get();
 		} else if (createNew) {
-			std::shared_ptr<ConfigEntry> entry =
-			    std::make_shared<ConfigEntry>(*this, id);
-			this->entries[id] = entry;
+			std::unique_ptr<ConfigEntry> entry =
+			    std::make_unique<ConfigEntry>(*this, id);
+			ConfigEntry *ptr = entry.get();
+			this->entries[id] = std::move(entry);
 			for (const auto &l : this->listeners) {
 				l->entryAdded(this, id);
 			}
-			return entry.get();
+			return ptr;
 		} else {
 			return nullptr;
 		}
@@ -77,11 +78,15 @@ namespace CalX {
 		this->validator = v;
 	}
 
-	bool ConfigManager::validate(std::shared_ptr<ConfigValidator> v) {
+	bool ConfigManager::validate(ConfigValidator *v) {
 		if (v == nullptr) {
-			v = this->validator;
+			v = this->validator.get();
 		}
-		return v->validate(this);
+		if (v) {
+			return v->validate(this);
+		} else {
+			return true;
+		}
 	}
 
 	void ConfigManager::store(std::ostream &os) const {
