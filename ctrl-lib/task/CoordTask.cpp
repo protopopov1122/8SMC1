@@ -56,7 +56,7 @@ namespace CalX {
 		this->list.push_back(st);
 	}
 
-	size_t ProgrammedCoordTask::getSubCount() {
+	size_t ProgrammedCoordTask::getSubCount() const {
 		return this->list.size();
 	}
 
@@ -113,15 +113,15 @@ namespace CalX {
 		return code;
 	}
 
-	motor_point_t MoveTaskStep::getPosition() {
+	motor_point_t MoveTaskStep::getPosition() const {
 		return this->pos;
 	}
 
-	float MoveTaskStep::getSpeed() {
+	float MoveTaskStep::getSpeed() const {
 		return this->speed_coef;
 	}
 
-	bool MoveTaskStep::isRelative() {
+	bool MoveTaskStep::isRelative() const {
 		return this->rel;
 	}
 
@@ -160,15 +160,15 @@ namespace CalX {
 		return code;
 	}
 
-	motor_point_t JumpTaskStep::getPosition() {
+	motor_point_t JumpTaskStep::getPosition() const {
 		return this->pos;
 	}
 
-	float JumpTaskStep::getSpeed() {
+	float JumpTaskStep::getSpeed() const {
 		return this->speed_coef;
 	}
 
-	bool JumpTaskStep::isRelative() {
+	bool JumpTaskStep::isRelative() const {
 		return this->rel;
 	}
 
@@ -227,27 +227,27 @@ namespace CalX {
 		return code;
 	}
 
-	motor_point_t ArcTaskStep::getDestination() {
+	motor_point_t ArcTaskStep::getDestination() const {
 		return this->dest;
 	}
 
-	motor_point_t ArcTaskStep::getCenter() {
+	motor_point_t ArcTaskStep::getCenter() const {
 		return this->center;
 	}
 
-	int ArcTaskStep::getSplitter() {
+	int ArcTaskStep::getSplitter() const {
 		return this->splitter;
 	}
 
-	float ArcTaskStep::getSpeed() {
+	float ArcTaskStep::getSpeed() const {
 		return this->speed;
 	}
 
-	bool ArcTaskStep::isClockwise() {
+	bool ArcTaskStep::isClockwise() const {
 		return this->clockwise;
 	}
 
-	bool ArcTaskStep::isRelative() {
+	bool ArcTaskStep::isRelative() const {
 		return this->rel;
 	}
 

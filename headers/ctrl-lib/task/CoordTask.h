@@ -42,14 +42,14 @@ namespace CalX {
 	class LinearCoordTask : public CoordTask {
 	 public:
 		LinearCoordTask(motor_rect_t, motor_coord_t, bool = true);
-		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
-		                          SystemManager *, std::shared_ptr<TaskState>);
+		ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
+		                          SystemManager *, std::shared_ptr<TaskState>) override;
 
-		motor_rect_t getRectangle();
+		motor_rect_t getRectangle() const;
 		void setRectangle(motor_rect_t);
-		motor_coord_t getSpacing();
+		motor_coord_t getSpacing() const;
 		void setSpacing(motor_coord_t);
-		bool isVertical();
+		bool isVertical() const;
 		void setVertical(bool);
 
 	 private:
@@ -61,10 +61,10 @@ namespace CalX {
 	class ProgrammedCoordTask : public CoordTask {
 	 public:
 		ProgrammedCoordTask();
-		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
-		                          SystemManager *, std::shared_ptr<TaskState>);
+		ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
+		                          SystemManager *, std::shared_ptr<TaskState>) override;
 		void addStep(std::shared_ptr<TaskStep>);
-		size_t getSubCount();
+		size_t getSubCount() const;
 		bool removeStep(size_t);
 		std::shared_ptr<TaskStep> pollStep(size_t);
 		bool insertStep(size_t, std::shared_ptr<TaskStep>);
@@ -77,8 +77,8 @@ namespace CalX {
 	 public:
 		GraphCoordTask(std::unique_ptr<GraphBuilder>,
 		               std::shared_ptr<CoordTranslator>, float);
-		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
-		                          SystemManager *, std::shared_ptr<TaskState>);
+		ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
+		                          SystemManager *, std::shared_ptr<TaskState>) override;
 
 	 private:
 		std::unique_ptr<GraphBuilder> graph;
@@ -89,11 +89,11 @@ namespace CalX {
 	class GCodeCoordTask : public CoordTask {
 	 public:
 		GCodeCoordTask(std::istream &, std::shared_ptr<CoordTranslator>);
-		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
-		                          SystemManager *, std::shared_ptr<TaskState>);
+		ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
+		                          SystemManager *, std::shared_ptr<TaskState>) override;
 
-		std::string getGCode();
-		std::shared_ptr<CoordTranslator> getTranslator();
+		const std::string &getGCode() const;
+		std::shared_ptr<CoordTranslator> getTranslator() const;
 
 	 private:
 		std::string code;

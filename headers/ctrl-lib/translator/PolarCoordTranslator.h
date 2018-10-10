@@ -28,14 +28,14 @@ namespace CalX {
 	class PolarCoordTranslator : public CoordTranslator {
 	 public:
 		PolarCoordTranslator(std::shared_ptr<CoordTranslator> = nullptr);
-		virtual std::shared_ptr<CoordTranslator> getBase() const;
-		virtual void setBase(std::shared_ptr<CoordTranslator>);
-		virtual motor_point_t get(double, double) const;
-		virtual coord_point_t get(motor_point_t) const;
-		virtual coord_point_t floatGet(double, double) const;
-		virtual coord_point_t floatGet(coord_point_t) const;
-		virtual std::unique_ptr<CoordTranslator> clone(
-		    std::shared_ptr<CoordTranslator>);
+		std::shared_ptr<CoordTranslator> getBase() const override;
+		void setBase(std::shared_ptr<CoordTranslator>) override;
+		motor_point_t get(double, double) const override;
+		coord_point_t get(motor_point_t) const override;
+		coord_point_t floatGet(double, double) const override;
+		coord_point_t floatGet(coord_point_t) const override;
+		std::unique_ptr<CoordTranslator> clone(
+		    std::shared_ptr<CoordTranslator>) override;
 
 	 private:
 		std::shared_ptr<CoordTranslator> base;

@@ -31,9 +31,9 @@ namespace CalX {
 		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
 		                          SystemManager *, std::shared_ptr<TaskState>);
 
-		motor_point_t getPosition();
-		float getSpeed();
-		bool isRelative();
+		motor_point_t getPosition() const;
+		float getSpeed() const;
+		bool isRelative() const;
 
 		void setPosition(motor_point_t);
 		void setSpeed(float);
@@ -51,9 +51,9 @@ namespace CalX {
 		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
 		                          SystemManager *, std::shared_ptr<TaskState>);
 
-		motor_point_t getPosition();
-		float getSpeed();
-		bool isRelative();
+		motor_point_t getPosition() const;
+		float getSpeed() const;
+		bool isRelative() const;
 
 		void setPosition(motor_point_t);
 		void setSpeed(float);
@@ -81,12 +81,12 @@ namespace CalX {
 		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
 		                          SystemManager *, std::shared_ptr<TaskState>);
 
-		motor_point_t getDestination();
-		motor_point_t getCenter();
-		int getSplitter();
-		float getSpeed();
-		bool isClockwise();
-		bool isRelative();
+		motor_point_t getDestination() const;
+		motor_point_t getCenter() const;
+		int getSplitter() const;
+		float getSpeed() const;
+		bool isClockwise() const;
+		bool isRelative() const;
 
 		void setDestination(motor_point_t);
 		void setCenter(motor_point_t);

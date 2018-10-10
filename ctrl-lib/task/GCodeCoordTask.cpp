@@ -50,11 +50,11 @@ namespace CalX {
 		return errcode;
 	}
 
-	std::string GCodeCoordTask::getGCode() {
+	const std::string &GCodeCoordTask::getGCode() const {
 		return this->code;
 	}
 
-	std::shared_ptr<CoordTranslator> GCodeCoordTask::getTranslator() {
+	std::shared_ptr<CoordTranslator> GCodeCoordTask::getTranslator() const {
 		return this->translator;
 	}
 }  // namespace CalX

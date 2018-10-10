@@ -82,7 +82,7 @@ namespace CalX {
 		return errcode;
 	}
 
-	motor_rect_t LinearCoordTask::getRectangle() {
+	motor_rect_t LinearCoordTask::getRectangle() const {
 		return this->square;
 	}
 
@@ -90,7 +90,7 @@ namespace CalX {
 		this->square = sq;
 	}
 
-	motor_coord_t LinearCoordTask::getSpacing() {
+	motor_coord_t LinearCoordTask::getSpacing() const {
 		return this->spacing;
 	}
 
@@ -98,7 +98,7 @@ namespace CalX {
 		this->spacing = sp;
 	}
 
-	bool LinearCoordTask::isVertical() {
+	bool LinearCoordTask::isVertical() const {
 		return this->vertical;
 	}
 

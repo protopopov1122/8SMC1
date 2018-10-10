@@ -32,12 +32,12 @@ namespace CalX {
 		motor_size_t getScale() const;
 		void setCenter(motor_point_t);
 		void setScale(motor_size_t);
-		virtual motor_point_t get(double, double) const;
-		virtual coord_point_t get(motor_point_t) const;
-		virtual coord_point_t floatGet(double, double) const;
-		virtual coord_point_t floatGet(coord_point_t) const;
-		virtual std::unique_ptr<CoordTranslator> clone(
-		    std::shared_ptr<CoordTranslator>);
+		motor_point_t get(double, double) const override;
+		coord_point_t get(motor_point_t) const override;
+		coord_point_t floatGet(double, double) const override;
+		coord_point_t floatGet(coord_point_t) const override;
+		std::unique_ptr<CoordTranslator> clone(
+		    std::shared_ptr<CoordTranslator>) override;
 
 	 private:
 		motor_point_t center;
