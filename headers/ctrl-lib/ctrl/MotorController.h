@@ -52,8 +52,6 @@ namespace CalX {
 		motor_coord_t getPosition() const;
 		bool isMoving() const;
 
-		void addEventListener(std::shared_ptr<MotorEventListener>) override;
-		void removeEventListener(std::shared_ptr<MotorEventListener>) override;
 		virtual void use();
 		virtual void unuse();
 
@@ -71,7 +69,6 @@ namespace CalX {
 		MoveType destination;
 		bool work;
 		Motor &motor;
-		std::vector<std::shared_ptr<MotorEventListener>> listeners;
 	};
 }  // namespace CalX
 

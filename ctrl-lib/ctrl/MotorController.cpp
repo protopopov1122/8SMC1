@@ -241,59 +241,33 @@ namespace CalX {
 		return this->motor.isRunning();
 	}
 
-	void MotorController::addEventListener(
-	    std::shared_ptr<MotorEventListener> l) {
-		this->listeners.push_back(l);
-	}
-
-	void MotorController::removeEventListener(
-	    std::shared_ptr<MotorEventListener> l) {
-		this->listeners.erase(
-		    std::remove(this->listeners.begin(), this->listeners.end(), l),
-		    this->listeners.end());
-	}
-
 	void MotorController::sendMovingEvent(MotorMoveEvent &evt) {
-		for (const auto &l : this->listeners) {
-			l->moving(evt);
-		}
+		this->submitEvent(evt, &MotorEventListener::moving);
 	}
 
 	void MotorController::sendMovedEvent(MotorMoveEvent &evt) {
-		for (const auto &l : this->listeners) {
-			l->moved(evt);
-		}
+		this->submitEvent(evt, &MotorEventListener::moved);
 	}
 
 	void MotorController::sendStoppedEvent(MotorErrorEvent &evt) {
-		for (const auto &l : this->listeners) {
-			l->stopped(evt);
-		}
+		this->submitEvent(evt, &MotorEventListener::stopped);
 	}
 
 	void MotorController::sendRollingEvent(MotorRollEvent &evt) {
-		for (const auto &l : this->listeners) {
-			l->rolling(evt);
-		}
+		this->submitEvent(evt, &MotorEventListener::rolling);
 	}
 
 	void MotorController::sendRolledEvent(MotorRollEvent &evt) {
-		for (const auto &l : this->listeners) {
-			l->rolled(evt);
-		}
+		this->submitEvent(evt, &MotorEventListener::rolled);
 	}
 
 	void MotorController::use() {
 		UsableResource::use();
-		for (const auto &l : this->listeners) {
-			l->onUse();
-		}
+		this->submitEvent(&MotorEventListener::onUse);
 	}
 
 	void MotorController::unuse() {
 		UsableResource::unuse();
-		for (const auto &l : this->listeners) {
-			l->onUnuse();
-		}
+		this->submitEvent(&MotorEventListener::onUnuse);
 	}
 }  // namespace CalX

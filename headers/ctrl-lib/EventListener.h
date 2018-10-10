@@ -23,6 +23,8 @@
 
 #include "ctrl-lib/CtrlCore.h"
 #include <string>
+#include <algorithm>
+#include <vector>
 
 /* This header contains event type defintions.
    CalX Ctrl-lib widely uses events to communicate
@@ -122,11 +124,38 @@ namespace CalX {
 	};
 
 	template<typename T>
-	class EventSource {
+	class AbstractEventSource {
 	 public:
-		virtual ~EventSource() = default;
+		virtual ~AbstractEventSource() = default;
 		virtual void addEventListener(T) = 0;
 		virtual void removeEventListener(T) = 0;
+	};
+
+	template<typename T>
+	class EventSource : public AbstractEventSource<T> {
+	 public:
+		void addEventListener(T listener) override {
+			this->listeners.push_back(listener);
+		}
+		void removeEventListener(T listener) override {
+			this->listeners.erase(std::remove(this->listeners.begin(), this->listeners.end(), listener), this->listeners.end());
+		}
+	 protected:
+		template <typename E, typename F>
+		void submitEvent(E evt, F method) {
+			for (const auto &listener : this->listeners) {
+				((*listener).*method)(evt);
+			}
+		}
+
+		template <typename F>
+		void submitEvent(F method) {
+			for (const auto &listener : this->listeners) {
+				((*listener).*method)();
+			}
+		}
+
+		std::vector<T> listeners;
 	};
 }  // namespace CalX
 
