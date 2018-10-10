@@ -26,7 +26,8 @@
 
 namespace CalX {
 
-	class CoordHandle : public CoordPlaneStack {
+	class CoordHandle : public CoordPlaneStack,
+											public AbstractEventSource<std::shared_ptr<CoordEventListener>> {
 	 public:
 		CoordHandle(size_t, std::shared_ptr<CoordController>);
 
@@ -37,8 +38,8 @@ namespace CalX {
 		virtual bool popPlane();
 		virtual void pushPlane(std::shared_ptr<CoordPlane>);
 
-		void addEventListener(std::shared_ptr<CoordEventListener>);
-		void removeEventListener(std::shared_ptr<CoordEventListener>);
+		void addEventListener(std::shared_ptr<CoordEventListener>) override;
+		void removeEventListener(std::shared_ptr<CoordEventListener>) override;
 
 	 private:
 		size_t id;

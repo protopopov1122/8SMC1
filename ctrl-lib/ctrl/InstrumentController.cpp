@@ -111,35 +111,17 @@ namespace CalX {
 		return this->instr.setWorkingMode(m);
 	}
 
-	void InstrumentController::addEventListener(
-	    std::shared_ptr<InstrumentEventListener> l) {
-		this->listeners.push_back(l);
-	}
-
-	void InstrumentController::removeEventListener(
-	    std::shared_ptr<InstrumentEventListener> l) {
-		this->listeners.erase(
-		    std::remove(this->listeners.begin(), this->listeners.end(), l),
-		    this->listeners.end());
-	}
-
 	void InstrumentController::use() {
 		UsableResource::use();
-		for (const auto &l : this->listeners) {
-			l->onUse();
-		}
+		this->submitEvent(&InstrumentEventListener::onUse);
 	}
 
 	void InstrumentController::unuse() {
 		UsableResource::unuse();
-		for (const auto &l : this->listeners) {
-			l->onUnuse();
-		}
+		this->submitEvent(&InstrumentEventListener::onUnuse);
 	}
 
 	void InstrumentController::sendStateChanged() {
-		for (const auto &l : this->listeners) {
-			l->stateChanged(this->isRunnable(), this->isEnabled());
-		}
+		this->submitEvent(&InstrumentEventListener::stateChanged, this->isRunnable(), this->isEnabled());
 	}
 }  // namespace CalX

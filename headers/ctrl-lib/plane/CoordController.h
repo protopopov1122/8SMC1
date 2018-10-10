@@ -27,7 +27,8 @@
 
 namespace CalX {
 
-	class CoordController : public CoordPlane {
+	class CoordController : public CoordPlane,
+													public EventSource<std::shared_ptr<CoordEventListener>> {
 	 public:
 		CoordController(ConfigManager &, std::shared_ptr<MotorController>,
 		                std::shared_ptr<MotorController>,
@@ -52,8 +53,6 @@ namespace CalX {
 		ErrorCode open_session() override;
 		ErrorCode close_session() override;
 
-		void addEventListener(std::shared_ptr<CoordEventListener>);
-		void removeEventListener(std::shared_ptr<CoordEventListener>);
 		bool isSessionOpened() const override;
 		void use() override;
 		void unuse() override;
@@ -69,7 +68,6 @@ namespace CalX {
 
 		motor_rect_t size;
 		bool measured;
-		std::vector<std::shared_ptr<CoordEventListener>> listeners;
 
 		void sendMovingEvent(CoordMoveEvent &) const;
 		void sendMovedEvent(CoordMoveEvent &) const;

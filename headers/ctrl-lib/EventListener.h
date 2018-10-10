@@ -141,17 +141,10 @@ namespace CalX {
 			this->listeners.erase(std::remove(this->listeners.begin(), this->listeners.end(), listener), this->listeners.end());
 		}
 	 protected:
-		template <typename E, typename F>
-		void submitEvent(E evt, F method) {
+		template <typename F, typename... E>
+		void submitEvent(F method, E... evt) const {
 			for (const auto &listener : this->listeners) {
-				((*listener).*method)(evt);
-			}
-		}
-
-		template <typename F>
-		void submitEvent(F method) {
-			for (const auto &listener : this->listeners) {
-				((*listener).*method)();
+				((*listener).*method)(evt...);
 			}
 		}
 

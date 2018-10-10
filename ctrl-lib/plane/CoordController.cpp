@@ -465,53 +465,29 @@ namespace CalX {
 	}
 
 	/* Aux. event-related methods */
-	void CoordController::addEventListener(
-	    std::shared_ptr<CoordEventListener> l) {
-		this->listeners.push_back(l);
-	}
-
-	void CoordController::removeEventListener(
-	    std::shared_ptr<CoordEventListener> l) {
-		this->listeners.erase(
-		    std::remove(this->listeners.begin(), this->listeners.end(), l),
-		    this->listeners.end());
-	}
-
 	void CoordController::sendMovingEvent(CoordMoveEvent &evt) const {
-		for (const auto &l : this->listeners) {
-			l->moving(evt);
-		}
+		this->submitEvent(&CoordEventListener::moving, evt);
 	}
 
 	void CoordController::sendMovedEvent(CoordMoveEvent &evt) const {
-		for (const auto &l : this->listeners) {
-			l->moved(evt);
-		}
+		this->submitEvent(&CoordEventListener::moved, evt);
 	}
 
 	void CoordController::sendStoppedEvent(CoordErrorEvent &evt) const {
-		for (const auto &l : this->listeners) {
-			l->stopped(evt);
-		}
+		this->submitEvent(&CoordEventListener::stopped, evt);
 	}
 
 	void CoordController::sendCalibratingEvent(CoordCalibrateEvent &evt) const {
-		for (const auto &l : this->listeners) {
-			l->calibrating(evt);
-		}
+		this->submitEvent(&CoordEventListener::calibrating, evt);
 	}
 
 	void CoordController::sendCalibratedEvent(CoordCalibrateEvent &evt) const {
-		for (const auto &l : this->listeners) {
-			l->calibrated(evt);
-		}
+		this->submitEvent(&CoordEventListener::calibrated, evt);
 	}
 
 	void CoordController::use() {
 		UsableResource::use();
-		for (const auto &l : this->listeners) {
-			l->onUse();
-		}
+		this->submitEvent(&CoordEventListener::onUse);
 		xAxis->use();
 		yAxis->use();
 		if (this->instr != nullptr) {
@@ -521,9 +497,7 @@ namespace CalX {
 
 	void CoordController::unuse() {
 		UsableResource::unuse();
-		for (const auto &l : this->listeners) {
-			l->onUnuse();
-		}
+		this->submitEvent(&CoordEventListener::onUnuse);
 		xAxis->unuse();
 		yAxis->unuse();
 		if (this->instr != nullptr) {

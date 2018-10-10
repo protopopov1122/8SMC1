@@ -110,7 +110,7 @@ namespace CalX {
 		std::map<std::string, ConfigurationValue> content;
 	};
 
-	class ConfigManager {
+	class ConfigManager : public EventSource<std::shared_ptr<ConfigEventListener>> {
 	 public:
 		ConfigManager();
 
@@ -123,8 +123,6 @@ namespace CalX {
 		std::shared_ptr<ConfigValidator> getValidator() const;
 		bool validate(ConfigValidator * = nullptr);
 
-		void addEventListener(std::shared_ptr<ConfigEventListener>);
-		void removeEventListener(std::shared_ptr<ConfigEventListener>);
 		std::vector<std::shared_ptr<ConfigEventListener>> &getEventListeners();
 
 		static std::unique_ptr<ConfigManager> load(std::istream &, std::ostream &,
@@ -135,7 +133,6 @@ namespace CalX {
 
 		std::map<std::string, std::unique_ptr<ConfigEntry>> entries;
 		std::shared_ptr<ConfigValidator> validator;
-		std::vector<std::shared_ptr<ConfigEventListener>> listeners;
 	};
 }  // namespace CalX
 

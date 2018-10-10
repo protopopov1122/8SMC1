@@ -30,7 +30,8 @@
 namespace CalX {
 
 	class InstrumentController : public DeviceController,
-	                             public SessionableResource {
+	                             public SessionableResource,
+															 public EventSource<std::shared_ptr<InstrumentEventListener>> {
 	 public:
 		InstrumentController(ConfigManager &, Instrument &);
 		Instrument &getInstrument() const;
@@ -48,8 +49,6 @@ namespace CalX {
 		InstrumentMode getMode() const;
 		bool setMode(InstrumentMode);
 
-		void addEventListener(std::shared_ptr<InstrumentEventListener>);
-		void removeEventListener(std::shared_ptr<InstrumentEventListener>);
 		virtual void use();
 		virtual void unuse();
 
@@ -59,7 +58,6 @@ namespace CalX {
 	 private:
 		Instrument &instr;
 		bool state;
-		std::vector<std::shared_ptr<InstrumentEventListener>> listeners;
 	};
 }  // namespace CalX
 

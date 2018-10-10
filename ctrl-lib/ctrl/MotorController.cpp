@@ -242,23 +242,23 @@ namespace CalX {
 	}
 
 	void MotorController::sendMovingEvent(MotorMoveEvent &evt) {
-		this->submitEvent(evt, &MotorEventListener::moving);
+		this->submitEvent(&MotorEventListener::moving, evt);
 	}
 
 	void MotorController::sendMovedEvent(MotorMoveEvent &evt) {
-		this->submitEvent(evt, &MotorEventListener::moved);
+		this->submitEvent(&MotorEventListener::moved, evt);
 	}
 
 	void MotorController::sendStoppedEvent(MotorErrorEvent &evt) {
-		this->submitEvent(evt, &MotorEventListener::stopped);
+		this->submitEvent(&MotorEventListener::stopped, evt);
 	}
 
 	void MotorController::sendRollingEvent(MotorRollEvent &evt) {
-		this->submitEvent(evt, &MotorEventListener::rolling);
+		this->submitEvent(&MotorEventListener::rolling, evt);
 	}
 
 	void MotorController::sendRolledEvent(MotorRollEvent &evt) {
-		this->submitEvent(evt, &MotorEventListener::rolled);
+		this->submitEvent(&MotorEventListener::rolled, evt);
 	}
 
 	void MotorController::use() {

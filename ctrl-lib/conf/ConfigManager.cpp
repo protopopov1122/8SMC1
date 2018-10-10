@@ -39,9 +39,7 @@ namespace CalX {
 			    std::make_unique<ConfigEntry>(*this, id);
 			ConfigEntry *ptr = entry.get();
 			this->entries[id] = std::move(entry);
-			for (const auto &l : this->listeners) {
-				l->entryAdded(this, id);
-			}
+			this->submitEvent(&ConfigEventListener::entryAdded, this, id);
 			return ptr;
 		} else {
 			return nullptr;
@@ -57,9 +55,7 @@ namespace CalX {
 			return false;
 		}
 		this->entries.erase(id);
-		for (const auto &l : this->listeners) {
-			l->entryRemoved(this, id);
-		}
+		this->submitEvent(&ConfigEventListener::entryRemoved, this, id);
 		return true;
 	}
 
@@ -95,17 +91,6 @@ namespace CalX {
 			kv.second->store(os);
 			os << std::endl;
 		}
-	}
-
-	void ConfigManager::addEventListener(std::shared_ptr<ConfigEventListener> l) {
-		this->listeners.push_back(l);
-	}
-
-	void ConfigManager::removeEventListener(
-	    std::shared_ptr<ConfigEventListener> l) {
-		this->listeners.erase(
-		    std::remove(this->listeners.begin(), this->listeners.end(), l),
-		    this->listeners.end());
 	}
 
 	std::vector<std::shared_ptr<ConfigEventListener>>
