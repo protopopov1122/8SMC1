@@ -33,7 +33,7 @@
 namespace CalX {
 	class CLISystemCommand : public CLICommand {
 	 public:
-		CLISystemCommand(SystemManager *sysman) {
+		CLISystemCommand(SystemManager *sysman, TaskSet &tasks) : tasks(tasks) {
 			this->sysman = sysman;
 		}
 		virtual ~CLISystemCommand() {}
@@ -41,13 +41,14 @@ namespace CalX {
 
 	 protected:
 		SystemManager *sysman;
+		TaskSet &tasks;
 	};
 
 #define CMD(name)                                                              \
 	class name : public CLISystemCommand {                                       \
 	 public:                                                                     \
-		name(SystemManager *sysman)                                                \
-		    : CLISystemCommand::CLISystemCommand(sysman){};                        \
+		name(SystemManager *sysman, TaskSet &tasks)                                \
+		    : CLISystemCommand::CLISystemCommand(sysman, tasks){};                 \
 		virtual ~name(){};                                                         \
 		virtual void execute(CLI *cli, std::vector<std::string> &args);            \
 	};

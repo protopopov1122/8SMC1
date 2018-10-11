@@ -27,27 +27,6 @@ namespace CalX {
 	SystemManagerEventLogger::SystemManagerEventLogger(SystemManager &sysman)
 	    : sysman(sysman) {}
 
-	void SystemManagerEventLogger::onTaskAdded(std::shared_ptr<CoordTask> task) {
-		if (this->sysman.getExtensionEngine() != nullptr) {
-			this->sysman.getExtensionEngine()->onTaskAdded(task);
-		}
-		LOG(SYSMAN_TAG,
-		    "Added new task #" +
-		        std::to_string(this->sysman.getTaskSet().getTaskCount() - 1) +
-		        ". Task count: " +
-		        std::to_string(this->sysman.getTaskSet().getTaskCount()));
-	}
-
-	void SystemManagerEventLogger::onTaskRemoving(std::size_t index) {
-		if (this->sysman.getExtensionEngine() != nullptr) {
-			this->sysman.getExtensionEngine()->onTaskRemoving(index);
-		}
-
-		LOG(SYSMAN_TAG,
-		    "Removed task # " + std::to_string(index) + ". Task count: " +
-		        std::to_string(this->sysman.getTaskSet().getTaskCount()));
-	}
-
 	void SystemManagerEventLogger::onPlaneAdded(
 	    std::shared_ptr<CoordHandle> handle) {
 		if (this->sysman.getExtensionEngine() != nullptr) {
@@ -105,8 +84,7 @@ namespace CalX {
 	      eventLogger(*this),
 	      motorControllerSet(*this->conf, *this->devman, &this->eventLogger),
 	      instrumentControllerSet(*this->conf, *this->devman, &this->eventLogger),
-	      planeSet(*this->conf, &this->eventLogger),
-	      taskSet(&this->eventLogger) {
+	      planeSet(*this->conf, &this->eventLogger) {
 		LOG(SYSMAN_TAG,
 		    "System startup. Found " +
 		        std::to_string(this->motorControllerSet.getDeviceCount()) +
@@ -142,10 +120,6 @@ namespace CalX {
 
 	MathEngine &DefaultSystemManager::getMathEngine() {
 		return this->engine;
-	}
-
-	TaskSet &DefaultSystemManager::getTaskSet() {
-		return this->taskSet;
 	}
 
 	CoordPlaneSet &DefaultSystemManager::getCoordPlaneSet() {

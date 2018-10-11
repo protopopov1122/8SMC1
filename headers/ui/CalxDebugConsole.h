@@ -36,6 +36,7 @@ namespace CalXUI {
 	 private:
 		SystemManager *sysman;
 		DeviceManager &devman;
+                VectorTaskSet taskSet;
 	};
 }  // namespace CalXUI
 

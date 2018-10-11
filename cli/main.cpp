@@ -68,15 +68,16 @@ int main(int argc, char **argv) {
 	cnf.close();
 	SystemManager *sysman =
 	    new DefaultSystemManager(std::move(devman), std::move(conf));
+	VectorTaskSet taskSet;
 	setup_signals(sysman);
 	CLI cli(std::cout, std::cin);
 	cli.addCommand("echo", new EchoCMD());
-	cli.addCommand("ls", new LsCommand(sysman));
-	cli.addCommand("x", new HaltCommand(sysman));
-	cli.addCommand("dev", new MotorCommand(sysman));
-	cli.addCommand("coord", new CoordCommand(sysman));
-	cli.addCommand("refresh", new RefreshCommand(sysman));
-	cli.addCommand("task", new TaskCommand(sysman));
+	cli.addCommand("ls", new LsCommand(sysman, taskSet));
+	cli.addCommand("x", new HaltCommand(sysman, taskSet));
+	cli.addCommand("dev", new MotorCommand(sysman, taskSet));
+	cli.addCommand("coord", new CoordCommand(sysman, taskSet));
+	cli.addCommand("refresh", new RefreshCommand(sysman, taskSet));
+	cli.addCommand("task", new TaskCommand(sysman, taskSet));
 	cli.addCommand("help", new HelpCMD());
 	do {
 		if (sysman->getDeviceManager().hasError()) {

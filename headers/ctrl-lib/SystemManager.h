@@ -49,20 +49,15 @@ namespace CalX {
 		virtual ConfigManager &getConfiguration() const = 0;
 		virtual MathEngine &getMathEngine() = 0;
 		virtual ExtEngine *getExtensionEngine() const = 0;
-		virtual TaskSet &getTaskSet() = 0;
 		virtual CoordPlaneSet &getCoordPlaneSet() = 0;
 		virtual MotorControllerSet &getMotorControllerSet() = 0;
 		virtual InstrumentControllerSet &getInstrumentControllerSet() = 0;
 	};
 
-	class SystemManagerEventLogger : public TaskSetEventListener,
-	                                 public CoordPlaneSetListener,
+	class SystemManagerEventLogger : public CoordPlaneSetListener,
 	                                 public DeviceControllerSetListener {
 	 public:
 		SystemManagerEventLogger(SystemManager &);
-
-		void onTaskAdded(std::shared_ptr<CoordTask>) override;
-		void onTaskRemoving(std::size_t) override;
 
 		void onPlaneAdded(std::shared_ptr<CoordHandle>) override;
 		void onPlaneRemoving(std::size_t) override;
@@ -83,7 +78,6 @@ namespace CalX {
 		ConfigManager &getConfiguration() const override;
 		MathEngine &getMathEngine() override;
 		ExtEngine *getExtensionEngine() const override;
-		TaskSet &getTaskSet() override;
 		CoordPlaneSet &getCoordPlaneSet() override;
 		MotorControllerSet &getMotorControllerSet() override;
 		InstrumentControllerSet &getInstrumentControllerSet() override;
@@ -97,7 +91,6 @@ namespace CalX {
 		VectorMotorControllerSet motorControllerSet;
 		VectorInstrumentControllerSet instrumentControllerSet;
 		VectorCoordPlaneSet planeSet;
-		VectorTaskSet taskSet;
 	};
 }  // namespace CalX
 
