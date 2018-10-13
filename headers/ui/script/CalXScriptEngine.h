@@ -71,6 +71,7 @@ namespace CalXUI {
 		virtual std::pair<coord_point_t, ErrorCode> planeGetPosition(size_t);
 		virtual std::pair<coord_rect_t, ErrorCode> planeGetSize(size_t);
 		virtual std::pair<bool, ErrorCode> planeIsMeasured(size_t);
+		virtual bool planePositionAsCenter(std::size_t);
 
 	 private:
 		CalxApp &app;

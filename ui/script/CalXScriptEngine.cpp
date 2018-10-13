@@ -624,4 +624,19 @@ namespace CalXUI {
 		}
 	}
 
+	bool CalXAppScriptEnvironment::planePositionAsCenter(std::size_t id) {
+		CalxPlaneHandle *planeHandle =
+		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);
+		if (planeHandle != nullptr) {
+			motor_point_t offset = planeHandle->getController()->getHandle()->getPosition();
+			motor_scale_t scale = planeHandle->getController()->getScale();
+			offset.x += planeHandle->getController()->getOffset().x / scale.x;
+			offset.y += planeHandle->getController()->getOffset().y / scale.y;
+			planeHandle->getController()->setOffset(offset);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 }  // namespace CalXUI

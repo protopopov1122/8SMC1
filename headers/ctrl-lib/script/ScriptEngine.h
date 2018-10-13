@@ -87,6 +87,7 @@ namespace CalX {
 		virtual std::pair<coord_point_t, ErrorCode> planeGetPosition(size_t) = 0;
 		virtual std::pair<coord_rect_t, ErrorCode> planeGetSize(size_t) = 0;
 		virtual std::pair<bool, ErrorCode> planeIsMeasured(size_t) = 0;
+		virtual bool planePositionAsCenter(std::size_t) = 0;
 
 	 private:
 		ConfigManager &config;

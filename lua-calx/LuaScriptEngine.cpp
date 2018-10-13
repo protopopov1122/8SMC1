@@ -116,7 +116,8 @@ namespace CalXLua {
 
 		this->lua["calx"]["plane"]["position"].SetObj(
 		    lua_env, "getX", &LuaCalXEnvironment::planeGetPositionX, "getY",
-		    &LuaCalXEnvironment::planeGetPositionY);
+		    &LuaCalXEnvironment::planeGetPositionY,
+			"asCenter", &LuaCalXEnvironment::planePositionAsCenter);
 
 		this->lua["calx"]["plane"]["size"].SetObj(
 		    lua_env, "getX", &LuaCalXEnvironment::planeGetSizeX, "getY",

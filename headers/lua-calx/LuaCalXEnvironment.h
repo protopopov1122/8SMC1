@@ -82,6 +82,7 @@ namespace CalXLua {
 		double planeGetSizeW(int);
 		double planeGetSizeH(int);
 		bool planeIsMeasured(int);
+		int planePositionAsCenter(int);
 
 	 private:
 		CalXScriptEnvironment &env;

@@ -356,4 +356,13 @@ namespace CalXLua {
 		}
 		return res.first;
 	}
+
+	int LuaCalXEnvironment::planePositionAsCenter(int id) {
+		bool res = env.planePositionAsCenter(static_cast<std::size_t>(id));
+		if (res) {
+			return static_cast<int>(ErrorCode::NoError);
+		} else {
+			throw CalXException(ErrorCode::UnknownResource);
+		}
+	}
 }  // namespace CalXLua
