@@ -23,6 +23,7 @@
 
 #include "ctrl-lib/SystemManager.h"
 #include "ctrl-lib/conf/ConfigManager.h"
+#include <optional>
 
 /* Script engine is used to integrate different scripting languages into the
    system, it consists of several abstract objects:
@@ -38,6 +39,72 @@
 
 namespace CalX {
 
+	class CalXScriptMotor {
+	 public:
+		virtual ~CalXScriptMotor() = default;
+		virtual bool isValid() = 0;
+		virtual std::optional<Power> getPower() = 0;
+		virtual ErrorCode enablePower(bool) = 0;
+		virtual ErrorCode move(motor_coord_t, float) = 0;
+		virtual ErrorCode relativeMove(motor_coord_t, float) = 0;
+		virtual ErrorCode stop() = 0;
+		virtual std::optional<motor_coord_t> getPosition() = 0;
+		virtual ErrorCode moveToTrailer(TrailerId) = 0;
+		virtual ErrorCode checkTrailers() = 0;
+		virtual ErrorCode waitWhileRunning() = 0;
+	};
+
+	class CalXScriptInstrument {
+	 public:
+	 	virtual ~CalXScriptInstrument() = default;
+		virtual bool isValid() = 0;
+		virtual ErrorCode open_session() = 0;
+		virtual ErrorCode close_session() = 0;
+		virtual ErrorCode enable(bool) = 0;
+		virtual std::optional<bool> isEnabled() = 0;
+		virtual std::optional<bool> isRunnable() = 0;
+		virtual ErrorCode setRunnable(bool) = 0;
+		virtual std::optional<InstrumentMode> getMode() = 0;
+		virtual ErrorCode setMode(InstrumentMode) = 0;
+		virtual std::optional<bool> isSessionOpened() = 0;
+		virtual std::optional<std::string> getInfo() = 0;
+	};
+
+	class CalXScriptDevices {
+	 public:
+		virtual ~CalXScriptDevices() = default;
+		virtual device_id_t connectMotor(DeviceConnectionPrms *) = 0;
+		virtual device_id_t connectInstrument(DeviceConnectionPrms *) = 0;
+		virtual std::size_t getMotorCount() = 0;
+		virtual std::size_t getInstrumentCount() = 0;
+		virtual std::unique_ptr<CalXScriptMotor> getMotor(device_id_t) = 0;
+		virtual std::unique_ptr<CalXScriptInstrument> getInstrument(device_id_t) = 0;
+	};
+
+	class CalXScriptPlane {
+	 public:
+		virtual ~CalXScriptPlane() = default;
+		virtual ErrorCode move(coord_point_t, double, bool, bool) = 0;
+		virtual ErrorCode arc(coord_point_t, coord_point_t, int,
+		                           double, bool, bool) = 0;
+		virtual ErrorCode calibrate(TrailerId) = 0;
+		virtual ErrorCode measure(TrailerId) = 0;
+		virtual ErrorCode move(coord_point_t, double) = 0;
+		virtual ErrorCode configure(coord_point_t, double) = 0;
+		virtual ErrorCode newWatcher() = 0;
+		virtual std::optional<coord_point_t> getPosition() = 0;
+		virtual std::pair<coord_rect_t, ErrorCode> getSize() = 0;
+		virtual std::optional<bool> isMeasured() = 0;
+		virtual bool positionAsCenter() = 0;
+	};
+
+	class CalXScriptPlanes {
+	 public:
+		virtual ~CalXScriptPlanes() = default;
+		virtual int32_t createPlane(device_id_t, device_id_t, device_id_t = -1) = 0;
+		virtual std::unique_ptr<CalXScriptPlane> getPlane(std::size_t) = 0;
+	};
+
 	class CalXScriptEnvironment {
 	 public:
 		CalXScriptEnvironment(ConfigManager &);
@@ -45,49 +112,8 @@ namespace CalX {
 
 		ConfigManager &getConfiguration();
 
-		virtual device_id_t connectSerialMotor(uint8_t, uint32_t, uint8_t) = 0;
-		virtual device_id_t connectSerialInstrument(uint8_t, uint32_t, uint8_t) = 0;
-		virtual size_t getMotorCount() = 0;
-		virtual size_t getInstrumentCount() = 0;
-		virtual std::pair<Power, ErrorCode> getMotorPower(device_id_t) = 0;
-		virtual ErrorCode enableMotorPower(device_id_t, bool) = 0;
-		virtual ErrorCode motorMove(device_id_t, motor_coord_t, float) = 0;
-		virtual ErrorCode motorRelativeMove(device_id_t, motor_coord_t, float) = 0;
-		virtual ErrorCode motorStop(device_id_t) = 0;
-		virtual std::pair<motor_coord_t, ErrorCode> getMotorPosition(
-		    device_id_t) = 0;
-		virtual ErrorCode motorMoveToTrailer(device_id_t, TrailerId) = 0;
-		virtual std::pair<bool, ErrorCode> motorCheckTrailers(device_id_t) = 0;
-		virtual ErrorCode motorWaitWhileRunning(device_id_t) = 0;
-
-		virtual ErrorCode instrumentOpenSession(device_id_t) = 0;
-		virtual ErrorCode instrumentCloseSession(device_id_t) = 0;
-		virtual ErrorCode instrumentEnable(device_id_t, bool) = 0;
-		virtual std::pair<bool, ErrorCode> instrumentIsEnabled(device_id_t) = 0;
-		virtual std::pair<bool, ErrorCode> instrumentIsRunnable(device_id_t) = 0;
-		virtual ErrorCode instrumentSetRunnable(device_id_t, bool) = 0;
-		virtual std::pair<InstrumentMode, ErrorCode> instrumentGetMode(
-		    device_id_t) = 0;
-		virtual std::pair<bool, ErrorCode> instrumentSetMode(device_id_t,
-		                                                     InstrumentMode) = 0;
-		virtual std::pair<bool, ErrorCode> instrumentIsSessionOpened(
-		    device_id_t) = 0;
-		virtual std::pair<std::string, ErrorCode> instrumentGetInfo(
-		    device_id_t) = 0;
-
-		virtual int32_t createCoordPlane(device_id_t, device_id_t, device_id_t) = 0;
-		virtual ErrorCode planeMove(size_t, coord_point_t, double, bool, bool) = 0;
-		virtual ErrorCode planeArc(size_t, coord_point_t, coord_point_t, int,
-		                           double, bool, bool) = 0;
-		virtual ErrorCode planeCalibrate(size_t, TrailerId) = 0;
-		virtual ErrorCode planeMeasure(size_t, TrailerId) = 0;
-		virtual ErrorCode planeMove(size_t, coord_point_t, double) = 0;
-		virtual ErrorCode planeConfigure(size_t, coord_point_t, double) = 0;
-		virtual ErrorCode planeNewWatcher(size_t) = 0;
-		virtual std::pair<coord_point_t, ErrorCode> planeGetPosition(size_t) = 0;
-		virtual std::pair<coord_rect_t, ErrorCode> planeGetSize(size_t) = 0;
-		virtual std::pair<bool, ErrorCode> planeIsMeasured(size_t) = 0;
-		virtual bool planePositionAsCenter(std::size_t) = 0;
+		virtual CalXScriptDevices &getDevices() = 0;
+		virtual CalXScriptPlanes &getPlanes() = 0;
 
 	 private:
 		ConfigManager &config;

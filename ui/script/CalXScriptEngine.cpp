@@ -34,91 +34,36 @@ namespace CalXUI {
 		return nullptr;
 	}
 
-	CalXAppScriptEnvironment::CalXAppScriptEnvironment(CalxApp &app)
-	    : CalXScriptEnvironment::CalXScriptEnvironment(
-	          app.getSystemManager()->getConfiguration()),
-	      app(app) {}
+	CalXAppScriptMotor::CalXAppScriptMotor(CalxApp &app, device_id_t motor_id)
+		: app(app), motor_id(motor_id) {}
 
-	device_id_t CalXAppScriptEnvironment::connectSerialMotor(uint8_t port,
-	                                                         uint32_t baudrate,
-	                                                         uint8_t parity) {
-		SystemManager *sysman = this->app.getSystemManager();
-		DeviceSerialPortConnectionPrms prms;
-		prms.port = port;
-		prms.speed = baudrate;
-		prms.parity = static_cast<SerialPortParity>(parity);
-		std::shared_ptr<MotorController> ctrl =
-		    sysman->getMotorControllerSet().connectDevice(&prms).lock();
-		if (ctrl == nullptr) {
-			wxMessageBox(__("Motor can't be connected"),
-			             __("Script: Connection error"), wxICON_WARNING);
-			return -1;
-		} else {
-			bool ready = false;
-			this->app.getMainFrame()->getDevicePool()->appendDevice(
-			    new CalxMotorConstructor(this->app.getMainFrame()->getDevicePool(),
-			                             ctrl),
-			    &ready);
-			while (!ready) {
-			}
-			return ctrl->getID();
-		}
-	}
-
-	device_id_t CalXAppScriptEnvironment::connectSerialInstrument(
-	    uint8_t port, uint32_t baudrate, uint8_t parity) {
-		SystemManager *sysman = this->app.getSystemManager();
-		DeviceSerialPortConnectionPrms prms;
-		prms.port = port;
-		prms.speed = baudrate;
-		prms.parity = static_cast<SerialPortParity>(parity);
-		std::shared_ptr<InstrumentController> ctrl =
-		    sysman->getInstrumentControllerSet().connectDevice(&prms).lock();
-		if (ctrl == nullptr) {
-			wxMessageBox(__("Instrument can't be connected"),
-			             __("Script: Connection error"), wxICON_WARNING);
-			return -1;
-		} else {
-			bool ready = false;
-			this->app.getMainFrame()->getDevicePool()->appendDevice(
-			    new CalxInstrumentConstructor(
-			        this->app.getMainFrame()->getDevicePool(), ctrl),
-			    &ready);
-			while (!ready) {
-			}
-			return ctrl->getID();
-		}
-	}
-
-	size_t CalXAppScriptEnvironment::getMotorCount() {
-		return this->app.getMainFrame()->getDevicePool()->getMotorCount();
-	}
-
-	size_t CalXAppScriptEnvironment::getInstrumentCount() {
-		return this->app.getMainFrame()->getDevicePool()->getInstrumentCount();
-	}
-
-	std::pair<Power, ErrorCode> CalXAppScriptEnvironment::getMotorPower(
-	    device_id_t id) {
+	bool CalXAppScriptMotor::isValid() {
 		std::shared_ptr<MotorController> motor = this->app.getSystemManager()
 		                                             ->getMotorControllerSet()
-		                                             .getDeviceController(id)
+		                                             .getDeviceController(this->motor_id)
+		                                             .lock();
+		return  motor != nullptr;
+	}
+
+	std::optional<Power> CalXAppScriptMotor::getPower() {
+		std::shared_ptr<MotorController> motor = this->app.getSystemManager()
+		                                             ->getMotorControllerSet()
+		                                             .getDeviceController(this->motor_id)
 		                                             .lock();
 		if (motor == nullptr) {
-			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id),
+			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), this->motor_id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
-			return std::make_pair(Power::NoPower, ErrorCode::UnknownResource);
+			return std::optional<Power>();
 		} else {
-			return std::make_pair(motor->getPowerState(), ErrorCode::NoError);
+			return motor->getPowerState();
 		}
 	}
 
-	ErrorCode CalXAppScriptEnvironment::enableMotorPower(device_id_t id,
-	                                                     bool power) {
+	ErrorCode CalXAppScriptMotor::enablePower(bool power) {
 		CalxMotorHandle *motor =
-		    this->app.getMainFrame()->getDevicePool()->getMotor(id);
+		    this->app.getMainFrame()->getDevicePool()->getMotor(this->motor_id);
 		if (motor == nullptr) {
-			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id),
+			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), this->motor_id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
@@ -126,13 +71,12 @@ namespace CalXUI {
 		}
 	}
 
-	ErrorCode CalXAppScriptEnvironment::motorMove(device_id_t id,
-	                                              motor_coord_t pos,
+	ErrorCode CalXAppScriptMotor::move(motor_coord_t pos,
 	                                              float speed) {
 		CalxMotorHandle *motor =
-		    this->app.getMainFrame()->getDevicePool()->getMotor(id);
+		    this->app.getMainFrame()->getDevicePool()->getMotor(this->motor_id);
 		if (motor == nullptr) {
-			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id),
+			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), this->motor_id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
@@ -144,18 +88,16 @@ namespace CalXUI {
 				return ErrorCode::Interrupted;
 			} else {
 				return res.errcode;
-				;
 			}
 		}
 	}
 
-	ErrorCode CalXAppScriptEnvironment::motorRelativeMove(device_id_t id,
-	                                                      motor_coord_t pos,
+	ErrorCode CalXAppScriptMotor::relativeMove(motor_coord_t pos,
 	                                                      float speed) {
 		CalxMotorHandle *motor =
-		    this->app.getMainFrame()->getDevicePool()->getMotor(id);
+		    this->app.getMainFrame()->getDevicePool()->getMotor(this->motor_id);
 		if (motor == nullptr) {
-			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id),
+			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), this->motor_id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
@@ -172,11 +114,11 @@ namespace CalXUI {
 		}
 	}
 
-	ErrorCode CalXAppScriptEnvironment::motorStop(device_id_t id) {
+	ErrorCode CalXAppScriptMotor::stop() {
 		CalxMotorHandle *motor =
-		    this->app.getMainFrame()->getDevicePool()->getMotor(id);
+		    this->app.getMainFrame()->getDevicePool()->getMotor(this->motor_id);
 		if (motor == nullptr) {
-			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id),
+			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), this->motor_id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
@@ -184,28 +126,26 @@ namespace CalXUI {
 			return ErrorCode::NoError;
 		}
 	}
-
-	std::pair<motor_coord_t, ErrorCode>
-	    CalXAppScriptEnvironment::getMotorPosition(device_id_t id) {
+	
+	std::optional<motor_coord_t> CalXAppScriptMotor::getPosition() {
 		std::shared_ptr<MotorController> motor = this->app.getSystemManager()
 		                                             ->getMotorControllerSet()
-		                                             .getDeviceController(id)
+		                                             .getDeviceController(this->motor_id)
 		                                             .lock();
 		if (motor == nullptr) {
-			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id),
+			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), this->motor_id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
-			return std::make_pair(0, ErrorCode::UnknownResource);
+			return std::optional<motor_coord_t>();
 		} else {
-			return std::make_pair(motor->getPosition(), ErrorCode::NoError);
+			return motor->getPosition();
 		}
 	}
 
-	ErrorCode CalXAppScriptEnvironment::motorMoveToTrailer(device_id_t id,
-	                                                       TrailerId tr) {
+	ErrorCode CalXAppScriptMotor::moveToTrailer(TrailerId tr) {
 		CalxMotorHandle *motor =
-		    this->app.getMainFrame()->getDevicePool()->getMotor(id);
+		    this->app.getMainFrame()->getDevicePool()->getMotor(this->motor_id);
 		if (motor == nullptr) {
-			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id),
+			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), this->motor_id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
@@ -217,34 +157,31 @@ namespace CalXUI {
 				return ErrorCode::Interrupted;
 			} else {
 				return res.errcode;
-				;
 			}
 		}
 	}
 
-	std::pair<bool, ErrorCode> CalXAppScriptEnvironment::motorCheckTrailers(
-	    device_id_t id) {
+	ErrorCode CalXAppScriptMotor::checkTrailers() {
 		std::shared_ptr<MotorController> motor = this->app.getSystemManager()
 		                                             ->getMotorControllerSet()
-		                                             .getDeviceController(id)
+		                                             .getDeviceController(this->motor_id)
 		                                             .lock();
 		if (motor == nullptr) {
-			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id),
+			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), this->motor_id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
-			return std::make_pair(false, ErrorCode::UnknownResource);
+			return ErrorCode::UnknownResource;
 		} else {
-			return std::make_pair(motor->checkTrailers() != ErrorCode::NoError,
-			                      ErrorCode::NoError);
+			return motor->checkTrailers();
 		}
 	}
 
-	ErrorCode CalXAppScriptEnvironment::motorWaitWhileRunning(device_id_t id) {
+	ErrorCode CalXAppScriptMotor::waitWhileRunning() {
 		std::shared_ptr<MotorController> motor = this->app.getSystemManager()
 		                                             ->getMotorControllerSet()
-		                                             .getDeviceController(id)
+		                                             .getDeviceController(this->motor_id)
 		                                             .lock();
 		if (motor == nullptr) {
-			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), id),
+			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), this->motor_id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
@@ -252,29 +189,41 @@ namespace CalXUI {
 		}
 	}
 
-	ErrorCode CalXAppScriptEnvironment::instrumentOpenSession(device_id_t id) {
+	CalXAppScriptInstrument::CalXAppScriptInstrument(CalxApp &app, device_id_t instrument_id)
+		: app(app), instrument_id(instrument_id) {}
+	
+	bool CalXAppScriptInstrument::isValid() {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()
 		        ->getInstrumentControllerSet()
-		        .getDeviceController(id)
+		        .getDeviceController(this->instrument_id)
 		        .lock();
+		return instr != nullptr;
+	}
+
+	ErrorCode CalXAppScriptInstrument::open_session() {
+		std::shared_ptr<InstrumentController> instr =
+			this->app.getSystemManager()
+				->getInstrumentControllerSet()
+				.getDeviceController(this->instrument_id)
+				.lock();
 		if (instr == nullptr) {
-			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
-			             __("Script: Unknown instrument"), wxICON_WARNING);
+			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
+							__("Script: Unknown instrument"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
 			return instr->open_session();
 		}
 	}
 
-	ErrorCode CalXAppScriptEnvironment::instrumentCloseSession(device_id_t id) {
+	ErrorCode CalXAppScriptInstrument::close_session() {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()
 		        ->getInstrumentControllerSet()
-		        .getDeviceController(id)
+		        .getDeviceController(this->instrument_id)
 		        .lock();
 		if (instr == nullptr) {
-			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
+			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
 			             __("Script: Unknown instrument"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
@@ -282,15 +231,14 @@ namespace CalXUI {
 		}
 	}
 
-	ErrorCode CalXAppScriptEnvironment::instrumentEnable(device_id_t id,
-	                                                     bool en) {
+	ErrorCode CalXAppScriptInstrument::enable(bool en) {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()
 		        ->getInstrumentControllerSet()
-		        .getDeviceController(id)
+		        .getDeviceController(this->instrument_id)
 		        .lock();
 		if (instr == nullptr) {
-			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
+			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
 			             __("Script: Unknown instrument"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
@@ -298,31 +246,44 @@ namespace CalXUI {
 		}
 	}
 
-	std::pair<bool, ErrorCode> CalXAppScriptEnvironment::instrumentIsEnabled(
-	    device_id_t id) {
+	std::optional<bool> CalXAppScriptInstrument::isEnabled() {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()
 		        ->getInstrumentControllerSet()
-		        .getDeviceController(id)
+		        .getDeviceController(this->instrument_id)
 		        .lock();
 		if (instr == nullptr) {
-			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
+			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
 			             __("Script: Unknown instrument"), wxICON_WARNING);
-			return std::make_pair(false, ErrorCode::UnknownResource);
+			return std::optional<bool>();
 		} else {
-			return std::make_pair(instr->isEnabled(), ErrorCode::NoError);
+			return instr->isEnabled();
 		}
 	}
 
-	ErrorCode CalXAppScriptEnvironment::instrumentSetRunnable(device_id_t id,
-	                                                          bool en) {
+	std::optional<bool> CalXAppScriptInstrument::isRunnable() {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()
 		        ->getInstrumentControllerSet()
-		        .getDeviceController(id)
+		        .getDeviceController(this->instrument_id)
 		        .lock();
 		if (instr == nullptr) {
-			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
+			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
+			             __("Script: Unknown instrument"), wxICON_WARNING);
+			return std::optional<bool>();
+		} else {
+			return instr->isRunnable();
+		}
+	}
+
+	ErrorCode CalXAppScriptInstrument::setRunnable(bool en) {
+		std::shared_ptr<InstrumentController> instr =
+		    this->app.getSystemManager()
+		        ->getInstrumentControllerSet()
+		        .getDeviceController(this->instrument_id)
+		        .lock();
+		if (instr == nullptr) {
+			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
 			             __("Script: Unknown instrument"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
@@ -331,121 +292,132 @@ namespace CalXUI {
 		}
 	}
 
-	std::pair<bool, ErrorCode> CalXAppScriptEnvironment::instrumentIsRunnable(
-	    device_id_t id) {
+	std::optional<InstrumentMode> CalXAppScriptInstrument::getMode() {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()
 		        ->getInstrumentControllerSet()
-		        .getDeviceController(id)
+		        .getDeviceController(this->instrument_id)
 		        .lock();
 		if (instr == nullptr) {
-			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
+			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
 			             __("Script: Unknown instrument"), wxICON_WARNING);
-			return std::make_pair(false, ErrorCode::UnknownResource);
+			return std::optional<InstrumentMode>();
 		} else {
-			return std::make_pair(instr->isRunnable(), ErrorCode::NoError);
+			return instr->getMode();
 		}
 	}
 
-	std::pair<InstrumentMode, ErrorCode>
-	    CalXAppScriptEnvironment::instrumentGetMode(device_id_t id) {
+	ErrorCode CalXAppScriptInstrument::setMode(InstrumentMode mode) {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()
 		        ->getInstrumentControllerSet()
-		        .getDeviceController(id)
+		        .getDeviceController(this->instrument_id)
 		        .lock();
 		if (instr == nullptr) {
-			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
+			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
 			             __("Script: Unknown instrument"), wxICON_WARNING);
-			return std::make_pair(InstrumentMode::Off, ErrorCode::UnknownResource);
+			return ErrorCode::UnknownResource;
 		} else {
-			return std::make_pair(instr->getMode(), ErrorCode::NoError);
+			instr->setMode(mode);
+			return ErrorCode::NoError;
 		}
 	}
-
-	std::pair<bool, ErrorCode> CalXAppScriptEnvironment::instrumentSetMode(
-	    device_id_t id, InstrumentMode mode) {
+	std::optional<bool> CalXAppScriptInstrument::isSessionOpened() {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()
 		        ->getInstrumentControllerSet()
-		        .getDeviceController(id)
+		        .getDeviceController(this->instrument_id)
 		        .lock();
 		if (instr == nullptr) {
-			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
+			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
 			             __("Script: Unknown instrument"), wxICON_WARNING);
-			return std::make_pair(false, ErrorCode::UnknownResource);
+			return std::optional<bool>();
 		} else {
-			return std::make_pair(instr->setMode(mode), ErrorCode::NoError);
+			return instr->isSessionOpened();
 		}
 	}
-
-	std::pair<bool, ErrorCode>
-	    CalXAppScriptEnvironment::instrumentIsSessionOpened(device_id_t id) {
+	std::optional<std::string> CalXAppScriptInstrument::getInfo() {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()
 		        ->getInstrumentControllerSet()
-		        .getDeviceController(id)
+		        .getDeviceController(this->instrument_id)
 		        .lock();
 		if (instr == nullptr) {
-			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
+			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
 			             __("Script: Unknown instrument"), wxICON_WARNING);
-			return std::make_pair(false, ErrorCode::UnknownResource);
+			return std::optional<std::string>();
 		} else {
-			return std::make_pair(instr->isSessionOpened(), ErrorCode::NoError);
+			return instr->getInfo();
 		}
 	}
 
-	std::pair<std::string, ErrorCode> CalXAppScriptEnvironment::instrumentGetInfo(
-	    device_id_t id) {
-		std::shared_ptr<InstrumentController> instr =
-		    this->app.getSystemManager()
-		        ->getInstrumentControllerSet()
-		        .getDeviceController(id)
-		        .lock();
-		if (instr == nullptr) {
-			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), id),
-			             __("Script: Unknown instrument"), wxICON_WARNING);
-			return std::make_pair("", ErrorCode::UnknownResource);
-		} else {
-			return std::make_pair(instr->getInfo(), ErrorCode::NoError);
-		}
-	}
+	CalXAppScriptDevices::CalXAppScriptDevices(CalxApp &app)
+		: app(app) {}
 
-	int32_t CalXAppScriptEnvironment::createCoordPlane(device_id_t m1,
-	                                                   device_id_t m2,
-	                                                   device_id_t instr) {
-		std::shared_ptr<CoordHandle> handle =
-		    this->app.getSystemManager()
-		        ->getCoordPlaneSet()
-		        .createCoord(this->app.getSystemManager()
-		                         ->getMotorControllerSet()
-		                         .getDeviceController(m1)
-		                         .lock(),
-		                     this->app.getSystemManager()
-		                         ->getMotorControllerSet()
-		                         .getDeviceController(m2)
-		                         .lock(),
-		                     this->app.getSystemManager()
-		                         ->getInstrumentControllerSet()
-		                         .getDeviceController(instr)
-		                         .lock())
-		        .lock();
-		if (handle == nullptr) {
+	device_id_t CalXAppScriptDevices::connectMotor(DeviceConnectionPrms *prms) {
+		SystemManager *sysman = this->app.getSystemManager();
+		std::shared_ptr<MotorController> ctrl =
+		    sysman->getMotorControllerSet().connectDevice(prms).lock();
+		if (ctrl == nullptr) {
+			wxMessageBox(__("Motor can't be connected"),
+			             __("Script: Connection error"), wxICON_WARNING);
 			return -1;
 		} else {
 			bool ready = false;
-			this->app.getMainFrame()->getPlaneList()->updateList(handle, &ready);
+			this->app.getMainFrame()->getDevicePool()->appendDevice(
+			    new CalxMotorConstructor(this->app.getMainFrame()->getDevicePool(),
+			                             ctrl),
+			    &ready);
 			while (!ready) {
 			}
-			return handle->getID();
+			return ctrl->getID();
 		}
 	}
 
-	ErrorCode CalXAppScriptEnvironment::planeMove(size_t id, coord_point_t dest,
-	                                              double speed, bool sync,
-	                                              bool relative) {
+	device_id_t CalXAppScriptDevices::connectInstrument(DeviceConnectionPrms *prms) {
+		SystemManager *sysman = this->app.getSystemManager();
+		std::shared_ptr<InstrumentController> ctrl =
+		    sysman->getInstrumentControllerSet().connectDevice(prms).lock();
+		if (ctrl == nullptr) {
+			wxMessageBox(__("Instrument can't be connected"),
+			             __("Script: Connection error"), wxICON_WARNING);
+			return -1;
+		} else {
+			bool ready = false;
+			this->app.getMainFrame()->getDevicePool()->appendDevice(
+			    new CalxInstrumentConstructor(
+			        this->app.getMainFrame()->getDevicePool(), ctrl),
+			    &ready);
+			while (!ready) {
+			}
+			return ctrl->getID();
+		}
+	}
+
+
+	std::size_t CalXAppScriptDevices::getMotorCount() {
+		return this->app.getMainFrame()->getDevicePool()->getMotorCount();
+	}
+
+	std::size_t CalXAppScriptDevices::getInstrumentCount() {
+		return this->app.getMainFrame()->getDevicePool()->getInstrumentCount();
+	}
+
+	std::unique_ptr<CalXScriptMotor> CalXAppScriptDevices::getMotor(device_id_t id) {
+		return std::make_unique<CalXAppScriptMotor>(this->app, id);
+	}
+
+	std::unique_ptr<CalXScriptInstrument> CalXAppScriptDevices::getInstrument(device_id_t id) {
+		return std::make_unique<CalXAppScriptInstrument>(this->app, id);
+	}
+
+	CalXAppScriptPlane::CalXAppScriptPlane(CalxApp &app, std::size_t id)
+		: app(app), plane_id(id) {}
+	
+
+	ErrorCode CalXAppScriptPlane::move(coord_point_t dest, double speed, bool sync, bool relative) {
 		CalxPlaneHandle *handle =
-		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);
+		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(this->plane_id);
 		if (handle == nullptr) {
 			return ErrorCode::UnknownResource;
 		} else {
@@ -460,14 +432,13 @@ namespace CalXUI {
 				return res.errcode;
 			}
 		}
+
 	}
 
-	ErrorCode CalXAppScriptEnvironment::planeArc(size_t id, coord_point_t dest,
-	                                             coord_point_t cen, int splitter,
-	                                             double speed, bool clockwise,
-	                                             bool relative) {
+	ErrorCode CalXAppScriptPlane::arc(coord_point_t dest, coord_point_t cen, int splitter,
+										double speed, bool clockwise, bool relative) {
 		CalxPlaneHandle *handle =
-		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);
+			this->app.getMainFrame()->getPlaneList()->getPlaneHandle(this->plane_id);
 		if (handle == nullptr) {
 			return ErrorCode::UnknownResource;
 		} else {
@@ -485,9 +456,9 @@ namespace CalXUI {
 		}
 	}
 
-	ErrorCode CalXAppScriptEnvironment::planeCalibrate(size_t id, TrailerId tid) {
+	ErrorCode CalXAppScriptPlane::calibrate(TrailerId tid) {
 		CalxPlaneHandle *handle =
-		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);
+		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(this->plane_id);
 		if (handle == nullptr) {
 			return ErrorCode::UnknownResource;
 		} else {
@@ -504,9 +475,9 @@ namespace CalXUI {
 		}
 	}
 
-	ErrorCode CalXAppScriptEnvironment::planeMeasure(size_t id, TrailerId tid) {
+	ErrorCode CalXAppScriptPlane::measure(TrailerId tid) {
 		CalxPlaneHandle *handle =
-		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);
+		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(this->plane_id);
 		if (handle == nullptr) {
 			return ErrorCode::UnknownResource;
 		} else {
@@ -523,10 +494,9 @@ namespace CalXUI {
 		}
 	}
 
-	ErrorCode CalXAppScriptEnvironment::planeMove(size_t id, coord_point_t dest,
-	                                              double speed) {
+	ErrorCode CalXAppScriptPlane::move(coord_point_t dest, double speed) {
 		CalxPlaneHandle *handle =
-		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);
+		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(this->plane_id);
 		if (handle == nullptr) {
 			return ErrorCode::UnknownResource;
 		} else {
@@ -543,11 +513,9 @@ namespace CalXUI {
 		}
 	}
 
-	ErrorCode CalXAppScriptEnvironment::planeConfigure(size_t id,
-	                                                   coord_point_t dest,
-	                                                   double speed) {
+	ErrorCode CalXAppScriptPlane::configure(coord_point_t dest, double speed) {
 		CalxPlaneHandle *handle =
-		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);
+		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(this->plane_id);
 		if (handle == nullptr) {
 			return ErrorCode::UnknownResource;
 		} else {
@@ -564,9 +532,9 @@ namespace CalXUI {
 		}
 	}
 
-	ErrorCode CalXAppScriptEnvironment::planeNewWatcher(size_t id) {
+	ErrorCode CalXAppScriptPlane::newWatcher() {
 		CalxPlaneHandle *handle =
-		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);
+		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(this->plane_id);
 		if (handle == nullptr) {
 			return ErrorCode::UnknownResource;
 		} else {
@@ -575,26 +543,24 @@ namespace CalXUI {
 		}
 	}
 
-	std::pair<coord_point_t, ErrorCode>
-	    CalXAppScriptEnvironment::planeGetPosition(size_t id) {
+	std::optional<coord_point_t> CalXAppScriptPlane::getPosition() {
 		CalxPlaneHandle *planeHandle =
-		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);
+		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(this->plane_id);
 		std::shared_ptr<CoordHandle> handle =
 		    planeHandle != nullptr ? planeHandle->getController()->getHandle()
 		                           : nullptr;
 		coord_point_t pos;
 		if (handle == nullptr) {
-			return std::make_pair(pos, ErrorCode::UnknownResource);
+			return std::optional<coord_point_t>();
 		} else {
 			pos = handle->getFloatPlane()->getFloatPosition();
-			return std::make_pair(pos, ErrorCode::NoError);
+			return std::optional<coord_point_t>(pos);
 		}
 	}
 
-	std::pair<coord_rect_t, ErrorCode> CalXAppScriptEnvironment::planeGetSize(
-	    size_t id) {
+	std::pair<coord_rect_t, ErrorCode> CalXAppScriptPlane::getSize() {
 		CalxPlaneHandle *planeHandle =
-		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);
+		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(this->plane_id);
 		std::shared_ptr<CoordHandle> handle =
 		    planeHandle != nullptr ? planeHandle->getController()->getHandle()
 		                           : nullptr;
@@ -609,24 +575,23 @@ namespace CalXUI {
 		}
 	}
 
-	std::pair<bool, ErrorCode> CalXAppScriptEnvironment::planeIsMeasured(
-	    size_t id) {
+	std::optional<bool> CalXAppScriptPlane::isMeasured() {
 		CalxPlaneHandle *planeHandle =
-		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);
+		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(this->plane_id);
 		std::shared_ptr<CoordHandle> handle =
 		    planeHandle != nullptr ? planeHandle->getController()->getHandle()
 		                           : nullptr;
 		coord_rect_t rect;
 		if (handle == nullptr) {
-			return std::make_pair(false, ErrorCode::UnknownResource);
+			return std::optional<bool>();
 		} else {
-			return std::make_pair(handle->isMeasured(), ErrorCode::NoError);
+			return handle->isMeasured();
 		}
 	}
 
-	bool CalXAppScriptEnvironment::planePositionAsCenter(std::size_t id) {
+	bool CalXAppScriptPlane::positionAsCenter() {
 		CalxPlaneHandle *planeHandle =
-		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);
+		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(this->plane_id);
 		if (planeHandle != nullptr) {
 			motor_point_t offset = planeHandle->getController()->getHandle()->getPosition();
 			motor_scale_t scale = planeHandle->getController()->getScale();
@@ -637,6 +602,54 @@ namespace CalXUI {
 		} else {
 			return false;
 		}
+	}
+
+	CalXAppScriptPlanes::CalXAppScriptPlanes(CalxApp &app)
+		: app(app) {}
+	
+	int32_t CalXAppScriptPlanes::createPlane(device_id_t motor1, device_id_t motor2, device_id_t instrument) {
+		std::shared_ptr<CoordHandle> handle =
+		    this->app.getSystemManager()
+		        ->getCoordPlaneSet()
+		        .createCoord(this->app.getSystemManager()
+		                         ->getMotorControllerSet()
+		                         .getDeviceController(motor1)
+		                         .lock(),
+		                     this->app.getSystemManager()
+		                         ->getMotorControllerSet()
+		                         .getDeviceController(motor2)
+		                         .lock(),
+		                     this->app.getSystemManager()
+		                         ->getInstrumentControllerSet()
+		                         .getDeviceController(instrument)
+		                         .lock())
+		        .lock();
+		if (handle == nullptr) {
+			return -1;
+		} else {
+			bool ready = false;
+			this->app.getMainFrame()->getPlaneList()->updateList(handle, &ready);
+			while (!ready) {
+			}
+			return handle->getID();
+		}
+	}
+
+	std::unique_ptr<CalXScriptPlane> CalXAppScriptPlanes::getPlane(std::size_t id) {
+		return std::make_unique<CalXAppScriptPlane>(this->app, id);
+	}
+
+	CalXAppScriptEnvironment::CalXAppScriptEnvironment(CalxApp &app)
+	    : CalXScriptEnvironment::CalXScriptEnvironment(
+	          app.getSystemManager()->getConfiguration()),
+	      app(app), devices(app), planes(app) {}
+
+	CalXScriptDevices &CalXAppScriptEnvironment::getDevices() {
+		return this->devices;
+	}
+
+	CalXScriptPlanes &CalXAppScriptEnvironment::getPlanes() {
+		return this->planes;
 	}
 
 }  // namespace CalXUI

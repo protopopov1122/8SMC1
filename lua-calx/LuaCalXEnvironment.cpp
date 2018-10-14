@@ -37,34 +37,41 @@ namespace CalXLua {
 
 	int LuaCalXEnvironment::connectSerialMotor(int port, int baudrate,
 	                                           int parity) {
-		return static_cast<int>(env.connectSerialMotor(port, baudrate, parity));
+		DeviceSerialPortConnectionPrms prms;
+		prms.port = static_cast<uint8_t>(port);
+		prms.speed = static_cast<uint32_t>(baudrate);
+		prms.parity = static_cast<SerialPortParity>(parity);
+		return static_cast<int>(env.getDevices().connectMotor(&prms));
 	}
 
 	int LuaCalXEnvironment::connectSerialInstrument(int port, int baudrate,
 	                                                int parity) {
-		return static_cast<int>(
-		    env.connectSerialInstrument(port, baudrate, parity));
+		DeviceSerialPortConnectionPrms prms;
+		prms.port = static_cast<uint8_t>(port);
+		prms.speed = static_cast<uint32_t>(baudrate);
+		prms.parity = static_cast<SerialPortParity>(parity);
+		return static_cast<int>(env.getDevices().connectInstrument(&prms));
 	}
 
 	int LuaCalXEnvironment::getMotorCount() {
-		return env.getMotorCount();
+		return env.getDevices().getMotorCount();
 	}
 
 	int LuaCalXEnvironment::getInstrumentCount() {
-		return env.getInstrumentCount();
+		return env.getDevices().getInstrumentCount();
 	}
 
 	int LuaCalXEnvironment::getMotorPower(int id) {
-		std::pair<Power, ErrorCode> res =
-		    env.getMotorPower(static_cast<device_id_t>(id));
-		if (res.second != ErrorCode::NoError) {
-			throw CalXException(res.second);
+		std::optional<Power> res =
+		    env.getDevices().getMotor(static_cast<device_id_t>(id))->getPower();
+		if (!res.has_value()) {
+			throw CalXException(ErrorCode::UnknownResource);
 		}
-		return static_cast<int>(res.first);
+		return static_cast<int>(res.value());
 	}
 
 	int LuaCalXEnvironment::enableMotorPower(int id, bool power) {
-		ErrorCode res = env.enableMotorPower(static_cast<device_id_t>(id), power);
+		ErrorCode res = env.getDevices().getMotor(static_cast<device_id_t>(id))->enablePower(power);
 		if (res != ErrorCode::NoError) {
 			throw CalXException(res);
 		}
@@ -72,8 +79,7 @@ namespace CalXLua {
 	}
 
 	int LuaCalXEnvironment::motorMove(int id, int pos, double speed) {
-		ErrorCode res = env.motorMove(static_cast<device_id_t>(id),
-		                              static_cast<motor_coord_t>(pos), speed);
+		ErrorCode res = env.getDevices().getMotor(static_cast<device_id_t>(id))->move(static_cast<motor_coord_t>(pos), speed);
 		if (res != ErrorCode::NoError) {
 			throw CalXException(res);
 		}
@@ -81,8 +87,7 @@ namespace CalXLua {
 	}
 
 	int LuaCalXEnvironment::motorRelativeMove(int id, int pos, double speed) {
-		ErrorCode res = env.motorRelativeMove(
-		    static_cast<device_id_t>(id), static_cast<motor_coord_t>(pos), speed);
+		ErrorCode res = env.getDevices().getMotor(static_cast<device_id_t>(id))->relativeMove(static_cast<motor_coord_t>(pos), speed);
 		if (res != ErrorCode::NoError) {
 			throw CalXException(res);
 		}
@@ -90,7 +95,7 @@ namespace CalXLua {
 	}
 
 	int LuaCalXEnvironment::motorStop(int id) {
-		ErrorCode res = env.motorStop(static_cast<device_id_t>(id));
+		ErrorCode res = env.getDevices().getMotor(static_cast<device_id_t>(id))->stop();
 		if (res != ErrorCode::NoError) {
 			throw CalXException(res);
 		}
@@ -98,17 +103,16 @@ namespace CalXLua {
 	}
 
 	int LuaCalXEnvironment::motorPosition(int id) {
-		std::pair<motor_coord_t, ErrorCode> res =
-		    env.getMotorPosition(static_cast<device_id_t>(id));
-		if (res.second != ErrorCode::NoError) {
-			throw CalXException(res.second);
+		std::optional<motor_coord_t> res =
+		    env.getDevices().getMotor(static_cast<device_id_t>(id))->getPosition();
+		if (!res.has_value()) {
+			throw CalXException(ErrorCode::UnknownResource);
 		}
-		return static_cast<int>(res.first);
+		return static_cast<int>(res.value());
 	}
 
 	int LuaCalXEnvironment::motorMoveToTrailer(int id, int tr) {
-		ErrorCode res = env.motorMoveToTrailer(static_cast<device_id_t>(id),
-		                                       static_cast<TrailerId>(tr));
+		ErrorCode res = env.getDevices().getMotor(static_cast<device_id_t>(id))->moveToTrailer(static_cast<TrailerId>(tr));
 		if (res != ErrorCode::NoError) {
 			throw CalXException(res);
 		}
@@ -116,16 +120,16 @@ namespace CalXLua {
 	}
 
 	bool LuaCalXEnvironment::motorCheckTrailers(int id) {
-		std::pair<bool, ErrorCode> res =
-		    env.motorCheckTrailers(static_cast<device_id_t>(id));
-		if (res.second != ErrorCode::NoError) {
-			throw CalXException(res.second);
+		ErrorCode res =
+		    env.getDevices().getMotor(static_cast<device_id_t>(id))->checkTrailers();
+		if (res != ErrorCode::NoError) {
+			throw CalXException(res);
 		}
-		return res.first;
+		return true;
 	}
 
 	int LuaCalXEnvironment::motorWaitWhileRunning(int id) {
-		ErrorCode res = env.motorWaitWhileRunning(static_cast<device_id_t>(id));
+		ErrorCode res = env.getDevices().getMotor(static_cast<device_id_t>(id))->waitWhileRunning();
 		if (res != ErrorCode::NoError) {
 			throw CalXException(res);
 		}
@@ -133,7 +137,7 @@ namespace CalXLua {
 	}
 
 	int LuaCalXEnvironment::instrumentOpenSession(int id) {
-		ErrorCode res = env.instrumentOpenSession(static_cast<device_id_t>(id));
+		ErrorCode res = env.getDevices().getInstrument(static_cast<device_id_t>(id))->open_session();
 		if (res != ErrorCode::NoError) {
 			throw CalXException(res);
 		}
@@ -141,7 +145,7 @@ namespace CalXLua {
 	}
 
 	int LuaCalXEnvironment::instrumentCloseSession(int id) {
-		ErrorCode res = env.instrumentCloseSession(static_cast<device_id_t>(id));
+		ErrorCode res = env.getDevices().getInstrument(static_cast<device_id_t>(id))->close_session();
 		if (res != ErrorCode::NoError) {
 			throw CalXException(res);
 		}
@@ -149,7 +153,7 @@ namespace CalXLua {
 	}
 
 	int LuaCalXEnvironment::instrumentEnable(int id, bool en) {
-		ErrorCode res = env.instrumentEnable(static_cast<device_id_t>(id), en);
+		ErrorCode res = env.getDevices().getInstrument(static_cast<device_id_t>(id))->enable(en);
 		if (res != ErrorCode::NoError) {
 			throw CalXException(res);
 		}
@@ -157,16 +161,16 @@ namespace CalXLua {
 	}
 
 	bool LuaCalXEnvironment::instrumentIsEnabled(int id) {
-		std::pair<bool, ErrorCode> res =
-		    env.instrumentIsEnabled(static_cast<device_id_t>(id));
-		if (res.second != ErrorCode::NoError) {
-			throw CalXException(res.second);
+		std::optional<bool> res =
+		    env.getDevices().getInstrument(static_cast<device_id_t>(id))->isEnabled();
+		if (!res.has_value()) {
+			throw CalXException(ErrorCode::UnknownResource);
 		}
-		return res.first;
+		return res.value();
 	}
 
 	int LuaCalXEnvironment::instrumentSetRunnable(int id, bool r) {
-		ErrorCode res = env.instrumentSetRunnable(static_cast<device_id_t>(id), r);
+		ErrorCode res = env.getDevices().getInstrument(static_cast<device_id_t>(id))->setRunnable(r);
 		if (res != ErrorCode::NoError) {
 			throw CalXException(res);
 		}
@@ -174,52 +178,52 @@ namespace CalXLua {
 	}
 
 	bool LuaCalXEnvironment::instrumentIsRunnable(int id) {
-		std::pair<bool, ErrorCode> res =
-		    env.instrumentIsRunnable(static_cast<device_id_t>(id));
-		if (res.second != ErrorCode::NoError) {
-			throw CalXException(res.second);
+		std::optional<bool> res =
+		    env.getDevices().getInstrument(static_cast<device_id_t>(id))->isRunnable();
+		if (!res.has_value()) {
+			throw CalXException(ErrorCode::UnknownResource);
 		}
-		return res.first;
+		return res.value();
 	}
 
 	int LuaCalXEnvironment::instrumentGetMode(int id) {
-		std::pair<InstrumentMode, ErrorCode> res =
-		    env.instrumentGetMode(static_cast<device_id_t>(id));
-		if (res.second != ErrorCode::NoError) {
-			throw CalXException(res.second);
+		std::optional<InstrumentMode> res =
+		    env.getDevices().getInstrument(static_cast<device_id_t>(id))->getMode();
+		if (!res.has_value()) {
+			throw CalXException(ErrorCode::UnknownResource);
 		}
-		return static_cast<int>(res.first);
+		return static_cast<int>(res.value());
 	}
 
 	bool LuaCalXEnvironment::instrumentSetMode(int id, int mode) {
-		std::pair<bool, ErrorCode> res = env.instrumentSetMode(
-		    static_cast<device_id_t>(id), static_cast<InstrumentMode>(mode));
-		if (res.second != ErrorCode::NoError) {
-			throw CalXException(res.second);
+		ErrorCode res = env.getDevices().getInstrument(static_cast<device_id_t>(id))->setMode(
+		    static_cast<InstrumentMode>(mode));
+		if (res != ErrorCode::NoError) {
+			throw CalXException(res);
 		}
-		return res.first;
+		return true;
 	}
 
 	bool LuaCalXEnvironment::instrumentIsSessionOpened(int id) {
-		std::pair<bool, ErrorCode> res =
-		    env.instrumentIsSessionOpened(static_cast<device_id_t>(id));
-		if (res.second != ErrorCode::NoError) {
-			throw CalXException(res.second);
+		std::optional<bool> res =
+		    env.getDevices().getInstrument(static_cast<device_id_t>(id))->isSessionOpened();
+		if (!res.has_value()) {
+			throw CalXException(ErrorCode::UnknownResource);
 		}
-		return res.first;
+		return res.value();
 	}
 
 	std::string LuaCalXEnvironment::instrumentGetInfo(int id) {
-		std::pair<std::string, ErrorCode> res =
-		    env.instrumentGetInfo(static_cast<device_id_t>(id));
-		if (res.second != ErrorCode::NoError) {
-			throw CalXException(res.second);
+		std::optional<std::string> res =
+		    env.getDevices().getInstrument(static_cast<device_id_t>(id))->getInfo();
+		if (!res.has_value()) {
+			throw CalXException(ErrorCode::UnknownResource);
 		}
-		return res.first;
+		return res.value();
 	}
 
 	int LuaCalXEnvironment::planeCreate(int m1, int m2, int ins) {
-		return static_cast<int>(env.createCoordPlane(
+		return static_cast<int>(env.getPlanes().createPlane(
 		    static_cast<device_id_t>(m1), static_cast<device_id_t>(m2),
 		    static_cast<device_id_t>(ins)));
 	}
@@ -228,7 +232,7 @@ namespace CalXLua {
 	                                  bool sync, bool relative) {
 		coord_point_t dest = { x, y };
 		ErrorCode errcode =
-		    env.planeMove(static_cast<size_t>(id), dest, speed, sync, relative);
+		    env.getPlanes().getPlane(static_cast<std::size_t>(id))->move(dest, speed, sync, relative);
 		if (errcode != ErrorCode::NoError) {
 			throw CalXException(errcode);
 		}
@@ -240,7 +244,7 @@ namespace CalXLua {
 	                                 bool clockwise, bool relative) {
 		coord_point_t dest = { x, y };
 		coord_point_t cen = { cx, cy };
-		ErrorCode errcode = env.planeArc(static_cast<size_t>(id), dest, cen,
+		ErrorCode errcode = env.getPlanes().getPlane(static_cast<std::size_t>(id))->arc(dest, cen,
 		                                 splitter, speed, clockwise, relative);
 		if (errcode != ErrorCode::NoError) {
 			throw CalXException(errcode);
@@ -249,8 +253,7 @@ namespace CalXLua {
 	}
 
 	int LuaCalXEnvironment::planeCalibrate(int id, int tid) {
-		ErrorCode errcode = env.planeCalibrate(static_cast<size_t>(id),
-		                                       static_cast<TrailerId>(tid));
+		ErrorCode errcode = env.getPlanes().getPlane(static_cast<std::size_t>(id))->calibrate(static_cast<TrailerId>(tid));
 		if (errcode != ErrorCode::NoError) {
 			throw CalXException(errcode);
 		}
@@ -259,7 +262,7 @@ namespace CalXLua {
 
 	int LuaCalXEnvironment::planeMeasure(int id, int tid) {
 		ErrorCode errcode =
-		    env.planeMeasure(static_cast<size_t>(id), static_cast<TrailerId>(tid));
+		    env.getPlanes().getPlane(static_cast<std::size_t>(id))->measure(static_cast<TrailerId>(tid));
 		if (errcode != ErrorCode::NoError) {
 			throw CalXException(errcode);
 		}
@@ -268,7 +271,7 @@ namespace CalXLua {
 
 	int LuaCalXEnvironment::planeFMove(int id, double x, double y, double speed) {
 		coord_point_t dest = { x, y };
-		ErrorCode errcode = env.planeMove(static_cast<size_t>(id), dest, speed);
+		ErrorCode errcode = env.getPlanes().getPlane(static_cast<std::size_t>(id))->move(dest, speed);
 		if (errcode != ErrorCode::NoError) {
 			throw CalXException(errcode);
 		}
@@ -279,7 +282,7 @@ namespace CalXLua {
 	                                       double speed) {
 		coord_point_t dest = { x, y };
 		ErrorCode errcode =
-		    env.planeConfigure(static_cast<size_t>(id), dest, speed);
+		    env.getPlanes().getPlane(static_cast<std::size_t>(id))->configure(dest, speed);
 		if (errcode != ErrorCode::NoError) {
 			throw CalXException(errcode);
 		}
@@ -287,7 +290,7 @@ namespace CalXLua {
 	}
 
 	int LuaCalXEnvironment::planeNewWatcher(int id) {
-		ErrorCode errcode = env.planeNewWatcher(static_cast<size_t>(id));
+		ErrorCode errcode = env.getPlanes().getPlane(static_cast<std::size_t>(id))->newWatcher();
 		if (errcode != ErrorCode::NoError) {
 			throw CalXException(errcode);
 		}
@@ -295,26 +298,26 @@ namespace CalXLua {
 	}
 
 	double LuaCalXEnvironment::planeGetPositionX(int id) {
-		std::pair<coord_point_t, ErrorCode> res =
-		    env.planeGetPosition(static_cast<size_t>(id));
-		if (res.second != ErrorCode::NoError) {
-			throw CalXException(res.second);
+		std::optional<coord_point_t> res =
+		    env.getPlanes().getPlane(static_cast<std::size_t>(id))->getPosition();
+		if (!res.has_value()) {
+			throw CalXException(ErrorCode::UnknownResource);
 		}
-		return res.first.x;
+		return res.value().x;
 	}
 
 	double LuaCalXEnvironment::planeGetPositionY(int id) {
-		std::pair<coord_point_t, ErrorCode> res =
-		    env.planeGetPosition(static_cast<size_t>(id));
-		if (res.second != ErrorCode::NoError) {
-			throw CalXException(res.second);
+		std::optional<coord_point_t> res =
+		    env.getPlanes().getPlane(static_cast<std::size_t>(id))->getPosition();
+		if (!res.has_value()) {
+			throw CalXException(ErrorCode::UnknownResource);
 		}
-		return res.first.y;
+		return res.value().y;
 	}
 
 	double LuaCalXEnvironment::planeGetSizeX(int id) {
 		std::pair<coord_rect_t, ErrorCode> res =
-		    env.planeGetSize(static_cast<size_t>(id));
+		    env.getPlanes().getPlane(static_cast<size_t>(id))->getSize();
 		if (res.second != ErrorCode::NoError) {
 			throw CalXException(res.second);
 		}
@@ -323,7 +326,7 @@ namespace CalXLua {
 
 	double LuaCalXEnvironment::planeGetSizeY(int id) {
 		std::pair<coord_rect_t, ErrorCode> res =
-		    env.planeGetSize(static_cast<size_t>(id));
+		    env.getPlanes().getPlane(static_cast<size_t>(id))->getSize();
 		if (res.second != ErrorCode::NoError) {
 			throw CalXException(res.second);
 		}
@@ -332,7 +335,7 @@ namespace CalXLua {
 
 	double LuaCalXEnvironment::planeGetSizeW(int id) {
 		std::pair<coord_rect_t, ErrorCode> res =
-		    env.planeGetSize(static_cast<size_t>(id));
+		    env.getPlanes().getPlane(static_cast<size_t>(id))->getSize();
 		if (res.second != ErrorCode::NoError) {
 			throw CalXException(res.second);
 		}
@@ -341,7 +344,7 @@ namespace CalXLua {
 
 	double LuaCalXEnvironment::planeGetSizeH(int id) {
 		std::pair<coord_rect_t, ErrorCode> res =
-		    env.planeGetSize(static_cast<size_t>(id));
+		    env.getPlanes().getPlane(static_cast<size_t>(id))->getSize();
 		if (res.second != ErrorCode::NoError) {
 			throw CalXException(res.second);
 		}
@@ -349,16 +352,16 @@ namespace CalXLua {
 	}
 
 	bool LuaCalXEnvironment::planeIsMeasured(int id) {
-		std::pair<bool, ErrorCode> res =
-		    env.planeIsMeasured(static_cast<size_t>(id));
-		if (res.second != ErrorCode::NoError) {
-			throw CalXException(res.second);
+		std::optional<bool> res =
+		    env.getPlanes().getPlane(static_cast<size_t>(id))->isMeasured();
+		if (!res.has_value()) {
+			throw CalXException(ErrorCode::UnknownResource);
 		}
-		return res.first;
+		return res.value();
 	}
 
 	int LuaCalXEnvironment::planePositionAsCenter(int id) {
-		bool res = env.planePositionAsCenter(static_cast<std::size_t>(id));
+		bool res = env.getPlanes().getPlane(static_cast<size_t>(id))->positionAsCenter();
 		if (res) {
 			return static_cast<int>(ErrorCode::NoError);
 		} else {

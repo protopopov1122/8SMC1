@@ -29,52 +29,100 @@
 
 namespace CalXUI {
 
+	class CalXAppScriptMotor : public CalXScriptMotor {
+	 public:
+	 	CalXAppScriptMotor(CalxApp &, device_id_t);
+
+		bool isValid() override;
+		std::optional<Power> getPower() override;
+		ErrorCode enablePower(bool) override;
+		ErrorCode move(motor_coord_t, float) override;
+		ErrorCode relativeMove(motor_coord_t, float) override;
+		ErrorCode stop() override;
+		std::optional<motor_coord_t> getPosition() override;
+		ErrorCode moveToTrailer(TrailerId) override;
+		ErrorCode checkTrailers() override;
+		ErrorCode waitWhileRunning() override;
+	 private:
+	 	CalxApp &app;
+		device_id_t motor_id;
+	};
+
+	class CalXAppScriptInstrument : public CalXScriptInstrument {
+	 public:
+		CalXAppScriptInstrument(CalxApp &, device_id_t);
+
+		bool isValid() override;
+		ErrorCode open_session() override;
+		ErrorCode close_session() override;
+		ErrorCode enable(bool) override;
+		std::optional<bool> isEnabled() override;
+		std::optional<bool> isRunnable() override;
+		ErrorCode setRunnable(bool) override;
+		std::optional<InstrumentMode> getMode() override;
+		ErrorCode setMode(InstrumentMode) override;
+		std::optional<bool> isSessionOpened() override;
+		std::optional<std::string> getInfo() override;
+	 private:
+		CalxApp &app;
+		device_id_t instrument_id;
+	};
+
+	class CalXAppScriptDevices : public CalXScriptDevices {
+	 public:
+	 	CalXAppScriptDevices(CalxApp &);
+
+		device_id_t connectMotor(DeviceConnectionPrms *) override;
+		device_id_t connectInstrument(DeviceConnectionPrms *) override;
+		std::size_t getMotorCount() override;
+		std::size_t getInstrumentCount() override;
+		std::unique_ptr<CalXScriptMotor> getMotor(device_id_t) override;
+		std::unique_ptr<CalXScriptInstrument> getInstrument(device_id_t) override;
+	 private:
+		CalxApp &app;
+	};
+
+	class CalXAppScriptPlane : public CalXScriptPlane {
+	 public:
+		CalXAppScriptPlane(CalxApp &, std::size_t);
+		ErrorCode move(coord_point_t, double, bool, bool) override;
+		ErrorCode arc(coord_point_t, coord_point_t, int,
+		                           double, bool, bool) override;
+		ErrorCode calibrate(TrailerId) override;
+		ErrorCode measure(TrailerId) override;
+		ErrorCode move(coord_point_t, double) override;
+		ErrorCode configure(coord_point_t, double) override;
+		ErrorCode newWatcher() override;
+		std::optional<coord_point_t> getPosition() override;
+		std::pair<coord_rect_t, ErrorCode> getSize() override;
+		std::optional<bool> isMeasured() override;
+		bool positionAsCenter() override;
+	 private:
+		CalxApp &app;
+		std::size_t plane_id;
+	};
+
+	class CalXAppScriptPlanes : public CalXScriptPlanes {
+	 public:
+		CalXAppScriptPlanes(CalxApp &);
+
+		int32_t createPlane(device_id_t, device_id_t, device_id_t) override;
+		std::unique_ptr<CalXScriptPlane> getPlane(std::size_t) override;
+	 private:
+		CalxApp &app;
+	};
+
 	class CalXAppScriptEnvironment : public CalXScriptEnvironment {
 	 public:
 		CalXAppScriptEnvironment(CalxApp &);
 
-		virtual device_id_t connectSerialMotor(uint8_t, uint32_t, uint8_t);
-		virtual device_id_t connectSerialInstrument(uint8_t, uint32_t, uint8_t);
-		virtual size_t getMotorCount();
-		virtual size_t getInstrumentCount();
-		virtual std::pair<Power, ErrorCode> getMotorPower(device_id_t);
-		virtual ErrorCode enableMotorPower(device_id_t, bool);
-		virtual ErrorCode motorMove(device_id_t, motor_coord_t, float);
-		virtual ErrorCode motorRelativeMove(device_id_t, motor_coord_t, float);
-		virtual ErrorCode motorStop(device_id_t);
-		virtual std::pair<motor_coord_t, ErrorCode> getMotorPosition(device_id_t);
-		virtual ErrorCode motorMoveToTrailer(device_id_t, TrailerId);
-		virtual std::pair<bool, ErrorCode> motorCheckTrailers(device_id_t);
-		virtual ErrorCode motorWaitWhileRunning(device_id_t);
-
-		virtual ErrorCode instrumentOpenSession(device_id_t);
-		virtual ErrorCode instrumentCloseSession(device_id_t);
-		virtual ErrorCode instrumentEnable(device_id_t, bool);
-		virtual std::pair<bool, ErrorCode> instrumentIsEnabled(device_id_t);
-		virtual std::pair<bool, ErrorCode> instrumentIsRunnable(device_id_t);
-		virtual ErrorCode instrumentSetRunnable(device_id_t, bool);
-		virtual std::pair<InstrumentMode, ErrorCode> instrumentGetMode(device_id_t);
-		virtual std::pair<bool, ErrorCode> instrumentSetMode(device_id_t,
-		                                                     InstrumentMode);
-		virtual std::pair<bool, ErrorCode> instrumentIsSessionOpened(device_id_t);
-		virtual std::pair<std::string, ErrorCode> instrumentGetInfo(device_id_t);
-
-		virtual int32_t createCoordPlane(device_id_t, device_id_t, device_id_t);
-		virtual ErrorCode planeMove(size_t, coord_point_t, double, bool, bool);
-		virtual ErrorCode planeArc(size_t, coord_point_t, coord_point_t, int,
-		                           double, bool, bool);
-		virtual ErrorCode planeCalibrate(size_t, TrailerId);
-		virtual ErrorCode planeMeasure(size_t, TrailerId);
-		virtual ErrorCode planeMove(size_t, coord_point_t, double);
-		virtual ErrorCode planeConfigure(size_t, coord_point_t, double);
-		virtual ErrorCode planeNewWatcher(size_t);
-		virtual std::pair<coord_point_t, ErrorCode> planeGetPosition(size_t);
-		virtual std::pair<coord_rect_t, ErrorCode> planeGetSize(size_t);
-		virtual std::pair<bool, ErrorCode> planeIsMeasured(size_t);
-		virtual bool planePositionAsCenter(std::size_t);
+		CalXScriptDevices &getDevices() override;
+		CalXScriptPlanes &getPlanes() override;
 
 	 private:
 		CalxApp &app;
+		CalXAppScriptDevices devices;
+		CalXAppScriptPlanes planes;
 	};
 
 	class CalXScriptHookThread : public wxThread {
