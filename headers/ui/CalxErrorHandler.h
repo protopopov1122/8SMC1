@@ -30,6 +30,7 @@ namespace CalXUI {
 		CalxErrorHandler(SystemManager *);
 		void handle(ErrorCode);
 		void display(ErrorCode);
+                void alert(std::string, std::string, long);
 
 	 private:
 		SystemManager *sysman;

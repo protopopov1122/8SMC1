@@ -20,6 +20,7 @@
 
 #include "ui/script/CalxScriptHandle.h"
 #include <wx/splitter.h>
+#include <iostream>
 
 namespace CalXUI {
 

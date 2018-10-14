@@ -30,6 +30,8 @@
 
 namespace CalXUI {
 
+	wxDECLARE_EVENT(wxEVT_ENABLE_EVENT, wxThreadEvent);
+
 	class CalxScriptPanel : public CalxPanelPane, CalxActionReceiver {
 	 public:
 		CalxScriptPanel(wxWindow *, wxWindowID, CalXScriptEnvironment &,
@@ -48,6 +50,7 @@ namespace CalXUI {
 		void OnOpenShellClick(wxCommandEvent &);
 		void OnRemoveScriptClick(wxCommandEvent &);
 		void OnExit(wxCloseEvent &);
+		void OnEnableEvent(wxThreadEvent &);
 		void addHandle(std::string, CalxScriptHandle *);
 
 		CalXScriptEnvironment &env;

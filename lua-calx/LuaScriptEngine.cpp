@@ -24,6 +24,7 @@
 #include <lualib.h>
 #include "selene.h"
 #include "lua-calx/LuaScriptEngine.h"
+#include <iostream>
 
 namespace CalXLua {
 
@@ -62,6 +63,9 @@ namespace CalXLua {
 			std::cout << "Caught CalX error " << static_cast<int>(ex.getErrorCode())
 			          << std::endl;
 			return false;
+		} catch (...) {
+			std::cout << "Caught error" << std::endl;
+			return false;
 		}
 	}
 
@@ -72,6 +76,9 @@ namespace CalXLua {
 		} catch (CalXException &ex) {
 			std::cout << "Caught CalX error " << static_cast<int>(ex.getErrorCode())
 			          << std::endl;
+			return false;
+		} catch (...) {
+			std::cout << "Caught error" << std::endl;
 			return false;
 		}
 	}

@@ -36,11 +36,13 @@
 #include <cmath>
 #include <fstream>
 #include <sstream>
+#include <tuple>
 #include <string>
 
 namespace CalXUI {
 
 	wxDEFINE_EVENT(wxEVT_APP_ERROR, wxThreadEvent);
+	wxDEFINE_EVENT(wxEVT_APP_ALERT, wxThreadEvent);
 
 	// Utility startup methods
 	// System startup is quite complex action
@@ -123,6 +125,7 @@ namespace CalXUI {
 			this->debug_console = nullptr;
 		}
 		this->Bind(wxEVT_APP_ERROR, &CalxApp::OnErrorEvent, this);
+		this->Bind(wxEVT_APP_ALERT, &CalxApp::OnAlertEvent, this);
 	}
 
 	void CalxApp::initLogging(ConfigManager &conf){
@@ -387,6 +390,11 @@ namespace CalXUI {
 
 	void CalxApp::OnErrorEvent(wxThreadEvent &evt) {
 		this->error_handler->display(evt.GetPayload<ErrorCode>());
+	}
+
+	void CalxApp::OnAlertEvent(wxThreadEvent &evt) {
+		 auto params = evt.GetPayload<std::tuple<std::string, std::string, long>>();
+		 wxMessageBox(std::get<0>(params), std::get<0>(params), std::get<2>(params));
 	}
 }  // namespace CalXUI
 

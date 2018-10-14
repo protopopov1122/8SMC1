@@ -54,4 +54,11 @@ namespace CalXUI {
 			wxMessageBox(text, __("Error occured"), wxICON_ERROR);
 		}
 	}
+
+	void CalxErrorHandler::alert(std::string text, std::string title, long style) {
+		auto params = std::make_tuple(text, title, style);
+		wxThreadEvent evt(wxEVT_APP_ALERT);
+		evt.SetPayload(params);
+		wxPostEvent(&wxGetApp(), evt);
+	}
 }  // namespace CalXUI

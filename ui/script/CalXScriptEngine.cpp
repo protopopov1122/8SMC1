@@ -22,6 +22,7 @@
 #include "ui/script/CalXScriptEngine.h"
 #include "ui/dev/CalxDeviceConstructor.h"
 #include "ui/coord/CalxCoordActions.h"
+#include "ui/CalxErrorHandler.h"
 
 namespace CalXUI {
 
@@ -30,7 +31,7 @@ namespace CalXUI {
 
 	wxThread::ExitCode CalXScriptHookThread::Entry() {
 		std::unique_ptr<CalXScript> scr = wxGetApp().loadScript(this->path);
-		scr->call("init");
+		scr->call(this->hook);
 		return nullptr;
 	}
 
@@ -51,7 +52,7 @@ namespace CalXUI {
 		                                             .getDeviceController(this->motor_id)
 		                                             .lock();
 		if (motor == nullptr) {
-			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), this->motor_id),
+			this->app.getErrorHandler()->alert(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), this->motor_id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
 			return std::optional<Power>();
 		} else {
@@ -63,7 +64,7 @@ namespace CalXUI {
 		CalxMotorHandle *motor =
 		    this->app.getMainFrame()->getDevicePool()->getMotor(this->motor_id);
 		if (motor == nullptr) {
-			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), this->motor_id),
+			this->app.getErrorHandler()->alert(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), this->motor_id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
@@ -76,7 +77,7 @@ namespace CalXUI {
 		CalxMotorHandle *motor =
 		    this->app.getMainFrame()->getDevicePool()->getMotor(this->motor_id);
 		if (motor == nullptr) {
-			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), this->motor_id),
+			this->app.getErrorHandler()->alert(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), this->motor_id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
@@ -97,7 +98,7 @@ namespace CalXUI {
 		CalxMotorHandle *motor =
 		    this->app.getMainFrame()->getDevicePool()->getMotor(this->motor_id);
 		if (motor == nullptr) {
-			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), this->motor_id),
+			this->app.getErrorHandler()->alert(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), this->motor_id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
@@ -118,7 +119,7 @@ namespace CalXUI {
 		CalxMotorHandle *motor =
 		    this->app.getMainFrame()->getDevicePool()->getMotor(this->motor_id);
 		if (motor == nullptr) {
-			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), this->motor_id),
+			this->app.getErrorHandler()->alert(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), this->motor_id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
@@ -133,7 +134,7 @@ namespace CalXUI {
 		                                             .getDeviceController(this->motor_id)
 		                                             .lock();
 		if (motor == nullptr) {
-			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), this->motor_id),
+			this->app.getErrorHandler()->alert(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), this->motor_id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
 			return std::optional<motor_coord_t>();
 		} else {
@@ -145,7 +146,7 @@ namespace CalXUI {
 		CalxMotorHandle *motor =
 		    this->app.getMainFrame()->getDevicePool()->getMotor(this->motor_id);
 		if (motor == nullptr) {
-			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), this->motor_id),
+			this->app.getErrorHandler()->alert(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), this->motor_id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
@@ -167,7 +168,7 @@ namespace CalXUI {
 		                                             .getDeviceController(this->motor_id)
 		                                             .lock();
 		if (motor == nullptr) {
-			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), this->motor_id),
+			this->app.getErrorHandler()->alert(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), this->motor_id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
@@ -181,7 +182,7 @@ namespace CalXUI {
 		                                             .getDeviceController(this->motor_id)
 		                                             .lock();
 		if (motor == nullptr) {
-			wxMessageBox(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), this->motor_id),
+			this->app.getErrorHandler()->alert(FORMAT(__("Motor %" DEVICE_ID_FMT " not found!"), this->motor_id),
 			             __("Script: Unknown motor"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
@@ -208,7 +209,7 @@ namespace CalXUI {
 				.getDeviceController(this->instrument_id)
 				.lock();
 		if (instr == nullptr) {
-			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
+			this->app.getErrorHandler()->alert(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
 							__("Script: Unknown instrument"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
@@ -223,7 +224,7 @@ namespace CalXUI {
 		        .getDeviceController(this->instrument_id)
 		        .lock();
 		if (instr == nullptr) {
-			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
+			this->app.getErrorHandler()->alert(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
 			             __("Script: Unknown instrument"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
@@ -238,7 +239,7 @@ namespace CalXUI {
 		        .getDeviceController(this->instrument_id)
 		        .lock();
 		if (instr == nullptr) {
-			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
+			this->app.getErrorHandler()->alert(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
 			             __("Script: Unknown instrument"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
@@ -253,7 +254,7 @@ namespace CalXUI {
 		        .getDeviceController(this->instrument_id)
 		        .lock();
 		if (instr == nullptr) {
-			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
+			this->app.getErrorHandler()->alert(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
 			             __("Script: Unknown instrument"), wxICON_WARNING);
 			return std::optional<bool>();
 		} else {
@@ -268,7 +269,7 @@ namespace CalXUI {
 		        .getDeviceController(this->instrument_id)
 		        .lock();
 		if (instr == nullptr) {
-			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
+			this->app.getErrorHandler()->alert(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
 			             __("Script: Unknown instrument"), wxICON_WARNING);
 			return std::optional<bool>();
 		} else {
@@ -283,7 +284,7 @@ namespace CalXUI {
 		        .getDeviceController(this->instrument_id)
 		        .lock();
 		if (instr == nullptr) {
-			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
+			this->app.getErrorHandler()->alert(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
 			             __("Script: Unknown instrument"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
@@ -299,7 +300,7 @@ namespace CalXUI {
 		        .getDeviceController(this->instrument_id)
 		        .lock();
 		if (instr == nullptr) {
-			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
+			this->app.getErrorHandler()->alert(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
 			             __("Script: Unknown instrument"), wxICON_WARNING);
 			return std::optional<InstrumentMode>();
 		} else {
@@ -314,7 +315,7 @@ namespace CalXUI {
 		        .getDeviceController(this->instrument_id)
 		        .lock();
 		if (instr == nullptr) {
-			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
+			this->app.getErrorHandler()->alert(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
 			             __("Script: Unknown instrument"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
@@ -329,7 +330,7 @@ namespace CalXUI {
 		        .getDeviceController(this->instrument_id)
 		        .lock();
 		if (instr == nullptr) {
-			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
+			this->app.getErrorHandler()->alert(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
 			             __("Script: Unknown instrument"), wxICON_WARNING);
 			return std::optional<bool>();
 		} else {
@@ -343,7 +344,7 @@ namespace CalXUI {
 		        .getDeviceController(this->instrument_id)
 		        .lock();
 		if (instr == nullptr) {
-			wxMessageBox(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
+			this->app.getErrorHandler()->alert(FORMAT(__("Instrument %" DEVICE_ID_FMT " not found!"), this->instrument_id),
 			             __("Script: Unknown instrument"), wxICON_WARNING);
 			return std::optional<std::string>();
 		} else {
@@ -359,7 +360,7 @@ namespace CalXUI {
 		std::shared_ptr<MotorController> ctrl =
 		    sysman->getMotorControllerSet().connectDevice(prms).lock();
 		if (ctrl == nullptr) {
-			wxMessageBox(__("Motor can't be connected"),
+			this->app.getErrorHandler()->alert(__("Motor can't be connected"),
 			             __("Script: Connection error"), wxICON_WARNING);
 			return -1;
 		} else {
@@ -379,7 +380,7 @@ namespace CalXUI {
 		std::shared_ptr<InstrumentController> ctrl =
 		    sysman->getInstrumentControllerSet().connectDevice(prms).lock();
 		if (ctrl == nullptr) {
-			wxMessageBox(__("Instrument can't be connected"),
+			this->app.getErrorHandler()->alert(__("Instrument can't be connected"),
 			             __("Script: Connection error"), wxICON_WARNING);
 			return -1;
 		} else {

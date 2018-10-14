@@ -85,7 +85,8 @@ namespace CalXUI {
 		while (work) {
 			while (!this->queue.empty() && work) {
 				this->mutex->Lock();
-				CalxActionHandle &handle = this->queue.at(0);
+				CalxActionHandle handle = std::move(this->queue.at(0));
+				this->queue.erase(this->queue.begin());
 				CalxAction *action = handle.action.get();
 				this->current = action;
 				this->mutex->Unlock();
@@ -94,7 +95,6 @@ namespace CalXUI {
 				if (handle.status != nullptr) {
 					*handle.status = true;
 				}
-				this->queue.erase(this->queue.begin());
 				wxQueueEvent(evtHandle, new wxThreadEvent(wxEVT_COMMAND_QUEUE_UPDATE));
 			}
 			while (this->queue.empty() && work) {

@@ -25,6 +25,8 @@
 
 namespace CalXUI {
 
+	wxDEFINE_EVENT(wxEVT_ENABLE_EVENT, wxThreadEvent);
+
 	class CalxScriptActionWrapper : public CalxAction {
 	 public:
 		CalxScriptActionWrapper(CalxScriptPanel *panel,
@@ -89,6 +91,7 @@ namespace CalXUI {
 		this->queue->Run();
 
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxScriptPanel::OnExit, this);
+		this->Bind(wxEVT_ENABLE_EVENT, &CalxScriptPanel::OnEnableEvent, this);
 	}
 
 	bool CalxScriptPanel::isBusy() {
@@ -111,7 +114,9 @@ namespace CalXUI {
 	}
 
 	void CalxScriptPanel::setEnabled(bool en) {
-		this->Enable(en);
+		wxThreadEvent evt(wxEVT_ENABLE_EVENT);
+		evt.SetPayload(en);
+		wxPostEvent(this, evt);
 	}
 
 	void CalxScriptPanel::sendAction(std::unique_ptr<CalxAction> action) {
@@ -149,7 +154,7 @@ namespace CalXUI {
 	void CalxScriptPanel::OnOpenShellClick(wxCommandEvent &evt) {
 		std::unique_ptr<CalXScript> script =
 		    this->scriptFactory.createShell(this->env);
-		this->addHandle(FORMAT(__("Script shell #%d"), this->scripts.size()),
+		this->addHandle(FORMAT(__("Script shell #%s"), std::to_string(this->scripts.size())),
 		                new CalxScriptShellHandle(this->scriptPanel, wxID_ANY, this,
 		                                          std::move(script)));
 	}
@@ -172,6 +177,10 @@ namespace CalXUI {
 
 	void CalxScriptPanel::OnExit(wxCloseEvent &evt) {
 		Destroy();
+	}
+
+	void CalxScriptPanel::OnEnableEvent(wxThreadEvent &evt) {
+		this->Enable(evt.GetPayload<bool>());
 	}
 
 	void CalxScriptPanel::addHandle(std::string title, CalxScriptHandle *handle) {
