@@ -23,6 +23,7 @@
 
 #include "ctrl-lib/logger.h"
 #include "platform.h"
+#include "ctrl-lib/ConfigKeys.h"
 #include <cinttypes>
 #include <iosfwd>
 

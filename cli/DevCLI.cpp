@@ -569,7 +569,7 @@ namespace CalX {
 			}
 			coordController->measure(coordTrailer == 1 ? TrailerId::Trailer1
 			                                           : TrailerId::Trailer2);
-		} else if (com.compare("graph") == 0) {
+		} else if (com.compare(CalxConfiguration::Graph) == 0) {
 			if (args.size() < 12) {
 				std::cout << "Provide args" << std::endl;
 				return;
@@ -849,7 +849,7 @@ namespace CalX {
 			std::ifstream is(path, std::ifstream::in);
 			tasks.addTask(std::make_unique<GCodeCoordTask>(is, trans));
 			is.close();
-		} else if (args.at(0).compare("graph") == 0) {
+		} else if (args.at(0).compare(CalxConfiguration::Graph) == 0) {
 			if (args.size() < 12) {
 				std::cout << "Provide args" << std::endl;
 				return;

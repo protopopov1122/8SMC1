@@ -85,7 +85,7 @@ namespace CalXUI {
 
 		ConfigEntry *colourEntry =
 		    wxGetApp().getSystemManager()->getConfiguration().getEntry(
-		        "watcher_color");
+		        CalxConfiguration::Watcher);
 		this->pointer_colour = wxColour(colourEntry->getInt("pointer_R", 255),
 		                                colourEntry->getInt("pointer_G", 0),
 		                                colourEntry->getInt("pointer_B", 0));
@@ -110,7 +110,7 @@ namespace CalXUI {
 		int_conf_t interval = wxGetApp()
 		                          .getSystemManager()
 		                          ->getConfiguration()
-		                          .getEntry("ui")
+		                          .getEntry(CalxConfiguration::UserInterfaces)
 		                          ->getInt("watcher_append_interval", 500);
 		if (interval != -1) {
 			this->timer = new CalxCoordPlaneWatcherTimer(this, this->handle);
@@ -122,7 +122,7 @@ namespace CalXUI {
 		interval = wxGetApp()
 		               .getSystemManager()
 		               ->getConfiguration()
-		               .getEntry("ui")
+		               .getEntry(CalxConfiguration::UserInterfaces)
 		               ->getInt("watcher_render_interval", 50);
 		if (interval != -1) {
 			this->repaint_timer = new CalxCoordPlaneWatcherRepaintTimer(this);

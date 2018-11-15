@@ -50,7 +50,7 @@ namespace CalX {
 		}
 		bool relative_pos = false;
 		const int_conf_t CHORD_COUNT =
-		    config.getEntry("core")->getInt("chord_count", 100);
+		    config.getEntry(CalxConfiguration::Core)->getInt("chord_count", 100);
 		ErrorCode errcode = ErrorCode::NoError;
 		while (input.hasNext() && state.work && errcode == ErrorCode::NoError) {
 			motor_point_t rel_offset = { 0, 0 };

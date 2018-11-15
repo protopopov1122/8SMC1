@@ -86,18 +86,18 @@ namespace CalX {
 
 		COMMTIMEOUTS CommTimeOuts;
 		CommTimeOuts.ReadIntervalTimeout =
-		    this->config->getEntry("connection")->getInt("ReadIntervalTimeout", 1);
+		    this->config->getEntry(CalxConfiguration::Connection)->getInt("ReadIntervalTimeout", 1);
 		CommTimeOuts.ReadTotalTimeoutMultiplier =
-		    this->config->getEntry("connection")
+		    this->config->getEntry(CalxConfiguration::Connection)
 		        ->getInt("ReadTotalTimeoutMultiplier", 1);
 		CommTimeOuts.ReadTotalTimeoutConstant =
-		    this->config->getEntry("connection")
+		    this->config->getEntry(CalxConfiguration::Connection)
 		        ->getInt("ReadTotalTimeoutConstant", 0xFFFFFFFF);
 		CommTimeOuts.WriteTotalTimeoutMultiplier =
-		    this->config->getEntry("connection")
+		    this->config->getEntry(CalxConfiguration::Connection)
 		        ->getInt("WriteTotalTimeoutMultiplier", 1);
 		CommTimeOuts.WriteTotalTimeoutConstant =
-		    this->config->getEntry("connection")
+		    this->config->getEntry(CalxConfiguration::Connection)
 		        ->getInt("WriteTotalTimeoutConstant", 250);
 
 		if (!SetCommTimeouts(handle, &CommTimeOuts)) {

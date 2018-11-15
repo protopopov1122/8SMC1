@@ -36,7 +36,7 @@ namespace CalXUI {
 
 		ConfigEntry *confEntry =
 		    wxGetApp().getSystemManager()->getConfiguration().getEntry(
-		        "relative_pos");
+		        CalxConfiguration::RelativePosition);
 		this->xPos = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
 		    wxSP_ARROW_KEYS, 0, 1, confEntry->getReal("x", 0.5),
@@ -51,12 +51,12 @@ namespace CalXUI {
 		                         wxGetApp()
 		                             .getSystemManager()
 		                             ->getConfiguration()
-		                             .getEntry("units")
+		                             .getEntry(CalxConfiguration::Units)
 		                             ->getReal("unit_speed", 4000.0),
 		                         wxGetApp()
 		                             .getSystemManager()
 		                             ->getConfiguration()
-		                             .getEntry("units")
+		                             .getEntry(CalxConfiguration::Units)
 		                             ->getReal("unit_speed", 4000.0),
 		                         wxGetApp().getUnitProcessor().getSpeedPrecision());
 		wxButton *moveButton = new wxButton(this, wxID_ANY, __("Move"));

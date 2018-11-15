@@ -31,13 +31,13 @@ namespace CalXUI {
 	}
 
 	std::string CalxUnitProcessor::getUnits() {
-		return this->config.getEntry("units")->getString("unit_suffix", "");
+		return this->config.getEntry(CalxConfiguration::Units)->getString("unit_suffix", "");
 	}
 
 	std::string CalxUnitProcessor::getSpeedUnits() {
 		std::string units = this->getUnits();
 		std::string timing =
-		    this->config.getEntry("units")->getString("timing", "");
+		    this->config.getEntry(CalxConfiguration::Units)->getString("timing", "");
 		return units.empty() ? "" : units + timing;
 	}
 
@@ -50,17 +50,17 @@ namespace CalXUI {
 	}
 
 	double CalxUnitProcessor::getUnitScale() {
-		return this->config.getEntry("units")->getReal("unit_scale", 1.0f);
+		return this->config.getEntry(CalxConfiguration::Units)->getReal("unit_scale", 1.0f);
 	}
 
 	double CalxUnitProcessor::getSpeedScale() {
-		return this->config.getEntry("units")->getReal("speed_scale", 1.0f);
+		return this->config.getEntry(CalxConfiguration::Units)->getReal("speed_scale", 1.0f);
 	}
 
 	coord_point_t CalxUnitProcessor::getUnitOffset() {
 		coord_point_t offset = {
-			this->config.getEntry("units")->getReal("unit_offset_x", 0.0f),
-			this->config.getEntry("units")->getReal("unit_offset_y", 0.0f)
+			this->config.getEntry(CalxConfiguration::Units)->getReal("unit_offset_x", 0.0f),
+			this->config.getEntry(CalxConfiguration::Units)->getReal("unit_offset_y", 0.0f)
 		};
 		return offset;
 	}

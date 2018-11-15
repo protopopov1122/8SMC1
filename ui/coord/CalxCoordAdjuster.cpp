@@ -96,7 +96,7 @@ namespace CalXUI {
 		SetMinSize(sz);
 		ConfigEntry *colourEntry =
 		    wxGetApp().getSystemManager()->getConfiguration().getEntry(
-		        "watcher_color");
+		        CalxConfiguration::Watcher);
 		this->pointer_colour = wxColour(colourEntry->getInt("pointer_R", 255),
 		                                colourEntry->getInt("pointer_G", 0),
 		                                colourEntry->getInt("pointer_B", 0));
@@ -220,7 +220,7 @@ namespace CalXUI {
 		    wxGetApp()
 		        .getSystemManager()
 		        ->getConfiguration()
-		        .getEntry("ui")
+		        .getEntry(CalxConfiguration::UserInterfaces)
 		        ->getReal("adjust_step", 2.5),
 		    wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->speedSpin = new wxSpinCtrlDouble(
@@ -229,12 +229,12 @@ namespace CalXUI {
 		    wxGetApp()
 		        .getSystemManager()
 		        ->getConfiguration()
-		        .getEntry("units")
+		        .getEntry(CalxConfiguration::Units)
 		        ->getReal("unit_speed", 4000.0),
 		    wxGetApp()
 		        .getSystemManager()
 		        ->getConfiguration()
-		        .getEntry("units")
+		        .getEntry(CalxConfiguration::Units)
 		        ->getReal("unit_speed", 4000.0),
 		    wxGetApp().getUnitProcessor().getSpeedPrecision());
 		prmsSizer->Add(new wxStaticText(prmsPanel, wxID_ANY,
@@ -286,7 +286,7 @@ namespace CalXUI {
 		int_conf_t interval = wxGetApp()
 		                          .getSystemManager()
 		                          ->getConfiguration()
-		                          .getEntry("ui")
+		                          .getEntry(CalxConfiguration::UserInterfaces)
 		                          ->getInt("watcher_render_interval", 50);
 		if (interval != -1) {
 			this->timer = new CalxCoordAdjustRepaintTimer(this);

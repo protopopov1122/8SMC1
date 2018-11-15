@@ -50,12 +50,12 @@ namespace CalXUI {
 		                         wxGetApp()
 		                             .getSystemManager()
 		                             ->getConfiguration()
-		                             .getEntry("units")
+		                             .getEntry(CalxConfiguration::Units)
 		                             ->getReal("unit_speed", 4000.0),
 		                         wxGetApp()
 		                             .getSystemManager()
 		                             ->getConfiguration()
-		                             .getEntry("units")
+		                             .getEntry(CalxConfiguration::Units)
 		                             ->getReal("unit_speed", 4000.0),
 		                         wxGetApp().getUnitProcessor().getSpeedPrecision());
 		this->relative = new wxCheckBox(this, wxID_ANY, __("Relative"));

@@ -51,7 +51,7 @@ namespace CalX {
 		    this->config, motor1, motor2, instrument);
 		std::shared_ptr<CoordHandle> handle =
 		    std::make_shared<CoordHandle>(this->planes.size(), plane);
-		if (this->config.getEntry("core")->getBool("auto_power_motors", false)) {
+		if (this->config.getEntry(CalxConfiguration::Core)->getBool("auto_power_motors", false)) {
 			plane->getXAxis()->enablePower(true);
 			plane->getYAxis()->enablePower(true);
 		}

@@ -75,7 +75,7 @@ namespace CalXUI {
 	DeviceManager_getter CalxApp::loadDeviceDrivers(ConfigManager &conf) {
 		// Load specified dynamic library
 		std::string lib_addr =
-		    conf.getEntry("ui")->getString("devicelib", STRINGIZE(DEVICES_LIB));
+		    conf.getEntry(CalxConfiguration::UserInterfaces)->getString("devicelib", STRINGIZE(DEVICES_LIB));
 
 		this->dynlib =
 		    new wxDynamicLibrary(wxDynamicLibrary::CanonicalizeName(lib_addr),
@@ -104,7 +104,7 @@ namespace CalXUI {
 	}
 
 	void CalxApp::initDebugConsole(ConfigManager &conf) {
-		this->debug_mode = conf.getEntry("ui")->getBool("debug", false);
+		this->debug_mode = conf.getEntry(CalxConfiguration::UserInterfaces)->getBool("debug", false);
 		if (this->debug_mode) {
 #ifdef OS_WIN
 			AllocConsole();
@@ -118,7 +118,7 @@ namespace CalXUI {
 
 	void CalxApp::startDebugConsole(ConfigManager &conf) {
 		if (this->debug_mode &&
-		    sysman->getConfiguration().getEntry("ui")->getBool("console", false)) {
+		    sysman->getConfiguration().getEntry(CalxConfiguration::UserInterfaces)->getBool("console", false)) {
 			this->debug_console = std::make_unique<CalxDebugConsole>(this->sysman.get());
 			this->debug_console->Run();
 		} else {
@@ -132,7 +132,7 @@ namespace CalXUI {
 #define SETUP_LOG(name, id, dest)                                              \
 	{                                                                            \
 		this->name = nullptr;                                                      \
-		std::string logger = conf.getEntry("log")->getString(id, "");              \
+		std::string logger = conf.getEntry(CalxConfiguration::Logging)->getString(id, "");              \
 		if (logger.compare("stdout") == 0) {                                       \
 			SET_LOGGER(dest, &std::cout);                                            \
 		} else if (logger.length() > 0) {                                          \
@@ -151,7 +151,7 @@ namespace CalXUI {
 	}
 
 	std::unique_ptr<ExtEngine> CalxApp::loadExtensionEngine(ConfigManager &conf) {
-		std::string ext_addr = conf.getEntry("ext")->getString("engine", "");
+		std::string ext_addr = conf.getEntry(CalxConfiguration::Extensions)->getString("engine", "");
 		std::unique_ptr<ExtEngine> ext = nullptr;
 		if (!ext_addr.empty()) {
 			this->extLib =
@@ -194,7 +194,7 @@ namespace CalXUI {
 
 	void CalxApp::loadScriptEngine(ConfigManager &conf) {
 		std::string script_eng_addr =
-		    conf.getEntry("script")->getString("engine", "");
+		    conf.getEntry(CalxConfiguration::Scripting)->getString("engine", "");
 		this->scriptFactory = nullptr;
 		this->script_env = nullptr;
 		this->scriptLib = nullptr;
@@ -226,12 +226,12 @@ namespace CalXUI {
 
 	void CalxApp::startInitScript(ConfigManager &conf) {
 		if (this->scriptFactory != nullptr &&
-		    this->sysman->getConfiguration().getEntry("script")->getBool("autoinit",
+		    this->sysman->getConfiguration().getEntry(CalxConfiguration::Scripting)->getBool("autoinit",
 		                                                                 false)) {
 			CalXScriptHookThread *th = new CalXScriptHookThread(
-			    this->sysman->getConfiguration().getEntry("script")->getString(
+			    this->sysman->getConfiguration().getEntry(CalxConfiguration::Scripting)->getString(
 			        "main", "scripts/main.lua"),
-			    this->sysman->getConfiguration().getEntry("script")->getString(
+			    this->sysman->getConfiguration().getEntry(CalxConfiguration::Scripting)->getString(
 			        "init_entry", "init"));
 			th->Run();
 		}

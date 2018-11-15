@@ -30,7 +30,7 @@ namespace CalXUI {
 
 		ConfigEntry *confEntry =
 		    wxGetApp().getSystemManager()->getConfiguration().getEntry(
-		        "linear_task");
+		        CalxConfiguration::LinearTask);
 		coord_rect_t rect = { confEntry->getReal("x_start", 0.0),
 			                    confEntry->getReal("y_start", 0.0),
 			                    confEntry->getReal("width", 1000.0),

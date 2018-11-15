@@ -87,8 +87,8 @@ namespace CalX {
 	      instrumentControllerSet(*this->conf, *this->devman, &this->eventLogger),
 	      planeSet(*this->conf, &this->eventLogger) {
 		
-		if (this->conf->getEntry("core")->has("settings")) {
-			this->settings = std::make_unique<SettingsFileRepository>(this->conf->getEntry("core")->getString("settings"));
+		if (this->conf->getEntry(CalxConfiguration::Core)->has("settings")) {
+			this->settings = std::make_unique<SettingsFileRepository>(this->conf->getEntry(CalxConfiguration::Core)->getString("settings"));
 		}
 		LOG(SYSMAN_TAG,
 		    "System startup. Found " +

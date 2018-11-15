@@ -58,12 +58,12 @@ namespace CalXUI {
 		                         wxGetApp()
 		                             .getSystemManager()
 		                             ->getConfiguration()
-		                             .getEntry("units")
+		                             .getEntry(CalxConfiguration::Units)
 		                             ->getReal("unit_speed", 4000.0),
 		                         wxGetApp()
 		                             .getSystemManager()
 		                             ->getConfiguration()
-		                             .getEntry("units")
+		                             .getEntry(CalxConfiguration::Units)
 		                             ->getReal("unit_speed", 4000.0),
 		                         wxGetApp().getUnitProcessor().getSpeedPrecision());
 		this->splitter =

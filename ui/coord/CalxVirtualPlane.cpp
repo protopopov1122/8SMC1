@@ -65,7 +65,7 @@ namespace CalXUI {
 		SetMinSize(min);
 		ConfigEntry *colourEntry =
 		    wxGetApp().getSystemManager()->getConfiguration().getEntry(
-		        "watcher_color");
+		        CalxConfiguration::Watcher);
 		this->pointer_colour = wxColour(colourEntry->getInt("pointer_R", 255),
 		                                colourEntry->getInt("pointer_G", 0),
 		                                colourEntry->getInt("pointer_B", 0));

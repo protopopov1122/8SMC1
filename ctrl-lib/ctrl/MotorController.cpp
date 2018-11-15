@@ -94,11 +94,11 @@ namespace CalX {
 		}
 		this->work = true;
 		int_conf_t roll_step =
-		    config.getEntry("core")->getInt("roll_step", ROLL_STEP);
+		    config.getEntry(CalxConfiguration::Core)->getInt("roll_step", ROLL_STEP);
 		int_conf_t roll_speed =
-		    config.getEntry("core")->getInt("roll_speed", ROLL_SPEED);
+		    config.getEntry(CalxConfiguration::Core)->getInt("roll_speed", ROLL_SPEED);
 		int_conf_t comeback =
-		    config.getEntry("core")->getInt("trailer_comeback", TRAILER_COMEBACK);
+		    config.getEntry(CalxConfiguration::Core)->getInt("trailer_comeback", TRAILER_COMEBACK);
 
 		int_conf_t dest = (tr == TrailerId::Trailer1 ? -roll_step : roll_step);
 		this->destination =
