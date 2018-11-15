@@ -24,6 +24,7 @@
 #include <memory>
 #include "ctrl-lib/ExtEngine.h"
 #include "ctrl-lib/conf/ConfigManager.h"
+#include "ctrl-lib/conf/Settings.h"
 #include "ctrl-lib/device/DeviceManager.h"
 #include "ctrl-lib/ctrl/DeviceControllerSet.h"
 #include "ctrl-lib/graph/MathEngine.h"
@@ -47,6 +48,7 @@ namespace CalX {
 		virtual ~SystemManager() = default;
 		virtual DeviceManager &getDeviceManager() const = 0;
 		virtual ConfigManager &getConfiguration() const = 0;
+		virtual SettingsRepository *getSettingsRepository() const = 0;
 		virtual MathEngine &getMathEngine() = 0;
 		virtual ExtEngine *getExtensionEngine() const = 0;
 		virtual CoordPlaneSet &getCoordPlaneSet() = 0;
@@ -76,6 +78,7 @@ namespace CalX {
 		virtual ~DefaultSystemManager();
 		DeviceManager &getDeviceManager() const override;
 		ConfigManager &getConfiguration() const override;
+		SettingsRepository *getSettingsRepository() const override;
 		MathEngine &getMathEngine() override;
 		ExtEngine *getExtensionEngine() const override;
 		CoordPlaneSet &getCoordPlaneSet() override;
@@ -85,6 +88,7 @@ namespace CalX {
 	 private:
 		const std::unique_ptr<DeviceManager> devman;
 		const std::unique_ptr<ConfigManager> conf;
+		std::unique_ptr<SettingsRepository> settings;
 		DefaultMathEngine engine;
 		const std::unique_ptr<ExtEngine> ext_engine;
 		SystemManagerEventLogger eventLogger;

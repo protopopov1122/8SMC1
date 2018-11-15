@@ -80,11 +80,16 @@ namespace CalX {
 	    std::unique_ptr<ConfigManager> conf, std::unique_ptr<ExtEngine> ext_eng)
 	    : devman(std::move(devman)),
 	      conf(std::move(conf)),
+		  settings(nullptr),
 	      ext_engine(std::move(ext_eng)),
 	      eventLogger(*this),
 	      motorControllerSet(*this->conf, *this->devman, &this->eventLogger),
 	      instrumentControllerSet(*this->conf, *this->devman, &this->eventLogger),
 	      planeSet(*this->conf, &this->eventLogger) {
+		
+		if (this->conf->getEntry("core")->has("settings")) {
+			this->settings = std::make_unique<SettingsFileRepository>(this->conf->getEntry("core")->getString("settings"));
+		}
 		LOG(SYSMAN_TAG,
 		    "System startup. Found " +
 		        std::to_string(this->motorControllerSet.getDeviceCount()) +
@@ -112,6 +117,10 @@ namespace CalX {
 
 	ConfigManager &DefaultSystemManager::getConfiguration() const {
 		return *this->conf;
+	}
+
+	SettingsRepository *DefaultSystemManager::getSettingsRepository() const {
+		return this->settings.get();
 	}
 
 	ExtEngine *DefaultSystemManager::getExtensionEngine() const {

@@ -73,6 +73,7 @@ namespace CalX {
 		operator bool() const {
 			return this->getBool();
 		}
+	
 		operator std::string () const {
 			return this->toString();
 		}
