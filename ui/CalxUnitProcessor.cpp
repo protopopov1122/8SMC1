@@ -31,13 +31,13 @@ namespace CalXUI {
 	}
 
 	std::string CalxUnitProcessor::getUnits() {
-		return this->config.getEntry(CalxConfiguration::Units)->getString("unit_suffix", "");
+		return this->config.getEntry(CalxConfiguration::Units)->getString(CalxUnitConfiguration::UnitSuffix, "");
 	}
 
 	std::string CalxUnitProcessor::getSpeedUnits() {
 		std::string units = this->getUnits();
 		std::string timing =
-		    this->config.getEntry(CalxConfiguration::Units)->getString("timing", "");
+		    this->config.getEntry(CalxConfiguration::Units)->getString(CalxUnitConfiguration::Timing, "");
 		return units.empty() ? "" : units + timing;
 	}
 

@@ -36,7 +36,7 @@ namespace CalXUI {
 			                    confEntry->getReal(CalxLinearTaskConfiguration::Width, 1000.0),
 			                    confEntry->getReal(CalxLinearTaskConfiguration::Height, 1000.0) };
 		double spac = confEntry->getReal(CalxLinearTaskConfiguration::Spacing, 1.0);
-		bool vert = confEntry->getBool("vertical", true);
+		bool vert = confEntry->getBool(CalxLinearTaskConfiguration::Vertical, true);
 
 		motor_rect_t mrect = { 0, 0, 0, 0 };
 		motor_coord_t mspac = 0;

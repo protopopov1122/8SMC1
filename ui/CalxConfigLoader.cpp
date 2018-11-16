@@ -73,9 +73,9 @@ namespace CalXUI {
 			} else {
 				conf = ConfigManagerIO::load(cnf, std::cout);
 				name = conf->getEntry(CalxConfiguration::Configuration)->getString(
-				    "name",
+				    CalxConfigConfiguration::Name,
 				    this->filesys.URLToFileName(fname).GetFullName().ToStdString());
-				descr = conf->getEntry(CalxConfiguration::Configuration)->getString("description", __("None"));
+				descr = conf->getEntry(CalxConfiguration::Configuration)->getString(CalxConfigConfiguration::Description, __("None"));
 			}
 			cnf.close();
 

@@ -25,11 +25,35 @@ namespace CalX {
   class CalxCoreConfiguration {
    public:
     static constexpr auto JumpSpeed = "jump_speed";
+    static constexpr auto Settings = "settings";
+    static constexpr auto AutoPowerMotors = "auto_power_motors";
+  };
+
+  class CalxExtensionsConfiguration {
+   public:
+    static constexpr auto Engine = "engine";
+  };
+
+  class CalxScriptingConfiguration {
+   public:
+    static constexpr auto Engine = "engine";
+    static constexpr auto Main = "main";
+    static constexpr auto InitEntry = "init_entry";
+    static constexpr auto AutoInit = "autoinit";
+  };
+
+  class CalxConfigConfiguration {
+   public:
+    static constexpr auto Name = "name";
+    static constexpr auto Description = "description";
   };
 
   class CalxUIConfiguration {
    public:
     static constexpr auto AdjustStep = "adjust_step";
+    static constexpr auto DeviceLibrary = "devicelib";
+    static constexpr auto Debug = "debug";
+    static constexpr auto Console = "console";
   };
 
   class CalxMotorConfiguration {
@@ -89,6 +113,8 @@ namespace CalX {
     static constexpr auto UnitSpeed = "unit_speed";
     static constexpr auto PlaneScale = "plane_scale";
     static constexpr auto PlaneSpeedScale = "plane_speed_scale";
+    static constexpr auto UnitSuffix = "unit_suffix";
+    static constexpr auto Timing = "timing";
   };
 
   class CalxLinearTaskConfiguration {
@@ -98,6 +124,7 @@ namespace CalX {
     static constexpr auto Width = "width";
     static constexpr auto Height = "height";
     static constexpr auto Spacing = "spacing";
+    static constexpr auto Vertical = "vertical";
   };
 
   class CalxGraphConfiguration {
@@ -110,6 +137,16 @@ namespace CalX {
     static constexpr auto YAxisStep = "y_axis_step";
     static constexpr auto Step = "step";
     static constexpr auto StepStep = "step_step";
+  };
+
+  class CalxLoggingConfiguration {
+   public:
+    static constexpr auto Errors = "errors";
+    static constexpr auto Warnings = "warnings";
+    static constexpr auto Debug = "debug";
+    static constexpr auto Info = "info";
+    static constexpr auto Resources = "resources";
+    static constexpr auto Instruments = "instruments";
   };
 }
 
