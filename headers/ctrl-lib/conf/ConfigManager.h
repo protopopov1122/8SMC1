@@ -29,6 +29,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <functional>
 #include <variant>
 
 /* This file contains configuration manager - configuration parameter storage.
@@ -38,8 +39,6 @@
 
 namespace CalX {
 
-	class ConfigValidator;  // Forward referencing
-
 	typedef int64_t int_conf_t;
 	typedef double real_conf_t;
 
@@ -48,6 +47,7 @@ namespace CalX {
 	class ConfigurationValue {
 	 public:
 	 	ConfigurationValue();
+		ConfigurationValue(const ConfigurationValue &);
 		ConfigurationValue(int_conf_t);
 		ConfigurationValue(real_conf_t);
 		ConfigurationValue(bool);
@@ -84,6 +84,12 @@ namespace CalX {
 		std::variant<int_conf_t, real_conf_t, bool, std::string> value;
 	};
 
+	class ConfigEntryVisitor {
+	 public:
+		virtual ~ConfigEntryVisitor() = default;
+		virtual void visit(const std::string &, const ConfigurationValue &) = 0;
+	};
+
 	class ConfigEntry {
 	 public:
 		ConfigEntry(ConfigManager &, std::string);
@@ -94,21 +100,25 @@ namespace CalX {
 		bool put(std::string, ConfigurationValue);
 		bool remove(std::string);
 		bool is(std::string, ConfigValueType) const;
-		void store(std::ostream &) const;
 
 		int_conf_t getInt(std::string, int_conf_t = 0) const;
 		real_conf_t getReal(std::string, real_conf_t = 0) const;
 		bool getBool(std::string, bool = false) const;
 		std::string getString(std::string, std::string = "") const;
 
-		void getContent(
-		    std::vector<std::pair<std::string, ConfigurationValue>> &)
-		    const;
+		void visit(ConfigEntryVisitor &) const;
+		void visit(std::function<void (const std::string &, const ConfigurationValue &)>) const;
 
 	 private:
 		ConfigManager &config;
 		std::string name;
 		std::map<std::string, ConfigurationValue> content;
+	};
+
+	class ConfigManagerVisitor {
+	 public:
+		virtual ~ConfigManagerVisitor() = default;
+		virtual void visit(ConfigEntry &) = 0;
 	};
 
 	class ConfigManager : public EventSource<std::shared_ptr<ConfigEventListener>> {
@@ -118,22 +128,22 @@ namespace CalX {
 		ConfigEntry *getEntry(std::string, bool = true);
 		bool hasEntry(std::string) const;
 		bool removeEntry(std::string);
-		void store(std::ostream &) const;
-		void getEntries(std::vector<ConfigEntry *> &) const;
-		void setValidator(std::shared_ptr<ConfigValidator>);
-		std::shared_ptr<ConfigValidator> getValidator() const;
-		bool validate(ConfigValidator * = nullptr);
+		void visit(ConfigManagerVisitor &);
+		void visit(std::function<void (ConfigEntry &)>);
 
 		std::vector<std::shared_ptr<ConfigEventListener>> &getEventListeners();
+	 private:
+		std::map<std::string, std::unique_ptr<ConfigEntry>> entries;
+	};
 
+	class ConfigManagerIO {
+	 public:
+		static void store(ConfigManager &, std::ostream &);
 		static std::unique_ptr<ConfigManager> load(std::istream &, std::ostream &,
 		                                           ConfigManager * = nullptr);
-
 	 private:
+		static void store(ConfigEntry &, std::ostream &);
 		static ConfigurationValue parseValue(const char *);
-
-		std::map<std::string, std::unique_ptr<ConfigEntry>> entries;
-		std::shared_ptr<ConfigValidator> validator;
 	};
 }  // namespace CalX
 

@@ -17,7 +17,10 @@ namespace CalX {
     : type(ConfigValueType::Boolean), value(value) {}
 
   ConfigurationValue::ConfigurationValue(std::string value)
-    : type(ConfigValueType::String), value(value) {}
+    : type(ConfigValueType::String), value(std::move(value)) {}
+
+  ConfigurationValue::ConfigurationValue(const ConfigurationValue &value)
+    : type(value.type), value(value.value) {}
 
   ConfigValueType ConfigurationValue::getType() const {
     return this->type;

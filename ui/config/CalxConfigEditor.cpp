@@ -356,10 +356,9 @@ namespace CalXUI {
 	void CalxConfigEditor::updateEntries() {
 		this->entryList->Clear();
 		std::vector<ConfigEntry *> entries;
-		config.getEntries(entries);
-		for (const auto &entry : entries) {
-			this->entryList->Append(entry->getEntryName());
-		}
+		config.visit([&](ConfigEntry &entry) {
+			this->entryList->Append(entry.getEntryName());
+		});
 		Layout();
 		this->entryList->SetSelection(entries.empty() ? wxNOT_FOUND : 0);
 	}
@@ -373,7 +372,9 @@ namespace CalXUI {
 		std::string entryName = this->entryList->GetStringSelection().ToStdString();
 		ConfigEntry *entry = this->config.getEntry(entryName);
 		std::vector<std::pair<std::string, ConfigurationValue>> content;
-		entry->getContent(content);
+		entry->visit([&](const std::string &key, const ConfigurationValue &value) {
+			content.push_back(std::make_pair(key, value));
+		});
 		for (const auto &kv : content) {
 			wxVector<wxVariant> data;
 			data.push_back(wxVariant(kv.first));
@@ -497,7 +498,7 @@ namespace CalXUI {
 		if (dialog->ShowModal() == wxID_OK) {
 			std::string path = dialog->GetPath().ToStdString();
 			std::ofstream out(path);
-			this->config.store(out);
+			ConfigManagerIO::store(this->config, out);
 			out.close();
 		}
 		dialog->Destroy();

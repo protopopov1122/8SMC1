@@ -88,7 +88,7 @@ namespace CalX {
 		if (!cnf.good()) {
 			return false;
 		} else {
-			ConfigManager::load(cnf, std::cout, &conf);
+			ConfigManagerIO::load(cnf, std::cout, &conf);
 		}
 		cnf.close();
 		return true;

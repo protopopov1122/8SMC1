@@ -49,7 +49,7 @@ namespace CalX {
   void SettingsFileRepository::importRepo() {
     std::ifstream is(this->repo_path);
     if (is.good()) {
-      this->settings = ConfigManager::load(is, std::cout);
+      this->settings = ConfigManagerIO::load(is, std::cout);
     } else {
       this->settings = std::make_unique<ConfigManager>();
     }
@@ -58,6 +58,6 @@ namespace CalX {
 
   void SettingsFileRepository::exportRepo() {
     std::ofstream os(this->repo_path);
-    this->settings->store(os);
+    ConfigManagerIO::store(*this->settings, os);
   }
 }

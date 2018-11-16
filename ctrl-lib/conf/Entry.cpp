@@ -78,35 +78,15 @@ namespace CalX {
 		return this->get(key).getString(def);
 	}
 
-	void ConfigEntry::getContent(
-	    std::vector<std::pair<std::string, ConfigurationValue>> &vec)
-	    const {
+	void ConfigEntry::visit(ConfigEntryVisitor &visitor) const {
 		for (const auto &kv : this->content) {
-			vec.push_back(make_pair(kv.first, kv.second));
+			visitor.visit(kv.first, kv.second);
 		}
 	}
 
-	void ConfigEntry::store(std::ostream &os) const {
+	void ConfigEntry::visit(std::function<void (const std::string &, const ConfigurationValue &)> visit) const {
 		for (const auto &kv : this->content) {
-			os << kv.first << '=';
-			const ConfigurationValue &value = kv.second;
-			switch (value.getType()) {
-				case ConfigValueType::Integer:
-					os << value.getInt();
-					break;
-				case ConfigValueType::Real:
-					os << value.getReal();
-					break;
-				case ConfigValueType::Boolean:
-					os << (value.getBool() ? "true" : "false");
-					break;
-				case ConfigValueType::String:
-					os << '\"' << value.getString() << '\"';
-					break;
-				case ConfigValueType::None:
-					break;
-			}
-			os << std::endl;
+			visit(kv.first, kv.second);
 		}
 	}
 }

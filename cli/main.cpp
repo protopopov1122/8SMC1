@@ -63,7 +63,7 @@ int main(int argc, char **argv) {
 		std::cout << "Can't load configuration, using default values." << std::endl;
 		conf = std::make_unique<ConfigManager>();
 	} else {
-		conf = ConfigManager::load(cnf, std::cout);
+		conf = ConfigManagerIO::load(cnf, std::cout);
 	}
 	cnf.close();
 	SystemManager *sysman =

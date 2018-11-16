@@ -66,7 +66,7 @@ namespace CalXUI {
 			             __("Warning"), wxICON_WARNING);
 			conf_ptr = std::make_unique<ConfigManager>();
 		} else {
-			conf_ptr = ConfigManager::load(cnf, std::cout);
+			conf_ptr = ConfigManagerIO::load(cnf, std::cout);
 		}
 		cnf.close();
 		return conf_ptr;

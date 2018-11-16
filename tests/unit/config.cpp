@@ -8,7 +8,9 @@ TEST_CASE("Configuration manager entry management") {
   std::vector<ConfigEntry *> entries;
   const std::string ENTRY = "test_entry";
   REQUIRE(!config.hasEntry(ENTRY));
-  config.getEntries(entries);
+  config.visit([&](ConfigEntry &entry) {
+    entries.push_back(&entry);
+  });
   REQUIRE(entries.size() == 0);
   REQUIRE(!config.removeEntry(ENTRY));
   REQUIRE(config.getEntry(ENTRY, false) == nullptr);
@@ -20,13 +22,17 @@ TEST_CASE("Configuration manager entry management") {
   for (int i = 0; i < 10; i++) {
     config.getEntry(ENTRY);
   }
-  config.getEntries(entries);
+  config.visit([&](ConfigEntry &entry) {
+    entries.push_back(&entry);
+  });
   REQUIRE(entries.size() == 1);
 
   REQUIRE(config.removeEntry(ENTRY));
   REQUIRE(!config.hasEntry(ENTRY));
   entries.clear();
-  config.getEntries(entries);
+  config.visit([&](ConfigEntry &entry) {
+    entries.push_back(&entry);
+  });
   REQUIRE(entries.size() == 0);
 
   const int ENTRY_COUNT = 10;
@@ -35,7 +41,9 @@ TEST_CASE("Configuration manager entry management") {
     config.getEntry(ENTRY + std::to_string(i));
   }
   entries.clear();
-  config.getEntries(entries);
+  config.visit([&](ConfigEntry &entry) {
+    entries.push_back(&entry);
+  });
   REQUIRE(entries.size() == ENTRY_COUNT);
   for (int i = 0; i < ENTRY_COUNT; i++) {
     REQUIRE(config.hasEntry(ENTRY + std::to_string(i)));
@@ -117,7 +125,9 @@ TEST_CASE("Configuration manager entry") {
     REQUIRE(STRING_VALUE.compare(entry->getString(STRING_KEY)) == 0);
 
     std::vector<std::pair<std::string, ConfigurationValue>> content;
-    entry->getContent(content);
+    entry->visit([&](const std::string &key, const ConfigurationValue &value) {
+      content.push_back(std::make_pair(key, value));
+    });
     REQUIRE(content.size() == 4);
 
     REQUIRE(entry->remove(INTEGER_KEY));
