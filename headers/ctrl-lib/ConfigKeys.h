@@ -21,6 +21,42 @@ namespace CalX {
     static constexpr auto LinearTask = "linear_task";
     static constexpr auto Graph = "graph";
   };
+
+  class CalxMotorConfiguration {
+   public:
+    static constexpr auto RollStep = "roll_step";
+    static constexpr auto RollSpeed = "roll_speed";
+    static constexpr auto TrailerComeback = "trailer_comeback";
+    static constexpr auto Divisor = "divisor";
+    static constexpr auto MaxSpeed = "dev_speed";
+  };
+
+  class CalxDeviceConfiguration {
+   public:
+    static constexpr auto COMPort = "port";
+    static constexpr auto COMSpeed = "speed";
+    static constexpr auto COMParity = "parity";
+  };
+
+  class CalxCoordConfiguration {
+   public:
+    static constexpr auto MaxSpeed = "maxspeed";
+  };
+
+  class CalxWatcherConfiguration {
+   public:
+    static constexpr auto PointerR = "pointer_R";
+    static constexpr auto PointerG = "pointer_G";
+    static constexpr auto PointerB = "pointer_B";
+    static constexpr auto JumpR = "jump_R";
+    static constexpr auto JumpG = "jump_G";
+    static constexpr auto JumpB = "jump_B";
+    static constexpr auto MoveR = "move_R";
+    static constexpr auto MoveG = "move_G";
+    static constexpr auto MoveB = "move_B";
+    static constexpr auto AppendInterval = "watcher_append_interval";
+    static constexpr auto RenderInterval = "watcher_render_interval";
+  };
 }
 
 #endif 

@@ -49,7 +49,7 @@ namespace CalXUI {
 		                       .getSystemManager()
 		                       ->getConfiguration()
 		                       .getEntry(CalxConfiguration::SerialConnection)
-		                       ->getInt("port", 1));
+		                       ->getInt(CalxDeviceConfiguration::COMPort, 1));
 		mainSizer->Add(this->portSpin);
 		mainSizer->Add(new wxStaticText(mainPanel, wxID_ANY,
 		                                __("Baud rate") + std::string(": ")),
@@ -61,7 +61,7 @@ namespace CalXUI {
 		                       .getSystemManager()
 		                       ->getConfiguration()
 		                       .getEntry(CalxConfiguration::SerialConnection)
-		                       ->getInt("speed", 9600));
+		                       ->getInt(CalxDeviceConfiguration::COMSpeed, 9600));
 		mainSizer->Add(this->speedSpin);
 		mainSizer->Add(
 		    new wxStaticText(mainPanel, wxID_ANY, __("Parity") + std::string(": ")),
@@ -76,7 +76,7 @@ namespace CalXUI {
 		                                 .getSystemManager()
 		                                 ->getConfiguration()
 		                                 .getEntry(CalxConfiguration::SerialConnection)
-		                                 ->getInt("parity", 0));
+		                                 ->getInt(CalxDeviceConfiguration::COMParity, 0));
 		mainSizer->Add(this->parityCh);
 
 		wxPanel *buttonPanel = new wxPanel(this, wxID_ANY);

@@ -41,7 +41,7 @@ namespace CalX {
 		this->updateParameters();
 		getDeviceManager().loadConfiguration("8SMC1.ini", *this->config);
 		ConfigEntry *motor_sect = this->config->getEntry(CalxConfiguration::Motor);
-		this->divisor = motor_sect->getInt("divisor", 8);
+		this->divisor = motor_sect->getInt(CalxMotorConfiguration::Divisor, 8);
 	}
 
 	_8SMC1Motor::~_8SMC1Motor() {}

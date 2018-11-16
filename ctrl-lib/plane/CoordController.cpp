@@ -247,11 +247,11 @@ namespace CalX {
 		CoordStatusHandle statusHandle(&this->status, CoordPlaneStatus::Jump);
 		/* Determne movement parameters. They are stored in configuration */
 		int_conf_t roll_step =
-		    config.getEntry(CalxConfiguration::Core)->getInt("roll_step", ROLL_STEP);
+		    config.getEntry(CalxConfiguration::Core)->getInt(CalxMotorConfiguration::RollStep, ROLL_STEP);
 		int_conf_t roll_speed =
-		    config.getEntry(CalxConfiguration::Core)->getInt("roll_speed", ROLL_SPEED);
+		    config.getEntry(CalxConfiguration::Core)->getInt(CalxMotorConfiguration::RollSpeed, ROLL_SPEED);
 		int_conf_t comeback =
-		    config.getEntry(CalxConfiguration::Core)->getInt("trailer_comeback", TRAILER_COMEBACK);
+		    config.getEntry(CalxConfiguration::Core)->getInt(CalxMotorConfiguration::TrailerComeback, TRAILER_COMEBACK);
 		/* Determine movement destination */
 		int_conf_t dest = (tr == TrailerId::Trailer1 ? -roll_step : roll_step);
 		/* Variables that are used to detect if motor reached trailer */

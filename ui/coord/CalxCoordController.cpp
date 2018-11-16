@@ -53,7 +53,7 @@ namespace CalXUI {
 		                                              .getSystemManager()
 		                                              ->getConfiguration()
 		                                              .getEntry(CalxConfiguration::Core)
-		                                              ->getInt("maxspeed", 4000),
+		                                              ->getInt(CalxCoordConfiguration::MaxSpeed, 4000),
 		                                          handle->peekPlane());
 		handle->pushPlane(this->validator);
 		this->log = std::make_shared<CoordPlaneLog>(

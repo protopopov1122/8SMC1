@@ -215,12 +215,12 @@ namespace CalXUI {
 		                       .getSystemManager()
 		                       ->getConfiguration()
 		                       .getEntry(CalxConfiguration::Core)
-		                       ->getInt("dev_speed", 4000),
+		                       ->getInt(CalxMotorConfiguration::MaxSpeed, 4000),
 		                   (int) wxGetApp()
 		                       .getSystemManager()
 		                       ->getConfiguration()
 		                       .getEntry(CalxConfiguration::Core)
-		                       ->getInt("dev_speed", 4000));
+		                       ->getInt(CalxMotorConfiguration::MaxSpeed, 4000));
 		moveSpeedSizer->Add(moveSpeedSpin, 1, wxEXPAND);
 		moveSpeedPanel->SetSizer(moveSpeedSizer);
 		moveSizer->Add(moveSpeedPanel, 1, wxEXPAND);

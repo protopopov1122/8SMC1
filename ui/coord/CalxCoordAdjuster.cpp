@@ -97,9 +97,9 @@ namespace CalXUI {
 		ConfigEntry *colourEntry =
 		    wxGetApp().getSystemManager()->getConfiguration().getEntry(
 		        CalxConfiguration::Watcher);
-		this->pointer_colour = wxColour(colourEntry->getInt("pointer_R", 255),
-		                                colourEntry->getInt("pointer_G", 0),
-		                                colourEntry->getInt("pointer_B", 0));
+		this->pointer_colour = wxColour(colourEntry->getInt(CalxWatcherConfiguration::PointerR, 255),
+		                                colourEntry->getInt(CalxWatcherConfiguration::PointerG, 0),
+		                                colourEntry->getInt(CalxWatcherConfiguration::PointerB, 0));
 		this->Bind(wxEVT_PAINT, &CalxCoordAdjustViewer::OnPaintEvent, this);
 		this->Bind(wxEVT_SIZE, &CalxCoordAdjustViewer::OnResizeEvent, this);
 	}
@@ -287,7 +287,7 @@ namespace CalXUI {
 		                          .getSystemManager()
 		                          ->getConfiguration()
 		                          .getEntry(CalxConfiguration::UserInterface)
-		                          ->getInt("watcher_render_interval", 50);
+		                          ->getInt(CalxWatcherConfiguration::RenderInterval, 50);
 		if (interval != -1) {
 			this->timer = new CalxCoordAdjustRepaintTimer(this);
 			this->timer->Start((int) interval);

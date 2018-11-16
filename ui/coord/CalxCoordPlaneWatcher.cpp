@@ -86,15 +86,15 @@ namespace CalXUI {
 		ConfigEntry *colourEntry =
 		    wxGetApp().getSystemManager()->getConfiguration().getEntry(
 		        CalxConfiguration::Watcher);
-		this->pointer_colour = wxColour(colourEntry->getInt("pointer_R", 255),
-		                                colourEntry->getInt("pointer_G", 0),
-		                                colourEntry->getInt("pointer_B", 0));
-		this->jump_colour = wxColour(colourEntry->getInt("jump_R", 128),
-		                             colourEntry->getInt("jump_G", 128),
-		                             colourEntry->getInt("jump_B", 128));
-		this->move_colour = wxColour(colourEntry->getInt("move_R", 0),
-		                             colourEntry->getInt("move_G", 0),
-		                             colourEntry->getInt("move_B", 0));
+		this->pointer_colour = wxColour(colourEntry->getInt(CalxWatcherConfiguration::PointerR, 255),
+		                                colourEntry->getInt(CalxWatcherConfiguration::PointerG, 0),
+		                                colourEntry->getInt(CalxWatcherConfiguration::PointerB, 0));
+		this->jump_colour = wxColour(colourEntry->getInt(CalxWatcherConfiguration::JumpR, 128),
+		                             colourEntry->getInt(CalxWatcherConfiguration::JumpG, 128),
+		                             colourEntry->getInt(CalxWatcherConfiguration::JumpB, 128));
+		this->move_colour = wxColour(colourEntry->getInt(CalxWatcherConfiguration::MoveR, 0),
+		                             colourEntry->getInt(CalxWatcherConfiguration::MoveG, 0),
+		                             colourEntry->getInt(CalxWatcherConfiguration::MoveB, 0));
 
 		SetMinSize(min);
 
@@ -111,7 +111,7 @@ namespace CalXUI {
 		                          .getSystemManager()
 		                          ->getConfiguration()
 		                          .getEntry(CalxConfiguration::UserInterface)
-		                          ->getInt("watcher_append_interval", 500);
+		                          ->getInt(CalxWatcherConfiguration::AppendInterval, 500);
 		if (interval != -1) {
 			this->timer = new CalxCoordPlaneWatcherTimer(this, this->handle);
 			this->timer->Start((int) interval);
@@ -123,7 +123,7 @@ namespace CalXUI {
 		               .getSystemManager()
 		               ->getConfiguration()
 		               .getEntry(CalxConfiguration::UserInterface)
-		               ->getInt("watcher_render_interval", 50);
+		               ->getInt(CalxWatcherConfiguration::RenderInterval, 50);
 		if (interval != -1) {
 			this->repaint_timer = new CalxCoordPlaneWatcherRepaintTimer(this);
 			this->repaint_timer->Start((int) interval);

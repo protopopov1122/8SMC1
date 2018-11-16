@@ -106,12 +106,12 @@ namespace CalXUI {
 		                       .getSystemManager()
 		                       ->getConfiguration()
 		                       .getEntry(CalxConfiguration::Core)
-		                       ->getInt("maxspeed", 4000),
+		                       ->getInt(CalxCoordConfiguration::MaxSpeed, 4000),
 		                   (int) wxGetApp()
 		                       .getSystemManager()
 		                       ->getConfiguration()
 		                       .getEntry(CalxConfiguration::Core)
-		                       ->getInt("maxspeed", 4000));
+		                       ->getInt(CalxCoordConfiguration::MaxSpeed, 4000));
 		validateSizer->Add(
 		    new wxStaticText(validatePanel, wxID_ANY,
 		                     __("Coordinate validation") + std::string(":")));
