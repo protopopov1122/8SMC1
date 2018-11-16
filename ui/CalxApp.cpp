@@ -75,7 +75,7 @@ namespace CalXUI {
 	DeviceManager_getter CalxApp::loadDeviceDrivers(ConfigManager &conf) {
 		// Load specified dynamic library
 		std::string lib_addr =
-		    conf.getEntry(CalxConfiguration::UserInterfaces)->getString("devicelib", STRINGIZE(DEVICES_LIB));
+		    conf.getEntry(CalxConfiguration::UserInterface)->getString("devicelib", STRINGIZE(DEVICES_LIB));
 
 		this->dynlib =
 		    new wxDynamicLibrary(wxDynamicLibrary::CanonicalizeName(lib_addr),
@@ -104,7 +104,7 @@ namespace CalXUI {
 	}
 
 	void CalxApp::initDebugConsole(ConfigManager &conf) {
-		this->debug_mode = conf.getEntry(CalxConfiguration::UserInterfaces)->getBool("debug", false);
+		this->debug_mode = conf.getEntry(CalxConfiguration::UserInterface)->getBool("debug", false);
 		if (this->debug_mode) {
 #ifdef OS_WIN
 			AllocConsole();
@@ -118,7 +118,7 @@ namespace CalXUI {
 
 	void CalxApp::startDebugConsole(ConfigManager &conf) {
 		if (this->debug_mode &&
-		    sysman->getConfiguration().getEntry(CalxConfiguration::UserInterfaces)->getBool("console", false)) {
+		    sysman->getConfiguration().getEntry(CalxConfiguration::UserInterface)->getBool("console", false)) {
 			this->debug_console = std::make_unique<CalxDebugConsole>(this->sysman.get());
 			this->debug_console->Run();
 		} else {

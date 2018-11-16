@@ -110,7 +110,7 @@ namespace CalXUI {
 		int_conf_t interval = wxGetApp()
 		                          .getSystemManager()
 		                          ->getConfiguration()
-		                          .getEntry(CalxConfiguration::UserInterfaces)
+		                          .getEntry(CalxConfiguration::UserInterface)
 		                          ->getInt("watcher_append_interval", 500);
 		if (interval != -1) {
 			this->timer = new CalxCoordPlaneWatcherTimer(this, this->handle);
@@ -122,7 +122,7 @@ namespace CalXUI {
 		interval = wxGetApp()
 		               .getSystemManager()
 		               ->getConfiguration()
-		               .getEntry(CalxConfiguration::UserInterfaces)
+		               .getEntry(CalxConfiguration::UserInterface)
 		               ->getInt("watcher_render_interval", 50);
 		if (interval != -1) {
 			this->repaint_timer = new CalxCoordPlaneWatcherRepaintTimer(this);

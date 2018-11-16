@@ -220,7 +220,7 @@ namespace CalXUI {
 		    wxGetApp()
 		        .getSystemManager()
 		        ->getConfiguration()
-		        .getEntry(CalxConfiguration::UserInterfaces)
+		        .getEntry(CalxConfiguration::UserInterface)
 		        ->getReal("adjust_step", 2.5),
 		    wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->speedSpin = new wxSpinCtrlDouble(
@@ -286,7 +286,7 @@ namespace CalXUI {
 		int_conf_t interval = wxGetApp()
 		                          .getSystemManager()
 		                          ->getConfiguration()
-		                          .getEntry(CalxConfiguration::UserInterfaces)
+		                          .getEntry(CalxConfiguration::UserInterface)
 		                          ->getInt("watcher_render_interval", 50);
 		if (interval != -1) {
 			this->timer = new CalxCoordAdjustRepaintTimer(this);
