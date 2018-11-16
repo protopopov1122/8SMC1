@@ -31,17 +31,17 @@ namespace CalXUI {
 			                                .getSystemManager()
 			                                ->getConfiguration()
 			                                .getEntry(CalxConfiguration::Units)
-			                                ->getReal("plane_scale", 1.0f),
+			                                ->getReal(CalxUnitConfiguration::PlaneScale, 1.0f),
 			                            wxGetApp()
 			                                .getSystemManager()
 			                                ->getConfiguration()
 			                                .getEntry(CalxConfiguration::Units)
-			                                ->getReal("plane_scale", 1.0f) };
+			                                ->getReal(CalxUnitConfiguration::PlaneScale, 1.0f) };
 		float plane_speed_scale = wxGetApp()
 		                              .getSystemManager()
 		                              ->getConfiguration()
 		                              .getEntry(CalxConfiguration::Units)
-		                              ->getReal("plane_speed_scale", 1.0f);
+		                              ->getReal(CalxUnitConfiguration::PlaneSpeedScale, 1.0f);
 		this->unit_map = std::make_shared<CoordPlaneMap>(
 		    plane_offset, plane_scale, plane_speed_scale, handle->peekPlane());
 		handle->pushPlane(this->unit_map);

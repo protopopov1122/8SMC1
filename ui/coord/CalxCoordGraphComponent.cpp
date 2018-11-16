@@ -50,25 +50,25 @@ namespace CalXUI {
 		this->expr = new wxTextCtrl(graphPanel, wxID_ANY, "x");
 		this->xmin = new wxSpinCtrlDouble(
 		    graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, graphconf->getReal("x_from", -10.0),
-		    graphconf->getReal("x_axis_step", 0.001));
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, graphconf->getReal(CalxGraphConfiguration::XFrom, -10.0),
+		    graphconf->getReal(CalxGraphConfiguration::XAxisStep, 0.001));
 		this->xmax = new wxSpinCtrlDouble(
 		    graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, graphconf->getReal("x_to", 10.0),
-		    graphconf->getReal("x_axis_step", 0.001));
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, graphconf->getReal(CalxGraphConfiguration::XTo, 10.0),
+		    graphconf->getReal(CalxGraphConfiguration::XAxisStep, 0.001));
 		this->ymin = new wxSpinCtrlDouble(
 		    graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, graphconf->getReal("y_from", -10.0),
-		    graphconf->getReal("y_axis_step", 0.001));
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, graphconf->getReal(CalxGraphConfiguration::YFrom, -10.0),
+		    graphconf->getReal(CalxGraphConfiguration::YAxisStep, 0.001));
 		this->ymax = new wxSpinCtrlDouble(
 		    graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, graphconf->getReal("y_to", 10.0),
-		    graphconf->getReal("y_axis_step", 0.001));
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, graphconf->getReal(CalxGraphConfiguration::YTo, 10.0),
+		    graphconf->getReal(CalxGraphConfiguration::YAxisStep, 0.001));
 		this->step = new wxSpinCtrlDouble(
 		    graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, graphconf->getReal("step_step", 0.001), INT_MAX,
-		    graphconf->getReal("step", 0.1),
-		    graphconf->getReal("step_step", 0.001));
+		    wxSP_ARROW_KEYS, graphconf->getReal(CalxGraphConfiguration::StepStep, 0.001), INT_MAX,
+		    graphconf->getReal(CalxGraphConfiguration::Step, 0.1),
+		    graphconf->getReal(CalxGraphConfiguration::StepStep, 0.001));
 		this->speed = new wxSpinCtrlDouble(
 		    graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
 		    wxSP_ARROW_KEYS, 0,
@@ -76,12 +76,12 @@ namespace CalXUI {
 		        .getSystemManager()
 		        ->getConfiguration()
 		        .getEntry(CalxConfiguration::Units)
-		        ->getReal("unit_speed", 4000.0),
+		        ->getReal(CalxUnitConfiguration::UnitSpeed, 4000.0),
 		    wxGetApp()
 		        .getSystemManager()
 		        ->getConfiguration()
 		        .getEntry(CalxConfiguration::Units)
-		        ->getReal("unit_speed", 4000.0),
+		        ->getReal(CalxUnitConfiguration::UnitSpeed, 4000.0),
 		    wxGetApp().getUnitProcessor().getSpeedPrecision());
 		wxButton *buildButton = new wxButton(graphPanel, wxID_ANY, __("Build"));
 		wxButton *previewButton = new wxButton(graphPanel, wxID_ANY, __("Preview"));
@@ -128,12 +128,12 @@ namespace CalXUI {
 
 		ConfigManager &conf = wxGetApp().getSystemManager()->getConfiguration();
 		coord_point_t cen = {
-			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)->getReal("offset_x", 0.0)),
-			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)->getReal("offset_y", 0.0))
+			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)->getReal(CalxCoordConfiguration::OffsetX, 0.0)),
+			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)->getReal(CalxCoordConfiguration::OffsetY, 0.0))
 		};
 		coord_scale_t scl = {
-			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)->getReal("scale_x", 1.0)),
-			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)->getReal("scale_y", 1.0))
+			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)->getReal(CalxCoordConfiguration::ScaleX, 1.0)),
+			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)->getReal(CalxCoordConfiguration::ScaleY, 1.0))
 		};
 		std::shared_ptr<LinearCoordTranslator> basic =
 		    std::make_shared<LinearCoordTranslator>(cen, scl);

@@ -50,17 +50,17 @@ namespace CalXUI {
 	}
 
 	double CalxUnitProcessor::getUnitScale() {
-		return this->config.getEntry(CalxConfiguration::Units)->getReal("unit_scale", 1.0f);
+		return this->config.getEntry(CalxConfiguration::Units)->getReal(CalxUnitConfiguration::UnitScale, 1.0f);
 	}
 
 	double CalxUnitProcessor::getSpeedScale() {
-		return this->config.getEntry(CalxConfiguration::Units)->getReal("speed_scale", 1.0f);
+		return this->config.getEntry(CalxConfiguration::Units)->getReal(CalxUnitConfiguration::SpeedScale, 1.0f);
 	}
 
 	coord_point_t CalxUnitProcessor::getUnitOffset() {
 		coord_point_t offset = {
-			this->config.getEntry(CalxConfiguration::Units)->getReal("unit_offset_x", 0.0f),
-			this->config.getEntry(CalxConfiguration::Units)->getReal("unit_offset_y", 0.0f)
+			this->config.getEntry(CalxConfiguration::Units)->getReal(CalxUnitConfiguration::UnitOffsetX, 0.0f),
+			this->config.getEntry(CalxConfiguration::Units)->getReal(CalxUnitConfiguration::UnitOffsetY, 0.0f)
 		};
 		return offset;
 	}

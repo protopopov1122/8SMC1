@@ -39,12 +39,12 @@ namespace CalXUI {
 		        CalxConfiguration::RelativePosition);
 		this->xPos = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, 0, 1, confEntry->getReal("x", 0.5),
-		    confEntry->getReal("x_prec", 0.0001));
+		    wxSP_ARROW_KEYS, 0, 1, confEntry->getReal(CalxCoordPositionConfiguration::X, 0.5),
+		    confEntry->getReal(CalxCoordPositionConfiguration::XPrecision, 0.0001));
 		this->yPos = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, 0, 1, confEntry->getReal("y", 0.5),
-		    confEntry->getReal("y_prec", 0.0001));
+		    wxSP_ARROW_KEYS, 0, 1, confEntry->getReal(CalxCoordPositionConfiguration::Y, 0.5),
+		    confEntry->getReal(CalxCoordPositionConfiguration::YPrecision, 0.0001));
 		this->speed =
 		    new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
 		                         wxDefaultSize, wxSP_ARROW_KEYS, 0,
@@ -52,12 +52,12 @@ namespace CalXUI {
 		                             .getSystemManager()
 		                             ->getConfiguration()
 		                             .getEntry(CalxConfiguration::Units)
-		                             ->getReal("unit_speed", 4000.0),
+		                             ->getReal(CalxUnitConfiguration::UnitSpeed, 4000.0),
 		                         wxGetApp()
 		                             .getSystemManager()
 		                             ->getConfiguration()
 		                             .getEntry(CalxConfiguration::Units)
-		                             ->getReal("unit_speed", 4000.0),
+		                             ->getReal(CalxUnitConfiguration::UnitSpeed, 4000.0),
 		                         wxGetApp().getUnitProcessor().getSpeedPrecision());
 		wxButton *moveButton = new wxButton(this, wxID_ANY, __("Move"));
 		wxButton *configureButton = new wxButton(this, wxID_ANY, __("Configure"));

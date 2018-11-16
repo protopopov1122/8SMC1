@@ -51,12 +51,12 @@ namespace CalXUI {
 
 		ConfigManager &conf = wxGetApp().getSystemManager()->getConfiguration();
 		coord_point_t trans_offset = {
-			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)->getReal("offset_x", 0.0)),
-			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)->getReal("offset_y", 0.0))
+			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)->getReal(CalxCoordConfiguration::OffsetX, 0.0)),
+			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)->getReal(CalxCoordConfiguration::OffsetY, 0.0))
 		};
 		coord_scale_t trans_scale = {
-			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)->getReal("scale_x", 1.0)),
-			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)->getReal("scale_y", 1.0))
+			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)->getReal(CalxCoordConfiguration::ScaleX, 1.0)),
+			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)->getReal(CalxCoordConfiguration::ScaleY, 1.0))
 		};
 		coord_point_t unit_offset = wxGetApp().getUnitProcessor().getUnitOffset();
 		coord_scale_t unit_scale = { wxGetApp().getUnitProcessor().getUnitScale(),

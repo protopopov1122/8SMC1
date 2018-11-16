@@ -98,7 +98,7 @@ namespace CalX {
 		   Depending on configuration settings */
 		if (!sync) {
 			float maxspeed =
-			    this->config.getEntry(CalxConfiguration::Core)->getReal("jump_speed", 0.0f);
+			    this->config.getEntry(CalxConfiguration::Core)->getReal(CalxCoreConfiguration::JumpSpeed, 0.0f);
 			if (maxspeed > 0 && speed < maxspeed) {
 				LOG("CoordController", "Changing jump speed from " +
 				                           std::to_string(speed) + " to " +

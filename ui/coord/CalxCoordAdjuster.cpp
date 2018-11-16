@@ -221,7 +221,7 @@ namespace CalXUI {
 		        .getSystemManager()
 		        ->getConfiguration()
 		        .getEntry(CalxConfiguration::UserInterface)
-		        ->getReal("adjust_step", 2.5),
+		        ->getReal(CalxUIConfiguration::AdjustStep, 2.5),
 		    wxGetApp().getUnitProcessor().getUnitPrecision());
 		this->speedSpin = new wxSpinCtrlDouble(
 		    prmsPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
@@ -230,12 +230,12 @@ namespace CalXUI {
 		        .getSystemManager()
 		        ->getConfiguration()
 		        .getEntry(CalxConfiguration::Units)
-		        ->getReal("unit_speed", 4000.0),
+		        ->getReal(CalxUnitConfiguration::UnitSpeed, 4000.0),
 		    wxGetApp()
 		        .getSystemManager()
 		        ->getConfiguration()
 		        .getEntry(CalxConfiguration::Units)
-		        ->getReal("unit_speed", 4000.0),
+		        ->getReal(CalxUnitConfiguration::UnitSpeed, 4000.0),
 		    wxGetApp().getUnitProcessor().getSpeedPrecision());
 		prmsSizer->Add(new wxStaticText(prmsPanel, wxID_ANY,
 		                                __("Position") + std::string(":")),

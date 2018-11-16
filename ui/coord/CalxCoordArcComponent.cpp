@@ -59,12 +59,12 @@ namespace CalXUI {
 		                             .getSystemManager()
 		                             ->getConfiguration()
 		                             .getEntry(CalxConfiguration::Units)
-		                             ->getReal("unit_speed", 4000.0),
+		                             ->getReal(CalxUnitConfiguration::UnitSpeed, 4000.0),
 		                         wxGetApp()
 		                             .getSystemManager()
 		                             ->getConfiguration()
 		                             .getEntry(CalxConfiguration::Units)
-		                             ->getReal("unit_speed", 4000.0),
+		                             ->getReal(CalxUnitConfiguration::UnitSpeed, 4000.0),
 		                         wxGetApp().getUnitProcessor().getSpeedPrecision());
 		this->splitter =
 		    new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
