@@ -5,24 +5,24 @@ using namespace CalX;
 
 TEST_CASE("Configuration manager entry management") {
   ConfigManager config;
-  std::vector<ConfigEntry *> entries;
+  std::vector<ConfiguationFlatDictionary *> entries;
   const std::string ENTRY = "test_entry";
   REQUIRE(!config.hasEntry(ENTRY));
-  config.visit([&](ConfigEntry &entry) {
+  config.visit([&](const std::string &name, ConfiguationFlatDictionary &entry) {
     entries.push_back(&entry);
   });
   REQUIRE(entries.size() == 0);
   REQUIRE(!config.removeEntry(ENTRY));
   REQUIRE(config.getEntry(ENTRY, false) == nullptr);
 
-  ConfigEntry *entry = config.getEntry(ENTRY);
+  ConfiguationFlatDictionary *entry = config.getEntry(ENTRY);
   REQUIRE(entry != nullptr);
   REQUIRE(config.hasEntry(ENTRY));
   REQUIRE(entry == config.getEntry(ENTRY));
   for (int i = 0; i < 10; i++) {
     config.getEntry(ENTRY);
   }
-  config.visit([&](ConfigEntry &entry) {
+  config.visit([&](const std::string &name, ConfiguationFlatDictionary &entry) {
     entries.push_back(&entry);
   });
   REQUIRE(entries.size() == 1);
@@ -30,7 +30,7 @@ TEST_CASE("Configuration manager entry management") {
   REQUIRE(config.removeEntry(ENTRY));
   REQUIRE(!config.hasEntry(ENTRY));
   entries.clear();
-  config.visit([&](ConfigEntry &entry) {
+  config.visit([&](const std::string &name, ConfiguationFlatDictionary &entry) {
     entries.push_back(&entry);
   });
   REQUIRE(entries.size() == 0);
@@ -41,7 +41,7 @@ TEST_CASE("Configuration manager entry management") {
     config.getEntry(ENTRY + std::to_string(i));
   }
   entries.clear();
-  config.visit([&](ConfigEntry &entry) {
+  config.visit([&](const std::string &name, ConfiguationFlatDictionary &entry) {
     entries.push_back(&entry);
   });
   REQUIRE(entries.size() == ENTRY_COUNT);
@@ -63,26 +63,25 @@ TEST_CASE("Configuration manager value objects") {
   ConfigurationValue str(STRING);
 
   REQUIRE(integer.getInt() == INTEGER);
-  REQUIRE(integer.getType() == ConfigValueType::Integer);
+  REQUIRE(integer.getType() == ConfigurationValueType::Integer);
   REQUIRE(integer.toString().compare(std::to_string(INTEGER)) == 0);
   REQUIRE(real.getReal() == REAL);
-  REQUIRE(real.getType() == ConfigValueType::Real);
+  REQUIRE(real.getType() == ConfigurationValueType::Real);
   REQUIRE(real.toString().compare(std::to_string(REAL)) == 0);
   REQUIRE(boolean.getBool() == BOOLEAN);
-  REQUIRE(boolean.getType() == ConfigValueType::Boolean);
+  REQUIRE(boolean.getType() == ConfigurationValueType::Boolean);
   REQUIRE(boolean.toString().compare(BOOLEAN ? "true" : "false") == 0);
   REQUIRE(str.getString().compare(STRING) == 0);
-  REQUIRE(str.getType() == ConfigValueType::String);
+  REQUIRE(str.getType() == ConfigurationValueType::String);
   REQUIRE(str.toString().compare(STRING) == 0);
 }
 
 TEST_CASE("Configuration manager entry") {
   ConfigManager config;
   const std::string ENTRY = "test_entry";
-  ConfigEntry *entry = config.getEntry(ENTRY);
+  ConfiguationFlatDictionary *entry = config.getEntry(ENTRY);
   SECTION("Entry parameters") {
     REQUIRE(entry != nullptr);
-    REQUIRE(ENTRY.compare(entry->getEntryName()) == 0);
   }
   SECTION("Operations with entry variables") {
     const std::string INTEGER_KEY = "integer";
@@ -114,10 +113,10 @@ TEST_CASE("Configuration manager entry") {
     REQUIRE(entry->has(BOOLEAN_KEY));
     REQUIRE(entry->has(STRING_KEY));
 
-    REQUIRE(entry->is(INTEGER_KEY, ConfigValueType::Integer));
-    REQUIRE(entry->is(REAL_KEY, ConfigValueType::Real));
-    REQUIRE(entry->is(BOOLEAN_KEY, ConfigValueType::Boolean));
-    REQUIRE(entry->is(STRING_KEY, ConfigValueType::String));
+    REQUIRE(entry->is(INTEGER_KEY, ConfigurationValueType::Integer));
+    REQUIRE(entry->is(REAL_KEY, ConfigurationValueType::Real));
+    REQUIRE(entry->is(BOOLEAN_KEY, ConfigurationValueType::Boolean));
+    REQUIRE(entry->is(STRING_KEY, ConfigurationValueType::String));
 
     REQUIRE(entry->getInt(INTEGER_KEY) == INTEGER_VALUE);
     REQUIRE(entry->getReal(REAL_KEY) == REAL_VALUE);

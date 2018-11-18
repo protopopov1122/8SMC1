@@ -83,7 +83,7 @@ namespace CalXUI {
 		this->pool = pool;
 		pool->bindWatcher(this);
 
-		ConfigEntry *colourEntry =
+		ConfiguationFlatDictionary *colourEntry =
 		    wxGetApp().getSystemManager()->getConfiguration().getEntry(
 		        CalxConfiguration::Watcher);
 		this->pointer_colour = wxColour(colourEntry->getInt(CalxWatcherConfiguration::PointerR, 255),

@@ -27,7 +27,7 @@ namespace CalX {
 
 	ConfigManager::ConfigManager() {}
 
-	ConfigEntry *ConfigManager::getEntry(std::string id,
+	ConfiguationFlatDictionary *ConfigManager::getEntry(const std::string &id,
 	                                                     bool createNew) {
 		if (this->entries.count(id) != 0) {
 			return this->entries[id].get();
@@ -43,11 +43,11 @@ namespace CalX {
 		}
 	}
 
-	bool ConfigManager::hasEntry(std::string id) const {
+	bool ConfigManager::hasEntry(const std::string &id) const {
 		return this->entries.count(id) != 0;
 	}
 
-	bool ConfigManager::removeEntry(std::string id) {
+	bool ConfigManager::removeEntry(const std::string &id) {
 		if (this->entries.count(id) == 0) {
 			return false;
 		}
@@ -56,15 +56,9 @@ namespace CalX {
 		return true;
 	}
 
-	void ConfigManager::visit(ConfigManagerVisitor &visitor) {
+	void ConfigManager::visit(std::function<void (const std::string &, ConfiguationFlatDictionary &)> visit) const {
 		for (const auto &kv : this->entries) {
-			visitor.visit(*kv.second);
-		}
-	}
-
-	void ConfigManager::visit(std::function<void (ConfigEntry &)> visit) {
-		for (const auto &kv : this->entries) {
-			visit(*kv.second);
+			visit(kv.first, *kv.second);
 		}
 	}
 

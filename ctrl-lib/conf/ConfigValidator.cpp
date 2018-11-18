@@ -28,15 +28,15 @@ namespace CalX {
 		return this->optional;
 	}
 
-	ConfigValueValidator::ConfigValueValidator(ConfigValueType tp, bool opt)
+	ConfigValueValidator::ConfigValueValidator(ConfigurationValueType tp, bool opt)
 	    : AbstractValidator::AbstractValidator(opt), type(tp) {}
 
-	ConfigValueType ConfigValueValidator::getType() {
+	ConfigurationValueType ConfigValueValidator::getType() {
 		return this->type;
 	}
 
 	bool ConfigValueValidator::validate(const ConfigurationValue & value) {
-		if (value.is(ConfigValueType::None)) {
+		if (value.is(ConfigurationValueType::None)) {
 			return this->isOptional();
 		} else {
 			return value.getType() == type || this->isOptional();
@@ -57,7 +57,7 @@ namespace CalX {
 		return this->value.get();
 	}
 
-	bool ConfigKeyValidator::validate(ConfigEntry *entry) {
+	bool ConfigKeyValidator::validate(ConfiguationFlatDictionary *entry) {
 		if (entry == nullptr || !entry->has(key)) {
 			return this->isOptional();
 		}
@@ -82,7 +82,7 @@ namespace CalX {
 			return this->isOptional();
 		}
 
-		ConfigEntry *entry = conf->getEntry(this->name, false);
+		ConfiguationFlatDictionary *entry = conf->getEntry(this->name, false);
 		for (const auto &k : this->keys) {
 			if (!k->validate(entry)) {
 				return false;

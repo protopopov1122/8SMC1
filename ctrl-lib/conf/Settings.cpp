@@ -18,15 +18,15 @@ namespace CalX {
       this->exportFn();
     }
 
-		void keyAdded(ConfigManager *conf, ConfigEntry *entry, std::string key) override {
+		void keyAdded(ConfigManager *conf, std::string entry, std::string key) override {
       this->exportFn();
     }
 
-		void keyRemoved(ConfigManager *conf, ConfigEntry *entry, std::string key) override {
+		void keyRemoved(ConfigManager *conf, std::string entry, std::string key) override {
       this->exportFn();
     }
 
-		void keyChanged(ConfigManager *conf, ConfigEntry *entry, std::string key) override {
+		void keyChanged(ConfigManager *conf, std::string entry, std::string key) override {
       this->exportFn();
     }
    private:

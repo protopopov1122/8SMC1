@@ -23,6 +23,8 @@
 
 #include "ctrl-lib/CtrlCore.h"
 #include "ctrl-lib/EventListener.h"
+#include "ctrl-lib/conf/Value.h"
+#include "ctrl-lib/conf/Dictionary.h"
 #include <cinttypes>
 #include <iosfwd>
 #include <map>
@@ -30,7 +32,6 @@
 #include <vector>
 #include <memory>
 #include <functional>
-#include <variant>
 
 /* This file contains configuration manager - configuration parameter storage.
    It represents structure similar to INI file, but all values have types.
@@ -39,97 +40,31 @@
 
 namespace CalX {
 
-	typedef int64_t int_conf_t;
-	typedef double real_conf_t;
-
-	enum class ConfigValueType { Integer, Real, String, Boolean, None };
-
-	class ConfigurationValue {
+	class ConfigEntry : public ConfiguationFlatDictionary {
 	 public:
-	 	ConfigurationValue();
-		ConfigurationValue(const ConfigurationValue &);
-		ConfigurationValue(int_conf_t);
-		ConfigurationValue(real_conf_t);
-		ConfigurationValue(bool);
-		ConfigurationValue(std::string);
+		ConfigEntry(ConfigManager &, const std::string &);
 
-		ConfigValueType getType() const;
-		bool is(ConfigValueType) const;
+		const ConfigurationValue &get(const std::string &) const override;
+		bool has(const std::string &) const override;
+		bool put(const std::string &, const ConfigurationValue &) override;
+		bool remove(const std::string &) override;
 
-		int_conf_t getInt(int_conf_t = 0) const;
-		real_conf_t getReal(real_conf_t = 0.0) const;
-		bool getBool(bool = false) const;
-		std::string getString(std::string = "") const;
-		std::string toString() const;
-
-		operator int_conf_t() const {
-			return this->getInt();
-		}
-
-		operator real_conf_t() const {
-			return this->getReal();
-		}
-		
-		operator bool() const {
-			return this->getBool();
-		}
-	
-		operator std::string () const {
-			return this->toString();
-		}
-
-		static ConfigurationValue Empty;
-	 private:
-		ConfigValueType type;
-		std::variant<int_conf_t, real_conf_t, bool, std::string> value;
-	};
-
-	class ConfigEntryVisitor {
-	 public:
-		virtual ~ConfigEntryVisitor() = default;
-		virtual void visit(const std::string &, const ConfigurationValue &) = 0;
-	};
-
-	class ConfigEntry {
-	 public:
-		ConfigEntry(ConfigManager &, std::string);
-		const std::string &getEntryName() const;
-
-		const ConfigurationValue &get(std::string) const;
-		bool has(std::string) const;
-		bool put(std::string, ConfigurationValue);
-		bool remove(std::string);
-		bool is(std::string, ConfigValueType) const;
-
-		int_conf_t getInt(std::string, int_conf_t = 0) const;
-		real_conf_t getReal(std::string, real_conf_t = 0) const;
-		bool getBool(std::string, bool = false) const;
-		std::string getString(std::string, std::string = "") const;
-
-		void visit(ConfigEntryVisitor &) const;
-		void visit(std::function<void (const std::string &, const ConfigurationValue &)>) const;
+		void visit(std::function<void (const std::string &, const ConfigurationValue &)>) const override;
 
 	 private:
 		ConfigManager &config;
-		std::string name;
+		std::string entryName;
 		std::map<std::string, ConfigurationValue> content;
 	};
 
-	class ConfigManagerVisitor {
-	 public:
-		virtual ~ConfigManagerVisitor() = default;
-		virtual void visit(ConfigEntry &) = 0;
-	};
-
-	class ConfigManager : public EventSource<std::shared_ptr<ConfigEventListener>> {
+	class ConfigManager : public ConfigurationCatalogue, public EventSource<std::shared_ptr<ConfigEventListener>> {
 	 public:
 		ConfigManager();
 
-		ConfigEntry *getEntry(std::string, bool = true);
-		bool hasEntry(std::string) const;
-		bool removeEntry(std::string);
-		void visit(ConfigManagerVisitor &);
-		void visit(std::function<void (ConfigEntry &)>);
+		ConfiguationFlatDictionary *getEntry(const std::string &, bool = true) override;
+		bool hasEntry(const std::string &) const override;
+		bool removeEntry(const std::string &) override;
+		void visit(std::function<void (const std::string &, ConfiguationFlatDictionary &)>) const override;
 
 		std::vector<std::shared_ptr<ConfigEventListener>> &getEventListeners();
 	 private:
@@ -142,7 +77,7 @@ namespace CalX {
 		static std::unique_ptr<ConfigManager> load(std::istream &, std::ostream &,
 		                                           ConfigManager * = nullptr);
 	 private:
-		static void store(ConfigEntry &, std::ostream &);
+		static void store(ConfiguationFlatDictionary &, std::ostream &);
 		static ConfigurationValue parseValue(const char *);
 	};
 }  // namespace CalX

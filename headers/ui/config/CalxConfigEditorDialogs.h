@@ -31,7 +31,7 @@ namespace CalXUI {
 
 	class CalxNewKeyDialog : public wxDialog {
 	 public:
-		CalxNewKeyDialog(wxWindow *, wxWindowID, ConfigEntry *);
+		CalxNewKeyDialog(wxWindow *, wxWindowID, ConfiguationFlatDictionary *);
 
 	 private:
 		void updateUI();
@@ -40,7 +40,7 @@ namespace CalXUI {
 		void OnCancelClick(wxCommandEvent &);
 		void OnTypeChange(wxCommandEvent &);
 
-		ConfigEntry *entry;
+		ConfiguationFlatDictionary *entry;
 		wxTextCtrl *key;
 		wxComboBox *type;
 

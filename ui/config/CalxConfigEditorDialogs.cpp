@@ -23,7 +23,7 @@
 namespace CalXUI {
 
 	CalxNewKeyDialog::CalxNewKeyDialog(wxWindow *win, wxWindowID id,
-	                                   ConfigEntry *entry)
+	                                   ConfiguationFlatDictionary *entry)
 	    : wxDialog::wxDialog(win, id, __("Add new key")) {
 		this->entry = entry;
 

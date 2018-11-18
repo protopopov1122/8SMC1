@@ -3,15 +3,10 @@
 
 namespace CalX {
 
-	ConfigEntry::ConfigEntry(ConfigManager &conf, std::string name) : config(conf) {
-		this->name = name;
-	}
+	ConfigEntry::ConfigEntry(ConfigManager &conf, const std::string &name)
+		: config(conf), entryName(name) {}
 
-	const std::string &ConfigEntry::getEntryName() const {
-		return this->name;
-	}
-
-	const ConfigurationValue &ConfigEntry::get(std::string id) const {
+	const ConfigurationValue &ConfigEntry::get(const std::string &id) const {
 		if (this->content.count(id) != 0) {
 			return this->content.at(id);
 		} else {
@@ -19,69 +14,39 @@ namespace CalX {
 		}
 	}
 
-	bool ConfigEntry::has(std::string id) const {
+	bool ConfigEntry::has(const std::string &id) const {
 		return this->content.count(id) != 0;
 	}
 
-	bool ConfigEntry::put(std::string id, ConfigurationValue value) {
+	bool ConfigEntry::put(const std::string &id, const ConfigurationValue &value) {
 		bool change = false;
 		if (this->has(id)) {
 			this->content.erase(id);
 			change = true;
 		}
-		if (value.is(ConfigValueType::None)) {
+		if (value.is(ConfigurationValueType::None)) {
 			return false;
 		}
 		this->content[id] = value;
 		for (const auto &l : this->config.getEventListeners()) {
 			if (change) {
-				l->keyChanged(&this->config, this, id);
+				l->keyChanged(&this->config, this->entryName, id);
 			} else {
-				l->keyAdded(&this->config, this, id);
+				l->keyAdded(&this->config, this->entryName, id);
 			}
 		}
 		return true;
 	}
 
-	bool ConfigEntry::remove(std::string id) {
+	bool ConfigEntry::remove(const std::string &id) {
 		if (this->content.count(id) == 0) {
 			return false;
 		}
 		this->content.erase(id);
 		for (const auto &l : this->config.getEventListeners()) {
-			l->keyRemoved(&this->config, this, id);
+			l->keyRemoved(&this->config, this->entryName, id);
 		}
 		return true;
-	}
-
-	bool ConfigEntry::is(std::string id, ConfigValueType type) const {
-		if (this->content.count(id) == 0) {
-			return false;
-		}
-		ConfigurationValue val = this->content.at(id);
-		return val.is(type);
-	}
-
-	int_conf_t ConfigEntry::getInt(std::string key, int_conf_t def) const {
-		return this->get(key).getInt(def);
-	}
-
-	real_conf_t ConfigEntry::getReal(std::string key, real_conf_t def) const {
-		return this->get(key).getReal(def);
-	}
-
-	bool ConfigEntry::getBool(std::string key, bool def) const {
-		return this->get(key).getBool(def);
-	}
-
-	std::string ConfigEntry::getString(std::string key, std::string def) const {
-		return this->get(key).getString(def);
-	}
-
-	void ConfigEntry::visit(ConfigEntryVisitor &visitor) const {
-		for (const auto &kv : this->content) {
-			visitor.visit(kv.first, kv.second);
-		}
 	}
 
 	void ConfigEntry::visit(std::function<void (const std::string &, const ConfigurationValue &)> visit) const {

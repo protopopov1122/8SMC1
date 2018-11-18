@@ -59,12 +59,12 @@ namespace CalX {
 		virtual ~NL300ConfigEventListener();
 		virtual void entryAdded(ConfigManager *, std::string);
 		virtual void entryRemoved(ConfigManager *, std::string);
-		virtual void keyAdded(ConfigManager *, ConfigEntry *, std::string);
-		virtual void keyRemoved(ConfigManager *, ConfigEntry *, std::string);
-		virtual void keyChanged(ConfigManager *, ConfigEntry *, std::string);
+		virtual void keyAdded(ConfigManager *, std::string, std::string);
+		virtual void keyRemoved(ConfigManager *, std::string, std::string);
+		virtual void keyChanged(ConfigManager *, std::sstring, std::string);
 
 	 private:
-		void process(ConfigManager *, ConfigEntry *, std::string);
+		void process(ConfigManager *, std::string, std::string);
 
 		NL300Instrument *instr;
 	};

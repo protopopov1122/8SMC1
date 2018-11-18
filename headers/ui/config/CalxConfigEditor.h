@@ -41,9 +41,9 @@ namespace CalXUI {
 		virtual ~CalxConfigEventListener();
 		virtual void entryAdded(ConfigManager *, std::string);
 		virtual void entryRemoved(ConfigManager *, std::string);
-		virtual void keyAdded(ConfigManager *, ConfigEntry *, std::string);
-		virtual void keyRemoved(ConfigManager *, ConfigEntry *, std::string);
-		virtual void keyChanged(ConfigManager *, ConfigEntry *, std::string);
+		virtual void keyAdded(ConfigManager *, std::string, std::string);
+		virtual void keyRemoved(ConfigManager *, std::string, std::string);
+		virtual void keyChanged(ConfigManager *, std::string, std::string);
 
 	 private:
 		CalxConfigEditor *editor;

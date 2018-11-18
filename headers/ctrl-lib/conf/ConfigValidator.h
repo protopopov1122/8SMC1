@@ -43,12 +43,12 @@ namespace CalX {
 
 	class ConfigValueValidator : public AbstractValidator {
 	 public:
-		ConfigValueValidator(ConfigValueType, bool = false);
-		ConfigValueType getType();
+		ConfigValueValidator(ConfigurationValueType, bool = false);
+		ConfigurationValueType getType();
 		virtual bool validate(const ConfigurationValue &);
 
 	 private:
-		ConfigValueType type;
+		ConfigurationValueType type;
 	};
 
 	class ConfigKeyValidator : public AbstractValidator {
@@ -57,7 +57,7 @@ namespace CalX {
 		                   bool = false);
 		std::string getKey();
 		ConfigValueValidator *getValue();
-		bool validate(ConfigEntry *);
+		bool validate(ConfiguationFlatDictionary *);
 
 	 private:
 		std::string key;

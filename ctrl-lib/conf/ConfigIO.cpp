@@ -5,30 +5,30 @@
 namespace CalX {
 
   void ConfigManagerIO::store(ConfigManager &config, std::ostream &os) {
-    config.visit([&](ConfigEntry &entry) {
-      os << '[' << entry.getEntryName() << ']' << std::endl;
+    config.visit([&](const std::string &entryName, ConfiguationFlatDictionary &entry) {
+      os << '[' << entryName << ']' << std::endl;
 			ConfigManagerIO::store(entry, os);
 			os << std::endl;
     });
   }
 
-  void ConfigManagerIO::store(ConfigEntry &entry, std::ostream &os) {
+  void ConfigManagerIO::store(ConfiguationFlatDictionary &entry, std::ostream &os) {
     entry.visit([&](const std::string &key, const ConfigurationValue &value) {
 			os << key << '=';
 			switch (value.getType()) {
-				case ConfigValueType::Integer:
+				case ConfigurationValueType::Integer:
 					os << value.getInt();
 					break;
-				case ConfigValueType::Real:
+				case ConfigurationValueType::Real:
 					os << value.getReal();
 					break;
-				case ConfigValueType::Boolean:
+				case ConfigurationValueType::Boolean:
 					os << (value.getBool() ? "true" : "false");
 					break;
-				case ConfigValueType::String:
+				case ConfigurationValueType::String:
 					os << '\"' << value.getString() << '\"';
 					break;
-				case ConfigValueType::None:
+				case ConfigurationValueType::None:
 					break;
 			}
 			os << std::endl;
@@ -50,7 +50,7 @@ namespace CalX {
 			new_man = std::make_unique<ConfigManager>();
 			man = new_man.get();
 		}
-		ConfigEntry *entry = nullptr;
+		ConfiguationFlatDictionary *entry = nullptr;
 		const int LINE_LEN = 256;
 		char rawline[LINE_LEN];
 		int line_num = 0;
@@ -113,7 +113,7 @@ namespace CalX {
 						continue;
 					}
 					ConfigurationValue value = parseValue(&line[pos]);
-					if (!value.is(ConfigValueType::None)) {
+					if (!value.is(ConfigurationValueType::None)) {
 						entry->put(key, std::move(value));
 					}
 				}

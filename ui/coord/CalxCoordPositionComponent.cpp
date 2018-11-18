@@ -34,7 +34,7 @@ namespace CalXUI {
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 		SetSizer(sizer);
 
-		ConfigEntry *confEntry =
+		ConfiguationFlatDictionary *confEntry =
 		    wxGetApp().getSystemManager()->getConfiguration().getEntry(
 		        CalxConfiguration::RelativePosition);
 		this->xPos = new wxSpinCtrlDouble(
