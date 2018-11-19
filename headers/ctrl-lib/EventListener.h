@@ -22,9 +22,8 @@
 #define CALX_CTRL_LIB_EVENT_LISTENER_H_
 
 #include "ctrl-lib/CtrlCore.h"
+#include "ctrl-lib/Event.h"
 #include <string>
-#include <algorithm>
-#include <vector>
 
 /* This header contains event type defintions.
    CalX Ctrl-lib widely uses events to communicate
@@ -106,49 +105,6 @@ namespace CalX {
 		virtual void stopped(CoordErrorEvent &) {}
 		virtual void calibrating(CoordCalibrateEvent &) {}
 		virtual void calibrated(CoordCalibrateEvent &) {}
-	};
-
-	class ConfigEventListener {
-	 public:
-		ConfigEventListener() {
-			INIT_LOG("ConfigEventListener");
-		}
-		virtual ~ConfigEventListener() {
-			DESTROY_LOG("ConfigEventListener");
-		}
-		virtual void entryAdded(ConfigManager *, std::string) {}
-		virtual void entryRemoved(ConfigManager *, std::string) {}
-		virtual void keyAdded(ConfigManager *, std::string, std::string) {}
-		virtual void keyRemoved(ConfigManager *, std::string, std::string) {}
-		virtual void keyChanged(ConfigManager *, std::string, std::string) {}
-	};
-
-	template<typename T>
-	class AbstractEventSource {
-	 public:
-		virtual ~AbstractEventSource() = default;
-		virtual void addEventListener(T) = 0;
-		virtual void removeEventListener(T) = 0;
-	};
-
-	template<typename T>
-	class EventSource : public AbstractEventSource<T> {
-	 public:
-		void addEventListener(T listener) override {
-			this->listeners.push_back(listener);
-		}
-		void removeEventListener(T listener) override {
-			this->listeners.erase(std::remove(this->listeners.begin(), this->listeners.end(), listener), this->listeners.end());
-		}
-	 protected:
-		template <typename F, typename... E>
-		void submitEvent(F method, E... evt) const {
-			for (const auto &listener : this->listeners) {
-				((*listener).*method)(evt...);
-			}
-		}
-
-		std::vector<T> listeners;
 	};
 }  // namespace CalX
 

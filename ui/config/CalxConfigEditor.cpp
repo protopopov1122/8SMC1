@@ -29,34 +29,33 @@ namespace CalXUI {
 		this->editor = editor;
 	}
 
-	CalxConfigEventListener::~CalxConfigEventListener() {}
-
-	void CalxConfigEventListener::entryAdded(ConfigManager *manager,
-	                                         std::string id) {
+	void CalxConfigEventListener::entryAdd(ConfigurationCatalogue *manager,
+	                                       const std::string &id) {
 		editor->updateEntries();
 		editor->updateEntry();
 	}
 
-	void CalxConfigEventListener::entryRemoved(ConfigManager *manager,
-	                                           std::string id) {
+	void CalxConfigEventListener::entryRemove(ConfigurationCatalogue *manager,
+	                                           const std::string &id) {
 		editor->updateEntries();
 		editor->updateEntry();
 	}
 
-	void CalxConfigEventListener::keyAdded(ConfigManager *manager,
-	                                       std::string entry, std::string key) {
+	void CalxConfigEventListener::keyAdd(ConfigurationCatalogue *manager,
+	                                       const std::string &entry,
+										   const std::string &key) {
 		editor->updateEntry();
 	}
 
-	void CalxConfigEventListener::keyRemoved(ConfigManager *manager,
-	                                         std::string entry,
-	                                         std::string key) {
+	void CalxConfigEventListener::keyRemove(ConfigurationCatalogue *manager,
+	                                         const std::string &entry,
+	                                         const std::string &key) {
 		editor->updateEntry();
 	}
 
-	void CalxConfigEventListener::keyChanged(ConfigManager *manager,
-	                                         std::string entry,
-	                                         std::string key) {
+	void CalxConfigEventListener::keyChange(ConfigurationCatalogue *manager,
+	                                         const std::string &entry,
+	                                         const std::string &key) {
 		editor->updateKey();
 	}
 

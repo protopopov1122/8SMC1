@@ -35,15 +35,14 @@ namespace CalXUI {
 
 	class CalxConfigEditor;  // Forward referencing
 
-	class CalxConfigEventListener : public ConfigEventListener {
+	class CalxConfigEventListener : public CatalogueListener {
 	 public:
 		CalxConfigEventListener(CalxConfigEditor *);
-		virtual ~CalxConfigEventListener();
-		virtual void entryAdded(ConfigManager *, std::string);
-		virtual void entryRemoved(ConfigManager *, std::string);
-		virtual void keyAdded(ConfigManager *, std::string, std::string);
-		virtual void keyRemoved(ConfigManager *, std::string, std::string);
-		virtual void keyChanged(ConfigManager *, std::string, std::string);
+		void entryAdd(ConfigurationCatalogue *, const std::string &) override;
+		void entryRemove(ConfigurationCatalogue *, const std::string &) override;
+		void keyAdd(ConfigurationCatalogue *, const std::string &, const std::string &) override;
+		void keyRemove(ConfigurationCatalogue *, const std::string &, const std::string &) override;
+		void keyChange(ConfigurationCatalogue *, const std::string &, const std::string &) override;
 
 	 private:
 		CalxConfigEditor *editor;

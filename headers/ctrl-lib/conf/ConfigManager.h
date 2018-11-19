@@ -42,7 +42,7 @@ namespace CalX {
 
 	class ConfigEntry : public ConfiguationFlatDictionary {
 	 public:
-		ConfigEntry(ConfigManager &, const std::string &);
+		ConfigEntry();
 
 		const ConfigurationValue &get(const std::string &) const override;
 		bool has(const std::string &) const override;
@@ -52,12 +52,10 @@ namespace CalX {
 		void visit(std::function<void (const std::string &, const ConfigurationValue &)>) const override;
 
 	 private:
-		ConfigManager &config;
-		std::string entryName;
 		std::map<std::string, ConfigurationValue> content;
 	};
 
-	class ConfigManager : public ConfigurationCatalogue, public EventSource<std::shared_ptr<ConfigEventListener>> {
+	class ConfigManager : public ConfigurationCatalogue {
 	 public:
 		ConfigManager();
 
@@ -65,8 +63,6 @@ namespace CalX {
 		bool hasEntry(const std::string &) const override;
 		bool removeEntry(const std::string &) override;
 		void visit(std::function<void (const std::string &, ConfiguationFlatDictionary &)>) const override;
-
-		std::vector<std::shared_ptr<ConfigEventListener>> &getEventListeners();
 	 private:
 		std::map<std::string, std::unique_ptr<ConfigEntry>> entries;
 	};

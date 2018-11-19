@@ -29,31 +29,31 @@ namespace CalX {
 		this->instr = i;
 	}
 
-	NL300ConfigEventListener::~NL300ConfigEventListener() {}
+	void NL300ConfigEventListener::entryAdd(ConfigurationCatalogue *conf,
+	                                          const std::string &id) {}
 
-	void NL300ConfigEventListener::entryAdded(ConfigManager *conf,
-	                                          std::string id) {}
+	void NL300ConfigEventListener::entryRemove(ConfigurationCatalogue *conf,
+	                                            const std::string &id) {}
 
-	void NL300ConfigEventListener::entryRemoved(ConfigManager *conf,
-	                                            std::string id) {}
-
-	void NL300ConfigEventListener::keyAdded(ConfigManager *conf,
-	                                        std::string entry, std::string key) {
+	void NL300ConfigEventListener::keyAdd(ConfigurationCatalogue *conf,
+	                                        const std::string &entry,
+																					const std::string &key) {
 		process(conf, entry, key);
 	}
 
-	void NL300ConfigEventListener::keyRemoved(ConfigManager *conf,
-	                                          ConfigEntry *entry,
-	                                          std::string key) {}
+	void NL300ConfigEventListener::keyRemove(ConfigurationCatalogue *conf,
+	                                          const std::string &entry,
+	                                          const std::string &key) {}
 
-	void NL300ConfigEventListener::keyChanged(ConfigManager *conf,
-	                                          std::string entry,
-	                                          std::string key) {
+	void NL300ConfigEventListener::keyChanged(ConfigurationCatalogue *conf,
+	                                          const std::string &entry,
+	                                          const std::string &key) {
 		process(conf, entry, key);
 	}
 
-	void NL300ConfigEventListener::process(ConfigManager *conf,
-	                                       std::string entryName, std::string key) {
+	void NL300ConfigEventListener::process(ConfigurationCatalogue *conf,
+	                                       const std::string &entryName,
+																				 const std::string &key) {
 		if (entryName.compare(NL300_ENTRY_NAME) != 0) {
 			return;
 		}

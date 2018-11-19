@@ -1,10 +1,29 @@
+/*
+        Copyright (c) 2017-2018 Jevgenijs Protopopovs
+
+        This file is part of CalX project.
+
+        CalX is free software: you can redistribute it and/or modify
+        it under the terms of the GNU Lesser General Public License as published
+   by
+        the Free Software Foundation, either version 3 of the License, or
+        (at your option) any later version.
+
+        CalX is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        GNU Lesser General Public License for more details.
+
+        You should have received a copy of the GNU Lesser General Public License
+        along with CalX.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "ctrl-lib/conf/ConfigManager.h"
 #include <iostream>
 
 namespace CalX {
 
-	ConfigEntry::ConfigEntry(ConfigManager &conf, const std::string &name)
-		: config(conf), entryName(name) {}
+	ConfigEntry::ConfigEntry() {}
 
 	const ConfigurationValue &ConfigEntry::get(const std::string &id) const {
 		if (this->content.count(id) != 0) {
@@ -28,12 +47,10 @@ namespace CalX {
 			return false;
 		}
 		this->content[id] = value;
-		for (const auto &l : this->config.getEventListeners()) {
-			if (change) {
-				l->keyChanged(&this->config, this->entryName, id);
-			} else {
-				l->keyAdded(&this->config, this->entryName, id);
-			}
+		if (change) {
+			this->submitEvent(&FlatDictionaryListener::keyChange, *this, id);
+		} else {
+			this->submitEvent(&FlatDictionaryListener::keyAdd, *this, id);
 		}
 		return true;
 	}
@@ -43,9 +60,7 @@ namespace CalX {
 			return false;
 		}
 		this->content.erase(id);
-		for (const auto &l : this->config.getEventListeners()) {
-			l->keyRemoved(&this->config, this->entryName, id);
-		}
+		this->submitEvent(&FlatDictionaryListener::keyRemove, *this, id);
 		return true;
 	}
 

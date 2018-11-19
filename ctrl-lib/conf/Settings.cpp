@@ -1,3 +1,23 @@
+/*
+        Copyright (c) 2017-2018 Jevgenijs Protopopovs
+
+        This file is part of CalX project.
+
+        CalX is free software: you can redistribute it and/or modify
+        it under the terms of the GNU Lesser General Public License as published
+   by
+        the Free Software Foundation, either version 3 of the License, or
+        (at your option) any later version.
+
+        CalX is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        GNU Lesser General Public License for more details.
+
+        You should have received a copy of the GNU Lesser General Public License
+        along with CalX.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include <functional>
 #include <fstream>
 #include <iostream>
@@ -5,28 +25,28 @@
 
 namespace CalX {
 
-  class SettingsConfigListener : public ConfigEventListener {
+  class SettingsConfigListener : public CatalogueListener {
    public:
     SettingsConfigListener(std::function<void()> exportFn)
       : exportFn(exportFn) {}
     
-		void entryAdded(ConfigManager *conf, std::string entry) override {
+		void entryAdd(ConfigurationCatalogue *conf, const std::string &entry) override {
       this->exportFn();
     }
 
-		void entryRemoved(ConfigManager *conf, std::string entry) override {
+		void entryRemove(ConfigurationCatalogue *conf, const std::string &entry) override {
       this->exportFn();
     }
 
-		void keyAdded(ConfigManager *conf, std::string entry, std::string key) override {
+		void keyAdd(ConfigurationCatalogue *conf, const std::string &entry, const std::string &key) override {
       this->exportFn();
     }
 
-		void keyRemoved(ConfigManager *conf, std::string entry, std::string key) override {
+		void keyRemove(ConfigurationCatalogue *conf, const std::string &entry, const std::string &key) override {
       this->exportFn();
     }
 
-		void keyChanged(ConfigManager *conf, std::string entry, std::string key) override {
+		void keyChange(ConfigurationCatalogue *conf, const std::string &entry, const std::string &key) override {
       this->exportFn();
     }
    private:

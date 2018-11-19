@@ -53,18 +53,17 @@ namespace CalX {
 	class NL300Instrument;        // Forward referencing
 	class StandardDeviceManager;  // Forward referencing
 
-	class NL300ConfigEventListener : public ConfigEventListener {
+	class NL300ConfigEventListener : public CatalogueListener {
 	 public:
 		NL300ConfigEventListener(NL300Instrument *);
-		virtual ~NL300ConfigEventListener();
-		virtual void entryAdded(ConfigManager *, std::string);
-		virtual void entryRemoved(ConfigManager *, std::string);
-		virtual void keyAdded(ConfigManager *, std::string, std::string);
-		virtual void keyRemoved(ConfigManager *, std::string, std::string);
-		virtual void keyChanged(ConfigManager *, std::sstring, std::string);
+		void entryAdd(ConfigurationCatalogue *, const std::string &) override;
+		void entryRemove(ConfigurationCatalogue *, const std::string &) override;
+		void keyAdd(ConfigurationCatalogue *, const std::string &, const std::string &) override;
+		void keyRemove(ConfigurationCatalogue *, const std::string &, const std::string &) override;
+		void keyChange(ConfigurationCatalogue *, const std::sstring &, const std::string &) override;
 
 	 private:
-		void process(ConfigManager *, std::string, std::string);
+		void process(ConfigurationCatalogue *, const std::string &, const std::string &);
 
 		NL300Instrument *instr;
 	};

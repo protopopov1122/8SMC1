@@ -25,6 +25,36 @@
 
 namespace CalX {
 
+	class ConfigManagerDictionaryListener : public FlatDictionaryListener {
+	 public:
+		ConfigManagerDictionaryListener(ConfigurationCatalogue &cat, const std::string &entry,
+			const std::vector<std::shared_ptr<CatalogueListener>> &listeners)
+			: catalogue(cat), entry(entry), listeners(listeners) {}
+	
+		void keyAdd(ConfiguationFlatDictionary &dist, const std::string &key) override {
+			for (auto &l : this->listeners) {
+				l->keyAdd(&this->catalogue, this->entry, key);
+			}
+		}
+		
+		void keyChange(ConfiguationFlatDictionary &dist, const std::string &key) override {
+			for (auto &l : this->listeners) {
+				l->keyChange(&this->catalogue, this->entry, key);
+			}
+		}
+
+		void keyRemove(ConfiguationFlatDictionary &dist, const std::string &key) override {
+			for (auto &l : this->listeners) {
+				l->keyRemove(&this->catalogue, this->entry, key);
+			}
+		}
+
+	 private:
+	 	ConfigurationCatalogue &catalogue;
+		std::string entry;
+		const std::vector<std::shared_ptr<CatalogueListener>> &listeners;
+	};
+
 	ConfigManager::ConfigManager() {}
 
 	ConfiguationFlatDictionary *ConfigManager::getEntry(const std::string &id,
@@ -33,10 +63,11 @@ namespace CalX {
 			return this->entries[id].get();
 		} else if (createNew) {
 			std::unique_ptr<ConfigEntry> entry =
-			    std::make_unique<ConfigEntry>(*this, id);
+			    std::make_unique<ConfigEntry>();
+			entry->addEventListener(std::make_shared<ConfigManagerDictionaryListener>(*this, id, this->listeners));
 			ConfigEntry *ptr = entry.get();
 			this->entries[id] = std::move(entry);
-			this->submitEvent(&ConfigEventListener::entryAdded, this, id);
+			this->submitEvent(&CatalogueListener::entryAdd, this, id);
 			return ptr;
 		} else {
 			return nullptr;
@@ -51,8 +82,8 @@ namespace CalX {
 		if (this->entries.count(id) == 0) {
 			return false;
 		}
+		this->submitEvent(&CatalogueListener::entryRemove, this, id);
 		this->entries.erase(id);
-		this->submitEvent(&ConfigEventListener::entryRemoved, this, id);
 		return true;
 	}
 
@@ -60,10 +91,5 @@ namespace CalX {
 		for (const auto &kv : this->entries) {
 			visit(kv.first, *kv.second);
 		}
-	}
-
-	std::vector<std::shared_ptr<ConfigEventListener>>
-	    &ConfigManager::getEventListeners() {
-		return this->listeners;
 	}
 }  // namespace CalX
