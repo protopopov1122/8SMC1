@@ -22,7 +22,7 @@
 
 namespace CalX {
 	VectorMotorControllerSet::VectorMotorControllerSet(
-	    ConfigManager &config, DeviceManager &devman,
+	    ConfigurationCatalogue &config, DeviceManager &devman,
 	    DeviceControllerSetListener *listener)
 	    : config(config), devman(devman), listener(listener) {
 		for (device_id_t deviceId = 0;
@@ -64,7 +64,7 @@ namespace CalX {
 	}
 
 	VectorInstrumentControllerSet::VectorInstrumentControllerSet(
-	    ConfigManager &config, DeviceManager &devman,
+	    ConfigurationCatalogue &config, DeviceManager &devman,
 	    DeviceControllerSetListener *listener)
 	    : config(config), devman(devman), listener(listener) {
 		for (device_id_t deviceId = 0;

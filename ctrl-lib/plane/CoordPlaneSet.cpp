@@ -23,7 +23,7 @@
 
 namespace CalX {
 
-	VectorCoordPlaneSet::VectorCoordPlaneSet(ConfigManager &config,
+	VectorCoordPlaneSet::VectorCoordPlaneSet(ConfigurationCatalogue &config,
 	                                         CoordPlaneSetListener *listener)
 	    : config(config), listener(listener) {}
 

@@ -24,7 +24,7 @@
 
 namespace CalX {
 
-	MotorController::MotorController(ConfigManager &conf, Motor &dev)
+	MotorController::MotorController(ConfigurationCatalogue &conf, Motor &dev)
 	    : DeviceController::DeviceController(conf, dev), motor(dev) {
 		this->destination = MoveType::Stop;
 		this->work = false;

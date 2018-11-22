@@ -29,7 +29,7 @@ namespace CalX {
 
 	ErrorCode GCodeInterpreter::execute(GCodeStream &input, CoordPlane &plane,
 	                                    std::shared_ptr<CoordTranslator> trans,
-	                                    ConfigManager &config, float speed,
+	                                    ConfigurationCatalogue &config, float speed,
 	                                    TaskState &state) {
 		input.reset();
 

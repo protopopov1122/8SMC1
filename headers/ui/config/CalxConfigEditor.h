@@ -21,7 +21,7 @@
 #ifndef CALX_UI_CALX_CONFIG_EDITOR_H_
 #define CALX_UI_CALX_CONFIG_EDITOR_H_
 
-#include "ctrl-lib/conf/ConfigManager.h"
+#include "ctrl-lib/conf/Dictionary.h"
 #include "ui/CalxApp.h"
 #include "ui/CalxPanelPane.h"
 #include "ui/config/CalxConfigEditorDialogs.h"
@@ -50,8 +50,8 @@ namespace CalXUI {
 
 	class CalxConfigEditor : public CalxPanelPane {
 	 public:
-		CalxConfigEditor(wxWindow *, wxWindowID, ConfigManager &);
-		ConfigManager &getConfiguration();
+		CalxConfigEditor(wxWindow *, wxWindowID, ConfigurationCatalogue &);
+		ConfigurationCatalogue &getConfiguration();
 		wxButton *getOkButton();
 
 		virtual bool isBusy();
@@ -92,7 +92,7 @@ namespace CalXUI {
 		wxPanel *stringEditor;
 		wxTextCtrl *stringCtrl;
 
-		ConfigManager &config;
+		ConfigurationCatalogue &config;
 		std::shared_ptr<CalxConfigEventListener> listener;
 	};
 }  // namespace CalXUI

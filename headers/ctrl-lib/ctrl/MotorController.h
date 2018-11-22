@@ -34,7 +34,7 @@ namespace CalX {
 
 	class MotorController : public DeviceController, public EventSource<std::shared_ptr<MotorEventListener>> {
 	 public:
-		MotorController(ConfigManager &, Motor &);
+		MotorController(ConfigurationCatalogue &, Motor &);
 		Motor &getMotor() const;
 
 		Power getPowerState() const;

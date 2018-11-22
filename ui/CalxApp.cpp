@@ -47,7 +47,7 @@ namespace CalXUI {
 	// Utility startup methods
 	// System startup is quite complex action
 	// so it is split into several methods
-	std::unique_ptr<ConfigManager> CalxApp::loadConfiguration() {
+	std::unique_ptr<ConfigurationCatalogue> CalxApp::loadConfiguration() {
 		// Determine which configuration to use
 		CalxConfigLoader *confLoader = new CalxConfigLoader(nullptr, wxID_ANY);
 		confLoader->load();
@@ -59,20 +59,20 @@ namespace CalXUI {
 		confLoader->Destroy();
 
 		// Load selected configuration
-		std::unique_ptr<ConfigManager> conf_ptr = nullptr;
+		std::unique_ptr<ConfigurationCatalogue> conf_ptr = nullptr;
 		std::ifstream cnf(path);
 		if (!cnf.good()) {
 			wxMessageBox(__("Can't open configuration. Using default values."),
 			             __("Warning"), wxICON_WARNING);
 			conf_ptr = std::make_unique<ConfigManager>();
 		} else {
-			conf_ptr = ConfigManagerIO::load(cnf, std::cout);
+			conf_ptr = INIConfiguration::load(cnf, std::cout);
 		}
 		cnf.close();
 		return conf_ptr;
 	}
 
-	DeviceManager_getter CalxApp::loadDeviceDrivers(ConfigManager &conf) {
+	DeviceManager_getter CalxApp::loadDeviceDrivers(ConfigurationCatalogue &conf) {
 		// Load specified dynamic library
 		std::string lib_addr =
 		    conf.getEntry(CalxConfiguration::UserInterface)->getString(CalxUIConfiguration::DeviceLibrary, STRINGIZE(DEVICES_LIB));
@@ -103,7 +103,7 @@ namespace CalXUI {
 		return getter;
 	}
 
-	void CalxApp::initDebugConsole(ConfigManager &conf) {
+	void CalxApp::initDebugConsole(ConfigurationCatalogue &conf) {
 		this->debug_mode = conf.getEntry(CalxConfiguration::UserInterface)->getBool(CalxUIConfiguration::Debug, false);
 		if (this->debug_mode) {
 #ifdef OS_WIN
@@ -116,7 +116,7 @@ namespace CalXUI {
 		}
 	}
 
-	void CalxApp::startDebugConsole(ConfigManager &conf) {
+	void CalxApp::startDebugConsole(ConfigurationCatalogue &conf) {
 		if (this->debug_mode &&
 		    sysman->getConfiguration().getEntry(CalxConfiguration::UserInterface)->getBool(CalxUIConfiguration::Console, false)) {
 			this->debug_console = std::make_unique<CalxDebugConsole>(this->sysman.get());
@@ -128,7 +128,7 @@ namespace CalXUI {
 		this->Bind(wxEVT_APP_ALERT, &CalxApp::OnAlertEvent, this);
 	}
 
-	void CalxApp::initLogging(ConfigManager &conf){
+	void CalxApp::initLogging(ConfigurationCatalogue &conf){
 #define SETUP_LOG(name, id, dest)                                              \
 	{                                                                            \
 		this->name = nullptr;                                                      \
@@ -151,7 +151,7 @@ namespace CalXUI {
 #undef SETUP_LOG
 	}
 
-	std::unique_ptr<ExtEngine> CalxApp::loadExtensionEngine(ConfigManager &conf) {
+	std::unique_ptr<ExtEngine> CalxApp::loadExtensionEngine(ConfigurationCatalogue &conf) {
 		std::string ext_addr = conf.getEntry(CalxConfiguration::Extensions)->getString(CalxExtensionsConfiguration::Engine, "");
 		std::unique_ptr<ExtEngine> ext = nullptr;
 		if (!ext_addr.empty()) {
@@ -193,7 +193,7 @@ namespace CalXUI {
 		return ext;
 	}
 
-	void CalxApp::loadScriptEngine(ConfigManager &conf) {
+	void CalxApp::loadScriptEngine(ConfigurationCatalogue &conf) {
 		std::string script_eng_addr =
 		    conf.getEntry(CalxConfiguration::Scripting)->getString(CalxScriptingConfiguration::Engine, "");
 		this->scriptFactory = nullptr;
@@ -225,7 +225,7 @@ namespace CalXUI {
 		}
 	}
 
-	void CalxApp::startInitScript(ConfigManager &conf) {
+	void CalxApp::startInitScript(ConfigurationCatalogue &conf) {
 		if (this->scriptFactory != nullptr &&
 		    this->sysman->getConfiguration().getEntry(CalxConfiguration::Scripting)->getBool(CalxScriptingConfiguration::AutoInit,
 		                                                                 false)) {
@@ -242,11 +242,11 @@ namespace CalXUI {
 	// calls methods above
 	bool CalxApp::OnInit() {
 		// Load configuration
-		std::unique_ptr<ConfigManager> conf_ptr = this->loadConfiguration();
+		std::unique_ptr<ConfigurationCatalogue> conf_ptr = this->loadConfiguration();
 		if (conf_ptr == nullptr) {
 			return false;
 		}
-		ConfigManager &conf = *conf_ptr;
+		ConfigurationCatalogue &conf = *conf_ptr;
 
 		// Init device drivers
 		DeviceManager_getter getter = this->loadDeviceDrivers(conf);

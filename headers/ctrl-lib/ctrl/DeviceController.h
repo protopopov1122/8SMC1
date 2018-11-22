@@ -24,7 +24,7 @@
 #include "ctrl-lib/CtrlCore.h"
 #include "ctrl-lib/Resource.h"
 #include "ctrl-lib/EventListener.h"
-#include "ctrl-lib/conf/ConfigManager.h"
+#include "ctrl-lib/conf/Dictionary.h"
 #include "ctrl-lib/device/DeviceManager.h"
 #include <cinttypes>
 #include <vector>
@@ -33,14 +33,14 @@ namespace CalX {
 
 	class DeviceController : public UsableResource {
 	 public:
-		DeviceController(ConfigManager &, Device &);
+		DeviceController(ConfigurationCatalogue &, Device &);
 		virtual ~DeviceController() = default;
 		device_id_t getID() const;
-		ConfigManager &getConfiguration() const;
+		ConfigurationCatalogue &getConfiguration() const;
 		Device &getDevice() const;
 
 	 protected:
-		ConfigManager &config;
+		ConfigurationCatalogue &config;
 
 	 private:
 		Device &device;

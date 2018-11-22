@@ -23,7 +23,7 @@
 
 #include "ctrl-lib/Resource.h"
 #include "ctrl-lib/EventListener.h"
-#include "ctrl-lib/conf/ConfigManager.h"
+#include "ctrl-lib/conf/Dictionary.h"
 #include <iosfwd>
 #include <memory>
 #include <string>

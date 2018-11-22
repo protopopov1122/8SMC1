@@ -126,7 +126,7 @@ namespace CalXUI {
 		graphSizer->Add(buildButton);
 		graphSizer->Add(previewButton);
 
-		ConfigManager &conf = wxGetApp().getSystemManager()->getConfiguration();
+		ConfigurationCatalogue &conf = wxGetApp().getSystemManager()->getConfiguration();
 		coord_point_t cen = {
 			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)->getReal(CalxCoordConfiguration::OffsetX, 0.0)),
 			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)->getReal(CalxCoordConfiguration::OffsetY, 0.0))

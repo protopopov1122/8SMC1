@@ -22,7 +22,7 @@
 #include <sstream>
 
 namespace CalXUI {
-	CalxUnitProcessor::CalxUnitProcessor(ConfigManager &conf) : config(conf) {}
+	CalxUnitProcessor::CalxUnitProcessor(ConfigurationCatalogue &conf) : config(conf) {}
 
 	std::string CalxUnitProcessor::formatDouble(double d) {
 		std::ostringstream os;

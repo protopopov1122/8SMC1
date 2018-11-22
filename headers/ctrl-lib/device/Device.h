@@ -22,7 +22,7 @@
 #define CALX_DEVICE_H_
 
 #include "ctrl-lib/CtrlCore.h"
-#include "ctrl-lib/conf/ConfigManager.h"
+#include "ctrl-lib/conf/Dictionary.h"
 #include <cinttypes>
 #include <mutex>
 #include <string>
@@ -95,7 +95,7 @@ namespace CalX {
 		virtual device_id_t getID() const;
 		virtual bool hasErrors() const;
 		virtual std::string pollError();
-		virtual ConfigManager &getConfiguration() const;
+		virtual ConfigurationCatalogue &getConfiguration() const;
 		virtual DeviceManager &getDeviceManager() = 0;
 		virtual std::string getDeviceInfo() = 0;
 		virtual std::string getRuntimeInfo() = 0;
@@ -105,7 +105,7 @@ namespace CalX {
 		virtual void log(std::string);
 
 		const device_id_t id;
-		std::shared_ptr<ConfigManager> config;
+		std::shared_ptr<ConfigurationCatalogue> config;
 		std::vector<std::string> errors;
 
 	 private:

@@ -49,7 +49,7 @@ namespace CalX {
 
 	class VectorMotorControllerSet : public DeviceControllerSet<MotorController> {
 	 public:
-		VectorMotorControllerSet(ConfigManager &, DeviceManager &,
+		VectorMotorControllerSet(ConfigurationCatalogue &, DeviceManager &,
 		                         DeviceControllerSetListener * = nullptr);
 		std::weak_ptr<MotorController> connectDevice(
 		    DeviceConnectionPrms *) override;
@@ -58,7 +58,7 @@ namespace CalX {
 		std::size_t getDeviceCount() const override;
 
 	 private:
-		ConfigManager &config;
+		ConfigurationCatalogue &config;
 		DeviceManager &devman;
 		DeviceControllerSetListener *listener;
 		std::vector<std::shared_ptr<MotorController>> motors;
@@ -67,7 +67,7 @@ namespace CalX {
 	class VectorInstrumentControllerSet
 	    : public DeviceControllerSet<InstrumentController> {
 	 public:
-		VectorInstrumentControllerSet(ConfigManager &, DeviceManager &,
+		VectorInstrumentControllerSet(ConfigurationCatalogue &, DeviceManager &,
 		                              DeviceControllerSetListener *);
 		std::weak_ptr<InstrumentController> connectDevice(
 		    DeviceConnectionPrms *) override;
@@ -76,7 +76,7 @@ namespace CalX {
 		std::size_t getDeviceCount() const override;
 
 	 private:
-		ConfigManager &config;
+		ConfigurationCatalogue &config;
 		DeviceManager &devman;
 		DeviceControllerSetListener *listener;
 		std::vector<std::shared_ptr<InstrumentController>> instruments;

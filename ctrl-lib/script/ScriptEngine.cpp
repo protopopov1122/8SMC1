@@ -22,10 +22,10 @@
 
 namespace CalX {
 
-	CalXScriptEnvironment::CalXScriptEnvironment(ConfigManager &conf)
+	CalXScriptEnvironment::CalXScriptEnvironment(ConfigurationCatalogue &conf)
 	    : config(conf) {}
 
-	ConfigManager &CalXScriptEnvironment::getConfiguration() {
+	ConfigurationCatalogue &CalXScriptEnvironment::getConfiguration() {
 		return this->config;
 	}
 

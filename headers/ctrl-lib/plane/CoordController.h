@@ -30,7 +30,7 @@ namespace CalX {
 	class CoordController : public CoordPlane,
 													public EventSource<std::shared_ptr<CoordEventListener>> {
 	 public:
-		CoordController(ConfigManager &, std::shared_ptr<MotorController>,
+		CoordController(ConfigurationCatalogue &, std::shared_ptr<MotorController>,
 		                std::shared_ptr<MotorController>,
 		                std::shared_ptr<InstrumentController> = nullptr);
 		std::shared_ptr<MotorController> getXAxis() const;
@@ -61,7 +61,7 @@ namespace CalX {
 		std::shared_ptr<MotorController> xAxis;
 		std::shared_ptr<MotorController> yAxis;
 		std::shared_ptr<InstrumentController> instr;
-		ConfigManager &config;
+		ConfigurationCatalogue &config;
 		bool work;
 		bool defWork;
 		CoordPlaneStatus status;

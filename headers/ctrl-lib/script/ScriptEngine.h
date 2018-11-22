@@ -22,7 +22,7 @@
 #define CALX_CTRL_LIB_SCRIPT_SCRIPT_ENGINE_H_
 
 #include "ctrl-lib/SystemManager.h"
-#include "ctrl-lib/conf/ConfigManager.h"
+#include "ctrl-lib/conf/Dictionary.h"
 #include <optional>
 
 /* Script engine is used to integrate different scripting languages into the
@@ -107,16 +107,16 @@ namespace CalX {
 
 	class CalXScriptEnvironment {
 	 public:
-		CalXScriptEnvironment(ConfigManager &);
+		CalXScriptEnvironment(ConfigurationCatalogue &);
 		virtual ~CalXScriptEnvironment() = default;
 
-		ConfigManager &getConfiguration();
+		ConfigurationCatalogue &getConfiguration();
 
 		virtual CalXScriptDevices &getDevices() = 0;
 		virtual CalXScriptPlanes &getPlanes() = 0;
 
 	 private:
-		ConfigManager &config;
+		ConfigurationCatalogue &config;
 	};
 
 	class CalXScript {

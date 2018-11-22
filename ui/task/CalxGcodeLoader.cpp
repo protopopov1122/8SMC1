@@ -49,7 +49,7 @@ namespace CalXUI {
 		gcodeSizer->Add(chooseButton, 0, wxALL);
 		chooseButton->Bind(wxEVT_BUTTON, &CalxGcodeLoader::OnChooseClick, this);
 
-		ConfigManager &conf = wxGetApp().getSystemManager()->getConfiguration();
+		ConfigurationCatalogue &conf = wxGetApp().getSystemManager()->getConfiguration();
 		coord_point_t trans_offset = {
 			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)->getReal(CalxCoordConfiguration::OffsetX, 0.0)),
 			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)->getReal(CalxCoordConfiguration::OffsetY, 0.0))

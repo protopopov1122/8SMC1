@@ -2,6 +2,7 @@
 #include "ctrl-lib/ctrl/MotorController.h"
 #include "ctrl-lib/ctrl/InstrumentController.h"
 #include "device/emulated/EmuDeviceManager.h"
+#include "ctrl-lib/conf/ConfigManager.h"
 
 using namespace CalX;
 

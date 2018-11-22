@@ -19,6 +19,8 @@
 */
 
 #include "ctrl-lib/device/DeviceManager.h"
+#include "ctrl-lib/conf/Dictionary.h"
+#include "ctrl-lib/conf/INI.h"
 #include <algorithm>
 #include <fstream>
 #include <iostream>
@@ -83,12 +85,12 @@ namespace CalX {
 		                 d) != instrumentConnectionType.end();
 	}
 
-	bool DeviceManager::loadConfiguration(std::string path, ConfigManager &conf) {
+	bool DeviceManager::loadConfiguration(std::string path, ConfigurationCatalogue &conf) {
 		std::ifstream cnf(path);
 		if (!cnf.good()) {
 			return false;
 		} else {
-			ConfigManagerIO::load(cnf, std::cout, &conf);
+			INIConfiguration::load(cnf, std::cout, &conf);
 		}
 		cnf.close();
 		return true;

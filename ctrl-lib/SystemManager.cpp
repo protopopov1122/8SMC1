@@ -19,6 +19,8 @@
 */
 
 #include "ctrl-lib/SystemManager.h"
+#include "ctrl-lib/conf/INI.h"
+#include "ctrl-lib/conf/FileSettings.h"
 
 namespace CalX {
 
@@ -77,7 +79,7 @@ namespace CalX {
 
 	DefaultSystemManager::DefaultSystemManager(
 	    std::unique_ptr<DeviceManager> devman,
-	    std::unique_ptr<ConfigManager> conf, std::unique_ptr<ExtEngine> ext_eng)
+	    std::unique_ptr<ConfigurationCatalogue> conf, std::unique_ptr<ExtEngine> ext_eng)
 	    : devman(std::move(devman)),
 	      conf(std::move(conf)),
 		  settings(nullptr),
@@ -88,7 +90,7 @@ namespace CalX {
 	      planeSet(*this->conf, &this->eventLogger) {
 		
 		if (this->conf->getEntry(CalxConfiguration::Core)->has(CalxCoreConfiguration::Settings)) {
-			this->settings = std::make_unique<SettingsFileRepository>(this->conf->getEntry(CalxConfiguration::Core)->getString(CalxCoreConfiguration::Settings));
+			this->settings = std::make_unique<SettingsFileRepository<INIConfiguration>>(this->conf->getEntry(CalxConfiguration::Core)->getString(CalxCoreConfiguration::Settings));
 		}
 		LOG(SYSMAN_TAG,
 		    "System startup. Found " +
@@ -115,7 +117,7 @@ namespace CalX {
 		return *this->devman;
 	}
 
-	ConfigManager &DefaultSystemManager::getConfiguration() const {
+	ConfigurationCatalogue &DefaultSystemManager::getConfiguration() const {
 		return *this->conf;
 	}
 

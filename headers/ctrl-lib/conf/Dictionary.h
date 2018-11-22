@@ -46,7 +46,7 @@ namespace CalX {
   class ConfigurationCatalogue : public EventSource<std::shared_ptr<CatalogueListener>> {
    public:
     virtual ~ConfigurationCatalogue() = default;
-    virtual ConfiguationFlatDictionary *getEntry(const std::string &, bool) = 0;
+    virtual ConfiguationFlatDictionary *getEntry(const std::string &, bool = true) = 0;
     virtual bool hasEntry(const std::string &) const = 0;
     virtual bool removeEntry(const std::string &) = 0;
 		virtual void visit(std::function<void (const std::string &, ConfiguationFlatDictionary &)>) const = 0;

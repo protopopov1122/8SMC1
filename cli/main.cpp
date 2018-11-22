@@ -20,6 +20,7 @@
 
 #include "cli/DevCLI.h"
 #include "ctrl-lib/SignalHandler.h"
+#include "ctrl-lib/conf/ConfigManager.h"
 #include "ctrl-lib/SystemManager.h"
 #include "ctrl-lib/device/DeviceManager.h"
 #include "ctrl-lib/translator/CoordTranslator.h"
@@ -57,13 +58,13 @@ class HelpCMD : public CLICommand {
 int main(int argc, char **argv) {
 	std::unique_ptr<DeviceManager> devman =
 	    std::unique_ptr<DeviceManager>(getDeviceManager());
-	std::unique_ptr<ConfigManager> conf = nullptr;
+	std::unique_ptr<ConfigurationCatalogue> conf = nullptr;
 	std::ifstream cnf("main.conf.ini");
 	if (!cnf.good()) {
 		std::cout << "Can't load configuration, using default values." << std::endl;
 		conf = std::make_unique<ConfigManager>();
 	} else {
-		conf = ConfigManagerIO::load(cnf, std::cout);
+		conf = INIConfiguration::load(cnf, std::cout);
 	}
 	cnf.close();
 	SystemManager *sysman =

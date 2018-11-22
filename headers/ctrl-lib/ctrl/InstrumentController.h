@@ -33,7 +33,7 @@ namespace CalX {
 	                             public SessionableResource,
 															 public EventSource<std::shared_ptr<InstrumentEventListener>> {
 	 public:
-		InstrumentController(ConfigManager &, Instrument &);
+		InstrumentController(ConfigurationCatalogue &, Instrument &);
 		Instrument &getInstrument() const;
 		virtual bool isSessionOpened() const;
 		virtual ErrorCode open_session();

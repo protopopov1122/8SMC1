@@ -25,6 +25,7 @@
 #include "ctrl-lib/EventListener.h"
 #include "ctrl-lib/conf/Value.h"
 #include "ctrl-lib/conf/Dictionary.h"
+#include "ctrl-lib/conf/INI.h"
 #include <cinttypes>
 #include <iosfwd>
 #include <map>
@@ -65,16 +66,6 @@ namespace CalX {
 		void visit(std::function<void (const std::string &, ConfiguationFlatDictionary &)>) const override;
 	 private:
 		std::map<std::string, std::unique_ptr<ConfigEntry>> entries;
-	};
-
-	class ConfigManagerIO {
-	 public:
-		static void store(ConfigManager &, std::ostream &);
-		static std::unique_ptr<ConfigManager> load(std::istream &, std::ostream &,
-		                                           ConfigManager * = nullptr);
-	 private:
-		static void store(ConfiguationFlatDictionary &, std::ostream &);
-		static ConfigurationValue parseValue(const char *);
 	};
 }  // namespace CalX
 

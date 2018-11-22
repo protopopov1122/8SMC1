@@ -18,25 +18,23 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CALX_CTRL_LIB_GCODE_GCODE_INTERPRETER_H_
-#define CALX_CTRL_LIB_GCODE_GCODE_INTERPRETER_H_
+#ifndef CALX_CTRL_LIB_CONF_INI_H_
+#define CALX_CTRL_LIB_CONF_INI_H_
 
-#include "ctrl-lib/CtrlCore.h"
 #include "ctrl-lib/conf/Dictionary.h"
-#include "ctrl-lib/gcode/GCodeStream.h"
-#include "ctrl-lib/plane/CoordPlane.h"
-#include "ctrl-lib/translator/CoordTranslator.h"
-
-/* GCode interpreter executes parser produced commands
-   on given coordinate plane with given speeed. */
+#include <iosfwd>
 
 namespace CalX {
-	class GCodeInterpreter {
+
+	class INIConfiguration {
 	 public:
-		static ErrorCode execute(GCodeStream &, CoordPlane &,
-		                         std::shared_ptr<CoordTranslator>, ConfigurationCatalogue &,
-		                         float, TaskState &);
+		static void store(ConfigurationCatalogue &, std::ostream &);
+		static std::unique_ptr<ConfigurationCatalogue> load(std::istream &, std::ostream &,
+		                                           					ConfigurationCatalogue * = nullptr);
+	 private:
+		static void store(ConfiguationFlatDictionary &, std::ostream &);
+		static ConfigurationValue parseValue(const char *);
 	};
-}  // namespace CalX
+}
 
 #endif

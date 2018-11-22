@@ -18,21 +18,22 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "ctrl-lib/conf/INI.h"
 #include "ctrl-lib/conf/ConfigManager.h"
 #include <iostream>
 #include <string.h>
 
 namespace CalX {
 
-  void ConfigManagerIO::store(ConfigManager &config, std::ostream &os) {
+  void INIConfiguration::store(ConfigurationCatalogue &config, std::ostream &os) {
     config.visit([&](const std::string &entryName, ConfiguationFlatDictionary &entry) {
       os << '[' << entryName << ']' << std::endl;
-			ConfigManagerIO::store(entry, os);
+			INIConfiguration::store(entry, os);
 			os << std::endl;
     });
   }
 
-  void ConfigManagerIO::store(ConfiguationFlatDictionary &entry, std::ostream &os) {
+  void INIConfiguration::store(ConfiguationFlatDictionary &entry, std::ostream &os) {
     entry.visit([&](const std::string &key, const ConfigurationValue &value) {
 			os << key << '=';
 			switch (value.getType()) {
@@ -62,10 +63,10 @@ namespace CalX {
 		return start;
 	}
 
-	std::unique_ptr<ConfigManager> ConfigManagerIO::load(std::istream &is,
+	std::unique_ptr<ConfigurationCatalogue> INIConfiguration::load(std::istream &is,
 	                                                   std::ostream &err,
-	                                                   ConfigManager *man) {
-		std::unique_ptr<ConfigManager> new_man = nullptr;
+	                                                   ConfigurationCatalogue *man) {
+		std::unique_ptr<ConfigurationCatalogue> new_man = nullptr;
 		if (man == nullptr) {
 			new_man = std::make_unique<ConfigManager>();
 			man = new_man.get();
@@ -142,7 +143,7 @@ namespace CalX {
 		return new_man;
 	}
 
-	ConfigurationValue ConfigManagerIO::parseValue(const char *input) {
+	ConfigurationValue INIConfiguration::parseValue(const char *input) {
 		size_t pos = 0;
 		pos = skipWhitespaces(input, pos);
 		const char *val = &input[pos];

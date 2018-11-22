@@ -23,7 +23,7 @@
 
 #include <memory>
 #include "ctrl-lib/ExtEngine.h"
-#include "ctrl-lib/conf/ConfigManager.h"
+#include "ctrl-lib/conf/Dictionary.h"
 #include "ctrl-lib/conf/Settings.h"
 #include "ctrl-lib/device/DeviceManager.h"
 #include "ctrl-lib/ctrl/DeviceControllerSet.h"
@@ -47,7 +47,7 @@ namespace CalX {
 	 public:
 		virtual ~SystemManager() = default;
 		virtual DeviceManager &getDeviceManager() const = 0;
-		virtual ConfigManager &getConfiguration() const = 0;
+		virtual ConfigurationCatalogue &getConfiguration() const = 0;
 		virtual SettingsRepository *getSettingsRepository() const = 0;
 		virtual MathEngine &getMathEngine() = 0;
 		virtual ExtEngine *getExtensionEngine() const = 0;
@@ -73,11 +73,11 @@ namespace CalX {
 	class DefaultSystemManager : public SystemManager {
 	 public:
 		DefaultSystemManager(std::unique_ptr<DeviceManager>,
-		                     std::unique_ptr<ConfigManager>,
+		                     std::unique_ptr<ConfigurationCatalogue>,
 		                     std::unique_ptr<ExtEngine> = nullptr);
 		virtual ~DefaultSystemManager();
 		DeviceManager &getDeviceManager() const override;
-		ConfigManager &getConfiguration() const override;
+		ConfigurationCatalogue &getConfiguration() const override;
 		SettingsRepository *getSettingsRepository() const override;
 		MathEngine &getMathEngine() override;
 		ExtEngine *getExtensionEngine() const override;
@@ -87,7 +87,7 @@ namespace CalX {
 
 	 private:
 		const std::unique_ptr<DeviceManager> devman;
-		const std::unique_ptr<ConfigManager> conf;
+		const std::unique_ptr<ConfigurationCatalogue> conf;
 		std::unique_ptr<SettingsRepository> settings;
 		DefaultMathEngine engine;
 		const std::unique_ptr<ExtEngine> ext_engine;

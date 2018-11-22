@@ -19,6 +19,7 @@
 */
 
 #include "ui/config/CalxConfigEditor.h"
+#include "ctrl-lib/conf/INI.h"
 #include <wx/sizer.h>
 #include <wx/splitter.h>
 #include <wx/stattext.h>
@@ -60,7 +61,7 @@ namespace CalXUI {
 	}
 
 	CalxConfigEditor::CalxConfigEditor(wxWindow *win, wxWindowID id,
-	                                   ConfigManager &conf)
+	                                   ConfigurationCatalogue &conf)
 	    : CalxPanelPane::CalxPanelPane(win, id), config(conf) {
 		this->currentValue = ConfigurationValue::Empty;
 
@@ -193,7 +194,7 @@ namespace CalXUI {
 		return this->okButton;
 	}
 
-	ConfigManager &CalxConfigEditor::getConfiguration() {
+	ConfigurationCatalogue &CalxConfigEditor::getConfiguration() {
 		return this->config;
 	}
 
@@ -498,7 +499,7 @@ namespace CalXUI {
 		if (dialog->ShowModal() == wxID_OK) {
 			std::string path = dialog->GetPath().ToStdString();
 			std::ofstream out(path);
-			ConfigManagerIO::store(this->config, out);
+			INIConfiguration::store(this->config, out);
 			out.close();
 		}
 		dialog->Destroy();

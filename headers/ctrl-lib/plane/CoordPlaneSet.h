@@ -46,7 +46,7 @@ namespace CalX {
 
 	class VectorCoordPlaneSet : public CoordPlaneSet {
 	 public:
-		VectorCoordPlaneSet(ConfigManager &, CoordPlaneSetListener * = nullptr);
+		VectorCoordPlaneSet(ConfigurationCatalogue &, CoordPlaneSetListener * = nullptr);
 		std::size_t getCoordCount() const override;
 		std::weak_ptr<CoordHandle> getCoord(std::size_t) const override;
 		std::weak_ptr<CoordHandle> createCoord(
@@ -55,7 +55,7 @@ namespace CalX {
 		bool removeCoord(std::size_t) override;
 
 	 private:
-		ConfigManager &config;
+		ConfigurationCatalogue &config;
 		CoordPlaneSetListener *listener;
 		std::vector<std::shared_ptr<CoordHandle>> planes;
 	};

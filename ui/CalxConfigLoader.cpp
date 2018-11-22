@@ -19,6 +19,7 @@
 */
 
 #include "ui/CalxConfigLoader.h"
+#include "ctrl-lib/conf/INI.h"
 #include <wx/sizer.h>
 
 namespace CalXUI {
@@ -65,13 +66,13 @@ namespace CalXUI {
 			std::string path =
 			    this->filesys.URLToFileName(fname).GetFullPath().ToStdString();
 			std::string name, descr;
-			std::shared_ptr<ConfigManager> conf = nullptr;
+			std::shared_ptr<ConfigurationCatalogue> conf = nullptr;
 			std::ifstream cnf(path);
 			if (!cnf.good()) {
 				fname = this->filesys.FindNext().ToStdString();
 				continue;
 			} else {
-				conf = ConfigManagerIO::load(cnf, std::cout);
+				conf = INIConfiguration::load(cnf, std::cout);
 				name = conf->getEntry(CalxConfiguration::Configuration)->getString(
 				    CalxConfigConfiguration::Name,
 				    this->filesys.URLToFileName(fname).GetFullName().ToStdString());

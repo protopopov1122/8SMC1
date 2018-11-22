@@ -48,7 +48,7 @@ namespace CalX {
 		CoordPlaneStatus *status;
 	};
 
-	CoordController::CoordController(ConfigManager &config,
+	CoordController::CoordController(ConfigurationCatalogue &config,
 	                                 std::shared_ptr<MotorController> xaxis,
 	                                 std::shared_ptr<MotorController> yaxis,
 	                                 std::shared_ptr<InstrumentController> instr)

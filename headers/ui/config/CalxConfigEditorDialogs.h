@@ -21,7 +21,7 @@
 #ifndef CALX_UI_CONFIG_CALX_CONFIG_EDITOR_DIALOGS_H_
 #define CALX_UI_CONFIG_CALX_CONFIG_EDITOR_DIALOGS_H_
 
-#include "ctrl-lib/conf/ConfigManager.h"
+#include "ctrl-lib/conf/Dictionary.h"
 #include "ui/CalxApp.h"
 #include <wx/spinctrl.h>
 
@@ -53,20 +53,20 @@ namespace CalXUI {
 
 	class CalxNewEntryDialog : public wxDialog {
 	 public:
-		CalxNewEntryDialog(wxWindow *, wxWindowID, ConfigManager &);
+		CalxNewEntryDialog(wxWindow *, wxWindowID, ConfigurationCatalogue &);
 
 	 private:
 		void OnOkClick(wxCommandEvent &);
 		void OnCancelClick(wxCommandEvent &);
 
 		wxTextCtrl *entryName;
-		ConfigManager &config;
+		ConfigurationCatalogue &config;
 	};
 
 	class CalxConfigDialog : public wxDialog {
 	 public:
-		CalxConfigDialog(wxWindow *, wxWindowID, ConfigManager &);
-		ConfigManager &getConfiguration();
+		CalxConfigDialog(wxWindow *, wxWindowID, ConfigurationCatalogue &);
+		ConfigurationCatalogue &getConfiguration();
 
 	 private:
 		void OnOkClick(wxCommandEvent &);

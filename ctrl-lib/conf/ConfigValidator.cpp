@@ -77,7 +77,7 @@ namespace CalX {
 		this->keys.push_back(std::move(kv));
 	}
 
-	bool ConfigEntryValidator::validate(ConfigManager *conf) {
+	bool ConfigEntryValidator::validate(ConfigurationCatalogue *conf) {
 		if (conf == nullptr || !conf->hasEntry(this->name)) {
 			return this->isOptional();
 		}
@@ -99,7 +99,7 @@ namespace CalX {
 		this->entries.push_back(std::move(entry));
 	}
 
-	bool ConfigValidator::validate(ConfigManager *conf) {
+	bool ConfigValidator::validate(ConfigurationCatalogue *conf) {
 		if (conf == nullptr) {
 			return this->isOptional();
 		}

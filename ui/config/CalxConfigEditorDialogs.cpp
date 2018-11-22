@@ -158,7 +158,7 @@ namespace CalXUI {
 	}
 
 	CalxNewEntryDialog::CalxNewEntryDialog(wxWindow *win, wxWindowID id,
-	                                       ConfigManager &config)
+	                                       ConfigurationCatalogue &config)
 	    : wxDialog::wxDialog(win, id, __("Add new entry")), config(config) {
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(sizer);
@@ -209,7 +209,7 @@ namespace CalXUI {
 	}
 
 	CalxConfigDialog::CalxConfigDialog(wxWindow *win, wxWindowID id,
-	                                   ConfigManager &conf)
+	                                   ConfigurationCatalogue &conf)
 	    : wxDialog::wxDialog(win, id, __("Configuration Editor"),
 	                         wxDefaultPosition, wxDefaultSize,
 	                         wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER) {
@@ -227,7 +227,7 @@ namespace CalXUI {
 		Fit();
 	}
 
-	ConfigManager &CalxConfigDialog::getConfiguration() {
+	ConfigurationCatalogue &CalxConfigDialog::getConfiguration() {
 		return this->editor->getConfiguration();
 	}
 

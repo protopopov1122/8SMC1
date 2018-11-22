@@ -19,6 +19,7 @@
 */
 
 #include "ctrl-lib/device/DeviceManager.h"
+#include "ctrl-lib/conf/ConfigManager.h"
 
 /* Implementations of API wrappers */
 
@@ -36,7 +37,7 @@ namespace CalX {
 		return this->id;
 	}
 
-	ConfigManager &Device::getConfiguration() const {
+	ConfigurationCatalogue &Device::getConfiguration() const {
 		return *this->config;
 	}
 

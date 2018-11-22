@@ -18,10 +18,14 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef CALX_CTRL_LIB_CONF_FILE_SETTINGS_H_
+#define CALX_CTRL_LIB_CONF_FILE_SETTINGS_H_
+
+#include "ctrl-lib/conf/Settings.h"
+#include "ctrl-lib/conf/ConfigManager.h"
+#include <iostream>
 #include <functional>
 #include <fstream>
-#include <iostream>
-#include "ctrl-lib/conf/Settings.h"
 
 namespace CalX {
 
@@ -53,31 +57,40 @@ namespace CalX {
     std::function<void()> exportFn;
   };
 
-  SettingsFileRepository::SettingsFileRepository(const std::string &path)
-    : repo_path(path) {
-    this->importRepo();
-  }
-
-  const std::string &SettingsFileRepository::getRepositoryPath() const {
-    return this->repo_path;
-  }
-
-  ConfigManager &SettingsFileRepository::getSettings() {
-    return *this->settings;
-  }
-
-  void SettingsFileRepository::importRepo() {
-    std::ifstream is(this->repo_path);
-    if (is.good()) {
-      this->settings = ConfigManagerIO::load(is, std::cout);
-    } else {
-      this->settings = std::make_unique<ConfigManager>();
+  template <typename IO>
+  class SettingsFileRepository : public SettingsRepository {
+   public:
+    SettingsFileRepository(const std::string &path)
+      : repo_path(path) {
+      this->importRepo();
     }
-    this->settings->addEventListener(std::make_shared<SettingsConfigListener>([this]() { this->exportRepo(); }));
-  }
 
-  void SettingsFileRepository::exportRepo() {
-    std::ofstream os(this->repo_path);
-    ConfigManagerIO::store(*this->settings, os);
-  }
+    const std::string &getRepositoryPath() const {
+      return this->repo_path;
+    }
+
+    ConfigurationCatalogue &getSettings() {
+      return *this->settings;
+    }
+   private:
+    void importRepo() {
+      std::ifstream is(this->repo_path);
+      if (is.good()) {
+        this->settings = IO::load(is, std::cout);
+      } else {
+        this->settings = std::make_unique<ConfigManager>();
+      }
+      this->settings->addEventListener(std::make_shared<SettingsConfigListener>([this]() { this->exportRepo(); }));
+    }
+
+    void exportRepo() {
+      std::ofstream os(this->repo_path);
+      IO::store(*this->settings, os);
+    }
+
+    std::string repo_path;
+    std::unique_ptr<ConfigurationCatalogue> settings;
+  };
 }
+
+#endif

@@ -27,7 +27,7 @@ namespace CalXUI {
 
 	class CalxUnitProcessor {
 	 public:
-		CalxUnitProcessor(ConfigManager &);
+		CalxUnitProcessor(ConfigurationCatalogue &);
 		std::string formatDouble(double);
 		std::string getUnits();
 		std::string getSpeedUnits();
@@ -38,7 +38,7 @@ namespace CalXUI {
 		coord_point_t getUnitOffset();
 
 	 private:
-		ConfigManager &config;
+		ConfigurationCatalogue &config;
 	};
 }  // namespace CalXUI
 

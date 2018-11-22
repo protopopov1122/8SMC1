@@ -68,7 +68,7 @@ namespace CalX {
 	 public:
 		ConfigEntryValidator(std::string, bool = false);
 		std::string getEntryName();
-		bool validate(ConfigManager *);
+		bool validate(ConfigurationCatalogue *);
 		void addKeyValidator(std::unique_ptr<ConfigKeyValidator>);
 
 	 private:
@@ -80,7 +80,7 @@ namespace CalX {
 	 public:
 		ConfigValidator(bool = true);
 		void addEntryValidator(std::unique_ptr<ConfigEntryValidator>);
-		bool validate(ConfigManager *);
+		bool validate(ConfigurationCatalogue *);
 
 	 private:
 		std::vector<std::unique_ptr<ConfigEntryValidator>> entries;

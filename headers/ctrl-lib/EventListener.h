@@ -32,9 +32,6 @@
 
 namespace CalX {
 
-	class ConfigManager;  // Forward referencing
-	class ConfigEntry;    // Forward referencing
-
 	class UsageEventListener {
 	 public:
 		virtual ~UsageEventListener() = default;
