@@ -39,6 +39,7 @@ namespace CalXUI {
 	 private:
 		void OnMoveClick(wxCommandEvent &);
 		void OnConfigureClick(wxCommandEvent &);
+		void OnSaveClick(wxCommandEvent &);
 
 		wxSpinCtrlDouble *xPos;
 		wxSpinCtrlDouble *yPos;

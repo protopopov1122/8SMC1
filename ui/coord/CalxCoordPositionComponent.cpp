@@ -37,13 +37,25 @@ namespace CalXUI {
 		ConfiguationFlatDictionary *confEntry =
 		    wxGetApp().getSystemManager()->getConfiguration().getEntry(
 		        CalxConfiguration::RelativePosition);
+		
+		double xPosition = confEntry->getReal(CalxCoordPositionConfiguration::X, 0.5);
+		double yPosition = confEntry->getReal(CalxCoordPositionConfiguration::Y, 0.5);
+
+		if (wxGetApp().getSystemManager()->getSettingsRepository()) {
+			auto &settings = wxGetApp().getSystemManager()->getSettingsRepository()->getSettings();
+			if (settings.hasEntry("plane_calibration")) {
+				xPosition = settings.getEntry("plane_calibration")->getReal("configure_x", xPosition);
+				yPosition = settings.getEntry("plane_calibration")->getReal("configure_y", yPosition);
+			}
+		}
+
 		this->xPos = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, 0, 1, confEntry->getReal(CalxCoordPositionConfiguration::X, 0.5),
+		    wxSP_ARROW_KEYS, 0, 1, xPosition,
 		    confEntry->getReal(CalxCoordPositionConfiguration::XPrecision, 0.0001));
 		this->yPos = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, 0, 1, confEntry->getReal(CalxCoordPositionConfiguration::Y, 0.5),
+		    wxSP_ARROW_KEYS, 0, 1, yPosition,
 		    confEntry->getReal(CalxCoordPositionConfiguration::YPrecision, 0.0001));
 		this->speed =
 		    new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
@@ -61,6 +73,7 @@ namespace CalXUI {
 		                         wxGetApp().getUnitProcessor().getSpeedPrecision());
 		wxButton *moveButton = new wxButton(this, wxID_ANY, __("Move"));
 		wxButton *configureButton = new wxButton(this, wxID_ANY, __("Configure"));
+		wxButton *saveButton = new wxButton(this, wxID_ANY, __("Save"));
 
 		sizer->Add(
 		    new wxStaticText(this, wxID_ANY, __("Destination") + std::string(":")));
@@ -81,11 +94,15 @@ namespace CalXUI {
 		                            wxGetApp().getUnitProcessor().getSpeedUnits()));
 		sizer->Add(moveButton);
 		sizer->Add(configureButton);
+		sizer->Add(new wxStaticText(this, wxID_ANY, ""));
+		sizer->Add(saveButton);
 
 		moveButton->Bind(wxEVT_BUTTON, &CalxCoordPositionComponent::OnMoveClick,
 		                 this);
 		configureButton->Bind(wxEVT_BUTTON,
 		                      &CalxCoordPositionComponent::OnConfigureClick, this);
+		saveButton->Bind(wxEVT_BUTTON,
+		                      &CalxCoordPositionComponent::OnSaveClick, this);
 	}
 
 	void CalxCoordPositionComponent::OnMoveClick(wxCommandEvent &evt) {
@@ -105,5 +122,15 @@ namespace CalXUI {
 		coord_point_t dest = { this->xPos->GetValue(), this->yPos->GetValue() };
 		double speed = this->speed->GetValue();
 		this->controller->configure(dest, speed);
+	}
+
+	void CalxCoordPositionComponent::OnSaveClick(wxCommandEvent &evt) {
+		double xPosition = this->xPos->GetValue();
+		double yPosition = this->yPos->GetValue();
+		if (wxGetApp().getSystemManager()->getSettingsRepository()) {
+			auto &settings = wxGetApp().getSystemManager()->getSettingsRepository()->getSettings();
+			settings.getEntry("plane_calibration")->put("configure_x", xPosition);
+			settings.getEntry("plane_calibration")->put("configure_y", yPosition);
+		}
 	}
 }  // namespace CalXUI
