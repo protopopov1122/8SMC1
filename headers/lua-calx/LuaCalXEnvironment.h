@@ -84,6 +84,19 @@ namespace CalXLua {
 		bool planeIsMeasured(int);
 		int planePositionAsCenter(int);
 
+		int getConfigurationInt(std::string, std::string);
+		double getConfigurationFloat(std::string, std::string);
+		std::string getConfigurationString(std::string, std::string);
+		bool getConfigurationBoolean(std::string, std::string);
+		bool configurationHas(std::string, std::string);
+
+		bool hasSettings();
+		int getSettingsInt(std::string, std::string);
+		double getSettingsFloat(std::string, std::string);
+		std::string getSettingsString(std::string, std::string);
+		bool getSettingsBoolean(std::string, std::string);
+		bool settingsHas(std::string, std::string);
+
 	 private:
 		CalXScriptEnvironment &env;
 	};

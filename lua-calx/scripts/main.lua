@@ -50,10 +50,20 @@
 
 
 function init()
+	local configure_x = 0.5
+	local configure_y = 0.5
+
+	if calx.settings.has('plane_calibration', 'configure_x') then
+		configure_x = calx.settings.getFloat('plane_calibration', 'configure_x')
+	end
+	if calx.settings.has('plane_calibration', 'configure_y') then
+		configure_y = calx.settings.getFloat('plane_calibration', 'configure_y')
+	end
+
 	m1 = calx.motor.connectSerial(1, 9600, calx.serial.parity.No)
 	m2 = calx.motor.connectSerial(2, 9600, calx.serial.parity.No)
     i1= calx.instrument.connectSerial(4, 19200, calx.serial.parity.No)
 	p1 = calx.plane.create(m1, m2, i1)
-	calx.plane.configure(p1, 0.5, 0.5, 1.25)
+	calx.plane.configure(p1, configure_x, configure_y, 1.25)
 	calx.plane.newWatcher(p1)
 end

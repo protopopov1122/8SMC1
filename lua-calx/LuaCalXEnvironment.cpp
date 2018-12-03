@@ -368,4 +368,65 @@ namespace CalXLua {
 			throw CalXException(ErrorCode::UnknownResource);
 		}
 	}
+
+	int LuaCalXEnvironment::getConfigurationInt(std::string entry, std::string key) {
+		return this->env.getConfiguration().getEntry(entry)->getInt(key);
+	}
+
+	double LuaCalXEnvironment::getConfigurationFloat(std::string entry, std::string key) {
+		return this->env.getConfiguration().getEntry(entry)->getReal(key);
+	}
+
+	std::string LuaCalXEnvironment::getConfigurationString(std::string entry, std::string key) {
+		return this->env.getConfiguration().getEntry(entry)->getString(key);
+	}
+
+	bool LuaCalXEnvironment::getConfigurationBoolean(std::string entry, std::string key) {
+		return this->env.getConfiguration().getEntry(entry)->getBool(key);
+	}
+
+	bool LuaCalXEnvironment::configurationHas(std::string entry, std::string key) {
+		return this->env.getConfiguration().hasEntry(entry) &&
+			this->env.getConfiguration().getEntry(entry)->has(key);
+	}
+
+	bool LuaCalXEnvironment::hasSettings() {
+		return this->env.getSettings() != nullptr;
+	}
+
+	int LuaCalXEnvironment::getSettingsInt(std::string entry, std::string key) {
+		if (this->env.getSettings() != nullptr) {
+			return this->env.getSettings()->getSettings().getEntry(entry)->getInt(key);
+		} else {
+			return 0;
+		}
+	}
+	
+	double LuaCalXEnvironment::getSettingsFloat(std::string entry, std::string key) {
+		if (this->env.getSettings() != nullptr) {
+			return this->env.getSettings()->getSettings().getEntry(entry)->getReal(key);
+		} else {
+			return 0.0;
+		}
+	}
+
+	std::string LuaCalXEnvironment::getSettingsString(std::string entry, std::string key) {
+		if (this->env.getSettings() != nullptr) {
+			return this->env.getSettings()->getSettings().getEntry(entry)->getString(key);
+		} else {
+			return "";
+		}
+	}
+	bool LuaCalXEnvironment::getSettingsBoolean(std::string entry, std::string key) {
+		if (this->env.getSettings() != nullptr) {
+			return this->env.getSettings()->getSettings().getEntry(entry)->getBool(key);
+		} else {
+			return false;
+		}
+	}
+	bool LuaCalXEnvironment::settingsHas(std::string entry, std::string key) {
+		return this->env.getSettings() != nullptr &&
+			this->env.getSettings()->getSettings().hasEntry(entry) &&
+			this->env.getSettings()->getSettings().getEntry(entry)->has(key);
+	}
 }  // namespace CalXLua

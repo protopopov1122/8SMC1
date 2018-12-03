@@ -107,16 +107,18 @@ namespace CalX {
 
 	class CalXScriptEnvironment {
 	 public:
-		CalXScriptEnvironment(ConfigurationCatalogue &);
+		CalXScriptEnvironment(ConfigurationCatalogue &, SettingsRepository *);
 		virtual ~CalXScriptEnvironment() = default;
 
 		ConfigurationCatalogue &getConfiguration();
+		SettingsRepository *getSettings();
 
 		virtual CalXScriptDevices &getDevices() = 0;
 		virtual CalXScriptPlanes &getPlanes() = 0;
 
 	 private:
 		ConfigurationCatalogue &config;
+		SettingsRepository *settings;
 	};
 
 	class CalXScript {

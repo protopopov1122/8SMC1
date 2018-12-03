@@ -131,6 +131,25 @@ namespace CalXLua {
 		    &LuaCalXEnvironment::planeGetSizeY, "getW",
 		    &LuaCalXEnvironment::planeGetSizeW, "getH",
 		    &LuaCalXEnvironment::planeGetSizeH);
+		
+		this->lua["calx"]["config"].SetObj(
+			lua_env,
+			"getInt", &LuaCalXEnvironment::getConfigurationInt,
+			"getFloat", &LuaCalXEnvironment::getConfigurationFloat,
+			"getBool", &LuaCalXEnvironment::getConfigurationBoolean,
+			"getString", &LuaCalXEnvironment::getConfigurationString,
+			"has", &LuaCalXEnvironment::configurationHas
+		);
+		
+		this->lua["calx"]["settings"].SetObj(
+			lua_env,
+			"getInt", &LuaCalXEnvironment::getSettingsInt,
+			"getFloat", &LuaCalXEnvironment::getSettingsFloat,
+			"getBool", &LuaCalXEnvironment::getSettingsBoolean,
+			"getString", &LuaCalXEnvironment::getSettingsString,
+			"has", &LuaCalXEnvironment::settingsHas,
+			"exist", &LuaCalXEnvironment::hasSettings
+		);
 	}
 
 	void LuaCalXScript::init_constants() {
