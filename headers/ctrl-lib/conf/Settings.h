@@ -22,6 +22,7 @@
 #define CALX_CTRL_LIB_CONF_SETTINGS_H_
 
 #include "ctrl-lib/conf/Dictionary.h"
+#include <map>
 
 namespace CalX {
 
@@ -29,6 +30,33 @@ namespace CalX {
    public:
     virtual ~SettingsRepository() = default;
     virtual ConfigurationCatalogue &getSettings() = 0;
+  };
+
+  class SettingsConfigurationEntry : public ConfiguationFlatDictionary {
+   public:
+    SettingsConfigurationEntry(ConfigurationCatalogue *, ConfigurationCatalogue &, const std::string &, bool);
+    const ConfigurationValue &get(const std::string &) const override;
+    bool has(const std::string &) const override;
+    bool put(const std::string &, const ConfigurationValue &) override;
+    bool remove(const std::string &) override;
+		void visit(std::function<void (const std::string &, const ConfigurationValue &)>) const override;
+   private:
+    ConfiguationFlatDictionary *master;
+    ConfiguationFlatDictionary *fallback;
+  };
+
+  class SettingsConfiguration : public ConfigurationCatalogue {
+   public:
+    SettingsConfiguration(SettingsRepository *, ConfigurationCatalogue &);
+    SettingsConfiguration(ConfigurationCatalogue *, ConfigurationCatalogue &);
+    ConfiguationFlatDictionary *getEntry(const std::string &, bool = true) override;
+    bool hasEntry(const std::string &) const override;
+    bool removeEntry(const std::string &) override;
+		void visit(std::function<void (const std::string &, ConfiguationFlatDictionary &)>) const override;
+   private:
+    ConfigurationCatalogue *master;
+    ConfigurationCatalogue &fallback;
+    std::map<std::string, std::unique_ptr<SettingsConfigurationEntry>> entries;
   };
 }
 

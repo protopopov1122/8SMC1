@@ -34,20 +34,14 @@ namespace CalXUI {
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 		SetSizer(sizer);
 
+		SettingsConfiguration settingsConf(wxGetApp().getSystemManager()->getSettingsRepository(),
+			wxGetApp().getSystemManager()->getConfiguration());
 		ConfiguationFlatDictionary *confEntry =
 		    wxGetApp().getSystemManager()->getConfiguration().getEntry(
 		        CalxConfiguration::RelativePosition);
 		
-		double xPosition = confEntry->getReal(CalxCoordPositionConfiguration::X, 0.5);
-		double yPosition = confEntry->getReal(CalxCoordPositionConfiguration::Y, 0.5);
-
-		if (wxGetApp().getSystemManager()->getSettingsRepository()) {
-			auto &settings = wxGetApp().getSystemManager()->getSettingsRepository()->getSettings();
-			if (settings.hasEntry("plane_calibration")) {
-				xPosition = settings.getEntry("plane_calibration")->getReal("configure_x", xPosition);
-				yPosition = settings.getEntry("plane_calibration")->getReal("configure_y", yPosition);
-			}
-		}
+		double xPosition = settingsConf.getEntry(CalxConfiguration::RelativePosition)->getReal(CalxCoordPositionConfiguration::X, 0.5);
+		double yPosition = settingsConf.getEntry(CalxConfiguration::RelativePosition)->getReal(CalxCoordPositionConfiguration::Y, 0.5);
 
 		this->xPos = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
@@ -129,8 +123,8 @@ namespace CalXUI {
 		double yPosition = this->yPos->GetValue();
 		if (wxGetApp().getSystemManager()->getSettingsRepository()) {
 			auto &settings = wxGetApp().getSystemManager()->getSettingsRepository()->getSettings();
-			settings.getEntry("plane_calibration")->put("configure_x", xPosition);
-			settings.getEntry("plane_calibration")->put("configure_y", yPosition);
+			settings.getEntry(CalxConfiguration::RelativePosition)->put(CalxCoordPositionConfiguration::X, xPosition);
+			settings.getEntry(CalxConfiguration::RelativePosition)->put(CalxCoordPositionConfiguration::Y, yPosition);
 		}
 	}
 }  // namespace CalXUI
