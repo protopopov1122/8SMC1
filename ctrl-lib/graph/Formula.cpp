@@ -80,14 +80,20 @@ namespace CalX {
     MathFormulaScope scope;
   };
 
-  MathFormulaBase::MathFormulaBase(std::unique_ptr<Node> formula, const std::vector<std::string> &variables)
+  std::unique_ptr<MathFormula> MathFormula::build(const std::string &formula, const std::vector<std::string> &variables) {
+		std::stringstream ss(formula);
+		FunctionParser parser(std::make_unique<FunctionLexer>(ss));
+    return std::make_unique<MathBaseFormula>(parser.parse(), variables);
+  }
+
+  MathBaseFormula::MathBaseFormula(std::unique_ptr<Node> formula, const std::vector<std::string> &variables)
     : formula(std::move(formula)), variables(variables) {}
 
-  const std::vector<std::string> &MathFormulaBase::getVariables() const {
+  const std::vector<std::string> &MathBaseFormula::getVariables() const {
     return this->variables;
   }
 
-  engine_value_t MathFormulaBase::eval(MathEngine &baseEngine, const std::map<std::string, double> &variableValues) {
+  engine_value_t MathBaseFormula::eval(MathEngine &baseEngine, const std::map<std::string, double> &variableValues) {
     MathFormulaEngine engine(baseEngine);
     for (const std::string &key : this->variables) {
       if (variableValues.count(key) == 0) {
@@ -96,20 +102,5 @@ namespace CalX {
       engine.getScope().putVariable(key, variableValues.at(key));
     }
     return engine.eval(*this->formula);
-  }
-
-  MathFormula::MathFormula(const std::string &formula, const std::vector<std::string> &variables)
-    : formula(nullptr) {
-		std::stringstream ss(formula);
-		FunctionParser parser(std::make_unique<FunctionLexer>(ss));
-    this->formula = std::make_unique<MathFormulaBase>(parser.parse(), variables);
-  }
-  
-  const std::vector<std::string> &MathFormula::getVariables() const {
-    return this->formula->getVariables();
-  }
-
-  engine_value_t MathFormula::eval(MathEngine &baseEngine, const std::map<std::string, double> &variableValues) {
-    return this->formula->eval(baseEngine, variableValues);
   }
 }

@@ -26,32 +26,24 @@
 
 namespace CalX {
 
-  class MathAbstractFormula {
+  class MathFormula {
    public:
-    virtual ~MathAbstractFormula() = default;
+    virtual ~MathFormula() = default;
     virtual const std::vector<std::string> &getVariables() const = 0;
     virtual engine_value_t eval(MathEngine &, const std::map<std::string, double> &) = 0;
+
+    static std::unique_ptr<MathFormula> build(const std::string &, const std::vector<std::string> &);
   };
 
-  class MathFormulaBase : public MathAbstractFormula {
+  class MathBaseFormula : public MathFormula {
    public:
-    MathFormulaBase(std::unique_ptr<Node>, const std::vector<std::string> &);
+    MathBaseFormula(std::unique_ptr<Node>, const std::vector<std::string> &);
 
     const std::vector<std::string> &getVariables() const override;
     engine_value_t eval(MathEngine &, const std::map<std::string, double> &) override;
    private:
     std::unique_ptr<Node> formula;
     std::vector<std::string> variables;
-  };
-
-  class MathFormula : public MathAbstractFormula {
-   public:
-    MathFormula(const std::string &, const std::vector<std::string> &);
-
-    const std::vector<std::string> &getVariables() const override;
-    engine_value_t eval(MathEngine &, const std::map<std::string, double> &) override;
-   private:
-    std::unique_ptr<MathAbstractFormula> formula;
   };
 }
 
