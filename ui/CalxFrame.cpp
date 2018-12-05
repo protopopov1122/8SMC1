@@ -38,6 +38,7 @@
 #include "ui/task/CalxProgrammedTask.h"
 #include "ui/task/CalxTaskPanel.h"
 #include "ui/script/CalxScriptPanel.h"
+#include "ui/math/CalxMathPanel.h"
 #include <iostream>
 #include <wx/aboutdlg.h>
 #include <wx/app.h>
@@ -174,6 +175,7 @@ namespace CalXUI {
 		this->task_list = taskPanel;
 
 		CalxScriptPanel *scriptPanel = newScriptPanel(panel);
+		CalxMathPanel *mathPanel = new CalxMathPanel(panel, wxID_ANY);
 
 		panel->addPane(__("Devices"), devicePanel);
 		panel->addPane(__("Coordinate planes"), coordPanel);
@@ -182,6 +184,7 @@ namespace CalXUI {
 		if (scriptPanel != nullptr) {
 			panel->addPane(__("Scripts"), scriptPanel);
 		}
+		panel->addPane(__("Math"), mathPanel);
 
 		wxBoxSizer *statusSizer = new wxBoxSizer(wxHORIZONTAL);
 		statusPanel->SetSizer(statusSizer);
