@@ -32,8 +32,8 @@
         To enable loggins define LOGGING macro */
 
 #include "platform.h"
-#include <iosfwd>
 #include <string>
+#include <string.h>
 
 #define ERRORS "errors"
 #define WARNINGS "warnings"
@@ -42,13 +42,15 @@
 #define RESOURCES "resources"
 #define INSTRUMENTS "instruments"
 
-void LOGGER_LOG(std::string, std::string, std::string, const char *, int);
-void SET_LOGGER(std::string, std::ostream *);
+#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
+
+void LOGGER_LOG(const std::string &, const std::string &, const std::string &, const char *, int);
+void SET_LOGGER(const std::string &, std::ostream *);
 
 #ifdef LOGGING
 #define WRITE_LOG(__output, tag, msg)                                          \
 	do {                                                                         \
-		const char *__file = __FILE__;                                             \
+		const char *__file = __FILENAME__;                                             \
 		int __line = __LINE__;                                                     \
 		LOGGER_LOG(__output, tag, msg, __file, __line);                            \
 	} while (false)

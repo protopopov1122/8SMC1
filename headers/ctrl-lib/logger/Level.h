@@ -18,22 +18,20 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/logger.h"
-#include "ctrl-lib/logger/Session.h"
+#ifndef CALX_CTRL_LIB_LOGGER_LEVEL_H_
+#define CALX_CTRL_LIB_LOGGER_LEVEL_H_
 
-using namespace CalX;
+#include "platform.h"
 
-JournalDefaultSession globalJournal(LoggingSeverity::Debug);
+namespace CalX {
 
-void LOGGER_LOG(const std::string &sinkName, const std::string &tag, const std::string &message, const char *file, int line) {
-	const JournalSink &sink = globalJournal.getSink(sinkName);
-	try {
-		sink.log(LoggingSeverity::Debug, message, tag, SourcePosition(file, line));
-	} catch (...) {
-	}
+  enum class LoggingSeverity {
+    Debug = 0,
+    Info = 1,
+    Warning = 2,
+    Error = 3,
+    Critical = 4
+  };
 }
 
-void SET_LOGGER(const std::string &sinkName, std::ostream *stream) {
-	JournalStreamSinkFactory factory(*stream);
-	globalJournal.newSink(sinkName, factory, sinkName.compare(INFORMATION) == 0);
-}
+#endif
