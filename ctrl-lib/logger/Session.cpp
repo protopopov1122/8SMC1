@@ -25,11 +25,11 @@ namespace CalX {
   JournalDefaultSession::JournalDefaultSession(LoggingSeverity defaultSeverity)
     : defaultSink(std::make_shared<JournalNullSink>("")), severity(defaultSeverity) {}
 
-  const JournalSink &JournalDefaultSession::getDefaultSink() const {
+  JournalSink &JournalDefaultSession::getDefaultSink() {
     return *this->defaultSink;
   }
 
-  const JournalSink &JournalDefaultSession::getSink(const std::string &name) {
+  JournalSink &JournalDefaultSession::getSink(const std::string &name) {
     if (this->sinks.count(name)) {
       return *this->sinks.at(name);
     } else {

@@ -47,7 +47,7 @@ namespace CalX {
    public:
     virtual ~JournalSink() = default;
     virtual const std::string &getName() const = 0;
-    virtual void log(LoggingSeverity, const std::string &, const std::string & = "", const SourcePosition & = SourcePosition()) const = 0;
+    virtual void log(LoggingSeverity, const std::string &, const std::string & = "", const SourcePosition & = SourcePosition()) = 0;
     virtual LoggingSeverity getLevel() const = 0;
     virtual void setLevel(LoggingSeverity) = 0;
   };
@@ -61,8 +61,8 @@ namespace CalX {
   class JournalSession {
    public:
     virtual ~JournalSession() = default;
-    virtual const JournalSink &getDefaultSink() const = 0;
-    virtual const JournalSink &getSink(const std::string &) = 0;
+    virtual JournalSink &getDefaultSink() = 0;
+    virtual JournalSink &getSink(const std::string &) = 0;
     virtual void getSinks(std::vector<std::reference_wrapper<JournalSink>> &) const = 0;
   };
 }

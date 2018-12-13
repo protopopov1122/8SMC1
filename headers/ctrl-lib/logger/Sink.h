@@ -23,29 +23,49 @@
 
 #include "ctrl-lib/logger/Journal.h"
 #include <iosfwd>
+#include <fstream>
 
 namespace CalX {
 
-  class JournalStreamSink : public JournalSink {
+  class JournalAbstractSink : public JournalSink {
    public:
-    JournalStreamSink(const std::string &, LoggingSeverity, std::ostream &);
+    JournalAbstractSink(const std::string &, LoggingSeverity);
     const std::string &getName() const override;
-    void log(LoggingSeverity, const std::string &, const std::string &, const SourcePosition &) const override;
+    void log(LoggingSeverity, const std::string &, const std::string &, const SourcePosition &) override;
     LoggingSeverity getLevel() const override;
     void setLevel(LoggingSeverity) override;
-   private:
+   protected:
+    virtual void log(const std::string &) = 0;
     static constexpr unsigned int SinkNamePadding = 10;
 
     std::string name;
     LoggingSeverity severity;
+  };
+
+  class JournalStreamSink : public JournalAbstractSink {
+   public:
+    JournalStreamSink(const std::string &, LoggingSeverity, std::ostream &);
+   protected:
+    void log(const std::string &) override;
+   private:
     std::ostream &output;
+  };
+
+  class JournalFileSink : public JournalAbstractSink {
+   public:
+    JournalFileSink(const std::string &, LoggingSeverity, const std::string &);
+    virtual ~JournalFileSink();
+   protected:
+    void log(const std::string &) override;
+   private:
+    std::ofstream output;
   };
 
   class JournalNullSink : public JournalSink {
    public:
     JournalNullSink(const std::string &);
     const std::string &getName() const override;
-    void log(LoggingSeverity, const std::string &, const std::string &, const SourcePosition &) const override;
+    void log(LoggingSeverity, const std::string &, const std::string &, const SourcePosition &) override;
     LoggingSeverity getLevel() const override;
     void setLevel(LoggingSeverity) override;
    private:
@@ -59,6 +79,15 @@ namespace CalX {
     std::unique_ptr<JournalSink> newSink(const std::string &, LoggingSeverity) const override;
    private:
     std::ostream &stream;
+  };
+
+  class JournalFileSinkFactory : public JournalSinkFactory {
+   public:
+    JournalFileSinkFactory(const std::string &);
+
+    std::unique_ptr<JournalSink> newSink(const std::string &, LoggingSeverity) const override;
+   private:
+    std::string file;
   };
 }
 

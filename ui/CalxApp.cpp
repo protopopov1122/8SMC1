@@ -33,6 +33,7 @@
 #include "ctrl-lib/SignalHandler.h"
 #include "ctrl-lib/conf/ConfigManager.h"
 #include "ctrl-lib/conf/ConfigValidator.h"
+#include "ctrl-lib/logger/Global.h"
 #include <cmath>
 #include <fstream>
 #include <sstream>
@@ -129,24 +130,24 @@ namespace CalXUI {
 	}
 
 	void CalxApp::initLogging(ConfigurationCatalogue &conf){
-#define SETUP_LOG(name, id, dest)                                              \
+#define SETUP_LOG(id, dest)                                              \
 	{                                                                            \
-		this->name = nullptr;                                                      \
 		std::string logger = conf.getEntry(CalxConfiguration::Logging)->getString(id, "");              \
 		if (logger.compare("stdout") == 0) {                                       \
-			SET_LOGGER(dest, &std::cout);                                            \
+			JournalStreamSinkFactory factory(std::cout);                             \
+			GlobalLogger::setupSink(dest, factory);                                  \
 		} else if (logger.length() > 0) {                                          \
-			this->name = new std::ofstream(logger);                                  \
-			SET_LOGGER(dest, this->name);                                            \
+			JournalFileSinkFactory factory(logger);                                  \
+			GlobalLogger::setupSink(dest, factory);                                  \
 		}                                                                          \
 	}
 
-		SETUP_LOG(errors_log, CalxLoggingConfiguration::Errors, ERRORS)
-		SETUP_LOG(warnings_log, CalxLoggingConfiguration::Warnings, WARNINGS)
-		SETUP_LOG(debug_log, CalxLoggingConfiguration::Debug, DEBUG)
-		SETUP_LOG(info_log, CalxLoggingConfiguration::Info, INFORMATION)
-		SETUP_LOG(resources_log, CalxLoggingConfiguration::Resources, RESOURCES)
-		SETUP_LOG(instruments_log, CalxLoggingConfiguration::Instruments, INSTRUMENTS)
+		SETUP_LOG(CalxLoggingConfiguration::Errors, ERRORS)
+		SETUP_LOG(CalxLoggingConfiguration::Warnings, WARNINGS)
+		SETUP_LOG(CalxLoggingConfiguration::Debug, DEBUG)
+		SETUP_LOG(CalxLoggingConfiguration::Info, INFORMATION)
+		SETUP_LOG(CalxLoggingConfiguration::Resources, RESOURCES)
+		SETUP_LOG(CalxLoggingConfiguration::Instruments, INSTRUMENTS)
 
 #undef SETUP_LOG
 	}
@@ -346,10 +347,6 @@ namespace CalXUI {
 		}
 #endif
 
-		if (this->resources_log != nullptr) {
-			this->resources_log->close();
-			delete this->resources_log;
-		}
 		return 0;
 	}
 

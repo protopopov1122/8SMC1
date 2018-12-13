@@ -92,13 +92,6 @@ namespace CalXUI {
 
 		std::shared_ptr<CalXScriptEnvironment> script_env;
 		std::shared_ptr<CalXScriptFactory> scriptFactory;
-
-		std::ofstream *errors_log;
-		std::ofstream *warnings_log;
-		std::ofstream *debug_log;
-		std::ofstream *info_log;
-		std::ofstream *resources_log;
-		std::ofstream *instruments_log;
 	};
 }  // namespace CalXUI
 wxDECLARE_APP(CalXUI::CalxApp);

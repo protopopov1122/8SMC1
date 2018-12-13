@@ -31,8 +31,8 @@ namespace CalX {
    public:
     JournalDefaultSession(LoggingSeverity);
 
-    const JournalSink &getDefaultSink() const override;
-    const JournalSink &getSink(const std::string &) override;
+    JournalSink &getDefaultSink() override;
+    JournalSink &getSink(const std::string &) override;
     void getSinks(std::vector<std::reference_wrapper<JournalSink>> &) const override;
 
     void newSink(const std::string &, JournalSinkFactory &, bool = false);

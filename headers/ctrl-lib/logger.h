@@ -23,36 +23,34 @@
 
 /* This file contains simple logging system used by project.
    All logger output controller by few macros:
-        * SET_LOGGER(ptr) - set log output
         * WRITE_LOG(output, tag, message) - log some debug info with tag
         * INIT_LOG & DESTROY_LOG - track resource allocation and destroy with
    tag
    "resource"
 
-        To enable loggins define LOGGING macro */
+        To enable logging define LOGGING macro */
 
 #include "platform.h"
+#include "ctrl-lib/logger/Global.h"
 #include <string>
 #include <string.h>
 
-#define ERRORS "errors"
-#define WARNINGS "warnings"
-#define DEBUG "debug"
-#define INFORMATION "info"
-#define RESOURCES "resources"
-#define INSTRUMENTS "instruments"
+#define ERRORS GlobalLoggingSink::Errors
+#define WARNINGS GlobalLoggingSink::Warnings
+#define DEBUG GlobalLoggingSink::Debug
+#define INFORMATION GlobalLoggingSink::Information
+#define RESOURCES GlobalLoggingSink::Resources
+#define INSTRUMENTS GlobalLoggingSink::Instruments
 
 #define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 
-void LOGGER_LOG(const std::string &, const std::string &, const std::string &, const char *, int);
-void SET_LOGGER(const std::string &, std::ostream *);
-
 #ifdef LOGGING
-#define WRITE_LOG(__output, tag, msg)                                          \
-	do {                                                                         \
-		const char *__file = __FILENAME__;                                             \
-		int __line = __LINE__;                                                     \
-		LOGGER_LOG(__output, tag, msg, __file, __line);                            \
+#define WRITE_LOG(__output, tag, msg)                                                                                    \
+	do {                                                                                                             \
+		const char *__file = __FILENAME__;                                                                       \
+		int __line = __LINE__;                                                                                   \
+                JournalSink &__sink = GlobalLogger::getLogger().getSink(GlobalLogger::getSink(__output));          \
+                __sink.log(LoggingSeverity::Debug, msg, tag, SourcePosition(__file, __line));                            \
 	} while (false)
 #else
 #define WRITE_LOG(output, tag, msg)
