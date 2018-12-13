@@ -27,7 +27,7 @@
 
 namespace CalX {
 
-  class JournalDefaultSession : public JournalSession {
+  class JournalDefaultSession : public JournalSessionController, public JournalSession {
    public:
     JournalDefaultSession(LoggingSeverity);
 
@@ -35,9 +35,11 @@ namespace CalX {
     JournalSink &getSink(const std::string &) override;
     void getSinks(std::vector<std::reference_wrapper<JournalSink>> &) const override;
 
-    void newSink(const std::string &, JournalSinkFactory &, bool = false);
-    LoggingSeverity getSeverity() const;
-    void setSeverity(LoggingSeverity);
+    LoggingSeverity getDefaultSeverity() const override;
+    void setDefaultSeverity(LoggingSeverity);
+    JournalSink &newStreamSink(const std::string &, std::ostream &, bool) override;
+    JournalSink &newFileSink(const std::string &, const std::string &, bool) override;
+    void setDefaultSink(const std::string &) override;
    private:
     std::map<std::string, std::shared_ptr<JournalSink>> sinks;
     std::shared_ptr<JournalSink> defaultSink;

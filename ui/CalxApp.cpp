@@ -130,16 +130,14 @@ namespace CalXUI {
 	}
 
 	void CalxApp::initLogging(ConfigurationCatalogue &conf){
-#define SETUP_LOG(id, dest)                                              \
-	{                                                                            \
-		std::string logger = conf.getEntry(CalxConfiguration::Logging)->getString(id, "");              \
-		if (logger.compare("stdout") == 0) {                                       \
-			JournalStreamSinkFactory factory(std::cout);                             \
-			GlobalLogger::setupSink(dest, factory);                                  \
-		} else if (logger.length() > 0) {                                          \
-			JournalFileSinkFactory factory(logger);                                  \
-			GlobalLogger::setupSink(dest, factory);                                  \
-		}                                                                          \
+#define SETUP_LOG(id, dest)                                                                           \
+	{                                                                                                   \
+		std::string logger = conf.getEntry(CalxConfiguration::Logging)->getString(id, "");                \
+		if (logger.compare("stdout") == 0) {                                                              \
+			GlobalLogger::getController().newStreamSink(GlobalLogger::getSink(dest), std::cout);            \
+		} else if (logger.length() > 0) {                                                                 \
+			GlobalLogger::getController().newFileSink(GlobalLogger::getSink(dest), logger);                 \
+		}                                                                                                 \
 	}
 
 		SETUP_LOG(CalxLoggingConfiguration::Errors, ERRORS)
@@ -148,6 +146,7 @@ namespace CalXUI {
 		SETUP_LOG(CalxLoggingConfiguration::Info, INFORMATION)
 		SETUP_LOG(CalxLoggingConfiguration::Resources, RESOURCES)
 		SETUP_LOG(CalxLoggingConfiguration::Instruments, INSTRUMENTS)
+		GlobalLogger::getController().setDefaultSink(GlobalLogger::getSink(INFORMATION));
 
 #undef SETUP_LOG
 	}

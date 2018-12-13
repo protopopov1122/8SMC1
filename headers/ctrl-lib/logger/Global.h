@@ -39,7 +39,7 @@ namespace CalX {
    public:
     static JournalSession &getLogger();
     static const std::string &getSink(GlobalLoggingSink);
-    static void setupSink(GlobalLoggingSink, JournalSinkFactory &);
+    static JournalSessionController &getController();
    private:
     static JournalDefaultSession logger;
   };

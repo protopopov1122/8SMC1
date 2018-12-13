@@ -43,19 +43,35 @@ namespace CalX {
     }
   }
 
-  void JournalDefaultSession::newSink(const std::string &name, JournalSinkFactory &factory, bool makeDefault) {
-    std::shared_ptr<JournalSink> sink = factory.newSink(name, this->severity);
+  JournalSink &JournalDefaultSession::newStreamSink(const std::string &name, std::ostream &stream, bool makeDefault) {
+    std::shared_ptr<JournalSink> sink = std::make_shared<JournalStreamSink>(name, this->severity, stream);
     this->sinks[name] = sink;
     if (makeDefault) {
       this->defaultSink = sink;
     }
+    return *sink;
+  }
+
+  JournalSink &JournalDefaultSession::newFileSink(const std::string &name, const std::string &path, bool makeDefault) {
+    std::shared_ptr<JournalSink> sink = std::make_shared<JournalFileSink>(name, this->severity, path);
+    this->sinks[name] = sink;
+    if (makeDefault) {
+      this->defaultSink = sink;
+    }
+    return *sink;
   }
   
-  LoggingSeverity JournalDefaultSession::getSeverity() const {
+  LoggingSeverity JournalDefaultSession::getDefaultSeverity() const {
     return this->severity;
   }
 
-  void JournalDefaultSession::setSeverity(LoggingSeverity sev) {
+  void JournalDefaultSession::setDefaultSeverity(LoggingSeverity sev) {
     this->severity = sev;
+  }
+
+  void JournalDefaultSession::setDefaultSink(const std::string &name) {
+    if (this->sinks.count(name)) {
+      this->defaultSink = this->sinks[name];
+    }
   }
 }

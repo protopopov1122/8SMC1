@@ -65,6 +65,16 @@ namespace CalX {
     virtual JournalSink &getSink(const std::string &) = 0;
     virtual void getSinks(std::vector<std::reference_wrapper<JournalSink>> &) const = 0;
   };
+
+  class JournalSessionController {
+   public:
+    virtual ~JournalSessionController() = default;
+    virtual LoggingSeverity getDefaultSeverity() const = 0;
+    virtual void setDefaultSeverity(LoggingSeverity) = 0;
+    virtual JournalSink &newStreamSink(const std::string &, std::ostream &, bool = false) = 0;
+    virtual JournalSink &newFileSink(const std::string &, const std::string &, bool = false) = 0;
+    virtual void setDefaultSink(const std::string &) = 0;
+  };
 }
 
 #endif

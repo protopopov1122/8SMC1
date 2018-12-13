@@ -54,7 +54,7 @@ namespace CalX {
     }
   }
 
-  void GlobalLogger::setupSink(GlobalLoggingSink id, JournalSinkFactory &factory) {
-    GlobalLogger::logger.newSink(GlobalLogger::getSink(id), factory, id == GlobalLoggingSink::Information);
+  JournalSessionController &GlobalLogger::getController() {
+    return GlobalLogger::logger;
   }
 }
