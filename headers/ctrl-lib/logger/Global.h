@@ -21,8 +21,7 @@
 #ifndef CALX_CTRL_LIB_LOGGER_GLOBAL_H_
 #define CALX_CTRL_LIB_LOGGER_GLOBAL_H_
 
-#include "ctrl-lib/logger/Journal.h"
-#include "ctrl-lib/logger/Session.h"
+#include "ctrl-lib/logger/Logger.h"
 
 namespace CalX {
 
@@ -37,11 +36,11 @@ namespace CalX {
 
   class GlobalLogger {
    public:
-    static JournalSession &getLogger();
+    static JournalLogger &getLogger();
     static const std::string &getSink(GlobalLoggingSink);
-    static JournalSessionController &getController();
+    static JournalLoggerController &getController();
    private:
-    static JournalDefaultSession logger;
+    static DefaultJournal logger;
   };
 }
 

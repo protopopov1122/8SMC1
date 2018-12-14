@@ -29,10 +29,10 @@ namespace CalX {
   static const std::string Resources = "resources";
   static const std::string Instruments = "instruments";
 
-  JournalDefaultSession GlobalLogger::logger(LoggingSeverity::Debug);
+  DefaultJournal GlobalLogger::logger(LoggingSeverity::Debug);
 
-  JournalSession &GlobalLogger::getLogger() {
-    return GlobalLogger::logger;
+  JournalLogger &GlobalLogger::getLogger() {
+    return GlobalLogger::logger.openSession();
   }
 
   const std::string &GlobalLogger::getSink(GlobalLoggingSink id) {
@@ -54,7 +54,7 @@ namespace CalX {
     }
   }
 
-  JournalSessionController &GlobalLogger::getController() {
-    return GlobalLogger::logger;
+  JournalLoggerController &GlobalLogger::getController() {
+    return GlobalLogger::logger.getSessionController();
   }
 }

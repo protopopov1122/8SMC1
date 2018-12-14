@@ -27,9 +27,9 @@
 
 namespace CalX {
 
-  class JournalDefaultSession : public JournalSessionController, public JournalSession {
+  class JournalDefaultLogger : public JournalLoggerController, public JournalLogger {
    public:
-    JournalDefaultSession(LoggingSeverity);
+    JournalDefaultLogger(LoggingSeverity);
 
     JournalSink &getDefaultSink() override;
     JournalSink &getSink(const std::string &) override;

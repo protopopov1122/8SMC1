@@ -22,14 +22,14 @@
 
 namespace CalX {
 
-  JournalDefaultSession::JournalDefaultSession(LoggingSeverity defaultSeverity)
+  JournalDefaultLogger::JournalDefaultLogger(LoggingSeverity defaultSeverity)
     : defaultSink(std::make_shared<JournalNullSink>("")), severity(defaultSeverity) {}
 
-  JournalSink &JournalDefaultSession::getDefaultSink() {
+  JournalSink &JournalDefaultLogger::getDefaultSink() {
     return *this->defaultSink;
   }
 
-  JournalSink &JournalDefaultSession::getSink(const std::string &name) {
+  JournalSink &JournalDefaultLogger::getSink(const std::string &name) {
     if (this->sinks.count(name)) {
       return *this->sinks.at(name);
     } else {
@@ -37,13 +37,13 @@ namespace CalX {
     }
   }
 
-  void JournalDefaultSession::getSinks(std::vector<std::reference_wrapper<JournalSink>> &sinks) const {
+  void JournalDefaultLogger::getSinks(std::vector<std::reference_wrapper<JournalSink>> &sinks) const {
     for (auto it = this->sinks.begin(); it != this->sinks.end(); ++it) {
       sinks.push_back(std::ref(*it->second));
     }
   }
 
-  JournalSink &JournalDefaultSession::newStreamSink(const std::string &name, std::ostream &stream, bool makeDefault) {
+  JournalSink &JournalDefaultLogger::newStreamSink(const std::string &name, std::ostream &stream, bool makeDefault) {
     std::shared_ptr<JournalSink> sink = std::make_shared<JournalStreamSink>(name, this->severity, stream);
     this->sinks[name] = sink;
     if (makeDefault) {
@@ -52,7 +52,7 @@ namespace CalX {
     return *sink;
   }
 
-  JournalSink &JournalDefaultSession::newFileSink(const std::string &name, const std::string &path, bool makeDefault) {
+  JournalSink &JournalDefaultLogger::newFileSink(const std::string &name, const std::string &path, bool makeDefault) {
     std::shared_ptr<JournalSink> sink = std::make_shared<JournalFileSink>(name, this->severity, path);
     this->sinks[name] = sink;
     if (makeDefault) {
@@ -61,15 +61,15 @@ namespace CalX {
     return *sink;
   }
   
-  LoggingSeverity JournalDefaultSession::getDefaultSeverity() const {
+  LoggingSeverity JournalDefaultLogger::getDefaultSeverity() const {
     return this->severity;
   }
 
-  void JournalDefaultSession::setDefaultSeverity(LoggingSeverity sev) {
+  void JournalDefaultLogger::setDefaultSeverity(LoggingSeverity sev) {
     this->severity = sev;
   }
 
-  void JournalDefaultSession::setDefaultSink(const std::string &name) {
+  void JournalDefaultLogger::setDefaultSink(const std::string &name) {
     if (this->sinks.count(name)) {
       this->defaultSink = this->sinks[name];
     }
