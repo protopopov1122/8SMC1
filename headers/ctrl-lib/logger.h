@@ -35,19 +35,10 @@
 #include <string>
 #include <string.h>
 
-#define ERRORS GlobalLoggingSink::Errors
-#define WARNINGS GlobalLoggingSink::Warnings
-#define DEBUG GlobalLoggingSink::Debug
-#define INFORMATION GlobalLoggingSink::Information
-#define RESOURCES GlobalLoggingSink::Resources
-#define INSTRUMENTS GlobalLoggingSink::Instruments
-
-#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
-
 #ifdef LOGGING
 #define WRITE_LOG(__output, tag, msg)                                                                                    \
 	do {                                                                                                             \
-		const char *__file = __FILENAME__;                                                                       \
+		const char *__file = (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__);                   \
 		int __line = __LINE__;                                                                                   \
                 JournalSink &__sink = GlobalLogger::getLogger().getSink(GlobalLogger::getSink(__output));                \
                 JournalSinkStream __stream = __sink.stream(tag, SourcePosition(__file, __line));                         \
@@ -57,16 +48,16 @@
 #define WRITE_LOG(output, tag, msg)
 #endif
 
-#define LOG_ERROR(tag, msg) WRITE_LOG(ERRORS, tag, msg)
-#define LOG_WARNING(tag, msg) WRITE_LOG(WARNINGS, tag, msg)
-#define LOG_DEBUG(tag, msg) WRITE_LOG(DEBUG, tag, msg)
-#define LOG(tag, msg) WRITE_LOG(INFORMATION, tag, msg)
+#define LOG_ERROR(tag, msg) WRITE_LOG(GlobalLoggingSink::Errors, tag, msg)
+#define LOG_WARNING(tag, msg) WRITE_LOG(GlobalLoggingSink::Warnings, tag, msg)
+#define LOG_DEBUG(tag, msg) WRITE_LOG(GlobalLoggingSink::Debug, tag, msg)
+#define LOG(tag, msg) WRITE_LOG(GlobalLoggingSink::Information, tag, msg)
 #define LOG_INSTR(id, msg)                                                     \
-	WRITE_LOG(INSTRUMENTS, "Instrument #" + std::to_string(id), msg)
+	WRITE_LOG(GlobalLoggingSink::Instruments, "Instrument #" + std::to_string(id), msg)
 
 #define INIT_LOG(name)                                                         \
-	WRITE_LOG(RESOURCES, "resource", std::string(name) + " initialized")
+	WRITE_LOG(GlobalLoggingSink::Resources, "resource", std::string(name) + " initialized")
 #define DESTROY_LOG(name)                                                      \
-	WRITE_LOG(RESOURCES, "resource", std::string(name) + " destroyed")
+	WRITE_LOG(GlobalLoggingSink::Resources, "resource", std::string(name) + " destroyed")
 
 #endif

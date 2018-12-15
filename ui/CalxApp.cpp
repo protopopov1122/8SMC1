@@ -140,13 +140,13 @@ namespace CalXUI {
 		}                                                                                                 \
 	}
 
-		SETUP_LOG(CalxLoggingConfiguration::Errors, ERRORS)
-		SETUP_LOG(CalxLoggingConfiguration::Warnings, WARNINGS)
-		SETUP_LOG(CalxLoggingConfiguration::Debug, DEBUG)
-		SETUP_LOG(CalxLoggingConfiguration::Info, INFORMATION)
-		SETUP_LOG(CalxLoggingConfiguration::Resources, RESOURCES)
-		SETUP_LOG(CalxLoggingConfiguration::Instruments, INSTRUMENTS)
-		GlobalLogger::getController().setDefaultSink(GlobalLogger::getSink(INFORMATION));
+		SETUP_LOG(CalxLoggingConfiguration::Errors, GlobalLoggingSink::Errors)
+		SETUP_LOG(CalxLoggingConfiguration::Warnings, GlobalLoggingSink::Warnings)
+		SETUP_LOG(CalxLoggingConfiguration::Debug, GlobalLoggingSink::Debug)
+		SETUP_LOG(CalxLoggingConfiguration::Info, GlobalLoggingSink::Information)
+		SETUP_LOG(CalxLoggingConfiguration::Resources, GlobalLoggingSink::Resources)
+		SETUP_LOG(CalxLoggingConfiguration::Instruments, GlobalLoggingSink::Instruments)
+		GlobalLogger::getController().setDefaultSink(GlobalLogger::getSink(GlobalLoggingSink::Information));
 
 #undef SETUP_LOG
 	}
