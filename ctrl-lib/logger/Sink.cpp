@@ -128,4 +128,27 @@ namespace CalX {
   std::unique_ptr<JournalSink> JournalFileSinkFactory::newSink(const std::string & name, LoggingSeverity severity) const {
     return std::make_unique<JournalFileSink>(name, severity, this->file);
   }
+
+  JournalSinkStream::JournalSinkStream(JournalSink &sink, LoggingSeverity severity, const std::string &tag, const SourcePosition &position)
+    : sink(sink), severity(severity), tag(tag), position(position) {}
+
+  JournalSinkStream::~JournalSinkStream() {
+    this->flush();
+  }
+
+  void JournalSinkStream::flush() {
+    std::string content(this->buffer.str());
+    if (!content.empty()) {
+      this->buffer.str("");
+      this->sink.log(this->severity, content, this->tag, this->position);
+    }
+  }
+
+  JournalSinkStream JournalSink::stream(const std::string &tag, const SourcePosition &position) {
+    return JournalSinkStream(*this, this->getLevel(), tag, position);
+  }
+
+  JournalSinkStream JournalSink::stream(LoggingSeverity severity, const std::string &tag, const SourcePosition &position) {
+    return JournalSinkStream(*this, severity, tag, position);
+  }
 }

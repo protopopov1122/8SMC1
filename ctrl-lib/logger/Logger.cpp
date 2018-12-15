@@ -19,7 +19,7 @@ namespace CalX {
   DefaultJournal::DefaultJournal(LoggingSeverity severity)
     : session(nullptr), defaultSeverity(severity) {}
   
-  JournalLogger &DefaultJournal::openSession() {
+  JournalLogger &DefaultJournal::getSession() {
     if (this->session == nullptr) {
       this->session = std::make_unique<DefaultJournalSession>(this->defaultSeverity);
     }
@@ -31,7 +31,7 @@ namespace CalX {
   }
 
   JournalLoggerController &DefaultJournal::getSessionController() {
-    this->openSession();
+    this->getSession();
     return this->session->getController();
   }
 }

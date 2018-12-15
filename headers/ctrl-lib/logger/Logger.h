@@ -5,12 +5,12 @@
 
 namespace CalX {
 
-  class DefaultJournal : public Journal {
+  class DefaultJournal : public ConfigurableJournal {
    public:
     DefaultJournal(LoggingSeverity = LoggingSeverity::Debug);
-    JournalLogger &openSession() override;
+    JournalLogger &getSession() override;
     void closeSession() override;
-    JournalLoggerController &getSessionController();
+    JournalLoggerController &getSessionController() override;
    private:
     std::unique_ptr<JournalSession> session;
     LoggingSeverity defaultSeverity;

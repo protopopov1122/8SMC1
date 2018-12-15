@@ -32,7 +32,7 @@ namespace CalX {
   DefaultJournal GlobalLogger::logger(LoggingSeverity::Debug);
 
   JournalLogger &GlobalLogger::getLogger() {
-    return GlobalLogger::logger.openSession();
+    return GlobalLogger::logger.getSession();
   }
 
   const std::string &GlobalLogger::getSink(GlobalLoggingSink id) {

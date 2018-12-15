@@ -27,6 +27,7 @@
 #include <vector>
 #include <functional>
 #include <memory>
+#include <sstream>
 
 namespace CalX {
 
@@ -43,6 +44,35 @@ namespace CalX {
     const unsigned int line;
   };
 
+  class JournalSink;
+
+  struct Flush {};
+
+  class JournalSinkStream {
+   public:
+    JournalSinkStream(JournalSink &, LoggingSeverity, const std::string & = "", const SourcePosition & = SourcePosition());
+    ~JournalSinkStream();
+
+    void flush();
+
+    JournalSinkStream &operator<<(Flush flush) {
+      this->flush();
+      return *this;
+    }
+
+    template <typename T>
+    JournalSinkStream &operator<<(T value) {
+      this->buffer << value;
+      return *this;
+    }
+   private:
+    JournalSink &sink;
+    LoggingSeverity severity;
+    std::string tag;
+    SourcePosition position;
+    std::stringstream buffer;
+  };
+
   class JournalSink {
    public:
     virtual ~JournalSink() = default;
@@ -50,6 +80,16 @@ namespace CalX {
     virtual void log(LoggingSeverity, const std::string &, const std::string & = "", const SourcePosition & = SourcePosition()) = 0;
     virtual LoggingSeverity getLevel() const = 0;
     virtual void setLevel(LoggingSeverity) = 0;
+
+    JournalSinkStream stream(const std::string & = "", const SourcePosition & = SourcePosition());
+    JournalSinkStream stream(LoggingSeverity, const std::string & = "", const SourcePosition & = SourcePosition());
+
+    template <typename T>
+    JournalSinkStream operator<<(T value) {
+      JournalSinkStream stream = this->stream();
+      stream << value;
+      return stream;
+    }
   };
 
   class JournalSinkFactory {
@@ -64,6 +104,11 @@ namespace CalX {
     virtual JournalSink &getDefaultSink() = 0;
     virtual JournalSink &getSink(const std::string &) = 0;
     virtual void getSinks(std::vector<std::reference_wrapper<JournalSink>> &) const = 0;
+
+    template <typename T>
+    JournalSinkStream operator<<(T value) {
+      return this->getDefaultSink() << value;
+    }
   };
 
   class JournalLoggerController {
@@ -86,8 +131,13 @@ namespace CalX {
   class Journal {
    public:
     virtual ~Journal() = default;
-    virtual JournalLogger &openSession() = 0;
+    virtual JournalLogger &getSession() = 0;
     virtual void closeSession() = 0;
+  };
+
+  class ConfigurableJournal : public Journal {
+   public:
+    virtual JournalLoggerController &getSessionController() = 0;
   };
 }
 

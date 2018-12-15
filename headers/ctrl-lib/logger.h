@@ -49,8 +49,9 @@
 	do {                                                                                                             \
 		const char *__file = __FILENAME__;                                                                       \
 		int __line = __LINE__;                                                                                   \
-                JournalSink &__sink = GlobalLogger::getLogger().getSink(GlobalLogger::getSink(__output));          \
-                __sink.log(LoggingSeverity::Debug, msg, tag, SourcePosition(__file, __line));                            \
+                JournalSink &__sink = GlobalLogger::getLogger().getSink(GlobalLogger::getSink(__output));                \
+                JournalSinkStream __stream = __sink.stream(tag, SourcePosition(__file, __line));                         \
+                __stream << msg << Flush();                                                                              \
 	} while (false)
 #else
 #define WRITE_LOG(output, tag, msg)
