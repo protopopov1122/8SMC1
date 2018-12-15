@@ -36,13 +36,17 @@
 #include <string.h>
 
 #ifdef LOGGING
-#define WRITE_LOG(__output, tag, msg)                                                                                    \
-	do {                                                                                                             \
-		const char *__file = (strrchr(__FILE__, PATH_SEPARATOR) ? strrchr(__FILE__, PATH_SEPARATOR) + 1 : __FILE__);                   \
-		int __line = __LINE__;                                                                                   \
-                JournalSink &__sink = GlobalLogger::getLogger().getSink(GlobalLogger::getSink(__output));                \
-                JournalSinkStream __stream = __sink.stream(tag, SourcePosition(__file, __line));                         \
-                __stream << msg << Flush();                                                                              \
+#define WRITE_LOG(__output, tag, msg)                                          \
+	do {                                                                         \
+		const char *__file = (strrchr(__FILE__, PATH_SEPARATOR)                    \
+		                          ? strrchr(__FILE__, PATH_SEPARATOR) + 1          \
+		                          : __FILE__);                                     \
+		int __line = __LINE__;                                                     \
+		JournalSink &__sink =                                                      \
+		    GlobalLogger::getLogger().getSink(GlobalLogger::getSink(__output));    \
+		JournalSinkStream __stream =                                               \
+		    __sink.stream(tag, SourcePosition(__file, __line));                    \
+		__stream << msg << Flush();                                                \
 	} while (false)
 #else
 #define WRITE_LOG(output, tag, msg)
@@ -53,11 +57,14 @@
 #define LOG_DEBUG(tag, msg) WRITE_LOG(GlobalLoggingSink::Debug, tag, msg)
 #define LOG(tag, msg) WRITE_LOG(GlobalLoggingSink::Information, tag, msg)
 #define LOG_INSTR(id, msg)                                                     \
-	WRITE_LOG(GlobalLoggingSink::Instruments, "Instrument #" + std::to_string(id), msg)
+	WRITE_LOG(GlobalLoggingSink::Instruments,                                    \
+	          "Instrument #" + std::to_string(id), msg)
 
 #define INIT_LOG(name)                                                         \
-	WRITE_LOG(GlobalLoggingSink::Resources, "resource", std::string(name) + " initialized")
+	WRITE_LOG(GlobalLoggingSink::Resources, "resource",                          \
+	          std::string(name) + " initialized")
 #define DESTROY_LOG(name)                                                      \
-	WRITE_LOG(GlobalLoggingSink::Resources, "resource", std::string(name) + " destroyed")
+	WRITE_LOG(GlobalLoggingSink::Resources, "resource",                          \
+	          std::string(name) + " destroyed")
 
 #endif

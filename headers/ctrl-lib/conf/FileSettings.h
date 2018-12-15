@@ -29,68 +29,75 @@
 
 namespace CalX {
 
-  class SettingsConfigListener : public CatalogueListener {
-   public:
-    SettingsConfigListener(std::function<void()> exportFn)
-      : exportFn(exportFn) {}
-    
-		void entryAdd(ConfigurationCatalogue *conf, const std::string &entry) override {
-      this->exportFn();
-    }
+	class SettingsConfigListener : public CatalogueListener {
+	 public:
+		SettingsConfigListener(std::function<void()> exportFn)
+		    : exportFn(exportFn) {}
 
-		void entryRemove(ConfigurationCatalogue *conf, const std::string &entry) override {
-      this->exportFn();
-    }
+		void entryAdd(ConfigurationCatalogue *conf,
+		              const std::string &entry) override {
+			this->exportFn();
+		}
 
-		void keyAdd(ConfigurationCatalogue *conf, const std::string &entry, const std::string &key) override {
-      this->exportFn();
-    }
+		void entryRemove(ConfigurationCatalogue *conf,
+		                 const std::string &entry) override {
+			this->exportFn();
+		}
 
-		void keyRemove(ConfigurationCatalogue *conf, const std::string &entry, const std::string &key) override {
-      this->exportFn();
-    }
+		void keyAdd(ConfigurationCatalogue *conf, const std::string &entry,
+		            const std::string &key) override {
+			this->exportFn();
+		}
 
-		void keyChange(ConfigurationCatalogue *conf, const std::string &entry, const std::string &key) override {
-      this->exportFn();
-    }
-   private:
-    std::function<void()> exportFn;
-  };
+		void keyRemove(ConfigurationCatalogue *conf, const std::string &entry,
+		               const std::string &key) override {
+			this->exportFn();
+		}
 
-  template <typename IO>
-  class SettingsFileRepository : public SettingsRepository {
-   public:
-    SettingsFileRepository(const std::string &path)
-      : repo_path(path) {
-      this->importRepo();
-    }
+		void keyChange(ConfigurationCatalogue *conf, const std::string &entry,
+		               const std::string &key) override {
+			this->exportFn();
+		}
 
-    const std::string &getRepositoryPath() const {
-      return this->repo_path;
-    }
+	 private:
+		std::function<void()> exportFn;
+	};
 
-    ConfigurationCatalogue &getSettings() {
-      return *this->settings;
-    }
-   private:
-    void importRepo() {
-      std::ifstream is(this->repo_path);
-      if (is.good()) {
-        this->settings = IO::load(is, std::cout);
-      } else {
-        this->settings = std::make_unique<ConfigManager>();
-      }
-      this->settings->addEventListener(std::make_shared<SettingsConfigListener>([this]() { this->exportRepo(); }));
-    }
+	template<typename IO>
+	class SettingsFileRepository : public SettingsRepository {
+	 public:
+		SettingsFileRepository(const std::string &path) : repo_path(path) {
+			this->importRepo();
+		}
 
-    void exportRepo() {
-      std::ofstream os(this->repo_path);
-      IO::store(*this->settings, os);
-    }
+		const std::string &getRepositoryPath() const {
+			return this->repo_path;
+		}
 
-    std::string repo_path;
-    std::unique_ptr<ConfigurationCatalogue> settings;
-  };
-}
+		ConfigurationCatalogue &getSettings() {
+			return *this->settings;
+		}
+
+	 private:
+		void importRepo() {
+			std::ifstream is(this->repo_path);
+			if (is.good()) {
+				this->settings = IO::load(is, std::cout);
+			} else {
+				this->settings = std::make_unique<ConfigManager>();
+			}
+			this->settings->addEventListener(std::make_shared<SettingsConfigListener>(
+			    [this]() { this->exportRepo(); }));
+		}
+
+		void exportRepo() {
+			std::ofstream os(this->repo_path);
+			IO::store(*this->settings, os);
+		}
+
+		std::string repo_path;
+		std::unique_ptr<ConfigurationCatalogue> settings;
+	};
+}  // namespace CalX
 
 #endif

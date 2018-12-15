@@ -22,7 +22,8 @@
 #include <sstream>
 
 namespace CalXUI {
-	CalxUnitProcessor::CalxUnitProcessor(ConfigurationCatalogue &conf) : config(conf) {}
+	CalxUnitProcessor::CalxUnitProcessor(ConfigurationCatalogue &conf)
+	    : config(conf) {}
 
 	std::string CalxUnitProcessor::formatDouble(double d) {
 		std::ostringstream os;
@@ -31,13 +32,14 @@ namespace CalXUI {
 	}
 
 	std::string CalxUnitProcessor::getUnits() {
-		return this->config.getEntry(CalxConfiguration::Units)->getString(CalxUnitConfiguration::UnitSuffix, "");
+		return this->config.getEntry(CalxConfiguration::Units)
+		    ->getString(CalxUnitConfiguration::UnitSuffix, "");
 	}
 
 	std::string CalxUnitProcessor::getSpeedUnits() {
 		std::string units = this->getUnits();
-		std::string timing =
-		    this->config.getEntry(CalxConfiguration::Units)->getString(CalxUnitConfiguration::Timing, "");
+		std::string timing = this->config.getEntry(CalxConfiguration::Units)
+		                         ->getString(CalxUnitConfiguration::Timing, "");
 		return units.empty() ? "" : units + timing;
 	}
 
@@ -50,17 +52,21 @@ namespace CalXUI {
 	}
 
 	double CalxUnitProcessor::getUnitScale() {
-		return this->config.getEntry(CalxConfiguration::Units)->getReal(CalxUnitConfiguration::UnitScale, 1.0f);
+		return this->config.getEntry(CalxConfiguration::Units)
+		    ->getReal(CalxUnitConfiguration::UnitScale, 1.0f);
 	}
 
 	double CalxUnitProcessor::getSpeedScale() {
-		return this->config.getEntry(CalxConfiguration::Units)->getReal(CalxUnitConfiguration::SpeedScale, 1.0f);
+		return this->config.getEntry(CalxConfiguration::Units)
+		    ->getReal(CalxUnitConfiguration::SpeedScale, 1.0f);
 	}
 
 	coord_point_t CalxUnitProcessor::getUnitOffset() {
 		coord_point_t offset = {
-			this->config.getEntry(CalxConfiguration::Units)->getReal(CalxUnitConfiguration::UnitOffsetX, 0.0f),
-			this->config.getEntry(CalxConfiguration::Units)->getReal(CalxUnitConfiguration::UnitOffsetY, 0.0f)
+			this->config.getEntry(CalxConfiguration::Units)
+			    ->getReal(CalxUnitConfiguration::UnitOffsetX, 0.0f),
+			this->config.getEntry(CalxConfiguration::Units)
+			    ->getReal(CalxUnitConfiguration::UnitOffsetY, 0.0f)
 		};
 		return offset;
 	}

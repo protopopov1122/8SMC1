@@ -79,18 +79,22 @@ namespace CalX {
 
 	DefaultSystemManager::DefaultSystemManager(
 	    std::unique_ptr<DeviceManager> devman,
-	    std::unique_ptr<ConfigurationCatalogue> conf, std::unique_ptr<ExtEngine> ext_eng)
+	    std::unique_ptr<ConfigurationCatalogue> conf,
+	    std::unique_ptr<ExtEngine> ext_eng)
 	    : devman(std::move(devman)),
 	      conf(std::move(conf)),
-		  settings(nullptr),
+	      settings(nullptr),
 	      ext_engine(std::move(ext_eng)),
 	      eventLogger(*this),
 	      motorControllerSet(*this->conf, *this->devman, &this->eventLogger),
 	      instrumentControllerSet(*this->conf, *this->devman, &this->eventLogger),
 	      planeSet(*this->conf, &this->eventLogger) {
-		
-		if (this->conf->getEntry(CalxConfiguration::Core)->has(CalxCoreConfiguration::Settings)) {
-			this->settings = std::make_unique<SettingsFileRepository<INIConfiguration>>(this->conf->getEntry(CalxConfiguration::Core)->getString(CalxCoreConfiguration::Settings));
+		if (this->conf->getEntry(CalxConfiguration::Core)
+		        ->has(CalxCoreConfiguration::Settings)) {
+			this->settings =
+			    std::make_unique<SettingsFileRepository<INIConfiguration>>(
+			        this->conf->getEntry(CalxConfiguration::Core)
+			            ->getString(CalxCoreConfiguration::Settings));
 		}
 		LOG(SYSMAN_TAG,
 		    "System startup. Found " +

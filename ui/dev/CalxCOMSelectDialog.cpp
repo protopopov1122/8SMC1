@@ -72,11 +72,12 @@ namespace CalXUI {
 		this->parityCh->Append(__("Even"));
 		this->parityCh->Append(__("Mark"));
 		this->parityCh->Append(__("Space"));
-		this->parityCh->SetSelection((int) wxGetApp()
-		                                 .getSystemManager()
-		                                 ->getConfiguration()
-		                                 .getEntry(CalxConfiguration::SerialConnection)
-		                                 ->getInt(CalxDeviceConfiguration::COMParity, 0));
+		this->parityCh->SetSelection(
+		    (int) wxGetApp()
+		        .getSystemManager()
+		        ->getConfiguration()
+		        .getEntry(CalxConfiguration::SerialConnection)
+		        ->getInt(CalxDeviceConfiguration::COMParity, 0));
 		mainSizer->Add(this->parityCh);
 
 		wxPanel *buttonPanel = new wxPanel(this, wxID_ANY);

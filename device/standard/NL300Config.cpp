@@ -30,30 +30,30 @@ namespace CalX {
 	}
 
 	void NL300ConfigEventListener::entryAdd(ConfigurationCatalogue *conf,
-	                                          const std::string &id) {}
+	                                        const std::string &id) {}
 
 	void NL300ConfigEventListener::entryRemove(ConfigurationCatalogue *conf,
-	                                            const std::string &id) {}
+	                                           const std::string &id) {}
 
 	void NL300ConfigEventListener::keyAdd(ConfigurationCatalogue *conf,
-	                                        const std::string &entry,
-																					const std::string &key) {
+	                                      const std::string &entry,
+	                                      const std::string &key) {
 		process(conf, entry, key);
 	}
 
 	void NL300ConfigEventListener::keyRemove(ConfigurationCatalogue *conf,
-	                                          const std::string &entry,
-	                                          const std::string &key) {}
+	                                         const std::string &entry,
+	                                         const std::string &key) {}
 
 	void NL300ConfigEventListener::keyChange(ConfigurationCatalogue *conf,
-	                                          const std::string &entry,
-	                                          const std::string &key) {
+	                                         const std::string &entry,
+	                                         const std::string &key) {
 		process(conf, entry, key);
 	}
 
 	void NL300ConfigEventListener::process(ConfigurationCatalogue *conf,
 	                                       const std::string &entryName,
-																				 const std::string &key) {
+	                                       const std::string &key) {
 		if (entryName.compare(NL300_ENTRY_NAME) != 0) {
 			return;
 		}

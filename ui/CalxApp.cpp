@@ -73,10 +73,12 @@ namespace CalXUI {
 		return conf_ptr;
 	}
 
-	DeviceManager_getter CalxApp::loadDeviceDrivers(ConfigurationCatalogue &conf) {
+	DeviceManager_getter CalxApp::loadDeviceDrivers(
+	    ConfigurationCatalogue &conf) {
 		// Load specified dynamic library
-		std::string lib_addr =
-		    conf.getEntry(CalxConfiguration::UserInterface)->getString(CalxUIConfiguration::DeviceLibrary, STRINGIZE(DEVICES_LIB));
+		std::string lib_addr = conf.getEntry(CalxConfiguration::UserInterface)
+		                           ->getString(CalxUIConfiguration::DeviceLibrary,
+		                                       STRINGIZE(DEVICES_LIB));
 
 		this->dynlib =
 		    new wxDynamicLibrary(wxDynamicLibrary::CanonicalizeName(lib_addr),
@@ -105,7 +107,8 @@ namespace CalXUI {
 	}
 
 	void CalxApp::initDebugConsole(ConfigurationCatalogue &conf) {
-		this->debug_mode = conf.getEntry(CalxConfiguration::UserInterface)->getBool(CalxUIConfiguration::Debug, false);
+		this->debug_mode = conf.getEntry(CalxConfiguration::UserInterface)
+		                       ->getBool(CalxUIConfiguration::Debug, false);
 		if (this->debug_mode) {
 #ifdef OS_WIN
 			AllocConsole();
@@ -119,8 +122,11 @@ namespace CalXUI {
 
 	void CalxApp::startDebugConsole(ConfigurationCatalogue &conf) {
 		if (this->debug_mode &&
-		    sysman->getConfiguration().getEntry(CalxConfiguration::UserInterface)->getBool(CalxUIConfiguration::Console, false)) {
-			this->debug_console = std::make_unique<CalxDebugConsole>(this->sysman.get());
+		    sysman->getConfiguration()
+		        .getEntry(CalxConfiguration::UserInterface)
+		        ->getBool(CalxUIConfiguration::Console, false)) {
+			this->debug_console =
+			    std::make_unique<CalxDebugConsole>(this->sysman.get());
 			this->debug_console->Run();
 		} else {
 			this->debug_console = nullptr;
@@ -129,15 +135,18 @@ namespace CalXUI {
 		this->Bind(wxEVT_APP_ALERT, &CalxApp::OnAlertEvent, this);
 	}
 
-	void CalxApp::initLogging(ConfigurationCatalogue &conf){
-#define SETUP_LOG(id, dest)                                                                           \
-	{                                                                                                   \
-		std::string logger = conf.getEntry(CalxConfiguration::Logging)->getString(id, "");                \
-		if (logger.compare("stdout") == 0) {                                                              \
-			GlobalLogger::getController().newStreamSink(GlobalLogger::getSink(dest), std::cout);            \
-		} else if (logger.length() > 0) {                                                                 \
-			GlobalLogger::getController().newFileSink(GlobalLogger::getSink(dest), logger);                 \
-		}                                                                                                 \
+	void CalxApp::initLogging(ConfigurationCatalogue &conf) {
+#define SETUP_LOG(id, dest)                                                    \
+	{                                                                            \
+		std::string logger =                                                       \
+		    conf.getEntry(CalxConfiguration::Logging)->getString(id, "");          \
+		if (logger.compare("stdout") == 0) {                                       \
+			GlobalLogger::getController().newStreamSink(GlobalLogger::getSink(dest), \
+			                                            std::cout);                  \
+		} else if (logger.length() > 0) {                                          \
+			GlobalLogger::getController().newFileSink(GlobalLogger::getSink(dest),   \
+			                                          logger);                       \
+		}                                                                          \
 	}
 
 		SETUP_LOG(CalxLoggingConfiguration::Errors, GlobalLoggingSink::Errors)
@@ -145,14 +154,19 @@ namespace CalXUI {
 		SETUP_LOG(CalxLoggingConfiguration::Debug, GlobalLoggingSink::Debug)
 		SETUP_LOG(CalxLoggingConfiguration::Info, GlobalLoggingSink::Information)
 		SETUP_LOG(CalxLoggingConfiguration::Resources, GlobalLoggingSink::Resources)
-		SETUP_LOG(CalxLoggingConfiguration::Instruments, GlobalLoggingSink::Instruments)
-		GlobalLogger::getController().setDefaultSink(GlobalLogger::getSink(GlobalLoggingSink::Information));
+		SETUP_LOG(CalxLoggingConfiguration::Instruments,
+		          GlobalLoggingSink::Instruments)
+		GlobalLogger::getController().setDefaultSink(
+		    GlobalLogger::getSink(GlobalLoggingSink::Information));
 
 #undef SETUP_LOG
 	}
 
-	std::unique_ptr<ExtEngine> CalxApp::loadExtensionEngine(ConfigurationCatalogue &conf) {
-		std::string ext_addr = conf.getEntry(CalxConfiguration::Extensions)->getString(CalxExtensionsConfiguration::Engine, "");
+	std::unique_ptr<ExtEngine> CalxApp::loadExtensionEngine(
+	    ConfigurationCatalogue &conf) {
+		std::string ext_addr =
+		    conf.getEntry(CalxConfiguration::Extensions)
+		        ->getString(CalxExtensionsConfiguration::Engine, "");
 		std::unique_ptr<ExtEngine> ext = nullptr;
 		if (!ext_addr.empty()) {
 			this->extLib =
@@ -195,7 +209,8 @@ namespace CalXUI {
 
 	void CalxApp::loadScriptEngine(ConfigurationCatalogue &conf) {
 		std::string script_eng_addr =
-		    conf.getEntry(CalxConfiguration::Scripting)->getString(CalxScriptingConfiguration::Engine, "");
+		    conf.getEntry(CalxConfiguration::Scripting)
+		        ->getString(CalxScriptingConfiguration::Engine, "");
 		this->scriptFactory = nullptr;
 		this->script_env = nullptr;
 		this->scriptLib = nullptr;
@@ -227,13 +242,16 @@ namespace CalXUI {
 
 	void CalxApp::startInitScript(ConfigurationCatalogue &conf) {
 		if (this->scriptFactory != nullptr &&
-		    this->sysman->getConfiguration().getEntry(CalxConfiguration::Scripting)->getBool(CalxScriptingConfiguration::AutoInit,
-		                                                                 false)) {
+		    this->sysman->getConfiguration()
+		        .getEntry(CalxConfiguration::Scripting)
+		        ->getBool(CalxScriptingConfiguration::AutoInit, false)) {
 			CalXScriptHookThread *th = new CalXScriptHookThread(
-			    this->sysman->getConfiguration().getEntry(CalxConfiguration::Scripting)->getString(
-			        CalxScriptingConfiguration::Main, "scripts/main.lua"),
-			    this->sysman->getConfiguration().getEntry(CalxConfiguration::Scripting)->getString(
-			        CalxScriptingConfiguration::InitEntry, "init"));
+			    this->sysman->getConfiguration()
+			        .getEntry(CalxConfiguration::Scripting)
+			        ->getString(CalxScriptingConfiguration::Main, "scripts/main.lua"),
+			    this->sysman->getConfiguration()
+			        .getEntry(CalxConfiguration::Scripting)
+			        ->getString(CalxScriptingConfiguration::InitEntry, "init"));
 			th->Run();
 		}
 	}
@@ -242,7 +260,8 @@ namespace CalXUI {
 	// calls methods above
 	bool CalxApp::OnInit() {
 		// Load configuration
-		std::unique_ptr<ConfigurationCatalogue> conf_ptr = this->loadConfiguration();
+		std::unique_ptr<ConfigurationCatalogue> conf_ptr =
+		    this->loadConfiguration();
 		if (conf_ptr == nullptr) {
 			return false;
 		}
@@ -268,9 +287,10 @@ namespace CalXUI {
 		    std::unique_ptr<DeviceManager>(getter());
 		this->sysman = std::make_unique<DefaultSystemManager>(
 		    std::move(devman), std::move(conf_ptr), std::move(ext));
-		
-		// Error handler will be released in the OnExit method 
-		this->error_handler = new CalxErrorHandler(this->sysman.get());	// lgtm [cpp/resource-not-released-in-destructor]
+
+		// Error handler will be released in the OnExit method
+		this->error_handler = new CalxErrorHandler(
+		    this->sysman.get());  // lgtm [cpp/resource-not-released-in-destructor]
 
 		// Start debug console if necessary
 		this->startDebugConsole(conf);
@@ -283,7 +303,8 @@ namespace CalXUI {
 
 		// Show main program window
 		// wxWidgets will release it automatically
-		this->frame = new CalxFrame(__("CalX UI"));	// lgtm [cpp/resource-not-released-in-destructor]
+		this->frame = new CalxFrame(
+		    __("CalX UI"));  // lgtm [cpp/resource-not-released-in-destructor]
 		this->frame->Show(true);
 		this->frame->Maximize(true);
 
@@ -390,8 +411,8 @@ namespace CalXUI {
 	}
 
 	void CalxApp::OnAlertEvent(wxThreadEvent &evt) {
-		 auto params = evt.GetPayload<std::tuple<std::string, std::string, long>>();
-		 wxMessageBox(std::get<0>(params), std::get<0>(params), std::get<2>(params));
+		auto params = evt.GetPayload<std::tuple<std::string, std::string, long>>();
+		wxMessageBox(std::get<0>(params), std::get<0>(params), std::get<2>(params));
 	}
 }  // namespace CalXUI
 

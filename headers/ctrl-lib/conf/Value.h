@@ -30,19 +30,13 @@ namespace CalX {
 	typedef int64_t int_conf_t;
 	typedef double real_conf_t;
 
-	enum class ConfigurationValueType {
-    Integer,
-    Real,
-    String,
-    Boolean,
-    None
-  };
+	enum class ConfigurationValueType { Integer, Real, String, Boolean, None };
 
-  class ConfiguationFlatDictionary; // Forward reference
+	class ConfiguationFlatDictionary;  // Forward reference
 
 	class ConfigurationValue {
 	 public:
-	 	ConfigurationValue();
+		ConfigurationValue();
 		ConfigurationValue(const ConfigurationValue &);
 		ConfigurationValue(int_conf_t);
 		ConfigurationValue(real_conf_t);
@@ -65,20 +59,21 @@ namespace CalX {
 		operator real_conf_t() const {
 			return this->getReal();
 		}
-		
+
 		operator bool() const {
 			return this->getBool();
 		}
-	
-		operator std::string () const {
+
+		operator std::string() const {
 			return this->toString();
 		}
 
 		static ConfigurationValue Empty;
+
 	 private:
 		ConfigurationValueType type;
 		std::variant<int_conf_t, real_conf_t, bool, std::string> value;
 	};
-}
+}  // namespace CalX
 
 #endif

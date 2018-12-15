@@ -52,7 +52,8 @@ namespace CalX {
 		if (!this->motor.isRunning()) {
 			return errcode;
 		}
-		if (this->destination == MoveType::MoveUp && this->motor.isTrailerPressed(2)) {
+		if (this->destination == MoveType::MoveUp &&
+		    this->motor.isTrailerPressed(2)) {
 			errcode = ErrorCode::Trailer2Pressed;
 			if (!this->motor.stop()) {
 				errcode = ErrorCode::LowLevelError;
@@ -60,7 +61,8 @@ namespace CalX {
 			this->destination = MoveType::Stop;
 			return errcode;
 		}
-		if (this->destination == MoveType::MoveDown && this->motor.isTrailerPressed(1)) {
+		if (this->destination == MoveType::MoveDown &&
+		    this->motor.isTrailerPressed(1)) {
 			errcode = ErrorCode::Trailer1Pressed;
 			if (!this->motor.stop()) {
 				errcode = ErrorCode::LowLevelError;
@@ -94,11 +96,14 @@ namespace CalX {
 		}
 		this->work = true;
 		int_conf_t roll_step =
-		    config.getEntry(CalxConfiguration::Core)->getInt(CalxMotorConfiguration::RollStep, ROLL_STEP);
+		    config.getEntry(CalxConfiguration::Core)
+		        ->getInt(CalxMotorConfiguration::RollStep, ROLL_STEP);
 		int_conf_t roll_speed =
-		    config.getEntry(CalxConfiguration::Core)->getInt(CalxMotorConfiguration::RollSpeed, ROLL_SPEED);
+		    config.getEntry(CalxConfiguration::Core)
+		        ->getInt(CalxMotorConfiguration::RollSpeed, ROLL_SPEED);
 		int_conf_t comeback =
-		    config.getEntry(CalxConfiguration::Core)->getInt(CalxMotorConfiguration::TrailerComeback, TRAILER_COMEBACK);
+		    config.getEntry(CalxConfiguration::Core)
+		        ->getInt(CalxMotorConfiguration::TrailerComeback, TRAILER_COMEBACK);
 
 		int_conf_t dest = (tr == TrailerId::Trailer1 ? -roll_step : roll_step);
 		this->destination =
@@ -129,7 +134,8 @@ namespace CalX {
 		}
 		ErrorCode errcode = ErrorCode::NoError;
 		if (work) {
-			errcode = this->startMove(this->motor.getPosition() + comeback, roll_speed);
+			errcode =
+			    this->startMove(this->motor.getPosition() + comeback, roll_speed);
 		}
 		this->sendRolledEvent(evt);
 		this->work = false;
@@ -145,8 +151,8 @@ namespace CalX {
 			return ErrorCode::PowerOff;
 		}
 		this->work = true;
-		this->destination =
-		    dest > this->motor.getPosition() ? MoveType::MoveUp : MoveType::MoveDown;
+		this->destination = dest > this->motor.getPosition() ? MoveType::MoveUp
+		                                                     : MoveType::MoveDown;
 		MotorMoveEvent evt = { dest, speed };
 		this->sendMovingEvent(evt);
 		ErrorCode errcode = ErrorCode::NoError;
@@ -182,14 +188,15 @@ namespace CalX {
 			return ErrorCode::PowerOff;
 		}
 		this->work = true;
-		this->destination =
-		    dest > this->motor.getPosition() ? MoveType::MoveUp : MoveType::MoveDown;
+		this->destination = dest > this->motor.getPosition() ? MoveType::MoveUp
+		                                                     : MoveType::MoveDown;
 		if (!rollEvent) {
 			MotorMoveEvent evt = { dest, speed };
 			this->sendMovingEvent(evt);
 		} else {
-			TrailerId tid = this->destination == MoveType::MoveUp ? TrailerId::Trailer2
-			                                               : TrailerId::Trailer1;
+			TrailerId tid = this->destination == MoveType::MoveUp
+			                    ? TrailerId::Trailer2
+			                    : TrailerId::Trailer1;
 			MotorRollEvent evt = { tid };
 			this->sendRollingEvent(evt);
 		}
@@ -217,8 +224,9 @@ namespace CalX {
 			MotorMoveEvent evt = { dest, speed };
 			this->sendMovedEvent(evt);
 		} else {
-			TrailerId tid = this->destination == MoveType::MoveUp ? TrailerId::Trailer2
-			                                               : TrailerId::Trailer1;
+			TrailerId tid = this->destination == MoveType::MoveUp
+			                    ? TrailerId::Trailer2
+			                    : TrailerId::Trailer1;
 			MotorRollEvent evt = { tid };
 			this->sendRolledEvent(evt);
 		}

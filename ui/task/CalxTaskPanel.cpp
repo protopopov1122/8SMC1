@@ -483,11 +483,12 @@ namespace CalXUI {
 					                  ->getConfiguration()
 					                  .getEntry(CalxConfiguration::Units)
 					                  ->getReal(CalxUnitConfiguration::UnitScale, 1.0f);
-					float unit_speed = wxGetApp()
-					                       .getSystemManager()
-					                       ->getConfiguration()
-					                       .getEntry(CalxConfiguration::Units)
-					                       ->getReal(CalxUnitConfiguration::UnitSpeed, 1.25f);
+					float unit_speed =
+					    wxGetApp()
+					        .getSystemManager()
+					        ->getConfiguration()
+					        .getEntry(CalxConfiguration::Units)
+					        ->getReal(CalxUnitConfiguration::UnitSpeed, 1.25f);
 					coord_point_t dest = { start.first.x / scale, start.first.y / scale };
 					wxGetApp()
 					    .getMainFrame()

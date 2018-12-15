@@ -27,68 +27,80 @@
 
 namespace CalX {
 
-  class JournalAbstractSink : public JournalSink {
-   public:
-    JournalAbstractSink(const std::string &, LoggingSeverity);
-    const std::string &getName() const override;
-    void log(LoggingSeverity, const std::string &, const std::string &, const SourcePosition &) override;
-    LoggingSeverity getLevel() const override;
-    void setLevel(LoggingSeverity) override;
-   protected:
-    virtual void log(const std::string &) = 0;
-    static constexpr unsigned int SinkNamePadding = 10;
+	class JournalAbstractSink : public JournalSink {
+	 public:
+		JournalAbstractSink(const std::string &, LoggingSeverity);
+		const std::string &getName() const override;
+		void log(LoggingSeverity, const std::string &, const std::string &,
+		         const SourcePosition &) override;
+		LoggingSeverity getLevel() const override;
+		void setLevel(LoggingSeverity) override;
 
-    std::string name;
-    LoggingSeverity severity;
-  };
+	 protected:
+		virtual void log(const std::string &) = 0;
+		static constexpr unsigned int SinkNamePadding = 10;
 
-  class JournalStreamSink : public JournalAbstractSink {
-   public:
-    JournalStreamSink(const std::string &, LoggingSeverity, std::ostream &);
-   protected:
-    void log(const std::string &) override;
-   private:
-    std::ostream &output;
-  };
+		std::string name;
+		LoggingSeverity severity;
+	};
 
-  class JournalFileSink : public JournalAbstractSink {
-   public:
-    JournalFileSink(const std::string &, LoggingSeverity, const std::string &);
-    virtual ~JournalFileSink();
-   protected:
-    void log(const std::string &) override;
-   private:
-    std::ofstream output;
-  };
+	class JournalStreamSink : public JournalAbstractSink {
+	 public:
+		JournalStreamSink(const std::string &, LoggingSeverity, std::ostream &);
 
-  class JournalNullSink : public JournalSink {
-   public:
-    JournalNullSink(const std::string &);
-    const std::string &getName() const override;
-    void log(LoggingSeverity, const std::string &, const std::string &, const SourcePosition &) override;
-    LoggingSeverity getLevel() const override;
-    void setLevel(LoggingSeverity) override;
-   private:
-    std::string name;
-  };
+	 protected:
+		void log(const std::string &) override;
 
-  class JournalStreamSinkFactory : public JournalSinkFactory {
-   public:
-    JournalStreamSinkFactory(std::ostream &);
+	 private:
+		std::ostream &output;
+	};
 
-    std::unique_ptr<JournalSink> newSink(const std::string &, LoggingSeverity) const override;
-   private:
-    std::ostream &stream;
-  };
+	class JournalFileSink : public JournalAbstractSink {
+	 public:
+		JournalFileSink(const std::string &, LoggingSeverity, const std::string &);
+		virtual ~JournalFileSink();
 
-  class JournalFileSinkFactory : public JournalSinkFactory {
-   public:
-    JournalFileSinkFactory(const std::string &);
+	 protected:
+		void log(const std::string &) override;
 
-    std::unique_ptr<JournalSink> newSink(const std::string &, LoggingSeverity) const override;
-   private:
-    std::string file;
-  };
-}
+	 private:
+		std::ofstream output;
+	};
+
+	class JournalNullSink : public JournalSink {
+	 public:
+		JournalNullSink(const std::string &);
+		const std::string &getName() const override;
+		void log(LoggingSeverity, const std::string &, const std::string &,
+		         const SourcePosition &) override;
+		LoggingSeverity getLevel() const override;
+		void setLevel(LoggingSeverity) override;
+
+	 private:
+		std::string name;
+	};
+
+	class JournalStreamSinkFactory : public JournalSinkFactory {
+	 public:
+		JournalStreamSinkFactory(std::ostream &);
+
+		std::unique_ptr<JournalSink> newSink(const std::string &,
+		                                     LoggingSeverity) const override;
+
+	 private:
+		std::ostream &stream;
+	};
+
+	class JournalFileSinkFactory : public JournalSinkFactory {
+	 public:
+		JournalFileSinkFactory(const std::string &);
+
+		std::unique_ptr<JournalSink> newSink(const std::string &,
+		                                     LoggingSeverity) const override;
+
+	 private:
+		std::string file;
+	};
+}  // namespace CalX
 
 #endif

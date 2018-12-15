@@ -66,15 +66,18 @@ namespace CalXUI {
 		ConfiguationFlatDictionary *colourEntry =
 		    wxGetApp().getSystemManager()->getConfiguration().getEntry(
 		        CalxConfiguration::Watcher);
-		this->pointer_colour = wxColour(colourEntry->getInt(CalxWatcherConfiguration::PointerR, 255),
-		                                colourEntry->getInt(CalxWatcherConfiguration::PointerG, 0),
-		                                colourEntry->getInt(CalxWatcherConfiguration::PointerB, 0));
-		this->jump_colour = wxColour(colourEntry->getInt(CalxWatcherConfiguration::JumpR, 128),
-		                             colourEntry->getInt(CalxWatcherConfiguration::JumpG, 128),
-		                             colourEntry->getInt(CalxWatcherConfiguration::JumpB, 128));
-		this->move_colour = wxColour(colourEntry->getInt(CalxWatcherConfiguration::MoveR, 0),
-		                             colourEntry->getInt(CalxWatcherConfiguration::MoveG, 0),
-		                             colourEntry->getInt(CalxWatcherConfiguration::MoveB, 0));
+		this->pointer_colour =
+		    wxColour(colourEntry->getInt(CalxWatcherConfiguration::PointerR, 255),
+		             colourEntry->getInt(CalxWatcherConfiguration::PointerG, 0),
+		             colourEntry->getInt(CalxWatcherConfiguration::PointerB, 0));
+		this->jump_colour =
+		    wxColour(colourEntry->getInt(CalxWatcherConfiguration::JumpR, 128),
+		             colourEntry->getInt(CalxWatcherConfiguration::JumpG, 128),
+		             colourEntry->getInt(CalxWatcherConfiguration::JumpB, 128));
+		this->move_colour =
+		    wxColour(colourEntry->getInt(CalxWatcherConfiguration::MoveR, 0),
+		             colourEntry->getInt(CalxWatcherConfiguration::MoveG, 0),
+		             colourEntry->getInt(CalxWatcherConfiguration::MoveB, 0));
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxVirtualPlane::OnExit, this);
 		this->Bind(wxEVT_PAINT, &CalxVirtualPlane::OnPaintEvent, this);
 		this->Bind(wxEVT_SIZE, &CalxVirtualPlane::OnResizeEvent, this);

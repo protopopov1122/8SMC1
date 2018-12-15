@@ -56,7 +56,7 @@ namespace CalX {
 		// Proxy methods
 		ErrorCode move(motor_point_t, float, bool) override;
 		ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,
-		                      float = 1.0f) override;
+		              float = 1.0f) override;
 		motor_point_t getPosition() const override;
 		motor_rect_t getSize() const override;
 		std::ostream &operator<<(std::ostream &) const override;
@@ -64,12 +64,13 @@ namespace CalX {
 		// Floating-point methods
 		ErrorCode move(coord_point_t, double, bool) override;
 		ErrorCode arc(coord_point_t, coord_point_t, int, double, bool,
-		                      float = 1.0f) override;
+		              float = 1.0f) override;
 		ErrorCode relativeMove(coord_point_t, float, bool) override;
-		ErrorCode relativeArc(coord_point_t, coord_point_t, int, float,
-		                              bool, float = 1.0f) override;
+		ErrorCode relativeArc(coord_point_t, coord_point_t, int, float, bool,
+		                      float = 1.0f) override;
 		coord_point_t getFloatPosition() const override;
 		coord_rect_t getFloatSize() const override;
+
 	 private:
 		coord_point_t offset;
 		coord_scale_t scale;

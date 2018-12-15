@@ -86,15 +86,18 @@ namespace CalXUI {
 		ConfiguationFlatDictionary *colourEntry =
 		    wxGetApp().getSystemManager()->getConfiguration().getEntry(
 		        CalxConfiguration::Watcher);
-		this->pointer_colour = wxColour(colourEntry->getInt(CalxWatcherConfiguration::PointerR, 255),
-		                                colourEntry->getInt(CalxWatcherConfiguration::PointerG, 0),
-		                                colourEntry->getInt(CalxWatcherConfiguration::PointerB, 0));
-		this->jump_colour = wxColour(colourEntry->getInt(CalxWatcherConfiguration::JumpR, 128),
-		                             colourEntry->getInt(CalxWatcherConfiguration::JumpG, 128),
-		                             colourEntry->getInt(CalxWatcherConfiguration::JumpB, 128));
-		this->move_colour = wxColour(colourEntry->getInt(CalxWatcherConfiguration::MoveR, 0),
-		                             colourEntry->getInt(CalxWatcherConfiguration::MoveG, 0),
-		                             colourEntry->getInt(CalxWatcherConfiguration::MoveB, 0));
+		this->pointer_colour =
+		    wxColour(colourEntry->getInt(CalxWatcherConfiguration::PointerR, 255),
+		             colourEntry->getInt(CalxWatcherConfiguration::PointerG, 0),
+		             colourEntry->getInt(CalxWatcherConfiguration::PointerB, 0));
+		this->jump_colour =
+		    wxColour(colourEntry->getInt(CalxWatcherConfiguration::JumpR, 128),
+		             colourEntry->getInt(CalxWatcherConfiguration::JumpG, 128),
+		             colourEntry->getInt(CalxWatcherConfiguration::JumpB, 128));
+		this->move_colour =
+		    wxColour(colourEntry->getInt(CalxWatcherConfiguration::MoveR, 0),
+		             colourEntry->getInt(CalxWatcherConfiguration::MoveG, 0),
+		             colourEntry->getInt(CalxWatcherConfiguration::MoveB, 0));
 
 		SetMinSize(min);
 
@@ -107,11 +110,12 @@ namespace CalXUI {
 		this->history.push_back(
 		    std::make_pair(this->handle->getController()->getPosition(), false));
 
-		int_conf_t interval = wxGetApp()
-		                          .getSystemManager()
-		                          ->getConfiguration()
-		                          .getEntry(CalxConfiguration::UserInterface)
-		                          ->getInt(CalxWatcherConfiguration::AppendInterval, 500);
+		int_conf_t interval =
+		    wxGetApp()
+		        .getSystemManager()
+		        ->getConfiguration()
+		        .getEntry(CalxConfiguration::UserInterface)
+		        ->getInt(CalxWatcherConfiguration::AppendInterval, 500);
 		if (interval != -1) {
 			this->timer = new CalxCoordPlaneWatcherTimer(this, this->handle);
 			this->timer->Start((int) interval);

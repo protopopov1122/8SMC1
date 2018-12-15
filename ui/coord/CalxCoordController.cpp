@@ -27,34 +27,37 @@ namespace CalXUI {
 	                                         CalxActionQueue *queue)
 	    : handle(handle), queue(queue) {
 		motor_point_t plane_offset = { 0, 0 };
-		motor_scale_t plane_scale = { wxGetApp()
-			                                .getSystemManager()
-			                                ->getConfiguration()
-			                                .getEntry(CalxConfiguration::Units)
-			                                ->getReal(CalxUnitConfiguration::PlaneScale, 1.0f),
-			                            wxGetApp()
-			                                .getSystemManager()
-			                                ->getConfiguration()
-			                                .getEntry(CalxConfiguration::Units)
-			                                ->getReal(CalxUnitConfiguration::PlaneScale, 1.0f) };
-		float plane_speed_scale = wxGetApp()
-		                              .getSystemManager()
-		                              ->getConfiguration()
-		                              .getEntry(CalxConfiguration::Units)
-		                              ->getReal(CalxUnitConfiguration::PlaneSpeedScale, 1.0f);
+		motor_scale_t plane_scale = {
+			wxGetApp()
+			    .getSystemManager()
+			    ->getConfiguration()
+			    .getEntry(CalxConfiguration::Units)
+			    ->getReal(CalxUnitConfiguration::PlaneScale, 1.0f),
+			wxGetApp()
+			    .getSystemManager()
+			    ->getConfiguration()
+			    .getEntry(CalxConfiguration::Units)
+			    ->getReal(CalxUnitConfiguration::PlaneScale, 1.0f)
+		};
+		float plane_speed_scale =
+		    wxGetApp()
+		        .getSystemManager()
+		        ->getConfiguration()
+		        .getEntry(CalxConfiguration::Units)
+		        ->getReal(CalxUnitConfiguration::PlaneSpeedScale, 1.0f);
 		this->unit_map = std::make_shared<CoordPlaneMap>(
 		    plane_offset, plane_scale, plane_speed_scale, handle->peekPlane());
 		handle->pushPlane(this->unit_map);
 		motor_point_t validateMin = { INT_MIN, INT_MIN };
 		motor_point_t validateMax = { INT_MAX, INT_MAX };
-		this->validator =
-		    std::make_shared<CoordPlaneValidator>(validateMin, validateMax,
-		                                          wxGetApp()
-		                                              .getSystemManager()
-		                                              ->getConfiguration()
-		                                              .getEntry(CalxConfiguration::Core)
-		                                              ->getInt(CalxCoordConfiguration::MaxSpeed, 4000),
-		                                          handle->peekPlane());
+		this->validator = std::make_shared<CoordPlaneValidator>(
+		    validateMin, validateMax,
+		    wxGetApp()
+		        .getSystemManager()
+		        ->getConfiguration()
+		        .getEntry(CalxConfiguration::Core)
+		        ->getInt(CalxCoordConfiguration::MaxSpeed, 4000),
+		    handle->peekPlane());
 		handle->pushPlane(this->validator);
 		this->log = std::make_shared<CoordPlaneLog>(
 		    handle->peekPlane(), std::cout,

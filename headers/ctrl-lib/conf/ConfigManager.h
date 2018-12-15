@@ -50,7 +50,8 @@ namespace CalX {
 		bool put(const std::string &, const ConfigurationValue &) override;
 		bool remove(const std::string &) override;
 
-		void visit(std::function<void (const std::string &, const ConfigurationValue &)>) const override;
+		void visit(std::function<void(const std::string &,
+		                              const ConfigurationValue &)>) const override;
 
 	 private:
 		std::map<std::string, ConfigurationValue> content;
@@ -60,10 +61,14 @@ namespace CalX {
 	 public:
 		ConfigManager();
 
-		ConfiguationFlatDictionary *getEntry(const std::string &, bool = true) override;
+		ConfiguationFlatDictionary *getEntry(const std::string &,
+		                                     bool = true) override;
 		bool hasEntry(const std::string &) const override;
 		bool removeEntry(const std::string &) override;
-		void visit(std::function<void (const std::string &, ConfiguationFlatDictionary &)>) const override;
+		void visit(
+		    std::function<void(const std::string &, ConfiguationFlatDictionary &)>)
+		    const override;
+
 	 private:
 		std::map<std::string, std::unique_ptr<ConfigEntry>> entries;
 	};

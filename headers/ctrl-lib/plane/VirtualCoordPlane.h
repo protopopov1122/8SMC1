@@ -31,7 +31,7 @@ namespace CalX {
 
 		ErrorCode move(motor_point_t, float, bool) override;
 		ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,
-		                      float = 1.0f) override;
+		              float = 1.0f) override;
 		ErrorCode calibrate(TrailerId) override;
 		ErrorCode measure(TrailerId) override;
 		motor_point_t getPosition() const override;

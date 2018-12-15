@@ -22,16 +22,17 @@
 
 namespace CalX {
 
-	CalXScriptEnvironment::CalXScriptEnvironment(ConfigurationCatalogue &conf, SettingsRepository *settings)
+	CalXScriptEnvironment::CalXScriptEnvironment(ConfigurationCatalogue &conf,
+	                                             SettingsRepository *settings)
 	    : config(conf), settings(settings) {}
 
 	ConfigurationCatalogue &CalXScriptEnvironment::getConfiguration() {
 		return this->config;
 	}
 
-    SettingsRepository *CalXScriptEnvironment::getSettings() {
-        return this->settings;
-    }
+	SettingsRepository *CalXScriptEnvironment::getSettings() {
+		return this->settings;
+	}
 
 	CalXScript::CalXScript(CalXScriptEnvironment &env) : env(env) {}
 }  // namespace CalX

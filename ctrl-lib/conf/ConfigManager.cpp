@@ -27,30 +27,34 @@ namespace CalX {
 
 	class ConfigManagerDictionaryListener : public FlatDictionaryListener {
 	 public:
-		ConfigManagerDictionaryListener(ConfigurationCatalogue &cat, const std::string &entry,
-			const std::vector<std::shared_ptr<CatalogueListener>> &listeners)
-			: catalogue(cat), entry(entry), listeners(listeners) {}
-	
-		void keyAdd(ConfiguationFlatDictionary &dist, const std::string &key) override {
+		ConfigManagerDictionaryListener(
+		    ConfigurationCatalogue &cat, const std::string &entry,
+		    const std::vector<std::shared_ptr<CatalogueListener>> &listeners)
+		    : catalogue(cat), entry(entry), listeners(listeners) {}
+
+		void keyAdd(ConfiguationFlatDictionary &dist,
+		            const std::string &key) override {
 			for (auto &l : this->listeners) {
 				l->keyAdd(&this->catalogue, this->entry, key);
 			}
 		}
-		
-		void keyChange(ConfiguationFlatDictionary &dist, const std::string &key) override {
+
+		void keyChange(ConfiguationFlatDictionary &dist,
+		               const std::string &key) override {
 			for (auto &l : this->listeners) {
 				l->keyChange(&this->catalogue, this->entry, key);
 			}
 		}
 
-		void keyRemove(ConfiguationFlatDictionary &dist, const std::string &key) override {
+		void keyRemove(ConfiguationFlatDictionary &dist,
+		               const std::string &key) override {
 			for (auto &l : this->listeners) {
 				l->keyRemove(&this->catalogue, this->entry, key);
 			}
 		}
 
 	 private:
-	 	ConfigurationCatalogue &catalogue;
+		ConfigurationCatalogue &catalogue;
 		std::string entry;
 		const std::vector<std::shared_ptr<CatalogueListener>> &listeners;
 	};
@@ -58,13 +62,13 @@ namespace CalX {
 	ConfigManager::ConfigManager() {}
 
 	ConfiguationFlatDictionary *ConfigManager::getEntry(const std::string &id,
-	                                                     bool createNew) {
+	                                                    bool createNew) {
 		if (this->entries.count(id) != 0) {
 			return this->entries[id].get();
 		} else if (createNew) {
-			std::unique_ptr<ConfigEntry> entry =
-			    std::make_unique<ConfigEntry>();
-			entry->addEventListener(std::make_shared<ConfigManagerDictionaryListener>(*this, id, this->listeners));
+			std::unique_ptr<ConfigEntry> entry = std::make_unique<ConfigEntry>();
+			entry->addEventListener(std::make_shared<ConfigManagerDictionaryListener>(
+			    *this, id, this->listeners));
 			ConfigEntry *ptr = entry.get();
 			this->entries[id] = std::move(entry);
 			this->submitEvent(&CatalogueListener::entryAdd, this, id);
@@ -87,7 +91,9 @@ namespace CalX {
 		return true;
 	}
 
-	void ConfigManager::visit(std::function<void (const std::string &, ConfiguationFlatDictionary &)> visit) const {
+	void ConfigManager::visit(
+	    std::function<void(const std::string &, ConfiguationFlatDictionary &)>
+	        visit) const {
 		for (const auto &kv : this->entries) {
 			visit(kv.first, *kv.second);
 		}

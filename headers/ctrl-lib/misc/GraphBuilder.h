@@ -42,11 +42,9 @@ namespace CalX {
 		double getStep() const;
 
 		ErrorCode build(SystemManager &, std::shared_ptr<CoordPlane>,
-		              	CoordTranslator &, float,
-		                TaskState &) const;
+		                CoordTranslator &, float, TaskState &) const;
 		ErrorCode floatBuild(SystemManager &, std::shared_ptr<FloatCoordPlane>,
-		                     CoordTranslator &, float,
-		                     TaskState &) const;
+		                     CoordTranslator &, float, TaskState &) const;
 
 	 private:
 		std::unique_ptr<Node> node;

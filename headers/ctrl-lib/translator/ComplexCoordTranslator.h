@@ -33,7 +33,7 @@ namespace CalX {
 		coord_point_t get(motor_point_t) const override;
 		coord_point_t floatGet(double, double) const override;
 		coord_point_t floatGet(coord_point_t) const override;
-		
+
 		std::size_t getSize() const;
 		std::shared_ptr<CoordTranslator> getTranslator(size_t) const;
 		void add(std::shared_ptr<CoordTranslator>);

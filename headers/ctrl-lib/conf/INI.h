@@ -29,12 +29,13 @@ namespace CalX {
 	class INIConfiguration {
 	 public:
 		static void store(ConfigurationCatalogue &, std::ostream &);
-		static std::unique_ptr<ConfigurationCatalogue> load(std::istream &, std::ostream &,
-		                                           					ConfigurationCatalogue * = nullptr);
+		static std::unique_ptr<ConfigurationCatalogue> load(
+		    std::istream &, std::ostream &, ConfigurationCatalogue * = nullptr);
+
 	 private:
 		static void store(ConfiguationFlatDictionary &, std::ostream &);
 		static ConfigurationValue parseValue(const char *);
 	};
-}
+}  // namespace CalX
 
 #endif

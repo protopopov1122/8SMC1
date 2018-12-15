@@ -122,6 +122,7 @@ namespace CalX {
 	}
 
 	void InstrumentController::sendStateChanged() {
-		this->submitEvent(&InstrumentEventListener::stateChanged, this->isRunnable(), this->isEnabled());
+		this->submitEvent(&InstrumentEventListener::stateChanged,
+		                  this->isRunnable(), this->isEnabled());
 	}
 }  // namespace CalX

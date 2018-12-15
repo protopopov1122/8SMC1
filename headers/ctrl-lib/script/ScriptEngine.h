@@ -56,7 +56,7 @@ namespace CalX {
 
 	class CalXScriptInstrument {
 	 public:
-	 	virtual ~CalXScriptInstrument() = default;
+		virtual ~CalXScriptInstrument() = default;
 		virtual bool isValid() = 0;
 		virtual ErrorCode open_session() = 0;
 		virtual ErrorCode close_session() = 0;
@@ -78,15 +78,16 @@ namespace CalX {
 		virtual std::size_t getMotorCount() = 0;
 		virtual std::size_t getInstrumentCount() = 0;
 		virtual std::unique_ptr<CalXScriptMotor> getMotor(device_id_t) = 0;
-		virtual std::unique_ptr<CalXScriptInstrument> getInstrument(device_id_t) = 0;
+		virtual std::unique_ptr<CalXScriptInstrument> getInstrument(
+		    device_id_t) = 0;
 	};
 
 	class CalXScriptPlane {
 	 public:
 		virtual ~CalXScriptPlane() = default;
 		virtual ErrorCode move(coord_point_t, double, bool, bool) = 0;
-		virtual ErrorCode arc(coord_point_t, coord_point_t, int,
-		                           double, bool, bool) = 0;
+		virtual ErrorCode arc(coord_point_t, coord_point_t, int, double, bool,
+		                      bool) = 0;
 		virtual ErrorCode calibrate(TrailerId) = 0;
 		virtual ErrorCode measure(TrailerId) = 0;
 		virtual ErrorCode move(coord_point_t, double) = 0;

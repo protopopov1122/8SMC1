@@ -154,9 +154,10 @@ namespace CalXUI {
 	void CalxScriptPanel::OnOpenShellClick(wxCommandEvent &evt) {
 		std::unique_ptr<CalXScript> script =
 		    this->scriptFactory.createShell(this->env);
-		this->addHandle(FORMAT(__("Script shell #%s"), std::to_string(this->scripts.size())),
-		                new CalxScriptShellHandle(this->scriptPanel, wxID_ANY, this,
-		                                          std::move(script)));
+		this->addHandle(
+		    FORMAT(__("Script shell #%s"), std::to_string(this->scripts.size())),
+		    new CalxScriptShellHandle(this->scriptPanel, wxID_ANY, this,
+		                              std::move(script)));
 	}
 
 	void CalxScriptPanel::OnRemoveScriptClick(wxCommandEvent &evt) {

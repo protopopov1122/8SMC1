@@ -3,6 +3,4 @@
 
 using namespace CalX;
 
-TEST_CASE("GCode stream") {
-  
-}
+TEST_CASE("GCode stream") {}

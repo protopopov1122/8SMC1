@@ -27,24 +27,29 @@
 
 namespace CalX {
 
-  class JournalDefaultLogger : public JournalLoggerController, public JournalLogger {
-   public:
-    JournalDefaultLogger(LoggingSeverity);
+	class JournalDefaultLogger : public JournalLoggerController,
+	                             public JournalLogger {
+	 public:
+		JournalDefaultLogger(LoggingSeverity);
 
-    JournalSink &getDefaultSink() override;
-    JournalSink &getSink(const std::string &) override;
-    void getSinks(std::vector<std::reference_wrapper<JournalSink>> &) const override;
+		JournalSink &getDefaultSink() override;
+		JournalSink &getSink(const std::string &) override;
+		void getSinks(
+		    std::vector<std::reference_wrapper<JournalSink>> &) const override;
 
-    LoggingSeverity getDefaultSeverity() const override;
-    void setDefaultSeverity(LoggingSeverity);
-    JournalSink &newStreamSink(const std::string &, std::ostream &, bool) override;
-    JournalSink &newFileSink(const std::string &, const std::string &, bool) override;
-    void setDefaultSink(const std::string &) override;
-   private:
-    std::map<std::string, std::shared_ptr<JournalSink>> sinks;
-    std::shared_ptr<JournalSink> defaultSink;
-    LoggingSeverity severity;
-  };
-}
+		LoggingSeverity getDefaultSeverity() const override;
+		void setDefaultSeverity(LoggingSeverity);
+		JournalSink &newStreamSink(const std::string &, std::ostream &,
+		                           bool) override;
+		JournalSink &newFileSink(const std::string &, const std::string &,
+		                         bool) override;
+		void setDefaultSink(const std::string &) override;
+
+	 private:
+		std::map<std::string, std::shared_ptr<JournalSink>> sinks;
+		std::shared_ptr<JournalSink> defaultSink;
+		LoggingSeverity severity;
+	};
+}  // namespace CalX
 
 #endif

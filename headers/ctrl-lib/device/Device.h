@@ -57,18 +57,22 @@ namespace CalX {
 
 	struct DeviceSerialPortConnectionPrms : public DeviceConnectionPrms {
 	 public:
-		DeviceSerialPortConnectionPrms(uint8_t port = 0, uint32_t speed = 0, SerialPortParity parity = SerialPortParity::No)
+		DeviceSerialPortConnectionPrms(
+		    uint8_t port = 0, uint32_t speed = 0,
+		    SerialPortParity parity = SerialPortParity::No)
 		    : DeviceConnectionPrms::DeviceConnectionPrms(
 		          DeviceConnectionType::SerialPort),
 		      port(port),
 		      speed(speed),
 		      parity(parity) {}
 		DeviceSerialPortConnectionPrms(const DeviceSerialPortConnectionPrms &prms)
-			: DeviceConnectionPrms::DeviceConnectionPrms(DeviceConnectionType::SerialPort),
-				port(prms.port),
-				speed(prms.speed),
-				parity(prms.parity) {}
-		DeviceSerialPortConnectionPrms &operator=(const DeviceSerialPortConnectionPrms &) = default;
+		    : DeviceConnectionPrms::DeviceConnectionPrms(
+		          DeviceConnectionType::SerialPort),
+		      port(prms.port),
+		      speed(prms.speed),
+		      parity(prms.parity) {}
+		DeviceSerialPortConnectionPrms &operator=(
+		    const DeviceSerialPortConnectionPrms &) = default;
 
 		uint8_t port;
 		uint32_t speed;

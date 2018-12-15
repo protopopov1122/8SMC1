@@ -40,9 +40,12 @@ namespace CalXUI {
 		CalxConfigEventListener(CalxConfigEditor *);
 		void entryAdd(ConfigurationCatalogue *, const std::string &) override;
 		void entryRemove(ConfigurationCatalogue *, const std::string &) override;
-		void keyAdd(ConfigurationCatalogue *, const std::string &, const std::string &) override;
-		void keyRemove(ConfigurationCatalogue *, const std::string &, const std::string &) override;
-		void keyChange(ConfigurationCatalogue *, const std::string &, const std::string &) override;
+		void keyAdd(ConfigurationCatalogue *, const std::string &,
+		            const std::string &) override;
+		void keyRemove(ConfigurationCatalogue *, const std::string &,
+		               const std::string &) override;
+		void keyChange(ConfigurationCatalogue *, const std::string &,
+		               const std::string &) override;
 
 	 private:
 		CalxConfigEditor *editor;

@@ -29,9 +29,10 @@
 
 namespace CalX {
 
-	class InstrumentController : public DeviceController,
-	                             public SessionableResource,
-															 public EventSource<std::shared_ptr<InstrumentEventListener>> {
+	class InstrumentController
+	    : public DeviceController,
+	      public SessionableResource,
+	      public EventSource<std::shared_ptr<InstrumentEventListener>> {
 	 public:
 		InstrumentController(ConfigurationCatalogue &, Instrument &);
 		Instrument &getInstrument() const;

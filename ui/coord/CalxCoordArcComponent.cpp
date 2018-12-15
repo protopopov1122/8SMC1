@@ -52,20 +52,20 @@ namespace CalXUI {
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
 		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, 0,
 		    wxGetApp().getUnitProcessor().getUnitPrecision());
-		this->speed =
-		    new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		                         wxDefaultSize, wxSP_ARROW_KEYS, 0,
-		                         wxGetApp()
-		                             .getSystemManager()
-		                             ->getConfiguration()
-		                             .getEntry(CalxConfiguration::Units)
-		                             ->getReal(CalxUnitConfiguration::UnitSpeed, 4000.0),
-		                         wxGetApp()
-		                             .getSystemManager()
-		                             ->getConfiguration()
-		                             .getEntry(CalxConfiguration::Units)
-		                             ->getReal(CalxUnitConfiguration::UnitSpeed, 4000.0),
-		                         wxGetApp().getUnitProcessor().getSpeedPrecision());
+		this->speed = new wxSpinCtrlDouble(
+		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+		    wxSP_ARROW_KEYS, 0,
+		    wxGetApp()
+		        .getSystemManager()
+		        ->getConfiguration()
+		        .getEntry(CalxConfiguration::Units)
+		        ->getReal(CalxUnitConfiguration::UnitSpeed, 4000.0),
+		    wxGetApp()
+		        .getSystemManager()
+		        ->getConfiguration()
+		        .getEntry(CalxConfiguration::Units)
+		        ->getReal(CalxUnitConfiguration::UnitSpeed, 4000.0),
+		    wxGetApp().getUnitProcessor().getSpeedPrecision());
 		this->splitter =
 		    new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
 		                   wxDefaultSize, wxSP_ARROW_KEYS, 0, 1000, 200);

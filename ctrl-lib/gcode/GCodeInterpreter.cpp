@@ -29,8 +29,8 @@ namespace CalX {
 
 	ErrorCode GCodeInterpreter::execute(GCodeStream &input, CoordPlane &plane,
 	                                    std::shared_ptr<CoordTranslator> trans,
-	                                    ConfigurationCatalogue &config, float speed,
-	                                    TaskState &state) {
+	                                    ConfigurationCatalogue &config,
+	                                    float speed, TaskState &state) {
 		input.reset();
 
 		coord_point_t troffset = { 0, 0 };

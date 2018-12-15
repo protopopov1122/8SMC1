@@ -26,129 +26,149 @@
 
 namespace CalX {
 
-  JournalAbstractSink::JournalAbstractSink(const std::string &name, LoggingSeverity severity)
-    : name(name), severity(severity) {}
-  
-  const std::string &JournalAbstractSink::getName() const {
-    return this->name;
-  }
+	JournalAbstractSink::JournalAbstractSink(const std::string &name,
+	                                         LoggingSeverity severity)
+	    : name(name), severity(severity) {}
 
-  void JournalAbstractSink::log(LoggingSeverity severity, const std::string &message, const std::string &tag, const SourcePosition &position) {
-    if (static_cast<int>(severity) < static_cast<int>(this->severity)) {
-      return;
-    }
+	const std::string &JournalAbstractSink::getName() const {
+		return this->name;
+	}
 
-    std::stringstream out;
-    std::string fullName(this->name);
-    if (fullName.size() < JournalAbstractSink::SinkNamePadding) {
-      fullName.insert(fullName.size(), JournalStreamSink::SinkNamePadding - fullName.size(), ' ');
-    }
-    auto timenow = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    std::string currentTime(ctime(&timenow));
-    out << fullName << currentTime.substr(0, currentTime.size() - 1) << '\t';
+	void JournalAbstractSink::log(LoggingSeverity severity,
+	                              const std::string &message,
+	                              const std::string &tag,
+	                              const SourcePosition &position) {
+		if (static_cast<int>(severity) < static_cast<int>(this->severity)) {
+			return;
+		}
 
-    std::string fullTag;
-    if (tag.size() > 0) {
-      fullTag.append(" [");
-      fullTag.append(tag);
-      fullTag.push_back(']');
-    }
-    if (!position.isEmpty()) {
-      fullTag.append("@(");
-      fullTag.append(position.file);
-      fullTag.push_back(':');
-      fullTag.append(std::to_string(position.line));
-      fullTag.push_back(')');
-    }
+		std::stringstream out;
+		std::string fullName(this->name);
+		if (fullName.size() < JournalAbstractSink::SinkNamePadding) {
+			fullName.insert(fullName.size(),
+			                JournalStreamSink::SinkNamePadding - fullName.size(),
+			                ' ');
+		}
+		auto timenow =
+		    std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+		std::string currentTime(ctime(&timenow));
+		out << fullName << currentTime.substr(0, currentTime.size() - 1) << '\t';
 
-    if (fullTag.size() > 0) {
-      if (fullTag.size() < 50) {
-        fullTag.insert(fullTag.size(), 50 - fullTag.size(), ' ');
-      }
-      out << fullTag << '\t' << message << std::endl;
-    } else {
-      out << message << std::endl;
-    }
-    this->log(out.str());
-  }
+		std::string fullTag;
+		if (tag.size() > 0) {
+			fullTag.append(" [");
+			fullTag.append(tag);
+			fullTag.push_back(']');
+		}
+		if (!position.isEmpty()) {
+			fullTag.append("@(");
+			fullTag.append(position.file);
+			fullTag.push_back(':');
+			fullTag.append(std::to_string(position.line));
+			fullTag.push_back(')');
+		}
 
-  LoggingSeverity JournalAbstractSink::getLevel() const {
-    return this->severity;
-  }
+		if (fullTag.size() > 0) {
+			if (fullTag.size() < 50) {
+				fullTag.insert(fullTag.size(), 50 - fullTag.size(), ' ');
+			}
+			out << fullTag << '\t' << message << std::endl;
+		} else {
+			out << message << std::endl;
+		}
+		this->log(out.str());
+	}
 
-  void JournalAbstractSink::setLevel(LoggingSeverity severity) {
-    this->severity = severity;
-  }
+	LoggingSeverity JournalAbstractSink::getLevel() const {
+		return this->severity;
+	}
 
-  JournalStreamSink::JournalStreamSink(const std::string &name, LoggingSeverity severity, std::ostream &output)
-    : JournalAbstractSink::JournalAbstractSink(name, severity), output(output) {}
+	void JournalAbstractSink::setLevel(LoggingSeverity severity) {
+		this->severity = severity;
+	}
 
-  void JournalStreamSink::log(const std::string &msg) {
-    this->output << msg << std::flush;
-  }
+	JournalStreamSink::JournalStreamSink(const std::string &name,
+	                                     LoggingSeverity severity,
+	                                     std::ostream &output)
+	    : JournalAbstractSink::JournalAbstractSink(name, severity),
+	      output(output) {}
 
-  JournalFileSink::JournalFileSink(const std::string &name, LoggingSeverity severity, const std::string &path)
-    : JournalAbstractSink::JournalAbstractSink(name, severity), output(path, std::ios::out | std::ios::app) {}
+	void JournalStreamSink::log(const std::string &msg) {
+		this->output << msg << std::flush;
+	}
 
-  JournalFileSink::~JournalFileSink() {
-    this->output.close();
-  }
-  
-  void JournalFileSink::log(const std::string &msg) {
-    this->output << msg << std::flush;
-  }
+	JournalFileSink::JournalFileSink(const std::string &name,
+	                                 LoggingSeverity severity,
+	                                 const std::string &path)
+	    : JournalAbstractSink::JournalAbstractSink(name, severity),
+	      output(path, std::ios::out | std::ios::app) {}
 
-  JournalNullSink::JournalNullSink(const std::string &name)
-    : name(name) {}
-  
-  const std::string &JournalNullSink::getName() const {
-    return this->name;
-  }
+	JournalFileSink::~JournalFileSink() {
+		this->output.close();
+	}
 
-  void JournalNullSink::log(LoggingSeverity severity, const std::string &message, const std::string &tag, const SourcePosition &position) {
-  }
+	void JournalFileSink::log(const std::string &msg) {
+		this->output << msg << std::flush;
+	}
 
-  LoggingSeverity JournalNullSink::getLevel() const {
-    return LoggingSeverity::Debug;
-  }
+	JournalNullSink::JournalNullSink(const std::string &name) : name(name) {}
 
-  void JournalNullSink::setLevel(LoggingSeverity severity) {
-  }
+	const std::string &JournalNullSink::getName() const {
+		return this->name;
+	}
 
-  JournalStreamSinkFactory::JournalStreamSinkFactory(std::ostream &stream)
-    : stream(stream) {}
-  
-  std::unique_ptr<JournalSink> JournalStreamSinkFactory::newSink(const std::string & name, LoggingSeverity severity) const {
-    return std::make_unique<JournalStreamSink>(name, severity, this->stream);
-  }
+	void JournalNullSink::log(LoggingSeverity severity,
+	                          const std::string &message, const std::string &tag,
+	                          const SourcePosition &position) {}
 
-  JournalFileSinkFactory::JournalFileSinkFactory(const std::string &file)
-    : file(file) {}
-  
-  std::unique_ptr<JournalSink> JournalFileSinkFactory::newSink(const std::string & name, LoggingSeverity severity) const {
-    return std::make_unique<JournalFileSink>(name, severity, this->file);
-  }
+	LoggingSeverity JournalNullSink::getLevel() const {
+		return LoggingSeverity::Debug;
+	}
 
-  JournalSinkStream::JournalSinkStream(JournalSink &sink, LoggingSeverity severity, const std::string &tag, const SourcePosition &position)
-    : sink(sink), severity(severity), tag(tag), position(position) {}
+	void JournalNullSink::setLevel(LoggingSeverity severity) {}
 
-  JournalSinkStream::~JournalSinkStream() {
-    this->flush();
-  }
+	JournalStreamSinkFactory::JournalStreamSinkFactory(std::ostream &stream)
+	    : stream(stream) {}
 
-  void JournalSinkStream::flush() {
-    std::string content(this->buffer.str());
-    if (!content.empty()) {
-      this->buffer.str("");
-      this->sink.log(this->severity, content, this->tag, this->position);
-    }
-  }
+	std::unique_ptr<JournalSink> JournalStreamSinkFactory::newSink(
+	    const std::string &name, LoggingSeverity severity) const {
+		return std::make_unique<JournalStreamSink>(name, severity, this->stream);
+	}
 
-  JournalSinkStream JournalSink::stream(const std::string &tag, const SourcePosition &position) {
-    return JournalSinkStream(*this, this->getLevel(), tag, position);
-  }
+	JournalFileSinkFactory::JournalFileSinkFactory(const std::string &file)
+	    : file(file) {}
 
-  JournalSinkStream JournalSink::stream(LoggingSeverity severity, const std::string &tag, const SourcePosition &position) {
-    return JournalSinkStream(*this, severity, tag, position);
-  }
-}
+	std::unique_ptr<JournalSink> JournalFileSinkFactory::newSink(
+	    const std::string &name, LoggingSeverity severity) const {
+		return std::make_unique<JournalFileSink>(name, severity, this->file);
+	}
+
+	JournalSinkStream::JournalSinkStream(JournalSink &sink,
+	                                     LoggingSeverity severity,
+	                                     const std::string &tag,
+	                                     const SourcePosition &position)
+	    : sink(sink), severity(severity), tag(tag), position(position) {}
+
+	JournalSinkStream::~JournalSinkStream() {
+		this->flush();
+	}
+
+	void JournalSinkStream::flush() {
+		std::string content(this->buffer.str());
+		if (!content.empty()) {
+			this->buffer.str("");
+			this->sink.log(this->severity, content, this->tag, this->position);
+		}
+	}
+
+	JournalSinkStream JournalSink::stream(const std::string &tag,
+	                                      const SourcePosition &position) {
+		return JournalSinkStream(*this, this->getLevel(), tag, position);
+	}
+
+	JournalSinkStream JournalSink::stream(LoggingSeverity severity,
+	                                      const std::string &tag,
+	                                      const SourcePosition &position) {
+		return JournalSinkStream(*this, severity, tag, position);
+	}
+}  // namespace CalX

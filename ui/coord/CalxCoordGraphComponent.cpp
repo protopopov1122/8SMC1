@@ -38,7 +38,8 @@ namespace CalXUI {
 	      controller(controller) {
 		std::string units = wxGetApp().getUnitProcessor().getUnits();
 		ConfiguationFlatDictionary *graphconf =
-		    wxGetApp().getSystemManager()->getConfiguration().getEntry(CalxConfiguration::Graph);
+		    wxGetApp().getSystemManager()->getConfiguration().getEntry(
+		        CalxConfiguration::Graph);
 		wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 		SetSizer(sizer);
 
@@ -50,23 +51,28 @@ namespace CalXUI {
 		this->expr = new wxTextCtrl(graphPanel, wxID_ANY, "x");
 		this->xmin = new wxSpinCtrlDouble(
 		    graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, graphconf->getReal(CalxGraphConfiguration::XFrom, -10.0),
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX,
+		    graphconf->getReal(CalxGraphConfiguration::XFrom, -10.0),
 		    graphconf->getReal(CalxGraphConfiguration::XAxisStep, 0.001));
 		this->xmax = new wxSpinCtrlDouble(
 		    graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, graphconf->getReal(CalxGraphConfiguration::XTo, 10.0),
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX,
+		    graphconf->getReal(CalxGraphConfiguration::XTo, 10.0),
 		    graphconf->getReal(CalxGraphConfiguration::XAxisStep, 0.001));
 		this->ymin = new wxSpinCtrlDouble(
 		    graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, graphconf->getReal(CalxGraphConfiguration::YFrom, -10.0),
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX,
+		    graphconf->getReal(CalxGraphConfiguration::YFrom, -10.0),
 		    graphconf->getReal(CalxGraphConfiguration::YAxisStep, 0.001));
 		this->ymax = new wxSpinCtrlDouble(
 		    graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX, graphconf->getReal(CalxGraphConfiguration::YTo, 10.0),
+		    wxSP_ARROW_KEYS, INT_MIN, INT_MAX,
+		    graphconf->getReal(CalxGraphConfiguration::YTo, 10.0),
 		    graphconf->getReal(CalxGraphConfiguration::YAxisStep, 0.001));
 		this->step = new wxSpinCtrlDouble(
 		    graphPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-		    wxSP_ARROW_KEYS, graphconf->getReal(CalxGraphConfiguration::StepStep, 0.001), INT_MAX,
+		    wxSP_ARROW_KEYS,
+		    graphconf->getReal(CalxGraphConfiguration::StepStep, 0.001), INT_MAX,
 		    graphconf->getReal(CalxGraphConfiguration::Step, 0.1),
 		    graphconf->getReal(CalxGraphConfiguration::StepStep, 0.001));
 		this->speed = new wxSpinCtrlDouble(
@@ -126,14 +132,19 @@ namespace CalXUI {
 		graphSizer->Add(buildButton);
 		graphSizer->Add(previewButton);
 
-		ConfigurationCatalogue &conf = wxGetApp().getSystemManager()->getConfiguration();
+		ConfigurationCatalogue &conf =
+		    wxGetApp().getSystemManager()->getConfiguration();
 		coord_point_t cen = {
-			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)->getReal(CalxCoordConfiguration::OffsetX, 0.0)),
-			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)->getReal(CalxCoordConfiguration::OffsetY, 0.0))
+			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)
+			                        ->getReal(CalxCoordConfiguration::OffsetX, 0.0)),
+			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)
+			                        ->getReal(CalxCoordConfiguration::OffsetY, 0.0))
 		};
 		coord_scale_t scl = {
-			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)->getReal(CalxCoordConfiguration::ScaleX, 1.0)),
-			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)->getReal(CalxCoordConfiguration::ScaleY, 1.0))
+			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)
+			                        ->getReal(CalxCoordConfiguration::ScaleX, 1.0)),
+			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)
+			                        ->getReal(CalxCoordConfiguration::ScaleY, 1.0))
 		};
 		std::shared_ptr<LinearCoordTranslator> basic =
 		    std::make_shared<LinearCoordTranslator>(cen, scl);

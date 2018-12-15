@@ -26,8 +26,9 @@
 
 namespace CalX {
 
-	class CoordHandle : public CoordPlaneStack,
-											public AbstractEventSource<std::shared_ptr<CoordEventListener>> {
+	class CoordHandle
+	    : public CoordPlaneStack,
+	      public AbstractEventSource<std::shared_ptr<CoordEventListener>> {
 	 public:
 		CoordHandle(size_t, std::shared_ptr<CoordController>);
 

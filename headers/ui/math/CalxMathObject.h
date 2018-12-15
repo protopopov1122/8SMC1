@@ -6,26 +6,29 @@
 
 namespace CalXUI {
 
-  class CalxMathObject : public wxPanel {
-   public:
-    using wxPanel::wxPanel;
-    virtual const std::string &getTitle() const = 0;
-  };
+	class CalxMathObject : public wxPanel {
+	 public:
+		using wxPanel::wxPanel;
+		virtual const std::string &getTitle() const = 0;
+	};
 
-  class CalxMathFormulaPanel : public CalxMathObject {
-   public:
-    CalxMathFormulaPanel(wxWindow *, wxWindowID, const std::string &, const std::string &, const std::map<std::string, std::string> &);
-    const std::string &getTitle() const override;
-   private:
-    void OnCalculateClick(wxCommandEvent &);
+	class CalxMathFormulaPanel : public CalxMathObject {
+	 public:
+		CalxMathFormulaPanel(wxWindow *, wxWindowID, const std::string &,
+		                     const std::string &,
+		                     const std::map<std::string, std::string> &);
+		const std::string &getTitle() const override;
 
-    std::string title;
-    std::string formulaText;
-    std::unique_ptr<MathFormula> formula;
+	 private:
+		void OnCalculateClick(wxCommandEvent &);
 
-    wxStaticText *resultText;
-    std::map<std::string, double> variableValues;
-  };
-}
+		std::string title;
+		std::string formulaText;
+		std::unique_ptr<MathFormula> formula;
+
+		wxStaticText *resultText;
+		std::map<std::string, double> variableValues;
+	};
+}  // namespace CalXUI
 
 #endif

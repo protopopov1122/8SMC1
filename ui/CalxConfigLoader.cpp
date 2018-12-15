@@ -73,10 +73,14 @@ namespace CalXUI {
 				continue;
 			} else {
 				conf = INIConfiguration::load(cnf, std::cout);
-				name = conf->getEntry(CalxConfiguration::Configuration)->getString(
-				    CalxConfigConfiguration::Name,
-				    this->filesys.URLToFileName(fname).GetFullName().ToStdString());
-				descr = conf->getEntry(CalxConfiguration::Configuration)->getString(CalxConfigConfiguration::Description, __("None"));
+				name = conf->getEntry(CalxConfiguration::Configuration)
+				           ->getString(CalxConfigConfiguration::Name,
+				                       this->filesys.URLToFileName(fname)
+				                           .GetFullName()
+				                           .ToStdString());
+				descr =
+				    conf->getEntry(CalxConfiguration::Configuration)
+				        ->getString(CalxConfigConfiguration::Description, __("None"));
 			}
 			cnf.close();
 

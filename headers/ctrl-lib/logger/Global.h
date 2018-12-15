@@ -25,23 +25,24 @@
 
 namespace CalX {
 
-  enum class GlobalLoggingSink {
-    Errors,
-    Warnings,
-    Debug,
-    Information,
-    Resources,
-    Instruments
-  };
+	enum class GlobalLoggingSink {
+		Errors,
+		Warnings,
+		Debug,
+		Information,
+		Resources,
+		Instruments
+	};
 
-  class GlobalLogger {
-   public:
-    static JournalLogger &getLogger();
-    static const std::string &getSink(GlobalLoggingSink);
-    static JournalLoggerController &getController();
-   private:
-    static DefaultJournal logger;
-  };
-}
+	class GlobalLogger {
+	 public:
+		static JournalLogger &getLogger();
+		static const std::string &getSink(GlobalLoggingSink);
+		static JournalLoggerController &getController();
+
+	 private:
+		static DefaultJournal logger;
+	};
+}  // namespace CalX
 
 #endif

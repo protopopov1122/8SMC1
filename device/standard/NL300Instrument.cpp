@@ -86,7 +86,8 @@ namespace CalX {
 
 		COMMTIMEOUTS CommTimeOuts;
 		CommTimeOuts.ReadIntervalTimeout =
-		    this->config->getEntry(CalxConfiguration::Connection)->getInt("ReadIntervalTimeout", 1);
+		    this->config->getEntry(CalxConfiguration::Connection)
+		        ->getInt("ReadIntervalTimeout", 1);
 		CommTimeOuts.ReadTotalTimeoutMultiplier =
 		    this->config->getEntry(CalxConfiguration::Connection)
 		        ->getInt("ReadTotalTimeoutMultiplier", 1);
@@ -161,21 +162,17 @@ namespace CalX {
 		this->listener = std::make_shared<NL300ConfigEventListener>(this);
 		this->config->addEventListener(this->listener);
 
-		ConfiguationFlatDictionary *core =
-		    this->config->getEntry(NL300_ENTRY_NAME);
-		core->put(NL300_PACK_PULSES, ConfigurationValue(
-		                                 inquireIntegerParameter('P', 0, 1)));
+		ConfiguationFlatDictionary *core = this->config->getEntry(NL300_ENTRY_NAME);
+		core->put(NL300_PACK_PULSES,
+		          ConfigurationValue(inquireIntegerParameter('P', 0, 1)));
 		core->put(NL300_MAX_OUTPUT_DELAY,
-		          ConfigurationValue(
-		              inquireIntegerParameter('D', 0, 400)));
+		          ConfigurationValue(inquireIntegerParameter('D', 0, 400)));
 		core->put(NL300_ADJ_OUTPUT_DELAY,
-		          ConfigurationValue(
-		              inquireIntegerParameter('D', 1, 400)));
-		core->put(NL300_SYNC_OUT_DELAY, ConfigurationValue(
-		                                    inquireIntegerParameter('D', 2, 0)));
+		          ConfigurationValue(inquireIntegerParameter('D', 1, 400)));
+		core->put(NL300_SYNC_OUT_DELAY,
+		          ConfigurationValue(inquireIntegerParameter('D', 2, 0)));
 		core->put(NL300_REPETITION_RATE_DIV,
-		          ConfigurationValue(
-		              inquireIntegerParameter('F', 0, 1)));
+		          ConfigurationValue(inquireIntegerParameter('F', 0, 1)));
 
 		this->hardwareInfo = getSystemCommandResponse("VER", "");
 		this->softwareInfo = getSystemCommandResponse("SN", "");

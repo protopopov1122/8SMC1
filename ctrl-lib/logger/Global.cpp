@@ -22,39 +22,39 @@
 
 namespace CalX {
 
-  static const std::string Errors = "errors";
-  static const std::string Warnings = "warnings";
-  static const std::string Debug = "debug";
-  static const std::string Information = "info";
-  static const std::string Resources = "resources";
-  static const std::string Instruments = "instruments";
+	static const std::string Errors = "errors";
+	static const std::string Warnings = "warnings";
+	static const std::string Debug = "debug";
+	static const std::string Information = "info";
+	static const std::string Resources = "resources";
+	static const std::string Instruments = "instruments";
 
-  DefaultJournal GlobalLogger::logger(LoggingSeverity::Debug);
+	DefaultJournal GlobalLogger::logger(LoggingSeverity::Debug);
 
-  JournalLogger &GlobalLogger::getLogger() {
-    return GlobalLogger::logger.getSession();
-  }
+	JournalLogger &GlobalLogger::getLogger() {
+		return GlobalLogger::logger.getSession();
+	}
 
-  const std::string &GlobalLogger::getSink(GlobalLoggingSink id) {
-    switch (id) {
-      case GlobalLoggingSink::Errors:
-        return Errors;
-      case GlobalLoggingSink::Warnings:
-        return Warnings;
-      case GlobalLoggingSink::Debug:
-        return Debug;
-      case GlobalLoggingSink::Information:
-        return Information;
-      case GlobalLoggingSink::Resources:
-        return Resources;
-      case GlobalLoggingSink::Instruments:
-        return Instruments;
-      default:
-        return Information;
-    }
-  }
+	const std::string &GlobalLogger::getSink(GlobalLoggingSink id) {
+		switch (id) {
+			case GlobalLoggingSink::Errors:
+				return Errors;
+			case GlobalLoggingSink::Warnings:
+				return Warnings;
+			case GlobalLoggingSink::Debug:
+				return Debug;
+			case GlobalLoggingSink::Information:
+				return Information;
+			case GlobalLoggingSink::Resources:
+				return Resources;
+			case GlobalLoggingSink::Instruments:
+				return Instruments;
+			default:
+				return Information;
+		}
+	}
 
-  JournalLoggerController &GlobalLogger::getController() {
-    return GlobalLogger::logger.getSessionController();
-  }
-}
+	JournalLoggerController &GlobalLogger::getController() {
+		return GlobalLogger::logger.getSessionController();
+	}
+}  // namespace CalX

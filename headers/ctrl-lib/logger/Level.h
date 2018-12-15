@@ -25,13 +25,13 @@
 
 namespace CalX {
 
-  enum class LoggingSeverity {
-    Debug = 0,
-    Info = 1,
-    Warning = 2,
-    Error = 3,
-    Critical = 4
-  };
+	enum class LoggingSeverity {
+		Debug = 0,
+		Info = 1,
+		Warning = 2,
+		Error = 3,
+		Critical = 4
+	};
 }
 
 #endif

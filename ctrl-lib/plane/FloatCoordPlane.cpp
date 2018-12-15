@@ -119,11 +119,10 @@ namespace CalX {
 	}
 
 	ErrorCode FloatCoordPlane::move(coord_point_t dest, double speed, bool sync) {
-		motor_point_t pdest = {
-			static_cast<motor_coord_t>(
-			    round(dest.x * this->scale.x + this->offset.x)),
-			static_cast<motor_coord_t>(round(dest.y * this->scale.y + this->offset.y))
-		};
+		motor_point_t pdest = { static_cast<motor_coord_t>(
+			                          round(dest.x * this->scale.x + this->offset.x)),
+			                      static_cast<motor_coord_t>(round(
+			                          dest.y * this->scale.y + this->offset.y)) };
 		return this->base->move(pdest, static_cast<float>(speed * this->speed),
 		                        sync);
 	}
@@ -131,11 +130,10 @@ namespace CalX {
 	ErrorCode FloatCoordPlane::arc(coord_point_t dest, coord_point_t center,
 	                               int splitter, double speed, bool clockwise,
 	                               float scale) {
-		motor_point_t pdest = {
-			static_cast<motor_coord_t>(
-			    round(dest.x * this->scale.x + this->offset.x)),
-			static_cast<motor_coord_t>(round(dest.y * this->scale.y + this->offset.y))
-		};
+		motor_point_t pdest = { static_cast<motor_coord_t>(
+			                          round(dest.x * this->scale.x + this->offset.x)),
+			                      static_cast<motor_coord_t>(round(
+			                          dest.y * this->scale.y + this->offset.y)) };
 
 		motor_point_t pcen = { static_cast<motor_coord_t>(round(
 			                         center.x * this->scale.x + this->offset.x)),

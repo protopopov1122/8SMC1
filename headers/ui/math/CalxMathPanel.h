@@ -7,21 +7,22 @@
 
 namespace CalXUI {
 
-  class CalxMathPanel : public CalxPanelPane {
-   public:
-    CalxMathPanel(wxWindow *, wxWindowID);
+	class CalxMathPanel : public CalxPanelPane {
+	 public:
+		CalxMathPanel(wxWindow *, wxWindowID);
 		bool isBusy() override;
 		void shutdown() override;
 		void updateUI() override;
-   private:
-    void addMathObject(CalxMathObject *);
-    void removeMathObject(std::size_t);
-    void OnListClick(wxCommandEvent &);
 
-    wxPanel *mathObjectPanel;
-    wxListBox *mathObjectList;
-    std::vector<CalxMathObject *> contents;
-  };
-}
+	 private:
+		void addMathObject(CalxMathObject *);
+		void removeMathObject(std::size_t);
+		void OnListClick(wxCommandEvent &);
+
+		wxPanel *mathObjectPanel;
+		wxListBox *mathObjectList;
+		std::vector<CalxMathObject *> contents;
+	};
+}  // namespace CalXUI
 
 #endif

@@ -32,7 +32,9 @@ namespace CalX {
 #define ROLL_SPEED 4000.0f
 #define TRAILER_COMEBACK 800
 
-	class MotorController : public DeviceController, public EventSource<std::shared_ptr<MotorEventListener>> {
+	class MotorController
+	    : public DeviceController,
+	      public EventSource<std::shared_ptr<MotorEventListener>> {
 	 public:
 		MotorController(ConfigurationCatalogue &, Motor &);
 		Motor &getMotor() const;

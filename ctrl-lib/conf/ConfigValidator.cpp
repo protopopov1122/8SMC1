@@ -28,14 +28,15 @@ namespace CalX {
 		return this->optional;
 	}
 
-	ConfigValueValidator::ConfigValueValidator(ConfigurationValueType tp, bool opt)
+	ConfigValueValidator::ConfigValueValidator(ConfigurationValueType tp,
+	                                           bool opt)
 	    : AbstractValidator::AbstractValidator(opt), type(tp) {}
 
 	ConfigurationValueType ConfigValueValidator::getType() {
 		return this->type;
 	}
 
-	bool ConfigValueValidator::validate(const ConfigurationValue & value) {
+	bool ConfigValueValidator::validate(const ConfigurationValue &value) {
 		if (value.is(ConfigurationValueType::None)) {
 			return this->isOptional();
 		} else {

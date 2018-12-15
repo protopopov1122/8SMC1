@@ -37,26 +37,26 @@ namespace CalXUI {
 	}
 
 	void CalxConfigEventListener::entryRemove(ConfigurationCatalogue *manager,
-	                                           const std::string &id) {
+	                                          const std::string &id) {
 		editor->updateEntries();
 		editor->updateEntry();
 	}
 
 	void CalxConfigEventListener::keyAdd(ConfigurationCatalogue *manager,
-	                                       const std::string &entry,
-										   const std::string &key) {
+	                                     const std::string &entry,
+	                                     const std::string &key) {
 		editor->updateEntry();
 	}
 
 	void CalxConfigEventListener::keyRemove(ConfigurationCatalogue *manager,
-	                                         const std::string &entry,
-	                                         const std::string &key) {
+	                                        const std::string &entry,
+	                                        const std::string &key) {
 		editor->updateEntry();
 	}
 
 	void CalxConfigEventListener::keyChange(ConfigurationCatalogue *manager,
-	                                         const std::string &entry,
-	                                         const std::string &key) {
+	                                        const std::string &entry,
+	                                        const std::string &key) {
 		editor->updateKey();
 	}
 
@@ -356,10 +356,11 @@ namespace CalXUI {
 	void CalxConfigEditor::updateEntries() {
 		this->entryList->Clear();
 		bool hasEntries = false;
-		config.visit([&](const std::string &entryName, ConfiguationFlatDictionary &entry) {
-			this->entryList->Append(entryName);
-			hasEntries = true;
-		});
+		config.visit(
+		    [&](const std::string &entryName, ConfiguationFlatDictionary &entry) {
+			    this->entryList->Append(entryName);
+			    hasEntries = true;
+		    });
 		Layout();
 		this->entryList->SetSelection(hasEntries ? 0 : wxNOT_FOUND);
 	}
@@ -395,8 +396,7 @@ namespace CalXUI {
 					break;
 				case ConfigurationValueType::String:
 					data.push_back(wxVariant(__("string")));
-					data.push_back(
-					    wxVariant(value.toString()));
+					data.push_back(wxVariant(value.toString()));
 					break;
 				case ConfigurationValueType::None:
 					break;
@@ -418,8 +418,7 @@ namespace CalXUI {
 		switch (this->currentValue.getType()) {
 			case ConfigurationValueType::Integer:
 				this->integerEditor->Show(true);
-				this->integerSpin->SetValue(
-				    (int) this->currentValue.getInt());
+				this->integerSpin->SetValue((int) this->currentValue.getInt());
 				break;
 			case ConfigurationValueType::Real:
 				this->realEditor->Show(true);

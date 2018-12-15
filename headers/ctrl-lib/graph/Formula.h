@@ -26,26 +26,29 @@
 
 namespace CalX {
 
-  class MathFormula {
-   public:
-    virtual ~MathFormula() = default;
-    virtual const std::vector<std::string> &getVariables() const = 0;
-    virtual engine_value_t eval(MathEngine &, const std::map<std::string, double> &) = 0;
+	class MathFormula {
+	 public:
+		virtual ~MathFormula() = default;
+		virtual const std::vector<std::string> &getVariables() const = 0;
+		virtual engine_value_t eval(MathEngine &,
+		                            const std::map<std::string, double> &) = 0;
 
-    static std::unique_ptr<MathFormula> build(const std::string &, const std::vector<std::string> &);
-  };
+		static std::unique_ptr<MathFormula> build(const std::string &,
+		                                          const std::vector<std::string> &);
+	};
 
-  class MathBaseFormula : public MathFormula {
-   public:
-    MathBaseFormula(std::unique_ptr<Node>, const std::vector<std::string> &);
+	class MathBaseFormula : public MathFormula {
+	 public:
+		MathBaseFormula(std::unique_ptr<Node>, const std::vector<std::string> &);
 
-    const std::vector<std::string> &getVariables() const override;
-    engine_value_t eval(MathEngine &, const std::map<std::string, double> &) override;
-   private:
-    std::unique_ptr<Node> formula;
-    std::vector<std::string> variables;
-  };
-}
+		const std::vector<std::string> &getVariables() const override;
+		engine_value_t eval(MathEngine &,
+		                    const std::map<std::string, double> &) override;
 
+	 private:
+		std::unique_ptr<Node> formula;
+		std::vector<std::string> variables;
+	};
+}  // namespace CalX
 
 #endif

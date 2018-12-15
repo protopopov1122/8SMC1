@@ -89,8 +89,7 @@ namespace CalX {
 				}
 			} else if (cmp(TASKS)) {
 				for (size_t i = 0; i < tasks.getTaskCount(); i++) {
-					if (std::shared_ptr<CoordTask> task =
-					        tasks.getTask(i).lock()) {
+					if (std::shared_ptr<CoordTask> task = tasks.getTask(i).lock()) {
 						std::cout << i;
 						if (task->getType() == CoordTaskType::ProgrammedTask) {
 							std::shared_ptr<ProgrammedCoordTask> pct =
@@ -626,8 +625,7 @@ namespace CalX {
 			if (task == nullptr) {
 				std::cout << "Error occured" << std::endl;
 			} else {
-				std::cout << "Created task #"
-				          << (this->tasks.getTaskCount() - 1)
+				std::cout << "Created task #" << (this->tasks.getTaskCount() - 1)
 				          << std::endl;
 			}
 		} else if (args.at(0).compare("rm") == 0) {
@@ -643,9 +641,7 @@ namespace CalX {
 		} else if (args.at(0).compare("add") == 0) {
 			args.erase(args.begin());
 			if (std::shared_ptr<CoordTask> tsk =
-			        tasks
-			            .getTask((size_t) std::stoul(args.at(0)))
-			            .lock()) {
+			        tasks.getTask((size_t) std::stoul(args.at(0))).lock()) {
 				args.erase(args.begin());
 				std::string com = args.at(0);
 				args.erase(args.begin());
@@ -816,9 +812,7 @@ namespace CalX {
 				return;
 			}
 			if (std::shared_ptr<CoordTask> task =
-			        tasks
-			            .getTask((size_t) std::stoul(args.at(1)))
-			            .lock()) {
+			        tasks.getTask((size_t) std::stoul(args.at(1))).lock()) {
 				std::shared_ptr<CoordHandle> coord =
 				    sysman->getCoordPlaneSet()
 				        .getCoord((size_t) std::stoul(args.at(2)))
@@ -872,9 +866,8 @@ namespace CalX {
 			std::unique_ptr<GraphBuilder> graph =
 			    std::make_unique<GraphBuilder>(std::move(node), min, max, step);
 			std::cout << "New graph task #"
-			          << tasks.addTask(
-			                 std::make_unique<GraphCoordTask>(std::move(graph), trans,
-			                                                  speed))
+			          << tasks.addTask(std::make_unique<GraphCoordTask>(
+			                 std::move(graph), trans, speed))
 			          << std::endl;
 		} else {
 			std::cout << "Wrong command '" << args.at(0) << "'" << std::endl;

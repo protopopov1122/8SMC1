@@ -37,7 +37,8 @@ namespace CalX {
 		return this->content.count(id) != 0;
 	}
 
-	bool ConfigEntry::put(const std::string &id, const ConfigurationValue &value) {
+	bool ConfigEntry::put(const std::string &id,
+	                      const ConfigurationValue &value) {
 		bool change = false;
 		if (this->has(id)) {
 			this->content.erase(id);
@@ -64,9 +65,11 @@ namespace CalX {
 		return true;
 	}
 
-	void ConfigEntry::visit(std::function<void (const std::string &, const ConfigurationValue &)> visit) const {
+	void ConfigEntry::visit(
+	    std::function<void(const std::string &, const ConfigurationValue &)>
+	        visit) const {
 		for (const auto &kv : this->content) {
 			visit(kv.first, kv.second);
 		}
 	}
-}
+}  // namespace CalX

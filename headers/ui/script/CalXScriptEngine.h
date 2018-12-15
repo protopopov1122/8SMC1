@@ -31,7 +31,7 @@ namespace CalXUI {
 
 	class CalXAppScriptMotor : public CalXScriptMotor {
 	 public:
-	 	CalXAppScriptMotor(CalxApp &, device_id_t);
+		CalXAppScriptMotor(CalxApp &, device_id_t);
 
 		bool isValid() override;
 		std::optional<Power> getPower() override;
@@ -43,8 +43,9 @@ namespace CalXUI {
 		ErrorCode moveToTrailer(TrailerId) override;
 		ErrorCode checkTrailers() override;
 		ErrorCode waitWhileRunning() override;
+
 	 private:
-	 	CalxApp &app;
+		CalxApp &app;
 		device_id_t motor_id;
 	};
 
@@ -63,6 +64,7 @@ namespace CalXUI {
 		ErrorCode setMode(InstrumentMode) override;
 		std::optional<bool> isSessionOpened() override;
 		std::optional<std::string> getInfo() override;
+
 	 private:
 		CalxApp &app;
 		device_id_t instrument_id;
@@ -70,7 +72,7 @@ namespace CalXUI {
 
 	class CalXAppScriptDevices : public CalXScriptDevices {
 	 public:
-	 	CalXAppScriptDevices(CalxApp &);
+		CalXAppScriptDevices(CalxApp &);
 
 		device_id_t connectMotor(DeviceConnectionPrms *) override;
 		device_id_t connectInstrument(DeviceConnectionPrms *) override;
@@ -78,6 +80,7 @@ namespace CalXUI {
 		std::size_t getInstrumentCount() override;
 		std::unique_ptr<CalXScriptMotor> getMotor(device_id_t) override;
 		std::unique_ptr<CalXScriptInstrument> getInstrument(device_id_t) override;
+
 	 private:
 		CalxApp &app;
 	};
@@ -86,8 +89,8 @@ namespace CalXUI {
 	 public:
 		CalXAppScriptPlane(CalxApp &, std::size_t);
 		ErrorCode move(coord_point_t, double, bool, bool) override;
-		ErrorCode arc(coord_point_t, coord_point_t, int,
-		                           double, bool, bool) override;
+		ErrorCode arc(coord_point_t, coord_point_t, int, double, bool,
+		              bool) override;
 		ErrorCode calibrate(TrailerId) override;
 		ErrorCode measure(TrailerId) override;
 		ErrorCode move(coord_point_t, double) override;
@@ -97,6 +100,7 @@ namespace CalXUI {
 		std::pair<coord_rect_t, ErrorCode> getSize() override;
 		std::optional<bool> isMeasured() override;
 		bool positionAsCenter() override;
+
 	 private:
 		CalxApp &app;
 		std::size_t plane_id;
@@ -108,6 +112,7 @@ namespace CalXUI {
 
 		int32_t createPlane(device_id_t, device_id_t, device_id_t) override;
 		std::unique_ptr<CalXScriptPlane> getPlane(std::size_t) override;
+
 	 private:
 		CalxApp &app;
 	};

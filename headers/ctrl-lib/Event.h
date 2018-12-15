@@ -22,10 +22,13 @@ namespace CalX {
 			this->listeners.push_back(listener);
 		}
 		void removeEventListener(T listener) override {
-			this->listeners.erase(std::remove(this->listeners.begin(), this->listeners.end(), listener), this->listeners.end());
+			this->listeners.erase(
+			    std::remove(this->listeners.begin(), this->listeners.end(), listener),
+			    this->listeners.end());
 		}
+
 	 protected:
-		template <typename F, typename... E>
+		template<typename F, typename... E>
 		void submitEvent(F method, E... evt) const {
 			for (const auto &listener : this->listeners) {
 				((*listener).*method)(evt...);
@@ -34,6 +37,6 @@ namespace CalX {
 
 		std::vector<T> listeners;
 	};
-}
+}  // namespace CalX
 
 #endif

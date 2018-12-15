@@ -123,33 +123,29 @@ namespace CalXLua {
 
 		this->lua["calx"]["plane"]["position"].SetObj(
 		    lua_env, "getX", &LuaCalXEnvironment::planeGetPositionX, "getY",
-		    &LuaCalXEnvironment::planeGetPositionY,
-			"asCenter", &LuaCalXEnvironment::planePositionAsCenter);
+		    &LuaCalXEnvironment::planeGetPositionY, "asCenter",
+		    &LuaCalXEnvironment::planePositionAsCenter);
 
 		this->lua["calx"]["plane"]["size"].SetObj(
 		    lua_env, "getX", &LuaCalXEnvironment::planeGetSizeX, "getY",
 		    &LuaCalXEnvironment::planeGetSizeY, "getW",
 		    &LuaCalXEnvironment::planeGetSizeW, "getH",
 		    &LuaCalXEnvironment::planeGetSizeH);
-		
+
 		this->lua["calx"]["config"].SetObj(
-			lua_env,
-			"getInt", &LuaCalXEnvironment::getConfigurationInt,
-			"getFloat", &LuaCalXEnvironment::getConfigurationFloat,
-			"getBool", &LuaCalXEnvironment::getConfigurationBoolean,
-			"getString", &LuaCalXEnvironment::getConfigurationString,
-			"has", &LuaCalXEnvironment::configurationHas
-		);
-		
+		    lua_env, "getInt", &LuaCalXEnvironment::getConfigurationInt, "getFloat",
+		    &LuaCalXEnvironment::getConfigurationFloat, "getBool",
+		    &LuaCalXEnvironment::getConfigurationBoolean, "getString",
+		    &LuaCalXEnvironment::getConfigurationString, "has",
+		    &LuaCalXEnvironment::configurationHas);
+
 		this->lua["calx"]["settings"].SetObj(
-			lua_env,
-			"getInt", &LuaCalXEnvironment::getSettingsInt,
-			"getFloat", &LuaCalXEnvironment::getSettingsFloat,
-			"getBool", &LuaCalXEnvironment::getSettingsBoolean,
-			"getString", &LuaCalXEnvironment::getSettingsString,
-			"has", &LuaCalXEnvironment::settingsHas,
-			"exist", &LuaCalXEnvironment::hasSettings
-		);
+		    lua_env, "getInt", &LuaCalXEnvironment::getSettingsInt, "getFloat",
+		    &LuaCalXEnvironment::getSettingsFloat, "getBool",
+		    &LuaCalXEnvironment::getSettingsBoolean, "getString",
+		    &LuaCalXEnvironment::getSettingsString, "has",
+		    &LuaCalXEnvironment::settingsHas, "exist",
+		    &LuaCalXEnvironment::hasSettings);
 	}
 
 	void LuaCalXScript::init_constants() {

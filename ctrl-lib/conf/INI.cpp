@@ -25,16 +25,19 @@
 
 namespace CalX {
 
-  void INIConfiguration::store(ConfigurationCatalogue &config, std::ostream &os) {
-    config.visit([&](const std::string &entryName, ConfiguationFlatDictionary &entry) {
-      os << '[' << entryName << ']' << std::endl;
-			INIConfiguration::store(entry, os);
-			os << std::endl;
-    });
-  }
+	void INIConfiguration::store(ConfigurationCatalogue &config,
+	                             std::ostream &os) {
+		config.visit(
+		    [&](const std::string &entryName, ConfiguationFlatDictionary &entry) {
+			    os << '[' << entryName << ']' << std::endl;
+			    INIConfiguration::store(entry, os);
+			    os << std::endl;
+		    });
+	}
 
-  void INIConfiguration::store(ConfiguationFlatDictionary &entry, std::ostream &os) {
-    entry.visit([&](const std::string &key, const ConfigurationValue &value) {
+	void INIConfiguration::store(ConfiguationFlatDictionary &entry,
+	                             std::ostream &os) {
+		entry.visit([&](const std::string &key, const ConfigurationValue &value) {
 			os << key << '=';
 			switch (value.getType()) {
 				case ConfigurationValueType::Integer:
@@ -53,8 +56,8 @@ namespace CalX {
 					break;
 			}
 			os << std::endl;
-    });
-  }
+		});
+	}
 
 	size_t skipWhitespaces(const char *line, size_t start) {
 		while (start < strlen(line) && isspace(line[start])) {
@@ -63,9 +66,8 @@ namespace CalX {
 		return start;
 	}
 
-	std::unique_ptr<ConfigurationCatalogue> INIConfiguration::load(std::istream &is,
-	                                                   std::ostream &err,
-	                                                   ConfigurationCatalogue *man) {
+	std::unique_ptr<ConfigurationCatalogue> INIConfiguration::load(
+	    std::istream &is, std::ostream &err, ConfigurationCatalogue *man) {
 		std::unique_ptr<ConfigurationCatalogue> new_man = nullptr;
 		if (man == nullptr) {
 			new_man = std::make_unique<ConfigManager>();
@@ -191,4 +193,4 @@ namespace CalX {
 			}
 		}
 	}
-}
+}  // namespace CalX

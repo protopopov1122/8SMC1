@@ -25,26 +25,34 @@
 
 namespace CalX {
 
-  class ConfiguationFlatDictionary; // Forward referencing
-  class ConfigurationCatalogue; // Forward referencing
+	class ConfiguationFlatDictionary;  // Forward referencing
+	class ConfigurationCatalogue;      // Forward referencing
 
-  class FlatDictionaryListener {
-   public:
-    virtual ~FlatDictionaryListener() = default;
-    virtual void keyAdd(ConfiguationFlatDictionary &dict, const std::string &key) {};
-    virtual void keyChange(ConfiguationFlatDictionary &dict, const std::string &key) {};
-    virtual void keyRemove(ConfiguationFlatDictionary &dict, const std::string &key) {};
-  };
+	class FlatDictionaryListener {
+	 public:
+		virtual ~FlatDictionaryListener() = default;
+		virtual void keyAdd(ConfiguationFlatDictionary &dict,
+		                    const std::string &key){};
+		virtual void keyChange(ConfiguationFlatDictionary &dict,
+		                       const std::string &key){};
+		virtual void keyRemove(ConfiguationFlatDictionary &dict,
+		                       const std::string &key){};
+	};
 
-  class CatalogueListener {
-   public:
-    virtual ~CatalogueListener() = default;
-    virtual void entryAdd(ConfigurationCatalogue *cat, const std::string &entry) {};
-    virtual void entryRemove(ConfigurationCatalogue *cat, const std::string &entry) {};
-    virtual void keyAdd(ConfigurationCatalogue *cat, const std::string &entry, const std::string &key) {};
-    virtual void keyChange(ConfigurationCatalogue *cat, const std::string &entry, const std::string &key) {};
-    virtual void keyRemove(ConfigurationCatalogue *cat, const std::string &entry, const std::string &key) {};
-  };
-}
+	class CatalogueListener {
+	 public:
+		virtual ~CatalogueListener() = default;
+		virtual void entryAdd(ConfigurationCatalogue *cat,
+		                      const std::string &entry){};
+		virtual void entryRemove(ConfigurationCatalogue *cat,
+		                         const std::string &entry){};
+		virtual void keyAdd(ConfigurationCatalogue *cat, const std::string &entry,
+		                    const std::string &key){};
+		virtual void keyChange(ConfigurationCatalogue *cat,
+		                       const std::string &entry, const std::string &key){};
+		virtual void keyRemove(ConfigurationCatalogue *cat,
+		                       const std::string &entry, const std::string &key){};
+	};
+}  // namespace CalX
 
 #endif

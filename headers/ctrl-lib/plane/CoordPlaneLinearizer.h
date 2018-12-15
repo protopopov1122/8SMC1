@@ -30,7 +30,7 @@ namespace CalX {
 		CoordPlaneLinearizer(std::shared_ptr<CoordPlane>);
 
 		ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,
-		                      float = 1.0f) override;
+		              float = 1.0f) override;
 		std::ostream &operator<<(std::ostream &) const override;
 		std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>) override;
 

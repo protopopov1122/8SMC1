@@ -43,7 +43,7 @@ namespace CalX {
 	 public:
 		LinearCoordTask(motor_rect_t, motor_coord_t, bool = true);
 		ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
-		                          SystemManager *, std::shared_ptr<TaskState>) override;
+		                  SystemManager *, std::shared_ptr<TaskState>) override;
 
 		motor_rect_t getRectangle() const;
 		void setRectangle(motor_rect_t);
@@ -62,7 +62,7 @@ namespace CalX {
 	 public:
 		ProgrammedCoordTask();
 		ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
-		                          SystemManager *, std::shared_ptr<TaskState>) override;
+		                  SystemManager *, std::shared_ptr<TaskState>) override;
 		void addStep(std::shared_ptr<TaskStep>);
 		size_t getSubCount() const;
 		bool removeStep(size_t);
@@ -78,7 +78,7 @@ namespace CalX {
 		GraphCoordTask(std::unique_ptr<GraphBuilder>,
 		               std::shared_ptr<CoordTranslator>, float);
 		ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
-		                          SystemManager *, std::shared_ptr<TaskState>) override;
+		                  SystemManager *, std::shared_ptr<TaskState>) override;
 
 	 private:
 		std::unique_ptr<GraphBuilder> graph;
@@ -90,7 +90,7 @@ namespace CalX {
 	 public:
 		GCodeCoordTask(std::istream &, std::shared_ptr<CoordTranslator>);
 		ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
-		                          SystemManager *, std::shared_ptr<TaskState>) override;
+		                  SystemManager *, std::shared_ptr<TaskState>) override;
 
 		const std::string &getGCode() const;
 		std::shared_ptr<CoordTranslator> getTranslator() const;

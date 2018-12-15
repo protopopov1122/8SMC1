@@ -38,7 +38,7 @@ namespace CalX {
 
 		ErrorCode move(motor_point_t, float, bool) override;
 		ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,
-		                      float = 1.0f) override;
+		              float = 1.0f) override;
 		motor_point_t getPosition() const override;
 		motor_rect_t getSize() const override;
 		std::ostream &operator<<(std::ostream &) const override;

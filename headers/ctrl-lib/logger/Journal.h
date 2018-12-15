@@ -31,114 +31,127 @@
 
 namespace CalX {
 
-  struct SourcePosition {
-    SourcePosition() : file(""), line(0) {}
-    SourcePosition(const std::string &file, unsigned int line) : file(file), line(line) {}
-    SourcePosition(const char *file, unsigned int line) : file(file), line(line) {}
-    SourcePosition(const SourcePosition &position) : file(position.file), line(position.line) {}
-    bool isEmpty() const {
-      return this->file.size() == 0 || this->line == 0;
-    }
+	struct SourcePosition {
+		SourcePosition() : file(""), line(0) {}
+		SourcePosition(const std::string &file, unsigned int line)
+		    : file(file), line(line) {}
+		SourcePosition(const char *file, unsigned int line)
+		    : file(file), line(line) {}
+		SourcePosition(const SourcePosition &position)
+		    : file(position.file), line(position.line) {}
+		bool isEmpty() const {
+			return this->file.size() == 0 || this->line == 0;
+		}
 
-    const std::string file;
-    const unsigned int line;
-  };
+		const std::string file;
+		const unsigned int line;
+	};
 
-  class JournalSink;
+	class JournalSink;
 
-  struct Flush {};
+	struct Flush {};
 
-  class JournalSinkStream {
-   public:
-    JournalSinkStream(JournalSink &, LoggingSeverity, const std::string & = "", const SourcePosition & = SourcePosition());
-    ~JournalSinkStream();
+	class JournalSinkStream {
+	 public:
+		JournalSinkStream(JournalSink &, LoggingSeverity, const std::string & = "",
+		                  const SourcePosition & = SourcePosition());
+		~JournalSinkStream();
 
-    void flush();
+		void flush();
 
-    JournalSinkStream &operator<<(Flush flush) {
-      this->flush();
-      return *this;
-    }
+		JournalSinkStream &operator<<(Flush flush) {
+			this->flush();
+			return *this;
+		}
 
-    template <typename T>
-    JournalSinkStream &operator<<(T value) {
-      this->buffer << value;
-      return *this;
-    }
-   private:
-    JournalSink &sink;
-    LoggingSeverity severity;
-    std::string tag;
-    SourcePosition position;
-    std::stringstream buffer;
-  };
+		template<typename T>
+		JournalSinkStream &operator<<(T value) {
+			this->buffer << value;
+			return *this;
+		}
 
-  class JournalSink {
-   public:
-    virtual ~JournalSink() = default;
-    virtual const std::string &getName() const = 0;
-    virtual void log(LoggingSeverity, const std::string &, const std::string & = "", const SourcePosition & = SourcePosition()) = 0;
-    virtual LoggingSeverity getLevel() const = 0;
-    virtual void setLevel(LoggingSeverity) = 0;
+	 private:
+		JournalSink &sink;
+		LoggingSeverity severity;
+		std::string tag;
+		SourcePosition position;
+		std::stringstream buffer;
+	};
 
-    JournalSinkStream stream(const std::string & = "", const SourcePosition & = SourcePosition());
-    JournalSinkStream stream(LoggingSeverity, const std::string & = "", const SourcePosition & = SourcePosition());
+	class JournalSink {
+	 public:
+		virtual ~JournalSink() = default;
+		virtual const std::string &getName() const = 0;
+		virtual void log(LoggingSeverity, const std::string &,
+		                 const std::string & = "",
+		                 const SourcePosition & = SourcePosition()) = 0;
+		virtual LoggingSeverity getLevel() const = 0;
+		virtual void setLevel(LoggingSeverity) = 0;
 
-    template <typename T>
-    JournalSinkStream operator<<(T value) {
-      JournalSinkStream stream = this->stream();
-      stream << value;
-      return stream;
-    }
-  };
+		JournalSinkStream stream(const std::string & = "",
+		                         const SourcePosition & = SourcePosition());
+		JournalSinkStream stream(LoggingSeverity, const std::string & = "",
+		                         const SourcePosition & = SourcePosition());
 
-  class JournalSinkFactory {
-   public:
-    virtual ~JournalSinkFactory() = default;
-    virtual std::unique_ptr<JournalSink> newSink(const std::string &, LoggingSeverity) const = 0;
-  };
+		template<typename T>
+		JournalSinkStream operator<<(T value) {
+			JournalSinkStream stream = this->stream();
+			stream << value;
+			return stream;
+		}
+	};
 
-  class JournalLogger {
-   public:
-    virtual ~JournalLogger() = default;
-    virtual JournalSink &getDefaultSink() = 0;
-    virtual JournalSink &getSink(const std::string &) = 0;
-    virtual void getSinks(std::vector<std::reference_wrapper<JournalSink>> &) const = 0;
+	class JournalSinkFactory {
+	 public:
+		virtual ~JournalSinkFactory() = default;
+		virtual std::unique_ptr<JournalSink> newSink(const std::string &,
+		                                             LoggingSeverity) const = 0;
+	};
 
-    template <typename T>
-    JournalSinkStream operator<<(T value) {
-      return this->getDefaultSink() << value;
-    }
-  };
+	class JournalLogger {
+	 public:
+		virtual ~JournalLogger() = default;
+		virtual JournalSink &getDefaultSink() = 0;
+		virtual JournalSink &getSink(const std::string &) = 0;
+		virtual void getSinks(
+		    std::vector<std::reference_wrapper<JournalSink>> &) const = 0;
 
-  class JournalLoggerController {
-   public:
-    virtual ~JournalLoggerController() = default;
-    virtual LoggingSeverity getDefaultSeverity() const = 0;
-    virtual void setDefaultSeverity(LoggingSeverity) = 0;
-    virtual JournalSink &newStreamSink(const std::string &, std::ostream &, bool = false) = 0;
-    virtual JournalSink &newFileSink(const std::string &, const std::string &, bool = false) = 0;
-    virtual void setDefaultSink(const std::string &) = 0;
-  };
+		template<typename T>
+		JournalSinkStream operator<<(T value) {
+			return this->getDefaultSink() << value;
+		}
+	};
 
-  class JournalSession {
-   public:
-    virtual ~JournalSession() = default;
-    virtual JournalLogger &getLogger() = 0;
-    virtual JournalLoggerController &getController() = 0;
-  };
+	class JournalLoggerController {
+	 public:
+		virtual ~JournalLoggerController() = default;
+		virtual LoggingSeverity getDefaultSeverity() const = 0;
+		virtual void setDefaultSeverity(LoggingSeverity) = 0;
+		virtual JournalSink &newStreamSink(const std::string &, std::ostream &,
+		                                   bool = false) = 0;
+		virtual JournalSink &newFileSink(const std::string &, const std::string &,
+		                                 bool = false) = 0;
+		virtual void setDefaultSink(const std::string &) = 0;
+	};
 
-  class Journal {
-   public:
-    virtual ~Journal() = default;
-    virtual JournalLogger &getSession() = 0;
-    virtual void closeSession() = 0;
-  };
+	class JournalSession {
+	 public:
+		virtual ~JournalSession() = default;
+		virtual JournalLogger &getLogger() = 0;
+		virtual JournalLoggerController &getController() = 0;
+	};
 
-  class ConfigurableJournal : public Journal {
-   public:
-    virtual JournalLoggerController &getSessionController() = 0;
-  };
-}
+	class Journal {
+	 public:
+		virtual ~Journal() = default;
+		virtual JournalLogger &getSession() = 0;
+		virtual void closeSession() = 0;
+	};
+
+	class ConfigurableJournal : public Journal {
+	 public:
+		virtual JournalLoggerController &getSessionController() = 0;
+	};
+}  // namespace CalX
 
 #endif

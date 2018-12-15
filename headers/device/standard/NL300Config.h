@@ -58,12 +58,16 @@ namespace CalX {
 		NL300ConfigEventListener(NL300Instrument *);
 		void entryAdd(ConfigurationCatalogue *, const std::string &) override;
 		void entryRemove(ConfigurationCatalogue *, const std::string &) override;
-		void keyAdd(ConfigurationCatalogue *, const std::string &, const std::string &) override;
-		void keyRemove(ConfigurationCatalogue *, const std::string &, const std::string &) override;
-		void keyChange(ConfigurationCatalogue *, const std::string &, const std::string &) override;
+		void keyAdd(ConfigurationCatalogue *, const std::string &,
+		            const std::string &) override;
+		void keyRemove(ConfigurationCatalogue *, const std::string &,
+		               const std::string &) override;
+		void keyChange(ConfigurationCatalogue *, const std::string &,
+		               const std::string &) override;
 
 	 private:
-		void process(ConfigurationCatalogue *, const std::string &, const std::string &);
+		void process(ConfigurationCatalogue *, const std::string &,
+		             const std::string &);
 
 		NL300Instrument *instr;
 	};

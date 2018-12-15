@@ -34,14 +34,19 @@ namespace CalXUI {
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 		SetSizer(sizer);
 
-		SettingsConfiguration settingsConf(wxGetApp().getSystemManager()->getSettingsRepository(),
-			wxGetApp().getSystemManager()->getConfiguration());
+		SettingsConfiguration settingsConf(
+		    wxGetApp().getSystemManager()->getSettingsRepository(),
+		    wxGetApp().getSystemManager()->getConfiguration());
 		ConfiguationFlatDictionary *confEntry =
 		    wxGetApp().getSystemManager()->getConfiguration().getEntry(
 		        CalxConfiguration::RelativePosition);
-		
-		double xPosition = settingsConf.getEntry(CalxConfiguration::RelativePosition)->getReal(CalxCoordPositionConfiguration::X, 0.5);
-		double yPosition = settingsConf.getEntry(CalxConfiguration::RelativePosition)->getReal(CalxCoordPositionConfiguration::Y, 0.5);
+
+		double xPosition =
+		    settingsConf.getEntry(CalxConfiguration::RelativePosition)
+		        ->getReal(CalxCoordPositionConfiguration::X, 0.5);
+		double yPosition =
+		    settingsConf.getEntry(CalxConfiguration::RelativePosition)
+		        ->getReal(CalxCoordPositionConfiguration::Y, 0.5);
 
 		this->xPos = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
@@ -51,20 +56,20 @@ namespace CalXUI {
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
 		    wxSP_ARROW_KEYS, 0, 1, yPosition,
 		    confEntry->getReal(CalxCoordPositionConfiguration::YPrecision, 0.0001));
-		this->speed =
-		    new wxSpinCtrlDouble(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		                         wxDefaultSize, wxSP_ARROW_KEYS, 0,
-		                         wxGetApp()
-		                             .getSystemManager()
-		                             ->getConfiguration()
-		                             .getEntry(CalxConfiguration::Units)
-		                             ->getReal(CalxUnitConfiguration::UnitSpeed, 4000.0),
-		                         wxGetApp()
-		                             .getSystemManager()
-		                             ->getConfiguration()
-		                             .getEntry(CalxConfiguration::Units)
-		                             ->getReal(CalxUnitConfiguration::UnitSpeed, 4000.0),
-		                         wxGetApp().getUnitProcessor().getSpeedPrecision());
+		this->speed = new wxSpinCtrlDouble(
+		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+		    wxSP_ARROW_KEYS, 0,
+		    wxGetApp()
+		        .getSystemManager()
+		        ->getConfiguration()
+		        .getEntry(CalxConfiguration::Units)
+		        ->getReal(CalxUnitConfiguration::UnitSpeed, 4000.0),
+		    wxGetApp()
+		        .getSystemManager()
+		        ->getConfiguration()
+		        .getEntry(CalxConfiguration::Units)
+		        ->getReal(CalxUnitConfiguration::UnitSpeed, 4000.0),
+		    wxGetApp().getUnitProcessor().getSpeedPrecision());
 		wxButton *moveButton = new wxButton(this, wxID_ANY, __("Move"));
 		wxButton *configureButton = new wxButton(this, wxID_ANY, __("Configure"));
 		wxButton *saveButton = new wxButton(this, wxID_ANY, __("Save"));
@@ -95,8 +100,8 @@ namespace CalXUI {
 		                 this);
 		configureButton->Bind(wxEVT_BUTTON,
 		                      &CalxCoordPositionComponent::OnConfigureClick, this);
-		saveButton->Bind(wxEVT_BUTTON,
-		                      &CalxCoordPositionComponent::OnSaveClick, this);
+		saveButton->Bind(wxEVT_BUTTON, &CalxCoordPositionComponent::OnSaveClick,
+		                 this);
 	}
 
 	void CalxCoordPositionComponent::OnMoveClick(wxCommandEvent &evt) {
@@ -122,9 +127,12 @@ namespace CalXUI {
 		double xPosition = this->xPos->GetValue();
 		double yPosition = this->yPos->GetValue();
 		if (wxGetApp().getSystemManager()->getSettingsRepository()) {
-			auto &settings = wxGetApp().getSystemManager()->getSettingsRepository()->getSettings();
-			settings.getEntry(CalxConfiguration::RelativePosition)->put(CalxCoordPositionConfiguration::X, xPosition);
-			settings.getEntry(CalxConfiguration::RelativePosition)->put(CalxCoordPositionConfiguration::Y, yPosition);
+			auto &settings =
+			    wxGetApp().getSystemManager()->getSettingsRepository()->getSettings();
+			settings.getEntry(CalxConfiguration::RelativePosition)
+			    ->put(CalxCoordPositionConfiguration::X, xPosition);
+			settings.getEntry(CalxConfiguration::RelativePosition)
+			    ->put(CalxCoordPositionConfiguration::Y, yPosition);
 		}
 	}
 }  // namespace CalXUI
