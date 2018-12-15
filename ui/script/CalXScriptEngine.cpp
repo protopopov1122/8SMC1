@@ -364,11 +364,11 @@ namespace CalXUI {
 			             __("Script: Connection error"), wxICON_WARNING);
 			return -1;
 		} else {
-			bool ready = false;
+			volatile bool ready = false;
 			this->app.getMainFrame()->getDevicePool()->appendDevice(
 			    new CalxMotorConstructor(this->app.getMainFrame()->getDevicePool(),
 			                             ctrl),
-			    &ready);
+			    const_cast<bool *>(&ready));
 			while (!ready) {
 			}
 			return ctrl->getID();
@@ -384,11 +384,11 @@ namespace CalXUI {
 			             __("Script: Connection error"), wxICON_WARNING);
 			return -1;
 		} else {
-			bool ready = false;
+			volatile bool ready = false;
 			this->app.getMainFrame()->getDevicePool()->appendDevice(
 			    new CalxInstrumentConstructor(
 			        this->app.getMainFrame()->getDevicePool(), ctrl),
-			    &ready);
+			    const_cast<bool *>(&ready));
 			while (!ready) {
 			}
 			return ctrl->getID();
@@ -422,9 +422,9 @@ namespace CalXUI {
 		if (handle == nullptr) {
 			return ErrorCode::UnknownResource;
 		} else {
-			bool ready = false;
+			volatile bool ready = false;
 			ActionResult res = { false, false, ErrorCode::NoError };
-			handle->getController()->move(dest, speed, sync, relative, &ready, &res);
+			handle->getController()->move(dest, speed, sync, relative, const_cast<bool *>(&ready), &res);
 			while (!ready) {
 			}
 			if (res.stopped) {
@@ -443,10 +443,10 @@ namespace CalXUI {
 		if (handle == nullptr) {
 			return ErrorCode::UnknownResource;
 		} else {
-			bool ready = false;
+			volatile bool ready = false;
 			ActionResult res = { false, false, ErrorCode::NoError };
 			handle->getController()->arc(dest, cen, splitter, speed, clockwise,
-			                             relative, &ready, &res);
+			                             relative, const_cast<bool *>(&ready), &res);
 			while (!ready) {
 			}
 			if (res.stopped) {
@@ -463,9 +463,9 @@ namespace CalXUI {
 		if (handle == nullptr) {
 			return ErrorCode::UnknownResource;
 		} else {
-			bool ready = false;
+			volatile bool ready = false;
 			ActionResult res = { false, false, ErrorCode::NoError };
-			handle->getController()->calibrate(tid, &ready, &res);
+			handle->getController()->calibrate(tid, const_cast<bool *>(&ready), &res);
 			while (!ready) {
 			}
 			if (res.stopped) {
@@ -482,9 +482,9 @@ namespace CalXUI {
 		if (handle == nullptr) {
 			return ErrorCode::UnknownResource;
 		} else {
-			bool ready = false;
+			volatile bool ready = false;
 			ActionResult res = { false, false, ErrorCode::NoError };
-			handle->getController()->measure(tid, &ready, &res);
+			handle->getController()->measure(tid, const_cast<bool *>(&ready), &res);
 			while (!ready) {
 			}
 			if (res.stopped) {
@@ -501,9 +501,9 @@ namespace CalXUI {
 		if (handle == nullptr) {
 			return ErrorCode::UnknownResource;
 		} else {
-			bool ready = false;
+			volatile bool ready = false;
 			ActionResult res = { false, false, ErrorCode::NoError };
-			handle->getController()->move(dest, speed, &ready, &res);
+			handle->getController()->move(dest, speed, const_cast<bool *>(&ready), &res);
 			while (!ready) {
 			}
 			if (res.stopped) {
@@ -520,9 +520,9 @@ namespace CalXUI {
 		if (handle == nullptr) {
 			return ErrorCode::UnknownResource;
 		} else {
-			bool ready = false;
+			volatile bool ready = false;
 			ActionResult res = { false, false, ErrorCode::NoError };
-			handle->getController()->configure(dest, speed, &ready, &res);
+			handle->getController()->configure(dest, speed, const_cast<bool *>(&ready), &res);
 			while (!ready) {
 			}
 			if (res.stopped) {
@@ -628,8 +628,8 @@ namespace CalXUI {
 		if (handle == nullptr) {
 			return -1;
 		} else {
-			bool ready = false;
-			this->app.getMainFrame()->getPlaneList()->updateList(handle, &ready);
+			volatile bool ready = false;
+			this->app.getMainFrame()->getPlaneList()->updateList(handle, const_cast<bool *>(&ready));
 			while (!ready) {
 			}
 			return handle->getID();

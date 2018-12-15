@@ -38,7 +38,7 @@
 #ifdef LOGGING
 #define WRITE_LOG(__output, tag, msg)                                                                                    \
 	do {                                                                                                             \
-		const char *__file = (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__);                   \
+		const char *__file = (strrchr(__FILE__, PATH_SEPARATOR) ? strrchr(__FILE__, PATH_SEPARATOR) + 1 : __FILE__);                   \
 		int __line = __LINE__;                                                                                   \
                 JournalSink &__sink = GlobalLogger::getLogger().getSink(GlobalLogger::getSink(__output));                \
                 JournalSinkStream __stream = __sink.stream(tag, SourcePosition(__file, __line));                         \

@@ -23,7 +23,7 @@
 
 namespace CalX {
 
-	ConfigurationValue ConfigurationValue::Empty;
+  ConfigurationValue ConfigurationValue::Empty;
 
   ConfigurationValue::ConfigurationValue()
     : type(ConfigurationValueType::None) {}

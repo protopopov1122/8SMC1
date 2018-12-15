@@ -39,9 +39,11 @@
 #ifdef OS_WIN
 #define LIBEXPORT __declspec(dllexport)
 #define LIBIMPORT __declspec(dllimport)
+#define PATH_SEPARATOR '\\'
 #else
 #define LIBEXPORT
 #define LIBIMPORT
+#define PATH_SEPARATOR '/'
 #endif
 
 #define TMP_STRINGIZE(x) #x

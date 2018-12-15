@@ -60,7 +60,7 @@ namespace CalX {
 		void entryRemove(ConfigurationCatalogue *, const std::string &) override;
 		void keyAdd(ConfigurationCatalogue *, const std::string &, const std::string &) override;
 		void keyRemove(ConfigurationCatalogue *, const std::string &, const std::string &) override;
-		void keyChange(ConfigurationCatalogue *, const std::sstring &, const std::string &) override;
+		void keyChange(ConfigurationCatalogue *, const std::string &, const std::string &) override;
 
 	 private:
 		void process(ConfigurationCatalogue *, const std::string &, const std::string &);

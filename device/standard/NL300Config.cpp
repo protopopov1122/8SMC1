@@ -45,7 +45,7 @@ namespace CalX {
 	                                          const std::string &entry,
 	                                          const std::string &key) {}
 
-	void NL300ConfigEventListener::keyChanged(ConfigurationCatalogue *conf,
+	void NL300ConfigEventListener::keyChange(ConfigurationCatalogue *conf,
 	                                          const std::string &entry,
 	                                          const std::string &key) {
 		process(conf, entry, key);
@@ -57,7 +57,7 @@ namespace CalX {
 		if (entryName.compare(NL300_ENTRY_NAME) != 0) {
 			return;
 		}
-		ConfigEntry *entry = conf->getEntry(entryName);
+		ConfiguationFlatDictionary *entry = conf->getEntry(entryName);
 		if (key.compare(NL300_PACK_PULSES) == 0) {
 			int_conf_t value = entry->getInt(key, 1);
 			NL300GeneralCommand cmd(NL300_LASER_NAME, 'P', 0, NL300GeneralAction::Set,

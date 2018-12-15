@@ -63,7 +63,7 @@ namespace CalXUI {
 	CalxConfigEditor::CalxConfigEditor(wxWindow *win, wxWindowID id,
 	                                   ConfigurationCatalogue &conf)
 	    : CalxPanelPane::CalxPanelPane(win, id), config(conf) {
-		this->currentValue = ConfigurationValue::Empty;
+		this->currentValue = ConfigurationValue();
 
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(sizer);
@@ -213,7 +213,7 @@ namespace CalXUI {
 			this->stringEditor->Hide();
 			this->editorPanel->Layout();
 			this->valuePanel->Layout();
-			this->currentValue = ConfigurationValue::Empty;
+			this->currentValue = ConfigurationValue();
 			std::string name = this->entryList->GetStringSelection().ToStdString();
 			this->config.removeEntry(name);
 		} else {
@@ -229,13 +229,13 @@ namespace CalXUI {
 		this->stringEditor->Show(false);
 		this->editorPanel->Layout();
 		this->valuePanel->Layout();
-		this->currentValue = ConfigurationValue::Empty;
+		this->currentValue = ConfigurationValue();
 	}
 
 	void CalxConfigEditor::OnKeyClick(wxDataViewEvent &evt) {
 		if (this->entryList->GetSelection() == wxNOT_FOUND ||
 		    this->valueList->GetSelectedRow() == wxNOT_FOUND) {
-			this->currentValue = ConfigurationValue::Empty;
+			this->currentValue = ConfigurationValue();
 			updateEditor();
 			return;
 		}
@@ -335,7 +335,7 @@ namespace CalXUI {
 			this->stringEditor->Hide();
 			this->editorPanel->Layout();
 			this->valuePanel->Layout();
-			this->currentValue = ConfigurationValue::Empty;
+			this->currentValue = ConfigurationValue();
 			ConfiguationFlatDictionary *entry = this->config.getEntry(
 			    this->entryList->GetStringSelection().ToStdString());
 			wxVariant vrt;

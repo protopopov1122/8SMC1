@@ -68,7 +68,7 @@ namespace CalX {
 		std::string getSystemCommandResponse(std::string, std::string);
 		NL300GeneralCommand *inquireGeneralParameter(char, uint16_t);
 		int64_t inquireIntegerParameter(char, uint16_t, int64_t);
-		ConfigEntry *getCoreEntry();
+		ConfiguationFlatDictionary *getCoreEntry();
 
 		bool aborting;
 		StandardDeviceManager &devman;
