@@ -30,15 +30,15 @@ namespace CalX {
 	class JournalDefaultLogger : public JournalLoggerController,
 	                             public JournalLogger {
 	 public:
-		JournalDefaultLogger(LoggingSeverity);
+		JournalDefaultLogger();
 
 		JournalSink &getDefaultSink() override;
 		JournalSink &getSink(const std::string &) override;
 		void getSinks(
 		    std::vector<std::reference_wrapper<JournalSink>> &) const override;
+		void log(const LogEntry &) override;
 
-		LoggingSeverity getDefaultSeverity() const override;
-		void setDefaultSeverity(LoggingSeverity);
+		void setFilter(std::function<bool(const LogEntry &)>) override;
 		JournalSink &newStreamSink(const std::string &, std::ostream &,
 		                           bool) override;
 		JournalSink &newFileSink(const std::string &, const std::string &,
@@ -48,7 +48,7 @@ namespace CalX {
 	 private:
 		std::map<std::string, std::shared_ptr<JournalSink>> sinks;
 		std::shared_ptr<JournalSink> defaultSink;
-		LoggingSeverity severity;
+		std::function<bool(const LogEntry &)> filter;
 	};
 }  // namespace CalX
 

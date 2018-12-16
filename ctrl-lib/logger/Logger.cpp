@@ -20,6 +20,7 @@
 
 #include "ctrl-lib/logger/Logger.h"
 #include "ctrl-lib/logger/Session.h"
+#include "ctrl-lib/logger/Filter.h"
 
 namespace CalX {
 
@@ -42,8 +43,9 @@ namespace CalX {
 
 	JournalLogger &DefaultJournal::getSession() {
 		if (this->session == nullptr) {
-			this->session =
-			    std::make_unique<DefaultJournalSession>(this->defaultSeverity);
+			this->session = std::make_unique<DefaultJournalSession>();
+			this->session->getController().setFilter(
+			    LoggerFilter::severity_at_least(this->defaultSeverity));
 		}
 		return this->session->getLogger();
 	}

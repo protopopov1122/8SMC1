@@ -42,29 +42,26 @@
 		                          ? strrchr(__FILE__, PATH_SEPARATOR) + 1          \
 		                          : __FILE__);                                     \
 		int __line = __LINE__;                                                     \
-		JournalSink &__sink =                                                      \
-		    GlobalLogger::getLogger().getSink(GlobalLogger::getSink(__output));    \
-		JournalSinkStream __stream =                                               \
-		    __sink.stream(tag, SourcePosition(__file, __line));                    \
-		__stream << msg << Flush();                                                \
+		GlobalLogger::getLogger().stream(__output, tag,                            \
+		                                 SourcePosition(__file, __line))           \
+		    << msg << Flush();                                                     \
 	} while (false)
 #else
 #define WRITE_LOG(output, tag, msg)
 #endif
 
-#define LOG_ERROR(tag, msg) WRITE_LOG(GlobalLoggingSink::Errors, tag, msg)
-#define LOG_WARNING(tag, msg) WRITE_LOG(GlobalLoggingSink::Warnings, tag, msg)
-#define LOG_DEBUG(tag, msg) WRITE_LOG(GlobalLoggingSink::Debug, tag, msg)
-#define LOG(tag, msg) WRITE_LOG(GlobalLoggingSink::Information, tag, msg)
+#define LOG_ERROR(tag, msg) WRITE_LOG(LoggingSeverity::Error, tag, msg)
+#define LOG_WARNING(tag, msg) WRITE_LOG(LoggingSeverity::Warning, tag, msg)
+#define LOG_DEBUG(tag, msg) WRITE_LOG(LoggingSeverity::Debug, tag, msg)
+#define LOG(tag, msg) WRITE_LOG(LoggingSeverity::Info, tag, msg)
 #define LOG_INSTR(id, msg)                                                     \
-	WRITE_LOG(GlobalLoggingSink::Instruments,                                    \
-	          "Instrument #" + std::to_string(id), msg)
+	WRITE_LOG(LoggingSeverity::Info, "Instrument #" + std::to_string(id), msg)
 
 #define INIT_LOG(name)                                                         \
-	WRITE_LOG(GlobalLoggingSink::Resources, "resource",                          \
+	WRITE_LOG(LoggingSeverity::Debug, "resource",                                \
 	          std::string(name) + " initialized")
 #define DESTROY_LOG(name)                                                      \
-	WRITE_LOG(GlobalLoggingSink::Resources, "resource",                          \
+	WRITE_LOG(LoggingSeverity::Debug, "resource",                                \
 	          std::string(name) + " destroyed")
 
 #endif

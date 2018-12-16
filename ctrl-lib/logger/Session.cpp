@@ -22,9 +22,15 @@
 
 namespace CalX {
 
-	JournalDefaultLogger::JournalDefaultLogger(LoggingSeverity defaultSeverity)
+	JournalSinkStream JournalLogger::stream(LoggingSeverity severity,
+	                                        const std::string &tag,
+	                                        const SourcePosition &position) {
+		return JournalSinkStream(*this, severity, tag, position);
+	}
+
+	JournalDefaultLogger::JournalDefaultLogger()
 	    : defaultSink(std::make_shared<JournalNullSink>("")),
-	      severity(defaultSeverity) {}
+	      filter([](const auto &entry) { return true; }) {}
 
 	JournalSink &JournalDefaultLogger::getDefaultSink() {
 		return *this->defaultSink;
@@ -45,11 +51,19 @@ namespace CalX {
 		}
 	}
 
+	void JournalDefaultLogger::log(const LogEntry &entry) {
+		if (this->filter(entry)) {
+			for (auto it = this->sinks.begin(); it != this->sinks.end(); ++it) {
+				it->second->log(entry);
+			}
+		}
+	}
+
 	JournalSink &JournalDefaultLogger::newStreamSink(const std::string &name,
 	                                                 std::ostream &stream,
 	                                                 bool makeDefault) {
 		std::shared_ptr<JournalSink> sink =
-		    std::make_shared<JournalStreamSink>(name, this->severity, stream);
+		    std::make_shared<JournalStreamSink>(name, stream);
 		this->sinks[name] = sink;
 		if (makeDefault) {
 			this->defaultSink = sink;
@@ -61,7 +75,7 @@ namespace CalX {
 	                                               const std::string &path,
 	                                               bool makeDefault) {
 		std::shared_ptr<JournalSink> sink =
-		    std::make_shared<JournalFileSink>(name, this->severity, path);
+		    std::make_shared<JournalFileSink>(name, path);
 		this->sinks[name] = sink;
 		if (makeDefault) {
 			this->defaultSink = sink;
@@ -69,12 +83,9 @@ namespace CalX {
 		return *sink;
 	}
 
-	LoggingSeverity JournalDefaultLogger::getDefaultSeverity() const {
-		return this->severity;
-	}
-
-	void JournalDefaultLogger::setDefaultSeverity(LoggingSeverity sev) {
-		this->severity = sev;
+	void JournalDefaultLogger::setFilter(
+	    std::function<bool(const LogEntry &)> filter) {
+		this->filter = filter;
 	}
 
 	void JournalDefaultLogger::setDefaultSink(const std::string &name) {

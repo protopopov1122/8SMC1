@@ -145,8 +145,6 @@ namespace CalX {
 		static constexpr auto Warnings = "warnings";
 		static constexpr auto Debug = "debug";
 		static constexpr auto Info = "info";
-		static constexpr auto Resources = "resources";
-		static constexpr auto Instruments = "instruments";
 	};
 }  // namespace CalX
 

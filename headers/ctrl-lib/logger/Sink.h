@@ -29,24 +29,22 @@ namespace CalX {
 
 	class JournalAbstractSink : public JournalSink {
 	 public:
-		JournalAbstractSink(const std::string &, LoggingSeverity);
+		JournalAbstractSink(const std::string &);
 		const std::string &getName() const override;
-		void log(LoggingSeverity, const std::string &, const std::string &,
-		         const SourcePosition &) override;
-		LoggingSeverity getLevel() const override;
-		void setLevel(LoggingSeverity) override;
+		void log(const LogEntry &) override;
+		void setFilter(std::function<bool(const LogEntry &)>) override;
 
 	 protected:
 		virtual void log(const std::string &) = 0;
 		static constexpr unsigned int SinkNamePadding = 10;
 
 		std::string name;
-		LoggingSeverity severity;
+		std::function<bool(const LogEntry &)> filter;
 	};
 
 	class JournalStreamSink : public JournalAbstractSink {
 	 public:
-		JournalStreamSink(const std::string &, LoggingSeverity, std::ostream &);
+		JournalStreamSink(const std::string &, std::ostream &);
 
 	 protected:
 		void log(const std::string &) override;
@@ -57,7 +55,7 @@ namespace CalX {
 
 	class JournalFileSink : public JournalAbstractSink {
 	 public:
-		JournalFileSink(const std::string &, LoggingSeverity, const std::string &);
+		JournalFileSink(const std::string &, const std::string &);
 		virtual ~JournalFileSink();
 
 	 protected:
@@ -71,10 +69,8 @@ namespace CalX {
 	 public:
 		JournalNullSink(const std::string &);
 		const std::string &getName() const override;
-		void log(LoggingSeverity, const std::string &, const std::string &,
-		         const SourcePosition &) override;
-		LoggingSeverity getLevel() const override;
-		void setLevel(LoggingSeverity) override;
+		void log(const LogEntry &) override;
+		void setFilter(std::function<bool(const LogEntry &)>) override;
 
 	 private:
 		std::string name;
@@ -84,8 +80,7 @@ namespace CalX {
 	 public:
 		JournalStreamSinkFactory(std::ostream &);
 
-		std::unique_ptr<JournalSink> newSink(const std::string &,
-		                                     LoggingSeverity) const override;
+		std::unique_ptr<JournalSink> newSink(const std::string &) const override;
 
 	 private:
 		std::ostream &stream;
@@ -95,8 +90,7 @@ namespace CalX {
 	 public:
 		JournalFileSinkFactory(const std::string &);
 
-		std::unique_ptr<JournalSink> newSink(const std::string &,
-		                                     LoggingSeverity) const override;
+		std::unique_ptr<JournalSink> newSink(const std::string &) const override;
 
 	 private:
 		std::string file;

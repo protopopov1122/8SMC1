@@ -34,6 +34,7 @@
 #include "ctrl-lib/conf/ConfigManager.h"
 #include "ctrl-lib/conf/ConfigValidator.h"
 #include "ctrl-lib/logger/Global.h"
+#include "ctrl-lib/logger/Filter.h"
 #include <cmath>
 #include <fstream>
 #include <sstream>
@@ -136,26 +137,30 @@ namespace CalXUI {
 	}
 
 	void CalxApp::initLogging(ConfigurationCatalogue &conf) {
-#define SETUP_LOG(id, dest)                                                    \
+#define SETUP_LOG(id, dest, sever)                                             \
 	{                                                                            \
 		std::string logger =                                                       \
 		    conf.getEntry(CalxConfiguration::Logging)->getString(id, "");          \
+		auto filter = LoggerFilter::severity_exact(sever);                         \
 		if (logger.compare("stdout") == 0) {                                       \
-			GlobalLogger::getController().newStreamSink(GlobalLogger::getSink(dest), \
-			                                            std::cout);                  \
+			JournalSink &sink = GlobalLogger::getController().newStreamSink(         \
+			    GlobalLogger::getSink(dest), std::cout);                             \
+			sink.setFilter(filter);                                                  \
 		} else if (logger.length() > 0) {                                          \
-			GlobalLogger::getController().newFileSink(GlobalLogger::getSink(dest),   \
-			                                          logger);                       \
+			JournalSink &sink = GlobalLogger::getController().newFileSink(           \
+			    GlobalLogger::getSink(dest), logger);                                \
+			sink.setFilter(filter);                                                  \
 		}                                                                          \
 	}
 
-		SETUP_LOG(CalxLoggingConfiguration::Errors, GlobalLoggingSink::Errors)
-		SETUP_LOG(CalxLoggingConfiguration::Warnings, GlobalLoggingSink::Warnings)
-		SETUP_LOG(CalxLoggingConfiguration::Debug, GlobalLoggingSink::Debug)
-		SETUP_LOG(CalxLoggingConfiguration::Info, GlobalLoggingSink::Information)
-		SETUP_LOG(CalxLoggingConfiguration::Resources, GlobalLoggingSink::Resources)
-		SETUP_LOG(CalxLoggingConfiguration::Instruments,
-		          GlobalLoggingSink::Instruments)
+		SETUP_LOG(CalxLoggingConfiguration::Errors, GlobalLoggingSink::Errors,
+		          LoggingSeverity::Error)
+		SETUP_LOG(CalxLoggingConfiguration::Warnings, GlobalLoggingSink::Warnings,
+		          LoggingSeverity::Warning)
+		SETUP_LOG(CalxLoggingConfiguration::Debug, GlobalLoggingSink::Debug,
+		          LoggingSeverity::Debug)
+		SETUP_LOG(CalxLoggingConfiguration::Info, GlobalLoggingSink::Information,
+		          LoggingSeverity::Info)
 		GlobalLogger::getController().setDefaultSink(
 		    GlobalLogger::getSink(GlobalLoggingSink::Information));
 

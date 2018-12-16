@@ -26,8 +26,6 @@ namespace CalX {
 	static const std::string Warnings = "warnings";
 	static const std::string Debug = "debug";
 	static const std::string Information = "info";
-	static const std::string Resources = "resources";
-	static const std::string Instruments = "instruments";
 
 	DefaultJournal GlobalLogger::logger(LoggingSeverity::Debug);
 
@@ -45,10 +43,6 @@ namespace CalX {
 				return Debug;
 			case GlobalLoggingSink::Information:
 				return Information;
-			case GlobalLoggingSink::Resources:
-				return Resources;
-			case GlobalLoggingSink::Instruments:
-				return Instruments;
 			default:
 				return Information;
 		}
