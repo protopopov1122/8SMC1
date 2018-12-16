@@ -56,6 +56,9 @@ namespace CalX {
 			for (auto it = this->sinks.begin(); it != this->sinks.end(); ++it) {
 				it->second->log(entry);
 			}
+			if (this->sinks.empty()) {
+				this->defaultSink->log(entry);
+			}
 		}
 	}
 
