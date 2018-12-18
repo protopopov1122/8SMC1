@@ -24,18 +24,22 @@
 
 namespace CalX {
 
-  TimedJournal::TimedJournal(std::function<std::string(std::chrono::system_clock::time_point)> nameGen, LoggingSeverity severity)
-    : session(nullptr), sessionNameGenerator(nameGen), defaultSeverity(severity) {}
-  
+	TimedJournal::TimedJournal(
+	    std::function<std::string(std::chrono::system_clock::time_point)> nameGen,
+	    LoggingSeverity severity)
+	    : session(nullptr),
+	      sessionNameGenerator(nameGen),
+	      defaultSeverity(severity) {}
 
 	JournalLogger &TimedJournal::getSession() {
 		if (this->session == nullptr) {
 			this->session = std::make_unique<DefaultJournalSession>();
 			this->session->getController().setFilter(
 			    LoggerFilter::severity_at_least(this->defaultSeverity));
-      
-      auto now = std::chrono::system_clock::now();
-      this->session->getController().newFileSink("default", this->sessionNameGenerator(now));
+
+			auto now = std::chrono::system_clock::now();
+			this->session->getController().newFileSink(
+			    "default", this->sessionNameGenerator(now));
 		}
 		return this->session->getLogger();
 	}
@@ -48,4 +52,4 @@ namespace CalX {
 		this->getSession();
 		return this->session->getController();
 	}
-}
+}  // namespace CalX

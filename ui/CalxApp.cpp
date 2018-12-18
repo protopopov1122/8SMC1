@@ -168,14 +168,20 @@ namespace CalXUI {
 #undef SETUP_LOG
 
 		this->appJournal = nullptr;
-		if (conf.getEntry(CalxConfiguration::Logging)->has(CalxLoggingConfiguration::JournalDir)) {
-			std::string journalDir = conf.getEntry(CalxConfiguration::Logging)->getString(CalxLoggingConfiguration::JournalDir);
+		if (conf.getEntry(CalxConfiguration::Logging)
+		        ->has(CalxLoggingConfiguration::JournalDir)) {
+			std::string journalDir =
+			    conf.getEntry(CalxConfiguration::Logging)
+			        ->getString(CalxLoggingConfiguration::JournalDir);
 			if (!wxDir::Exists(journalDir)) {
 				wxDir::Make(journalDir);
 			}
-			this->appJournal = std::make_unique<TimedJournal>([journalDir](auto tiempoint) {
-				return journalDir + "/" + std::to_string(tiempoint.time_since_epoch().count()) + ".log";
-			});
+			this->appJournal =
+			    std::make_unique<TimedJournal>([journalDir](auto tiempoint) {
+				    return journalDir + "/" +
+				           std::to_string(tiempoint.time_since_epoch().count()) +
+				           ".log";
+			    });
 		}
 	}
 

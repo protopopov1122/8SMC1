@@ -27,17 +27,21 @@
 
 namespace CalX {
 
-  class TimedJournal : public ConfigurableJournal {
-   public:
-    TimedJournal(std::function<std::string(std::chrono::system_clock::time_point)>, LoggingSeverity = LoggingSeverity::Debug);
+	class TimedJournal : public ConfigurableJournal {
+	 public:
+		TimedJournal(
+		    std::function<std::string(std::chrono::system_clock::time_point)>,
+		    LoggingSeverity = LoggingSeverity::Debug);
 		JournalLogger &getSession() override;
 		void closeSession() override;
 		JournalLoggerController &getSessionController() override;
-   private:
+
+	 private:
 		std::unique_ptr<JournalSession> session;
-    std::function<std::string(std::chrono::system_clock::time_point)> sessionNameGenerator;
-    LoggingSeverity defaultSeverity;
-  };
-}
+		std::function<std::string(std::chrono::system_clock::time_point)>
+		    sessionNameGenerator;
+		LoggingSeverity defaultSeverity;
+	};
+}  // namespace CalX
 
 #endif
