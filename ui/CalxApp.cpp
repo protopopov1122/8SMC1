@@ -29,12 +29,14 @@
 #include "ui/coord/CalxCoordPanel.h"
 #include "ui/script/CalXScriptEngine.h"
 #include <wx/filedlg.h>
+#include <wx/dir.h>
 
 #include "ctrl-lib/SignalHandler.h"
 #include "ctrl-lib/conf/ConfigManager.h"
 #include "ctrl-lib/conf/ConfigValidator.h"
 #include "ctrl-lib/logger/Global.h"
 #include "ctrl-lib/logger/Filter.h"
+#include "ctrl-lib/logger/TimedJournal.h"
 #include <cmath>
 #include <fstream>
 #include <sstream>
@@ -164,6 +166,17 @@ namespace CalXUI {
 		GlobalLogger::getController().dropSink("default");
 
 #undef SETUP_LOG
+
+		this->appJournal = nullptr;
+		if (conf.getEntry(CalxConfiguration::Logging)->has(CalxLoggingConfiguration::JournalDir)) {
+			std::string journalDir = conf.getEntry(CalxConfiguration::Logging)->getString(CalxLoggingConfiguration::JournalDir);
+			if (!wxDir::Exists(journalDir)) {
+				wxDir::Make(journalDir);
+			}
+			this->appJournal = std::make_unique<TimedJournal>([journalDir](auto tiempoint) {
+				return journalDir + "/" + std::to_string(tiempoint.time_since_epoch().count()) + ".log";
+			});
+		}
 	}
 
 	std::unique_ptr<ExtEngine> CalxApp::loadExtensionEngine(
@@ -400,6 +413,14 @@ namespace CalXUI {
 
 	CalxFrame *CalxApp::getMainFrame() {
 		return this->frame;
+	}
+
+	JournalLogger &CalxApp::getJournal() {
+		if (this->appJournal) {
+			return this->appJournal->getSession();
+		} else {
+			return GlobalLogger::getLogger();
+		}
 	}
 
 	void CalxApp::loadDevicesPlugin() {

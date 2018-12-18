@@ -64,6 +64,7 @@ namespace CalXUI {
 		std::shared_ptr<CalXScriptEnvironment> getScriptEnvironment();
 		std::shared_ptr<CalXScriptFactory> getScriptFactory();
 		std::unique_ptr<CalXScript> loadScript(std::string);
+		JournalLogger &getJournal();
 
 		CalxUnitProcessor &getUnitProcessor();
 
@@ -92,6 +93,7 @@ namespace CalXUI {
 
 		std::shared_ptr<CalXScriptEnvironment> script_env;
 		std::shared_ptr<CalXScriptFactory> scriptFactory;
+		std::unique_ptr<ConfigurableJournal> appJournal;
 	};
 }  // namespace CalXUI
 wxDECLARE_APP(CalXUI::CalxApp);
