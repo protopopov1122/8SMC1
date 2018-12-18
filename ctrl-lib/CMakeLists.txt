@@ -1,14 +1,13 @@
 cmake_minimum_required(VERSION 3.1)
 project(CalX)
 
-include_directories(${CMAKE_SOURCE_DIR}/headers)
 add_definitions(-DLOGGING)
 file(GLOB_RECURSE SRCS *.cpp)
 add_library(calx SHARED ${SRCS})
 if (MINGW)
 	SET_TARGET_PROPERTIES(calx PROPERTIES PREFIX "")
 endif (MINGW)
-target_include_directories(calx PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(calx PUBLIC ${CMAKE_SOURCE_DIR}/headers)
 add_custom_command(TARGET calx POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:calx> ${build_directory}
 )

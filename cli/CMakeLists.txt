@@ -1,9 +1,8 @@
 cmake_minimum_required(VERSION 3.1)
 project(CalX)
 
-include_directories(${CMAKE_SOURCE_DIR}/headers)
-
 add_executable(calx_cli DevCLI.cpp CLI.cpp main.cpp)
+target_include_directories(calx_cli PUBLIC ${CMAKE_SOURCE_DIR}/headers)
 if (MINGW)
 	SET_TARGET_PROPERTIES(calx_cli PROPERTIES PREFIX "")
 endif (MINGW)
