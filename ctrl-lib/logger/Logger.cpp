@@ -29,13 +29,7 @@ namespace CalX {
 	    : session(nullptr), defaultSeverity(severity) {}
 
 	JournalLogger &DefaultJournal::getSession() {
-		if (this->session == nullptr) {
-			this->session = std::make_unique<DefaultJournalSession>();
-			this->session->getController().setFilter(
-			    LoggerFilter::severity_at_least(this->defaultSeverity));
-			this->session->getController().newStreamSink("default", std::cout, true);
-		}
-		return this->session->getLogger();
+		return this->openSession().getLogger();
 	}
 
 	void DefaultJournal::closeSession() {
@@ -43,7 +37,16 @@ namespace CalX {
 	}
 
 	JournalLoggerController &DefaultJournal::getSessionController() {
-		this->getSession();
-		return this->session->getController();
+		return this->openSession().getController();
+	}
+
+	JournalSession &DefaultJournal::openSession() {
+		if (this->session == nullptr) {
+			this->session = std::make_unique<DefaultJournalSession>();
+			this->session->getController().setFilter(
+			    LoggerFilter::severity_at_least(this->defaultSeverity));
+			this->session->getController().newStreamSink("default", std::cout, true);
+		}
+		return *this->session;
 	}
 }  // namespace CalX

@@ -22,16 +22,17 @@
 
 namespace CalX {
 
-	JournalSinkStream JournalLogger::stream(LoggingSeverity severity,
-	                                        const std::string &tag,
-	                                        const SourcePosition &position) {
+	JournalSinkStream JournalLogger::stream(
+	    LoggingSeverity severity, const std::string &tag,
+	    const SourcePosition &position) const {
 		return JournalSinkStream(*this, severity, tag, position);
 	}
 
 	JournalDefaultLogger::JournalDefaultLogger()
 	    : filter([](const auto &entry) { return true; }) {}
 
-	JournalSink *JournalDefaultLogger::getSink(const std::string &name) {
+	const JournalSink *JournalDefaultLogger::getSink(
+	    const std::string &name) const {
 		if (this->sinks.count(name)) {
 			return this->sinks.at(name).get();
 		} else {
@@ -40,13 +41,13 @@ namespace CalX {
 	}
 
 	void JournalDefaultLogger::getSinks(
-	    std::vector<std::reference_wrapper<JournalSink>> &sinks) const {
+	    std::vector<std::reference_wrapper<const JournalSink>> &sinks) const {
 		for (auto it = this->sinks.begin(); it != this->sinks.end(); ++it) {
-			sinks.push_back(std::ref(*it->second));
+			sinks.push_back(std::cref(*it->second));
 		}
 	}
 
-	void JournalDefaultLogger::log(const LogEntry &entry) {
+	void JournalDefaultLogger::log(const LogEntry &entry) const {
 		if (this->filter(entry)) {
 			for (auto it = this->sinks.begin(); it != this->sinks.end(); ++it) {
 				it->second->log(entry);

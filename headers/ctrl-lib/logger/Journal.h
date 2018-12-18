@@ -66,12 +66,13 @@ namespace CalX {
 	class Loggable {
 	 public:
 		virtual ~Loggable() = default;
-		virtual void log(const LogEntry &) = 0;
+		virtual void log(const LogEntry &) const = 0;
 	};
 
 	class JournalSinkStream {
 	 public:
-		JournalSinkStream(Loggable &, LoggingSeverity, const std::string & = "",
+		JournalSinkStream(const Loggable &, LoggingSeverity,
+		                  const std::string & = "",
 		                  const SourcePosition & = SourcePosition());
 		~JournalSinkStream();
 
@@ -89,7 +90,7 @@ namespace CalX {
 		}
 
 	 private:
-		Loggable &log;
+		const Loggable &log;
 		LoggingSeverity severity;
 		std::string tag;
 		SourcePosition position;
@@ -101,9 +102,11 @@ namespace CalX {
 		virtual ~JournalSink() = default;
 		virtual const std::string &getName() const = 0;
 		virtual void setFilter(std::function<bool(const LogEntry &)>) = 0;
+		virtual void setFormatter(
+		    std::function<void(const LogEntry &, std::ostream &)>) = 0;
 
 		JournalSinkStream stream(LoggingSeverity, const std::string & = "",
-		                         const SourcePosition & = SourcePosition());
+		                         const SourcePosition & = SourcePosition()) const;
 	};
 
 	class JournalSinkFactory {
@@ -115,12 +118,12 @@ namespace CalX {
 	class JournalLogger : public Loggable {
 	 public:
 		virtual ~JournalLogger() = default;
-		virtual JournalSink *getSink(const std::string &) = 0;
+		virtual const JournalSink *getSink(const std::string &) const = 0;
 		virtual void getSinks(
-		    std::vector<std::reference_wrapper<JournalSink>> &) const = 0;
+		    std::vector<std::reference_wrapper<const JournalSink>> &) const = 0;
 
 		JournalSinkStream stream(LoggingSeverity, const std::string & = "",
-		                         const SourcePosition & = SourcePosition());
+		                         const SourcePosition & = SourcePosition()) const;
 	};
 
 	class JournalLoggerController {

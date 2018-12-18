@@ -31,15 +31,18 @@ namespace CalX {
 	 public:
 		JournalAbstractSink(const std::string &);
 		const std::string &getName() const override;
-		void log(const LogEntry &) override;
+		void log(const LogEntry &) const override;
 		void setFilter(std::function<bool(const LogEntry &)>) override;
+		void setFormatter(
+		    std::function<void(const LogEntry &, std::ostream &)>) override;
 
 	 protected:
-		virtual void log(const std::string &) = 0;
+		virtual void log(const std::string &) const = 0;
 		static constexpr unsigned int SinkNamePadding = 10;
 
 		std::string name;
 		std::function<bool(const LogEntry &)> filter;
+		std::function<void(const LogEntry &, std::ostream &)> formatter;
 	};
 
 	class JournalStreamSink : public JournalAbstractSink {
@@ -47,7 +50,7 @@ namespace CalX {
 		JournalStreamSink(const std::string &, std::ostream &);
 
 	 protected:
-		void log(const std::string &) override;
+		void log(const std::string &) const override;
 
 	 private:
 		std::ostream &output;
@@ -59,18 +62,20 @@ namespace CalX {
 		virtual ~JournalFileSink();
 
 	 protected:
-		void log(const std::string &) override;
+		void log(const std::string &) const override;
 
 	 private:
-		std::ofstream output;
+		std::unique_ptr<std::ofstream> output;
 	};
 
 	class JournalNullSink : public JournalSink {
 	 public:
 		JournalNullSink(const std::string &);
 		const std::string &getName() const override;
-		void log(const LogEntry &) override;
+		void log(const LogEntry &) const override;
 		void setFilter(std::function<bool(const LogEntry &)>) override;
+		void setFormatter(
+		    std::function<void(const LogEntry &, std::ostream &)>) override;
 
 	 private:
 		std::string name;

@@ -18,24 +18,20 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CALX_CTRL_LIB_LOGGER_LOGGER_H_
-#define CALX_CTRL_LIB_LOGGER_LOGGER_H_
+#ifndef CALX_CTRL_LIB_LOGGER_FORMAT_H_
+#define CALX_CTRL_LIB_LOGGER_FORMAT_H_
 
 #include "ctrl-lib/logger/Journal.h"
+#include <iosfwd>
+#include <functional>
 
 namespace CalX {
 
-	class DefaultJournal : public ConfigurableJournal {
-	 public:
-		DefaultJournal(LoggingSeverity = LoggingSeverity::Debug);
-		JournalLogger &getSession() override;
-		void closeSession() override;
-		JournalLoggerController &getSessionController() override;
+	class JournalFormatter {
+		using Formatter = std::function<void(const LogEntry &, std::ostream &)>;
 
-	 private:
-		JournalSession &openSession();
-		std::unique_ptr<JournalSession> session;
-		LoggingSeverity defaultSeverity;
+	 public:
+		static Formatter defaultFormat(const std::string &);
 	};
 }  // namespace CalX
 

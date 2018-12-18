@@ -32,10 +32,10 @@ namespace CalX {
 	 public:
 		JournalDefaultLogger();
 
-		JournalSink *getSink(const std::string &) override;
-		void getSinks(
-		    std::vector<std::reference_wrapper<JournalSink>> &) const override;
-		void log(const LogEntry &) override;
+		const JournalSink *getSink(const std::string &) const override;
+		void getSinks(std::vector<std::reference_wrapper<const JournalSink>> &)
+		    const override;
+		void log(const LogEntry &) const override;
 
 		void setFilter(std::function<bool(const LogEntry &)>) override;
 		JournalSink &newStreamSink(const std::string &, std::ostream &,

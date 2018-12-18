@@ -28,6 +28,10 @@ namespace CalX {
 
 	class LoggerFilter {
 	 public:
+		static std::function<bool(const LogEntry &entry)> severity_any() {
+			return [](const LogEntry &entry) { return true; };
+		}
+
 		static std::function<bool(const LogEntry &entry)> severity_at_least(
 		    LoggingSeverity severity) {
 			return [severity](const LogEntry &entry) {
