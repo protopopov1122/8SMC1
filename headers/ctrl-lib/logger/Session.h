@@ -32,8 +32,7 @@ namespace CalX {
 	 public:
 		JournalDefaultLogger();
 
-		JournalSink &getDefaultSink() override;
-		JournalSink &getSink(const std::string &) override;
+		JournalSink *getSink(const std::string &) override;
 		void getSinks(
 		    std::vector<std::reference_wrapper<JournalSink>> &) const override;
 		void log(const LogEntry &) override;
@@ -43,12 +42,25 @@ namespace CalX {
 		                           bool) override;
 		JournalSink &newFileSink(const std::string &, const std::string &,
 		                         bool) override;
-		void setDefaultSink(const std::string &) override;
+		void dropSink(const std::string &) override;
 
 	 private:
 		std::map<std::string, std::shared_ptr<JournalSink>> sinks;
-		std::shared_ptr<JournalSink> defaultSink;
 		std::function<bool(const LogEntry &)> filter;
+	};
+
+	class DefaultJournalSession : public JournalDefaultLogger,
+	                              public JournalSession {
+	 public:
+		using JournalDefaultLogger::JournalDefaultLogger;
+
+		JournalLogger &getLogger() override {
+			return *this;
+		}
+
+		JournalLoggerController &getController() override {
+			return *this;
+		}
 	};
 }  // namespace CalX
 

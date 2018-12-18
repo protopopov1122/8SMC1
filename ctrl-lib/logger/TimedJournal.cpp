@@ -18,32 +18,34 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/logger/Logger.h"
+#include "ctrl-lib/logger/TimedJournal.h"
 #include "ctrl-lib/logger/Session.h"
 #include "ctrl-lib/logger/Filter.h"
-#include <iostream>
 
 namespace CalX {
 
-	DefaultJournal::DefaultJournal(LoggingSeverity severity)
-	    : session(nullptr), defaultSeverity(severity) {}
+  TimedJournal::TimedJournal(std::function<std::string(std::chrono::system_clock::time_point)> nameGen, LoggingSeverity severity)
+    : session(nullptr), sessionNameGenerator(nameGen), defaultSeverity(severity) {}
+  
 
-	JournalLogger &DefaultJournal::getSession() {
+	JournalLogger &TimedJournal::getSession() {
 		if (this->session == nullptr) {
 			this->session = std::make_unique<DefaultJournalSession>();
 			this->session->getController().setFilter(
 			    LoggerFilter::severity_at_least(this->defaultSeverity));
-			this->session->getController().newStreamSink("default", std::cout, true);
+      
+      auto now = std::chrono::system_clock::now();
+      this->session->getController().newFileSink("default", this->sessionNameGenerator(now));
 		}
 		return this->session->getLogger();
 	}
 
-	void DefaultJournal::closeSession() {
+	void TimedJournal::closeSession() {
 		this->session = nullptr;
 	}
 
-	JournalLoggerController &DefaultJournal::getSessionController() {
+	JournalLoggerController &TimedJournal::getSessionController() {
 		this->getSession();
 		return this->session->getController();
 	}
-}  // namespace CalX
+}

@@ -115,8 +115,7 @@ namespace CalX {
 	class JournalLogger : public Loggable {
 	 public:
 		virtual ~JournalLogger() = default;
-		virtual JournalSink &getDefaultSink() = 0;
-		virtual JournalSink &getSink(const std::string &) = 0;
+		virtual JournalSink *getSink(const std::string &) = 0;
 		virtual void getSinks(
 		    std::vector<std::reference_wrapper<JournalSink>> &) const = 0;
 
@@ -132,7 +131,7 @@ namespace CalX {
 		                                   bool = false) = 0;
 		virtual JournalSink &newFileSink(const std::string &, const std::string &,
 		                                 bool = false) = 0;
-		virtual void setDefaultSink(const std::string &) = 0;
+		virtual void dropSink(const std::string &) = 0;
 	};
 
 	class JournalSession {

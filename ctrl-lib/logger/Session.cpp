@@ -29,18 +29,13 @@ namespace CalX {
 	}
 
 	JournalDefaultLogger::JournalDefaultLogger()
-	    : defaultSink(std::make_shared<JournalNullSink>("")),
-	      filter([](const auto &entry) { return true; }) {}
+	    : filter([](const auto &entry) { return true; }) {}
 
-	JournalSink &JournalDefaultLogger::getDefaultSink() {
-		return *this->defaultSink;
-	}
-
-	JournalSink &JournalDefaultLogger::getSink(const std::string &name) {
+	JournalSink *JournalDefaultLogger::getSink(const std::string &name) {
 		if (this->sinks.count(name)) {
-			return *this->sinks.at(name);
+			return this->sinks.at(name).get();
 		} else {
-			return *this->defaultSink;
+			return nullptr;
 		}
 	}
 
@@ -56,9 +51,6 @@ namespace CalX {
 			for (auto it = this->sinks.begin(); it != this->sinks.end(); ++it) {
 				it->second->log(entry);
 			}
-			if (this->sinks.empty()) {
-				this->defaultSink->log(entry);
-			}
 		}
 	}
 
@@ -68,9 +60,6 @@ namespace CalX {
 		std::shared_ptr<JournalSink> sink =
 		    std::make_shared<JournalStreamSink>(name, stream);
 		this->sinks[name] = sink;
-		if (makeDefault) {
-			this->defaultSink = sink;
-		}
 		return *sink;
 	}
 
@@ -80,9 +69,6 @@ namespace CalX {
 		std::shared_ptr<JournalSink> sink =
 		    std::make_shared<JournalFileSink>(name, path);
 		this->sinks[name] = sink;
-		if (makeDefault) {
-			this->defaultSink = sink;
-		}
 		return *sink;
 	}
 
@@ -91,9 +77,9 @@ namespace CalX {
 		this->filter = filter;
 	}
 
-	void JournalDefaultLogger::setDefaultSink(const std::string &name) {
-		if (this->sinks.count(name)) {
-			this->defaultSink = this->sinks[name];
+	void JournalDefaultLogger::dropSink(const std::string &name) {
+		if (this->sinks.count(name) > 0) {
+			this->sinks.erase(name);
 		}
 	}
 }  // namespace CalX

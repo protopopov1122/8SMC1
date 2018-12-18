@@ -161,8 +161,7 @@ namespace CalXUI {
 		          LoggingSeverity::Debug)
 		SETUP_LOG(CalxLoggingConfiguration::Info, GlobalLoggingSink::Information,
 		          LoggingSeverity::Info)
-		GlobalLogger::getController().setDefaultSink(
-		    GlobalLogger::getSink(GlobalLoggingSink::Information));
+		GlobalLogger::getController().dropSink("default");
 
 #undef SETUP_LOG
 	}

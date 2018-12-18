@@ -19,6 +19,7 @@
 */
 
 #include "ctrl-lib/logger/Global.h"
+#include "ctrl-lib/logger/TimedJournal.h"
 
 namespace CalX {
 
