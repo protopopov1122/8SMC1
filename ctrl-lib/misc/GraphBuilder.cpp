@@ -22,6 +22,7 @@
 #include <cinttypes>
 #include <limits>
 #include <math.h>
+#include <iostream>
 
 namespace CalX {
 
@@ -157,5 +158,15 @@ namespace CalX {
 		state.work = false;
 		plane->unuse();
 		return ErrorCode::NoError;
+	}
+
+	void GraphBuilder::dump(std::ostream &out) const {
+		out << *this->node << " where x is [" << this->min.x << " .. " << this->step << " .. " << this->max.x << "]"
+		    << " and y is [" << this->min.y << " .. " << this->max.y << "]";
+	}
+
+	std::ostream &operator<<(std::ostream &out, const GraphBuilder &builder) {
+		builder.dump(out);
+		return out;
 	}
 }  // namespace CalX

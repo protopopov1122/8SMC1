@@ -20,8 +20,45 @@
 
 #include "ctrl-lib/graph/MathEngine.h"
 #include <math.h>
+#include <iostream>
 
 namespace CalX {
+
+	void IntegerConstantNode::dump(std::ostream &out) const {
+		out << this->value;
+	}
+
+	void RealConstantNode::dump(std::ostream &out) const {
+		out << this->value;
+	}
+
+	void VariableNode::dump(std::ostream &out) const {
+		out << this->id;
+	}
+
+	void InvertNode::dump(std::ostream &out) const {
+		out << '-' << *this->node;
+	}
+
+	void BinaryNode::dump(std::ostream &out) const {
+		out << '(' << *this->left << static_cast<char>(this->oper) << *this->right << ')';
+	}
+
+	void FunctionNode::dump(std::ostream &out) const {
+		out << this->id << '(';
+		for (std::size_t i = 0; i < this->args->size(); i++) {
+			out << *this->args->at(i);
+			if (i + 1 < this->args->size()) {
+				out << ", ";
+			}
+		}
+		out << ')';
+	}
+
+	std::ostream &operator<<(std::ostream &out, const Node &node) {
+		node.dump(out);
+		return out;
+	}
 
 	engine_value_t VariableNode::eval(MathEngine &eng) const {
 		return eng.getScope().getVariable(id);

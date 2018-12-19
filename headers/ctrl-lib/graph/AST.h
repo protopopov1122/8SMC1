@@ -26,6 +26,7 @@
 #include <string>
 #include <memory>
 #include <vector>
+#include <iosfwd>
 
 /* This file contains abstract syntax tree node definitions.
    Each node stores information about math expression and
@@ -69,6 +70,11 @@ namespace CalX {
 		}
 		virtual engine_value_t eval(MathEngine &) const = 0;
 
+		friend std::ostream &operator<<(std::ostream &, const Node &);
+
+	 protected:
+	 	virtual void dump(std::ostream &) const = 0;
+
 	 private:
 		NodeType type;
 	};
@@ -81,9 +87,11 @@ namespace CalX {
 		int64_t getValue() const {
 			return this->value;
 		}
-		virtual engine_value_t eval(MathEngine &eng) const {
+		engine_value_t eval(MathEngine &eng) const override {
 			return { (double) this->value, MathError::MNoError };
 		}
+	 protected:
+	 	void dump(std::ostream &) const override;
 
 	 private:
 		int64_t value;
@@ -97,9 +105,12 @@ namespace CalX {
 		double getValue() const {
 			return this->value;
 		}
-		virtual engine_value_t eval(MathEngine &eng) const {
+		engine_value_t eval(MathEngine &eng) const override {
 			return { this->value, MathError::MNoError };
 		}
+
+	 protected:
+	 	void dump(std::ostream &) const override;
 
 	 private:
 		double value;
@@ -113,7 +124,10 @@ namespace CalX {
 		std::string getId() const {
 			return this->id;
 		}
-		virtual engine_value_t eval(MathEngine &) const;
+		engine_value_t eval(MathEngine &) const override;
+
+	 protected:
+	 	void dump(std::ostream &) const override;
 
 	 private:
 		std::string id;
@@ -123,22 +137,34 @@ namespace CalX {
 	 public:
 		InvertNode(std::unique_ptr<Node> n)
 		    : Node::Node(NodeType::Invert), node(std::move(n)) {}
-		virtual engine_value_t eval(MathEngine &eng) const {
+		engine_value_t eval(MathEngine &eng) const override {
 			engine_value_t val = this->node->eval(eng);
 			val.value *= -1;
 			return val;
 		}
 
+	 protected:
+	 	void dump(std::ostream &) const override;
+
 	 private:
 		std::unique_ptr<Node> node;
 	};
 
-	enum class BinaryOperation { Add, Subtract, Multiply, Divide, PowerOp };
+	enum class BinaryOperation {
+		Add = '+',
+		Subtract = '-',
+		Multiply = '*',
+		Divide = '/',
+		PowerOp = '^'
+	};
 
 	class BinaryNode : public Node {
 	 public:
 		BinaryNode(BinaryOperation, std::unique_ptr<Node>, std::unique_ptr<Node>);
-		virtual engine_value_t eval(MathEngine &eng) const;
+		engine_value_t eval(MathEngine &eng) const override;
+
+	 protected:
+	 	void dump(std::ostream &) const override;
 
 	 private:
 		BinaryOperation oper;
@@ -150,7 +176,10 @@ namespace CalX {
 	 public:
 		FunctionNode(std::string,
 		             std::unique_ptr<std::vector<std::unique_ptr<Node>>>);
-		virtual engine_value_t eval(MathEngine &eng) const;
+		engine_value_t eval(MathEngine &eng) const override;
+
+	 protected:
+	 	void dump(std::ostream &) const override;
 
 	 private:
 		std::string id;

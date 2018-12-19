@@ -46,6 +46,9 @@ namespace CalX {
 		ErrorCode floatBuild(SystemManager &, std::shared_ptr<FloatCoordPlane>,
 		                     CoordTranslator &, float, TaskState &) const;
 
+		void dump(std::ostream &) const;
+		friend std::ostream &operator<<(std::ostream &, const GraphBuilder &);
+
 	 private:
 		std::unique_ptr<Node> node;
 		coord_point_t min;
