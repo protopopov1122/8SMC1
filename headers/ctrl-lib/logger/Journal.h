@@ -24,6 +24,7 @@
 #include "platform.h"
 #include "ctrl-lib/logger/Level.h"
 #include <string>
+#include <type_traits>
 #include <vector>
 #include <functional>
 #include <memory>
@@ -83,8 +84,14 @@ namespace CalX {
 			return *this;
 		}
 
-		template<typename T>
-		JournalSinkStream &operator<<(T value) {
+		template <typename T>
+		JournalSinkStream &operator<<(T &value) {
+			this->buffer << value;
+			return *this;
+		}
+
+		template <typename T>
+		JournalSinkStream &operator<<(T &&value) {
 			this->buffer << value;
 			return *this;
 		}
