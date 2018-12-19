@@ -20,6 +20,7 @@
 
 #include "ui/task/CalxGCodeTask.h"
 #include "ui/task/CalxGcodeLoader.h"
+#include <iostream>
 
 namespace CalXUI {
 
@@ -53,7 +54,7 @@ namespace CalXUI {
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxGcodeHandle::OnExit, this);
 	}
 
-	std::string CalxGcodeHandle::getName() {
+	std::string CalxGcodeHandle::getName() const {
 		return this->id;
 	}
 
@@ -71,6 +72,10 @@ namespace CalXUI {
 
 	std::shared_ptr<CoordTranslator> CalxGcodeHandle::getTranslator() {
 		return this->translator;
+	}
+
+	void CalxGcodeHandle::dump(std::ostream &out) const {
+		out << "GCode task \'" << this->getName() << '\'';
 	}
 
 	CalxTaskHandle *CalxGCodeTaskFactory::newTask(wxWindow *win) {

@@ -81,7 +81,7 @@ namespace CalXUI {
 		Layout();
 	}
 
-	std::string CalxProgrammedTaskHandle::getName() {
+	std::string CalxProgrammedTaskHandle::getName() const {
 		return "Programmed Task #" + std::to_string(this->id);
 	}
 
@@ -204,6 +204,10 @@ namespace CalXUI {
 
 	void CalxProgrammedTaskHandle::OnExit(wxCloseEvent &evt) {
 		Destroy();
+	}
+	
+	void CalxProgrammedTaskHandle::dump(std::ostream &out) const {
+		out << "Programmed task \'" << this->getName() << "\' with " << this->steps.size() << " steps";
 	}
 
 	CalxTaskHandle *CalxProgrammedTaskFactory::newTask(wxWindow *win) {

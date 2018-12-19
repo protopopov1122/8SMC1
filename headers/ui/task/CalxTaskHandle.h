@@ -32,13 +32,22 @@
 
 namespace CalXUI {
 
-	class CalxTaskHandle : public wxScrolledWindow {
+    class CalxTaskDescriptor {
+     public:
+        virtual ~CalxTaskDescriptor() = default;
+
+        friend std::ostream &operator<<(std::ostream &, const CalxTaskDescriptor &);
+     protected:
+        virtual void dump(std::ostream &) const = 0;
+    };
+
+	class CalxTaskHandle : public wxScrolledWindow, public CalxTaskDescriptor {
 	 public:
 		CalxTaskHandle(wxWindow *win, wxWindowID id)
 		    : wxScrolledWindow::wxScrolledWindow(win, id) {
 			this->SetScrollRate(5, 5);
 		}
-		virtual std::string getName() = 0;
+		virtual std::string getName() const = 0;
 		virtual std::shared_ptr<CoordTask> getTask() = 0;
 		virtual std::shared_ptr<CoordTranslator> getTranslator() = 0;
 		virtual void update() = 0;

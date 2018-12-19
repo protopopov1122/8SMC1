@@ -36,11 +36,14 @@ namespace CalXUI {
 	class CalxLinearTaskHandle : public CalxTaskHandle {
 	 public:
 		CalxLinearTaskHandle(wxWindow *, wxWindowID, size_t);
-		virtual std::string getName();
-		virtual std::shared_ptr<CoordTask> getTask();
-		virtual std::shared_ptr<CoordTranslator> getTranslator();
-		virtual void update();
+		std::string getName() const override;
+		std::shared_ptr<CoordTask> getTask() override;
+		std::shared_ptr<CoordTranslator> getTranslator() override;
+		void update() override;
 		void setRectangle(coord_rect_t);
+
+	 protected:
+		void dump(std::ostream &) const override;
 
 	 private:
 		void OnFieldChange(wxCommandEvent &);

@@ -34,10 +34,13 @@ namespace CalXUI {
 	 public:
 		CalxGcodeHandle(wxWindow *, wxWindowID, std::string, std::istream *,
 		                std::shared_ptr<ComplexCoordTranslator>);
-		virtual std::string getName();
-		virtual std::shared_ptr<CoordTask> getTask();
-		virtual void update();
-		virtual std::shared_ptr<CoordTranslator> getTranslator();
+		std::string getName() const override;
+		std::shared_ptr<CoordTask> getTask() override;
+		void update() override;
+		std::shared_ptr<CoordTranslator> getTranslator() override;
+
+	 protected:
+		void dump(std::ostream &) const override;
 
 	 private:
 		void OnExit(wxCloseEvent &);

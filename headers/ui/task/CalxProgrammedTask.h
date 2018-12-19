@@ -37,11 +37,14 @@ namespace CalXUI {
 	class CalxProgrammedTaskHandle : public CalxTaskHandle {
 	 public:
 		CalxProgrammedTaskHandle(wxWindow *, wxWindowID, size_t);
-		virtual std::string getName();
-		virtual std::shared_ptr<CoordTask> getTask();
-		virtual std::shared_ptr<CoordTranslator> getTranslator();
-		virtual void update();
+		std::string getName() const override;
+		std::shared_ptr<CoordTask> getTask() override;
+		std::shared_ptr<CoordTranslator> getTranslator() override;
+		void update() override;
 		void updateUI();
+
+	 protected:
+		void dump(std::ostream &) const override;
 
 	 private:
 		void OnListClick(wxCommandEvent &);

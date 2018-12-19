@@ -31,19 +31,22 @@
 #include <wx/splitter.h>
 #include <wx/stattext.h>
 #include "ui/coord/CalxPlaneList.h"
+#include "ctrl-lib/logger/Shortcuts.h"
 
 namespace CalXUI {
 
 	wxDEFINE_EVENT(wxEVT_TASK_PANEL_ENABLE, wxThreadEvent);
 
+	std::ostream &operator<<(std::ostream &out, const CalxTaskDescriptor &descr) {
+		descr.dump(out);
+		return out;
+	}
+
 	class CalxTaskAction : public CalxAction {
 	 public:
 		CalxTaskAction(CalxTaskPanel *panel, std::shared_ptr<CoordHandle> handle,
-		               std::shared_ptr<CoordTask> task, TaskParameters prms) {
-			this->panel = panel;
-			this->handle = handle;
-			this->task = task;
-			this->prms = prms;
+		               std::shared_ptr<CoordTask> task, const CalxTaskDescriptor &descr, const TaskParameters &prms)
+					   : descriptor(descr), panel(panel), handle(handle), task(task), prms(prms) {
 			this->prms.speed *= this->handle->getFloatPlane()->getSpeedScale();
 			this->state = std::make_shared<TaskState>();
 			this->state->plane = nullptr;
@@ -51,12 +54,14 @@ namespace CalXUI {
 		}
 
 		virtual void perform(SystemManager *sysman) {
+			Info(wxGetApp().getJournal()) << "Start execution of task: " << this->descriptor;
 			handle->open_session();
 			panel->setEnabled(false);
-			wxGetApp().getErrorHandler()->handle(
-			    task->perform(handle, prms, sysman, state));
+			ErrorCode errcode = task->perform(handle, prms, sysman, state);
+			wxGetApp().getErrorHandler()->handle(errcode);
 			panel->setEnabled(true);
 			handle->close_session();
+			Info(wxGetApp().getJournal()) << "End of execution of task with errcode " << static_cast<int>(errcode);
 		}
 
 		virtual void stop() {
@@ -64,6 +69,7 @@ namespace CalXUI {
 		}
 
 	 private:
+		const CalxTaskDescriptor &descriptor;
 		CalxTaskPanel *panel;
 		std::shared_ptr<CoordHandle> handle;
 		std::shared_ptr<CoordTask> task;
@@ -313,7 +319,7 @@ namespace CalXUI {
 				float speed = this->speed->GetValue();
 				TaskParameters prms = { (float) speed };
 				queue->addAction(
-				    std::make_unique<CalxTaskAction>(this, handle, task, prms));
+				    std::make_unique<CalxTaskAction>(this, handle, task, *list.at((size_t) taskList->GetSelection()), prms));
 			}
 		} else {
 			std::string message = __("Select coordinate plane");

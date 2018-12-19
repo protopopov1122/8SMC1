@@ -192,7 +192,7 @@ namespace CalXUI {
 		ResourceSession session(*this->handle);
 		Info(wxGetApp().getJournal()) << "Configuring coordinate plane #" << handle->getID()
 		                              << " with center " << dest.x << "x" << dest.y
-																	<< " and movement speed" << speed;
+																	<< " and movement speed " << speed;
 		work = true;
 		motor_point_t offset = { 0, 0 };
 		controller->setOffset(offset);
