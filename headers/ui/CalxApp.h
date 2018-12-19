@@ -26,6 +26,7 @@
 #include "ctrl-lib/script/ScriptEngine.h"
 #include "ui/CalxUnitProcessor.h"
 #include "ui/calx.h"
+#include "ui/CalxJournalManager.h"
 #include <fstream>
 #include <iosfwd>
 #include <wx/dynlib.h>
@@ -93,7 +94,7 @@ namespace CalXUI {
 
 		std::shared_ptr<CalXScriptEnvironment> script_env;
 		std::shared_ptr<CalXScriptFactory> scriptFactory;
-		std::unique_ptr<ConfigurableJournal> appJournal;
+		std::unique_ptr<CalxJournalManager> journalManager;
 	};
 }  // namespace CalXUI
 wxDECLARE_APP(CalXUI::CalxApp);

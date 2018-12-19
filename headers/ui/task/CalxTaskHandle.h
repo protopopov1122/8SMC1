@@ -32,14 +32,15 @@
 
 namespace CalXUI {
 
-    class CalxTaskDescriptor {
-     public:
-        virtual ~CalxTaskDescriptor() = default;
+	class CalxTaskDescriptor {
+	 public:
+		virtual ~CalxTaskDescriptor() = default;
 
-        friend std::ostream &operator<<(std::ostream &, const CalxTaskDescriptor &);
-     protected:
-        virtual void dump(std::ostream &) const = 0;
-    };
+		friend std::ostream &operator<<(std::ostream &, const CalxTaskDescriptor &);
+
+	 protected:
+		virtual void dump(std::ostream &) const = 0;
+	};
 
 	class CalxTaskHandle : public wxScrolledWindow, public CalxTaskDescriptor {
 	 public:

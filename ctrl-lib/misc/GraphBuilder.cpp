@@ -161,7 +161,8 @@ namespace CalX {
 	}
 
 	void GraphBuilder::dump(std::ostream &out) const {
-		out << *this->node << " where x is [" << this->min.x << " .. " << this->step << " .. " << this->max.x << "]"
+		out << *this->node << " where x is [" << this->min.x << " .. " << this->step
+		    << " .. " << this->max.x << "]"
 		    << " and y is [" << this->min.y << " .. " << this->max.y << "]";
 	}
 

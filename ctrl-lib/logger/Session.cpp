@@ -56,8 +56,7 @@ namespace CalX {
 	}
 
 	JournalSink &JournalDefaultLogger::newStreamSink(const std::string &name,
-	                                                 std::ostream &stream,
-	                                                 bool makeDefault) {
+	                                                 std::ostream &stream) {
 		std::shared_ptr<JournalSink> sink =
 		    std::make_shared<JournalStreamSink>(name, stream);
 		this->sinks[name] = sink;
@@ -65,10 +64,15 @@ namespace CalX {
 	}
 
 	JournalSink &JournalDefaultLogger::newFileSink(const std::string &name,
-	                                               const std::string &path,
-	                                               bool makeDefault) {
+	                                               const std::string &path) {
 		std::shared_ptr<JournalSink> sink =
 		    std::make_shared<JournalFileSink>(name, path);
+		this->sinks[name] = sink;
+		return *sink;
+	}
+
+	JournalSink &JournalDefaultLogger::newNullSink(const std::string &name) {
+		std::shared_ptr<JournalSink> sink = std::make_shared<JournalNullSink>(name);
 		this->sinks[name] = sink;
 		return *sink;
 	}

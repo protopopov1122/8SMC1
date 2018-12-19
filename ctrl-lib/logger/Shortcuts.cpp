@@ -22,23 +22,28 @@
 
 namespace CalX {
 
-  JournalSinkStream Debug(JournalLogger &logger, const std::string &tag, const SourcePosition &position) {
-    return logger.stream(LoggingSeverity::Debug, tag, position);
-  }
+	JournalSinkStream Debug(JournalLogger &logger, const std::string &tag,
+	                        const SourcePosition &position) {
+		return logger.stream(LoggingSeverity::Debug, tag, position);
+	}
 
-  JournalSinkStream Info(JournalLogger &logger, const std::string &tag, const SourcePosition &position) {
-    return logger.stream(LoggingSeverity::Info, tag, position);
-  }
+	JournalSinkStream Info(JournalLogger &logger, const std::string &tag,
+	                       const SourcePosition &position) {
+		return logger.stream(LoggingSeverity::Info, tag, position);
+	}
 
-  JournalSinkStream Warning(JournalLogger &logger, const std::string &tag, const SourcePosition &position) {
-    return logger.stream(LoggingSeverity::Warning, tag, position);
-  }
+	JournalSinkStream Warning(JournalLogger &logger, const std::string &tag,
+	                          const SourcePosition &position) {
+		return logger.stream(LoggingSeverity::Warning, tag, position);
+	}
 
-  JournalSinkStream Error(JournalLogger &logger, const std::string &tag, const SourcePosition &position) {
-    return logger.stream(LoggingSeverity::Error, tag, position);
-  }
+	JournalSinkStream Error(JournalLogger &logger, const std::string &tag,
+	                        const SourcePosition &position) {
+		return logger.stream(LoggingSeverity::Error, tag, position);
+	}
 
-  JournalSinkStream Critical(JournalLogger &logger, const std::string &tag, const SourcePosition &position) {
-    return logger.stream(LoggingSeverity::Critical, tag, position);
-  }
-}
+	JournalSinkStream Critical(JournalLogger &logger, const std::string &tag,
+	                           const SourcePosition &position) {
+		return logger.stream(LoggingSeverity::Critical, tag, position);
+	}
+}  // namespace CalX

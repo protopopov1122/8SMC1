@@ -41,7 +41,8 @@ namespace CalX {
 	}
 
 	void BinaryNode::dump(std::ostream &out) const {
-		out << '(' << *this->left << static_cast<char>(this->oper) << *this->right << ')';
+		out << '(' << *this->left << static_cast<char>(this->oper) << *this->right
+		    << ')';
 	}
 
 	void FunctionNode::dump(std::ostream &out) const {

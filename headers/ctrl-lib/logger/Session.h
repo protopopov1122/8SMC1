@@ -38,10 +38,9 @@ namespace CalX {
 		void log(const LogEntry &) const override;
 
 		void setFilter(std::function<bool(const LogEntry &)>) override;
-		JournalSink &newStreamSink(const std::string &, std::ostream &,
-		                           bool) override;
-		JournalSink &newFileSink(const std::string &, const std::string &,
-		                         bool) override;
+		JournalSink &newStreamSink(const std::string &, std::ostream &) override;
+		JournalSink &newFileSink(const std::string &, const std::string &) override;
+		JournalSink &newNullSink(const std::string &) override;
 		void dropSink(const std::string &) override;
 
 	 private:

@@ -45,7 +45,7 @@ namespace CalX {
 			this->session = std::make_unique<DefaultJournalSession>();
 			this->session->getController().setFilter(
 			    LoggerFilter::severity_at_least(this->defaultSeverity));
-			this->session->getController().newStreamSink("default", std::cout, true);
+			this->session->getController().newStreamSink("default", std::cout);
 		}
 		return *this->session;
 	}

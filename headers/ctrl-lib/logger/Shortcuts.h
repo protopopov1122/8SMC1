@@ -25,11 +25,16 @@
 
 namespace CalX {
 
-  JournalSinkStream Debug(JournalLogger &, const std::string & = "", const SourcePosition & = SourcePosition());
-  JournalSinkStream Info(JournalLogger &, const std::string & = "", const SourcePosition & = SourcePosition());
-  JournalSinkStream Warning(JournalLogger &, const std::string & = "", const SourcePosition & = SourcePosition());
-  JournalSinkStream Error(JournalLogger &, const std::string & = "", const SourcePosition & = SourcePosition());
-  JournalSinkStream Critical(JournalLogger &, const std::string & = "", const SourcePosition & = SourcePosition());
-}
+	JournalSinkStream Debug(JournalLogger &, const std::string & = "",
+	                        const SourcePosition & = SourcePosition());
+	JournalSinkStream Info(JournalLogger &, const std::string & = "",
+	                       const SourcePosition & = SourcePosition());
+	JournalSinkStream Warning(JournalLogger &, const std::string & = "",
+	                          const SourcePosition & = SourcePosition());
+	JournalSinkStream Error(JournalLogger &, const std::string & = "",
+	                        const SourcePosition & = SourcePosition());
+	JournalSinkStream Critical(JournalLogger &, const std::string & = "",
+	                           const SourcePosition & = SourcePosition());
+}  // namespace CalX
 
 #endif

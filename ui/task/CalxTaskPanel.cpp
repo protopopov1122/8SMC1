@@ -45,8 +45,13 @@ namespace CalXUI {
 	class CalxTaskAction : public CalxAction {
 	 public:
 		CalxTaskAction(CalxTaskPanel *panel, std::shared_ptr<CoordHandle> handle,
-		               std::shared_ptr<CoordTask> task, const CalxTaskDescriptor &descr, const TaskParameters &prms)
-					   : descriptor(descr), panel(panel), handle(handle), task(task), prms(prms) {
+		               std::shared_ptr<CoordTask> task,
+		               const CalxTaskDescriptor &descr, const TaskParameters &prms)
+		    : descriptor(descr),
+		      panel(panel),
+		      handle(handle),
+		      task(task),
+		      prms(prms) {
 			this->prms.speed *= this->handle->getFloatPlane()->getSpeedScale();
 			this->state = std::make_shared<TaskState>();
 			this->state->plane = nullptr;
@@ -54,14 +59,16 @@ namespace CalXUI {
 		}
 
 		virtual void perform(SystemManager *sysman) {
-			Info(wxGetApp().getJournal()) << "Start execution of task: " << this->descriptor;
+			Info(wxGetApp().getJournal())
+			    << "Start execution of task: " << this->descriptor;
 			handle->open_session();
 			panel->setEnabled(false);
 			ErrorCode errcode = task->perform(handle, prms, sysman, state);
 			wxGetApp().getErrorHandler()->handle(errcode);
 			panel->setEnabled(true);
 			handle->close_session();
-			Info(wxGetApp().getJournal()) << "End of execution of task with errcode " << static_cast<int>(errcode);
+			Info(wxGetApp().getJournal()) << "End of execution of task with errcode "
+			                              << static_cast<int>(errcode);
 		}
 
 		virtual void stop() {
@@ -318,8 +325,9 @@ namespace CalXUI {
 			            .lock()) {
 				float speed = this->speed->GetValue();
 				TaskParameters prms = { (float) speed };
-				queue->addAction(
-				    std::make_unique<CalxTaskAction>(this, handle, task, *list.at((size_t) taskList->GetSelection()), prms));
+				queue->addAction(std::make_unique<CalxTaskAction>(
+				    this, handle, task, *list.at((size_t) taskList->GetSelection()),
+				    prms));
 			}
 		} else {
 			std::string message = __("Select coordinate plane");

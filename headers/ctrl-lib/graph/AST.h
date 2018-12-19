@@ -73,7 +73,7 @@ namespace CalX {
 		friend std::ostream &operator<<(std::ostream &, const Node &);
 
 	 protected:
-	 	virtual void dump(std::ostream &) const = 0;
+		virtual void dump(std::ostream &) const = 0;
 
 	 private:
 		NodeType type;
@@ -90,8 +90,9 @@ namespace CalX {
 		engine_value_t eval(MathEngine &eng) const override {
 			return { (double) this->value, MathError::MNoError };
 		}
+
 	 protected:
-	 	void dump(std::ostream &) const override;
+		void dump(std::ostream &) const override;
 
 	 private:
 		int64_t value;
@@ -110,7 +111,7 @@ namespace CalX {
 		}
 
 	 protected:
-	 	void dump(std::ostream &) const override;
+		void dump(std::ostream &) const override;
 
 	 private:
 		double value;
@@ -127,7 +128,7 @@ namespace CalX {
 		engine_value_t eval(MathEngine &) const override;
 
 	 protected:
-	 	void dump(std::ostream &) const override;
+		void dump(std::ostream &) const override;
 
 	 private:
 		std::string id;
@@ -144,7 +145,7 @@ namespace CalX {
 		}
 
 	 protected:
-	 	void dump(std::ostream &) const override;
+		void dump(std::ostream &) const override;
 
 	 private:
 		std::unique_ptr<Node> node;
@@ -164,7 +165,7 @@ namespace CalX {
 		engine_value_t eval(MathEngine &eng) const override;
 
 	 protected:
-	 	void dump(std::ostream &) const override;
+		void dump(std::ostream &) const override;
 
 	 private:
 		BinaryOperation oper;
@@ -179,7 +180,7 @@ namespace CalX {
 		engine_value_t eval(MathEngine &eng) const override;
 
 	 protected:
-	 	void dump(std::ostream &) const override;
+		void dump(std::ostream &) const override;
 
 	 private:
 		std::string id;

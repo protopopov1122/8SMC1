@@ -59,13 +59,14 @@ namespace CalXUI {
 	}
 
 	void deviceActionFinished(MotorController &dev, ErrorCode errcode) {
-		Info(wxGetApp().getJournal()) << "Device #" << dev.getID()
-		                              << " action finished with error code " << static_cast<int>(errcode);
+		Info(wxGetApp().getJournal())
+		    << "Device #" << dev.getID() << " action finished with error code "
+		    << static_cast<int>(errcode);
 	}
 
 	void deviceActionStopped(MotorController &dev) {
-		Info(wxGetApp().getJournal()) << "Device #" << dev.getID()
-		                              << " action stopped";
+		Info(wxGetApp().getJournal())
+		    << "Device #" << dev.getID() << " action stopped";
 	}
 
 	class CalxMotorMoveAction : public CalxAction {
@@ -88,10 +89,10 @@ namespace CalXUI {
 
 		virtual void perform(SystemManager *sysman) {
 			ErrorCode errcode;
-			Info(wxGetApp().getJournal()) << "Starting device #" << dev->getID()
-			                              << (rel ? " relative " : " ") << "move"
-																		<< " to " << dest
-																		<< " with speed " << speed;
+			Info(wxGetApp().getJournal())
+			    << "Starting device #" << dev->getID() << (rel ? " relative " : " ")
+			    << "move"
+			    << " to " << dest << " with speed " << speed;
 			dev->use();
 			if (rel) {
 				errcode = dev->startRelativeMove(dest, speed);
@@ -140,8 +141,9 @@ namespace CalXUI {
 		}
 
 		virtual void perform(SystemManager *sysman) {
-			Info(wxGetApp().getJournal()) << "Starting device #" << dev->getID()
-			                              << " calibration to trailer #" << static_cast<int>(tr);
+			Info(wxGetApp().getJournal())
+			    << "Starting device #" << dev->getID() << " calibration to trailer #"
+			    << static_cast<int>(tr);
 			dev->use();
 			ErrorCode errcode = dev->moveToTrailer(tr);
 			dev->unuse();

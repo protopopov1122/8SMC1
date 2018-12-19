@@ -84,13 +84,13 @@ namespace CalX {
 			return *this;
 		}
 
-		template <typename T>
+		template<typename T>
 		JournalSinkStream &operator<<(T &value) {
 			this->buffer << value;
 			return *this;
 		}
 
-		template <typename T>
+		template<typename T>
 		JournalSinkStream &operator<<(T &&value) {
 			this->buffer << value;
 			return *this;
@@ -137,10 +137,10 @@ namespace CalX {
 	 public:
 		virtual ~JournalLoggerController() = default;
 		virtual void setFilter(std::function<bool(const LogEntry &)>) = 0;
-		virtual JournalSink &newStreamSink(const std::string &, std::ostream &,
-		                                   bool = false) = 0;
-		virtual JournalSink &newFileSink(const std::string &, const std::string &,
-		                                 bool = false) = 0;
+		virtual JournalSink &newStreamSink(const std::string &, std::ostream &) = 0;
+		virtual JournalSink &newFileSink(const std::string &,
+		                                 const std::string &) = 0;
+		virtual JournalSink &newNullSink(const std::string &) = 0;
 		virtual void dropSink(const std::string &) = 0;
 	};
 

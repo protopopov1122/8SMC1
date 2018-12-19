@@ -179,11 +179,10 @@ namespace CalXUI {
 			                    this->wDim->GetValue(), this->hDim->GetValue() };
 		double spacing = this->spacing->GetValue();
 		bool vert = this->vertical->GetValue();
-		out << "Linear task \'" << this->getName()
-		    << "\' - rectangle " << rect.x << 'x' << rect.y
-		    << " with area " << rect.w << 'x' << rect.h
-				<< "; space between lines " << spacing
-				<< "; " << (vert ? "vertical" : "horizontal") << " lines";
+		out << "Linear task \'" << this->getName() << "\' - rectangle " << rect.x
+		    << 'x' << rect.y << " with area " << rect.w << 'x' << rect.h
+		    << "; space between lines " << spacing << "; "
+		    << (vert ? "vertical" : "horizontal") << " lines";
 	}
 
 	CalxTaskHandle *CalxLinearTaskFactory::newTask(wxWindow *win) {
