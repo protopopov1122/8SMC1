@@ -1,8 +1,19 @@
 
 #include "ui/coord/CalxCoordActions.h"
 #include "ui/CalxErrorHandler.h"
+#include "ctrl-lib/logger/Shortcuts.h"
 
 namespace CalXUI {
+
+	void coordActionFinished(CoordHandle &handle, ErrorCode errcode) {
+		Info(wxGetApp().getJournal()) << "Coordinate plane #" << handle.getID()
+		                              << " action finished with code " << static_cast<int>(errcode);
+	}
+
+	void coordActionStopped(CoordHandle &handle) {
+		Info(wxGetApp().getJournal()) << "Coordinate plane #" << handle.getID()
+		                              << " action stopped";
+	}
 
 	CalxCoordActionMove::CalxCoordActionMove(std::shared_ptr<CoordHandle> handle,
 	                                         coord_point_t dest, double speed,
@@ -24,12 +35,17 @@ namespace CalXUI {
 	void CalxCoordActionMove::perform(SystemManager *sysman) {
 		ErrorCode errcode;
 		ResourceSession session(*this->handle);
+		Info(wxGetApp().getJournal()) << "Lineary moving coordinate plane #" << this->handle->getID()
+		                              << " to " << dest.x << "x" << dest.y
+																	<< (relative ? "relatively to current position" : "")
+																	<< " with speed " << speed << " " << (sync ? "synchroniously" : "asynchroniously");
 		if (relative) {
 			errcode = handle->getFloatPlane()->relativeMove(dest, speed, sync);
 		} else {
 			errcode = handle->getFloatPlane()->move(dest, speed, sync);
 		}
 		wxGetApp().getErrorHandler()->handle(errcode);
+		coordActionFinished(*handle, errcode);
 		if (this->action_result != nullptr) {
 			this->action_result->errcode = errcode;
 			this->action_result->ready = true;
@@ -38,6 +54,7 @@ namespace CalXUI {
 
 	void CalxCoordActionMove::stop() {
 		handle->stop();
+		coordActionStopped(*handle);
 		if (this->action_result != nullptr) {
 			this->action_result->stopped = true;
 		}
@@ -66,6 +83,12 @@ namespace CalXUI {
 	void CalxCoordActionArc::perform(SystemManager *sysman) {
 		ErrorCode errcode;
 		ResourceSession session(*this->handle);
+		Info(wxGetApp().getJournal()) << "Arc " << (clockwise ? "clockwise" : "counter-clockwise")
+		                              << " moving coordinate plane #" << this->handle->getID()
+		                              << " to " << dest.x << "x" << dest.y
+																	<< " with center in " << cen.x << "x" << cen.y
+																	<< " splitted into " << splitter << " segments"
+																	<< " with speed " << speed;
 		if (relative) {
 			errcode = handle->getFloatPlane()->relativeArc(dest, cen, splitter, speed,
 			                                               clockwise);
@@ -74,6 +97,7 @@ namespace CalXUI {
 			    handle->getFloatPlane()->arc(dest, cen, splitter, speed, clockwise);
 		}
 		wxGetApp().getErrorHandler()->handle(errcode);
+		coordActionFinished(*handle, errcode);
 		if (this->action_result != nullptr) {
 			this->action_result->errcode = errcode;
 			this->action_result->ready = true;
@@ -82,6 +106,7 @@ namespace CalXUI {
 
 	void CalxCoordActionArc::stop() {
 		handle->stop();
+		coordActionStopped(*handle);
 		if (this->action_result != nullptr) {
 			this->action_result->stopped = true;
 		}
@@ -99,8 +124,11 @@ namespace CalXUI {
 
 	void CalxCoordActionCalibrate::perform(SystemManager *sysman) {
 		ResourceSession session(*this->handle);
+		Info(wxGetApp().getJournal()) << "Calibrating coordinate plane #" << handle->getID()
+		                              << " to the trailer #" << static_cast<int>(trailer);
 		ErrorCode errcode = handle->calibrate(trailer);
 		wxGetApp().getErrorHandler()->handle(errcode);
+		coordActionFinished(*handle, errcode);
 		if (this->action_result != nullptr) {
 			this->action_result->errcode = errcode;
 			this->action_result->ready = true;
@@ -108,6 +136,7 @@ namespace CalXUI {
 	}
 	void CalxCoordActionCalibrate::stop() {
 		this->handle->stop();
+		coordActionStopped(*handle);
 		if (this->action_result != nullptr) {
 			this->action_result->stopped = true;
 		}
@@ -125,8 +154,11 @@ namespace CalXUI {
 
 	void CalxCoordActionMeasure::perform(SystemManager *sysman) {
 		ResourceSession session(*this->handle);
+		Info(wxGetApp().getJournal()) << "Measuring coordinate plane #" << handle->getID()
+		                              << " to the trailer #" << static_cast<int>(trailer);
 		ErrorCode errcode = handle->measure(trailer);
 		wxGetApp().getErrorHandler()->handle(errcode);
+		coordActionFinished(*handle, errcode);
 		if (this->action_result != nullptr) {
 			this->action_result->errcode = errcode;
 			this->action_result->ready = true;
@@ -134,6 +166,7 @@ namespace CalXUI {
 	}
 	void CalxCoordActionMeasure::stop() {
 		this->handle->stop();
+		coordActionStopped(*handle);
 		if (this->action_result != nullptr) {
 			this->action_result->stopped = true;
 		}
@@ -157,6 +190,9 @@ namespace CalXUI {
 
 	void CalxCoordActionConfigure::perform(SystemManager *sysman) {
 		ResourceSession session(*this->handle);
+		Info(wxGetApp().getJournal()) << "Configuring coordinate plane #" << handle->getID()
+		                              << " with center " << dest.x << "x" << dest.y
+																	<< " and movement speed" << speed;
 		work = true;
 		motor_point_t offset = { 0, 0 };
 		controller->setOffset(offset);
@@ -173,8 +209,10 @@ namespace CalXUI {
 		}
 		if (work && errcode == ErrorCode::NoError) {
 			controller->setOffset(handle->getPosition());
+
 		}
 		wxGetApp().getErrorHandler()->handle(errcode);
+		coordActionFinished(*handle, errcode);
 		if (this->action_result != nullptr) {
 			this->action_result->errcode = errcode;
 			this->action_result->ready = true;
@@ -184,6 +222,7 @@ namespace CalXUI {
 	void CalxCoordActionConfigure::stop() {
 		this->work = false;
 		handle->stop();
+		coordActionStopped(*handle);
 		if (this->action_result != nullptr) {
 			this->action_result->stopped = true;
 		}
@@ -204,12 +243,18 @@ namespace CalXUI {
 
 	void CalxCoordActionGraphBuild::perform(SystemManager *sysman) {
 		ResourceSession session(*this->handle);
-		wxGetApp().getErrorHandler()->handle(builder->floatBuild(
-		    *sysman, handle->getFloatPlane(), *translator, speed, *state));
+		Info(wxGetApp().getJournal()) << "Plotting graph on coordinate plane #" << handle->getID()
+		                              << " function " << *builder
+		                              << " with speed " << speed;
+		ErrorCode errcode = builder->floatBuild(
+		    *sysman, handle->getFloatPlane(), *translator, speed, *state);
+		wxGetApp().getErrorHandler()->handle(errcode);
+		coordActionFinished(*handle, errcode);
 	}
 
 	void CalxCoordActionGraphBuild::stop() {
 		this->state->stop();
+		coordActionStopped(*handle);
 	}
 
 	CalxCoordActionGraphPreview::CalxCoordActionGraphPreview(

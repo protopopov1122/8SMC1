@@ -24,6 +24,7 @@
 #include "ui/CalxApp.h"
 #include "ui/CalxErrorHandler.h"
 #include "ui/config/CalxConfigEditor.h"
+#include "ctrl-lib/logger/Shortcuts.h"
 #include <iostream>
 #include <limits.h>
 #include <signal.h>
@@ -57,6 +58,16 @@ namespace CalXUI {
 		}
 	}
 
+	void deviceActionFinished(MotorController &dev, ErrorCode errcode) {
+		Info(wxGetApp().getJournal()) << "Device #" << dev.getID()
+		                              << " action finished with error code " << static_cast<int>(errcode);
+	}
+
+	void deviceActionStopped(MotorController &dev) {
+		Info(wxGetApp().getJournal()) << "Device #" << dev.getID()
+		                              << " action stopped";
+	}
+
 	class CalxMotorMoveAction : public CalxAction {
 	 public:
 		CalxMotorMoveAction(CalxMotorComponent *ctrl, MotorController *dev,
@@ -77,6 +88,10 @@ namespace CalXUI {
 
 		virtual void perform(SystemManager *sysman) {
 			ErrorCode errcode;
+			Info(wxGetApp().getJournal()) << "Starting device #" << dev->getID()
+			                              << (rel ? " relative " : " ") << "move"
+																		<< " to " << dest
+																		<< " with speed " << speed;
 			dev->use();
 			if (rel) {
 				errcode = dev->startRelativeMove(dest, speed);
@@ -85,6 +100,7 @@ namespace CalXUI {
 			}
 			dev->unuse();
 			wxGetApp().getErrorHandler()->handle(errcode);
+			deviceActionFinished(*dev, errcode);
 			if (this->action_result != nullptr) {
 				this->action_result->ready = true;
 				this->action_result->errcode = errcode;
@@ -93,6 +109,7 @@ namespace CalXUI {
 
 		virtual void stop() {
 			dev->stop();
+			deviceActionStopped(*dev);
 			if (this->action_result != nullptr) {
 				this->action_result->stopped = true;
 			}
@@ -123,10 +140,13 @@ namespace CalXUI {
 		}
 
 		virtual void perform(SystemManager *sysman) {
+			Info(wxGetApp().getJournal()) << "Starting device #" << dev->getID()
+			                              << " calibration to trailer #" << static_cast<int>(tr);
 			dev->use();
 			ErrorCode errcode = dev->moveToTrailer(tr);
 			dev->unuse();
 			wxGetApp().getErrorHandler()->handle(errcode);
+			deviceActionFinished(*dev, errcode);
 			if (this->action_result != nullptr) {
 				this->action_result->errcode = errcode;
 				this->action_result->ready = true;
@@ -135,6 +155,7 @@ namespace CalXUI {
 
 		virtual void stop() {
 			dev->stop();
+			deviceActionStopped(*dev);
 			if (this->action_result != nullptr) {
 				this->action_result->stopped = true;
 			}
