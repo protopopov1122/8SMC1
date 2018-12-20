@@ -146,6 +146,7 @@ namespace CalX {
 		static constexpr auto Debug = "debug";
 		static constexpr auto Info = "info";
 		static constexpr auto JournalDir = "journal_dir";
+		static constexpr auto MaxSavedSessions = "journal_max_sessions";
 	};
 }  // namespace CalX
 

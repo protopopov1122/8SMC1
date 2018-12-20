@@ -22,6 +22,10 @@
 #define CALX_UI_CALX_JOURNAL_MANAGER_H_
 
 #include "ui/calx.h"
+#include <vector>
+#include <utility>
+#include <chrono>
+#include <string>
 
 namespace CalXUI {
 
@@ -31,6 +35,9 @@ namespace CalXUI {
 		JournalLogger &getJournal();
 
 	 private:
+                void vacuum(ConfigurationCatalogue &);
+                void getJournalFiles(std::vector<std::pair<std::string, std::chrono::system_clock::time_point>> &);
+
 		std::string journalDirectory;
 		std::unique_ptr<ConfigurableJournal> journal;
 	};
