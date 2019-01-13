@@ -22,6 +22,7 @@
 #define CALX_LUA_CALX_LUA_CALX_ENVIRONMENT_H_
 
 #include "ctrl-lib/script/ScriptEngine.h"
+#include "luacppb/LuaCppB.h"
 #include <exception>
 
 using namespace CalX;
@@ -38,9 +39,32 @@ namespace CalXLua {
 		ErrorCode errcode;
 	};
 
+	namespace lcb = LuaCppB;
+
+	class LuaCalXEnvironmentPosition {
+	 public:
+	 	LuaCalXEnvironmentPosition(CalXScriptEnvironment &);
+		double planeGetPositionX(std::size_t);
+		double planeGetPositionY(std::size_t);
+		ErrorCode planePositionAsCenter(std::size_t);
+	 private:
+	 	CalXScriptEnvironment &env;
+	};
+
+	class LuaCalXEnvironmentSize {
+	 public:
+		LuaCalXEnvironmentSize(CalXScriptEnvironment &);
+		double planeGetSizeX(std::size_t);
+		double planeGetSizeY(std::size_t);
+		double planeGetSizeW(std::size_t);
+		double planeGetSizeH(std::size_t);
+	 private:
+		CalXScriptEnvironment &env;
+	};
+
 	class LuaCalXEnvironment {
 	 public:
-		LuaCalXEnvironment(CalXScriptEnvironment &);
+		LuaCalXEnvironment(CalXScriptEnvironment &, lcb::LuaState &);
 
 		device_id_t connectSerialMotor(uint8_t, uint32_t, SerialPortParity);
 		device_id_t connectSerialInstrument(uint8_t, uint32_t, SerialPortParity);
@@ -75,14 +99,7 @@ namespace CalXLua {
 		ErrorCode planeFMove(std::size_t, double, double, double);
 		ErrorCode planeConfigure(std::size_t, double, double, double);
 		ErrorCode planeNewWatcher(std::size_t);
-		double planeGetPositionX(std::size_t);
-		double planeGetPositionY(std::size_t);
-		double planeGetSizeX(std::size_t);
-		double planeGetSizeY(std::size_t);
-		double planeGetSizeW(std::size_t);
-		double planeGetSizeH(std::size_t);
 		bool planeIsMeasured(std::size_t);
-		ErrorCode planePositionAsCenter(std::size_t);
 
 		int getConfigurationInt(const std::string &, const std::string &);
 		double getConfigurationFloat(const std::string &, const std::string &);
@@ -97,6 +114,12 @@ namespace CalXLua {
 		bool getSettingsBoolean(const std::string &, const std::string &);
 		bool settingsHas(const std::string &, const std::string &);
 
+		lcb::LuaTable MotorPower;
+		lcb::LuaTable MotorTrailer;
+		lcb::LuaTable InstrMode;
+
+		LuaCalXEnvironmentPosition Position;
+		LuaCalXEnvironmentSize Size;
 	 private:
 		CalXScriptEnvironment &env;
 	};

@@ -32,8 +32,94 @@ namespace CalXLua {
 		return "CalX runtime error";
 	}
 
-	LuaCalXEnvironment::LuaCalXEnvironment(CalXScriptEnvironment& env)
-	    : env(env) {}
+	LuaCalXEnvironmentPosition::LuaCalXEnvironmentPosition(CalXScriptEnvironment &env) : env(env) {}
+
+	double LuaCalXEnvironmentPosition::planeGetPositionX(std::size_t id) {
+		std::optional<coord_point_t> res =
+		    env.getPlanes().getPlane(id)->getPosition();
+		if (!res.has_value()) {
+			throw CalXException(ErrorCode::UnknownResource);
+		}
+		return res.value().x;
+	}
+
+	double LuaCalXEnvironmentPosition::planeGetPositionY(std::size_t id) {
+		std::optional<coord_point_t> res =
+		    env.getPlanes().getPlane(id)->getPosition();
+		if (!res.has_value()) {
+			throw CalXException(ErrorCode::UnknownResource);
+		}
+		return res.value().y;
+	}
+
+	ErrorCode LuaCalXEnvironmentPosition::planePositionAsCenter(std::size_t id) {
+		bool res =
+		    env.getPlanes().getPlane(static_cast<size_t>(id))->positionAsCenter();
+		if (res) {
+			return ErrorCode::NoError;
+		} else {
+			throw CalXException(ErrorCode::UnknownResource);
+		}
+	}
+
+	LuaCalXEnvironmentSize::LuaCalXEnvironmentSize(CalXScriptEnvironment &env) : env(env) {}
+
+	double LuaCalXEnvironmentSize::planeGetSizeX(std::size_t id) {
+		std::pair<coord_rect_t, ErrorCode> res =
+		    env.getPlanes().getPlane(id)->getSize();
+		if (res.second != ErrorCode::NoError) {
+			throw CalXException(res.second);
+		}
+		return res.first.x;
+	}
+
+	double LuaCalXEnvironmentSize::planeGetSizeY(std::size_t id) {
+		std::pair<coord_rect_t, ErrorCode> res =
+		    env.getPlanes().getPlane(id)->getSize();
+		if (res.second != ErrorCode::NoError) {
+			throw CalXException(res.second);
+		}
+		return res.first.y;
+	}
+
+	double LuaCalXEnvironmentSize::planeGetSizeW(std::size_t id) {
+		std::pair<coord_rect_t, ErrorCode> res =
+		    env.getPlanes().getPlane(id)->getSize();
+		if (res.second != ErrorCode::NoError) {
+			throw CalXException(res.second);
+		}
+		return res.first.w;
+	}
+
+	double LuaCalXEnvironmentSize::planeGetSizeH(std::size_t id) {
+		std::pair<coord_rect_t, ErrorCode> res =
+		    env.getPlanes().getPlane(id)->getSize();
+		if (res.second != ErrorCode::NoError) {
+			throw CalXException(res.second);
+		}
+		return res.first.h;
+	}
+
+	LuaCalXEnvironment::LuaCalXEnvironment(CalXScriptEnvironment& env, lcb::LuaState &lua)
+	    : MotorPower(lcb::LuaTable::create(lua.getState())),
+				MotorTrailer(lcb::LuaTable::create(lua.getState())),
+				InstrMode(lcb::LuaTable::create(lua.getState())),
+				Position(env), Size(env), env(env) {
+		
+		auto power = this->MotorPower.ref(lua);
+		power["No"] = Power::NoPower;
+		power["Half"] = Power::HalfPower;
+		power["Full"] = Power::FullPower;
+
+		auto trailer = this->MotorTrailer.ref(lua);
+		trailer["Top"] = TrailerId::Trailer1;
+		trailer["Bottom"] = TrailerId::Trailer2;
+
+		auto mode = this->InstrMode.ref(lua);
+		mode["Off"] = InstrumentMode::Off;
+		mode["Prepare"] = InstrumentMode::Prepare;
+		mode["Full"] = InstrumentMode::Full;
+	}
 
 	device_id_t LuaCalXEnvironment::connectSerialMotor(uint8_t port, uint32_t baudrate,
 	                                            SerialPortParity parity) {
@@ -329,60 +415,6 @@ namespace CalXLua {
 		return errcode;
 	}
 
-	double LuaCalXEnvironment::planeGetPositionX(std::size_t id) {
-		std::optional<coord_point_t> res =
-		    env.getPlanes().getPlane(id)->getPosition();
-		if (!res.has_value()) {
-			throw CalXException(ErrorCode::UnknownResource);
-		}
-		return res.value().x;
-	}
-
-	double LuaCalXEnvironment::planeGetPositionY(std::size_t id) {
-		std::optional<coord_point_t> res =
-		    env.getPlanes().getPlane(id)->getPosition();
-		if (!res.has_value()) {
-			throw CalXException(ErrorCode::UnknownResource);
-		}
-		return res.value().y;
-	}
-
-	double LuaCalXEnvironment::planeGetSizeX(std::size_t id) {
-		std::pair<coord_rect_t, ErrorCode> res =
-		    env.getPlanes().getPlane(id)->getSize();
-		if (res.second != ErrorCode::NoError) {
-			throw CalXException(res.second);
-		}
-		return res.first.x;
-	}
-
-	double LuaCalXEnvironment::planeGetSizeY(std::size_t id) {
-		std::pair<coord_rect_t, ErrorCode> res =
-		    env.getPlanes().getPlane(id)->getSize();
-		if (res.second != ErrorCode::NoError) {
-			throw CalXException(res.second);
-		}
-		return res.first.y;
-	}
-
-	double LuaCalXEnvironment::planeGetSizeW(std::size_t id) {
-		std::pair<coord_rect_t, ErrorCode> res =
-		    env.getPlanes().getPlane(id)->getSize();
-		if (res.second != ErrorCode::NoError) {
-			throw CalXException(res.second);
-		}
-		return res.first.w;
-	}
-
-	double LuaCalXEnvironment::planeGetSizeH(std::size_t id) {
-		std::pair<coord_rect_t, ErrorCode> res =
-		    env.getPlanes().getPlane(id)->getSize();
-		if (res.second != ErrorCode::NoError) {
-			throw CalXException(res.second);
-		}
-		return res.first.h;
-	}
-
 	bool LuaCalXEnvironment::planeIsMeasured(std::size_t id) {
 		std::optional<bool> res =
 		    env.getPlanes().getPlane(id)->isMeasured();
@@ -390,16 +422,6 @@ namespace CalXLua {
 			throw CalXException(ErrorCode::UnknownResource);
 		}
 		return res.value();
-	}
-
-	ErrorCode LuaCalXEnvironment::planePositionAsCenter(std::size_t id) {
-		bool res =
-		    env.getPlanes().getPlane(static_cast<size_t>(id))->positionAsCenter();
-		if (res) {
-			return ErrorCode::NoError;
-		} else {
-			throw CalXException(ErrorCode::UnknownResource);
-		}
 	}
 
 	int LuaCalXEnvironment::getConfigurationInt(const std::string &entry,

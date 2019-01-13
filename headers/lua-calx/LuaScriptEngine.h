@@ -23,9 +23,7 @@
 
 #include "ctrl-lib/script/ScriptEngine.h"
 #include "lua-calx/LuaCalXEnvironment.h"
-#include "luacppb/LuaCppB.h"
 
-namespace lcb = LuaCppB;
 using namespace CalX;
 
 namespace CalXLua {

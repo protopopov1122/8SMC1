@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.1)
 project(CalX)
 
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set(LUACPPB_FPIC ON)
 set(LUA_VERSION 5.3.5)
 set(LUACPPB_COMPILE_LUA ON)
 set(LUACPPB_LUA_SOURCE ${CMAKE_SOURCE_DIR}/third-party/lua-${LUA_VERSION})
