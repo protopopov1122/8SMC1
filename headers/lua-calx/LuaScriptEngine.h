@@ -23,11 +23,9 @@
 
 #include "ctrl-lib/script/ScriptEngine.h"
 #include "lua-calx/LuaCalXEnvironment.h"
-#include <lua.h>
-#include <lualib.h>
-#include <lauxlib.h>
-#include "selene.h"
+#include "luacppb/LuaCppB.h"
 
+namespace lcb = LuaCppB;
 using namespace CalX;
 
 namespace CalXLua {
@@ -36,14 +34,14 @@ namespace CalXLua {
 	 public:
 		LuaCalXScript(CalXScriptEnvironment &, std::string);
 
-		virtual bool execute(std::string);
-		virtual bool call(std::string);
+		bool execute(std::string) override;
+		bool call(std::string) override;
 
 	 private:
 		void bind_functions();
 		void init_constants();
 
-		sel::State lua;
+		lcb::LuaEnvironment lua;
 		LuaCalXEnvironment lua_env;
 	};
 

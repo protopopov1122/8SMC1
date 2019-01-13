@@ -19,10 +19,6 @@
 */
 
 #include <exception>
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
-#include "selene.h"
 #include "lua-calx/LuaScriptEngine.h"
 #include <iostream>
 
@@ -40,25 +36,17 @@ namespace CalXLua {
 
 	LuaCalXScript::LuaCalXScript(CalXScriptEnvironment &env, std::string path)
 	    : CalXScript(env), lua(true), lua_env(env) {
-		this->lua.HandleExceptionsWith(
-		    [](int s, std::string msg, std::exception_ptr exception) {
-			    if (exception) {
-				    std::rethrow_exception(exception);
-			    }
-		    });
-
 		this->bind_functions();
 		this->init_constants();
 
 		if (!path.empty()) {
-			this->lua.Load(path);
+			this->lua.load(path);
 		}
 	}
 
 	bool LuaCalXScript::execute(std::string code) {
 		try {
-			this->lua(code.c_str());
-			return true;
+			return this->lua.execute(code.c_str()) == lcb::LuaStatusCode::Ok;
 		} catch (CalXException &ex) {
 			std::cout << "Caught CalX error " << static_cast<int>(ex.getErrorCode())
 			          << std::endl;
@@ -71,8 +59,7 @@ namespace CalXLua {
 
 	bool LuaCalXScript::call(std::string hook) {
 		try {
-			this->lua[hook.c_str()]();
-			return true;
+			return this->lua[hook.c_str()]() != lcb::LuaStatusCode::Ok;
 		} catch (CalXException &ex) {
 			std::cout << "Caught CalX error " << static_cast<int>(ex.getErrorCode())
 			          << std::endl;
@@ -84,21 +71,24 @@ namespace CalXLua {
 	}
 
 	void LuaCalXScript::bind_functions() {
-		this->lua["calx"]["motor"].SetObj(
-		    lua_env, "connectSerial", &LuaCalXEnvironment::connectSerialMotor,
-		    "getCount", &LuaCalXEnvironment::getMotorCount, "getPower",
-		    &LuaCalXEnvironment::getMotorPower, "enablePower",
-		    &LuaCalXEnvironment::enableMotorPower, "move",
-		    &LuaCalXEnvironment::motorMove, "relativeMove",
-		    &LuaCalXEnvironment::motorRelativeMove, "stop",
-		    &LuaCalXEnvironment::motorStop, "getPosition",
-		    &LuaCalXEnvironment::motorPosition, "waitWhileRunning",
-		    &LuaCalXEnvironment::motorWaitWhileRunning, "moveToTrailer",
-		    &LuaCalXEnvironment::motorMoveToTrailer, "checkTrailers",
-		    &LuaCalXEnvironment::motorCheckTrailers);
+		this->lua["calx"] = *lcb::LuaValueFactory::newTable(lua);
+		this->lua["calx"]["motor"] = lcb::ObjectBinder::bind(
+		    lua_env, lua,
+			"connectSerial", &LuaCalXEnvironment::connectSerialMotor,
+		    "getCount", &LuaCalXEnvironment::getMotorCount,
+			"getPower", &LuaCalXEnvironment::getMotorPower,
+			"enablePower", &LuaCalXEnvironment::enableMotorPower,
+			"move", &LuaCalXEnvironment::motorMove, 
+			"relativeMove", &LuaCalXEnvironment::motorRelativeMove,
+			"stop", &LuaCalXEnvironment::motorStop,
+			"getPosition", &LuaCalXEnvironment::motorPosition,
+			"waitWhileRunning", &LuaCalXEnvironment::motorWaitWhileRunning,
+			"moveToTrailer", &LuaCalXEnvironment::motorMoveToTrailer, 
+			"checkTrailers", &LuaCalXEnvironment::motorCheckTrailers);
 
-		this->lua["calx"]["instrument"].SetObj(
-		    lua_env, "connectSerial", &LuaCalXEnvironment::connectSerialInstrument,
+		this->lua["calx"]["instrument"] = lcb::ObjectBinder::bind(
+		    lua_env, lua,
+			"connectSerial", &LuaCalXEnvironment::connectSerialInstrument,
 		    "getCount", &LuaCalXEnvironment::getInstrumentCount, "openSession",
 		    &LuaCalXEnvironment::instrumentOpenSession, "closeSession",
 		    &LuaCalXEnvironment::instrumentCloseSession, "enable",
@@ -111,8 +101,8 @@ namespace CalXLua {
 		    &LuaCalXEnvironment::instrumentIsSessionOpened, "getInfo",
 		    &LuaCalXEnvironment::instrumentGetInfo);
 
-		this->lua["calx"]["plane"].SetObj(
-		    lua_env, "create", &LuaCalXEnvironment::planeCreate, "move",
+		this->lua["calx"]["plane"] = lcb::ObjectBinder::bind(
+		    lua_env, lua, "create", &LuaCalXEnvironment::planeCreate, "move",
 		    &LuaCalXEnvironment::planeMove, "arc", &LuaCalXEnvironment::planeArc,
 		    "calibrate", &LuaCalXEnvironment::planeCalibrate, "measure",
 		    &LuaCalXEnvironment::planeMeasure, "fmove",
@@ -121,26 +111,26 @@ namespace CalXLua {
 		    &LuaCalXEnvironment::planeNewWatcher, "isMeasured",
 		    &LuaCalXEnvironment::planeIsMeasured);
 
-		this->lua["calx"]["plane"]["position"].SetObj(
-		    lua_env, "getX", &LuaCalXEnvironment::planeGetPositionX, "getY",
+		this->lua["calx"]["plane_position"] = lcb::ObjectBinder::bind(
+		    lua_env, lua, "getX", &LuaCalXEnvironment::planeGetPositionX, "getY",
 		    &LuaCalXEnvironment::planeGetPositionY, "asCenter",
 		    &LuaCalXEnvironment::planePositionAsCenter);
 
-		this->lua["calx"]["plane"]["size"].SetObj(
-		    lua_env, "getX", &LuaCalXEnvironment::planeGetSizeX, "getY",
+		this->lua["calx"]["plane_size"] = lcb::ObjectBinder::bind(
+		    lua_env, lua, "getX", &LuaCalXEnvironment::planeGetSizeX, "getY",
 		    &LuaCalXEnvironment::planeGetSizeY, "getW",
 		    &LuaCalXEnvironment::planeGetSizeW, "getH",
 		    &LuaCalXEnvironment::planeGetSizeH);
 
-		this->lua["calx"]["config"].SetObj(
-		    lua_env, "getInt", &LuaCalXEnvironment::getConfigurationInt, "getFloat",
+		this->lua["calx"]["config"] = lcb::ObjectBinder::bind(
+		    lua_env, lua, "getInt", &LuaCalXEnvironment::getConfigurationInt, "getFloat",
 		    &LuaCalXEnvironment::getConfigurationFloat, "getBool",
 		    &LuaCalXEnvironment::getConfigurationBoolean, "getString",
 		    &LuaCalXEnvironment::getConfigurationString, "has",
 		    &LuaCalXEnvironment::configurationHas);
 
-		this->lua["calx"]["settings"].SetObj(
-		    lua_env, "getInt", &LuaCalXEnvironment::getSettingsInt, "getFloat",
+		this->lua["calx"]["settings"] = lcb::ObjectBinder::bind(
+		    lua_env, lua, "getInt", &LuaCalXEnvironment::getSettingsInt, "getFloat",
 		    &LuaCalXEnvironment::getSettingsFloat, "getBool",
 		    &LuaCalXEnvironment::getSettingsBoolean, "getString",
 		    &LuaCalXEnvironment::getSettingsString, "has",
@@ -149,34 +139,29 @@ namespace CalXLua {
 	}
 
 	void LuaCalXScript::init_constants() {
-		this->lua["calx"]["motor"]["power"]["No"] =
-		    static_cast<int>(Power::NoPower);
-		this->lua["calx"]["motor"]["power"]["Half"] =
-		    static_cast<int>(Power::HalfPower);
-		this->lua["calx"]["motor"]["power"]["Full"] =
-		    static_cast<int>(Power::FullPower);
+		auto power = lcb::LuaValueFactory::newTable(lua);
+		this->lua["calx"]["motor_power"] = *power;
+		power["No"] = Power::NoPower;
+		power["Half"] = Power::HalfPower;
+		power["Full"] = Power::FullPower;
 
-		this->lua["calx"]["motor"]["trailer"]["Top"] =
-		    static_cast<int>(TrailerId::Trailer1);
-		this->lua["calx"]["motor"]["trailer"]["Bottom"] =
-		    static_cast<int>(TrailerId::Trailer2);
+		auto trailer = lcb::LuaValueFactory::newTable(lua);
+		this->lua["calx"]["motor_trailer"] = *trailer;
+		trailer["Top"] = TrailerId::Trailer1;
+		trailer["Bottom"] = TrailerId::Trailer2;
 
-		this->lua["calx"]["instrument"]["mode"]["Off"] =
-		    static_cast<int>(InstrumentMode::Off);
-		this->lua["calx"]["instrument"]["mode"]["Prepare"] =
-		    static_cast<int>(InstrumentMode::Prepare);
-		this->lua["calx"]["instrument"]["mode"]["Full"] =
-		    static_cast<int>(InstrumentMode::Full);
+		auto mode = lcb::LuaValueFactory::newTable(lua);
+		this->lua["calx"]["instrument_mode"] = *mode;
+		mode["Off"] = InstrumentMode::Off;
+		mode["Prepare"] = InstrumentMode::Prepare;
+		mode["Full"] = InstrumentMode::Full;
 
-		this->lua["calx"]["serial"]["parity"]["No"] =
-		    static_cast<int>(SerialPortParity::No);
-		this->lua["calx"]["serial"]["parity"]["Odd"] =
-		    static_cast<int>(SerialPortParity::Odd);
-		this->lua["calx"]["serial"]["parity"]["Even"] =
-		    static_cast<int>(SerialPortParity::Even);
-		this->lua["calx"]["serial"]["parity"]["Mark"] =
-		    static_cast<int>(SerialPortParity::Mark);
-		this->lua["calx"]["serial"]["parity"]["Space"] =
-		    static_cast<int>(SerialPortParity::Space);
+		auto parity = lcb::LuaValueFactory::newTable(lua);
+		this->lua["calx"]["serial_parity"] = *parity;
+		parity["No"] = SerialPortParity::No;
+		parity["Odd"] = SerialPortParity::Odd;
+		parity["Even"] = SerialPortParity::Even;
+		parity["Mark"] = SerialPortParity::Mark;
+		parity["Space"] = SerialPortParity::Space;
 	}
 }  // namespace CalXLua

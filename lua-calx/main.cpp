@@ -19,7 +19,6 @@
 */
 
 #include <iostream>
-#include "selene.h"
 #include "lua-calx/LuaScriptEngine.h"
 
 extern "C" LIBEXPORT CalXScriptFactory *getScriptEngine() {

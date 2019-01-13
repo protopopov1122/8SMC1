@@ -1,6 +1,6 @@
 --[[
 	API reference
-	    calx.serial.pairty                                Holds possible serial port parity constants
+	    calx.serial_pairty                                Holds possible serial port parity constants
 		    .No, .Odd, Even,
 		    .Mark, .Space
 		calx.motor                                        Motor controller bindings
@@ -16,9 +16,9 @@
 			.moveToTrailer(int, int)                      Move motor to specified trailer
 			.checkTrailers(int)                           Check if motor reached one of trailers
 		
-		calx.motor.power                                  Holds power state constants
+		calx.motor_power                                  Holds power state constants
 		    .No, .Half, .Full
-		calx.motor.trailer
+		calx.motor_trailer
             .Top, .Bottom
 					
 		calx.instrument                                   Instrument controller bindings
@@ -35,7 +35,7 @@
 			.isSessionOpened(int)                         Check if instrument session opened
 			.getInfo(int)                                 Get instrument text info
 		
-		calx.instrument.mode                              Possible instrument working modes
+		calx.instrument_mode                              Possible instrument working modes
 		    .Off, .Prepare, .Full
 			
 		calx.plane.create(int, int, int)                  Create plane using 2 motors and 1 instrument(optional)
@@ -54,16 +54,16 @@ function init()
 	local configure_y = 0.5
 
 	if calx.settings.has('relative_pos', 'x') then
-		configure_x = calx.settings.getFloat('relative_pos', 'x')
+		configure_x = calx.settings:getFloat('relative_pos', 'x')
 	end
 	if calx.settings.has('relative_pos', 'y') then
-		configure_y = calx.settings.getFloat('relative_pos', 'y')
+		configure_y = calx.settings:getFloat('relative_pos', 'y')
 	end
 
-	m1 = calx.motor.connectSerial(1, 9600, calx.serial.parity.No)
-	m2 = calx.motor.connectSerial(2, 9600, calx.serial.parity.No)
-    i1= calx.instrument.connectSerial(4, 19200, calx.serial.parity.No)
-	p1 = calx.plane.create(m1, m2, i1)
-	calx.plane.configure(p1, configure_x, configure_y, 1.25)
-	calx.plane.newWatcher(p1)
+	m1 = calx.motor:connectSerial(1, 9600, calx.serial_parity.No)
+	m2 = calx.motor:connectSerial(2, 9600, calx.serial_parity.No)
+    i1= calx.instrument:connectSerial(4, 19200, calx.serial_parity.No)
+	p1 = calx.plane:create(m1, m2, i1)
+	calx.plane:configure(p1, configure_x, configure_y, 1.25)
+	calx.plane:newWatcher(p1)
 end
