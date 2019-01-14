@@ -32,7 +32,7 @@ namespace CalXLua {
 		return "CalX runtime error";
 	}
 
-	LuaCalXEnvironmentPosition::LuaCalXEnvironmentPosition(CalXScriptEnvironment &env) : env(env) {}
+	LuaCalXEnvironmentPosition::LuaCalXEnvironmentPosition(CalXScriptUIEnvironment &env) : env(env) {}
 
 	double LuaCalXEnvironmentPosition::planeGetPositionX(std::size_t id) {
 		std::optional<coord_point_t> res =
@@ -62,7 +62,7 @@ namespace CalXLua {
 		}
 	}
 
-	LuaCalXEnvironmentSize::LuaCalXEnvironmentSize(CalXScriptEnvironment &env) : env(env) {}
+	LuaCalXEnvironmentSize::LuaCalXEnvironmentSize(CalXScriptUIEnvironment &env) : env(env) {}
 
 	double LuaCalXEnvironmentSize::planeGetSizeX(std::size_t id) {
 		std::pair<coord_rect_t, ErrorCode> res =
@@ -100,7 +100,7 @@ namespace CalXLua {
 		return res.first.h;
 	}
 
-	LuaCalXEnvironment::LuaCalXEnvironment(CalXScriptEnvironment& env, lcb::LuaState &lua)
+	LuaCalXEnvironment::LuaCalXEnvironment(CalXScriptUIEnvironment& env, lcb::LuaState &lua)
 	    : MotorPower(lcb::LuaTable::create(lua.getState())),
 				MotorTrailer(lcb::LuaTable::create(lua.getState())),
 				InstrMode(lcb::LuaTable::create(lua.getState())),
@@ -408,7 +408,7 @@ namespace CalXLua {
 
 	ErrorCode LuaCalXEnvironment::planeNewWatcher(std::size_t id) {
 		ErrorCode errcode =
-		    env.getPlanes().getPlane(id)->newWatcher();
+		    env.getUI().openWatcher(id);
 		if (errcode != ErrorCode::NoError) {
 			throw CalXException(errcode);
 		}

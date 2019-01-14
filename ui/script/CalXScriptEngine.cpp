@@ -578,18 +578,6 @@ namespace CalXUI {
 		}
 	}
 
-	ErrorCode CalXAppScriptPlane::newWatcher() {
-		CalxPlaneHandle *handle =
-		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(
-		        this->plane_id);
-		if (handle == nullptr) {
-			return ErrorCode::UnknownResource;
-		} else {
-			handle->newWatcher();
-			return ErrorCode::NoError;
-		}
-	}
-
 	std::optional<coord_point_t> CalXAppScriptPlane::getPosition() {
 		CalxPlaneHandle *planeHandle =
 		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(
@@ -694,13 +682,29 @@ namespace CalXUI {
 		return std::make_unique<CalXAppScriptPlane>(this->app, id);
 	}
 
+	CalXAppScriptUI::CalXAppScriptUI(CalxApp &app)
+		: app(app) {}
+	
+	ErrorCode CalXAppScriptUI::openWatcher(std::size_t id) {
+		CalxPlaneHandle *handle =
+		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(
+		        id);
+		if (handle == nullptr) {
+			return ErrorCode::UnknownResource;
+		} else {
+			handle->newWatcher();
+			return ErrorCode::NoError;
+		}
+	}
+
 	CalXAppScriptEnvironment::CalXAppScriptEnvironment(CalxApp &app)
-	    : CalXScriptEnvironment::CalXScriptEnvironment(
+	    : CalXScriptUIEnvironment::CalXScriptUIEnvironment(
 	          app.getSystemManager()->getConfiguration(),
 	          app.getSystemManager()->getSettingsRepository()),
 	      app(app),
 	      devices(app),
-	      planes(app) {}
+	      planes(app),
+		  ui(app) {}
 
 	CalXScriptDevices &CalXAppScriptEnvironment::getDevices() {
 		return this->devices;
@@ -708,6 +712,10 @@ namespace CalXUI {
 
 	CalXScriptPlanes &CalXAppScriptEnvironment::getPlanes() {
 		return this->planes;
+	}
+
+	CalXScriptUI &CalXAppScriptEnvironment::getUI() {
+		return this->ui;
 	}
 
 }  // namespace CalXUI

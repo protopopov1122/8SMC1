@@ -25,16 +25,16 @@
 namespace CalXLua {
 
 	std::unique_ptr<CalXScript> LuaCalXScriptFactory::openFile(
-	    CalXScriptEnvironment &env, std::string path) {
+	    CalXScriptUIEnvironment &env, const std::string &path) {
 		return std::make_unique<LuaCalXScript>(env, path);
 	}
 
 	std::unique_ptr<CalXScript> LuaCalXScriptFactory::createShell(
-	    CalXScriptEnvironment &env) {
+	    CalXScriptUIEnvironment &env) {
 		return std::make_unique<LuaCalXScript>(env, "");
 	}
 
-	LuaCalXScript::LuaCalXScript(CalXScriptEnvironment &env, std::string path)
+	LuaCalXScript::LuaCalXScript(CalXScriptUIEnvironment &env, const std::string &path)
 	    : CalXScript(env), lua(true), lua_env(env, lua) {
 		this->bind_functions();
 		this->init_constants();
@@ -44,7 +44,7 @@ namespace CalXLua {
 		}
 	}
 
-	bool LuaCalXScript::execute(std::string code) {
+	bool LuaCalXScript::execute(const std::string &code) {
 		try {
 			return this->lua.execute(code.c_str()) == lcb::LuaStatusCode::Ok;
 		} catch (CalXException &ex) {
@@ -57,7 +57,7 @@ namespace CalXLua {
 		}
 	}
 
-	bool LuaCalXScript::call(std::string hook) {
+	bool LuaCalXScript::call(const std::string &hook) {
 		try {
 			return this->lua[hook.c_str()]() != lcb::LuaStatusCode::Ok;
 		} catch (CalXException &ex) {

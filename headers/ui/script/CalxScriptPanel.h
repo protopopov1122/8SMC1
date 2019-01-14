@@ -34,8 +34,8 @@ namespace CalXUI {
 
 	class CalxScriptPanel : public CalxPanelPane, CalxActionReceiver {
 	 public:
-		CalxScriptPanel(wxWindow *, wxWindowID, CalXScriptEnvironment &,
-		                CalXScriptFactory &);
+		CalxScriptPanel(wxWindow *, wxWindowID, CalXScriptUIEnvironment &,
+		                CalXScriptUIFactory &);
 
 		virtual bool isBusy();
 		virtual void shutdown();
@@ -53,8 +53,8 @@ namespace CalXUI {
 		void OnEnableEvent(wxThreadEvent &);
 		void addHandle(std::string, CalxScriptHandle *);
 
-		CalXScriptEnvironment &env;
-		CalXScriptFactory &scriptFactory;
+		CalXScriptUIEnvironment &env;
+		CalXScriptUIFactory &scriptFactory;
 		CalxActionQueue *queue;
 
 		wxListBox *scriptList;

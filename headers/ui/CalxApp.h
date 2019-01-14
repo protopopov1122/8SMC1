@@ -23,7 +23,7 @@
 
 #include "ui/CalxFrame.h"
 #include "ui/UIExtEngine.h"
-#include "ctrl-lib/script/ScriptEngine.h"
+#include "ui/script/ScriptEngine.h"
 #include "ui/CalxUnitProcessor.h"
 #include "ui/calx.h"
 #include "ui/CalxJournalManager.h"
@@ -43,6 +43,7 @@
 
 namespace CalXUI {
 
+	class CalXScriptUIEnvironment; // Forward referencing
 	class CalxDebugConsole;  // Forward referencing
 	class CalxErrorHandler;  // Forward referencing
 
@@ -62,8 +63,8 @@ namespace CalXUI {
 		CalxFrame *getMainFrame();
 
 		bool hasScriptEngine();
-		std::shared_ptr<CalXScriptEnvironment> getScriptEnvironment();
-		std::shared_ptr<CalXScriptFactory> getScriptFactory();
+		std::shared_ptr<CalXScriptUIEnvironment> getScriptEnvironment();
+		std::shared_ptr<CalXScriptUIFactory> getScriptFactory();
 		std::unique_ptr<CalXScript> loadScript(std::string);
 		JournalLogger &getJournal();
 
@@ -92,8 +93,8 @@ namespace CalXUI {
 		std::unique_ptr<CalxDebugConsole> debug_console;
 		CalxErrorHandler *error_handler;
 
-		std::shared_ptr<CalXScriptEnvironment> script_env;
-		std::shared_ptr<CalXScriptFactory> scriptFactory;
+		std::shared_ptr<CalXScriptUIEnvironment> script_env;
+		std::shared_ptr<CalXScriptUIFactory> scriptFactory;
 		std::unique_ptr<CalxJournalManager> journalManager;
 	};
 }  // namespace CalXUI

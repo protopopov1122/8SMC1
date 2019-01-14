@@ -21,19 +21,20 @@
 #ifndef CALX_LUA_CALX_LUA_SCRIPT_ENGINE_H_
 #define CALX_LUA_CALX_LUA_SCRIPT_ENGINE_H_
 
-#include "ctrl-lib/script/ScriptEngine.h"
+#include "ui/script/ScriptEngine.h"
 #include "lua-calx/LuaCalXEnvironment.h"
 
 using namespace CalX;
+using namespace CalXUI;
 
 namespace CalXLua {
 
 	class LuaCalXScript : public CalXScript {
 	 public:
-		LuaCalXScript(CalXScriptEnvironment &, std::string);
+		LuaCalXScript(CalXScriptUIEnvironment &, const std::string &);
 
-		bool execute(std::string) override;
-		bool call(std::string) override;
+		bool execute(const std::string &) override;
+		bool call(const std::string &) override;
 
 	 private:
 		void bind_functions();
@@ -43,11 +44,11 @@ namespace CalXLua {
 		LuaCalXEnvironment lua_env;
 	};
 
-	class LuaCalXScriptFactory : public CalXScriptFactory {
+	class LuaCalXScriptFactory : public CalXScriptUIFactory {
 	 public:
-		virtual std::unique_ptr<CalXScript> openFile(CalXScriptEnvironment &,
-		                                             std::string);
-		virtual std::unique_ptr<CalXScript> createShell(CalXScriptEnvironment &);
+		std::unique_ptr<CalXScript> openFile(CalXScriptUIEnvironment &,
+		                                             const std::string &) override;
+		std::unique_ptr<CalXScript> createShell(CalXScriptUIEnvironment &) override;
 	};
 }  // namespace CalXLua
 

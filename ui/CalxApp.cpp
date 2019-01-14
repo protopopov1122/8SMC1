@@ -229,15 +229,15 @@ namespace CalXUI {
 				             wxOK | wxICON_WARNING);
 			} else {
 				bool scr_success;
-				if (this->scriptLib->HasSymbol("getScriptEngine")) {
+				if (this->scriptLib->HasSymbol("getScriptUIEngine")) {
 					void *scr_raw_getter =
-					    this->scriptLib->GetSymbol("getScriptEngine", &scr_success);
-					ScriptEngine_getter scr_getter =
-					    *((ScriptEngine_getter *) &scr_raw_getter);
+					    this->scriptLib->GetSymbol("getScriptUIEngine", &scr_success);
+					ScriptUIEngine_getter scr_getter =
+					    *((ScriptUIEngine_getter *) &scr_raw_getter);
 					this->script_env =
 					    std::make_unique<CalXAppScriptEnvironment>(wxGetApp());
 					this->scriptFactory =
-					    std::unique_ptr<CalXScriptFactory>(scr_getter());
+					    std::unique_ptr<CalXScriptUIFactory>(scr_getter());
 				} else {
 					wxMessageBox(__("Scripting engine can't be loaded"), __("Warning"),
 					             wxOK | wxICON_WARNING);
@@ -327,11 +327,11 @@ namespace CalXUI {
 		return this->scriptFactory != nullptr;
 	}
 
-	std::shared_ptr<CalXScriptEnvironment> CalxApp::getScriptEnvironment() {
+	std::shared_ptr<CalXScriptUIEnvironment> CalxApp::getScriptEnvironment() {
 		return this->script_env;
 	}
 
-	std::shared_ptr<CalXScriptFactory> CalxApp::getScriptFactory() {
+	std::shared_ptr<CalXScriptUIFactory> CalxApp::getScriptFactory() {
 		return this->scriptFactory;
 	}
 

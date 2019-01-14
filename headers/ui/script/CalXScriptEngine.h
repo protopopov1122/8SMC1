@@ -22,7 +22,8 @@
 #define CALX_UI_SCRIPT_CALX_SCRIPT_ENGINE_H_
 
 #include <wx/thread.h>
-#include "ctrl-lib/script/ScriptEngine.h"
+#include "ui/calx.h"
+#include "ui/script/ScriptEngine.h"
 #include "ui/CalxApp.h"
 #include "ui/dev/CalxDeviceHandle.h"
 #include "ui/coord/CalxPlaneList.h"
@@ -95,7 +96,6 @@ namespace CalXUI {
 		ErrorCode measure(TrailerId) override;
 		ErrorCode move(coord_point_t, double) override;
 		ErrorCode configure(coord_point_t, double) override;
-		ErrorCode newWatcher() override;
 		std::optional<coord_point_t> getPosition() override;
 		std::pair<coord_rect_t, ErrorCode> getSize() override;
 		std::optional<bool> isMeasured() override;
@@ -117,17 +117,27 @@ namespace CalXUI {
 		CalxApp &app;
 	};
 
-	class CalXAppScriptEnvironment : public CalXScriptEnvironment {
+	class CalXAppScriptUI : public CalXScriptUI {
+	 public:
+		CalXAppScriptUI(CalxApp &);
+    ErrorCode openWatcher(std::size_t) override;
+	 private:
+		CalxApp &app;
+	};
+
+	class CalXAppScriptEnvironment : public CalXScriptUIEnvironment {
 	 public:
 		CalXAppScriptEnvironment(CalxApp &);
 
 		CalXScriptDevices &getDevices() override;
 		CalXScriptPlanes &getPlanes() override;
+		CalXScriptUI &getUI() override;
 
 	 private:
 		CalxApp &app;
 		CalXAppScriptDevices devices;
 		CalXAppScriptPlanes planes;
+		CalXAppScriptUI ui;
 	};
 
 	class CalXScriptHookThread : public wxThread {

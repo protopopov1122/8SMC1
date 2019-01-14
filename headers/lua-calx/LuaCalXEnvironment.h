@@ -21,11 +21,12 @@
 #ifndef CALX_LUA_CALX_LUA_CALX_ENVIRONMENT_H_
 #define CALX_LUA_CALX_LUA_CALX_ENVIRONMENT_H_
 
-#include "ctrl-lib/script/ScriptEngine.h"
+#include "ui/script/ScriptEngine.h"
 #include "luacppb/LuaCppB.h"
 #include <exception>
 
 using namespace CalX;
+using namespace CalXUI;
 
 namespace CalXLua {
 
@@ -43,28 +44,28 @@ namespace CalXLua {
 
 	class LuaCalXEnvironmentPosition {
 	 public:
-	 	LuaCalXEnvironmentPosition(CalXScriptEnvironment &);
+	 	LuaCalXEnvironmentPosition(CalXScriptUIEnvironment &);
 		double planeGetPositionX(std::size_t);
 		double planeGetPositionY(std::size_t);
 		ErrorCode planePositionAsCenter(std::size_t);
 	 private:
-	 	CalXScriptEnvironment &env;
+	 	CalXScriptUIEnvironment &env;
 	};
 
 	class LuaCalXEnvironmentSize {
 	 public:
-		LuaCalXEnvironmentSize(CalXScriptEnvironment &);
+		LuaCalXEnvironmentSize(CalXScriptUIEnvironment &);
 		double planeGetSizeX(std::size_t);
 		double planeGetSizeY(std::size_t);
 		double planeGetSizeW(std::size_t);
 		double planeGetSizeH(std::size_t);
 	 private:
-		CalXScriptEnvironment &env;
+		CalXScriptUIEnvironment &env;
 	};
 
 	class LuaCalXEnvironment {
 	 public:
-		LuaCalXEnvironment(CalXScriptEnvironment &, lcb::LuaState &);
+		LuaCalXEnvironment(CalXScriptUIEnvironment &, lcb::LuaState &);
 
 		device_id_t connectSerialMotor(uint8_t, uint32_t, SerialPortParity);
 		device_id_t connectSerialInstrument(uint8_t, uint32_t, SerialPortParity);
@@ -121,7 +122,7 @@ namespace CalXLua {
 		LuaCalXEnvironmentPosition Position;
 		LuaCalXEnvironmentSize Size;
 	 private:
-		CalXScriptEnvironment &env;
+		CalXScriptUIEnvironment &env;
 	};
 }  // namespace CalXLua
 

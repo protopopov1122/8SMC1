@@ -92,7 +92,6 @@ namespace CalX {
 		virtual ErrorCode measure(TrailerId) = 0;
 		virtual ErrorCode move(coord_point_t, double) = 0;
 		virtual ErrorCode configure(coord_point_t, double) = 0;
-		virtual ErrorCode newWatcher() = 0;
 		virtual std::optional<coord_point_t> getPosition() = 0;
 		virtual std::pair<coord_rect_t, ErrorCode> getSize() = 0;
 		virtual std::optional<bool> isMeasured() = 0;
@@ -127,8 +126,8 @@ namespace CalX {
 		CalXScript(CalXScriptEnvironment &);
 		virtual ~CalXScript() = default;
 
-		virtual bool call(std::string) = 0;
-		virtual bool execute(std::string) = 0;
+		virtual bool call(const std::string &) = 0;
+		virtual bool execute(const std::string &) = 0;
 
 	 protected:
 		CalXScriptEnvironment &env;
@@ -138,7 +137,7 @@ namespace CalX {
 	 public:
 		virtual ~CalXScriptFactory() = default;
 		virtual std::unique_ptr<CalXScript> openFile(CalXScriptEnvironment &,
-		                                             std::string) = 0;
+		                                             const std::string &) = 0;
 		virtual std::unique_ptr<CalXScript> createShell(
 		    CalXScriptEnvironment &) = 0;
 	};

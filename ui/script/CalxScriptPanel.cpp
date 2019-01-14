@@ -49,8 +49,8 @@ namespace CalXUI {
 	};
 
 	CalxScriptPanel::CalxScriptPanel(wxWindow *win, wxWindowID id,
-	                                 CalXScriptEnvironment &env,
-	                                 CalXScriptFactory &fact)
+	                                 CalXScriptUIEnvironment &env,
+	                                 CalXScriptUIFactory &fact)
 	    : CalxPanelPane::CalxPanelPane(win, id), env(env), scriptFactory(fact) {
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(sizer);
