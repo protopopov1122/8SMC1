@@ -43,9 +43,9 @@
 
 namespace CalXUI {
 
-	class CalXScriptUIEnvironment; // Forward referencing
-	class CalxDebugConsole;  // Forward referencing
-	class CalxErrorHandler;  // Forward referencing
+	class CalXScriptUIEnvironment;  // Forward referencing
+	class CalxDebugConsole;         // Forward referencing
+	class CalxErrorHandler;         // Forward referencing
 
 	wxDECLARE_EVENT(wxEVT_APP_ERROR, wxThreadEvent);
 	wxDECLARE_EVENT(wxEVT_APP_ALERT, wxThreadEvent);

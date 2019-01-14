@@ -34,7 +34,8 @@ namespace CalXUI {
 
 	static std::string FullLogName(const std::string &directory) {
 		std::stringstream ss;
-		ss << directory << static_cast<char>(wxFileName::GetPathSeparator()) << TimestampFormat << ".log";
+		ss << directory << static_cast<char>(wxFileName::GetPathSeparator())
+		   << TimestampFormat << ".log";
 		return ss.str();
 	}
 
@@ -49,12 +50,13 @@ namespace CalXUI {
 				wxDir::Make(this->journalDirectory);
 			}
 			std::string logName = FullLogName(this->journalDirectory);
-			this->journal = std::make_unique<TimedJournal>([this, logName](auto timepoint) {
-				std::time_t time = std::chrono::system_clock::to_time_t(timepoint);
-				std::stringstream ss;
-				ss << std::put_time(std::localtime(&time), logName.c_str());
-				return ss.str();
-			});
+			this->journal =
+			    std::make_unique<TimedJournal>([this, logName](auto timepoint) {
+				    std::time_t time = std::chrono::system_clock::to_time_t(timepoint);
+				    std::stringstream ss;
+				    ss << std::put_time(std::localtime(&time), logName.c_str());
+				    return ss.str();
+			    });
 			this->vacuum(conf);
 		} else {
 			this->journal = std::make_unique<DefaultJournal>();
@@ -68,15 +70,22 @@ namespace CalXUI {
 	}
 
 	void CalxJournalManager::vacuum(ConfigurationCatalogue &conf) {
-		std::vector<std::pair<std::string, std::chrono::system_clock::time_point>> files;
+		std::vector<std::pair<std::string, std::chrono::system_clock::time_point>>
+		    files;
 		this->getJournalFiles(files);
 		std::sort(files.begin(), files.end(), [](const auto &f1, const auto &f2) {
 			return f1.second <= f2.second;
 		});
-		if (conf.getEntry(CalxConfiguration::Logging)->has(CalxLoggingConfiguration::MaxSavedSessions)) {
-			std::size_t saved_sessions = conf.getEntry(CalxConfiguration::Logging)->getInt(CalxLoggingConfiguration::MaxSavedSessions);
+		if (conf.getEntry(CalxConfiguration::Logging)
+		        ->has(CalxLoggingConfiguration::MaxSavedSessions)) {
+			std::size_t saved_sessions =
+			    conf.getEntry(CalxConfiguration::Logging)
+			        ->getInt(CalxLoggingConfiguration::MaxSavedSessions);
 			if (files.size() > saved_sessions) {
-				std::vector<std::pair<std::string, std::chrono::system_clock::time_point>> removedFiles(files.begin(), files.begin() + (files.size() - saved_sessions));
+				std::vector<
+				    std::pair<std::string, std::chrono::system_clock::time_point>>
+				    removedFiles(files.begin(),
+				                 files.begin() + (files.size() - saved_sessions));
 				for (const auto &file : removedFiles) {
 					wxRemoveFile(file.first);
 					std::remove(files.begin(), files.end(), file);
@@ -85,18 +94,23 @@ namespace CalXUI {
 		}
 	}
 
-	void CalxJournalManager::getJournalFiles(std::vector<std::pair<std::string, std::chrono::system_clock::time_point>> &files) {
+	void CalxJournalManager::getJournalFiles(
+	    std::vector<std::pair<std::string, std::chrono::system_clock::time_point>>
+	        &files) {
 		wxArrayString fileArr;
 		wxDir::GetAllFiles(this->journalDirectory, &fileArr);
 		std::string logName = FullLogName(this->journalDirectory);
 		std::stringstream ss;
 		for (std::size_t i = 0; i < fileArr.GetCount(); i++) {
-			std::tm tm = {};;
+			std::tm tm = {};
+			;
 			ss.str(fileArr.Item(i).ToStdString());
 			ss >> std::get_time(&tm, logName.c_str());
 			if (!ss.fail()) {
-				std::chrono::system_clock::time_point timepoint = std::chrono::system_clock::from_time_t(std::mktime(&tm));
-				files.push_back(std::make_pair(fileArr.Item(i).ToStdString(), timepoint));
+				std::chrono::system_clock::time_point timepoint =
+				    std::chrono::system_clock::from_time_t(std::mktime(&tm));
+				files.push_back(
+				    std::make_pair(fileArr.Item(i).ToStdString(), timepoint));
 			}
 		}
 	}

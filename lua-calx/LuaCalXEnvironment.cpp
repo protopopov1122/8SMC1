@@ -28,11 +28,13 @@ namespace CalXLua {
 		return this->errcode;
 	}
 
-	const char* CalXException::what() const throw() {
+	const char *CalXException::what() const throw() {
 		return "CalX runtime error";
 	}
 
-	LuaCalXEnvironmentPosition::LuaCalXEnvironmentPosition(CalXScriptUIEnvironment &env) : env(env) {}
+	LuaCalXEnvironmentPosition::LuaCalXEnvironmentPosition(
+	    CalXScriptUIEnvironment &env)
+	    : env(env) {}
 
 	double LuaCalXEnvironmentPosition::planeGetPositionX(std::size_t id) {
 		std::optional<coord_point_t> res =
@@ -62,7 +64,8 @@ namespace CalXLua {
 		}
 	}
 
-	LuaCalXEnvironmentSize::LuaCalXEnvironmentSize(CalXScriptUIEnvironment &env) : env(env) {}
+	LuaCalXEnvironmentSize::LuaCalXEnvironmentSize(CalXScriptUIEnvironment &env)
+	    : env(env) {}
 
 	double LuaCalXEnvironmentSize::planeGetSizeX(std::size_t id) {
 		std::pair<coord_rect_t, ErrorCode> res =
@@ -100,12 +103,14 @@ namespace CalXLua {
 		return res.first.h;
 	}
 
-	LuaCalXEnvironment::LuaCalXEnvironment(CalXScriptUIEnvironment& env, lcb::LuaState &lua)
+	LuaCalXEnvironment::LuaCalXEnvironment(CalXScriptUIEnvironment &env,
+	                                       lcb::LuaState &lua)
 	    : MotorPower(lcb::LuaTable::create(lua.getState())),
-				MotorTrailer(lcb::LuaTable::create(lua.getState())),
-				InstrMode(lcb::LuaTable::create(lua.getState())),
-				Position(env), Size(env), env(env) {
-		
+	      MotorTrailer(lcb::LuaTable::create(lua.getState())),
+	      InstrMode(lcb::LuaTable::create(lua.getState())),
+	      Position(env),
+	      Size(env),
+	      env(env) {
 		auto power = this->MotorPower.ref(lua);
 		power["No"] = Power::NoPower;
 		power["Half"] = Power::HalfPower;
@@ -121,8 +126,9 @@ namespace CalXLua {
 		mode["Full"] = InstrumentMode::Full;
 	}
 
-	device_id_t LuaCalXEnvironment::connectSerialMotor(uint8_t port, uint32_t baudrate,
-	                                            SerialPortParity parity) {
+	device_id_t LuaCalXEnvironment::connectSerialMotor(uint8_t port,
+	                                                   uint32_t baudrate,
+	                                                   SerialPortParity parity) {
 		DeviceSerialPortConnectionPrms prms;
 		prms.port = port;
 		prms.speed = baudrate;
@@ -130,8 +136,8 @@ namespace CalXLua {
 		return env.getDevices().connectMotor(&prms);
 	}
 
-	device_id_t LuaCalXEnvironment::connectSerialInstrument(uint8_t port, uint32_t baudrate,
-	                                           		 	SerialPortParity parity) {
+	device_id_t LuaCalXEnvironment::connectSerialInstrument(
+	    uint8_t port, uint32_t baudrate, SerialPortParity parity) {
 		DeviceSerialPortConnectionPrms prms;
 		prms.port = port;
 		prms.speed = baudrate;
@@ -148,8 +154,7 @@ namespace CalXLua {
 	}
 
 	Power LuaCalXEnvironment::getMotorPower(device_id_t id) {
-		std::optional<Power> res =
-		    env.getDevices().getMotor(id)->getPower();
+		std::optional<Power> res = env.getDevices().getMotor(id)->getPower();
 		if (!res.has_value()) {
 			throw CalXException(ErrorCode::UnknownResource);
 		}
@@ -157,29 +162,26 @@ namespace CalXLua {
 	}
 
 	ErrorCode LuaCalXEnvironment::enableMotorPower(device_id_t id, bool power) {
-		ErrorCode res = env.getDevices()
-		                    .getMotor(id)
-		                    ->enablePower(power);
+		ErrorCode res = env.getDevices().getMotor(id)->enablePower(power);
 		if (res != ErrorCode::NoError) {
 			throw CalXException(res);
 		}
 		return res;
 	}
 
-	ErrorCode LuaCalXEnvironment::motorMove(device_id_t id, motor_coord_t pos, double speed) {
-		ErrorCode res = env.getDevices()
-		                    .getMotor(id)
-		                    ->move(pos, speed);
+	ErrorCode LuaCalXEnvironment::motorMove(device_id_t id, motor_coord_t pos,
+	                                        double speed) {
+		ErrorCode res = env.getDevices().getMotor(id)->move(pos, speed);
 		if (res != ErrorCode::NoError) {
 			throw CalXException(res);
 		}
 		return res;
 	}
 
-	ErrorCode LuaCalXEnvironment::motorRelativeMove(device_id_t id, motor_coord_t pos, double speed) {
-		ErrorCode res = env.getDevices()
-		                    .getMotor(id)
-		                    ->relativeMove(pos, speed);
+	ErrorCode LuaCalXEnvironment::motorRelativeMove(device_id_t id,
+	                                                motor_coord_t pos,
+	                                                double speed) {
+		ErrorCode res = env.getDevices().getMotor(id)->relativeMove(pos, speed);
 		if (res != ErrorCode::NoError) {
 			throw CalXException(res);
 		}
@@ -187,8 +189,7 @@ namespace CalXLua {
 	}
 
 	ErrorCode LuaCalXEnvironment::motorStop(device_id_t id) {
-		ErrorCode res =
-		    env.getDevices().getMotor(id)->stop();
+		ErrorCode res = env.getDevices().getMotor(id)->stop();
 		if (res != ErrorCode::NoError) {
 			throw CalXException(res);
 		}
@@ -204,10 +205,9 @@ namespace CalXLua {
 		return res.value();
 	}
 
-	ErrorCode LuaCalXEnvironment::motorMoveToTrailer(device_id_t id, TrailerId tr) {
-		ErrorCode res = env.getDevices()
-		                    .getMotor(id)
-		                    ->moveToTrailer(tr);
+	ErrorCode LuaCalXEnvironment::motorMoveToTrailer(device_id_t id,
+	                                                 TrailerId tr) {
+		ErrorCode res = env.getDevices().getMotor(id)->moveToTrailer(tr);
 		if (res != ErrorCode::NoError) {
 			throw CalXException(res);
 		}
@@ -215,9 +215,7 @@ namespace CalXLua {
 	}
 
 	bool LuaCalXEnvironment::motorCheckTrailers(device_id_t id) {
-		ErrorCode res = env.getDevices()
-		                    .getMotor(id)
-		                    ->checkTrailers();
+		ErrorCode res = env.getDevices().getMotor(id)->checkTrailers();
 		if (res != ErrorCode::NoError) {
 			throw CalXException(res);
 		}
@@ -225,9 +223,7 @@ namespace CalXLua {
 	}
 
 	ErrorCode LuaCalXEnvironment::motorWaitWhileRunning(device_id_t id) {
-		ErrorCode res = env.getDevices()
-		                    .getMotor(id)
-		                    ->waitWhileRunning();
+		ErrorCode res = env.getDevices().getMotor(id)->waitWhileRunning();
 		if (res != ErrorCode::NoError) {
 			throw CalXException(res);
 		}
@@ -235,9 +231,7 @@ namespace CalXLua {
 	}
 
 	ErrorCode LuaCalXEnvironment::instrumentOpenSession(device_id_t id) {
-		ErrorCode res = env.getDevices()
-		                    .getInstrument(id)
-		                    ->open_session();
+		ErrorCode res = env.getDevices().getInstrument(id)->open_session();
 		if (res != ErrorCode::NoError) {
 			throw CalXException(res);
 		}
@@ -245,9 +239,7 @@ namespace CalXLua {
 	}
 
 	ErrorCode LuaCalXEnvironment::instrumentCloseSession(device_id_t id) {
-		ErrorCode res = env.getDevices()
-		                    .getInstrument(id)
-		                    ->close_session();
+		ErrorCode res = env.getDevices().getInstrument(id)->close_session();
 		if (res != ErrorCode::NoError) {
 			throw CalXException(res);
 		}
@@ -255,9 +247,7 @@ namespace CalXLua {
 	}
 
 	ErrorCode LuaCalXEnvironment::instrumentEnable(device_id_t id, bool en) {
-		ErrorCode res = env.getDevices()
-		                    .getInstrument(id)
-		                    ->enable(en);
+		ErrorCode res = env.getDevices().getInstrument(id)->enable(en);
 		if (res != ErrorCode::NoError) {
 			throw CalXException(res);
 		}
@@ -265,9 +255,7 @@ namespace CalXLua {
 	}
 
 	bool LuaCalXEnvironment::instrumentIsEnabled(device_id_t id) {
-		std::optional<bool> res = env.getDevices()
-		                              .getInstrument(id)
-		                              ->isEnabled();
+		std::optional<bool> res = env.getDevices().getInstrument(id)->isEnabled();
 		if (!res.has_value()) {
 			throw CalXException(ErrorCode::UnknownResource);
 		}
@@ -275,9 +263,7 @@ namespace CalXLua {
 	}
 
 	ErrorCode LuaCalXEnvironment::instrumentSetRunnable(device_id_t id, bool r) {
-		ErrorCode res = env.getDevices()
-		                    .getInstrument(id)
-		                    ->setRunnable(r);
+		ErrorCode res = env.getDevices().getInstrument(id)->setRunnable(r);
 		if (res != ErrorCode::NoError) {
 			throw CalXException(res);
 		}
@@ -285,9 +271,7 @@ namespace CalXLua {
 	}
 
 	bool LuaCalXEnvironment::instrumentIsRunnable(device_id_t id) {
-		std::optional<bool> res = env.getDevices()
-		                              .getInstrument(id)
-		                              ->isRunnable();
+		std::optional<bool> res = env.getDevices().getInstrument(id)->isRunnable();
 		if (!res.has_value()) {
 			throw CalXException(ErrorCode::UnknownResource);
 		}
@@ -303,10 +287,9 @@ namespace CalXLua {
 		return res.value();
 	}
 
-	bool LuaCalXEnvironment::instrumentSetMode(device_id_t id, InstrumentMode mode) {
-		ErrorCode res = env.getDevices()
-		                    .getInstrument(id)
-		                    ->setMode(mode);
+	bool LuaCalXEnvironment::instrumentSetMode(device_id_t id,
+	                                           InstrumentMode mode) {
+		ErrorCode res = env.getDevices().getInstrument(id)->setMode(mode);
 		if (res != ErrorCode::NoError) {
 			throw CalXException(res);
 		}
@@ -314,9 +297,8 @@ namespace CalXLua {
 	}
 
 	bool LuaCalXEnvironment::instrumentIsSessionOpened(device_id_t id) {
-		std::optional<bool> res = env.getDevices()
-		                              .getInstrument(id)
-		                              ->isSessionOpened();
+		std::optional<bool> res =
+		    env.getDevices().getInstrument(id)->isSessionOpened();
 		if (!res.has_value()) {
 			throw CalXException(ErrorCode::UnknownResource);
 		}
@@ -332,31 +314,31 @@ namespace CalXLua {
 		return res.value();
 	}
 
-	std::size_t LuaCalXEnvironment::planeCreate(device_id_t m1, device_id_t m2, device_id_t ins) {
+	std::size_t LuaCalXEnvironment::planeCreate(device_id_t m1, device_id_t m2,
+	                                            device_id_t ins) {
 		return env.getPlanes().createPlane(m1, m2, ins);
 	}
 
-	ErrorCode LuaCalXEnvironment::planeMove(std::size_t id, double x, double y, double speed,
-	                                  bool sync, bool relative) {
+	ErrorCode LuaCalXEnvironment::planeMove(std::size_t id, double x, double y,
+	                                        double speed, bool sync,
+	                                        bool relative) {
 		coord_point_t dest = { x, y };
-		ErrorCode errcode = env.getPlanes()
-		                        .getPlane(id)
-		                        ->move(dest, speed, sync, relative);
+		ErrorCode errcode =
+		    env.getPlanes().getPlane(id)->move(dest, speed, sync, relative);
 		if (errcode != ErrorCode::NoError) {
 			throw CalXException(errcode);
 		}
 		return errcode;
 	}
 
-	ErrorCode LuaCalXEnvironment::planeArc(std::size_t id, double x, double y, double cx,
-	                                 double cy, int splitter, double speed,
-	                                 bool clockwise, bool relative) {
+	ErrorCode LuaCalXEnvironment::planeArc(std::size_t id, double x, double y,
+	                                       double cx, double cy, int splitter,
+	                                       double speed, bool clockwise,
+	                                       bool relative) {
 		coord_point_t dest = { x, y };
 		coord_point_t cen = { cx, cy };
-		ErrorCode errcode =
-		    env.getPlanes()
-		        .getPlane(id)
-		        ->arc(dest, cen, splitter, speed, clockwise, relative);
+		ErrorCode errcode = env.getPlanes().getPlane(id)->arc(
+		    dest, cen, splitter, speed, clockwise, relative);
 		if (errcode != ErrorCode::NoError) {
 			throw CalXException(errcode);
 		}
@@ -364,9 +346,7 @@ namespace CalXLua {
 	}
 
 	ErrorCode LuaCalXEnvironment::planeCalibrate(std::size_t id, TrailerId tid) {
-		ErrorCode errcode = env.getPlanes()
-		                        .getPlane(id)
-		                        ->calibrate(tid);
+		ErrorCode errcode = env.getPlanes().getPlane(id)->calibrate(tid);
 		if (errcode != ErrorCode::NoError) {
 			throw CalXException(errcode);
 		}
@@ -374,32 +354,27 @@ namespace CalXLua {
 	}
 
 	ErrorCode LuaCalXEnvironment::planeMeasure(std::size_t id, TrailerId tid) {
-		ErrorCode errcode = env.getPlanes()
-		                        .getPlane(id)
-		                        ->measure(tid);
+		ErrorCode errcode = env.getPlanes().getPlane(id)->measure(tid);
 		if (errcode != ErrorCode::NoError) {
 			throw CalXException(errcode);
 		}
 		return errcode;
 	}
 
-	ErrorCode LuaCalXEnvironment::planeFMove(std::size_t id, double x, double y, double speed) {
+	ErrorCode LuaCalXEnvironment::planeFMove(std::size_t id, double x, double y,
+	                                         double speed) {
 		coord_point_t dest = { x, y };
-		ErrorCode errcode = env.getPlanes()
-		                        .getPlane(id)
-		                        ->move(dest, speed);
+		ErrorCode errcode = env.getPlanes().getPlane(id)->move(dest, speed);
 		if (errcode != ErrorCode::NoError) {
 			throw CalXException(errcode);
 		}
 		return errcode;
 	}
 
-	ErrorCode LuaCalXEnvironment::planeConfigure(std::size_t id, double x, double y,
-	                                       double speed) {
+	ErrorCode LuaCalXEnvironment::planeConfigure(std::size_t id, double x,
+	                                             double y, double speed) {
 		coord_point_t dest = { x, y };
-		ErrorCode errcode = env.getPlanes()
-		                        .getPlane(id)
-		                        ->configure(dest, speed);
+		ErrorCode errcode = env.getPlanes().getPlane(id)->configure(dest, speed);
 		if (errcode != ErrorCode::NoError) {
 			throw CalXException(errcode);
 		}
@@ -407,8 +382,7 @@ namespace CalXLua {
 	}
 
 	ErrorCode LuaCalXEnvironment::planeNewWatcher(std::size_t id) {
-		ErrorCode errcode =
-		    env.getUI().openWatcher(id);
+		ErrorCode errcode = env.getUI().openWatcher(id);
 		if (errcode != ErrorCode::NoError) {
 			throw CalXException(errcode);
 		}
@@ -416,8 +390,7 @@ namespace CalXLua {
 	}
 
 	bool LuaCalXEnvironment::planeIsMeasured(std::size_t id) {
-		std::optional<bool> res =
-		    env.getPlanes().getPlane(id)->isMeasured();
+		std::optional<bool> res = env.getPlanes().getPlane(id)->isMeasured();
 		if (!res.has_value()) {
 			throw CalXException(ErrorCode::UnknownResource);
 		}
@@ -434,8 +407,8 @@ namespace CalXLua {
 		return this->env.getConfiguration().getEntry(entry)->getReal(key);
 	}
 
-	std::string LuaCalXEnvironment::getConfigurationString(const std::string &entry,
-	                                                       const std::string &key) {
+	std::string LuaCalXEnvironment::getConfigurationString(
+	    const std::string &entry, const std::string &key) {
 		return this->env.getConfiguration().getEntry(entry)->getString(key);
 	}
 
@@ -454,7 +427,8 @@ namespace CalXLua {
 		return this->env.getSettings() != nullptr;
 	}
 
-	int LuaCalXEnvironment::getSettingsInt(const std::string &entry, const std::string &key) {
+	int LuaCalXEnvironment::getSettingsInt(const std::string &entry,
+	                                       const std::string &key) {
 		if (this->env.getSettings() != nullptr) {
 			return this->env.getSettings()->getSettings().getEntry(entry)->getInt(
 			    key);
@@ -491,7 +465,8 @@ namespace CalXLua {
 			return false;
 		}
 	}
-	bool LuaCalXEnvironment::settingsHas(const std::string &entry, const std::string &key) {
+	bool LuaCalXEnvironment::settingsHas(const std::string &entry,
+	                                     const std::string &key) {
 		return this->env.getSettings() != nullptr &&
 		       this->env.getSettings()->getSettings().hasEntry(entry) &&
 		       this->env.getSettings()->getSettings().getEntry(entry)->has(key);

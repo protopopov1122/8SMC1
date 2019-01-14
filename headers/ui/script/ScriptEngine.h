@@ -25,29 +25,29 @@
 
 namespace CalXUI {
 
-  class CalXScriptUI {
-   public:
-    virtual ~CalXScriptUI() = default;
-    virtual CalX::ErrorCode openWatcher(std::size_t) = 0;
-  };
+	class CalXScriptUI {
+	 public:
+		virtual ~CalXScriptUI() = default;
+		virtual CalX::ErrorCode openWatcher(std::size_t) = 0;
+	};
 
-  class CalXScriptUIEnvironment : public CalX::CalXScriptEnvironment {
-   public:
-    using CalX::CalXScriptEnvironment::CalXScriptEnvironment;
-    virtual CalXScriptUI &getUI() = 0;
-  };
+	class CalXScriptUIEnvironment : public CalX::CalXScriptEnvironment {
+	 public:
+		using CalX::CalXScriptEnvironment::CalXScriptEnvironment;
+		virtual CalXScriptUI &getUI() = 0;
+	};
 
 	class CalXScriptUIFactory {
 	 public:
 		virtual ~CalXScriptUIFactory() = default;
-		virtual std::unique_ptr<CalX::CalXScript> openFile(CalXScriptUIEnvironment &,
-		                                             const std::string &) = 0;
+		virtual std::unique_ptr<CalX::CalXScript> openFile(
+		    CalXScriptUIEnvironment &, const std::string &) = 0;
 		virtual std::unique_ptr<CalX::CalXScript> createShell(
 		    CalXScriptUIEnvironment &) = 0;
 	};
 
 	typedef CalXScriptUIFactory *(*ScriptUIEngine_getter)();
 	extern "C" LIBEXPORT CalXScriptUIFactory *getScriptUIEngine();
-}
+}  // namespace CalXUI
 
 #endif

@@ -44,12 +44,13 @@ namespace CalXLua {
 
 	class LuaCalXEnvironmentPosition {
 	 public:
-	 	LuaCalXEnvironmentPosition(CalXScriptUIEnvironment &);
+		LuaCalXEnvironmentPosition(CalXScriptUIEnvironment &);
 		double planeGetPositionX(std::size_t);
 		double planeGetPositionY(std::size_t);
 		ErrorCode planePositionAsCenter(std::size_t);
+
 	 private:
-	 	CalXScriptUIEnvironment &env;
+		CalXScriptUIEnvironment &env;
 	};
 
 	class LuaCalXEnvironmentSize {
@@ -59,6 +60,7 @@ namespace CalXLua {
 		double planeGetSizeY(std::size_t);
 		double planeGetSizeW(std::size_t);
 		double planeGetSizeH(std::size_t);
+
 	 private:
 		CalXScriptUIEnvironment &env;
 	};
@@ -94,7 +96,8 @@ namespace CalXLua {
 
 		std::size_t planeCreate(device_id_t, device_id_t, device_id_t);
 		ErrorCode planeMove(std::size_t, double, double, double, bool, bool);
-		ErrorCode planeArc(std::size_t, double, double, double, double, int, double, bool, bool);
+		ErrorCode planeArc(std::size_t, double, double, double, double, int, double,
+		                   bool, bool);
 		ErrorCode planeCalibrate(std::size_t, TrailerId);
 		ErrorCode planeMeasure(std::size_t, TrailerId);
 		ErrorCode planeFMove(std::size_t, double, double, double);
@@ -104,7 +107,8 @@ namespace CalXLua {
 
 		int getConfigurationInt(const std::string &, const std::string &);
 		double getConfigurationFloat(const std::string &, const std::string &);
-		std::string getConfigurationString(const std::string &, const std::string &);
+		std::string getConfigurationString(const std::string &,
+		                                   const std::string &);
 		bool getConfigurationBoolean(const std::string &, const std::string &);
 		bool configurationHas(const std::string &, const std::string &);
 
@@ -121,6 +125,7 @@ namespace CalXLua {
 
 		LuaCalXEnvironmentPosition Position;
 		LuaCalXEnvironmentSize Size;
+
 	 private:
 		CalXScriptUIEnvironment &env;
 	};

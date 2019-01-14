@@ -682,13 +682,11 @@ namespace CalXUI {
 		return std::make_unique<CalXAppScriptPlane>(this->app, id);
 	}
 
-	CalXAppScriptUI::CalXAppScriptUI(CalxApp &app)
-		: app(app) {}
-	
+	CalXAppScriptUI::CalXAppScriptUI(CalxApp &app) : app(app) {}
+
 	ErrorCode CalXAppScriptUI::openWatcher(std::size_t id) {
 		CalxPlaneHandle *handle =
-		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(
-		        id);
+		    this->app.getMainFrame()->getPlaneList()->getPlaneHandle(id);
 		if (handle == nullptr) {
 			return ErrorCode::UnknownResource;
 		} else {
@@ -704,7 +702,7 @@ namespace CalXUI {
 	      app(app),
 	      devices(app),
 	      planes(app),
-		  ui(app) {}
+	      ui(app) {}
 
 	CalXScriptDevices &CalXAppScriptEnvironment::getDevices() {
 		return this->devices;

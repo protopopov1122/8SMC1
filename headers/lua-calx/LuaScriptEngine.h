@@ -47,7 +47,7 @@ namespace CalXLua {
 	class LuaCalXScriptFactory : public CalXScriptUIFactory {
 	 public:
 		std::unique_ptr<CalXScript> openFile(CalXScriptUIEnvironment &,
-		                                             const std::string &) override;
+		                                     const std::string &) override;
 		std::unique_ptr<CalXScript> createShell(CalXScriptUIEnvironment &) override;
 	};
 }  // namespace CalXLua

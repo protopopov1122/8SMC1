@@ -120,7 +120,8 @@ namespace CalXUI {
 	class CalXAppScriptUI : public CalXScriptUI {
 	 public:
 		CalXAppScriptUI(CalxApp &);
-    ErrorCode openWatcher(std::size_t) override;
+		ErrorCode openWatcher(std::size_t) override;
+
 	 private:
 		CalxApp &app;
 	};

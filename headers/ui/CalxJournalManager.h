@@ -35,8 +35,10 @@ namespace CalXUI {
 		JournalLogger &getJournal();
 
 	 private:
-                void vacuum(ConfigurationCatalogue &);
-                void getJournalFiles(std::vector<std::pair<std::string, std::chrono::system_clock::time_point>> &);
+		void vacuum(ConfigurationCatalogue &);
+		void getJournalFiles(
+		    std::vector<
+		        std::pair<std::string, std::chrono::system_clock::time_point>> &);
 
 		std::string journalDirectory;
 		std::unique_ptr<ConfigurableJournal> journal;
