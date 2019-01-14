@@ -3,10 +3,9 @@ project(CalX)
 
 # Build standard Device API only on Windows if USMCDLL header is present
 if (WIN32 AND EXISTS ${THIRD_PARTY}/USMCDLL.h)
-	add_library(dev_standard SHARED 8SMC1Device.cpp NL300Instrument.cpp NL300Config.cpp NL300Command.cpp NL300Message.cpp StandardDeviceManager.cpp)
-	target_include_directories(dev_standard PUBLIC ${THIRD_PARTY})
 	if (NOT EXCLUDE_USMC_STUB)
 		add_library(USMCDLL SHARED stub.cpp)
+		target_include_directories(USMCDLL PUBLIC ${THIRD_PARTY})
 		if (MINGW)
 			SET_TARGET_PROPERTIES(USMCDLL PROPERTIES PREFIX "")
 		endif (MINGW)
@@ -24,7 +23,8 @@ if (WIN32 AND EXISTS ${THIRD_PARTY}/USMCDLL.h)
 	endif (NOT EXCLUDE_USMC_STUB)
 
 
-	target_include_directories(dev_standard PUBLIC ${CMAKE_SOURCE_DIR}/headers)
+	add_library(dev_standard SHARED 8SMC1Device.cpp NL300Instrument.cpp NL300Config.cpp NL300Command.cpp NL300Message.cpp StandardDeviceManager.cpp)
+	target_include_directories(dev_standard PUBLIC ${CMAKE_SOURCE_DIR}/headers ${THIRD_PARTY})
 	target_link_libraries(dev_standard calx USMCDLL)
 	if (MINGW)
 		SET_TARGET_PROPERTIES(dev_standard PROPERTIES PREFIX "")
