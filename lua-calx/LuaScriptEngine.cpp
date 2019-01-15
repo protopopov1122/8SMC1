@@ -36,9 +36,8 @@ namespace CalXLua {
 
 	LuaCalXScript::LuaCalXScript(CalXScriptUIEnvironment &env,
 	                             const std::string &path)
-	    : CalXScript(env), lua(true), lua_env(env, lua) {
-		this->bind_functions();
-		this->init_constants();
+	    : CalXScript(env), lua(true), env(env) {
+		this->initBindings();
 
 		if (!path.empty()) {
 			this->lua.load(path);
@@ -71,85 +70,122 @@ namespace CalXLua {
 		}
 	}
 
-	void LuaCalXScript::bind_functions() {
-		lcb::ClassBinder<LuaCalXEnvironmentPosition>::bind(
-		    lua, "getX", &LuaCalXEnvironmentPosition::planeGetPositionX, "getY",
-		    &LuaCalXEnvironmentPosition::planeGetPositionY, "asCenter",
-		    &LuaCalXEnvironmentPosition::planePositionAsCenter);
-
-		lcb::ClassBinder<LuaCalXEnvironmentSize>::bind(
-		    lua, "getX", &LuaCalXEnvironmentSize::planeGetSizeX, "getY",
-		    &LuaCalXEnvironmentSize::planeGetSizeY, "getW",
-		    &LuaCalXEnvironmentSize::planeGetSizeW, "getH",
-		    &LuaCalXEnvironmentSize::planeGetSizeH);
-
-		this->lua["calx"] = *lcb::LuaValueFactory::newTable(lua);
-		this->lua["calx"]["motor"] = lcb::ObjectBinder::bind(
-		    lua_env, lua, "connectSerial", &LuaCalXEnvironment::connectSerialMotor,
-		    "getCount", &LuaCalXEnvironment::getMotorCount, "getPower",
-		    &LuaCalXEnvironment::getMotorPower, "enablePower",
-		    &LuaCalXEnvironment::enableMotorPower, "move",
-		    &LuaCalXEnvironment::motorMove, "relativeMove",
-		    &LuaCalXEnvironment::motorRelativeMove, "stop",
-		    &LuaCalXEnvironment::motorStop, "getPosition",
-		    &LuaCalXEnvironment::motorPosition, "waitWhileRunning",
-		    &LuaCalXEnvironment::motorWaitWhileRunning, "moveToTrailer",
-		    &LuaCalXEnvironment::motorMoveToTrailer, "checkTrailers",
-		    &LuaCalXEnvironment::motorCheckTrailers, "power",
-		    &LuaCalXEnvironment::MotorPower, "trailer",
-		    &LuaCalXEnvironment::MotorTrailer);
-
-		this->lua["calx"]["instrument"] = lcb::ObjectBinder::bind(
-		    lua_env, lua, "connectSerial",
-		    &LuaCalXEnvironment::connectSerialInstrument, "getCount",
-		    &LuaCalXEnvironment::getInstrumentCount, "openSession",
-		    &LuaCalXEnvironment::instrumentOpenSession, "closeSession",
-		    &LuaCalXEnvironment::instrumentCloseSession, "enable",
-		    &LuaCalXEnvironment::instrumentEnable, "isEnabled",
-		    &LuaCalXEnvironment::instrumentIsEnabled, "setRunnable",
-		    &LuaCalXEnvironment::instrumentSetRunnable, "isRunnable",
-		    &LuaCalXEnvironment::instrumentIsRunnable, "getMode",
-		    &LuaCalXEnvironment::instrumentGetMode, "setMode",
-		    &LuaCalXEnvironment::instrumentSetMode, "isSessionOpened",
-		    &LuaCalXEnvironment::instrumentIsSessionOpened, "getInfo",
-		    &LuaCalXEnvironment::instrumentGetInfo, "mode",
-		    &LuaCalXEnvironment::InstrMode);
-
-		this->lua["calx"]["plane"] = lcb::ObjectBinder::bind(
-		    lua_env, lua, "create", &LuaCalXEnvironment::planeCreate, "move",
-		    &LuaCalXEnvironment::planeMove, "arc", &LuaCalXEnvironment::planeArc,
-		    "calibrate", &LuaCalXEnvironment::planeCalibrate, "measure",
-		    &LuaCalXEnvironment::planeMeasure, "fmove",
-		    &LuaCalXEnvironment::planeFMove, "configure",
-		    &LuaCalXEnvironment::planeConfigure, "newWatcher",
-		    &LuaCalXEnvironment::planeNewWatcher, "isMeasured",
-		    &LuaCalXEnvironment::planeIsMeasured, "position",
-		    &LuaCalXEnvironment::Position, "size", &LuaCalXEnvironment::Size);
-
-		this->lua["calx"]["config"] = lcb::ObjectBinder::bind(
-		    lua_env, lua, "getInt", &LuaCalXEnvironment::getConfigurationInt,
-		    "getFloat", &LuaCalXEnvironment::getConfigurationFloat, "getBool",
-		    &LuaCalXEnvironment::getConfigurationBoolean, "getString",
-		    &LuaCalXEnvironment::getConfigurationString, "has",
-		    &LuaCalXEnvironment::configurationHas);
-
-		this->lua["calx"]["settings"] = lcb::ObjectBinder::bind(
-		    lua_env, lua, "getInt", &LuaCalXEnvironment::getSettingsInt, "getFloat",
-		    &LuaCalXEnvironment::getSettingsFloat, "getBool",
-		    &LuaCalXEnvironment::getSettingsBoolean, "getString",
-		    &LuaCalXEnvironment::getSettingsString, "has",
-		    &LuaCalXEnvironment::settingsHas, "exist",
-		    &LuaCalXEnvironment::hasSettings);
-	}
-
-	void LuaCalXScript::init_constants() {
+	void LuaCalXScript::initBindings() {
 		auto parity = lcb::LuaValueFactory::newTable(lua);
-		this->lua["calx"]["serial"] = *lcb::LuaValueFactory::newTable(lua);
-		this->lua["calx"]["serial"]["parity"] = *parity;
 		parity["No"] = SerialPortParity::No;
 		parity["Odd"] = SerialPortParity::Odd;
 		parity["Even"] = SerialPortParity::Even;
 		parity["Mark"] = SerialPortParity::Mark;
 		parity["Space"] = SerialPortParity::Space;
+
+		auto power = lcb::LuaValueFactory::newTable(lua);
+		power["No"] = Power::NoPower;
+		power["Half"] = Power::HalfPower;
+		power["Full"] = Power::FullPower;
+
+		auto trailer = lcb::LuaValueFactory::newTable(lua);
+		trailer["Top"] = TrailerId::Trailer1;
+		trailer["Bottom"] = TrailerId::Trailer2;
+
+		auto mode = lcb::LuaValueFactory::newTable(lua);
+		mode["Off"] = InstrumentMode::Off;
+		mode["Prepare"] = InstrumentMode::Prepare;
+		mode["Full"] = InstrumentMode::Full;
+
+		lcb::ClassBinder<LuaCalXMotor>::bind(lua,
+			"id", &LuaCalXMotor::getDeviceID,
+			"power", &LuaCalXMotor::getPower,
+			"enable", &LuaCalXMotor::enablePower,
+			"move", &LuaCalXMotor::move,
+			"relMove", &LuaCalXMotor::relativeMove,
+			"stop", &LuaCalXMotor::stop,
+			"position", &LuaCalXMotor::getPosition,
+			"toTrailer", &LuaCalXMotor::moveToTrailer,
+			"checkTrailers", &LuaCalXMotor::checkTrailers,
+			"wait", &LuaCalXMotor::waitWhileRunning);
+		
+		lcb::ClassBinder<LuaCalXMotors>::bind(lua,
+			"get", &LuaCalXMotors::getMotor,
+			"count", &LuaCalXMotors::getCount,
+			"connect", &LuaCalXMotors::connectSerialMotor,
+			"power", lcb::LuaValueFactory::wrap(lua, *power),
+			"trailer", lcb::LuaValueFactory::wrap(lua, *trailer));
+
+		lcb::ClassBinder<LuaCalXInstrument>::bind(lua,
+			"id", &LuaCalXInstrument::getDeviceID,
+			"open", &LuaCalXInstrument::open_session,
+			"close", &LuaCalXInstrument::close_session,
+			"opened", &LuaCalXInstrument::isSessionOpened,
+			"enable", &LuaCalXInstrument::enable,
+			"enabled", &LuaCalXInstrument::isEnabled,
+			"runnable", &LuaCalXInstrument::isRunnable,
+			"setRunnable", &LuaCalXInstrument::setRunnable,
+			"mode", &LuaCalXInstrument::getMode,
+			"setMode", &LuaCalXInstrument::setMode,
+			"info", &LuaCalXInstrument::getInfo);
+		
+		lcb::ClassBinder<LuaCalXInstruments>::bind(lua,
+			"get", &LuaCalXInstruments::getInstrument,
+			"count", &LuaCalXInstruments::getCount,
+			"connect", &LuaCalXInstruments::connectSerialInstrument,
+			"mode", lcb::LuaValueFactory::wrap(lua, *mode));
+
+		auto coordPoint = lcb::ClassBinder<coord_point_t>::bind(lua,
+			"x", &coord_point_t::x,
+			"y", &coord_point_t::y,
+			"new", &lcb::LuaCppConstructor<coord_point_t, double, double>);
+		
+		auto coordRect = lcb::ClassBinder<coord_rect_t>::bind(lua,
+			"x", &coord_rect_t::x,
+			"y", &coord_rect_t::y,
+			"w", &coord_rect_t::w,
+			"h", &coord_rect_t::h,
+			"new", &lcb::LuaCppConstructor<coord_rect_t, double, double, double, double>);
+
+		lcb::ClassBinder<LuaCalXPlane>::bind(lua,
+			"id", &LuaCalXPlane::getPlaneID,
+			"move", static_cast<void (LuaCalXPlane::*)(coord_point_t, double, bool, bool)>(&LuaCalXPlane::move),
+			"arc", &LuaCalXPlane::arc,
+			"calibrate", &LuaCalXPlane::calibrate,
+			"measure", &LuaCalXPlane::measure,
+			"fmove", static_cast<void (LuaCalXPlane::*)(coord_point_t, double)>(&LuaCalXPlane::move),
+			"configure", &LuaCalXPlane::configure,
+			"position", &LuaCalXPlane::getPosition,
+			"size", &LuaCalXPlane::getSize,
+			"measured", &LuaCalXPlane::isMeasured,
+			"asCenter", &LuaCalXPlane::positionAsCenter,
+			"openWatcher", &LuaCalXPlane::openWatcher);
+		
+		lcb::ClassBinder<LuaCalXPlanes>::bind(lua,
+			"create", &LuaCalXPlanes::create,
+			"get", &LuaCalXPlanes::getPlane);
+
+		lcb::ClassBinder<ConfiguationFlatDictionary>::bind(lua,
+			"has", &ConfiguationFlatDictionary::has,
+			"int", &ConfiguationFlatDictionary::getInt,
+			"float", &ConfiguationFlatDictionary::getReal,
+			"string", &ConfiguationFlatDictionary::getString,
+			"bool", &ConfiguationFlatDictionary::getBool);
+
+		lcb::ClassBinder<LuaCalXConfig>::bind(lua,
+			"get", &LuaCalXConfig::getEntry,
+			"has", &LuaCalXConfig::hasEntry);
+
+		lcb::ClassBinder<LuaCalXSettings>::bind(lua,
+			"exists", &LuaCalXSettings::exists,
+			"has", &LuaCalXSettings::hasEntry,
+			"get", &LuaCalXSettings::getEntry);
+
+		this->lua["calx"] = *lcb::LuaValueFactory::newTable(lua);
+
+		this->lua["calx"]["serial"] = *lcb::LuaValueFactory::newTable(lua);
+		this->lua["calx"]["serial"]["parity"] = *parity;
+		this->lua["calx"]["point"] = coordPoint;
+		this->lua["calx"]["rect"] = coordRect;
+		this->lua["calx"]["motors"] = std::make_unique<LuaCalXMotors>(this->env);
+		this->lua["calx"]["instruments"] = std::make_unique<LuaCalXInstruments>(this->env);
+		this->lua["calx"]["planes"] = std::make_unique<LuaCalXPlanes>(this->env);
+		this->lua["calx"]["config"] = std::make_unique<LuaCalXConfig>(this->env);
+		this->lua["calx"]["settings"] = std::make_unique<LuaCalXSettings>(this->env);
 	}
 }  // namespace CalXLua

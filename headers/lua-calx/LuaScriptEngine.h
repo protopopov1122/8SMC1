@@ -21,11 +21,7 @@
 #ifndef CALX_LUA_CALX_LUA_SCRIPT_ENGINE_H_
 #define CALX_LUA_CALX_LUA_SCRIPT_ENGINE_H_
 
-#include "ui/script/ScriptEngine.h"
 #include "lua-calx/LuaCalXEnvironment.h"
-
-using namespace CalX;
-using namespace CalXUI;
 
 namespace CalXLua {
 
@@ -37,11 +33,10 @@ namespace CalXLua {
 		bool call(const std::string &) override;
 
 	 private:
-		void bind_functions();
-		void init_constants();
+		void initBindings();
 
 		lcb::LuaEnvironment lua;
-		LuaCalXEnvironment lua_env;
+		CalXScriptUIEnvironment &env;
 	};
 
 	class LuaCalXScriptFactory : public CalXScriptUIFactory {

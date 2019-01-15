@@ -27,6 +27,7 @@
 
 using namespace CalX;
 using namespace CalXUI;
+namespace lcb = LuaCppB;
 
 namespace CalXLua {
 
@@ -40,92 +41,111 @@ namespace CalXLua {
 		ErrorCode errcode;
 	};
 
-	namespace lcb = LuaCppB;
-
-	class LuaCalXEnvironmentPosition {
+	class LuaCalXMotor {
 	 public:
-		LuaCalXEnvironmentPosition(CalXScriptUIEnvironment &);
-		double planeGetPositionX(std::size_t);
-		double planeGetPositionY(std::size_t);
-		ErrorCode planePositionAsCenter(std::size_t);
+		LuaCalXMotor(CalXScriptUIEnvironment &, device_id_t);
 
+		device_id_t getDeviceID() const;
+		Power getPower();
+		void enablePower(bool);
+		void move(motor_coord_t, float);
+		void relativeMove(motor_coord_t, float);
+		void stop();
+		motor_coord_t getPosition();
+		void moveToTrailer(TrailerId);
+		void checkTrailers();
+		void waitWhileRunning();
+	 private:
+		std::unique_ptr<CalXScriptMotor> motor;
+		device_id_t deviceId;
+	};
+
+	class LuaCalXMotors {
+	 public:
+	 	LuaCalXMotors(CalXScriptUIEnvironment &);
+		std::unique_ptr<LuaCalXMotor> connectSerialMotor(uint8_t, uint32_t, SerialPortParity);
+		std::size_t getCount();
+		std::unique_ptr<LuaCalXMotor> getMotor(device_id_t);
 	 private:
 		CalXScriptUIEnvironment &env;
 	};
 
-	class LuaCalXEnvironmentSize {
+	class LuaCalXInstrument {
 	 public:
-		LuaCalXEnvironmentSize(CalXScriptUIEnvironment &);
-		double planeGetSizeX(std::size_t);
-		double planeGetSizeY(std::size_t);
-		double planeGetSizeW(std::size_t);
-		double planeGetSizeH(std::size_t);
+		LuaCalXInstrument(CalXScriptUIEnvironment &, device_id_t);
+	
+		device_id_t getDeviceID() const;
+		void open_session();
+		void close_session();
+		void enable(bool);
+		bool isEnabled();
+		bool isRunnable();
+		void setRunnable(bool);
+		InstrumentMode getMode();
+		void setMode(InstrumentMode);
+		bool isSessionOpened();
+		std::string getInfo();
+	 private:
+		std::unique_ptr<CalXScriptInstrument> instrument;
+		device_id_t deviceId;
+	};
 
+	class LuaCalXInstruments {
+	 public:
+		LuaCalXInstruments(CalXScriptUIEnvironment &);
+		std::unique_ptr<LuaCalXInstrument> connectSerialInstrument(uint8_t, uint32_t, SerialPortParity);
+		std::size_t getCount();
+		std::unique_ptr<LuaCalXInstrument> getInstrument(device_id_t);
 	 private:
 		CalXScriptUIEnvironment &env;
 	};
 
-	class LuaCalXEnvironment {
+	class LuaCalXPlane {
 	 public:
-		LuaCalXEnvironment(CalXScriptUIEnvironment &, lcb::LuaState &);
+		LuaCalXPlane(CalXScriptUIEnvironment &, std::size_t);
+		std::size_t getPlaneID() const;
+		void move(coord_point_t, double, bool, bool);
+		void arc(coord_point_t, coord_point_t, int, double, bool,
+		                      bool);
+		void calibrate(TrailerId);
+		void measure(TrailerId);
+		void move(coord_point_t, double);
+		void configure(coord_point_t, double);
+		coord_point_t getPosition();
+		coord_rect_t getSize();
+		bool isMeasured();
+		bool positionAsCenter();
+		void openWatcher();
+	 private:
+	 	CalXScriptUIEnvironment &env;
+		std::unique_ptr<CalXScriptPlane> plane;
+		std::size_t planeId;
+	};
 
-		device_id_t connectSerialMotor(uint8_t, uint32_t, SerialPortParity);
-		device_id_t connectSerialInstrument(uint8_t, uint32_t, SerialPortParity);
-		std::size_t getMotorCount();
-		std::size_t getInstrumentCount();
-		Power getMotorPower(device_id_t);
-		ErrorCode enableMotorPower(device_id_t, bool);
-		ErrorCode motorMove(device_id_t, motor_coord_t, double);
-		ErrorCode motorRelativeMove(device_id_t, motor_coord_t, double);
-		ErrorCode motorStop(device_id_t);
-		motor_coord_t motorPosition(device_id_t);
-		ErrorCode motorMoveToTrailer(device_id_t, TrailerId);
-		bool motorCheckTrailers(device_id_t);
-		ErrorCode motorWaitWhileRunning(device_id_t);
+	class LuaCalXPlanes {
+	 public:
+		LuaCalXPlanes(CalXScriptUIEnvironment &);
+		std::unique_ptr<LuaCalXPlane> create(LuaCalXMotor &, LuaCalXMotor &, LuaCalXInstrument &);
+		std::unique_ptr<LuaCalXPlane> getPlane(std::size_t);
+	 private:
+	 	CalXScriptUIEnvironment &env;
+	};
 
-		ErrorCode instrumentOpenSession(device_id_t);
-		ErrorCode instrumentCloseSession(device_id_t);
-		ErrorCode instrumentEnable(device_id_t, bool);
-		bool instrumentIsEnabled(device_id_t);
-		ErrorCode instrumentSetRunnable(device_id_t, bool);
-		bool instrumentIsRunnable(device_id_t);
-		InstrumentMode instrumentGetMode(device_id_t);
-		bool instrumentSetMode(device_id_t, InstrumentMode);
-		bool instrumentIsSessionOpened(device_id_t);
-		std::string instrumentGetInfo(device_id_t);
+	class LuaCalXConfig {
+	 public:
+		LuaCalXConfig(CalXScriptUIEnvironment &);
+		ConfiguationFlatDictionary &getEntry(const std::string &);
+		bool hasEntry(const std::string &);
+	 private:
+		CalXScriptUIEnvironment &env;
+	};
 
-		std::size_t planeCreate(device_id_t, device_id_t, device_id_t);
-		ErrorCode planeMove(std::size_t, double, double, double, bool, bool);
-		ErrorCode planeArc(std::size_t, double, double, double, double, int, double,
-		                   bool, bool);
-		ErrorCode planeCalibrate(std::size_t, TrailerId);
-		ErrorCode planeMeasure(std::size_t, TrailerId);
-		ErrorCode planeFMove(std::size_t, double, double, double);
-		ErrorCode planeConfigure(std::size_t, double, double, double);
-		ErrorCode planeNewWatcher(std::size_t);
-		bool planeIsMeasured(std::size_t);
-
-		int getConfigurationInt(const std::string &, const std::string &);
-		double getConfigurationFloat(const std::string &, const std::string &);
-		std::string getConfigurationString(const std::string &,
-		                                   const std::string &);
-		bool getConfigurationBoolean(const std::string &, const std::string &);
-		bool configurationHas(const std::string &, const std::string &);
-
-		bool hasSettings();
-		int getSettingsInt(const std::string &, const std::string &);
-		double getSettingsFloat(const std::string &, const std::string &);
-		std::string getSettingsString(const std::string &, const std::string &);
-		bool getSettingsBoolean(const std::string &, const std::string &);
-		bool settingsHas(const std::string &, const std::string &);
-
-		lcb::LuaTable MotorPower;
-		lcb::LuaTable MotorTrailer;
-		lcb::LuaTable InstrMode;
-
-		LuaCalXEnvironmentPosition Position;
-		LuaCalXEnvironmentSize Size;
-
+	class LuaCalXSettings {
+	 public:
+		LuaCalXSettings(CalXScriptUIEnvironment &);
+		bool exists();
+		ConfiguationFlatDictionary &getEntry(const std::string &);
+		bool hasEntry(const std::string &);
 	 private:
 		CalXScriptUIEnvironment &env;
 	};
