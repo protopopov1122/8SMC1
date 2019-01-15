@@ -58,6 +58,7 @@ namespace CalX {
 		Power power;
 
 		motor_coord_t destination;
+		float speed;
 	};
 }  // namespace CalX
 

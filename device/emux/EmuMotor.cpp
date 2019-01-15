@@ -26,10 +26,13 @@
 
 namespace CalX {
 
+	static constexpr unsigned int SPEED_FACTOR = 10;
+
 	EmuMotor::EmuMotor(device_id_t id, EmuDeviceManager &devman)
 	    : Motor::Motor(id), devman(devman) {
 		this->pos = 0;
 		this->destination = 0;
+		this->speed = 0.0f;
 		this->power = Power::NoPower;
 		this->motorWorks = true;
 
@@ -81,6 +84,7 @@ namespace CalX {
 		}
 		this->power = Power::FullPower;
 		this->destination = dest;
+		this->speed = speed * SPEED_FACTOR;
 		return true;
 	}
 
@@ -97,11 +101,12 @@ namespace CalX {
 	void EmuMotor::terminate() {}
 
 	void EmuMotor::motorThread() {
-		const int MOTOR_SPEED = 20000;
+		const int MAX_SPEED = 4000 * SPEED_FACTOR;
 		const int DISCR = 100;  // times per second
-		const int MOTOR_STEP = MOTOR_SPEED / DISCR;
 		while (this->motorWorks) {
 			if (this->destination != this->pos) {
+				const int MOTOR_SPEED = this->speed > MAX_SPEED ? MAX_SPEED : static_cast<int>(this->speed);
+				const int MOTOR_STEP = MOTOR_SPEED / DISCR;
 				if (abs(this->destination - this->pos) <= MOTOR_STEP) {
 					this->pos = this->destination;
 				} else {
