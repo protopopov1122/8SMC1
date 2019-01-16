@@ -33,13 +33,14 @@ namespace CalXLua {
 	}
 
 	LuaCalXMotor::LuaCalXMotor(CalXScriptUIEnvironment &env, device_id_t deviceId)
-		: motor(env.getDevices().getMotor(deviceId)), deviceId(deviceId) {
+	    : motor(env.getDevices().getMotor(deviceId)), deviceId(deviceId) {
 		if (!this->motor->isValid()) {
 			throw CalXException(ErrorCode::UnknownResource);
 		}
-		this->halt_on_fail = env.getConfiguration().getEntry("script")->getBool("halt_on_fail", false);
+		this->halt_on_fail = env.getConfiguration().getEntry("script")->getBool(
+		    "halt_on_fail", false);
 	}
-	
+
 	device_id_t LuaCalXMotor::getDeviceID() const {
 		return this->deviceId;
 	}
@@ -125,31 +126,35 @@ namespace CalXLua {
 		}
 	}
 
-	LuaCalXMotors::LuaCalXMotors(CalXScriptUIEnvironment &env)
-		: env(env) {}
-	
-	std::unique_ptr<LuaCalXMotor> LuaCalXMotors::connectSerialMotor(uint8_t port, uint32_t baudrate, SerialPortParity parity) {
+	LuaCalXMotors::LuaCalXMotors(CalXScriptUIEnvironment &env) : env(env) {}
+
+	std::unique_ptr<LuaCalXMotor> LuaCalXMotors::connectSerialMotor(
+	    uint8_t port, uint32_t baudrate, SerialPortParity parity) {
 		DeviceSerialPortConnectionPrms prms;
 		prms.port = port;
 		prms.speed = baudrate;
 		prms.parity = parity;
-		return std::make_unique<LuaCalXMotor>(this->env, this->env.getDevices().connectMotor(&prms));
+		return std::make_unique<LuaCalXMotor>(
+		    this->env, this->env.getDevices().connectMotor(&prms));
 	}
 
 	std::size_t LuaCalXMotors::getCount() {
 		return this->env.getDevices().getMotorCount();
 	}
-	
+
 	std::unique_ptr<LuaCalXMotor> LuaCalXMotors::getMotor(device_id_t deviceId) {
 		return std::make_unique<LuaCalXMotor>(this->env, deviceId);
 	}
 
-	LuaCalXInstrument::LuaCalXInstrument(CalXScriptUIEnvironment &env, device_id_t deviceId)
-		: instrument(env.getDevices().getInstrument(deviceId)), deviceId(deviceId) {
+	LuaCalXInstrument::LuaCalXInstrument(CalXScriptUIEnvironment &env,
+	                                     device_id_t deviceId)
+	    : instrument(env.getDevices().getInstrument(deviceId)),
+	      deviceId(deviceId) {
 		if (!this->instrument->isValid()) {
 			throw CalXException(ErrorCode::UnknownResource);
 		}
-		this->halt_on_fail = env.getConfiguration().getEntry("script")->getBool("halt_on_fail", false);
+		this->halt_on_fail = env.getConfiguration().getEntry("script")->getBool(
+		    "halt_on_fail", false);
 	}
 
 	device_id_t LuaCalXInstrument::getDeviceID() const {
@@ -247,37 +252,44 @@ namespace CalXLua {
 	}
 
 	LuaCalXInstruments::LuaCalXInstruments(CalXScriptUIEnvironment &env)
-		: env(env) {}
-	
-	std::unique_ptr<LuaCalXInstrument> LuaCalXInstruments::connectSerialInstrument(uint8_t port, uint32_t baudrate, SerialPortParity parity) {
+	    : env(env) {}
+
+	std::unique_ptr<LuaCalXInstrument>
+	    LuaCalXInstruments::connectSerialInstrument(uint8_t port,
+	                                                uint32_t baudrate,
+	                                                SerialPortParity parity) {
 		DeviceSerialPortConnectionPrms prms;
 		prms.port = port;
 		prms.speed = baudrate;
 		prms.parity = parity;
-		return std::make_unique<LuaCalXInstrument>(this->env, this->env.getDevices().connectInstrument(&prms));
+		return std::make_unique<LuaCalXInstrument>(
+		    this->env, this->env.getDevices().connectInstrument(&prms));
 	}
 
 	std::size_t LuaCalXInstruments::getCount() {
 		return this->env.getDevices().getInstrumentCount();
 	}
 
-	std::unique_ptr<LuaCalXInstrument> LuaCalXInstruments::getInstrument(device_id_t deviceId) {
+	std::unique_ptr<LuaCalXInstrument> LuaCalXInstruments::getInstrument(
+	    device_id_t deviceId) {
 		return std::make_unique<LuaCalXInstrument>(this->env, deviceId);
 	}
 
 	LuaCalXPlane::LuaCalXPlane(CalXScriptUIEnvironment &env, std::size_t planeId)
-		: env(env), plane(env.getPlanes().getPlane(planeId)), planeId(planeId) {
+	    : env(env), plane(env.getPlanes().getPlane(planeId)), planeId(planeId) {
 		if (this->plane == nullptr) {
 			throw CalXException(ErrorCode::UnknownResource);
 		}
-		this->halt_on_fail = env.getConfiguration().getEntry("script")->getBool("halt_on_fail", false);
+		this->halt_on_fail = env.getConfiguration().getEntry("script")->getBool(
+		    "halt_on_fail", false);
 	}
-	
+
 	std::size_t LuaCalXPlane::getPlaneID() const {
 		return this->planeId;
 	}
 
-	ErrorCode LuaCalXPlane::move(coord_point_t dest, double speed, bool sync, bool relative) {
+	ErrorCode LuaCalXPlane::move(coord_point_t dest, double speed, bool sync,
+	                             bool relative) {
 		ErrorCode errcode = this->plane->move(dest, speed, sync, relative);
 		if (errcode != ErrorCode::NoError && this->halt_on_fail) {
 			throw CalXException(errcode);
@@ -286,8 +298,11 @@ namespace CalXLua {
 		}
 	}
 
-	ErrorCode LuaCalXPlane::arc(coord_point_t dest, coord_point_t center, int splitter, double speed, bool clockwise, bool relative) {
-		ErrorCode errcode = this->plane->arc(dest, center, splitter, speed, clockwise, relative);
+	ErrorCode LuaCalXPlane::arc(coord_point_t dest, coord_point_t center,
+	                            int splitter, double speed, bool clockwise,
+	                            bool relative) {
+		ErrorCode errcode =
+		    this->plane->arc(dest, center, splitter, speed, clockwise, relative);
 		if (errcode != ErrorCode::NoError && this->halt_on_fail) {
 			throw CalXException(errcode);
 		} else {
@@ -341,7 +356,7 @@ namespace CalXLua {
 	}
 
 	std::optional<coord_rect_t> LuaCalXPlane::getSize() {
-		std::pair<coord_rect_t, ErrorCode> res =  this->plane->getSize();
+		std::pair<coord_rect_t, ErrorCode> res = this->plane->getSize();
 		if (res.second != ErrorCode::NoError) {
 			if (this->halt_on_fail) {
 				throw CalXException(res.second);
@@ -375,28 +390,34 @@ namespace CalXLua {
 		}
 	}
 
-	LuaCalXPlanes::LuaCalXPlanes(CalXScriptUIEnvironment &env)
-		: env(env) {}
+	LuaCalXPlanes::LuaCalXPlanes(CalXScriptUIEnvironment &env) : env(env) {}
 
-	std::unique_ptr<LuaCalXPlane> LuaCalXPlanes::create(LuaCalXMotor &motor1, LuaCalXMotor &motor2, LuaCalXInstrument &instr) {
-		return std::make_unique<LuaCalXPlane>(this->env, this->env.getPlanes().createPlane(motor1.getDeviceID(), motor2.getDeviceID(), instr.getDeviceID()));
+	std::unique_ptr<LuaCalXPlane> LuaCalXPlanes::create(
+	    LuaCalXMotor &motor1, LuaCalXMotor &motor2, LuaCalXInstrument &instr) {
+		return std::make_unique<LuaCalXPlane>(
+		    this->env,
+		    this->env.getPlanes().createPlane(
+		        motor1.getDeviceID(), motor2.getDeviceID(), instr.getDeviceID()));
 	}
 
 	std::unique_ptr<LuaCalXPlane> LuaCalXPlanes::getPlane(std::size_t planeId) {
 		return std::make_unique<LuaCalXPlane>(this->env, planeId);
 	}
 
-	LuaCalXConfig::LuaCalXConfig(CalXScriptUIEnvironment &env)
-		: env(env) {
-		this->halt_on_fail = env.getConfiguration().getEntry("script")->getBool("halt_on_fail", false);
+	LuaCalXConfig::LuaCalXConfig(CalXScriptUIEnvironment &env) : env(env) {
+		this->halt_on_fail = env.getConfiguration().getEntry("script")->getBool(
+		    "halt_on_fail", false);
 	}
-	
-	std::optional<std::reference_wrapper<ConfiguationFlatDictionary>> LuaCalXConfig::getEntry(const std::string &entryName) {
-		ConfiguationFlatDictionary *entry = this->env.getConfiguration().getEntry(entryName, false);
+
+	std::optional<std::reference_wrapper<ConfiguationFlatDictionary>>
+	    LuaCalXConfig::getEntry(const std::string &entryName) {
+		ConfiguationFlatDictionary *entry =
+		    this->env.getConfiguration().getEntry(entryName, false);
 		if (entry) {
 			return std::ref(*entry);
 		} else if (!this->halt_on_fail) {
-			return std::optional<std::reference_wrapper<ConfiguationFlatDictionary>>();
+			return std::optional<
+			    std::reference_wrapper<ConfiguationFlatDictionary>>();
 		} else {
 			throw CalXException(ErrorCode::UnknownResource);
 		}
@@ -406,16 +427,17 @@ namespace CalXLua {
 		return this->env.getConfiguration().hasEntry(entryName);
 	}
 
-	LuaCalXSettings::LuaCalXSettings(CalXScriptUIEnvironment &env)
-		: env(env) {
-		this->halt_on_fail = env.getConfiguration().getEntry("script")->getBool("halt_on_fail", false);
+	LuaCalXSettings::LuaCalXSettings(CalXScriptUIEnvironment &env) : env(env) {
+		this->halt_on_fail = env.getConfiguration().getEntry("script")->getBool(
+		    "halt_on_fail", false);
 	}
-	
+
 	bool LuaCalXSettings::exists() {
 		return this->env.getSettings() != nullptr;
 	}
 
-	std::optional<std::reference_wrapper<ConfiguationFlatDictionary>> LuaCalXSettings::getEntry(const std::string &entryName) {
+	std::optional<std::reference_wrapper<ConfiguationFlatDictionary>>
+	    LuaCalXSettings::getEntry(const std::string &entryName) {
 		ConfiguationFlatDictionary *entry = nullptr;
 		if (this->env.getSettings() != nullptr) {
 			entry = this->env.getSettings()->getSettings().getEntry(entryName, false);
@@ -423,7 +445,8 @@ namespace CalXLua {
 		if (entry) {
 			return *entry;
 		} else if (!this->halt_on_fail) {
-			return std::optional<std::reference_wrapper<ConfiguationFlatDictionary>>();
+			return std::optional<
+			    std::reference_wrapper<ConfiguationFlatDictionary>>();
 		} else {
 			throw CalXException(ErrorCode::UnknownResource);
 		}
@@ -431,6 +454,6 @@ namespace CalXLua {
 
 	bool LuaCalXSettings::hasEntry(const std::string &entryName) {
 		return this->env.getSettings() != nullptr &&
-			this->env.getSettings()->getSettings().hasEntry(entryName);
+		       this->env.getSettings()->getSettings().hasEntry(entryName);
 	}
 }  // namespace CalXLua
