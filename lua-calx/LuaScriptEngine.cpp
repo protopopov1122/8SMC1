@@ -144,11 +144,11 @@ namespace CalXLua {
 
 		lcb::ClassBinder<LuaCalXPlane>::bind(lua,
 			"id", &LuaCalXPlane::getPlaneID,
-			"move", static_cast<void (LuaCalXPlane::*)(coord_point_t, double, bool, bool)>(&LuaCalXPlane::move),
+			"move", static_cast<ErrorCode (LuaCalXPlane::*)(coord_point_t, double, bool, bool)>(&LuaCalXPlane::move),
 			"arc", &LuaCalXPlane::arc,
 			"calibrate", &LuaCalXPlane::calibrate,
 			"measure", &LuaCalXPlane::measure,
-			"fmove", static_cast<void (LuaCalXPlane::*)(coord_point_t, double)>(&LuaCalXPlane::move),
+			"fmove", static_cast<ErrorCode (LuaCalXPlane::*)(coord_point_t, double)>(&LuaCalXPlane::move),
 			"configure", &LuaCalXPlane::configure,
 			"position", &LuaCalXPlane::getPosition,
 			"size", &LuaCalXPlane::getSize,

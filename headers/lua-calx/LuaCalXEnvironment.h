@@ -46,18 +46,19 @@ namespace CalXLua {
 		LuaCalXMotor(CalXScriptUIEnvironment &, device_id_t);
 
 		device_id_t getDeviceID() const;
-		Power getPower();
-		void enablePower(bool);
-		void move(motor_coord_t, float);
-		void relativeMove(motor_coord_t, float);
-		void stop();
-		motor_coord_t getPosition();
-		void moveToTrailer(TrailerId);
-		void checkTrailers();
-		void waitWhileRunning();
+		std::optional<Power> getPower();
+		ErrorCode enablePower(bool);
+		ErrorCode move(motor_coord_t, float);
+		ErrorCode relativeMove(motor_coord_t, float);
+		ErrorCode stop();
+		std::optional<motor_coord_t> getPosition();
+		ErrorCode moveToTrailer(TrailerId);
+		ErrorCode checkTrailers();
+		ErrorCode waitWhileRunning();
 	 private:
 		std::unique_ptr<CalXScriptMotor> motor;
 		device_id_t deviceId;
+		bool halt_on_fail;
 	};
 
 	class LuaCalXMotors {
@@ -75,19 +76,20 @@ namespace CalXLua {
 		LuaCalXInstrument(CalXScriptUIEnvironment &, device_id_t);
 	
 		device_id_t getDeviceID() const;
-		void open_session();
-		void close_session();
-		void enable(bool);
-		bool isEnabled();
-		bool isRunnable();
-		void setRunnable(bool);
-		InstrumentMode getMode();
-		void setMode(InstrumentMode);
-		bool isSessionOpened();
-		std::string getInfo();
+		ErrorCode open_session();
+		ErrorCode close_session();
+		ErrorCode enable(bool);
+		std::optional<bool> isEnabled();
+		std::optional<bool> isRunnable();
+		ErrorCode setRunnable(bool);
+		std::optional<InstrumentMode> getMode();
+		ErrorCode setMode(InstrumentMode);
+		std::optional<bool> isSessionOpened();
+		std::optional<std::string> getInfo();
 	 private:
 		std::unique_ptr<CalXScriptInstrument> instrument;
 		device_id_t deviceId;
+		bool halt_on_fail;
 	};
 
 	class LuaCalXInstruments {
@@ -104,22 +106,23 @@ namespace CalXLua {
 	 public:
 		LuaCalXPlane(CalXScriptUIEnvironment &, std::size_t);
 		std::size_t getPlaneID() const;
-		void move(coord_point_t, double, bool, bool);
-		void arc(coord_point_t, coord_point_t, int, double, bool,
+		ErrorCode move(coord_point_t, double, bool, bool);
+		ErrorCode arc(coord_point_t, coord_point_t, int, double, bool,
 		                      bool);
-		void calibrate(TrailerId);
-		void measure(TrailerId);
-		void move(coord_point_t, double);
-		void configure(coord_point_t, double);
-		coord_point_t getPosition();
-		coord_rect_t getSize();
-		bool isMeasured();
+		ErrorCode calibrate(TrailerId);
+		ErrorCode measure(TrailerId);
+		ErrorCode move(coord_point_t, double);
+		ErrorCode configure(coord_point_t, double);
+		std::optional<coord_point_t> getPosition();
+		std::optional<coord_rect_t> getSize();
+		std::optional<bool> isMeasured();
 		bool positionAsCenter();
-		void openWatcher();
+		ErrorCode openWatcher();
 	 private:
 	 	CalXScriptUIEnvironment &env;
 		std::unique_ptr<CalXScriptPlane> plane;
 		std::size_t planeId;
+		bool halt_on_fail;
 	};
 
 	class LuaCalXPlanes {
@@ -134,20 +137,22 @@ namespace CalXLua {
 	class LuaCalXConfig {
 	 public:
 		LuaCalXConfig(CalXScriptUIEnvironment &);
-		ConfiguationFlatDictionary &getEntry(const std::string &);
+		std::optional<std::reference_wrapper<ConfiguationFlatDictionary>> getEntry(const std::string &);
 		bool hasEntry(const std::string &);
 	 private:
 		CalXScriptUIEnvironment &env;
+		bool halt_on_fail;
 	};
 
 	class LuaCalXSettings {
 	 public:
 		LuaCalXSettings(CalXScriptUIEnvironment &);
 		bool exists();
-		ConfiguationFlatDictionary &getEntry(const std::string &);
+		std::optional<std::reference_wrapper<ConfiguationFlatDictionary>> getEntry(const std::string &);
 		bool hasEntry(const std::string &);
 	 private:
 		CalXScriptUIEnvironment &env;
+		bool halt_on_fail;
 	};
 }  // namespace CalXLua
 

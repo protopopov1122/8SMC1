@@ -37,66 +37,91 @@ namespace CalXLua {
 		if (!this->motor->isValid()) {
 			throw CalXException(ErrorCode::UnknownResource);
 		}
+		this->halt_on_fail = env.getConfiguration().getEntry("script")->getBool("halt_on_fail", false);
 	}
 	
 	device_id_t LuaCalXMotor::getDeviceID() const {
 		return this->deviceId;
 	}
 
-	Power LuaCalXMotor::getPower() {
-		return this->motor->getPower().value();
+	std::optional<Power> LuaCalXMotor::getPower() {
+		std::optional<Power> power = this->motor->getPower();
+		if (power.has_value() || !this->halt_on_fail) {
+			return power;
+		} else {
+			throw CalXException(ErrorCode::UnknownResource);
+		}
 	}
 
-	void LuaCalXMotor::enablePower(bool en) {
+	ErrorCode LuaCalXMotor::enablePower(bool en) {
 		ErrorCode errcode = this->motor->enablePower(en);
-		if (errcode != ErrorCode::NoError) {
+		if (errcode != ErrorCode::NoError && this->halt_on_fail) {
 			throw CalXException(errcode);
+		} else {
+			return errcode;
 		}
 	}
 
-	void LuaCalXMotor::move(motor_coord_t dest, float speed) {
+	ErrorCode LuaCalXMotor::move(motor_coord_t dest, float speed) {
 		ErrorCode errcode = this->motor->move(dest, speed);
-		if (errcode != ErrorCode::NoError) {
+		if (errcode != ErrorCode::NoError && this->halt_on_fail) {
 			throw CalXException(errcode);
+		} else {
+			return errcode;
 		}
 	}
 
-	void LuaCalXMotor::relativeMove(motor_coord_t dest, float speed) {
+	ErrorCode LuaCalXMotor::relativeMove(motor_coord_t dest, float speed) {
 		ErrorCode errcode = this->motor->relativeMove(dest, speed);
-		if (errcode != ErrorCode::NoError) {
+		if (errcode != ErrorCode::NoError && this->halt_on_fail) {
 			throw CalXException(errcode);
+		} else {
+			return errcode;
 		}
 	}
 
-	void LuaCalXMotor::stop() {
+	ErrorCode LuaCalXMotor::stop() {
 		ErrorCode errcode = this->motor->stop();
-		if (errcode != ErrorCode::NoError) {
+		if (errcode != ErrorCode::NoError && this->halt_on_fail) {
 			throw CalXException(errcode);
+		} else {
+			return errcode;
 		}
 	}
 
-	motor_coord_t LuaCalXMotor::getPosition() {
-		return this->motor->getPosition().value();
+	std::optional<motor_coord_t> LuaCalXMotor::getPosition() {
+		std::optional<motor_coord_t> position = this->motor->getPosition();
+		if (position.has_value() || !this->halt_on_fail) {
+			return position;
+		} else {
+			throw CalXException(ErrorCode::UnknownResource);
+		}
 	}
 
-	void LuaCalXMotor::moveToTrailer(TrailerId trailer) {
+	ErrorCode LuaCalXMotor::moveToTrailer(TrailerId trailer) {
 		ErrorCode errcode = this->motor->moveToTrailer(trailer);
-		if (errcode != ErrorCode::NoError) {
+		if (errcode != ErrorCode::NoError && this->halt_on_fail) {
 			throw CalXException(errcode);
+		} else {
+			return errcode;
 		}
 	}
 
-	void LuaCalXMotor::checkTrailers() {
+	ErrorCode LuaCalXMotor::checkTrailers() {
 		ErrorCode errcode = this->motor->checkTrailers();
-		if (errcode != ErrorCode::NoError) {
+		if (errcode != ErrorCode::NoError && this->halt_on_fail) {
 			throw CalXException(errcode);
+		} else {
+			return errcode;
 		}
 	}
 
-	void LuaCalXMotor::waitWhileRunning() {
+	ErrorCode LuaCalXMotor::waitWhileRunning() {
 		ErrorCode errcode = this->motor->waitWhileRunning();
-		if (errcode != ErrorCode::NoError) {
+		if (errcode != ErrorCode::NoError && this->halt_on_fail) {
 			throw CalXException(errcode);
+		} else {
+			return errcode;
 		}
 	}
 
@@ -124,65 +149,101 @@ namespace CalXLua {
 		if (!this->instrument->isValid()) {
 			throw CalXException(ErrorCode::UnknownResource);
 		}
+		this->halt_on_fail = env.getConfiguration().getEntry("script")->getBool("halt_on_fail", false);
 	}
 
 	device_id_t LuaCalXInstrument::getDeviceID() const {
 		return this->deviceId;
 	}
 
-	void LuaCalXInstrument::open_session() {
+	ErrorCode LuaCalXInstrument::open_session() {
 		ErrorCode errcode = this->instrument->open_session();
-		if (errcode != ErrorCode::NoError) {
+		if (errcode != ErrorCode::NoError && this->halt_on_fail) {
 			throw CalXException(errcode);
+		} else {
+			return errcode;
 		}
 	}
 
-	void LuaCalXInstrument::close_session() {
+	ErrorCode LuaCalXInstrument::close_session() {
 		ErrorCode errcode = this->instrument->close_session();
-		if (errcode != ErrorCode::NoError) {
+		if (errcode != ErrorCode::NoError && this->halt_on_fail) {
 			throw CalXException(errcode);
+		} else {
+			return errcode;
 		}
 	}
 
-	void LuaCalXInstrument::enable(bool en) {
+	ErrorCode LuaCalXInstrument::enable(bool en) {
 		ErrorCode errcode = this->instrument->enable(en);
-		if (errcode != ErrorCode::NoError) {
+		if (errcode != ErrorCode::NoError && this->halt_on_fail) {
 			throw CalXException(errcode);
+		} else {
+			return errcode;
 		}
 	}
 
-	bool LuaCalXInstrument::isEnabled() {
-		return this->instrument->isEnabled().value();
+	std::optional<bool> LuaCalXInstrument::isEnabled() {
+		std::optional<bool> value = this->instrument->isEnabled();
+		if (value.has_value() || !this->halt_on_fail) {
+			return value;
+		} else {
+			throw CalXException(ErrorCode::UnknownResource);
+		}
 	}
 
-	bool LuaCalXInstrument::isRunnable() {
-		return this->instrument->isRunnable().value();
+	std::optional<bool> LuaCalXInstrument::isRunnable() {
+		std::optional<bool> value = this->instrument->isRunnable();
+		if (value.has_value() || !this->halt_on_fail) {
+			return value;
+		} else {
+			throw CalXException(ErrorCode::UnknownResource);
+		}
 	}
 
-	void LuaCalXInstrument::setRunnable(bool run) {
+	ErrorCode LuaCalXInstrument::setRunnable(bool run) {
 		ErrorCode errcode = this->instrument->setRunnable(run);
-		if (errcode != ErrorCode::NoError) {
+		if (errcode != ErrorCode::NoError && this->halt_on_fail) {
 			throw CalXException(errcode);
+		} else {
+			return errcode;
 		}
 	}
 
-	InstrumentMode LuaCalXInstrument::getMode() {
-		return this->instrument->getMode().value();
+	std::optional<InstrumentMode> LuaCalXInstrument::getMode() {
+		std::optional<InstrumentMode> mode = this->instrument->getMode();
+		if (mode.has_value() || !this->halt_on_fail) {
+			return mode;
+		} else {
+			throw CalXException(ErrorCode::UnknownResource);
+		}
 	}
 
-	void LuaCalXInstrument::setMode(InstrumentMode mode) {
+	ErrorCode LuaCalXInstrument::setMode(InstrumentMode mode) {
 		ErrorCode errcode = this->instrument->setMode(mode);
-		if (errcode != ErrorCode::NoError) {
+		if (errcode != ErrorCode::NoError && this->halt_on_fail) {
 			throw CalXException(errcode);
+		} else {
+			return errcode;
 		}
 	}
 
-	bool LuaCalXInstrument::isSessionOpened() {
-		return this->instrument->isSessionOpened().value();
+	std::optional<bool> LuaCalXInstrument::isSessionOpened() {
+		std::optional<bool> value = this->instrument->isSessionOpened();
+		if (value.has_value() || !this->halt_on_fail) {
+			return value;
+		} else {
+			throw CalXException(ErrorCode::UnknownResource);
+		}
 	}
 
-	std::string LuaCalXInstrument::getInfo() {
-		return this->instrument->getInfo().value();
+	std::optional<std::string> LuaCalXInstrument::getInfo() {
+		std::optional<std::string> info = this->instrument->getInfo().value();
+		if (info.has_value() || !this->halt_on_fail) {
+			return info;
+		} else {
+			throw CalXException(ErrorCode::UnknownResource);
+		}
 	}
 
 	LuaCalXInstruments::LuaCalXInstruments(CalXScriptUIEnvironment &env)
@@ -209,79 +270,108 @@ namespace CalXLua {
 		if (this->plane == nullptr) {
 			throw CalXException(ErrorCode::UnknownResource);
 		}
+		this->halt_on_fail = env.getConfiguration().getEntry("script")->getBool("halt_on_fail", false);
 	}
 	
 	std::size_t LuaCalXPlane::getPlaneID() const {
 		return this->planeId;
 	}
 
-	void LuaCalXPlane::move(coord_point_t dest, double speed, bool sync, bool relative) {
+	ErrorCode LuaCalXPlane::move(coord_point_t dest, double speed, bool sync, bool relative) {
 		ErrorCode errcode = this->plane->move(dest, speed, sync, relative);
-		if (errcode != ErrorCode::NoError) {
+		if (errcode != ErrorCode::NoError && this->halt_on_fail) {
 			throw CalXException(errcode);
+		} else {
+			return errcode;
 		}
 	}
 
-	void LuaCalXPlane::arc(coord_point_t dest, coord_point_t center, int splitter, double speed, bool clockwise, bool relative) {
+	ErrorCode LuaCalXPlane::arc(coord_point_t dest, coord_point_t center, int splitter, double speed, bool clockwise, bool relative) {
 		ErrorCode errcode = this->plane->arc(dest, center, splitter, speed, clockwise, relative);
-		if (errcode != ErrorCode::NoError) {
+		if (errcode != ErrorCode::NoError && this->halt_on_fail) {
 			throw CalXException(errcode);
+		} else {
+			return errcode;
 		}
 	}
 
-	void LuaCalXPlane::calibrate(TrailerId id) {
+	ErrorCode LuaCalXPlane::calibrate(TrailerId id) {
 		ErrorCode errcode = this->plane->calibrate(id);
-		if (errcode != ErrorCode::NoError) {
+		if (errcode != ErrorCode::NoError && this->halt_on_fail) {
 			throw CalXException(errcode);
+		} else {
+			return errcode;
 		}
 	}
 
-	void LuaCalXPlane::measure(TrailerId id) {
+	ErrorCode LuaCalXPlane::measure(TrailerId id) {
 		ErrorCode errcode = this->plane->measure(id);
-		if (errcode != ErrorCode::NoError) {
+		if (errcode != ErrorCode::NoError && this->halt_on_fail) {
 			throw CalXException(errcode);
+		} else {
+			return errcode;
 		}
 	}
 
-	void LuaCalXPlane::move(coord_point_t dest, double speed) {
+	ErrorCode LuaCalXPlane::move(coord_point_t dest, double speed) {
 		ErrorCode errcode = this->plane->move(dest, speed);
-		if (errcode != ErrorCode::NoError) {
+		if (errcode != ErrorCode::NoError && this->halt_on_fail) {
 			throw CalXException(errcode);
+		} else {
+			return errcode;
 		}
 	}
 
-	void LuaCalXPlane::configure(coord_point_t dest, double speed) {
+	ErrorCode LuaCalXPlane::configure(coord_point_t dest, double speed) {
 		ErrorCode errcode = this->plane->configure(dest, speed);
-		if (errcode != ErrorCode::NoError) {
+		if (errcode != ErrorCode::NoError && this->halt_on_fail) {
 			throw CalXException(errcode);
+		} else {
+			return errcode;
 		}
 	}
 
-	coord_point_t LuaCalXPlane::getPosition() {
-		return this->plane->getPosition().value();
+	std::optional<coord_point_t> LuaCalXPlane::getPosition() {
+		std::optional<coord_point_t> position = this->plane->getPosition();
+		if (position.has_value() || !this->halt_on_fail) {
+			return position;
+		} else {
+			throw CalXException(ErrorCode::UnknownResource);
+		}
 	}
 
-	coord_rect_t LuaCalXPlane::getSize() {
+	std::optional<coord_rect_t> LuaCalXPlane::getSize() {
 		std::pair<coord_rect_t, ErrorCode> res =  this->plane->getSize();
 		if (res.second != ErrorCode::NoError) {
-			throw CalXException(res.second);
+			if (this->halt_on_fail) {
+				throw CalXException(res.second);
+			} else {
+				return std::optional<coord_rect_t>();
+			}
 		} else {
 			return res.first;
 		}
 	}
 
-	bool LuaCalXPlane::isMeasured() {
-		return this->plane->isMeasured().value();
+	std::optional<bool> LuaCalXPlane::isMeasured() {
+		std::optional<bool> value = this->plane->isMeasured();
+		if (value.has_value() || !this->halt_on_fail) {
+			return value;
+		} else {
+			throw CalXException(ErrorCode::UnknownResource);
+		}
 	}
 
 	bool LuaCalXPlane::positionAsCenter() {
 		return this->plane->positionAsCenter();
 	}
 
-	void LuaCalXPlane::openWatcher() {
+	ErrorCode LuaCalXPlane::openWatcher() {
 		ErrorCode errcode = this->env.getUI().openWatcher(this->planeId);
-		if (errcode != ErrorCode::NoError) {
+		if (errcode != ErrorCode::NoError && this->halt_on_fail) {
 			throw CalXException(errcode);
+		} else {
+			return errcode;
 		}
 	}
 
@@ -297,12 +387,16 @@ namespace CalXLua {
 	}
 
 	LuaCalXConfig::LuaCalXConfig(CalXScriptUIEnvironment &env)
-		: env(env) {}
+		: env(env) {
+		this->halt_on_fail = env.getConfiguration().getEntry("script")->getBool("halt_on_fail", false);
+	}
 	
-	ConfiguationFlatDictionary &LuaCalXConfig::getEntry(const std::string &entryName) {
+	std::optional<std::reference_wrapper<ConfiguationFlatDictionary>> LuaCalXConfig::getEntry(const std::string &entryName) {
 		ConfiguationFlatDictionary *entry = this->env.getConfiguration().getEntry(entryName, false);
 		if (entry) {
-			return *entry;
+			return std::ref(*entry);
+		} else if (!this->halt_on_fail) {
+			return std::optional<std::reference_wrapper<ConfiguationFlatDictionary>>();
 		} else {
 			throw CalXException(ErrorCode::UnknownResource);
 		}
@@ -313,19 +407,23 @@ namespace CalXLua {
 	}
 
 	LuaCalXSettings::LuaCalXSettings(CalXScriptUIEnvironment &env)
-		: env(env) {}
+		: env(env) {
+		this->halt_on_fail = env.getConfiguration().getEntry("script")->getBool("halt_on_fail", false);
+	}
 	
 	bool LuaCalXSettings::exists() {
 		return this->env.getSettings() != nullptr;
 	}
 
-	ConfiguationFlatDictionary &LuaCalXSettings::getEntry(const std::string &entryName) {
+	std::optional<std::reference_wrapper<ConfiguationFlatDictionary>> LuaCalXSettings::getEntry(const std::string &entryName) {
 		ConfiguationFlatDictionary *entry = nullptr;
 		if (this->env.getSettings() != nullptr) {
 			entry = this->env.getSettings()->getSettings().getEntry(entryName, false);
 		}
 		if (entry) {
 			return *entry;
+		} else if (!this->halt_on_fail) {
+			return std::optional<std::reference_wrapper<ConfiguationFlatDictionary>>();
 		} else {
 			throw CalXException(ErrorCode::UnknownResource);
 		}
