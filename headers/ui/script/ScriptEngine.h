@@ -40,10 +40,7 @@ namespace CalXUI {
 	class CalXScriptUIFactory {
 	 public:
 		virtual ~CalXScriptUIFactory() = default;
-		virtual std::unique_ptr<CalX::CalXScript> openFile(
-		    CalXScriptUIEnvironment &, const std::string &) = 0;
-		virtual std::unique_ptr<CalX::CalXScript> createShell(
-		    CalXScriptUIEnvironment &) = 0;
+		virtual std::unique_ptr<CalX::CalXScript> newScript(CalXScriptUIEnvironment &) = 0;
 	};
 
 	typedef CalXScriptUIFactory *(*ScriptUIEngine_getter)();

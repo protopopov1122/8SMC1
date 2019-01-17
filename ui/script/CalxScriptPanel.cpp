@@ -144,7 +144,8 @@ namespace CalXUI {
 			file.close();
 
 			std::unique_ptr<CalXScript> script =
-			    this->scriptFactory.openFile(this->env, path);
+			    this->scriptFactory.newScript(this->env);
+			script->loadScript(path);
 			this->addHandle(
 			    path, new CalxFileScriptHandle(this->scriptPanel, wxID_ANY, this,
 			                                   code, std::move(script)));
@@ -153,7 +154,7 @@ namespace CalXUI {
 
 	void CalxScriptPanel::OnOpenShellClick(wxCommandEvent &evt) {
 		std::unique_ptr<CalXScript> script =
-		    this->scriptFactory.createShell(this->env);
+		    this->scriptFactory.newScript(this->env);
 		this->addHandle(
 		    FORMAT(__("Script shell #%s"), std::to_string(this->scripts.size())),
 		    new CalxScriptShellHandle(this->scriptPanel, wxID_ANY, this,

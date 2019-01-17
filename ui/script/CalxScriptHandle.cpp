@@ -27,10 +27,10 @@ namespace CalXUI {
 	class CalxScriptHookCallAction : public CalxAction {
 	 public:
 		CalxScriptHookCallAction(CalXScript &script, std::string hook)
-		    : script(script), hook(hook) {}
+		    : script(script), hook(std::move(hook)) {}
 
 		virtual void perform(SystemManager *sysman) {
-			script.call(hook);
+			script.invokeFunction(hook);
 		}
 
 		virtual void stop() {}
@@ -46,7 +46,7 @@ namespace CalXUI {
 		    : script(script), code(code) {}
 
 		virtual void perform(SystemManager *sysman) {
-			script.execute(code);
+			script.executeScript(code);
 		}
 
 		virtual void stop() {}

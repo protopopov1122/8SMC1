@@ -27,7 +27,7 @@ namespace CalXUI {
 
 	wxThread::ExitCode CalXScriptHookThread::Entry() {
 		std::unique_ptr<CalXScript> scr = wxGetApp().loadScript(this->path);
-		scr->call(this->hook);
+		scr->invokeFunction(this->hook);
 		return nullptr;
 	}
 

@@ -27,10 +27,11 @@ namespace CalXLua {
 
 	class LuaCalXScript : public CalXScript {
 	 public:
-		LuaCalXScript(CalXScriptUIEnvironment &, const std::string &);
+		LuaCalXScript(CalXScriptUIEnvironment &);
 
-		bool execute(const std::string &) override;
-		bool call(const std::string &) override;
+		bool loadScript(const std::string &) override;
+		bool executeScript(const std::string &) override;
+		bool invokeFunction(const std::string &) override;
 
 	 private:
 		void initBindings();
@@ -41,9 +42,7 @@ namespace CalXLua {
 
 	class LuaCalXScriptFactory : public CalXScriptUIFactory {
 	 public:
-		std::unique_ptr<CalXScript> openFile(CalXScriptUIEnvironment &,
-		                                     const std::string &) override;
-		std::unique_ptr<CalXScript> createShell(CalXScriptUIEnvironment &) override;
+		std::unique_ptr<CalXScript> newScript(CalXScriptUIEnvironment &) override;
 	};
 }  // namespace CalXLua
 

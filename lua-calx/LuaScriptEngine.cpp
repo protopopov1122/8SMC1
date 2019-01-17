@@ -24,27 +24,30 @@
 
 namespace CalXLua {
 
-	std::unique_ptr<CalXScript> LuaCalXScriptFactory::openFile(
-	    CalXScriptUIEnvironment &env, const std::string &path) {
-		return std::make_unique<LuaCalXScript>(env, path);
-	}
-
-	std::unique_ptr<CalXScript> LuaCalXScriptFactory::createShell(
+	std::unique_ptr<CalXScript> LuaCalXScriptFactory::newScript(
 	    CalXScriptUIEnvironment &env) {
-		return std::make_unique<LuaCalXScript>(env, "");
+		return std::make_unique<LuaCalXScript>(env);
 	}
 
-	LuaCalXScript::LuaCalXScript(CalXScriptUIEnvironment &env,
-	                             const std::string &path)
+	LuaCalXScript::LuaCalXScript(CalXScriptUIEnvironment &env)
 	    : CalXScript(env), lua(true), env(env) {
 		this->initBindings();
+	}
 
-		if (!path.empty()) {
-			this->lua.load(path);
+	bool LuaCalXScript::loadScript(const std::string &path) {
+		try {
+			return this->lua.load(path) == lcb::LuaStatusCode::Ok;
+		} catch (CalXException &ex) {
+			std::cout << "Caught CalX error " << static_cast<int>(ex.getErrorCode())
+			          << std::endl;
+			return false;
+		} catch (...) {
+			std::cout << "Caught error" << std::endl;
+			return false;
 		}
 	}
 
-	bool LuaCalXScript::execute(const std::string &code) {
+	bool LuaCalXScript::executeScript(const std::string &code) {
 		try {
 			return this->lua.execute(code.c_str()) == lcb::LuaStatusCode::Ok;
 		} catch (CalXException &ex) {
@@ -57,7 +60,7 @@ namespace CalXLua {
 		}
 	}
 
-	bool LuaCalXScript::call(const std::string &hook) {
+	bool LuaCalXScript::invokeFunction(const std::string &hook) {
 		try {
 			return this->lua[hook.c_str()]() != lcb::LuaStatusCode::Ok;
 		} catch (CalXException &ex) {

@@ -127,8 +127,9 @@ namespace CalX {
 		CalXScript(CalXScriptEnvironment &);
 		virtual ~CalXScript() = default;
 
-		virtual bool call(const std::string &) = 0;
-		virtual bool execute(const std::string &) = 0;
+		virtual bool loadScript(const std::string &) = 0;
+		virtual bool invokeFunction(const std::string &) = 0;
+		virtual bool executeScript(const std::string &) = 0;
 
 	 protected:
 		CalXScriptEnvironment &env;
@@ -137,10 +138,7 @@ namespace CalX {
 	class CalXScriptFactory {
 	 public:
 		virtual ~CalXScriptFactory() = default;
-		virtual std::unique_ptr<CalXScript> openFile(CalXScriptEnvironment &,
-		                                             const std::string &) = 0;
-		virtual std::unique_ptr<CalXScript> createShell(
-		    CalXScriptEnvironment &) = 0;
+		virtual std::unique_ptr<CalXScript> newScript(CalXScriptEnvironment &) = 0;
 	};
 
 	typedef CalXScriptFactory *(*ScriptEngine_getter)();

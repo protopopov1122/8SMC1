@@ -343,7 +343,9 @@ namespace CalXUI {
 			             __("Warning"), wxOK | wxICON_WARNING);
 			return nullptr;
 		} else {
-			return this->scriptFactory->openFile(*this->script_env, path);
+			auto script = this->scriptFactory->newScript(*this->script_env);
+			script->loadScript(path);
+			return script;
 		}
 	}
 
