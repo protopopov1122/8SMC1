@@ -102,6 +102,7 @@ namespace CalX {
 	 public:
 		virtual ~CalXScriptPlanes() = default;
 		virtual int32_t createPlane(device_id_t, device_id_t, device_id_t = -1) = 0;
+		virtual std::size_t getPlaneCount() = 0;
 		virtual std::unique_ptr<CalXScriptPlane> getPlane(std::size_t) = 0;
 	};
 

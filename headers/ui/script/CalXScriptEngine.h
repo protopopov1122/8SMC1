@@ -111,6 +111,7 @@ namespace CalXUI {
 		CalXAppScriptPlanes(CalxApp &);
 
 		int32_t createPlane(device_id_t, device_id_t, device_id_t) override;
+		std::size_t getPlaneCount() override;
 		std::unique_ptr<CalXScriptPlane> getPlane(std::size_t) override;
 
 	 private:

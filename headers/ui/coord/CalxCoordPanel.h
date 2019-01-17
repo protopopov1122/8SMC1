@@ -49,14 +49,14 @@ namespace CalXUI {
 	 public:
 		CalxCoordPanel(wxWindow *, wxWindowID, size_t);
 
-		size_t getCoordCount();
+		std::size_t getPlaneCount() override;
 		CalxCoordPane *getCoordCtrl(size_t sz);
-		virtual void updateList(std::shared_ptr<CoordHandle>, bool *);
-		virtual CalxPlaneHandle *getPlaneHandle(size_t);
-		virtual void updateUI();
-		virtual void shutdown();
-		virtual bool isBusy();
-		virtual void stop();
+		void updateList(std::shared_ptr<CoordHandle>, bool *) override;
+		CalxPlaneHandle *getPlaneHandle(size_t) override;
+		void updateUI() override;
+		void shutdown() override;
+		bool isBusy() override;
+		void stop() override;
 		size_t getLayoutColumnCount();
 		bool addComponentFactory(std::string, CalxCoordComponentFactory *, size_t,
 		                         bool = true);

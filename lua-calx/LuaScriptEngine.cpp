@@ -146,6 +146,7 @@ namespace CalXLua {
 		    "openWatcher", &LuaCalXPlane::openWatcher);
 
 		lcb::ClassBinder<LuaCalXPlanes>::bind(lua, "create", &LuaCalXPlanes::create,
+		                                      "count", &LuaCalXPlanes::getPlaneCount,
 		                                      "get", &LuaCalXPlanes::getPlane);
 
 		lcb::ClassBinder<ConfiguationFlatDictionary>::bind(

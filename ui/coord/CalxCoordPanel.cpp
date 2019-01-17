@@ -100,7 +100,7 @@ namespace CalXUI {
 		Layout();
 	}
 
-	size_t CalxCoordPanel::getCoordCount() {
+	size_t CalxCoordPanel::getPlaneCount() {
 		return coords.size();
 	}
 

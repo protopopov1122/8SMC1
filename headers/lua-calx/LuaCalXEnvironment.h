@@ -136,6 +136,7 @@ namespace CalXLua {
 		LuaCalXPlanes(CalXScriptUIEnvironment &);
 		std::unique_ptr<LuaCalXPlane> create(LuaCalXMotor &, LuaCalXMotor &,
 		                                     LuaCalXInstrument &);
+		std::size_t getPlaneCount();
 		std::unique_ptr<LuaCalXPlane> getPlane(std::size_t);
 
 	 private:

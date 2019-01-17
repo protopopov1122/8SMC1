@@ -400,6 +400,10 @@ namespace CalXLua {
 		        motor1.getDeviceID(), motor2.getDeviceID(), instr.getDeviceID()));
 	}
 
+	std::size_t LuaCalXPlanes::getPlaneCount() {
+		return this->env.getPlanes().getPlaneCount();
+	}
+
 	std::unique_ptr<LuaCalXPlane> LuaCalXPlanes::getPlane(std::size_t planeId) {
 		return std::make_unique<LuaCalXPlane>(this->env, planeId);
 	}
