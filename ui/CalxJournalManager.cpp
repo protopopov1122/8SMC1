@@ -1,5 +1,7 @@
 /*
-        Copyright (c) 2017-2018 Jevgenijs Protopopovs
+        SPDX-License-Identifier: LGPL-3.0-or-later
+
+        Copyright (c) 2017-2019 Jevgenijs Protopopovs
 
         This file is part of CalX project.
 
