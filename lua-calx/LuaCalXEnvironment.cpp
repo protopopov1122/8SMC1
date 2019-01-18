@@ -480,4 +480,28 @@ namespace CalXLua {
 	bool LuaCalXMath::removeFormula(std::size_t index) {
 		return this->env.getUI().getMath().removeFormula(index);
 	}
+
+
+	LuaCalXJournal::LuaCalXJournal(JournalLogger &logger)
+		: logger(logger) {}
+	
+	void LuaCalXJournal::debug(const std::string &msg) {
+		this->logger.stream(LoggingSeverity::Debug) << msg << Flush();
+	}
+
+	void LuaCalXJournal::info(const std::string &msg) {
+		this->logger.stream(LoggingSeverity::Info) << msg << Flush();
+	}
+	
+	void LuaCalXJournal::warning(const std::string &msg) {
+		this->logger.stream(LoggingSeverity::Warning) << msg << Flush();
+	}
+
+	void LuaCalXJournal::error(const std::string &msg) {
+		this->logger.stream(LoggingSeverity::Error) << msg << Flush();
+	}
+
+	void LuaCalXJournal::critical(const std::string &msg) {
+		this->logger.stream(LoggingSeverity::Critical) << msg << Flush();
+	}
 }  // namespace CalXLua

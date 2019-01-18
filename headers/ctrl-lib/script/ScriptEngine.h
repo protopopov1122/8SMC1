@@ -116,6 +116,7 @@ namespace CalX {
 
 		virtual CalXScriptDevices &getDevices() = 0;
 		virtual CalXScriptPlanes &getPlanes() = 0;
+		virtual JournalLogger &getLogger() = 0;
 
 	 private:
 		ConfigurationCatalogue &config;

@@ -81,6 +81,14 @@ namespace CalXUI {
 		return this->planes;
 	}
 
+	JournalLogger &CalXAppScriptEnvironment::getLogger() {
+		return GlobalLogger::getLogger();
+	}
+
+	JournalLogger &CalXAppScriptEnvironment::getJournal() {
+		return this->app.getJournal();
+	}
+
 	CalXScriptUI &CalXAppScriptEnvironment::getUI() {
 		return this->ui;
 	}

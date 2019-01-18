@@ -146,7 +146,9 @@ namespace CalXUI {
 
 		CalXScriptDevices &getDevices() override;
 		CalXScriptPlanes &getPlanes() override;
+		JournalLogger &getLogger() override;
 		CalXScriptUI &getUI() override;
+		JournalLogger &getJournal() override;
 
 	 private:
 		CalxApp &app;

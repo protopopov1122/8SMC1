@@ -177,6 +177,18 @@ namespace CalXLua {
 	 private:
 		CalXScriptUIEnvironment &env;
 	};
+
+	class LuaCalXJournal {
+	 public:
+		LuaCalXJournal(JournalLogger &);
+		void debug(const std::string &);
+		void info(const std::string &);
+		void warning(const std::string &);
+		void error(const std::string &);
+		void critical(const std::string &);
+	 private:
+	 	JournalLogger &logger;
+	};
 }  // namespace CalXLua
 
 #endif

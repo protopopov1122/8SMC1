@@ -173,6 +173,15 @@ namespace CalXLua {
 			"remove", &LuaCalXMath::removeFormula
 		);
 
+		lcb::ClassBinder<LuaCalXJournal>::bind(
+			lua,
+			"debug", &LuaCalXJournal::debug,
+			"info", &LuaCalXJournal::info,
+			"warning", &LuaCalXJournal::warning,
+			"error", &LuaCalXJournal::error,
+			"critical", &LuaCalXJournal::critical
+		);
+
 		this->lua["calx"] = *lcb::LuaValueFactory::newTable(lua);
 
 		this->lua["calx"]["serial"] = *lcb::LuaValueFactory::newTable(lua);
@@ -187,5 +196,7 @@ namespace CalXLua {
 		this->lua["calx"]["settings"] =
 		    std::make_unique<LuaCalXSettings>(this->env);
 		this->lua["calx"]["math"] = std::make_unique<LuaCalXMath>(this->env);
+		this->lua["calx"]["logger"] = std::make_unique<LuaCalXJournal>(this->env.getLogger());
+		this->lua["calx"]["journal"] = std::make_unique<LuaCalXJournal>(this->env.getJournal());
 	}
 }  // namespace CalXLua

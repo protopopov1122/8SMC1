@@ -44,6 +44,7 @@ namespace CalXUI {
 	 public:
 		using CalX::CalXScriptEnvironment::CalXScriptEnvironment;
 		virtual CalXScriptUI &getUI() = 0;
+		virtual CalX::JournalLogger &getJournal() = 0;
 	};
 
 	class CalXScriptUIFactory {
