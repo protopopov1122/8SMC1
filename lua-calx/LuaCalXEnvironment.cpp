@@ -39,8 +39,8 @@ namespace CalXLua {
 		if (!this->motor->isValid()) {
 			throw CalXException(ErrorCode::UnknownResource);
 		}
-		this->halt_on_fail = env.getConfiguration().getEntry("script")->getBool(
-		    "halt_on_fail", false);
+		this->halt_on_fail = env.getConfiguration().getEntry(CalxConfiguration::Scripting)->getBool(
+		    CalxScriptingConfiguration::HaltOnFail, false);
 	}
 
 	device_id_t LuaCalXMotor::getDeviceID() const {
@@ -155,8 +155,8 @@ namespace CalXLua {
 		if (!this->instrument->isValid()) {
 			throw CalXException(ErrorCode::UnknownResource);
 		}
-		this->halt_on_fail = env.getConfiguration().getEntry("script")->getBool(
-		    "halt_on_fail", false);
+		this->halt_on_fail = env.getConfiguration().getEntry(CalxConfiguration::Scripting)->getBool(
+		    CalxScriptingConfiguration::HaltOnFail, false);
 	}
 
 	device_id_t LuaCalXInstrument::getDeviceID() const {
@@ -282,8 +282,8 @@ namespace CalXLua {
 		if (this->plane == nullptr) {
 			throw CalXException(ErrorCode::UnknownResource);
 		}
-		this->halt_on_fail = env.getConfiguration().getEntry("script")->getBool(
-		    "halt_on_fail", false);
+		this->halt_on_fail = env.getConfiguration().getEntry(CalxConfiguration::Scripting)->getBool(
+		    CalxScriptingConfiguration::HaltOnFail, false);
 	}
 
 	std::size_t LuaCalXPlane::getPlaneID() const {
@@ -411,8 +411,8 @@ namespace CalXLua {
 	}
 
 	LuaCalXConfig::LuaCalXConfig(CalXScriptUIEnvironment &env) : env(env) {
-		this->halt_on_fail = env.getConfiguration().getEntry("script")->getBool(
-		    "halt_on_fail", false);
+		this->halt_on_fail = env.getConfiguration().getEntry(CalxConfiguration::Scripting)->getBool(
+		    CalxScriptingConfiguration::HaltOnFail, false);
 	}
 
 	std::optional<std::reference_wrapper<ConfiguationFlatDictionary>>
@@ -434,8 +434,8 @@ namespace CalXLua {
 	}
 
 	LuaCalXSettings::LuaCalXSettings(CalXScriptUIEnvironment &env) : env(env) {
-		this->halt_on_fail = env.getConfiguration().getEntry("script")->getBool(
-		    "halt_on_fail", false);
+		this->halt_on_fail = env.getConfiguration().getEntry(CalxConfiguration::Scripting)->getBool(
+		    CalxScriptingConfiguration::HaltOnFail, false);
 	}
 
 	bool LuaCalXSettings::exists() {

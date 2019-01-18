@@ -62,6 +62,7 @@ namespace CalX {
 		static constexpr auto Main = "main";
 		static constexpr auto InitEntry = "init_entry";
 		static constexpr auto AutoInit = "autoinit";
+		static constexpr auto HaltOnFail = "halt_on_fail";
 	};
 
 	class CalxConfigConfiguration {
