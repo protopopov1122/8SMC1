@@ -26,6 +26,8 @@
 #include <wx/bitmap.h>
 #include <wx/stattext.h>
 
+wxDECLARE_EVENT(wxEVT_WATCHER_UPDATE, wxThreadEvent);
+
 namespace CalXUI {
 
 	class CalxCoordPlaneWatcher;  // Forward referencing
@@ -82,6 +84,7 @@ namespace CalXUI {
 		void OnPaintEvent(wxPaintEvent &);
 		void OnResizeEvent(wxSizeEvent &);
 		void OnAppendEvent(wxThreadEvent &);
+		void OnUpdateEvent(wxThreadEvent &);
 
 		std::shared_ptr<CoordHandle> handle;
 		CalxWatcherPool *pool;

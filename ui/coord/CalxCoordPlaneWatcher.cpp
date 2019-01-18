@@ -23,6 +23,8 @@
 #include <wx/dcmemory.h>
 #include <wx/sizer.h>
 
+wxDEFINE_EVENT(wxEVT_WATCHER_UPDATE, wxThreadEvent);
+
 namespace CalXUI {
 
 	wxDEFINE_EVENT(wxEVT_WATCHER_APPEND_POINT, wxThreadEvent);
@@ -106,6 +108,7 @@ namespace CalXUI {
 		this->Bind(wxEVT_SIZE, &CalxCoordPlaneWatcher::OnResizeEvent, this);
 		this->Bind(wxEVT_WATCHER_APPEND_POINT,
 		           &CalxCoordPlaneWatcher::OnAppendEvent, this);
+		this->Bind(wxEVT_WATCHER_UPDATE, &CalxCoordPlaneWatcher::OnUpdateEvent, this);
 
 		this->history.push_back(
 		    std::make_pair(this->handle->getController()->getPosition(), false));
@@ -237,9 +240,8 @@ namespace CalXUI {
 	}
 
 	void CalxCoordPlaneWatcher::update() {
-		this->bitmap.Create(GetSize().x, GetSize().y);
-		renderBitmap();
-		Refresh();
+		wxThreadEvent evt(wxEVT_WATCHER_UPDATE);
+		wxPostEvent(this, evt);
 	}
 
 	void CalxCoordPlaneWatcher::OnExit(wxCloseEvent &evt) {
@@ -258,6 +260,12 @@ namespace CalXUI {
 		std::pair<motor_point_t, bool> pair =
 		    evt.GetPayload<std::pair<motor_point_t, bool>>();
 		this->add(pair.first, pair.second);
+	}
+
+	void CalxCoordPlaneWatcher::OnUpdateEvent(wxThreadEvent &evt) {
+		this->bitmap.Create(GetSize().x, GetSize().y);
+		renderBitmap();
+		Refresh();
 	}
 
 	void CalxCoordPlaneWatcher::renderBitmap() {

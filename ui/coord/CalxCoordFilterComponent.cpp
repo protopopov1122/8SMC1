@@ -20,6 +20,9 @@
 
 #include "ui/coord/CalxCoordFilterComponent.h"
 
+wxDEFINE_EVENT(wxEVT_FILTER_UPDATE_OFFSET, wxThreadEvent);
+wxDEFINE_EVENT(wxEVT_FILTER_UPDATE_SCALE, wxThreadEvent);
+
 namespace CalXUI {
 
 	CalxCoordComponent *CalxCoordFilterComponentFactory::newComponent(
@@ -169,17 +172,33 @@ namespace CalXUI {
 		speed->Bind(wxEVT_SPINCTRL, &CalxCoordFilterComponent::OnFiltersUpdate,
 		            this);
 
+		this->Bind(wxEVT_FILTER_UPDATE_OFFSET, &CalxCoordFilterComponent::OnUpdateOffset, this);
+		this->Bind(wxEVT_FILTER_UPDATE_SCALE, &CalxCoordFilterComponent::OnUpdateScale, this);
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxCoordFilterComponent::OnExit, this);
 		this->controller->addFilterListener(this);
 		Layout();
 	}
 
 	void CalxCoordFilterComponent::updateOffset(motor_point_t offset) {
+		wxThreadEvent evt(wxEVT_FILTER_UPDATE_OFFSET);
+		evt.SetPayload(offset);
+		wxPostEvent(this, evt);
+	}
+
+	void CalxCoordFilterComponent::updateScale(motor_scale_t scale) {
+		wxThreadEvent evt(wxEVT_FILTER_UPDATE_SCALE);
+		evt.SetPayload(scale);
+		wxPostEvent(this, evt);
+	}
+
+	void CalxCoordFilterComponent::OnUpdateOffset(wxThreadEvent &evt) {
+		motor_point_t offset = evt.GetPayload<motor_point_t>();
 		this->xOffset->SetValue(offset.x);
 		this->yOffset->SetValue(offset.y);
 	}
 
-	void CalxCoordFilterComponent::updateScale(motor_scale_t scale) {
+	void CalxCoordFilterComponent::OnUpdateScale(wxThreadEvent &evt) {
+		motor_scale_t scale = evt.GetPayload<motor_scale_t>();
 		this->xScale->SetValue(scale.x);
 		this->yScale->SetValue(scale.y);
 	}

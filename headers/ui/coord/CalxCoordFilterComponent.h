@@ -32,6 +32,9 @@
 #include <wx/spinctrl.h>
 #include <wx/stattext.h>
 
+wxDECLARE_EVENT(wxEVT_FILTER_UPDATE_OFFSET, wxThreadEvent);
+wxDECLARE_EVENT(wxEVT_FILTER_UPDATE_SCALE, wxThreadEvent);
+
 namespace CalXUI {
 
 	class CalxCoordFilterComponentFactory : public CalxCoordComponentFactory {
@@ -48,6 +51,8 @@ namespace CalXUI {
 		virtual void updateScale(motor_scale_t);
 
 	 private:
+	 	void OnUpdateOffset(wxThreadEvent &);
+		void OnUpdateScale(wxThreadEvent &);
 		void OnFiltersUpdate(wxCommandEvent &);
 		void OnExit(wxCloseEvent &);
 
