@@ -32,6 +32,7 @@ namespace CalXUI {
 	class CalxDevicePool;  // Forward referencing
 	class CalxPlaneList;   // Forward referencing
 	class CalxTaskList;    // Forward referencing
+	class CalxMathEngine;  // Forward referencing
 
 	class CalxFrame : public wxFrame {
 	 public:
@@ -42,6 +43,7 @@ namespace CalXUI {
 		CalxDevicePool *getDevicePool();
 		CalxPlaneList *getPlaneList();
 		CalxTaskList *getTaskList();
+		CalxMathEngine *getMathEngine();
 
 	 private:
 		void switch_modes();
@@ -60,6 +62,7 @@ namespace CalXUI {
 		CalxDevicePool *device_pool;
 		CalxPlaneList *plane_list;
 		CalxTaskList *task_list;
+		CalxMathEngine *math_engine;
 	};
 }  // namespace CalXUI
 

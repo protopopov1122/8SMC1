@@ -25,10 +25,19 @@
 
 namespace CalXUI {
 
+	class CalXScriptUIMath {
+	 public:
+		virtual ~CalXScriptUIMath() = default;
+		virtual std::size_t getFormulaCount() = 0;
+		virtual void addFormula(const std::string &, const std::string &, const std::map<std::string, std::string> &) = 0;
+		virtual bool removeFormula(std::size_t) = 0;
+	};
+
 	class CalXScriptUI {
 	 public:
 		virtual ~CalXScriptUI() = default;
 		virtual CalX::ErrorCode openWatcher(std::size_t) = 0;
+		virtual CalXScriptUIMath &getMath() = 0;
 	};
 
 	class CalXScriptUIEnvironment : public CalX::CalXScriptEnvironment {

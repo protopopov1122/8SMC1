@@ -27,6 +27,7 @@
 #include "ui/CalxApp.h"
 #include "ui/dev/CalxDeviceHandle.h"
 #include "ui/coord/CalxPlaneList.h"
+#include "ui/math/CalxMathPanel.h"
 
 namespace CalXUI {
 
@@ -118,13 +119,25 @@ namespace CalXUI {
 		CalxApp &app;
 	};
 
+	class CalXAppScriptUIMath : public CalXScriptUIMath {
+	 public:
+	 	CalXAppScriptUIMath(CalxApp &);
+		std::size_t getFormulaCount() override;
+		void addFormula(const std::string &, const std::string &, const std::map<std::string, std::string> &) override;
+		bool removeFormula(std::size_t) override;
+	 private:
+		CalxApp &app;
+	};
+
 	class CalXAppScriptUI : public CalXScriptUI {
 	 public:
 		CalXAppScriptUI(CalxApp &);
 		ErrorCode openWatcher(std::size_t) override;
+		CalXScriptUIMath &getMath() override;
 
 	 private:
 		CalxApp &app;
+		CalXAppScriptUIMath math;
 	};
 
 	class CalXAppScriptEnvironment : public CalXScriptUIEnvironment {

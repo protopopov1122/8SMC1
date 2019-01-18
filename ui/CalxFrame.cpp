@@ -176,6 +176,7 @@ namespace CalXUI {
 
 		CalxScriptPanel *scriptPanel = newScriptPanel(panel);
 		CalxMathPanel *mathPanel = new CalxMathPanel(panel, wxID_ANY);
+		this->math_engine = mathPanel;
 
 		panel->addPane(__("Devices"), devicePanel);
 		panel->addPane(__("Coordinate planes"), coordPanel);
@@ -220,6 +221,10 @@ namespace CalXUI {
 
 	CalxTaskList *CalxFrame::getTaskList() {
 		return this->task_list;
+	}
+
+	CalxMathEngine *CalxFrame::getMathEngine() {
+		return this->math_engine;
 	}
 
 	void CalxFrame::OnStopClick(wxCommandEvent &evt) {

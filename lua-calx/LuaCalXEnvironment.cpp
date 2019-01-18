@@ -460,4 +460,25 @@ namespace CalXLua {
 		return this->env.getSettings() != nullptr &&
 		       this->env.getSettings()->getSettings().hasEntry(entryName);
 	}
+
+	LuaCalXMath::LuaCalXMath(CalXScriptUIEnvironment &env)
+		: env(env) {}
+	
+	std::size_t LuaCalXMath::getFormulaCount() {
+		return this->env.getUI().getMath().getFormulaCount();
+	}
+
+	void LuaCalXMath::addFormula(const std::string &title, const std::string &formula, lcb::LuaState lua) {
+		std::map<std::string, std::string> variables;
+		auto variablesRef = lua[4];
+		for (std::size_t i = 1; variablesRef[i].exists(); i++) {
+			auto varRef = variablesRef[i];
+			variables[varRef["name"].get<std::string>()] = varRef["description"].get<std::string>();
+		}
+		this->env.getUI().getMath().addFormula(title, formula, variables);
+	}
+
+	bool LuaCalXMath::removeFormula(std::size_t index) {
+		return this->env.getUI().getMath().removeFormula(index);
+	}
 }  // namespace CalXLua

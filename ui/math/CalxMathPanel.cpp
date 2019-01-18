@@ -3,7 +3,16 @@
 #include <wx/splitter.h>
 #include <iostream>
 
+wxDEFINE_EVENT(wxEVT_ADD_FORMULA, wxThreadEvent);
+wxDEFINE_EVENT(wxEVT_REMOVE_FORMULA, wxThreadEvent);
+
 namespace CalXUI {
+
+	struct CalxFormulaData {
+		std::string title;
+		std::string formula;
+		std::map<std::string, std::string> variables;
+	};
 
 	CalxMathPanel::CalxMathPanel(wxWindow *parent, wxWindowID id)
 	    : CalxPanelPane::CalxPanelPane(parent, id) {
@@ -12,10 +21,10 @@ namespace CalXUI {
 		wxSplitterWindow *splitter = new wxSplitterWindow(this, wxID_ANY);
 		sizer->Add(splitter, 1, wxALL | wxEXPAND);
 
-		wxPanel *mathObjectListPanel = new wxPanel(splitter, wxID_ANY);
+		this->mathObjectListPanel = new wxPanel(splitter, wxID_ANY);
 		wxBoxSizer *mathObjectListSizer = new wxBoxSizer(wxVERTICAL);
-		mathObjectListPanel->SetSizer(mathObjectListSizer);
-		this->mathObjectList = new wxListBox(mathObjectListPanel, wxID_ANY);
+		this->mathObjectListPanel->SetSizer(mathObjectListSizer);
+		this->mathObjectList = new wxListBox(this->mathObjectListPanel, wxID_ANY);
 		mathObjectListSizer->Add(this->mathObjectList, 1, wxALL | wxEXPAND);
 		this->mathObjectList->Bind(wxEVT_LISTBOX, &CalxMathPanel::OnListClick,
 		                           this);
@@ -27,6 +36,10 @@ namespace CalXUI {
 		splitter->Initialize(mathObjectListPanel);
 		splitter->SplitVertically(mathObjectListPanel, mathObjectPanel);
 		splitter->SetSashGravity(0.1f);
+		splitter->SetMinimumPaneSize(100);
+
+		this->Bind(wxEVT_ADD_FORMULA, &CalxMathPanel::OnAddFormula, this);
+		this->Bind(wxEVT_REMOVE_FORMULA, &CalxMathPanel::OnRemoveFormula, this);
 	}
 
 	bool CalxMathPanel::isBusy() {
@@ -45,7 +58,33 @@ namespace CalXUI {
 			    ->Show(true);
 		}
 		this->mathObjectPanel->Layout();
+		this->mathObjectListPanel->Layout();
 		this->Layout();
+		this->Update();
+	}
+
+	std::size_t CalxMathPanel::getFormulaCount() {
+		return this->contents.size();
+	}
+
+	void CalxMathPanel::addFormula(const std::string &title, const std::string &formula, const std::map<std::string, std::string> &variables) {
+		CalxFormulaData data {
+			title, formula, variables
+		};
+		wxThreadEvent evt(wxEVT_ADD_FORMULA);
+		evt.SetPayload(data);
+		wxPostEvent(this, evt);
+	}
+
+	bool CalxMathPanel::removeFormula(std::size_t index) {
+		if (index < this->contents.size()) {
+			wxThreadEvent evt(wxEVT_REMOVE_FORMULA);
+			evt.SetPayload(index);
+			wxPostEvent(this, evt);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	void CalxMathPanel::addMathObject(CalxMathObject *object) {
@@ -66,5 +105,14 @@ namespace CalXUI {
 
 	void CalxMathPanel::OnListClick(wxCommandEvent &evt) {
 		this->updateUI();
+	}
+	
+	void CalxMathPanel::OnAddFormula(wxThreadEvent &evt) {
+		CalxFormulaData data = evt.GetPayload<CalxFormulaData>();
+		this->addMathObject(new CalxMathFormulaPanel(this->mathObjectPanel, wxID_ANY, data.title, data.formula, data.variables));
+	}
+
+	void CalxMathPanel::OnRemoveFormula(wxThreadEvent &evt) {
+		this->removeMathObject(evt.GetPayload<std::size_t>());
 	}
 }  // namespace CalXUI

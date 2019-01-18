@@ -166,6 +166,13 @@ namespace CalXLua {
 		    lua, "exists", &LuaCalXSettings::exists, "has",
 		    &LuaCalXSettings::hasEntry, "get", &LuaCalXSettings::getEntry);
 
+		lcb::ClassBinder<LuaCalXMath>::bind(
+			lua,
+			"count", &LuaCalXMath::getFormulaCount,
+			"add", &LuaCalXMath::addFormula,
+			"remove", &LuaCalXMath::removeFormula
+		);
+
 		this->lua["calx"] = *lcb::LuaValueFactory::newTable(lua);
 
 		this->lua["calx"]["serial"] = *lcb::LuaValueFactory::newTable(lua);
@@ -179,5 +186,6 @@ namespace CalXLua {
 		this->lua["calx"]["config"] = std::make_unique<LuaCalXConfig>(this->env);
 		this->lua["calx"]["settings"] =
 		    std::make_unique<LuaCalXSettings>(this->env);
+		this->lua["calx"]["math"] = std::make_unique<LuaCalXMath>(this->env);
 	}
 }  // namespace CalXLua

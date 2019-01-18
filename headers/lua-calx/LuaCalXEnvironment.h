@@ -167,6 +167,16 @@ namespace CalXLua {
 		CalXScriptUIEnvironment &env;
 		bool halt_on_fail;
 	};
+
+	class LuaCalXMath {
+	 public:
+		LuaCalXMath(CalXScriptUIEnvironment &);
+		std::size_t getFormulaCount();
+		void addFormula(const std::string &, const std::string &, lcb::LuaState);
+		bool removeFormula(std::size_t);
+	 private:
+		CalXScriptUIEnvironment &env;
+	};
 }  // namespace CalXLua
 
 #endif
