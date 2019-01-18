@@ -269,7 +269,7 @@ namespace CalXUI {
 		about.AddDeveloper(__("Mihails Andzans"));
 		about.SetDescription(
 		    __("CalX - stepped motor and instrument control UI and library."));
-		about.SetCopyright(__("(C) 2017 Jevgenijs Protopopovs"));
+		about.SetCopyright(__("(C) 2017-2019 Jevgenijs Protopopovs"));
 		about.SetWebSite("https://github.com/protopopov1122/CalX");
 		about.SetLicense(LICENSE);
 
