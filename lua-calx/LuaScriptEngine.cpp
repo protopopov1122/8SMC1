@@ -76,23 +76,23 @@ namespace CalXLua {
 	}
 
 	void LuaCalXScript::initBindings() {
-		auto parity = lcb::LuaValueFactory::newTable(lua);
+		auto parity = lcb::LuaFactory::newTable(lua);
 		parity["No"] = SerialPortParity::No;
 		parity["Odd"] = SerialPortParity::Odd;
 		parity["Even"] = SerialPortParity::Even;
 		parity["Mark"] = SerialPortParity::Mark;
 		parity["Space"] = SerialPortParity::Space;
 
-		auto power = lcb::LuaValueFactory::newTable(lua);
+		auto power = lcb::LuaFactory::newTable(lua);
 		power["No"] = Power::NoPower;
 		power["Half"] = Power::HalfPower;
 		power["Full"] = Power::FullPower;
 
-		auto trailer = lcb::LuaValueFactory::newTable(lua);
+		auto trailer = lcb::LuaFactory::newTable(lua);
 		trailer["Top"] = TrailerId::Trailer1;
 		trailer["Bottom"] = TrailerId::Trailer2;
 
-		auto mode = lcb::LuaValueFactory::newTable(lua);
+		auto mode = lcb::LuaFactory::newTable(lua);
 		mode["Off"] = InstrumentMode::Off;
 		mode["Prepare"] = InstrumentMode::Prepare;
 		mode["Full"] = InstrumentMode::Full;
@@ -108,8 +108,8 @@ namespace CalXLua {
 		lcb::ClassBinder<LuaCalXMotors>::bind(
 		    lua, "get", &LuaCalXMotors::getMotor, "count", &LuaCalXMotors::getCount,
 		    "connect", &LuaCalXMotors::connectSerialMotor, "power",
-		    lcb::LuaValueFactory::wrap(lua, *power), "trailer",
-		    lcb::LuaValueFactory::wrap(lua, *trailer));
+		    lcb::LuaFactory::wrap(lua, *power), "trailer",
+		    lcb::LuaFactory::wrap(lua, *trailer));
 
 		lcb::ClassBinder<LuaCalXInstrument>::bind(
 		    lua, "id", &LuaCalXInstrument::getDeviceID, "open",
@@ -126,7 +126,7 @@ namespace CalXLua {
 		    lua, "get", &LuaCalXInstruments::getInstrument, "count",
 		    &LuaCalXInstruments::getCount, "connect",
 		    &LuaCalXInstruments::connectSerialInstrument, "mode",
-		    lcb::LuaValueFactory::wrap(lua, *mode));
+		    lcb::LuaFactory::wrap(lua, *mode));
 
 		auto coordPoint = lcb::ClassBinder<coord_point_t>::bind(
 		    lua, "x", &coord_point_t::x, "y", &coord_point_t::y, "new",
@@ -184,9 +184,9 @@ namespace CalXLua {
 			"critical", &LuaCalXJournal::critical
 		);
 
-		this->lua["calx"] = *lcb::LuaValueFactory::newTable(lua);
+		this->lua["calx"] = *lcb::LuaFactory::newTable(lua);
 
-		this->lua["calx"]["serial"] = *lcb::LuaValueFactory::newTable(lua);
+		this->lua["calx"]["serial"] = *lcb::LuaFactory::newTable(lua);
 		this->lua["calx"]["serial"]["parity"] = *parity;
 		this->lua["calx"]["point"] = coordPoint;
 		this->lua["calx"]["rect"] = coordRect;
