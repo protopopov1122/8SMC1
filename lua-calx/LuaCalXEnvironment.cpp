@@ -470,10 +470,10 @@ namespace CalXLua {
 		return this->env.getUI().getMath().getFormulaCount();
 	}
 
-	void LuaCalXMath::addFormula(const std::string &title, const std::string &formula, lcb::LuaReferenceHandle variablesRef) {
+	void LuaCalXMath::addFormula(lcb::LuaState lua, const std::string &title, const std::string &formula, lcb::LuaReferenceHandle variablesRef) {
 		std::map<std::string, std::string> variables;
-		for (std::size_t i = 1; variablesRef[i].exists(); i++) {
-			auto varRef = variablesRef[i];
+		for (auto it = variablesRef.begin(); it != variablesRef.end(); ++it) {
+			auto varRef = variablesRef[(*it).first];
 			variables[varRef["name"].get<std::string>()] = varRef["description"].get<std::string>();
 		}
 		this->env.getUI().getMath().addFormula(title, formula, variables);

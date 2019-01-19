@@ -174,7 +174,7 @@ namespace CalXLua {
 	 public:
 		LuaCalXMath(CalXScriptUIEnvironment &);
 		std::size_t getFormulaCount();
-		void addFormula(const std::string &, const std::string &, lcb::LuaReferenceHandle);
+		void addFormula(lcb::LuaState, const std::string &, const std::string &, lcb::LuaReferenceHandle);
 		bool removeFormula(std::size_t);
 	 private:
 		CalXScriptUIEnvironment &env;
