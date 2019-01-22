@@ -32,16 +32,18 @@
 
 namespace CalXUI {
 
-	static constexpr auto TimestampFormat = "%H-%M-%S_%d-%m-%Y";
+	static constexpr auto FullTimestampFormat = "%H-%M-%S_%d-%m-%Y";
+	static constexpr auto ShortTimestampFormat = "%d-%m-%Y";
 
-	static std::string FullLogName(const std::string &directory) {
+	static std::string FullLogName(const std::string &directory, ConfigurationCatalogue &conf) {
 		std::stringstream ss;
 		ss << directory << static_cast<char>(wxFileName::GetPathSeparator())
-		   << TimestampFormat << ".log";
+		   << (conf.getEntry(CalxConfiguration::Logging)->getBool(CalxLoggingConfiguration::DailyJournal, false) ? ShortTimestampFormat : FullTimestampFormat) << ".log";
 		return ss.str();
 	}
 
-	CalxJournalManager::CalxJournalManager(ConfigurationCatalogue &conf) {
+	CalxJournalManager::CalxJournalManager(ConfigurationCatalogue &conf)
+		: config(conf) {
 		this->journal = nullptr;
 		if (conf.getEntry(CalxConfiguration::Logging)
 		        ->has(CalxLoggingConfiguration::JournalDir)) {
@@ -51,7 +53,7 @@ namespace CalXUI {
 			if (!wxDir::Exists(this->journalDirectory)) {
 				wxDir::Make(this->journalDirectory);
 			}
-			std::string logName = FullLogName(this->journalDirectory);
+			std::string logName = FullLogName(this->journalDirectory, conf);
 			this->journal =
 			    std::make_unique<TimedJournal>([this, logName](auto timepoint) {
 				    std::time_t time = std::chrono::system_clock::to_time_t(timepoint);
@@ -101,7 +103,7 @@ namespace CalXUI {
 	        &files) {
 		wxArrayString fileArr;
 		wxDir::GetAllFiles(this->journalDirectory, &fileArr);
-		std::string logName = FullLogName(this->journalDirectory);
+		std::string logName = FullLogName(this->journalDirectory, this->config);
 		std::stringstream ss;
 		for (std::size_t i = 0; i < fileArr.GetCount(); i++) {
 			std::tm tm = {};

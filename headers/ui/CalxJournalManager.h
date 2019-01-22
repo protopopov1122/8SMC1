@@ -44,6 +44,7 @@ namespace CalXUI {
 
 		std::string journalDirectory;
 		std::unique_ptr<ConfigurableJournal> journal;
+                ConfigurationCatalogue &config;
 	};
 }  // namespace CalXUI
 

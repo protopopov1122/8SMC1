@@ -41,7 +41,7 @@ namespace CalX {
 
 			auto now = std::chrono::system_clock::now();
 			this->session->getController().newFileSink(
-			    "default", this->sessionNameGenerator(now));
+			    "", this->sessionNameGenerator(now));
 		}
 		return this->session->getLogger();
 	}

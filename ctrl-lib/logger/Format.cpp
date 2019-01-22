@@ -31,9 +31,11 @@ namespace CalX {
 		return [name](const LogEntry &entry, std::ostream &out) {
 			constexpr unsigned int SinkNamePadding = 10;
 			std::string fullName(name);
-			if (fullName.size() < SinkNamePadding) {
-				fullName.insert(fullName.size(), SinkNamePadding - fullName.size(),
-				                ' ');
+			if (!name.empty()) {
+				if (fullName.size() < SinkNamePadding) {
+					fullName.insert(fullName.size(), SinkNamePadding - fullName.size(),
+													' ');
+				}
 			}
 			auto timenow = std::chrono::system_clock::to_time_t(
 			    std::chrono::system_clock::now());

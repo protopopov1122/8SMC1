@@ -37,6 +37,7 @@
 #include "ctrl-lib/conf/ConfigValidator.h"
 #include "ctrl-lib/logger/Global.h"
 #include "ctrl-lib/logger/Filter.h"
+#include "ctrl-lib/logger/Shortcuts.h"
 #include <cmath>
 #include <fstream>
 #include <sstream>
@@ -297,8 +298,8 @@ namespace CalXUI {
 		    std::move(devman), std::move(conf_ptr), std::move(ext));
 
 		// Error handler will be released in the OnExit method
-		this->error_handler = new CalxErrorHandler(
-		    this->sysman.get());  // lgtm [cpp/resource-not-released-in-destructor]
+		this->error_handler = new CalxErrorHandler(  // lgtm [cpp/resource-not-released-in-destructor]
+		    this->sysman.get());
 
 		// Start debug console if necessary
 		this->startDebugConsole(conf);
@@ -318,6 +319,10 @@ namespace CalXUI {
 
 		// Init signal and SEH handlers which perform emergency shutdown if needed
 		setup_signals(this->sysman.get());
+
+		// System started. Write it to journal
+		Info(this->getJournal()) << "System started" << Flush();
+
 
 		// Start initialization script if it is defined
 		this->startInitScript(conf);
@@ -354,6 +359,7 @@ namespace CalXUI {
 	// This method is called before system shuts down
 	// So it frees resources and stops all actions
 	int CalxApp::OnExit() {
+		Info(this->getJournal()) << "System shutdown" << Flush();
 		if (this->debug_console != nullptr) {
 			this->debug_console->Kill();
 		}
