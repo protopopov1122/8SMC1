@@ -28,7 +28,7 @@ namespace CalXUI {
 	class EchoCMD : public CLICommand {
 		virtual ~EchoCMD() {}
 
-		virtual void execute(CLI *cli, std::vector<std::string> &args) {
+		void execute(CLI *cli, std::vector<std::string> &args) override {
 			for (size_t i = 0; i < args.size(); i++) {
 				std::cout << args.at(i) << " ";
 			}
@@ -39,7 +39,7 @@ namespace CalXUI {
 	class HelpCMD : public CLICommand {
 		virtual ~HelpCMD() {}
 
-		virtual void execute(CLI *cli, std::vector<std::string> &args) {
+		void execute(CLI *cli, std::vector<std::string> &args) override {
 			std::cout << "See cli/README.md in project repo to get CLI manual"
 			          << std::endl;
 		}

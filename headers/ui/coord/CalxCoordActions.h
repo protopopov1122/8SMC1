@@ -35,8 +35,8 @@ namespace CalXUI {
 		CalxCoordActionMove(std::shared_ptr<CoordHandle>, coord_point_t, double,
 		                    bool, bool, ActionResult * = nullptr);
 
-		virtual void perform(SystemManager *);
-		virtual void stop();
+		void perform(SystemManager *) override;
+		void stop() override;
 
 	 private:
 		std::shared_ptr<CoordHandle> handle;
@@ -53,8 +53,8 @@ namespace CalXUI {
 		                   coord_point_t, int, double, bool, bool,
 		                   ActionResult * = nullptr);
 
-		virtual void perform(SystemManager *);
-		virtual void stop();
+		void perform(SystemManager *) override;
+		void stop() override;
 
 	 private:
 		std::shared_ptr<CoordHandle> handle;
@@ -72,8 +72,8 @@ namespace CalXUI {
 		CalxCoordActionCalibrate(std::shared_ptr<CoordHandle>, TrailerId,
 		                         ActionResult * = nullptr);
 
-		virtual void perform(SystemManager *);
-		virtual void stop();
+		void perform(SystemManager *) override;
+		void stop() override;
 
 	 private:
 		std::shared_ptr<CoordHandle> handle;
@@ -86,8 +86,8 @@ namespace CalXUI {
 		CalxCoordActionMeasure(std::shared_ptr<CoordHandle>, TrailerId,
 		                       ActionResult * = nullptr);
 
-		virtual void perform(SystemManager *);
-		virtual void stop();
+		void perform(SystemManager * override);
+		void stop() override;
 
 	 private:
 		std::shared_ptr<CoordHandle> handle;
@@ -101,8 +101,8 @@ namespace CalXUI {
 		                         CalxCoordController *, coord_point_t, double,
 		                         ActionResult * = nullptr);
 
-		virtual void perform(SystemManager *);
-		virtual void stop();
+		void perform(SystemManager *) override;
+		void stop() override;
 
 	 private:
 		std::shared_ptr<CoordHandle> handle;
@@ -119,8 +119,8 @@ namespace CalXUI {
 		                          std::shared_ptr<CoordTranslator>,
 		                          std::unique_ptr<GraphBuilder>, double);
 
-		virtual void perform(SystemManager *);
-		virtual void stop();
+		void perform(SystemManager *) override;
+		void stop() override;
 
 	 private:
 		std::shared_ptr<CoordHandle> handle;
@@ -136,8 +136,8 @@ namespace CalXUI {
 		                            std::shared_ptr<CoordTranslator>,
 		                            std::unique_ptr<GraphBuilder>, double);
 
-		virtual void perform(SystemManager *);
-		virtual void stop();
+		void perform(SystemManager *) override;
+		void stop() override;
 
 	 private:
 		CalxVirtualPlaneDialog *dialog;

@@ -33,7 +33,7 @@ namespace CalXUI {
 		CalxDebugConsole(SystemManager *);
 
 	 protected:
-		virtual ExitCode Entry();
+		ExitCode Entry() override;
 
 	 private:
 		SystemManager *sysman;

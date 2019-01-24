@@ -134,7 +134,7 @@ namespace CalXUI {
 		Refresh();
 	}
 
-	size_t CalxDevicePanel::getMotorCount() {
+	std::size_t CalxDevicePanel::getMotorCount() {
 		return this->motors.size();
 	}
 
@@ -146,7 +146,7 @@ namespace CalXUI {
 		}
 	}
 
-	size_t CalxDevicePanel::getInstrumentCount() {
+	std::size_t CalxDevicePanel::getInstrumentCount() {
 		return this->instrs.size();
 	}
 

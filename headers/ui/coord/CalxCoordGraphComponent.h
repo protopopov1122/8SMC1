@@ -36,7 +36,7 @@
 namespace CalXUI {
 
 	class CalxCoordGraphComponentFactory : public CalxCoordComponentFactory {
-		virtual CalxCoordComponent *newComponent(wxWindow *, CalxCoordController *);
+		CalxCoordComponent *newComponent(wxWindow *, CalxCoordController *) override;
 	};
 
 	class CalxCoordGraphComponent : public CalxCoordComponent {

@@ -61,7 +61,7 @@ namespace CalXUI {
 		void stopCurrent();
 
 	 protected:
-		virtual ExitCode Entry();
+		ExitCode Entry() override;
 
 	 private:
 		bool finished;

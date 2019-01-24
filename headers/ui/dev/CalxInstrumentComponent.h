@@ -40,12 +40,12 @@ namespace CalXUI {
 	 public:
 		CalxInstrumentComponent(wxWindow *, wxWindowID,
 		                        std::shared_ptr<InstrumentController>);
-		virtual void stop();
-		virtual void updateUI();
-		virtual bool isBusy();
-		virtual void stopInstrument();
+		void stop() override;
+		void updateUI() override;
+		bool isBusy() override;
+		void stopInstrument() override;
 
-		virtual DeviceController *getController();
+		DeviceController *getController() override;
 
 	 private:
 		void OnExit(wxCloseEvent &);

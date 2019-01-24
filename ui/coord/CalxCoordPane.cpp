@@ -118,7 +118,7 @@ namespace CalXUI {
 		timer.Start(100);
 	}
 
-	bool CalxCoordPane::addComponent(std::string name,
+	bool CalxCoordPane::addComponent(const std::string &name,
 	                                 CalxCoordComponentFactory *compFact,
 	                                 size_t paneid, bool coll) {
 		if (paneid >= this->component_panes.size()) {

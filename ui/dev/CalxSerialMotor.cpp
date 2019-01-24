@@ -36,7 +36,8 @@ namespace CalXUI {
 		virtual ~CalxSerialMotorConnectAction() {
 			delete this->prms;
 		}
-		virtual void perform(SystemManager *sysman) {
+
+		void perform(SystemManager *sysman) override {
 			std::shared_ptr<MotorController> ctrl =
 			    sysman->getMotorControllerSet().connectDevice(prms).lock();
 			if (ctrl == nullptr) {
@@ -46,7 +47,7 @@ namespace CalXUI {
 				pool->appendDevice(new CalxMotorConstructor(pool, ctrl));
 			}
 		}
-		virtual void stop() {}
+		void stop() override {}
 
 	 private:
 		CalxDevicePool *pool;

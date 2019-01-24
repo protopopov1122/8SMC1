@@ -41,7 +41,7 @@ namespace CalXUI {
 
 	class CalxCoordFilterComponentFactory : public CalxCoordComponentFactory {
 	 public:
-		virtual CalxCoordComponent *newComponent(wxWindow *, CalxCoordController *);
+		CalxCoordComponent *newComponent(wxWindow *, CalxCoordController *) override;
 	};
 
 	class CalxCoordFilterComponent : public CalxCoordComponent,
@@ -49,8 +49,8 @@ namespace CalXUI {
 	 public:
 		CalxCoordFilterComponent(wxWindow *, wxWindowID, CalxCoordController *);
 
-		virtual void updateOffset(motor_point_t);
-		virtual void updateScale(motor_scale_t);
+		void updateOffset(motor_point_t) override;
+		void updateScale(motor_scale_t) override;
 
 	 private:
 	 	void OnUpdateOffset(wxThreadEvent &);

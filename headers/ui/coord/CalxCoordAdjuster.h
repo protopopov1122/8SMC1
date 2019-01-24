@@ -81,7 +81,7 @@ namespace CalXUI {
 	class CalxCoordAdjustRepaintTimer : public wxTimer {
 	 public:
 		CalxCoordAdjustRepaintTimer(CalxCoordAdjustDialog *);
-		virtual void Notify();
+		void Notify() override;
 
 	 private:
 		CalxCoordAdjustDialog *dialog;

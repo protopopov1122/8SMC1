@@ -51,10 +51,10 @@ namespace CalXUI {
 		void shutdown();
 		std::shared_ptr<CoordHandle> getHandle();
 		virtual CalxWatcherPool *getWatchers();
-		virtual void newWatcher();
-		virtual void stop();
-		virtual CalxCoordController *getController();
-		bool addComponent(std::string, CalxCoordComponentFactory *, size_t,
+		void newWatcher() override;
+		void stop() override;
+		CalxCoordController *getController() override;
+		bool addComponent(const std::string &, CalxCoordComponentFactory *, size_t,
 		                  bool = true);
 		size_t getComponentPaneCount();
 
@@ -62,8 +62,8 @@ namespace CalXUI {
 		void use();
 		void unuse();
 		bool isUsed();
-		virtual void updateOffset(motor_point_t);
-		virtual void updateScale(motor_scale_t);
+		void updateOffset(motor_point_t) override;
+		void updateScale(motor_scale_t) override;
 		void setEnabled(bool);
 
 	 private:

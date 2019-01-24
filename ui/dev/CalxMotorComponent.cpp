@@ -89,7 +89,7 @@ namespace CalXUI {
 			}
 		}
 
-		virtual void perform(SystemManager *sysman) {
+		void perform(SystemManager *sysman) override {
 			ErrorCode errcode;
 			Info(wxGetApp().getJournal())
 			    << "Starting device #" << dev->getID() << (rel ? " relative " : " ")
@@ -110,7 +110,7 @@ namespace CalXUI {
 			}
 		}
 
-		virtual void stop() {
+		void stop() override {
 			dev->stop();
 			deviceActionStopped(*dev);
 			if (this->action_result != nullptr) {
@@ -142,7 +142,7 @@ namespace CalXUI {
 			}
 		}
 
-		virtual void perform(SystemManager *sysman) {
+		void perform(SystemManager *sysman) override {
 			Info(wxGetApp().getJournal())
 			    << "Starting device #" << dev->getID() << " calibration to trailer #"
 			    << static_cast<int>(tr);
@@ -157,7 +157,7 @@ namespace CalXUI {
 			}
 		}
 
-		virtual void stop() {
+		void stop() override {
 			dev->stop();
 			deviceActionStopped(*dev);
 			if (this->action_result != nullptr) {

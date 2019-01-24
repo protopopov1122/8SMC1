@@ -35,12 +35,12 @@ namespace CalXUI {
 		CalxPlaneTracker(motor_point_t, motor_rect_t);
 		virtual ~CalxPlaneTracker();
 
-		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
+		std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>) override;
 		std::vector<std::pair<motor_point_t, bool>> *getPath();
 		void reset();
 
 	 protected:
-		virtual bool jump(motor_point_t, bool);
+		bool jump(motor_point_t, bool) override;
 
 	 private:
 		std::vector<std::pair<motor_point_t, bool>> path;

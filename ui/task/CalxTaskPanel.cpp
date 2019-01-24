@@ -60,7 +60,7 @@ namespace CalXUI {
 			this->state->work = false;
 		}
 
-		virtual void perform(SystemManager *sysman) {
+		void perform(SystemManager *sysman) override {
 			Info(wxGetApp().getJournal())
 			    << "Start execution of task: " << this->descriptor;
 			handle->open_session();
@@ -73,7 +73,7 @@ namespace CalXUI {
 			                              << static_cast<int>(errcode);
 		}
 
-		virtual void stop() {
+		void stop() override {
 			state->stop();
 		}
 
@@ -100,7 +100,7 @@ namespace CalXUI {
 			this->state->work = false;
 		}
 
-		virtual void perform(SystemManager *sysman) {
+		void perform(SystemManager *sysman) override {
 			dialog->setEnabled(false);
 			panel->setEnabled(false);
 			wxGetApp().getErrorHandler()->handle(
@@ -110,7 +110,7 @@ namespace CalXUI {
 			dialog->Refresh();
 		}
 
-		virtual void stop() {
+		void stop() override {
 			state->stop();
 		}
 
@@ -212,7 +212,7 @@ namespace CalXUI {
 		this->Bind(wxEVT_TASK_PANEL_ENABLE, &CalxTaskPanel::OnEnableEvent, this);
 	}
 
-	void CalxTaskPanel::attachTaskFactory(std::string name,
+	void CalxTaskPanel::attachTaskFactory(const std::string &name,
 	                                      CalxTaskFactory *factory) {
 		wxButton *factButton = new wxButton(
 		    this->taskFactoryPanel, wxID_ANY,
@@ -426,7 +426,7 @@ namespace CalXUI {
 				        ->getTranslator()
 				        ->clone(nullptr);
 				std::shared_ptr<ComplexCoordTranslator> trans = nullptr;
-				if (translator->getType() == ComplexCoord) {
+				if (translator->getType() == CoordType::ComplexCoord) {
 					std::shared_ptr<CoordTranslator> shtrans = std::move(translator);
 					trans = std::static_pointer_cast<ComplexCoordTranslator>(shtrans);
 				} else {

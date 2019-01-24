@@ -65,7 +65,7 @@ namespace CalXUI {
 			this->ctrl = ctrl;
 		}
 
-		virtual void Notify() {
+		void Notify() override {
 			ctrl->updateUI();
 		}
 
@@ -79,13 +79,13 @@ namespace CalXUI {
 			this->ctrl = ctrl;
 		}
 
-		virtual void perform(SystemManager *sysman) {
+		void perform(SystemManager *sysman) override {
 			ctrl->use();
 			wxGetApp().getErrorHandler()->handle(ctrl->flipState());
 			ctrl->unuse();
 		}
 
-		virtual void stop() {}
+		void stop() override {}
 
 	 private:
 		InstrumentController *ctrl;
@@ -97,7 +97,7 @@ namespace CalXUI {
 			this->ctrl = ctrl;
 		}
 
-		virtual void perform(SystemManager *sysman) {
+		void perform(SystemManager *sysman) override {
 			ctrl->use();
 			if (ctrl->isSessionOpened()) {
 				wxGetApp().getErrorHandler()->handle(ctrl->close_session());
@@ -107,7 +107,7 @@ namespace CalXUI {
 			ctrl->unuse();
 		}
 
-		virtual void stop() {}
+		void stop() override {}
 
 	 private:
 		InstrumentController *ctrl;
@@ -119,13 +119,13 @@ namespace CalXUI {
 			this->ctrl = ctrl;
 		}
 
-		virtual void perform(SystemManager *sysman) {
+		void perform(SystemManager *sysman) override {
 			ctrl->use();
 			ctrl->setRunnable(!ctrl->isRunnable());
 			ctrl->unuse();
 		}
 
-		virtual void stop() {}
+		void stop() override {}
 
 	 private:
 		InstrumentController *ctrl;
@@ -138,13 +138,13 @@ namespace CalXUI {
 			this->mode = m;
 		}
 
-		virtual void perform(SystemManager *sysman) {
+		void perform(SystemManager *sysman) override {
 			ctrl->use();
 			this->ctrl->setMode(this->mode);
 			ctrl->unuse();
 		}
 
-		virtual void stop() {}
+		void stop() override {}
 
 	 private:
 		InstrumentController *ctrl;

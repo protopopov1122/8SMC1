@@ -29,7 +29,7 @@ namespace CalXUI {
 
 	class CalxSerialInstrumentFactory : public CalxDeviceFactory {
 	 public:
-		virtual void newDevice(wxWindow *, CalxDevicePool *, CalxActionQueue *);
+		void newDevice(wxWindow *, CalxDevicePool *, CalxActionQueue *) override;
 	};
 }  // namespace CalXUI
 

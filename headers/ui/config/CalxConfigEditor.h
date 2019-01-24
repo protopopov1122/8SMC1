@@ -59,9 +59,9 @@ namespace CalXUI {
 		ConfigurationCatalogue &getConfiguration();
 		wxButton *getOkButton();
 
-		virtual bool isBusy();
-		virtual void shutdown();
-		virtual void updateUI();
+		bool isBusy() override;
+		void shutdown() override;
+		void updateUI() override;
 
 		void updateEntries();
 		void updateEntry();

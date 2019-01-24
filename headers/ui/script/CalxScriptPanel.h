@@ -39,12 +39,12 @@ namespace CalXUI {
 		CalxScriptPanel(wxWindow *, wxWindowID, CalXScriptUIEnvironment &,
 		                CalXScriptUIFactory &);
 
-		virtual bool isBusy();
-		virtual void shutdown();
-		virtual void updateUI();
+		bool isBusy() override;
+		void shutdown() override;
+		void updateUI() override;
 		void setEnabled(bool);
 
-		virtual void sendAction(std::unique_ptr<CalxAction>);
+		void sendAction(std::unique_ptr<CalxAction>) override;
 
 	 private:
 		void OnListClick(wxCommandEvent &);
@@ -53,7 +53,7 @@ namespace CalXUI {
 		void OnRemoveScriptClick(wxCommandEvent &);
 		void OnExit(wxCloseEvent &);
 		void OnEnableEvent(wxThreadEvent &);
-		void addHandle(std::string, CalxScriptHandle *);
+		void addHandle(const std::string &, CalxScriptHandle *);
 
 		CalXScriptUIEnvironment &env;
 		CalXScriptUIFactory &scriptFactory;

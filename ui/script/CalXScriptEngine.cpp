@@ -24,7 +24,7 @@
 
 namespace CalXUI {
 
-	CalXScriptHookThread::CalXScriptHookThread(std::string path, std::string hook)
+	CalXScriptHookThread::CalXScriptHookThread(const std::string &path, const std::string &hook)
 	    : wxThread::wxThread(wxTHREAD_DETACHED), path(path), hook(hook) {}
 
 	wxThread::ExitCode CalXScriptHookThread::Entry() {

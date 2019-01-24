@@ -161,10 +161,10 @@ namespace CalXUI {
 
 	class CalXScriptHookThread : public wxThread {
 	 public:
-		CalXScriptHookThread(std::string, std::string);
+		CalXScriptHookThread(const std::string &, const std::string &);
 
 	 protected:
-		virtual wxThread::ExitCode Entry();
+		wxThread::ExitCode Entry() override;
 
 	 private:
 		std::string path;

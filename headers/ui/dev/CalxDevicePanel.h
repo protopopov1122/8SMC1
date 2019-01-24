@@ -37,17 +37,17 @@ namespace CalXUI {
 	class CalxDevicePanel : public CalxPanelPane, public CalxDevicePool {
 	 public:
 		CalxDevicePanel(wxWindow *, wxWindowID);
-		virtual void shutdown();
-		virtual bool isBusy();
-		virtual void updateUI();
-		virtual void appendDevice(CalxDeviceConstructor *, bool * = nullptr);
+		void shutdown() override;
+		bool isBusy() override;
+		void updateUI() override;
+		void appendDevice(CalxDeviceConstructor *, bool * = nullptr) override;
 		virtual void appendDeviceFactory(std::string, CalxDeviceFactory *);
 
-		virtual size_t getMotorCount();
-		virtual CalxMotorHandle *getMotor(device_id_t);
-		virtual size_t getInstrumentCount();
-		virtual CalxInstrumentHandle *getInstrument(device_id_t);
-		virtual void stop();
+		std::size_t getMotorCount() override;
+		CalxMotorHandle *getMotor(device_id_t) override;
+		std::size_t getInstrumentCount() override;
+		CalxInstrumentHandle *getInstrument(device_id_t) override;
+		void stop() override;
 
 	 private:
 		void OnExit(wxCloseEvent &);

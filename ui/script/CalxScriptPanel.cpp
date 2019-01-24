@@ -35,13 +35,13 @@ namespace CalXUI {
 		                        std::unique_ptr<CalxAction> action)
 		    : panel(panel), action(std::move(action)) {}
 
-		virtual void perform(SystemManager *sysman) {
+		void perform(SystemManager *sysman) override {
 			panel->setEnabled(false);
 			action->perform(sysman);
 			panel->setEnabled(true);
 		}
 
-		virtual void stop() {
+		void stop() override {
 			action->stop();
 		}
 
@@ -187,7 +187,7 @@ namespace CalXUI {
 		this->Enable(evt.GetPayload<bool>());
 	}
 
-	void CalxScriptPanel::addHandle(std::string title, CalxScriptHandle *handle) {
+	void CalxScriptPanel::addHandle(const std::string &title, CalxScriptHandle *handle) {
 		this->scriptList->Append(title);
 		this->scriptPanel->GetSizer()->Add(handle, 1, wxALL | wxEXPAND);
 		this->scripts.push_back(handle);

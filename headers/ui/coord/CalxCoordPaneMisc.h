@@ -74,7 +74,7 @@ namespace CalXUI {
 		void setCtrl(CalxCoordPane *c) {
 			this->ctrl = c;
 		}
-		virtual void Notify();
+		void Notify() override;
 
 	 private:
 		CalxCoordPane *ctrl;

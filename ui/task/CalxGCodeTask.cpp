@@ -27,7 +27,7 @@
 namespace CalXUI {
 
 	CalxGcodeHandle::CalxGcodeHandle(wxWindow *win, wxWindowID id,
-	                                 std::string sid, std::istream *is,
+	                                 const std::string &sid, std::istream *is,
 	                                 std::shared_ptr<ComplexCoordTranslator> tr)
 	    : CalxTaskHandle::CalxTaskHandle(win, id) {
 		this->id = sid;

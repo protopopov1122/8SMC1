@@ -36,7 +36,8 @@ namespace CalXUI {
 		virtual ~CalxSerialInstrumentConnectAction() {
 			delete this->prms;
 		}
-		virtual void perform(SystemManager *sysman) {
+		
+		void perform(SystemManager *sysman) override {
 			std::shared_ptr<InstrumentController> ctrl =
 			    sysman->getInstrumentControllerSet().connectDevice(prms).lock();
 			if (ctrl == nullptr) {
@@ -46,7 +47,8 @@ namespace CalXUI {
 				pool->appendDevice(new CalxInstrumentConstructor(pool, ctrl));
 			}
 		}
-		virtual void stop() {}
+
+		void stop() override {}
 
 	 private:
 		CalxDevicePool *pool;

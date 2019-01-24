@@ -44,13 +44,13 @@ namespace CalXUI {
 	 public:
 		CalxTaskPanel(wxWindow *, wxWindowID);
 
-		virtual void updateUI();
-		virtual void shutdown();
-		virtual bool isBusy();
+		void updateUI() override;
+		void shutdown() override;
+		bool isBusy() override;
 		void setEnabled(bool);
-		virtual void stop();
+		void stop() override;
 
-		void attachTaskFactory(std::string, CalxTaskFactory *);
+		void attachTaskFactory(const std::string &, CalxTaskFactory *);
 
 	 private:
 		void OnExit(wxCloseEvent &);

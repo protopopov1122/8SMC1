@@ -31,11 +31,11 @@ namespace CalXUI {
 		CalxScriptHookCallAction(CalXScript &script, std::string hook)
 		    : script(script), hook(std::move(hook)) {}
 
-		virtual void perform(SystemManager *sysman) {
+		void perform(SystemManager *sysman) override {
 			script.invokeFunction(hook);
 		}
 
-		virtual void stop() {}
+		void stop() override {}
 
 	 private:
 		CalXScript &script;
@@ -47,11 +47,11 @@ namespace CalXUI {
 		CalxScriptExecuteAction(CalXScript &script, std::string code)
 		    : script(script), code(code) {}
 
-		virtual void perform(SystemManager *sysman) {
+		void perform(SystemManager *sysman) override {
 			script.executeScript(code);
 		}
 
-		virtual void stop() {}
+		void stop() override {}
 
 	 private:
 		CalXScript &script;

@@ -40,7 +40,7 @@ namespace CalXUI {
 	 public:
 		CalxCoordPlaneWatcherTimer(CalxCoordPlaneWatcher *,
 		                           std::shared_ptr<CoordHandle>);
-		virtual void Notify();
+		void Notify() override;
 
 	 private:
 		CalxCoordPlaneWatcher *watcher;
@@ -50,7 +50,7 @@ namespace CalXUI {
 	class CalxCoordPlaneWatcherRepaintTimer : public wxTimer {
 	 public:
 		CalxCoordPlaneWatcherRepaintTimer(CalxCoordPlaneWatcher *);
-		virtual void Notify();
+		void Notify() override;
 
 	 private:
 		CalxCoordPlaneWatcher *watcher;
@@ -61,7 +61,7 @@ namespace CalXUI {
 		CalxCoordPlaneWatcherEvent(CalxCoordPlaneWatcher *,
 		                           std::shared_ptr<CoordHandle>);
 		virtual ~CalxCoordPlaneWatcherEvent();
-		virtual void moved(CoordMoveEvent &);
+		void moved(CoordMoveEvent &) override;
 
 	 private:
 		CalxCoordPlaneWatcher *watcher;

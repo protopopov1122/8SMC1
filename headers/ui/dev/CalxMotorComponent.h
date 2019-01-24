@@ -54,7 +54,7 @@ namespace CalXUI {
 		void setCtrl(CalxMotorComponent *d) {
 			this->ctrl = d;
 		}
-		virtual void Notify();
+		void Notify() override;
 
 	 private:
 		CalxMotorComponent *ctrl;
@@ -65,18 +65,18 @@ namespace CalXUI {
 		friend class CalxMotorEventListener;
 		CalxMotorComponent(wxWindow *, wxWindowID,
 		                   std::shared_ptr<CalX::MotorController>);
-		virtual void updateUI();
-		virtual void stop();
-		virtual bool isBusy();
+		void updateUI() override;
+		void stop() override;
+		bool isBusy() override;
 		void setEnabled(bool);
 
-		virtual void stopMovement();
-		virtual ErrorCode setPower(bool);
-		virtual ErrorCode roll(TrailerId, ActionResult * = nullptr);
-		virtual ErrorCode move(motor_coord_t, float, bool,
-		                       ActionResult * = nullptr);
+		void stopMovement() override;
+		ErrorCode setPower(bool) override;
+		ErrorCode roll(TrailerId, ActionResult * = nullptr) override;
+		ErrorCode move(motor_coord_t, float, bool,
+		                       ActionResult * = nullptr) override;
 
-		virtual DeviceController *getController();
+		DeviceController *getController() override;
 
 	 private:
 		void switchPowerClick(wxCommandEvent &);

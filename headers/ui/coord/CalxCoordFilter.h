@@ -40,7 +40,7 @@ namespace CalXUI {
 	 public:
 		CalxCoordBasicFilter(wxWindow *, wxWindowID,
 		                     std::shared_ptr<BasicCoordTranslator>);
-		virtual std::shared_ptr<CoordTranslator> getTranslator();
+		std::shared_ptr<CoordTranslator> getTranslator() override;
 
 	 private:
 		void updateData();
@@ -55,7 +55,7 @@ namespace CalXUI {
 	 public:
 		CalxCoordLinearFilter(wxWindow *, wxWindowID,
 		                      std::shared_ptr<LinearCoordTranslator>);
-		virtual std::shared_ptr<CoordTranslator> getTranslator();
+		std::shared_ptr<CoordTranslator> getTranslator() override;
 
 	 private:
 		void updateData();
@@ -72,7 +72,7 @@ namespace CalXUI {
 	 public:
 		CalxCoordLogarithmicFilter(wxWindow *, wxWindowID,
 		                           std::shared_ptr<LogarithmicCoordTranslator>);
-		virtual std::shared_ptr<CoordTranslator> getTranslator();
+		std::shared_ptr<CoordTranslator> getTranslator() override;
 
 	 private:
 		void updateData();
@@ -87,7 +87,7 @@ namespace CalXUI {
 	 public:
 		CalxCoordPolarFilter(wxWindow *, wxWindowID,
 		                     std::shared_ptr<PolarCoordTranslator>);
-		virtual std::shared_ptr<CoordTranslator> getTranslator();
+		std::shared_ptr<CoordTranslator> getTranslator() override;
 
 	 private:
 		std::shared_ptr<PolarCoordTranslator> translator;
@@ -97,7 +97,7 @@ namespace CalXUI {
 	 public:
 		CalxCoordFilterCtrl(wxWindow *, wxWindowID,
 		                    std::shared_ptr<ComplexCoordTranslator> = nullptr);
-		virtual std::shared_ptr<CoordTranslator> getTranslator();
+		std::shared_ptr<CoordTranslator> getTranslator() override;
 		void updateUI();
 
 	 private:

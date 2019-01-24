@@ -39,7 +39,7 @@ namespace CalXUI {
 	 public:
 		CalxTaskLinearStepHandle(wxWindow *, wxWindowID);
 		std::shared_ptr<MoveTaskStep> getTaskStep();
-		virtual void update();
+		void update() override;
 
 	 private:
 		void OnFieldChange(wxCommandEvent &);
@@ -56,7 +56,7 @@ namespace CalXUI {
 	 public:
 		CalxTaskLinearJumpStepHandle(wxWindow *, wxWindowID);
 		std::shared_ptr<JumpTaskStep> getTaskStep();
-		virtual void update();
+		void update() override;
 
 	 private:
 		void OnFieldChange(wxCommandEvent &);
@@ -73,7 +73,7 @@ namespace CalXUI {
 	 public:
 		CalxTaskArcStepHandle(wxWindow *, wxWindowID);
 		std::shared_ptr<ArcTaskStep> getTaskStep();
-		virtual void update();
+		void update() override;
 
 	 private:
 		void OnFieldChange(wxCommandEvent &);
