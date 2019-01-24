@@ -43,7 +43,7 @@ namespace CalX {
 		ConfigurationValue(int_conf_t);
 		ConfigurationValue(real_conf_t);
 		ConfigurationValue(bool);
-		ConfigurationValue(std::string);
+		ConfigurationValue(const std::string &);
 
 		ConfigurationValueType getType() const;
 		bool is(ConfigurationValueType) const;
@@ -51,7 +51,7 @@ namespace CalX {
 		int_conf_t getInt(int_conf_t = 0) const;
 		real_conf_t getReal(real_conf_t = 0.0) const;
 		bool getBool(bool = false) const;
-		std::string getString(std::string = "") const;
+		const std::string &getString(const std::string & = "") const;
 		std::string toString() const;
 
 		operator int_conf_t() const {

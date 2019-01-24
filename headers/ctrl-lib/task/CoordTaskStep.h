@@ -30,8 +30,8 @@ namespace CalX {
 	class MoveTaskStep : public TaskStep {
 	 public:
 		MoveTaskStep(motor_point_t, float, bool = false);
-		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
-		                          SystemManager *, std::shared_ptr<TaskState>);
+		ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
+		                          SystemManager *, std::shared_ptr<TaskState>) override;
 
 		motor_point_t getPosition() const;
 		float getSpeed() const;
@@ -50,8 +50,8 @@ namespace CalX {
 	class JumpTaskStep : public TaskStep {
 	 public:
 		JumpTaskStep(motor_point_t, float, bool = false);
-		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
-		                          SystemManager *, std::shared_ptr<TaskState>);
+		ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
+		                          SystemManager *, std::shared_ptr<TaskState>) override;
 
 		motor_point_t getPosition() const;
 		float getSpeed() const;
@@ -70,8 +70,8 @@ namespace CalX {
 	class CalibrateTaskStep : public TaskStep {
 	 public:
 		CalibrateTaskStep(TrailerId);
-		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
-		                          SystemManager *, std::shared_ptr<TaskState>);
+		ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
+		                          SystemManager *, std::shared_ptr<TaskState>) override;
 
 	 private:
 		TrailerId side;
@@ -80,8 +80,8 @@ namespace CalX {
 	class ArcTaskStep : public TaskStep {
 	 public:
 		ArcTaskStep(motor_point_t, motor_point_t, int, float, bool = false);
-		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
-		                          SystemManager *, std::shared_ptr<TaskState>);
+		ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
+		                          SystemManager *, std::shared_ptr<TaskState>) override;
 
 		motor_point_t getDestination() const;
 		motor_point_t getCenter() const;
@@ -110,8 +110,8 @@ namespace CalX {
 	class RelArcTaskStep : public TaskStep {
 	 public:
 		RelArcTaskStep(motor_point_t, motor_point_t, int, float, bool = false);
-		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
-		                          SystemManager *, std::shared_ptr<TaskState>);
+		ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
+		                          SystemManager *, std::shared_ptr<TaskState>) override;
 		void setClockwise(bool);
 
 	 private:

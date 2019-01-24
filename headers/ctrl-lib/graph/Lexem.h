@@ -25,14 +25,21 @@
 
 #include <cinttypes>
 #include <string>
+#include <variant>
+#include <functional>
 
 /* This file contains definitions used by lexer. */
 
 namespace CalX {
 
-	enum TokenType { Operator, Literal, Integer, Real };
+	enum class TokenType {
+		Operator = 0,
+		Literal = 1,
+		Integer = 2,
+		Real = 3
+	};
 
-	enum OperatorType {
+	enum class OperatorType {
 		OPENING_PARENTHESE,
 		CLOSING_PARENTHESE,
 		PLUS,
@@ -45,10 +52,8 @@ namespace CalX {
 
 	struct Token {
 		TokenType type;
-		OperatorType oper;
-		int64_t integer;
-		double real;
-		std::string literal;
+		std::variant<OperatorType, int64_t, double, std::reference_wrapper<std::string>> value;
+		std::string raw;
 	};
 }  // namespace CalX
 

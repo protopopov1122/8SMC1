@@ -24,7 +24,7 @@
 
 namespace CalX {
 
-	engine_value_t MapEngineScope::getVariable(std::string id) const {
+	engine_value_t MapEngineScope::getVariable(const std::string &id) const {
 		engine_value_t val = { 0, MathError::MNoError };
 		if (this->vars.count(id) == 0) {
 			val.err = MathError::MNoVariable;
@@ -35,19 +35,19 @@ namespace CalX {
 		}
 	}
 
-	bool MapEngineScope::hasVariable(std::string id) const {
+	bool MapEngineScope::hasVariable(const std::string &id) const {
 		return this->vars.count(id) != 0;
 	}
 
-	void MapEngineScope::putVariable(std::string id, double val) {
+	void MapEngineScope::putVariable(const std::string &id, double val) {
 		this->vars[id] = val;
 	}
 
-	bool MapEngineScope::hasFunction(std::string id) const {
+	bool MapEngineScope::hasFunction(const std::string &id) const {
 		return this->func.count(id) != 0;
 	}
 
-	bool MapEngineScope::addFunction(std::string id,
+	bool MapEngineScope::addFunction(const std::string &id,
 	                                 std::unique_ptr<EngineFunction> func) {
 		if (this->func.count(id) != 0) {
 			return false;
@@ -56,7 +56,7 @@ namespace CalX {
 		return true;
 	}
 
-	engine_value_t MapEngineScope::evalFunction(std::string id,
+	engine_value_t MapEngineScope::evalFunction(const std::string &id,
 	                                            std::vector<double> &args) const {
 		if (this->func.count(id) == 0) {
 			engine_value_t val = { 0, MathError::MNoFunction };

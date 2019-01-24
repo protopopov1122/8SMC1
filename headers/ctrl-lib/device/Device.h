@@ -108,7 +108,7 @@ namespace CalX {
 		virtual void terminate() = 0;
 
 	 protected:
-		virtual void log(std::string);
+		virtual void log(const std::string &);
 
 		const device_id_t id;
 		std::shared_ptr<ConfigurationCatalogue> config;
@@ -142,7 +142,7 @@ namespace CalX {
 		virtual bool setWorkingMode(InstrumentMode) = 0;
 
 	 protected:
-		virtual void log(std::string);
+		virtual void log(const std::string &);
 	};
 }  // namespace CalX
 

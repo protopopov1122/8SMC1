@@ -39,8 +39,8 @@ namespace CalX {
 	ConfigurationValue::ConfigurationValue(bool value)
 	    : type(ConfigurationValueType::Boolean), value(value) {}
 
-	ConfigurationValue::ConfigurationValue(std::string value)
-	    : type(ConfigurationValueType::String), value(std::move(value)) {}
+	ConfigurationValue::ConfigurationValue(const std::string &value)
+	    : type(ConfigurationValueType::String), value(value) {}
 
 	ConfigurationValue::ConfigurationValue(const ConfigurationValue &value)
 	    : type(value.type), value(value.value) {}
@@ -77,7 +77,7 @@ namespace CalX {
 		}
 	}
 
-	std::string ConfigurationValue::getString(std::string defaultValue) const {
+	const std::string &ConfigurationValue::getString(const std::string &defaultValue) const {
 		if (this->is(ConfigurationValueType::String)) {
 			return std::get<std::string>(this->value);
 		} else {
@@ -121,7 +121,7 @@ namespace CalX {
 		return this->get(key).getBool(def);
 	}
 
-	std::string ConfiguationFlatDictionary::getString(
+	const std::string &ConfiguationFlatDictionary::getString(
 	    const std::string &key, const std::string &def) const {
 		return this->get(key).getString(def);
 	}

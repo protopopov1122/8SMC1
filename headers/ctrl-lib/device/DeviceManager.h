@@ -64,7 +64,7 @@ namespace CalX {
 		bool tryLock();
 
 	 protected:
-		virtual void log(std::string);
+		virtual void log(const std::string &);
 
 		std::vector<std::string> error_queue;
 		std::vector<std::unique_ptr<Motor>> motors;

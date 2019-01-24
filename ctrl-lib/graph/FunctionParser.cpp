@@ -43,7 +43,7 @@ namespace CalX {
 		}
 		while (expectOperator(OperatorType::PLUS) ||
 		       expectOperator(OperatorType::MINUS)) {
-			bool plus = this->tokens[0]->oper == OperatorType::PLUS;
+			bool plus = std::get<OperatorType>(this->tokens[0]->value) == OperatorType::PLUS;
 			this->nextToken();
 			std::unique_ptr<Node> right = nextMuldiv();
 			if (right == nullptr) {
@@ -64,7 +64,7 @@ namespace CalX {
 		}
 		while (expectOperator(OperatorType::STAR) ||
 		       expectOperator(OperatorType::SLASH)) {
-			bool mul = this->tokens[0]->oper == OperatorType::STAR;
+			bool mul = std::get<OperatorType>(this->tokens[0]->value) == OperatorType::STAR;
 			this->nextToken();
 			std::unique_ptr<Node> right = nextPower();
 			if (right == nullptr) {
@@ -100,18 +100,18 @@ namespace CalX {
 		if (this->tokens[0] != nullptr &&
 		    this->tokens[0]->type == TokenType::Integer) {
 			std::unique_ptr<IntegerConstantNode> node =
-			    std::make_unique<IntegerConstantNode>(this->tokens[0]->integer);
+			    std::make_unique<IntegerConstantNode>(std::get<int64_t>(this->tokens[0]->value));
 			nextToken();
 			return node;
 		} else if (this->tokens[0] != nullptr &&
 		           this->tokens[0]->type == TokenType::Real) {
 			std::unique_ptr<RealConstantNode> node =
-			    std::make_unique<RealConstantNode>(this->tokens[0]->real);
+			    std::make_unique<RealConstantNode>(std::get<double>(this->tokens[0]->value));
 			nextToken();
 			return node;
 		} else if (this->tokens[0] != nullptr &&
 		           this->tokens[0]->type == TokenType::Literal) {
-			std::string id = this->tokens[0]->literal;
+			std::string id(std::get<std::reference_wrapper<std::string>>(this->tokens[0]->value).get());
 			nextToken();
 			if (expectOperator(OperatorType::OPENING_PARENTHESE)) {
 				std::unique_ptr<std::vector<std::unique_ptr<Node>>> args =
@@ -163,7 +163,7 @@ namespace CalX {
 
 	bool FunctionParser::expectOperator(Token *tok, OperatorType op) {
 		return tok != nullptr && tok->type == TokenType::Operator &&
-		       tok->oper == op;
+		       std::get<OperatorType>(tok->value) == op;
 	}
 
 	bool FunctionParser::expectOperator(OperatorType op) {

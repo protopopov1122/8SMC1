@@ -29,7 +29,7 @@ namespace CalX {
 	class MathFormulaScope : public EngineScope {
 	 public:
 		MathFormulaScope(EngineScope &base) : baseScope(base) {}
-		engine_value_t getVariable(std::string key) const override {
+		engine_value_t getVariable(const std::string &key) const override {
 			if (this->scope.hasVariable(key)) {
 				return this->scope.getVariable(key);
 			} else {
@@ -37,19 +37,19 @@ namespace CalX {
 			}
 		}
 
-		bool hasVariable(std::string key) const override {
+		bool hasVariable(const std::string &key) const override {
 			return this->scope.hasVariable(key) || this->baseScope.hasVariable(key);
 		}
 
-		void putVariable(std::string key, double value) override {
+		void putVariable(const std::string &key, double value) override {
 			this->scope.putVariable(key, value);
 		}
 
-		bool hasFunction(std::string key) const override {
+		bool hasFunction(const std::string &key) const override {
 			return this->scope.hasFunction(key) || this->baseScope.hasFunction(key);
 		}
 
-		engine_value_t evalFunction(std::string key,
+		engine_value_t evalFunction(const std::string &key,
 		                            std::vector<double> &args) const override {
 			if (this->scope.hasFunction(key)) {
 				return this->scope.evalFunction(key, args);
@@ -58,9 +58,9 @@ namespace CalX {
 			}
 		}
 
-		bool addFunction(std::string name,
+		bool addFunction(const std::string &key,
 		                 std::unique_ptr<EngineFunction> fn) override {
-			return this->scope.addFunction(name, std::move(fn));
+			return this->scope.addFunction(key, std::move(fn));
 		}
 
 	 private:

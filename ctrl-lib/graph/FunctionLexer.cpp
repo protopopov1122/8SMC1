@@ -47,8 +47,8 @@ namespace CalX {
 		char buf[] = { (char) chr, '\0' };                                         \
 		std::string raw(buf);                                                      \
 		std::unique_ptr<Token> lexem = std::make_unique<Token>();                  \
-		lexem->literal = raw;                                                      \
-		lexem->oper = tp;                                                          \
+		lexem->raw = raw;                                                      \
+		lexem->value.emplace<OperatorType>(tp);                                                          \
 		lexem->type = TokenType::Operator;                                         \
 		return lexem;                                                              \
 	} break;
@@ -79,13 +79,13 @@ namespace CalX {
 			buf[offset] = '\0';
 			std::string raw(buf);
 			std::unique_ptr<Token> lexem = std::make_unique<Token>();
-			lexem->literal = raw;
+			lexem->raw = raw;
 			if (real) {
 				lexem->type = TokenType::Real;
-				lexem->real = std::stod(raw);
+				lexem->value.emplace<double>(std::stod(raw));
 			} else {
 				lexem->type = TokenType::Integer;
-				lexem->integer = std::stoi(raw);
+				lexem->value.emplace<int64_t>(std::stoi(raw));
 			}
 			return lexem;
 		}
@@ -107,7 +107,8 @@ namespace CalX {
 		std::string raw(buf);
 		std::unique_ptr<Token> lexem = std::make_unique<Token>();
 		lexem->type = TokenType::Literal;
-		lexem->literal = raw;
+		lexem->raw = raw;
+		lexem->value.emplace<std::reference_wrapper<std::string>>(std::ref(lexem->raw));
 		return lexem;
 	}
 }  // namespace CalX

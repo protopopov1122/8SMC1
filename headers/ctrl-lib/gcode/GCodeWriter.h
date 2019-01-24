@@ -35,10 +35,10 @@ namespace CalX {
 		GCodeWriter(motor_point_t, motor_rect_t, std::shared_ptr<CoordTranslator>,
 		            std::ostream &);
 		void close();
-		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>);
+		std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane>) override;
 
 	 protected:
-		virtual bool jump(motor_point_t, bool);
+		bool jump(motor_point_t, bool) override;
 
 	 private:
 		std::shared_ptr<CoordTranslator> trans;

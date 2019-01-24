@@ -56,8 +56,8 @@ namespace CalX {
 		motor_coord_t getPosition() const;
 		bool isMoving() const;
 
-		virtual void use();
-		virtual void unuse();
+		void use() override;
+		void unuse() override;
 
 		ErrorCode waitWhileRunning();
 		ErrorCode checkTrailers();

@@ -26,7 +26,7 @@
 namespace CalX {
 
 	CoordPlaneLog::CoordPlaneLog(std::shared_ptr<CoordPlane> cplane,
-	                             std::ostream &os, std::string prefix,
+	                             std::ostream &os, const std::string &prefix,
 	                             bool log_act, bool log_err)
 	    : ProxyCoordPlane(cplane), out(os) {
 		this->prefix = prefix;
@@ -34,7 +34,7 @@ namespace CalX {
 		this->log_errors = log_err;
 	}
 
-	std::string CoordPlaneLog::getPrefix() const {
+	const std::string &CoordPlaneLog::getPrefix() const {
 		return this->prefix;
 	}
 
@@ -46,7 +46,7 @@ namespace CalX {
 		return this->log_errors;
 	}
 
-	void CoordPlaneLog::setPrefix(std::string p) {
+	void CoordPlaneLog::setPrefix(const std::string &p) {
 		this->prefix = p;
 	}
 

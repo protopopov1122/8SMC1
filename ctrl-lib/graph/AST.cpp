@@ -109,7 +109,7 @@ namespace CalX {
 	}
 
 	FunctionNode::FunctionNode(
-	    std::string id, std::unique_ptr<std::vector<std::unique_ptr<Node>>> args)
+	    const std::string &id, std::unique_ptr<std::vector<std::unique_ptr<Node>>> args)
 	    : Node::Node(NodeType::Function), id(id), args(std::move(args)) {}
 
 	engine_value_t FunctionNode::eval(MathEngine &eng) const {

@@ -39,8 +39,8 @@ namespace CalX {
 		InstrumentController(ConfigurationCatalogue &, Instrument &);
 		Instrument &getInstrument() const;
 		virtual bool isSessionOpened() const;
-		virtual ErrorCode open_session();
-		virtual ErrorCode close_session();
+		ErrorCode open_session() override;
+		ErrorCode close_session() override;
 		bool isEnabled() const;
 		ErrorCode enable(bool);
 		ErrorCode flipState();
@@ -52,8 +52,8 @@ namespace CalX {
 		InstrumentMode getMode() const;
 		bool setMode(InstrumentMode);
 
-		virtual void use();
-		virtual void unuse();
+		void use() override;
+		void unuse() override;
 
 	 protected:
 		void sendStateChanged();

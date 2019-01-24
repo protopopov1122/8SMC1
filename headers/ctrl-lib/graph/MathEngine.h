@@ -46,13 +46,13 @@ namespace CalX {
 	class EngineScope {
 	 public:
 		virtual ~EngineScope() = default;
-		virtual engine_value_t getVariable(std::string) const = 0;
-		virtual bool hasVariable(std::string) const = 0;
-		virtual void putVariable(std::string, double) = 0;
-		virtual bool hasFunction(std::string) const = 0;
-		virtual engine_value_t evalFunction(std::string,
+		virtual engine_value_t getVariable(const std::string &) const = 0;
+		virtual bool hasVariable(const std::string &) const = 0;
+		virtual void putVariable(const std::string &, double) = 0;
+		virtual bool hasFunction(const std::string &) const = 0;
+		virtual engine_value_t evalFunction(const std::string &,
 		                                    std::vector<double> &) const = 0;
-		virtual bool addFunction(std::string, std::unique_ptr<EngineFunction>) = 0;
+		virtual bool addFunction(const std::string &, std::unique_ptr<EngineFunction>) = 0;
 	};
 
 	class MathEngine {
@@ -64,13 +64,13 @@ namespace CalX {
 
 	class MapEngineScope : public EngineScope {
 	 public:
-		engine_value_t getVariable(std::string) const override;
-		bool hasVariable(std::string) const override;
-		void putVariable(std::string, double) override;
-		bool hasFunction(std::string) const override;
-		engine_value_t evalFunction(std::string,
+		engine_value_t getVariable(const std::string &) const override;
+		bool hasVariable(const std::string &) const override;
+		void putVariable(const std::string &, double) override;
+		bool hasFunction(const std::string &) const override;
+		engine_value_t evalFunction(const std::string &,
 		                            std::vector<double> &) const override;
-		bool addFunction(std::string, std::unique_ptr<EngineFunction>) override;
+		bool addFunction(const std::string &, std::unique_ptr<EngineFunction>) override;
 
 	 private:
 		std::map<std::string, double> vars;

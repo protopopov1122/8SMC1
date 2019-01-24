@@ -56,11 +56,14 @@ namespace CalX {
 		return err;
 	}
 
-	void Device::log(std::string msg) {
+	void Device::log(const std::string &msg) {
 		LOG("Device #" + std::to_string(this->getID()), msg);
 	}
 
-	void Device::lock() {}
+	void Device::lock() {
+		// For better synchonization it's possible to implement locking
+		// However currently it's not strictly necessary
+	}
 
 	void Device::unlock() {}
 
@@ -73,7 +76,7 @@ namespace CalX {
 	Instrument::Instrument(device_id_t id)
 	    : Device::Device(DeviceType::Instrument, id) {}
 
-	void Instrument::log(std::string msg) {
+	void Instrument::log(const std::string &msg) {
 		LOG_INSTR(this->getID(), msg);
 	}
 }  // namespace CalX

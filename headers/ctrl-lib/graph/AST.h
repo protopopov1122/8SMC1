@@ -121,10 +121,8 @@ namespace CalX {
 
 	class VariableNode : public Node {
 	 public:
-		VariableNode(std::string i) : Node::Node(NodeType::Variable) {
-			this->id = i;
-		}
-		std::string getId() const {
+		VariableNode(const std::string &id) : Node::Node(NodeType::Variable), id(id) {}
+		const std::string &getId() const {
 			return this->id;
 		}
 		engine_value_t eval(MathEngine &) const override;
@@ -177,7 +175,7 @@ namespace CalX {
 
 	class FunctionNode : public Node {
 	 public:
-		FunctionNode(std::string,
+		FunctionNode(const std::string &,
 		             std::unique_ptr<std::vector<std::unique_ptr<Node>>>);
 		engine_value_t eval(MathEngine &eng) const override;
 

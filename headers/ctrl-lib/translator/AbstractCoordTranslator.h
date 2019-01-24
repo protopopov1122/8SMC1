@@ -37,7 +37,7 @@
 
 namespace CalX {
 
-	enum CoordType {
+	enum class CoordType {
 		BasicCoord,  // Basic coord translator. Similar to linear, but has no
 		             // underlying translators
 
