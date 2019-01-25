@@ -328,8 +328,8 @@ namespace CalXUI {
 				float speed = this->speed->GetValue();
 				TaskParameters prms = { (float) speed };
 				queue->addAction(std::make_unique<CalxTaskAction>(
-				    this, handle, task, *list.at((std::size_t) taskList->GetSelection()),
-				    prms));
+				    this, handle, task,
+				    *list.at((std::size_t) taskList->GetSelection()), prms));
 			}
 		} else {
 			std::string message = __("Select coordinate plane");
@@ -403,7 +403,8 @@ namespace CalXUI {
 				std::shared_ptr<TaskState> state = std::make_shared<TaskState>();
 				std::shared_ptr<GCodeWriter> writer = std::make_shared<GCodeWriter>(
 				    handle->getPosition(), handle->getSize(),
-				    list.at((std::size_t) taskList->GetSelection())->getTranslator(), ss);
+				    list.at((std::size_t) taskList->GetSelection())->getTranslator(),
+				    ss);
 				this->setEnabled(false);
 				wxGetApp().getErrorHandler()->handle(
 				    task->perform(writer, prms, wxGetApp().getSystemManager(), state));

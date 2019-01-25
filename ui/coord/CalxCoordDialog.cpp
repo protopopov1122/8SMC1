@@ -28,7 +28,8 @@ namespace CalXUI {
 
 	CalxCoordDialog::CalxCoordDialog(wxWindow *win, wxWindowID id,
 	                                 SystemManager &sysman)
-	    : wxDialog::wxDialog(win, id, __("New coordinate plane")), sysman(sysman) {
+	    : wxDialog::wxDialog(win, id, __("New coordinate plane")),
+	      sysman(sysman) {
 		this->ctrl = nullptr;
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(sizer);

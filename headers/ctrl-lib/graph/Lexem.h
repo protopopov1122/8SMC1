@@ -32,12 +32,7 @@
 
 namespace CalX {
 
-	enum class TokenType {
-		Operator = 0,
-		Literal = 1,
-		Integer = 2,
-		Real = 3
-	};
+	enum class TokenType { Operator = 0, Literal = 1, Integer = 2, Real = 3 };
 
 	enum class OperatorType {
 		OPENING_PARENTHESE,
@@ -52,7 +47,9 @@ namespace CalX {
 
 	struct Token {
 		TokenType type;
-		std::variant<OperatorType, int64_t, double, std::reference_wrapper<std::string>> value;
+		std::variant<OperatorType, int64_t, double,
+		             std::reference_wrapper<std::string>>
+		    value;
 		std::string raw;
 	};
 }  // namespace CalX

@@ -96,7 +96,8 @@ namespace CalXUI {
 			ctrl->Hide();
 		}
 		if (this->coordList->GetSelection() != wxNOT_FOUND) {
-			this->coords.at((std::size_t) this->coordList->GetSelection())->Show(true);
+			this->coords.at((std::size_t) this->coordList->GetSelection())
+			    ->Show(true);
 		}
 		mainPanel->Layout();
 		Layout();

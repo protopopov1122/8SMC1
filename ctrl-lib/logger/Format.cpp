@@ -34,7 +34,7 @@ namespace CalX {
 			if (!name.empty()) {
 				if (fullName.size() < SinkNamePadding) {
 					fullName.insert(fullName.size(), SinkNamePadding - fullName.size(),
-													' ');
+					                ' ');
 				}
 			}
 			auto timenow = std::chrono::system_clock::to_time_t(

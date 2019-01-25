@@ -174,8 +174,10 @@ namespace CalXLua {
 	 public:
 		LuaCalXMath(CalXScriptUIEnvironment &);
 		std::size_t getFormulaCount();
-		void addFormula(lcb::LuaState, const std::string &, const std::string &, lcb::LuaReferenceHandle);
+		void addFormula(lcb::LuaState, const std::string &, const std::string &,
+		                lcb::LuaReferenceHandle);
 		bool removeFormula(std::size_t);
+
 	 private:
 		CalXScriptUIEnvironment &env;
 	};
@@ -188,8 +190,9 @@ namespace CalXLua {
 		void warning(const std::string &);
 		void error(const std::string &);
 		void critical(const std::string &);
+
 	 private:
-	 	JournalLogger &logger;
+		JournalLogger &logger;
 	};
 }  // namespace CalXLua
 

@@ -39,8 +39,10 @@ namespace CalXLua {
 		if (!this->motor->isValid()) {
 			throw CalXException(ErrorCode::UnknownResource);
 		}
-		this->halt_on_fail = env.getConfiguration().getEntry(CalxConfiguration::Scripting)->getBool(
-		    CalxScriptingConfiguration::HaltOnFail, false);
+		this->halt_on_fail =
+		    env.getConfiguration()
+		        .getEntry(CalxConfiguration::Scripting)
+		        ->getBool(CalxScriptingConfiguration::HaltOnFail, false);
 	}
 
 	device_id_t LuaCalXMotor::getDeviceID() const {
@@ -155,8 +157,10 @@ namespace CalXLua {
 		if (!this->instrument->isValid()) {
 			throw CalXException(ErrorCode::UnknownResource);
 		}
-		this->halt_on_fail = env.getConfiguration().getEntry(CalxConfiguration::Scripting)->getBool(
-		    CalxScriptingConfiguration::HaltOnFail, false);
+		this->halt_on_fail =
+		    env.getConfiguration()
+		        .getEntry(CalxConfiguration::Scripting)
+		        ->getBool(CalxScriptingConfiguration::HaltOnFail, false);
 	}
 
 	device_id_t LuaCalXInstrument::getDeviceID() const {
@@ -282,8 +286,10 @@ namespace CalXLua {
 		if (this->plane == nullptr) {
 			throw CalXException(ErrorCode::UnknownResource);
 		}
-		this->halt_on_fail = env.getConfiguration().getEntry(CalxConfiguration::Scripting)->getBool(
-		    CalxScriptingConfiguration::HaltOnFail, false);
+		this->halt_on_fail =
+		    env.getConfiguration()
+		        .getEntry(CalxConfiguration::Scripting)
+		        ->getBool(CalxScriptingConfiguration::HaltOnFail, false);
 	}
 
 	std::size_t LuaCalXPlane::getPlaneID() const {
@@ -411,8 +417,10 @@ namespace CalXLua {
 	}
 
 	LuaCalXConfig::LuaCalXConfig(CalXScriptUIEnvironment &env) : env(env) {
-		this->halt_on_fail = env.getConfiguration().getEntry(CalxConfiguration::Scripting)->getBool(
-		    CalxScriptingConfiguration::HaltOnFail, false);
+		this->halt_on_fail =
+		    env.getConfiguration()
+		        .getEntry(CalxConfiguration::Scripting)
+		        ->getBool(CalxScriptingConfiguration::HaltOnFail, false);
 	}
 
 	std::optional<std::reference_wrapper<ConfiguationFlatDictionary>>
@@ -434,8 +442,10 @@ namespace CalXLua {
 	}
 
 	LuaCalXSettings::LuaCalXSettings(CalXScriptUIEnvironment &env) : env(env) {
-		this->halt_on_fail = env.getConfiguration().getEntry(CalxConfiguration::Scripting)->getBool(
-		    CalxScriptingConfiguration::HaltOnFail, false);
+		this->halt_on_fail =
+		    env.getConfiguration()
+		        .getEntry(CalxConfiguration::Scripting)
+		        ->getBool(CalxScriptingConfiguration::HaltOnFail, false);
 	}
 
 	bool LuaCalXSettings::exists() {
@@ -463,18 +473,20 @@ namespace CalXLua {
 		       this->env.getSettings()->getSettings().hasEntry(entryName);
 	}
 
-	LuaCalXMath::LuaCalXMath(CalXScriptUIEnvironment &env)
-		: env(env) {}
-	
+	LuaCalXMath::LuaCalXMath(CalXScriptUIEnvironment &env) : env(env) {}
+
 	std::size_t LuaCalXMath::getFormulaCount() {
 		return this->env.getUI().getMath().getFormulaCount();
 	}
 
-	void LuaCalXMath::addFormula(lcb::LuaState lua, const std::string &title, const std::string &formula, lcb::LuaReferenceHandle variablesRef) {
+	void LuaCalXMath::addFormula(lcb::LuaState lua, const std::string &title,
+	                             const std::string &formula,
+	                             lcb::LuaReferenceHandle variablesRef) {
 		std::map<std::string, std::string> variables;
 		for (auto it = variablesRef.begin(); it != variablesRef.end(); ++it) {
 			auto varRef = variablesRef[(*it).first];
-			variables[varRef["name"].get<std::string>()] = varRef["description"].get<std::string>();
+			variables[varRef["name"].get<std::string>()] =
+			    varRef["description"].get<std::string>();
 		}
 		this->env.getUI().getMath().addFormula(title, formula, variables);
 	}
@@ -483,10 +495,8 @@ namespace CalXLua {
 		return this->env.getUI().getMath().removeFormula(index);
 	}
 
+	LuaCalXJournal::LuaCalXJournal(JournalLogger &logger) : logger(logger) {}
 
-	LuaCalXJournal::LuaCalXJournal(JournalLogger &logger)
-		: logger(logger) {}
-	
 	void LuaCalXJournal::debug(const std::string &msg) {
 		this->logger.stream(LoggingSeverity::Debug) << msg << Flush();
 	}
@@ -494,7 +504,7 @@ namespace CalXLua {
 	void LuaCalXJournal::info(const std::string &msg) {
 		this->logger.stream(LoggingSeverity::Info) << msg << Flush();
 	}
-	
+
 	void LuaCalXJournal::warning(const std::string &msg) {
 		this->logger.stream(LoggingSeverity::Warning) << msg << Flush();
 	}

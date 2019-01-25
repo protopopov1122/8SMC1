@@ -36,7 +36,8 @@ namespace CalXUI {
 	 public:
 		virtual ~CalxMathEngine() = default;
 		virtual std::size_t getFormulaCount() = 0;
-		virtual void addFormula(const std::string &, const std::string &, const std::map<std::string, std::string> &) = 0;
+		virtual void addFormula(const std::string &, const std::string &,
+		                        const std::map<std::string, std::string> &) = 0;
 		virtual bool removeFormula(std::size_t) = 0;
 	};
 
@@ -48,7 +49,8 @@ namespace CalXUI {
 		void updateUI() override;
 
 		std::size_t getFormulaCount() override;
-		void addFormula(const std::string &, const std::string &, const std::map<std::string, std::string> &) override;
+		void addFormula(const std::string &, const std::string &,
+		                const std::map<std::string, std::string> &) override;
 		bool removeFormula(std::size_t) override;
 
 	 private:

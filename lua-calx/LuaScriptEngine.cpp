@@ -150,9 +150,9 @@ namespace CalXLua {
 		    &LuaCalXPlane::isMeasured, "asCenter", &LuaCalXPlane::positionAsCenter,
 		    "openWatcher", &LuaCalXPlane::openWatcher);
 
-		lcb::ClassBinder<LuaCalXPlanes>::bind(lua, "create", &LuaCalXPlanes::create,
-		                                      "count", &LuaCalXPlanes::getPlaneCount,
-		                                      "get", &LuaCalXPlanes::getPlane);
+		lcb::ClassBinder<LuaCalXPlanes>::bind(
+		    lua, "create", &LuaCalXPlanes::create, "count",
+		    &LuaCalXPlanes::getPlaneCount, "get", &LuaCalXPlanes::getPlane);
 
 		lcb::ClassBinder<ConfiguationFlatDictionary>::bind(
 		    lua, "has", &ConfiguationFlatDictionary::has, "int",
@@ -169,20 +169,13 @@ namespace CalXLua {
 		    &LuaCalXSettings::hasEntry, "get", &LuaCalXSettings::getEntry);
 
 		lcb::ClassBinder<LuaCalXMath>::bind(
-			lua,
-			"count", &LuaCalXMath::getFormulaCount,
-			"add", &LuaCalXMath::addFormula,
-			"remove", &LuaCalXMath::removeFormula
-		);
+		    lua, "count", &LuaCalXMath::getFormulaCount, "add",
+		    &LuaCalXMath::addFormula, "remove", &LuaCalXMath::removeFormula);
 
 		lcb::ClassBinder<LuaCalXJournal>::bind(
-			lua,
-			"debug", &LuaCalXJournal::debug,
-			"info", &LuaCalXJournal::info,
-			"warning", &LuaCalXJournal::warning,
-			"error", &LuaCalXJournal::error,
-			"critical", &LuaCalXJournal::critical
-		);
+		    lua, "debug", &LuaCalXJournal::debug, "info", &LuaCalXJournal::info,
+		    "warning", &LuaCalXJournal::warning, "error", &LuaCalXJournal::error,
+		    "critical", &LuaCalXJournal::critical);
 
 		this->lua["calx"] = *lcb::LuaFactory::newTable(lua);
 
@@ -198,7 +191,9 @@ namespace CalXLua {
 		this->lua["calx"]["settings"] =
 		    std::make_unique<LuaCalXSettings>(this->env);
 		this->lua["calx"]["math"] = std::make_unique<LuaCalXMath>(this->env);
-		this->lua["calx"]["logger"] = std::make_unique<LuaCalXJournal>(this->env.getLogger());
-		this->lua["calx"]["journal"] = std::make_unique<LuaCalXJournal>(this->env.getJournal());
+		this->lua["calx"]["logger"] =
+		    std::make_unique<LuaCalXJournal>(this->env.getLogger());
+		this->lua["calx"]["journal"] =
+		    std::make_unique<LuaCalXJournal>(this->env.getJournal());
 	}
 }  // namespace CalXLua

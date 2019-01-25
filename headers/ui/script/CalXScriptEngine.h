@@ -123,10 +123,12 @@ namespace CalXUI {
 
 	class CalXAppScriptUIMath : public CalXScriptUIMath {
 	 public:
-	 	CalXAppScriptUIMath(CalxApp &);
+		CalXAppScriptUIMath(CalxApp &);
 		std::size_t getFormulaCount() override;
-		void addFormula(const std::string &, const std::string &, const std::map<std::string, std::string> &) override;
+		void addFormula(const std::string &, const std::string &,
+		                const std::map<std::string, std::string> &) override;
 		bool removeFormula(std::size_t) override;
+
 	 private:
 		CalxApp &app;
 	};

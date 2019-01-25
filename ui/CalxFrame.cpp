@@ -71,10 +71,9 @@ namespace CalXUI {
 			}
 		}
 
-		for (std::size_t i = 0; i < wxGetApp()
-		                           .getSystemManager()
-		                           .getMotorControllerSet()
-		                           .getDeviceCount();
+		for (std::size_t i = 0;
+		     i <
+		     wxGetApp().getSystemManager().getMotorControllerSet().getDeviceCount();
 		     i++) {
 			devPanel->appendDevice(new CalxMotorConstructor(
 			    devPanel, wxGetApp()
@@ -85,14 +84,14 @@ namespace CalXUI {
 		}
 
 		for (std::size_t i = 0; i < wxGetApp()
-		                           .getSystemManager()
-		                           .getInstrumentControllerSet()
-		                           .getDeviceCount();
+		                                .getSystemManager()
+		                                .getInstrumentControllerSet()
+		                                .getDeviceCount();
 		     i++) {
 			devPanel->appendDevice(new CalxInstrumentConstructor(
 			    devPanel, wxGetApp()
 			                  .getSystemManager()
-			                	.getInstrumentControllerSet()
+			                  .getInstrumentControllerSet()
 			                  .getDeviceController((device_id_t) i)
 			                  .lock()));
 		}

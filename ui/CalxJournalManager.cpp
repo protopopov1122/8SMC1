@@ -35,15 +35,20 @@ namespace CalXUI {
 	static constexpr auto FullTimestampFormat = "%H-%M-%S_%d-%m-%Y";
 	static constexpr auto ShortTimestampFormat = "%d-%m-%Y";
 
-	static std::string FullLogName(const std::string &directory, ConfigurationCatalogue &conf) {
+	static std::string FullLogName(const std::string &directory,
+	                               ConfigurationCatalogue &conf) {
 		std::stringstream ss;
 		ss << directory << static_cast<char>(wxFileName::GetPathSeparator())
-		   << (conf.getEntry(CalxConfiguration::Logging)->getBool(CalxLoggingConfiguration::DailyJournal, false) ? ShortTimestampFormat : FullTimestampFormat) << ".log";
+		   << (conf.getEntry(CalxConfiguration::Logging)
+		               ->getBool(CalxLoggingConfiguration::DailyJournal, false)
+		           ? ShortTimestampFormat
+		           : FullTimestampFormat)
+		   << ".log";
 		return ss.str();
 	}
 
 	CalxJournalManager::CalxJournalManager(ConfigurationCatalogue &conf)
-		: config(conf) {
+	    : config(conf) {
 		this->journal = nullptr;
 		if (conf.getEntry(CalxConfiguration::Logging)
 		        ->has(CalxLoggingConfiguration::JournalDir)) {

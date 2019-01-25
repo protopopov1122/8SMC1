@@ -24,7 +24,8 @@
 
 namespace CalXUI {
 	CalxProgrammedTaskHandle::CalxProgrammedTaskHandle(wxWindow *win,
-	                                                   wxWindowID id, std::size_t tid)
+	                                                   wxWindowID id,
+	                                                   std::size_t tid)
 	    : CalxTaskHandle::CalxTaskHandle(win, id) {
 		this->task = std::make_shared<ProgrammedCoordTask>();
 		this->id = tid;

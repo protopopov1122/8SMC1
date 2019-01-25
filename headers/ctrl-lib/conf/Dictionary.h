@@ -45,7 +45,8 @@ namespace CalX {
 		int_conf_t getInt(const std::string &, int_conf_t = 0) const;
 		real_conf_t getReal(const std::string &, real_conf_t = 0) const;
 		bool getBool(const std::string &, bool = false) const;
-		const std::string &getString(const std::string &, const std::string & = "") const;
+		const std::string &getString(const std::string &,
+		                             const std::string & = "") const;
 	};
 
 	class ConfigurationCatalogue

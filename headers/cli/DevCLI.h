@@ -35,7 +35,8 @@
 namespace CalX {
 	class CLISystemCommand : public CLICommand {
 	 public:
-		CLISystemCommand(SystemManager &sysman, TaskSet &tasks) : sysman(sysman), tasks(tasks) {}
+		CLISystemCommand(SystemManager &sysman, TaskSet &tasks)
+		    : sysman(sysman), tasks(tasks) {}
 		virtual ~CLISystemCommand() = default;
 		virtual void execute(CLI *cli, std::vector<std::string> &args) = 0;
 

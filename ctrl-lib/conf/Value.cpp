@@ -77,7 +77,8 @@ namespace CalX {
 		}
 	}
 
-	const std::string &ConfigurationValue::getString(const std::string &defaultValue) const {
+	const std::string &ConfigurationValue::getString(
+	    const std::string &defaultValue) const {
 		if (this->is(ConfigurationValueType::String)) {
 			return std::get<std::string>(this->value);
 		} else {

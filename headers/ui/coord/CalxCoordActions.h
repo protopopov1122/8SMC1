@@ -86,7 +86,7 @@ namespace CalXUI {
 		CalxCoordActionMeasure(std::shared_ptr<CoordHandle>, TrailerId,
 		                       ActionResult * = nullptr);
 
-		void perform(SystemManager & override);
+		void perform(SystemManager &override);
 		void stop() override;
 
 	 private:

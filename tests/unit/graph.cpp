@@ -18,7 +18,8 @@ TEST_CASE("Math expression lexer") {
 
 	REQUIRE(tokens.size() == 13);
 	REQUIRE(tokens[0].type == TokenType::Operator);
-	REQUIRE(std::get<OperatorType>(tokens[0].value) == OperatorType::OPENING_PARENTHESE);
+	REQUIRE(std::get<OperatorType>(tokens[0].value) ==
+	        OperatorType::OPENING_PARENTHESE);
 	REQUIRE(tokens[1].type == TokenType::Integer);
 	REQUIRE(std::get<int64_t>(tokens[1].value) == 2);
 	REQUIRE(tokens[2].type == TokenType::Operator);
@@ -30,7 +31,8 @@ TEST_CASE("Math expression lexer") {
 	REQUIRE(tokens[5].type == TokenType::Integer);
 	REQUIRE(std::get<int64_t>(tokens[5].value) == 500);
 	REQUIRE(tokens[6].type == TokenType::Operator);
-	REQUIRE(std::get<OperatorType>(tokens[6].value) == OperatorType::CLOSING_PARENTHESE);
+	REQUIRE(std::get<OperatorType>(tokens[6].value) ==
+	        OperatorType::CLOSING_PARENTHESE);
 	REQUIRE(tokens[7].type == TokenType::Operator);
 	REQUIRE(std::get<OperatorType>(tokens[7].value) == OperatorType::POWER);
 	REQUIRE(tokens[8].type == TokenType::Literal);

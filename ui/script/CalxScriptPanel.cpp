@@ -187,7 +187,8 @@ namespace CalXUI {
 		this->Enable(evt.GetPayload<bool>());
 	}
 
-	void CalxScriptPanel::addHandle(const std::string &title, CalxScriptHandle *handle) {
+	void CalxScriptPanel::addHandle(const std::string &title,
+	                                CalxScriptHandle *handle) {
 		this->scriptList->Append(title);
 		this->scriptPanel->GetSizer()->Add(handle, 1, wxALL | wxEXPAND);
 		this->scripts.push_back(handle);

@@ -121,7 +121,8 @@ namespace CalX {
 
 	class VariableNode : public Node {
 	 public:
-		VariableNode(const std::string &id) : Node::Node(NodeType::Variable), id(id) {}
+		VariableNode(const std::string &id)
+		    : Node::Node(NodeType::Variable), id(id) {}
 		const std::string &getId() const {
 			return this->id;
 		}

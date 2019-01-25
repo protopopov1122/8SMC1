@@ -110,7 +110,8 @@ namespace CalXUI {
 		this->Bind(wxEVT_SIZE, &CalxCoordPlaneWatcher::OnResizeEvent, this);
 		this->Bind(wxEVT_WATCHER_APPEND_POINT,
 		           &CalxCoordPlaneWatcher::OnAppendEvent, this);
-		this->Bind(wxEVT_WATCHER_UPDATE, &CalxCoordPlaneWatcher::OnUpdateEvent, this);
+		this->Bind(wxEVT_WATCHER_UPDATE, &CalxCoordPlaneWatcher::OnUpdateEvent,
+		           this);
 
 		this->history.push_back(
 		    std::make_pair(this->handle->getController()->getPosition(), false));

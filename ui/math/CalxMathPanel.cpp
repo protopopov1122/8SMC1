@@ -89,10 +89,10 @@ namespace CalXUI {
 		return this->contents.size();
 	}
 
-	void CalxMathPanel::addFormula(const std::string &title, const std::string &formula, const std::map<std::string, std::string> &variables) {
-		CalxFormulaData data {
-			title, formula, variables
-		};
+	void CalxMathPanel::addFormula(
+	    const std::string &title, const std::string &formula,
+	    const std::map<std::string, std::string> &variables) {
+		CalxFormulaData data{ title, formula, variables };
 		wxThreadEvent evt(wxEVT_ADD_FORMULA);
 		evt.SetPayload(data);
 		wxPostEvent(this, evt);
@@ -128,10 +128,12 @@ namespace CalXUI {
 	void CalxMathPanel::OnListClick(wxCommandEvent &evt) {
 		this->updateUI();
 	}
-	
+
 	void CalxMathPanel::OnAddFormula(wxThreadEvent &evt) {
 		CalxFormulaData data = evt.GetPayload<CalxFormulaData>();
-		this->addMathObject(new CalxMathFormulaPanel(this->mathObjectPanel, wxID_ANY, data.title, data.formula, data.variables));
+		this->addMathObject(new CalxMathFormulaPanel(this->mathObjectPanel,
+		                                             wxID_ANY, data.title,
+		                                             data.formula, data.variables));
 	}
 
 	void CalxMathPanel::OnRemoveFormula(wxThreadEvent &evt) {

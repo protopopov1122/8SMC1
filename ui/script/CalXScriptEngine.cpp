@@ -24,7 +24,8 @@
 
 namespace CalXUI {
 
-	CalXScriptHookThread::CalXScriptHookThread(const std::string &path, const std::string &hook)
+	CalXScriptHookThread::CalXScriptHookThread(const std::string &path,
+	                                           const std::string &hook)
 	    : wxThread::wxThread(wxTHREAD_DETACHED), path(path), hook(hook) {}
 
 	wxThread::ExitCode CalXScriptHookThread::Entry() {
@@ -33,23 +34,24 @@ namespace CalXUI {
 		return nullptr;
 	}
 
-	CalXAppScriptUIMath::CalXAppScriptUIMath(CalxApp &app)
-		: app(app) {}
-	
+	CalXAppScriptUIMath::CalXAppScriptUIMath(CalxApp &app) : app(app) {}
+
 	std::size_t CalXAppScriptUIMath::getFormulaCount() {
 		return this->app.getMainFrame()->getMathEngine()->getFormulaCount();
 	}
 
-	void CalXAppScriptUIMath::addFormula(const std::string &title, const std::string &formula, const std::map<std::string, std::string> &variables) {
-		this->app.getMainFrame()->getMathEngine()->addFormula(title, formula, variables);
+	void CalXAppScriptUIMath::addFormula(
+	    const std::string &title, const std::string &formula,
+	    const std::map<std::string, std::string> &variables) {
+		this->app.getMainFrame()->getMathEngine()->addFormula(title, formula,
+		                                                      variables);
 	}
 
 	bool CalXAppScriptUIMath::removeFormula(std::size_t index) {
 		return this->app.getMainFrame()->getMathEngine()->removeFormula(index);
 	}
 
-	CalXAppScriptUI::CalXAppScriptUI(CalxApp &app)
-		: app(app), math(app) {}
+	CalXAppScriptUI::CalXAppScriptUI(CalxApp &app) : app(app), math(app) {}
 
 	ErrorCode CalXAppScriptUI::openWatcher(std::size_t id) {
 		CalxPlaneHandle *handle =

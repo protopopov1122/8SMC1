@@ -52,7 +52,8 @@ namespace CalX {
 		virtual bool hasFunction(const std::string &) const = 0;
 		virtual engine_value_t evalFunction(const std::string &,
 		                                    std::vector<double> &) const = 0;
-		virtual bool addFunction(const std::string &, std::unique_ptr<EngineFunction>) = 0;
+		virtual bool addFunction(const std::string &,
+		                         std::unique_ptr<EngineFunction>) = 0;
 	};
 
 	class MathEngine {
@@ -70,7 +71,8 @@ namespace CalX {
 		bool hasFunction(const std::string &) const override;
 		engine_value_t evalFunction(const std::string &,
 		                            std::vector<double> &) const override;
-		bool addFunction(const std::string &, std::unique_ptr<EngineFunction>) override;
+		bool addFunction(const std::string &,
+		                 std::unique_ptr<EngineFunction>) override;
 
 	 private:
 		std::map<std::string, double> vars;

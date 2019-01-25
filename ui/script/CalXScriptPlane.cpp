@@ -263,4 +263,4 @@ namespace CalXUI {
 	    std::size_t id) {
 		return std::make_unique<CalXAppScriptPlane>(this->app, id);
 	}
-}
+}  // namespace CalXUI

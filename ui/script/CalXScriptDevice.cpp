@@ -438,4 +438,4 @@ namespace CalXUI {
 	    device_id_t id) {
 		return std::make_unique<CalXAppScriptInstrument>(this->app, id);
 	}
-}
+}  // namespace CalXUI

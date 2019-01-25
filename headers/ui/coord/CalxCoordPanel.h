@@ -60,8 +60,8 @@ namespace CalXUI {
 		bool isBusy() override;
 		void stop() override;
 		std::size_t getLayoutColumnCount();
-		bool addComponentFactory(std::string, CalxCoordComponentFactory *, std::size_t,
-		                         bool = true);
+		bool addComponentFactory(std::string, CalxCoordComponentFactory *,
+		                         std::size_t, bool = true);
 
 	 private:
 		void addPlane(std::shared_ptr<CoordHandle>);

@@ -24,7 +24,8 @@
 
 namespace CalX {
 
-	CoordHandle::CoordHandle(std::size_t id, std::shared_ptr<CoordController> root)
+	CoordHandle::CoordHandle(std::size_t id,
+	                         std::shared_ptr<CoordController> root)
 	    : CoordPlaneStack::CoordPlaneStack(root) {
 		this->id = id;
 		this->root = root;

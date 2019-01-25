@@ -74,7 +74,7 @@ namespace CalXUI {
 		ErrorCode setPower(bool) override;
 		ErrorCode roll(TrailerId, ActionResult * = nullptr) override;
 		ErrorCode move(motor_coord_t, float, bool,
-		                       ActionResult * = nullptr) override;
+		               ActionResult * = nullptr) override;
 
 		DeviceController *getController() override;
 

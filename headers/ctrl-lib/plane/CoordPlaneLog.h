@@ -29,8 +29,8 @@ namespace CalX {
 
 	class CoordPlaneLog : public ProxyCoordPlane {
 	 public:
-		CoordPlaneLog(std::shared_ptr<CoordPlane>, std::ostream &, const std::string &,
-		              bool = true, bool = true);
+		CoordPlaneLog(std::shared_ptr<CoordPlane>, std::ostream &,
+		              const std::string &, bool = true, bool = true);
 		const std::string &getPrefix() const;
 		bool isLoggingActions() const;
 		bool isLoggingErrors() const;

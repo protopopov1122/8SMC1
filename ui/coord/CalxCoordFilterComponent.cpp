@@ -174,8 +174,10 @@ namespace CalXUI {
 		speed->Bind(wxEVT_SPINCTRL, &CalxCoordFilterComponent::OnFiltersUpdate,
 		            this);
 
-		this->Bind(wxEVT_FILTER_UPDATE_OFFSET, &CalxCoordFilterComponent::OnUpdateOffset, this);
-		this->Bind(wxEVT_FILTER_UPDATE_SCALE, &CalxCoordFilterComponent::OnUpdateScale, this);
+		this->Bind(wxEVT_FILTER_UPDATE_OFFSET,
+		           &CalxCoordFilterComponent::OnUpdateOffset, this);
+		this->Bind(wxEVT_FILTER_UPDATE_SCALE,
+		           &CalxCoordFilterComponent::OnUpdateScale, this);
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxCoordFilterComponent::OnExit, this);
 		this->controller->addFilterListener(this);
 		Layout();
