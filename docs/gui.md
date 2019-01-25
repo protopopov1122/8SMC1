@@ -2,7 +2,7 @@
 Graphical User Interface is the main goal of development, so currently it represents Ctrl-lib offered functions better that CLI. On the other hand, GUI may seem quite complex because it tends to cover most library functionality.
 
 ##### Interface organization
-Main program window is split into 4 tabs to mirror Ctrl-lib subsystem structure. There are also other dialogs: initial configuration selector and debug-console.
+Main program window is split into 6 tabs to mirror Ctrl-lib subsystem structure. There are also other dialogs: initial configuration selector and debug-console.
 
 ##### Devices tab
 First main application tab represents separate devices. It includes device connection panel and currently connected device list.
@@ -41,6 +41,15 @@ Currently, three task types are accessible:
 
 ##### Configuration
 CalX system has its own configuration system - read the description. UI contains component that manages given configuration and gives possibility to add/remove/change parameters, add/remove entries. Application contains different configurations for different subsystems, so the same component will appear in many UI parts. Main application configuration is located in the fourth tab. Component is quite intuitive: on the left you will see entry list, add or remove them, on the right you will see selected entry key-value pair list. You can add new key-value pair, remove and change selected pair. [Read mode](other.md) about configuration system.
+
+##### Scripting tab
+CalX system has a support of external scripting. Abstract scripting interface is offered to the external libraries, but user is able to make calls to the external scripting engine. There are two possible interactions with scripting engine:
+* loading an external script from the filesystem - script is executed directly and then user is able to invoke functions and execute arbitrary code in the scope of executed script.
+* executing scripts directly - user is able to execute scripts in the separate scope.
+CalX scripting bindings cover the most essential parts of system, however they lack the flexibility of system core. Scripting bindings are also synchronized with user interface.
+
+##### Math engine
+User is able to evaluate predefined math formulas, defining custom variable values. Currently math formulas can be precompiled or defined in the initialization script. Using configuration file is impossible (due the lack of list support in system configuration format), embedding formula input dialog into UI is inconvenient for the end-user.
 
 ##### Debug-mode console
 If debug-mode is enabled in the configuration, on Windows you will see second application window with CLI console and logging(if logging is enabled). On Linux logging and CLI will be on the main console. You can work with CLI in debug-mode, however GUI and CLI are not synchronized and you should be careful.

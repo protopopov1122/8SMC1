@@ -24,5 +24,8 @@ CalX Ctrl-lib designed to be used according to this pattern:
 * Connect devices according to your Device API implementation, attach planes, load tasks, etc. - work with Ctrl-lib API. See [used concepts](concepts.md) section.
 * Destroy SystemManager and Device API instance through default C++ destructors.
 
+#### Scripting
+CalX offers scripting interface. Currently only Lua bindings are implemented.
+
 #### Extensions
 CalX system have basic extension support. You can attach to SystemManager special extension object(ctrl-lib/ExtEngine.h), that will receive high-level system events and have full access to Ctrl-lib API. You can also overload special class, that have full access to GUI(however GUI has a little special API which may be hard to use).

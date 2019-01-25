@@ -1,16 +1,16 @@
 ## Installation and building
 As soon as it will be possible, binary project builds will be available on GitHub, but currently only build from source is possible.
 
-CalX system supports two build systems. First one is CMake: it is easier to use on Linux and newer Windows platforms, it is much clearer that others. However older Windows versions (which are used in university physics lab) require other type of building - custom written Makefile for cross-compilation from Linux using MinGW. Currently it is outdated. This build way is complex, 'dirty' and not recommended for use.
+CalX system supports two build systems. First one is CMake: it is easier to use on Linux and newer Windows platforms, it provides much cleaner building scripts. However older Windows versions (which are used in university physics lab) require other type of building - custom written Makefile for cross-compilation from Linux using MinGW. Currently it is outdated. This build way is complex, 'dirty' and not recommended for use.
 
 After build with both build systems 'build' directory will be generated. Basically, it includes system that is ready for use.
 #### Dependencies
 Project has several dependencies:
 * CMake - used as a build system.
 * Compilers - MS Visual C++, MinGW-w64, GCC, Clang are supported.
-* wxWidgets 3.1.0 - graphics library for user interface. If you use MinGW, you can compile it with 'RUNTIME_LIBS=static' key to get stand-alone build without outer dependencies.
-* Lua 5.3 - used as a scripting engine. Download Lua 5.3 sources and extract it into `third-party/lua-5.3.5`. Then download and extraact [LuaCppB](https://github.com/protopopov1122/LuaCppB) bindings into `third-party/LuaCppB`. These dependencies are optional and project may be compiled without them, but scripting will be disabled. Currently scripting usage excludes MSVC from supported compiler list.
-* MicroSMC headers - if you are using drivers for 8SMC1 motors, you should copy USMCDLL.h from your MicroSMC installation to `third-party` directory
+* wxWidgets 3.1.0 - graphics library for user interface. If you use MinGW, you can compile CalX with 'RUNTIME_LIBS=static' key to get stand-alone build without any outer dependencies.
+* Lua 5.3 - used as a scripting engine. Download Lua 5.3 sources and extract it into `third-party/lua-5.3.5`. Then download and extract [LuaCppB](https://github.com/protopopov1122/LuaCppB) bindings into `third-party/LuaCppB`. These dependencies are optional and project may be compiled without them, but scripting will be disabled. Currently scripting usage excludes MSVC from supported compiler list.
+* MicroSMC headers - if you are using drivers for 8SMC1 motors, you should copy `USMCDLL.h` from your MicroSMC installation to `third-party` directory
 #### CMake build
 ##### Windows
 If you are on Windows, you can use both MS Visual C++ and MinGW compilers (with posix threads) to build CalX system. You also need statically-built unicode wxWidgets 3.1.0 library (you should use the same compiler for CalX and wxWidgets building) and CMake installed.
@@ -38,14 +38,14 @@ cmake --build . -- -jN    # N - parallel job count
 Then you can generate installer by executing 'cpack' command( if you have NSIS installed).
 
 ##### Linux
-Make sure that you installed build tools, cmake and wxWidgets library, Lua and Selene sources. Then you can build this way:
+Make sure that you installed build tools, cmake and wxWidgets library, Lua and `LuaCppB` sources. Then you can build the system:
 ```bash
 mkdir build
 cd build    # Building out-of-source
 cmake ..
 cmake --build . -- -jN    # N - parallel job count
 ```
-However, installation currently is not properly configured, so you may use system from build directory(make sure you modified LD_LIBRARY_PATH before start).
+However, installation currently is not properly configured, so you may use system from build directory (make sure you modified `LD_LIBRARY_PATH` before start).
 
 
 #### Custom build system

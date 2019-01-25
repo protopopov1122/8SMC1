@@ -2,7 +2,7 @@
 
 CalX is a high-level application and shared library aimed to control and synchronize stepper motors and cutting instruments. The most of project codebase is platform- and device-independent, and can be adopted to different types of motor controllers and many kinds of instruments, the only requirement is the implementation of wrapper interfaces (so called Device API). Project already contains Device API implementation for Standa 8SMC1 stepper motor controllers and EKSPLA NL300 laser, which were used during development. Currently system is fully-functional and mostly tested on these devices, however any help is appreciated.
 
-**Warning - project provides detailed [documentation](docs/README.md), however due to fast project development documentation is quite outdated and messy. It should be rewritten**
+**Project provides detailed [documentation](docs/README.md), however recent aspects of the system (journaling, scripting, math formula engine) are not covered**
 
 
 ### Motivation

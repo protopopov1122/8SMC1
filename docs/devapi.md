@@ -54,7 +54,7 @@ Device API implementation should be represented as a single atomic module and mu
 ### Examples
 By 26/05/2017 project contains two Device API implementations:
 * Standa 8SMC1 motor and EKSPLA NL300 laser drivers - production code. May be used as a reference, but implementations are quite complex and messy.
-* Emulation Device API - clean and straightforward code, may be used as a skeleton for your library.
+* Emulation and Emux Device APIs - clean and straightforward code, may be used as a skeleton for your library.
 
 ### Licensing
 Despite the fact that other CalX code is licensed under the terms of GNU LGPLv3, your Device API drivers and implementation may freely copy code from 'device/emulated'(Emulation Device API) and have no licensing restrictions.

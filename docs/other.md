@@ -10,4 +10,4 @@ Configuration validation mechanism is also included in Ctrl-lib but is not used 
 ### CalX extensions
 CalX system contains simple extension engine. It is interface between Ctrl-lib and some dynamic link libraries. Main system configuration defines which library(called engine) may be loaded, but it works only in UI mode. Currently extension interface is poor and by default includes initialization and destroy functions as well as some system-wide events, all other functionality must be implemented in library itself. You could also write extension for UI application by overriding special class. Library has full access to CalX system manager and whole Ctrl-lib(and also UI if loaded appropriate plugin). In perspective extension engine could be expanded but it already has possibility to create scripting language bindings to the CalX.
 ### Testing
-By now CalX system doesn't use any unit-testing system, project contains only sample GCode for testing. In future testing may be added only to Ctrl-lib.
+By now CalX system include very limited count of unit tests, project also contains sample GCode for testing. In the future testing may be added only to Ctrl-lib.

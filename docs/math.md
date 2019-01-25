@@ -5,7 +5,8 @@ Engine supports:
 * mathematical operations - +, -, \*, /, ^
 * predefined variable referencing
 * predefined function calling
-By default, only 'x' variable is predefined and may be safely used. Some C library math functions are also included:
+  
+By default, only `x` variable may be predefined. Some C library math functions are also included:
 ```
 sin(x) - sine
 cos(x) - cosine
@@ -24,4 +25,4 @@ floor(x) -  largest integer value less than or equal to x
 abs(x) - absolute value
 ```
 
-Engine parse and runtime errors are quite poor and only indicate stage, when error appeared. See [error description](error.md).
+Engine parse and runtime errors are quite poor and only indicate the stage, when an error occured. See [error description](error.md).

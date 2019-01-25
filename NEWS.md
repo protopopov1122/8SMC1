@@ -145,3 +145,16 @@ Currently there are some TODOs:
 * make use of new C++17 features
 * do a slight refactoring of Ctrl-lib
 * fix documentation
+
+##### 25/01/2019
+During the past months following changes were made:
+* Ctrl-lib and UI code refactoring, extend usage of modern C++ features (including C++17 standard).
+* complete rewrite of the scripting subsystem, custom Lua bindings are used now.
+* implementation of extensible journaling subsystem.
+* add special math formula panel.
+* minor improvements and fixes.
+* documentation updates.
+There are several major tasks:
+* test existing version of CalX in the real environment.
+* extend scripting bindings.
+* document recently added system features and Lua scripting APIs.
