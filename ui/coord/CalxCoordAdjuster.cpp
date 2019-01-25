@@ -36,7 +36,7 @@ namespace CalXUI {
 	      step(step),
 	      speed(speed) {}
 
-	void CalxCoordAdjustAction::perform(SystemManager *sysman) {
+	void CalxCoordAdjustAction::perform(SystemManager &sysman) {
 		coord_point_t dest;
 		switch (this->direction) {
 			case CalxAdjustDirection::Up:
@@ -70,7 +70,7 @@ namespace CalXUI {
 	    coord_point_t dest, double speed)
 	    : dialog(dialog), handle(handle), dest(dest), speed(speed) {}
 
-	void CalxCoordAdjustMoveAction::perform(SystemManager *sysman) {
+	void CalxCoordAdjustMoveAction::perform(SystemManager &sysman) {
 		dialog->setEnabled(false);
 		handle->open_session();
 		wxGetApp().getErrorHandler()->handle(
@@ -97,7 +97,7 @@ namespace CalXUI {
 	    : wxWindow::wxWindow(win, id), handle(handle), pointer_colour(255, 0, 0) {
 		SetMinSize(sz);
 		ConfiguationFlatDictionary *colourEntry =
-		    wxGetApp().getSystemManager()->getConfiguration().getEntry(
+		    wxGetApp().getSystemManager().getConfiguration().getEntry(
 		        CalxConfiguration::Watcher);
 		this->pointer_colour =
 		    wxColour(colourEntry->getInt(CalxWatcherConfiguration::PointerR, 255),
@@ -222,7 +222,7 @@ namespace CalXUI {
 		    INT_MAX,
 		    wxGetApp()
 		        .getSystemManager()
-		        ->getConfiguration()
+		        .getConfiguration()
 		        .getEntry(CalxConfiguration::UserInterface)
 		        ->getReal(CalxUIConfiguration::AdjustStep, 2.5),
 		    wxGetApp().getUnitProcessor().getUnitPrecision());
@@ -231,12 +231,12 @@ namespace CalXUI {
 		    wxSP_ARROW_KEYS, wxGetApp().getUnitProcessor().getSpeedPrecision(),
 		    wxGetApp()
 		        .getSystemManager()
-		        ->getConfiguration()
+		        .getConfiguration()
 		        .getEntry(CalxConfiguration::Units)
 		        ->getReal(CalxUnitConfiguration::UnitSpeed, 4000.0),
 		    wxGetApp()
 		        .getSystemManager()
-		        ->getConfiguration()
+		        .getConfiguration()
 		        .getEntry(CalxConfiguration::Units)
 		        ->getReal(CalxUnitConfiguration::UnitSpeed, 4000.0),
 		    wxGetApp().getUnitProcessor().getSpeedPrecision());
@@ -289,7 +289,7 @@ namespace CalXUI {
 		int_conf_t interval =
 		    wxGetApp()
 		        .getSystemManager()
-		        ->getConfiguration()
+		        .getConfiguration()
 		        .getEntry(CalxConfiguration::UserInterface)
 		        ->getInt(CalxWatcherConfiguration::RenderInterval, 50);
 		if (interval != -1) {

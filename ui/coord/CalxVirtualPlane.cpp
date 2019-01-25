@@ -66,7 +66,7 @@ namespace CalXUI {
 		this->base = base;
 		SetMinSize(min);
 		ConfiguationFlatDictionary *colourEntry =
-		    wxGetApp().getSystemManager()->getConfiguration().getEntry(
+		    wxGetApp().getSystemManager().getConfiguration().getEntry(
 		        CalxConfiguration::Watcher);
 		this->pointer_colour =
 		    wxColour(colourEntry->getInt(CalxWatcherConfiguration::PointerR, 255),

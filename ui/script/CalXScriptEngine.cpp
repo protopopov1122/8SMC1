@@ -68,8 +68,8 @@ namespace CalXUI {
 
 	CalXAppScriptEnvironment::CalXAppScriptEnvironment(CalxApp &app)
 	    : CalXScriptUIEnvironment::CalXScriptUIEnvironment(
-	          app.getSystemManager()->getConfiguration(),
-	          app.getSystemManager()->getSettingsRepository()),
+	          app.getSystemManager().getConfiguration(),
+	          app.getSystemManager().getSettingsRepository()),
 	      app(app),
 	      devices(app),
 	      planes(app),

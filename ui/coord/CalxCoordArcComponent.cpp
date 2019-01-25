@@ -59,12 +59,12 @@ namespace CalXUI {
 		    wxSP_ARROW_KEYS, 0,
 		    wxGetApp()
 		        .getSystemManager()
-		        ->getConfiguration()
+		        .getConfiguration()
 		        .getEntry(CalxConfiguration::Units)
 		        ->getReal(CalxUnitConfiguration::UnitSpeed, 4000.0),
 		    wxGetApp()
 		        .getSystemManager()
-		        ->getConfiguration()
+		        .getConfiguration()
 		        .getEntry(CalxConfiguration::Units)
 		        ->getReal(CalxUnitConfiguration::UnitSpeed, 4000.0),
 		    wxGetApp().getUnitProcessor().getSpeedPrecision());

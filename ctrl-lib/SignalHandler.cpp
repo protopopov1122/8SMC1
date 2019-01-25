@@ -52,18 +52,16 @@ LONG WINAPI windows_exception_handler(EXCEPTION_POINTERS *ExceptionInfo) {
 
 namespace CalX {
 
-	void setup_signals(SystemManager *sysman) {
-		if (sysman != nullptr) {
-			SYSMAN = sysman;
-			signal(SIGABRT, signal_handle);
-			signal(SIGINT, signal_handle);
-			signal(SIGSEGV, signal_handle);
-			signal(SIGFPE, signal_handle);
-			signal(SIGILL, signal_handle);
-			signal(SIGTERM, signal_handle);
+	void setup_signals(SystemManager &sysman) {
+		SYSMAN = &sysman;
+		signal(SIGABRT, signal_handle);
+		signal(SIGINT, signal_handle);
+		signal(SIGSEGV, signal_handle);
+		signal(SIGFPE, signal_handle);
+		signal(SIGILL, signal_handle);
+		signal(SIGTERM, signal_handle);
 #ifdef OS_WIN32
-			SetUnhandledExceptionFilter(windows_exception_handler);
+		SetUnhandledExceptionFilter(windows_exception_handler);
 #endif
-		}
 	}
 }  // namespace CalX

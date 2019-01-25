@@ -29,16 +29,16 @@ class SampleExtEngine : public ExtEngine {
  public:
 	SampleExtEngine() : sysman(nullptr) {}
 	virtual ~SampleExtEngine() {}
-	virtual bool init(SystemManager *);
+	virtual bool init(SystemManager &);
 	virtual bool destroy();
 
  private:
 	SystemManager *sysman;
 };
 
-bool SampleExtEngine::init(SystemManager *sysman) {
+bool SampleExtEngine::init(SystemManager &sysman) {
 	std::cout << "Sample extension engine init" << std::endl;
-	this->sysman = sysman;
+	this->sysman = &sysman;
 	return true;
 }
 

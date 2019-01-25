@@ -49,7 +49,7 @@ namespace CalXUI {
 		                   wxDefaultSize, wxSP_ARROW_KEYS, 1, 255,
 		                   (int) wxGetApp()
 		                       .getSystemManager()
-		                       ->getConfiguration()
+		                       .getConfiguration()
 		                       .getEntry(CalxConfiguration::SerialConnection)
 		                       ->getInt(CalxDeviceConfiguration::COMPort, 1));
 		mainSizer->Add(this->portSpin);
@@ -61,7 +61,7 @@ namespace CalXUI {
 		                   wxDefaultSize, wxSP_ARROW_KEYS, 0, INT_MAX,
 		                   (int) wxGetApp()
 		                       .getSystemManager()
-		                       ->getConfiguration()
+		                       .getConfiguration()
 		                       .getEntry(CalxConfiguration::SerialConnection)
 		                       ->getInt(CalxDeviceConfiguration::COMSpeed, 9600));
 		mainSizer->Add(this->speedSpin);
@@ -77,7 +77,7 @@ namespace CalXUI {
 		this->parityCh->SetSelection(
 		    (int) wxGetApp()
 		        .getSystemManager()
-		        ->getConfiguration()
+		        .getConfiguration()
 		        .getEntry(CalxConfiguration::SerialConnection)
 		        ->getInt(CalxDeviceConfiguration::COMParity, 0));
 		mainSizer->Add(this->parityCh);

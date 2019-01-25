@@ -27,9 +27,8 @@
 namespace CalXUI {
 
 	CalxCoordDialog::CalxCoordDialog(wxWindow *win, wxWindowID id,
-	                                 SystemManager *sysman)
-	    : wxDialog::wxDialog(win, id, __("New coordinate plane")) {
-		this->sysman = sysman;
+	                                 SystemManager &sysman)
+	    : wxDialog::wxDialog(win, id, __("New coordinate plane")), sysman(sysman) {
 		this->ctrl = nullptr;
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(sizer);
@@ -70,7 +69,7 @@ namespace CalXUI {
 		buttonSizer->Add(okButton);
 		buttonSizer->Add(cancelButton);
 
-		for (std::size_t i = 0; i < sysman->getMotorControllerSet().getDeviceCount();
+		for (std::size_t i = 0; i < sysman.getMotorControllerSet().getDeviceCount();
 		     i++) {
 			std::string devId = FORMAT(__("Device #%s"), std::to_string(i));
 			xChoice->Append(devId);
@@ -80,17 +79,17 @@ namespace CalXUI {
 		instrChoice->Append(__("No instrument"));
 
 		for (std::size_t i = 0;
-		     i < sysman->getInstrumentControllerSet().getDeviceCount(); i++) {
+		     i < sysman.getInstrumentControllerSet().getDeviceCount(); i++) {
 			std::string devId = FORMAT(__("Instrument #%s"), std::to_string(i));
 			instrChoice->Append(devId);
 		}
 
-		if (sysman->getMotorControllerSet().getDeviceCount() >= 2) {
+		if (sysman.getMotorControllerSet().getDeviceCount() >= 2) {
 			xChoice->SetSelection(0);
 			yChoice->SetSelection(1);
 		}
 
-		if (sysman->getInstrumentControllerSet().getDeviceCount() > 0) {
+		if (sysman.getInstrumentControllerSet().getDeviceCount() > 0) {
 			instrChoice->SetSelection(1);
 		} else {
 			instrChoice->SetSelection(0);
@@ -121,11 +120,11 @@ namespace CalXUI {
 				return;
 			}
 			this->ctrl =
-			    sysman->getCoordPlaneSet()
+			    sysman.getCoordPlaneSet()
 			        .createCoord(
-			            sysman->getMotorControllerSet().getDeviceController(x).lock(),
-			            sysman->getMotorControllerSet().getDeviceController(y).lock(),
-			            sysman->getInstrumentControllerSet()
+			            sysman.getMotorControllerSet().getDeviceController(x).lock(),
+			            sysman.getMotorControllerSet().getDeviceController(y).lock(),
+			            sysman.getInstrumentControllerSet()
 			                .getDeviceController(i == wxNOT_FOUND || i == 0 ? -1
 			                                                                : (i - 1))
 			                .lock())

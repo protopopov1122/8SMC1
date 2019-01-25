@@ -37,9 +37,9 @@ namespace CalXUI {
 			delete this->prms;
 		}
 		
-		void perform(SystemManager *sysman) override {
+		void perform(SystemManager &sysman) override {
 			std::shared_ptr<InstrumentController> ctrl =
-			    sysman->getInstrumentControllerSet().connectDevice(prms).lock();
+			    sysman.getInstrumentControllerSet().connectDevice(prms).lock();
 			if (ctrl == nullptr) {
 				wxMessageBox(__("Instrument can't be connected"),
 				             __("Connection error"), wxICON_WARNING);

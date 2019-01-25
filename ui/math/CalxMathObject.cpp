@@ -82,7 +82,7 @@ namespace CalXUI {
 
 	void CalxMathFormulaPanel::OnCalculateClick(wxCommandEvent &evt) {
 		engine_value_t value = this->formula->eval(
-		    wxGetApp().getSystemManager()->getMathEngine(), this->variableValues);
+		    wxGetApp().getSystemManager().getMathEngine(), this->variableValues);
 		if (value.err == MathError::MNoError) {
 			this->resultText->SetLabel(this->formulaText + " = " +
 			                           std::to_string(value.value));

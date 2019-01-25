@@ -79,7 +79,7 @@ namespace CalXUI {
 			this->ctrl = ctrl;
 		}
 
-		void perform(SystemManager *sysman) override {
+		void perform(SystemManager &sysman) override {
 			ctrl->use();
 			wxGetApp().getErrorHandler()->handle(ctrl->flipState());
 			ctrl->unuse();
@@ -97,7 +97,7 @@ namespace CalXUI {
 			this->ctrl = ctrl;
 		}
 
-		void perform(SystemManager *sysman) override {
+		void perform(SystemManager &sysman) override {
 			ctrl->use();
 			if (ctrl->isSessionOpened()) {
 				wxGetApp().getErrorHandler()->handle(ctrl->close_session());
@@ -119,7 +119,7 @@ namespace CalXUI {
 			this->ctrl = ctrl;
 		}
 
-		void perform(SystemManager *sysman) override {
+		void perform(SystemManager &sysman) override {
 			ctrl->use();
 			ctrl->setRunnable(!ctrl->isRunnable());
 			ctrl->unuse();
@@ -138,7 +138,7 @@ namespace CalXUI {
 			this->mode = m;
 		}
 
-		void perform(SystemManager *sysman) override {
+		void perform(SystemManager &sysman) override {
 			ctrl->use();
 			this->ctrl->setMode(this->mode);
 			ctrl->unuse();

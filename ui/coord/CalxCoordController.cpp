@@ -32,19 +32,19 @@ namespace CalXUI {
 		motor_scale_t plane_scale = {
 			wxGetApp()
 			    .getSystemManager()
-			    ->getConfiguration()
+			    .getConfiguration()
 			    .getEntry(CalxConfiguration::Units)
 			    ->getReal(CalxUnitConfiguration::PlaneScale, 1.0f),
 			wxGetApp()
 			    .getSystemManager()
-			    ->getConfiguration()
+			    .getConfiguration()
 			    .getEntry(CalxConfiguration::Units)
 			    ->getReal(CalxUnitConfiguration::PlaneScale, 1.0f)
 		};
 		float plane_speed_scale =
 		    wxGetApp()
 		        .getSystemManager()
-		        ->getConfiguration()
+		        .getConfiguration()
 		        .getEntry(CalxConfiguration::Units)
 		        ->getReal(CalxUnitConfiguration::PlaneSpeedScale, 1.0f);
 		this->unit_map = std::make_shared<CoordPlaneMap>(
@@ -56,7 +56,7 @@ namespace CalXUI {
 		    validateMin, validateMax,
 		    wxGetApp()
 		        .getSystemManager()
-		        ->getConfiguration()
+		        .getConfiguration()
 		        .getEntry(CalxConfiguration::Core)
 		        ->getInt(CalxCoordConfiguration::MaxSpeed, 4000),
 		    handle->peekPlane());

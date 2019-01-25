@@ -52,7 +52,7 @@ namespace CalXUI {
 		CalxDevicePanel *devPanel = new CalxDevicePanel(win, wxID_ANY);
 		std::vector<DeviceConnectionType> devConType;
 		std::vector<DeviceConnectionType> instrConType;
-		wxGetApp().getSystemManager()->getDeviceManager().getConnectionTypes(
+		wxGetApp().getSystemManager().getDeviceManager().getConnectionTypes(
 		    devConType, instrConType);
 		for (const auto &devCon : devConType) {
 			switch (devCon) {
@@ -73,26 +73,26 @@ namespace CalXUI {
 
 		for (std::size_t i = 0; i < wxGetApp()
 		                           .getSystemManager()
-		                           ->getMotorControllerSet()
+		                           .getMotorControllerSet()
 		                           .getDeviceCount();
 		     i++) {
 			devPanel->appendDevice(new CalxMotorConstructor(
 			    devPanel, wxGetApp()
 			                  .getSystemManager()
-			                  ->getMotorControllerSet()
+			                  .getMotorControllerSet()
 			                  .getDeviceController((device_id_t) i)
 			                  .lock()));
 		}
 
 		for (std::size_t i = 0; i < wxGetApp()
 		                           .getSystemManager()
-		                           ->getInstrumentControllerSet()
+		                           .getInstrumentControllerSet()
 		                           .getDeviceCount();
 		     i++) {
 			devPanel->appendDevice(new CalxInstrumentConstructor(
 			    devPanel, wxGetApp()
 			                  .getSystemManager()
-			                  ->getInstrumentControllerSet()
+			                	.getInstrumentControllerSet()
 			                  .getDeviceController((device_id_t) i)
 			                  .lock()));
 		}
@@ -128,7 +128,7 @@ namespace CalXUI {
 
 	CalxConfigEditor *newConfigPanel(wxWindow *win) {
 		CalxConfigEditor *editor = new CalxConfigEditor(
-		    win, wxID_ANY, wxGetApp().getSystemManager()->getConfiguration());
+		    win, wxID_ANY, wxGetApp().getSystemManager().getConfiguration());
 		return editor;
 	}
 

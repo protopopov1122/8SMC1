@@ -48,7 +48,7 @@ namespace CalX {
 	 public:
 		virtual ~TaskStep() = default;
 		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
-		                          SystemManager *, std::shared_ptr<TaskState>) = 0;
+		                          SystemManager &, std::shared_ptr<TaskState>) = 0;
 	};
 
 	enum class CoordTaskType {
@@ -66,9 +66,9 @@ namespace CalX {
 			return this->type;
 		}
 		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
-		                          SystemManager *, std::shared_ptr<TaskState>) = 0;
+		                          SystemManager &, std::shared_ptr<TaskState>) = 0;
 		std::pair<motor_point_t, bool> getStartPoint(motor_point_t, motor_rect_t,
-		                                             SystemManager *);
+		                                             SystemManager &);
 
 	 private:
 		CoordTaskType type;

@@ -88,7 +88,7 @@ namespace CalXUI {
 		pool->bindWatcher(this);
 
 		ConfiguationFlatDictionary *colourEntry =
-		    wxGetApp().getSystemManager()->getConfiguration().getEntry(
+		    wxGetApp().getSystemManager().getConfiguration().getEntry(
 		        CalxConfiguration::Watcher);
 		this->pointer_colour =
 		    wxColour(colourEntry->getInt(CalxWatcherConfiguration::PointerR, 255),
@@ -118,7 +118,7 @@ namespace CalXUI {
 		int_conf_t interval =
 		    wxGetApp()
 		        .getSystemManager()
-		        ->getConfiguration()
+		        .getConfiguration()
 		        .getEntry(CalxConfiguration::UserInterface)
 		        ->getInt(CalxWatcherConfiguration::AppendInterval, 500);
 		if (interval != -1) {
@@ -130,7 +130,7 @@ namespace CalXUI {
 
 		interval = wxGetApp()
 		               .getSystemManager()
-		               ->getConfiguration()
+		               .getConfiguration()
 		               .getEntry(CalxConfiguration::UserInterface)
 		               ->getInt(CalxWatcherConfiguration::RenderInterval, 50);
 		if (interval != -1) {

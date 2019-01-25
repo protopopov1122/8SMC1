@@ -40,7 +40,7 @@ namespace CalXUI {
 	      controller(controller) {
 		std::string units = wxGetApp().getUnitProcessor().getUnits();
 		ConfiguationFlatDictionary *graphconf =
-		    wxGetApp().getSystemManager()->getConfiguration().getEntry(
+		    wxGetApp().getSystemManager().getConfiguration().getEntry(
 		        CalxConfiguration::Graph);
 		wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 		SetSizer(sizer);
@@ -82,12 +82,12 @@ namespace CalXUI {
 		    wxSP_ARROW_KEYS, 0,
 		    wxGetApp()
 		        .getSystemManager()
-		        ->getConfiguration()
+		        .getConfiguration()
 		        .getEntry(CalxConfiguration::Units)
 		        ->getReal(CalxUnitConfiguration::UnitSpeed, 4000.0),
 		    wxGetApp()
 		        .getSystemManager()
-		        ->getConfiguration()
+		        .getConfiguration()
 		        .getEntry(CalxConfiguration::Units)
 		        ->getReal(CalxUnitConfiguration::UnitSpeed, 4000.0),
 		    wxGetApp().getUnitProcessor().getSpeedPrecision());
@@ -135,7 +135,7 @@ namespace CalXUI {
 		graphSizer->Add(previewButton);
 
 		ConfigurationCatalogue &conf =
-		    wxGetApp().getSystemManager()->getConfiguration();
+		    wxGetApp().getSystemManager().getConfiguration();
 		coord_point_t cen = {
 			static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)
 			                        ->getReal(CalxCoordConfiguration::OffsetX, 0.0)),

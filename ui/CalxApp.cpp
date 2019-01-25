@@ -126,11 +126,11 @@ namespace CalXUI {
 
 	void CalxApp::startDebugConsole(ConfigurationCatalogue &conf) {
 		if (this->debug_mode &&
-		    sysman->getConfiguration()
+		    this->sysman->getConfiguration()
 		        .getEntry(CalxConfiguration::UserInterface)
 		        ->getBool(CalxUIConfiguration::Console, false)) {
 			this->debug_console =
-			    std::make_unique<CalxDebugConsole>(this->sysman.get());
+			    std::make_unique<CalxDebugConsole>(*this->sysman);
 			this->debug_console->Run();
 		} else {
 			this->debug_console = nullptr;
@@ -299,7 +299,7 @@ namespace CalXUI {
 
 		// Error handler will be released in the OnExit method
 		this->error_handler = new CalxErrorHandler(  // lgtm [cpp/resource-not-released-in-destructor]
-		    this->sysman.get());
+		    *this->sysman);
 
 		// Start debug console if necessary
 		this->startDebugConsole(conf);
@@ -318,7 +318,7 @@ namespace CalXUI {
 		this->frame->Maximize(true);
 
 		// Init signal and SEH handlers which perform emergency shutdown if needed
-		setup_signals(this->sysman.get());
+		setup_signals(*this->sysman);
 
 		// System started. Write it to journal
 		Info(this->getJournal()) << "System started" << Flush();
@@ -398,8 +398,8 @@ namespace CalXUI {
 		exit(-1);
 	}
 
-	SystemManager *CalxApp::getSystemManager() {
-		return this->sysman.get();
+	SystemManager &CalxApp::getSystemManager() {
+		return *this->sysman;
 	}
 
 	CalxErrorHandler *CalxApp::getErrorHandler() {

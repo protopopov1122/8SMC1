@@ -69,8 +69,7 @@ int main(int argc, char **argv) {
 		conf = INIConfiguration::load(cnf, std::cout);
 	}
 	cnf.close();
-	SystemManager *sysman =
-	    new DefaultSystemManager(std::move(devman), std::move(conf));
+	DefaultSystemManager sysman(std::move(devman), std::move(conf));
 	VectorTaskSet taskSet;
 	setup_signals(sysman);
 	CLI cli(std::cout, std::cin);
@@ -83,14 +82,13 @@ int main(int argc, char **argv) {
 	cli.addCommand("task", new TaskCommand(sysman, taskSet));
 	cli.addCommand("help", new HelpCMD());
 	do {
-		if (sysman->getDeviceManager().hasError()) {
+		if (sysman.getDeviceManager().hasError()) {
 			std::cout << "Errors occured during execution" << std::endl;
-			while (sysman->getDeviceManager().hasError()) {
-				std::cout << "Error: " << sysman->getDeviceManager().pollError()
+			while (sysman.getDeviceManager().hasError()) {
+				std::cout << "Error: " << sysman.getDeviceManager().pollError()
 				          << std::endl;
 			}
 		}
 	} while (cli.shell());
-	delete sysman;
 	return EXIT_SUCCESS;
 }

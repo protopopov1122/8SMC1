@@ -36,7 +36,7 @@ extern "C" void calx_terminate();
 
 namespace CalX {
 
-	void setup_signals(SystemManager *);
+	void setup_signals(SystemManager &);
 }
 
 #endif

@@ -29,13 +29,13 @@ namespace CalXUI {
 
 	class CalxErrorHandler {
 	 public:
-		CalxErrorHandler(SystemManager *);
+		CalxErrorHandler(SystemManager &);
 		void handle(ErrorCode);
 		void display(ErrorCode);
 		void alert(std::string, std::string, long);
 
 	 private:
-		SystemManager *sysman;
+		SystemManager &sysman;
 	};
 }  // namespace CalXUI
 

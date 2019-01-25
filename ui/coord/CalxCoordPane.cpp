@@ -278,7 +278,7 @@ namespace CalXUI {
 			this->ctrl->getController()->getInstrument()->removeEventListener(
 			    this->instrListener);
 		}
-		wxGetApp().getSystemManager()->getCoordPlaneSet().removeCoord(
+		wxGetApp().getSystemManager().getCoordPlaneSet().removeCoord(
 		    ctrl->getID());
 
 		Destroy();

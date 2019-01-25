@@ -105,7 +105,7 @@ namespace CalX {
 		        std::to_string(this->instrumentControllerSet.getDeviceCount()) +
 		        " instruments.");
 		if (this->ext_engine != nullptr) {
-			this->ext_engine->init(this);
+			this->ext_engine->init(*this);
 		}
 		INIT_LOG("DefaultSystemManager");
 	}

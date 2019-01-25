@@ -28,13 +28,12 @@ wxDEFINE_EVENT(wxEVT_COMMAND_QUEUE_UPDATE, wxThreadEvent);
 
 namespace CalXUI {
 
-	CalxActionQueue::CalxActionQueue(SystemManager *sysman, wxEvtHandler *handle)
-	    : wxThread::wxThread(wxTHREAD_DETACHED) {
+	CalxActionQueue::CalxActionQueue(SystemManager &sysman, wxEvtHandler *handle)
+	    : wxThread::wxThread(wxTHREAD_DETACHED), sysman(sysman) {
 		this->mutex = new wxMutex();
 		this->cond = new wxCondition(this->condMutex);
 		this->evtHandle = handle;
 		this->work = true;
-		this->sysman = sysman;
 		this->current = nullptr;
 		this->finished = false;
 	}

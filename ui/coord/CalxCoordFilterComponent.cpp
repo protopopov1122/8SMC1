@@ -109,12 +109,12 @@ namespace CalXUI {
 		                   wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0,
 		                   (int) wxGetApp()
 		                       .getSystemManager()
-		                       ->getConfiguration()
+		                       .getConfiguration()
 		                       .getEntry(CalxConfiguration::Core)
 		                       ->getInt(CalxCoordConfiguration::MaxSpeed, 4000),
 		                   (int) wxGetApp()
 		                       .getSystemManager()
-		                       ->getConfiguration()
+		                       .getConfiguration()
 		                       .getEntry(CalxConfiguration::Core)
 		                       ->getInt(CalxCoordConfiguration::MaxSpeed, 4000));
 		validateSizer->Add(

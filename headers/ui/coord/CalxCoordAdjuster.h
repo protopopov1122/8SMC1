@@ -38,7 +38,7 @@ namespace CalXUI {
 	 public:
 		CalxCoordAdjustAction(CalxCoordAdjustDialog *, std::shared_ptr<CoordHandle>,
 		                      CalxAdjustDirection, double, double);
-		void perform(SystemManager *);
+		void perform(SystemManager &);
 		void stop();
 
 	 private:
@@ -54,7 +54,7 @@ namespace CalXUI {
 		CalxCoordAdjustMoveAction(CalxCoordAdjustDialog *,
 		                          std::shared_ptr<CoordHandle>, coord_point_t,
 		                          double);
-		void perform(SystemManager *);
+		void perform(SystemManager &);
 		void stop();
 
 	 private:

@@ -60,7 +60,7 @@ namespace CalXUI {
 		void OnFatalException() override;
 		void OnErrorEvent(wxThreadEvent &);
 		void OnAlertEvent(wxThreadEvent &);
-		SystemManager *getSystemManager();
+		SystemManager &getSystemManager();
 		CalxErrorHandler *getErrorHandler();
 		CalxFrame *getMainFrame();
 

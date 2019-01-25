@@ -34,7 +34,7 @@ namespace CalX {
 
 	ErrorCode ProgrammedCoordTask::perform(std::shared_ptr<CoordPlane> ctrl,
 	                                       TaskParameters &prms,
-	                                       SystemManager *sysman,
+	                                       SystemManager &sysman,
 	                                       std::shared_ptr<TaskState> state) {
 		ErrorCode errcode;
 		state->plane = ctrl;
@@ -101,7 +101,7 @@ namespace CalX {
 	}
 
 	ErrorCode MoveTaskStep::perform(std::shared_ptr<CoordPlane> ctrl,
-	                                TaskParameters &prms, SystemManager *sysman,
+	                                TaskParameters &prms, SystemManager &sysman,
 	                                std::shared_ptr<TaskState> state) {
 		ErrorCode code;
 		state->work = true;
@@ -147,7 +147,7 @@ namespace CalX {
 	}
 
 	ErrorCode JumpTaskStep::perform(std::shared_ptr<CoordPlane> ctrl,
-	                                TaskParameters &prms, SystemManager *sysman,
+	                                TaskParameters &prms, SystemManager &sysman,
 	                                std::shared_ptr<TaskState> state) {
 		ErrorCode code;
 		state->plane = ctrl;
@@ -192,7 +192,7 @@ namespace CalX {
 
 	ErrorCode CalibrateTaskStep::perform(std::shared_ptr<CoordPlane> ctrl,
 	                                     TaskParameters &prms,
-	                                     SystemManager *sysman,
+	                                     SystemManager &sysman,
 	                                     std::shared_ptr<TaskState> state) {
 		state->plane = ctrl;
 		state->work = true;
@@ -213,7 +213,7 @@ namespace CalX {
 	}
 
 	ErrorCode ArcTaskStep::perform(std::shared_ptr<CoordPlane> ctrl,
-	                               TaskParameters &prms, SystemManager *sysman,
+	                               TaskParameters &prms, SystemManager &sysman,
 	                               std::shared_ptr<TaskState> state) {
 		ErrorCode code;
 		state->plane = ctrl;
@@ -289,7 +289,7 @@ namespace CalX {
 	}
 
 	ErrorCode RelArcTaskStep::perform(std::shared_ptr<CoordPlane> ctrl,
-	                                  TaskParameters &prms, SystemManager *sysman,
+	                                  TaskParameters &prms, SystemManager &sysman,
 	                                  std::shared_ptr<TaskState> state) {
 		motor_point_t cen = ctrl->getPosition();
 		cen.x += center.x;
@@ -321,9 +321,9 @@ namespace CalX {
 	      scale(scale) {}
 
 	ErrorCode GraphCoordTask::perform(std::shared_ptr<CoordPlane> plane,
-	                                  TaskParameters &prms, SystemManager *sysman,
+	                                  TaskParameters &prms, SystemManager &sysman,
 	                                  std::shared_ptr<TaskState> state) {
-		return this->graph->build(*sysman, plane, *this->trans,
+		return this->graph->build(sysman, plane, *this->trans,
 		                          this->scale * prms.speed, *state);
 	}
 }  // namespace CalX

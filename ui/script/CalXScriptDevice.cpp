@@ -32,7 +32,7 @@ namespace CalXUI {
 	bool CalXAppScriptMotor::isValid() {
 		std::shared_ptr<MotorController> motor =
 		    this->app.getSystemManager()
-		        ->getMotorControllerSet()
+		        .getMotorControllerSet()
 		        .getDeviceController(this->motor_id)
 		        .lock();
 		return motor != nullptr;
@@ -41,7 +41,7 @@ namespace CalXUI {
 	std::optional<Power> CalXAppScriptMotor::getPower() {
 		std::shared_ptr<MotorController> motor =
 		    this->app.getSystemManager()
-		        ->getMotorControllerSet()
+		        .getMotorControllerSet()
 		        .getDeviceController(this->motor_id)
 		        .lock();
 		if (motor == nullptr) {
@@ -127,7 +127,7 @@ namespace CalXUI {
 	std::optional<motor_coord_t> CalXAppScriptMotor::getPosition() {
 		std::shared_ptr<MotorController> motor =
 		    this->app.getSystemManager()
-		        ->getMotorControllerSet()
+		        .getMotorControllerSet()
 		        .getDeviceController(this->motor_id)
 		        .lock();
 		if (motor == nullptr) {
@@ -164,7 +164,7 @@ namespace CalXUI {
 	ErrorCode CalXAppScriptMotor::checkTrailers() {
 		std::shared_ptr<MotorController> motor =
 		    this->app.getSystemManager()
-		        ->getMotorControllerSet()
+		        .getMotorControllerSet()
 		        .getDeviceController(this->motor_id)
 		        .lock();
 		if (motor == nullptr) {
@@ -180,7 +180,7 @@ namespace CalXUI {
 	ErrorCode CalXAppScriptMotor::waitWhileRunning() {
 		std::shared_ptr<MotorController> motor =
 		    this->app.getSystemManager()
-		        ->getMotorControllerSet()
+		        .getMotorControllerSet()
 		        .getDeviceController(this->motor_id)
 		        .lock();
 		if (motor == nullptr) {
@@ -200,7 +200,7 @@ namespace CalXUI {
 	bool CalXAppScriptInstrument::isValid() {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()
-		        ->getInstrumentControllerSet()
+		        .getInstrumentControllerSet()
 		        .getDeviceController(this->instrument_id)
 		        .lock();
 		return instr != nullptr;
@@ -209,7 +209,7 @@ namespace CalXUI {
 	ErrorCode CalXAppScriptInstrument::open_session() {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()
-		        ->getInstrumentControllerSet()
+		        .getInstrumentControllerSet()
 		        .getDeviceController(this->instrument_id)
 		        .lock();
 		if (instr == nullptr) {
@@ -226,7 +226,7 @@ namespace CalXUI {
 	ErrorCode CalXAppScriptInstrument::close_session() {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()
-		        ->getInstrumentControllerSet()
+		        .getInstrumentControllerSet()
 		        .getDeviceController(this->instrument_id)
 		        .lock();
 		if (instr == nullptr) {
@@ -243,7 +243,7 @@ namespace CalXUI {
 	ErrorCode CalXAppScriptInstrument::enable(bool en) {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()
-		        ->getInstrumentControllerSet()
+		        .getInstrumentControllerSet()
 		        .getDeviceController(this->instrument_id)
 		        .lock();
 		if (instr == nullptr) {
@@ -260,7 +260,7 @@ namespace CalXUI {
 	std::optional<bool> CalXAppScriptInstrument::isEnabled() {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()
-		        ->getInstrumentControllerSet()
+		        .getInstrumentControllerSet()
 		        .getDeviceController(this->instrument_id)
 		        .lock();
 		if (instr == nullptr) {
@@ -277,7 +277,7 @@ namespace CalXUI {
 	std::optional<bool> CalXAppScriptInstrument::isRunnable() {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()
-		        ->getInstrumentControllerSet()
+		        .getInstrumentControllerSet()
 		        .getDeviceController(this->instrument_id)
 		        .lock();
 		if (instr == nullptr) {
@@ -294,7 +294,7 @@ namespace CalXUI {
 	ErrorCode CalXAppScriptInstrument::setRunnable(bool en) {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()
-		        ->getInstrumentControllerSet()
+		        .getInstrumentControllerSet()
 		        .getDeviceController(this->instrument_id)
 		        .lock();
 		if (instr == nullptr) {
@@ -312,7 +312,7 @@ namespace CalXUI {
 	std::optional<InstrumentMode> CalXAppScriptInstrument::getMode() {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()
-		        ->getInstrumentControllerSet()
+		        .getInstrumentControllerSet()
 		        .getDeviceController(this->instrument_id)
 		        .lock();
 		if (instr == nullptr) {
@@ -329,7 +329,7 @@ namespace CalXUI {
 	ErrorCode CalXAppScriptInstrument::setMode(InstrumentMode mode) {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()
-		        ->getInstrumentControllerSet()
+		        .getInstrumentControllerSet()
 		        .getDeviceController(this->instrument_id)
 		        .lock();
 		if (instr == nullptr) {
@@ -346,7 +346,7 @@ namespace CalXUI {
 	std::optional<bool> CalXAppScriptInstrument::isSessionOpened() {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()
-		        ->getInstrumentControllerSet()
+		        .getInstrumentControllerSet()
 		        .getDeviceController(this->instrument_id)
 		        .lock();
 		if (instr == nullptr) {
@@ -362,7 +362,7 @@ namespace CalXUI {
 	std::optional<std::string> CalXAppScriptInstrument::getInfo() {
 		std::shared_ptr<InstrumentController> instr =
 		    this->app.getSystemManager()
-		        ->getInstrumentControllerSet()
+		        .getInstrumentControllerSet()
 		        .getDeviceController(this->instrument_id)
 		        .lock();
 		if (instr == nullptr) {
@@ -379,9 +379,9 @@ namespace CalXUI {
 	CalXAppScriptDevices::CalXAppScriptDevices(CalxApp &app) : app(app) {}
 
 	device_id_t CalXAppScriptDevices::connectMotor(DeviceConnectionPrms *prms) {
-		SystemManager *sysman = this->app.getSystemManager();
+		SystemManager &sysman = this->app.getSystemManager();
 		std::shared_ptr<MotorController> ctrl =
-		    sysman->getMotorControllerSet().connectDevice(prms).lock();
+		    sysman.getMotorControllerSet().connectDevice(prms).lock();
 		if (ctrl == nullptr) {
 			this->app.getErrorHandler()->alert(__("Motor can't be connected"),
 			                                   __("Script: Connection error"),
@@ -401,9 +401,9 @@ namespace CalXUI {
 
 	device_id_t CalXAppScriptDevices::connectInstrument(
 	    DeviceConnectionPrms *prms) {
-		SystemManager *sysman = this->app.getSystemManager();
+		SystemManager &sysman = this->app.getSystemManager();
 		std::shared_ptr<InstrumentController> ctrl =
-		    sysman->getInstrumentControllerSet().connectDevice(prms).lock();
+		    sysman.getInstrumentControllerSet().connectDevice(prms).lock();
 		if (ctrl == nullptr) {
 			this->app.getErrorHandler()->alert(__("Instrument can't be connected"),
 			                                   __("Script: Connection error"),

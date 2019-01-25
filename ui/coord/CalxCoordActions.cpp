@@ -55,7 +55,7 @@ namespace CalXUI {
 		}
 	}
 
-	void CalxCoordActionMove::perform(SystemManager *sysman) {
+	void CalxCoordActionMove::perform(SystemManager &sysman) {
 		ErrorCode errcode;
 		ResourceSession session(*this->handle);
 		Info(wxGetApp().getJournal())
@@ -104,7 +104,7 @@ namespace CalXUI {
 		}
 	}
 
-	void CalxCoordActionArc::perform(SystemManager *sysman) {
+	void CalxCoordActionArc::perform(SystemManager &sysman) {
 		ErrorCode errcode;
 		ResourceSession session(*this->handle);
 		Info(wxGetApp().getJournal())
@@ -146,7 +146,7 @@ namespace CalXUI {
 		}
 	}
 
-	void CalxCoordActionCalibrate::perform(SystemManager *sysman) {
+	void CalxCoordActionCalibrate::perform(SystemManager &sysman) {
 		ResourceSession session(*this->handle);
 		Info(wxGetApp().getJournal())
 		    << "Calibrating coordinate plane #" << handle->getID()
@@ -177,7 +177,7 @@ namespace CalXUI {
 		}
 	}
 
-	void CalxCoordActionMeasure::perform(SystemManager *sysman) {
+	void CalxCoordActionMeasure::perform(SystemManager &sysman) {
 		ResourceSession session(*this->handle);
 		Info(wxGetApp().getJournal())
 		    << "Measuring coordinate plane #" << handle->getID()
@@ -214,7 +214,7 @@ namespace CalXUI {
 		}
 	}
 
-	void CalxCoordActionConfigure::perform(SystemManager *sysman) {
+	void CalxCoordActionConfigure::perform(SystemManager &sysman) {
 		ResourceSession session(*this->handle);
 		Info(wxGetApp().getJournal())
 		    << "Configuring coordinate plane #" << handle->getID()
@@ -267,12 +267,12 @@ namespace CalXUI {
 		this->state->work = false;
 	}
 
-	void CalxCoordActionGraphBuild::perform(SystemManager *sysman) {
+	void CalxCoordActionGraphBuild::perform(SystemManager &sysman) {
 		ResourceSession session(*this->handle);
 		Info(wxGetApp().getJournal())
 		    << "Plotting graph on coordinate plane #" << handle->getID()
 		    << " function " << *builder << " with speed " << speed;
-		ErrorCode errcode = builder->floatBuild(*sysman, handle->getFloatPlane(),
+		ErrorCode errcode = builder->floatBuild(sysman, handle->getFloatPlane(),
 		                                        *translator, speed, *state);
 		wxGetApp().getErrorHandler()->handle(errcode);
 		coordActionFinished(*handle, errcode);
@@ -295,10 +295,10 @@ namespace CalXUI {
 		this->state->work = false;
 	}
 
-	void CalxCoordActionGraphPreview::perform(SystemManager *sysman) {
+	void CalxCoordActionGraphPreview::perform(SystemManager &sysman) {
 		dialog->Enable(false);
 		wxGetApp().getErrorHandler()->handle(builder->floatBuild(
-		    *sysman, dialog->getFloatPlane(), *translator, speed, *state));
+		    sysman, dialog->getFloatPlane(), *translator, speed, *state));
 		;
 		dialog->Refresh();
 		dialog->Enable(true);

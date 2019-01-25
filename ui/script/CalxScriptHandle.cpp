@@ -31,7 +31,7 @@ namespace CalXUI {
 		CalxScriptHookCallAction(CalXScript &script, std::string hook)
 		    : script(script), hook(std::move(hook)) {}
 
-		void perform(SystemManager *sysman) override {
+		void perform(SystemManager &sysman) override {
 			script.invokeFunction(hook);
 		}
 
@@ -47,7 +47,7 @@ namespace CalXUI {
 		CalxScriptExecuteAction(CalXScript &script, std::string code)
 		    : script(script), code(code) {}
 
-		void perform(SystemManager *sysman) override {
+		void perform(SystemManager &sysman) override {
 			script.executeScript(code);
 		}
 

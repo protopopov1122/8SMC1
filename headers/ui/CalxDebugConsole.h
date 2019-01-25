@@ -30,13 +30,13 @@ namespace CalXUI {
 
 	class CalxDebugConsole : public wxThread {
 	 public:
-		CalxDebugConsole(SystemManager *);
+		CalxDebugConsole(SystemManager &);
 
 	 protected:
 		ExitCode Entry() override;
 
 	 private:
-		SystemManager *sysman;
+		SystemManager &sysman;
 		DeviceManager &devman;
 		VectorTaskSet taskSet;
 	};

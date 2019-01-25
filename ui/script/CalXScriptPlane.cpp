@@ -229,17 +229,17 @@ namespace CalXUI {
 	                                         device_id_t instrument) {
 		std::shared_ptr<CoordHandle> handle =
 		    this->app.getSystemManager()
-		        ->getCoordPlaneSet()
+		        .getCoordPlaneSet()
 		        .createCoord(this->app.getSystemManager()
-		                         ->getMotorControllerSet()
+		                         .getMotorControllerSet()
 		                         .getDeviceController(motor1)
 		                         .lock(),
 		                     this->app.getSystemManager()
-		                         ->getMotorControllerSet()
+		                         .getMotorControllerSet()
 		                         .getDeviceController(motor2)
 		                         .lock(),
 		                     this->app.getSystemManager()
-		                         ->getInstrumentControllerSet()
+		                         .getInstrumentControllerSet()
 		                         .getDeviceController(instrument)
 		                         .lock())
 		        .lock();

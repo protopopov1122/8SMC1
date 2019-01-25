@@ -41,13 +41,13 @@ namespace CalX {
 	}
 
 	ErrorCode GCodeCoordTask::perform(std::shared_ptr<CoordPlane> plane,
-	                                  TaskParameters &prms, SystemManager *sysman,
+	                                  TaskParameters &prms, SystemManager &sysman,
 	                                  std::shared_ptr<TaskState> state) {
 		state->plane = plane;
 		state->work = true;
 		ErrorCode errcode = GCodeInterpreter::execute(
 		    *this->stream.get(), *plane.get(), this->translator,
-		    sysman->getConfiguration(), prms.speed, *state.get());
+		    sysman.getConfiguration(), prms.speed, *state.get());
 		state->work = false;
 		return errcode;
 	}

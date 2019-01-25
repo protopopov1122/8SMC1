@@ -37,10 +37,10 @@ namespace CalXUI {
 		SetSizer(sizer);
 
 		SettingsConfiguration settingsConf(
-		    wxGetApp().getSystemManager()->getSettingsRepository(),
-		    wxGetApp().getSystemManager()->getConfiguration());
+		    wxGetApp().getSystemManager().getSettingsRepository(),
+		    wxGetApp().getSystemManager().getConfiguration());
 		ConfiguationFlatDictionary *confEntry =
-		    wxGetApp().getSystemManager()->getConfiguration().getEntry(
+		    wxGetApp().getSystemManager().getConfiguration().getEntry(
 		        CalxConfiguration::RelativePosition);
 
 		double xPosition =
@@ -63,12 +63,12 @@ namespace CalXUI {
 		    wxSP_ARROW_KEYS, 0,
 		    wxGetApp()
 		        .getSystemManager()
-		        ->getConfiguration()
+		        .getConfiguration()
 		        .getEntry(CalxConfiguration::Units)
 		        ->getReal(CalxUnitConfiguration::UnitSpeed, 4000.0),
 		    wxGetApp()
 		        .getSystemManager()
-		        ->getConfiguration()
+		        .getConfiguration()
 		        .getEntry(CalxConfiguration::Units)
 		        ->getReal(CalxUnitConfiguration::UnitSpeed, 4000.0),
 		    wxGetApp().getUnitProcessor().getSpeedPrecision());
@@ -128,9 +128,9 @@ namespace CalXUI {
 	void CalxCoordPositionComponent::OnSaveClick(wxCommandEvent &evt) {
 		double xPosition = this->xPos->GetValue();
 		double yPosition = this->yPos->GetValue();
-		if (wxGetApp().getSystemManager()->getSettingsRepository()) {
+		if (wxGetApp().getSystemManager().getSettingsRepository()) {
 			auto &settings =
-			    wxGetApp().getSystemManager()->getSettingsRepository()->getSettings();
+			    wxGetApp().getSystemManager().getSettingsRepository()->getSettings();
 			settings.getEntry(CalxConfiguration::RelativePosition)
 			    ->put(CalxCoordPositionConfiguration::X, xPosition);
 			settings.getEntry(CalxConfiguration::RelativePosition)

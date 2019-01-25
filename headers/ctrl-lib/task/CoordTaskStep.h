@@ -31,7 +31,7 @@ namespace CalX {
 	 public:
 		MoveTaskStep(motor_point_t, float, bool = false);
 		ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
-		                          SystemManager *, std::shared_ptr<TaskState>) override;
+		                          SystemManager &, std::shared_ptr<TaskState>) override;
 
 		motor_point_t getPosition() const;
 		float getSpeed() const;
@@ -51,7 +51,7 @@ namespace CalX {
 	 public:
 		JumpTaskStep(motor_point_t, float, bool = false);
 		ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
-		                          SystemManager *, std::shared_ptr<TaskState>) override;
+		                          SystemManager &, std::shared_ptr<TaskState>) override;
 
 		motor_point_t getPosition() const;
 		float getSpeed() const;
@@ -71,7 +71,7 @@ namespace CalX {
 	 public:
 		CalibrateTaskStep(TrailerId);
 		ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
-		                          SystemManager *, std::shared_ptr<TaskState>) override;
+		                          SystemManager &, std::shared_ptr<TaskState>) override;
 
 	 private:
 		TrailerId side;
@@ -81,7 +81,7 @@ namespace CalX {
 	 public:
 		ArcTaskStep(motor_point_t, motor_point_t, int, float, bool = false);
 		ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
-		                          SystemManager *, std::shared_ptr<TaskState>) override;
+		                          SystemManager &, std::shared_ptr<TaskState>) override;
 
 		motor_point_t getDestination() const;
 		motor_point_t getCenter() const;
@@ -111,7 +111,7 @@ namespace CalX {
 	 public:
 		RelArcTaskStep(motor_point_t, motor_point_t, int, float, bool = false);
 		ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
-		                          SystemManager *, std::shared_ptr<TaskState>) override;
+		                          SystemManager &, std::shared_ptr<TaskState>) override;
 		void setClockwise(bool);
 
 	 private:

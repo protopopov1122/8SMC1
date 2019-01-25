@@ -35,7 +35,7 @@ namespace CalXUI {
 		                        std::unique_ptr<CalxAction> action)
 		    : panel(panel), action(std::move(action)) {}
 
-		void perform(SystemManager *sysman) override {
+		void perform(SystemManager &sysman) override {
 			panel->setEnabled(false);
 			action->perform(sysman);
 			panel->setEnabled(true);

@@ -60,7 +60,7 @@ namespace CalXUI {
 			this->state->work = false;
 		}
 
-		void perform(SystemManager *sysman) override {
+		void perform(SystemManager &sysman) override {
 			Info(wxGetApp().getJournal())
 			    << "Start execution of task: " << this->descriptor;
 			handle->open_session();
@@ -100,7 +100,7 @@ namespace CalXUI {
 			this->state->work = false;
 		}
 
-		void perform(SystemManager *sysman) override {
+		void perform(SystemManager &sysman) override {
 			dialog->setEnabled(false);
 			panel->setEnabled(false);
 			wxGetApp().getErrorHandler()->handle(
@@ -163,12 +163,12 @@ namespace CalXUI {
 		    wxSP_ARROW_KEYS, 0,
 		    wxGetApp()
 		        .getSystemManager()
-		        ->getConfiguration()
+		        .getConfiguration()
 		        .getEntry(CalxConfiguration::Units)
 		        ->getReal(CalxUnitConfiguration::UnitSpeed, 4000.0),
 		    wxGetApp()
 		        .getSystemManager()
-		        ->getConfiguration()
+		        .getConfiguration()
 		        .getEntry(CalxConfiguration::Units)
 		        ->getReal(CalxUnitConfiguration::UnitSpeed, 4000.0),
 		    wxGetApp().getUnitProcessor().getSpeedPrecision());
@@ -243,11 +243,11 @@ namespace CalXUI {
 		}
 		plane->Clear();
 		for (std::size_t i = 0;
-		     i < wxGetApp().getSystemManager()->getCoordPlaneSet().getCoordCount();
+		     i < wxGetApp().getSystemManager().getCoordPlaneSet().getCoordCount();
 		     i++) {
 			if (std::shared_ptr<CoordHandle> handle = wxGetApp()
 			                                              .getSystemManager()
-			                                              ->getCoordPlaneSet()
+			                                              .getCoordPlaneSet()
 			                                              .getCoord(i)
 			                                              .lock()) {
 				if (!handle->isSessionOpened()) {
@@ -255,7 +255,7 @@ namespace CalXUI {
 				}
 			}
 		}
-		if (wxGetApp().getSystemManager()->getCoordPlaneSet().getCoordCount() > 0) {
+		if (wxGetApp().getSystemManager().getCoordPlaneSet().getCoordCount() > 0) {
 			plane->SetSelection(0);
 		}
 		this->mainPanel->Layout();
@@ -322,7 +322,7 @@ namespace CalXUI {
 			if (std::shared_ptr<CoordHandle> handle =
 			        wxGetApp()
 			            .getSystemManager()
-			            ->getCoordPlaneSet()
+			            .getCoordPlaneSet()
 			            .getCoord((std::size_t) plane->GetSelection())
 			            .lock()) {
 				float speed = this->speed->GetValue();
@@ -352,7 +352,7 @@ namespace CalXUI {
 			if (std::shared_ptr<CoordHandle> handle =
 			        wxGetApp()
 			            .getSystemManager()
-			            ->getCoordPlaneSet()
+			            .getCoordPlaneSet()
 			            .getCoord((std::size_t) plane->GetSelection())
 			            .lock()) {
 				if (!handle->isMeasured()) {
@@ -389,7 +389,7 @@ namespace CalXUI {
 			if (std::shared_ptr<CoordHandle> handle =
 			        wxGetApp()
 			            .getSystemManager()
-			            ->getCoordPlaneSet()
+			            .getCoordPlaneSet()
 			            .getCoord((std::size_t) plane->GetSelection())
 			            .lock()) {
 				if (!handle->isMeasured()) {
@@ -487,7 +487,7 @@ namespace CalXUI {
 			if (std::shared_ptr<CoordHandle> handle =
 			        wxGetApp()
 			            .getSystemManager()
-			            ->getCoordPlaneSet()
+			            .getCoordPlaneSet()
 			            .getCoord((std::size_t) plane->GetSelection())
 			            .lock()) {
 				std::pair<motor_point_t, bool> start =
@@ -496,13 +496,13 @@ namespace CalXUI {
 				if (start.second) {
 					float scale = wxGetApp()
 					                  .getSystemManager()
-					                  ->getConfiguration()
+					                  .getConfiguration()
 					                  .getEntry(CalxConfiguration::Units)
 					                  ->getReal(CalxUnitConfiguration::UnitScale, 1.0f);
 					float unit_speed =
 					    wxGetApp()
 					        .getSystemManager()
-					        ->getConfiguration()
+					        .getConfiguration()
 					        .getEntry(CalxConfiguration::Units)
 					        ->getReal(CalxUnitConfiguration::UnitSpeed, 1.25f);
 					coord_point_t dest = { start.first.x / scale, start.first.y / scale };

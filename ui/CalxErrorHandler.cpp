@@ -26,9 +26,7 @@
 
 namespace CalXUI {
 
-	CalxErrorHandler::CalxErrorHandler(SystemManager *sysman) {
-		this->sysman = sysman;
-	}
+	CalxErrorHandler::CalxErrorHandler(SystemManager &sysman) : sysman(sysman) {}
 
 	void CalxErrorHandler::handle(ErrorCode code) {
 		wxThreadEvent evt(wxEVT_APP_ERROR);
@@ -44,7 +42,7 @@ namespace CalXUI {
 			switch (code) {
 				case ErrorCode::LowLevelError: {
 					text += "Device low level error log:\n";
-					DeviceManager &devman = this->sysman->getDeviceManager();
+					DeviceManager &devman = this->sysman.getDeviceManager();
 					while (devman.hasError()) {
 						text += "\t" + devman.pollError() + "\n";
 					}

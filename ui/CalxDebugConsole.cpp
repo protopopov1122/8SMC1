@@ -45,10 +45,8 @@ namespace CalXUI {
 		}
 	};
 
-	CalxDebugConsole::CalxDebugConsole(SystemManager *sysman)
-	    : devman(sysman->getDeviceManager()) {
-		this->sysman = sysman;
-	}
+	CalxDebugConsole::CalxDebugConsole(SystemManager &sysman)
+	    : sysman(sysman), devman(sysman.getDeviceManager()) {}
 
 	void *CalxDebugConsole::Entry() {
 		CLI cli(std::cout, std::cin);

@@ -41,7 +41,7 @@ namespace CalXUI {
 	class CalxAction {
 	 public:
 		virtual ~CalxAction() = default;
-		virtual void perform(SystemManager *) = 0;
+		virtual void perform(SystemManager &) = 0;
 		virtual void stop() = 0;
 	};
 
@@ -52,7 +52,7 @@ namespace CalXUI {
 
 	class CalxActionQueue : public wxThread {
 	 public:
-		CalxActionQueue(SystemManager *, wxEvtHandler *);
+		CalxActionQueue(SystemManager &, wxEvtHandler *);
 		virtual ~CalxActionQueue();
 		void addAction(std::unique_ptr<CalxAction>, bool * = nullptr);
 		bool isEmpty();
@@ -72,7 +72,7 @@ namespace CalXUI {
 		std::vector<CalxActionHandle> queue;
 		CalxAction *current;
 		bool work;
-		SystemManager *sysman;
+		SystemManager &sysman;
 	};
 }  // namespace CalXUI
 

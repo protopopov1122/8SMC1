@@ -34,7 +34,7 @@ namespace CalX {
 
 	ErrorCode LinearCoordTask::perform(std::shared_ptr<CoordPlane> plane,
 	                                   TaskParameters &prms,
-	                                   SystemManager *sysman,
+	                                   SystemManager &sysman,
 	                                   std::shared_ptr<TaskState> state) {
 		state->plane = plane;
 		state->work = true;

@@ -39,7 +39,7 @@ namespace CalX {
 	class ExtEngine {
 	 public:
 		virtual ~ExtEngine() = default;
-		virtual bool init(SystemManager *) = 0;
+		virtual bool init(SystemManager &) = 0;
 		virtual bool destroy() = 0;
 
 		virtual void onTaskAdded(std::shared_ptr<CoordTask> task) {}

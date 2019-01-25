@@ -89,7 +89,7 @@ namespace CalXUI {
 			}
 		}
 
-		void perform(SystemManager *sysman) override {
+		void perform(SystemManager &sysman) override {
 			ErrorCode errcode;
 			Info(wxGetApp().getJournal())
 			    << "Starting device #" << dev->getID() << (rel ? " relative " : " ")
@@ -142,7 +142,7 @@ namespace CalXUI {
 			}
 		}
 
-		void perform(SystemManager *sysman) override {
+		void perform(SystemManager &sysman) override {
 			Info(wxGetApp().getJournal())
 			    << "Starting device #" << dev->getID() << " calibration to trailer #"
 			    << static_cast<int>(tr);
@@ -238,12 +238,12 @@ namespace CalXUI {
 		                   wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0,
 		                   (int) wxGetApp()
 		                       .getSystemManager()
-		                       ->getConfiguration()
+		                       .getConfiguration()
 		                       .getEntry(CalxConfiguration::Core)
 		                       ->getInt(CalxMotorConfiguration::MaxSpeed, 4000),
 		                   (int) wxGetApp()
 		                       .getSystemManager()
-		                       ->getConfiguration()
+		                       .getConfiguration()
 		                       .getEntry(CalxConfiguration::Core)
 		                       ->getInt(CalxMotorConfiguration::MaxSpeed, 4000));
 		moveSpeedSizer->Add(moveSpeedSpin, 1, wxEXPAND);

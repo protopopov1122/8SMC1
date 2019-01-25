@@ -35,7 +35,7 @@ namespace CalXUI {
 		CalxCoordActionMove(std::shared_ptr<CoordHandle>, coord_point_t, double,
 		                    bool, bool, ActionResult * = nullptr);
 
-		void perform(SystemManager *) override;
+		void perform(SystemManager &) override;
 		void stop() override;
 
 	 private:
@@ -53,7 +53,7 @@ namespace CalXUI {
 		                   coord_point_t, int, double, bool, bool,
 		                   ActionResult * = nullptr);
 
-		void perform(SystemManager *) override;
+		void perform(SystemManager &) override;
 		void stop() override;
 
 	 private:
@@ -72,7 +72,7 @@ namespace CalXUI {
 		CalxCoordActionCalibrate(std::shared_ptr<CoordHandle>, TrailerId,
 		                         ActionResult * = nullptr);
 
-		void perform(SystemManager *) override;
+		void perform(SystemManager &) override;
 		void stop() override;
 
 	 private:
@@ -86,7 +86,7 @@ namespace CalXUI {
 		CalxCoordActionMeasure(std::shared_ptr<CoordHandle>, TrailerId,
 		                       ActionResult * = nullptr);
 
-		void perform(SystemManager * override);
+		void perform(SystemManager & override);
 		void stop() override;
 
 	 private:
@@ -101,7 +101,7 @@ namespace CalXUI {
 		                         CalxCoordController *, coord_point_t, double,
 		                         ActionResult * = nullptr);
 
-		void perform(SystemManager *) override;
+		void perform(SystemManager &) override;
 		void stop() override;
 
 	 private:
@@ -119,7 +119,7 @@ namespace CalXUI {
 		                          std::shared_ptr<CoordTranslator>,
 		                          std::unique_ptr<GraphBuilder>, double);
 
-		void perform(SystemManager *) override;
+		void perform(SystemManager &) override;
 		void stop() override;
 
 	 private:
@@ -136,7 +136,7 @@ namespace CalXUI {
 		                            std::shared_ptr<CoordTranslator>,
 		                            std::unique_ptr<GraphBuilder>, double);
 
-		void perform(SystemManager *) override;
+		void perform(SystemManager &) override;
 		void stop() override;
 
 	 private:
