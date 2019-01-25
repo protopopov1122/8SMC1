@@ -42,7 +42,7 @@ namespace CalXUI {
 		virtual ~CalxPlaneList() = default;
 		virtual void updateList(std::shared_ptr<CoordHandle>, bool *) = 0;
 		virtual std::size_t getPlaneCount() = 0;
-		virtual CalxPlaneHandle *getPlaneHandle(size_t) = 0;
+		virtual CalxPlaneHandle *getPlaneHandle(std::size_t) = 0;
 		virtual void stop() = 0;
 	};
 }  // namespace CalXUI

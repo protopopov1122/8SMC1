@@ -71,7 +71,7 @@ namespace CalXUI {
 			}
 		}
 
-		for (size_t i = 0; i < wxGetApp()
+		for (std::size_t i = 0; i < wxGetApp()
 		                           .getSystemManager()
 		                           ->getMotorControllerSet()
 		                           .getDeviceCount();
@@ -84,7 +84,7 @@ namespace CalXUI {
 			                  .lock()));
 		}
 
-		for (size_t i = 0; i < wxGetApp()
+		for (std::size_t i = 0; i < wxGetApp()
 		                           .getSystemManager()
 		                           ->getInstrumentControllerSet()
 		                           .getDeviceCount();

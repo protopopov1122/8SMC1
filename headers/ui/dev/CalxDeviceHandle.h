@@ -63,9 +63,9 @@ namespace CalXUI {
 	class CalxDevicePool {
 	 public:
 		virtual void appendDevice(CalxDeviceConstructor *, bool * = nullptr) = 0;
-		virtual size_t getMotorCount() = 0;
+		virtual std::size_t getMotorCount() = 0;
 		virtual CalxMotorHandle *getMotor(device_id_t) = 0;
-		virtual size_t getInstrumentCount() = 0;
+		virtual std::size_t getInstrumentCount() = 0;
 		virtual CalxInstrumentHandle *getInstrument(device_id_t) = 0;
 		virtual void stop() = 0;
 	};

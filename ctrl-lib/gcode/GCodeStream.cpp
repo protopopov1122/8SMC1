@@ -209,7 +209,7 @@ namespace CalX {
 			prm.type = GCodeParameterType::Unknown;
 			return false;
 		}
-		size_t position = 0;
+		std::size_t position = 0;
 		uint16_t dot_count = 0;
 		if (par.at(0) == '+' || par.at(0) == '-') {
 			position++;

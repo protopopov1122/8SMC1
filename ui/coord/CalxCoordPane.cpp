@@ -40,7 +40,7 @@ namespace CalXUI {
 
 	CalxCoordPane::CalxCoordPane(wxWindow *win, wxWindowID id,
 	                             std::shared_ptr<CoordHandle> ctrl,
-	                             size_t component_pane_count)
+	                             std::size_t component_pane_count)
 	    : wxScrolledWindow::wxScrolledWindow(win, id) {
 		this->ctrl = ctrl;
 		this->used = 0;
@@ -94,7 +94,7 @@ namespace CalXUI {
 		wxBoxSizer *actionSizer = new wxBoxSizer(wxHORIZONTAL);
 		component_panel->SetSizer(actionSizer);
 
-		for (size_t i = 0; i < component_pane_count; i++) {
+		for (std::size_t i = 0; i < component_pane_count; i++) {
 			wxPanel *comPane = new wxPanel(this->component_panel, wxID_ANY);
 			actionSizer->Add(comPane, 0, wxALL | wxEXPAND);
 			wxBoxSizer *comSizer = new wxBoxSizer(wxVERTICAL);
@@ -120,7 +120,7 @@ namespace CalXUI {
 
 	bool CalxCoordPane::addComponent(const std::string &name,
 	                                 CalxCoordComponentFactory *compFact,
-	                                 size_t paneid, bool coll) {
+	                                 std::size_t paneid, bool coll) {
 		if (paneid >= this->component_panes.size()) {
 			return false;
 		}
@@ -141,7 +141,7 @@ namespace CalXUI {
 		return true;
 	}
 
-	size_t CalxCoordPane::getComponentPaneCount() {
+	std::size_t CalxCoordPane::getComponentPaneCount() {
 		return this->component_panes.size();
 	}
 

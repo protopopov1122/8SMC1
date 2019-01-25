@@ -103,7 +103,7 @@ namespace CalX {
 		void find_commands(std::vector<GCodeToken> &, std::vector<GCodeCmd> &);
 		bool parse_parameter(GCodeParameter &, std::string);
 		std::vector<GCodeCmd> commands;
-		size_t position;
+		std::size_t position;
 	};
 }  // namespace CalX
 

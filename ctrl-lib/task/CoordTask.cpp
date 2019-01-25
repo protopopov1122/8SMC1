@@ -41,7 +41,7 @@ namespace CalX {
 		state->work = true;
 		ctrl->use();
 		std::shared_ptr<TaskState> subSt = std::make_shared<TaskState>();
-		for (size_t i = 0; i < this->list.size() && state->work; i++) {
+		for (std::size_t i = 0; i < this->list.size() && state->work; i++) {
 			errcode = this->list.at(i)->perform(ctrl, prms, sysman, subSt);
 			if (errcode != ErrorCode::NoError) {
 				state->work = false;
@@ -58,11 +58,11 @@ namespace CalX {
 		this->list.push_back(st);
 	}
 
-	size_t ProgrammedCoordTask::getSubCount() const {
+	std::size_t ProgrammedCoordTask::getSubCount() const {
 		return this->list.size();
 	}
 
-	bool ProgrammedCoordTask::removeStep(size_t i) {
+	bool ProgrammedCoordTask::removeStep(std::size_t i) {
 		if (i >= this->list.size()) {
 			return false;
 		}
@@ -70,7 +70,7 @@ namespace CalX {
 		return true;
 	}
 
-	std::shared_ptr<TaskStep> ProgrammedCoordTask::pollStep(size_t i) {
+	std::shared_ptr<TaskStep> ProgrammedCoordTask::pollStep(std::size_t i) {
 		if (i >= this->list.size()) {
 			return nullptr;
 		}
@@ -79,7 +79,7 @@ namespace CalX {
 		return step;
 	}
 
-	bool ProgrammedCoordTask::insertStep(size_t i,
+	bool ProgrammedCoordTask::insertStep(std::size_t i,
 	                                     std::shared_ptr<TaskStep> step) {
 		if (i > this->list.size()) {
 			return false;

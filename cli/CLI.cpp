@@ -64,7 +64,7 @@ namespace CalX {
 		}
 		// Split line into command and arguments
 		std::vector<std::string> args;
-		size_t pos = 0;
+		std::size_t pos = 0;
 		bool quote = false;
 		const char *line = input.c_str();
 		args.push_back("");

@@ -33,9 +33,9 @@ namespace CalXUI {
 	wxDEFINE_EVENT(wxEVT_COORD_PANEL_UPDATE, wxThreadEvent);
 
 	CalxCoordPanel::CalxCoordPanel(wxWindow *win, wxWindowID id,
-	                               size_t layout_cols)
+	                               std::size_t layout_cols)
 	    : CalxPanelPane::CalxPanelPane(win, id) {
-		for (size_t i = 0; i < layout_cols; i++) {
+		for (std::size_t i = 0; i < layout_cols; i++) {
 			std::vector<CalxCoordComponentFactoryHandle> vec;
 			this->layout.push_back(vec);
 		}
@@ -83,7 +83,7 @@ namespace CalXUI {
 		wxPostEvent(this, evt);
 	}
 
-	CalxPlaneHandle *CalxCoordPanel::getPlaneHandle(size_t sz) {
+	CalxPlaneHandle *CalxCoordPanel::getPlaneHandle(std::size_t sz) {
 		if (sz >= this->coords.size()) {
 			return nullptr;
 		} else {
@@ -96,17 +96,17 @@ namespace CalXUI {
 			ctrl->Hide();
 		}
 		if (this->coordList->GetSelection() != wxNOT_FOUND) {
-			this->coords.at((size_t) this->coordList->GetSelection())->Show(true);
+			this->coords.at((std::size_t) this->coordList->GetSelection())->Show(true);
 		}
 		mainPanel->Layout();
 		Layout();
 	}
 
-	size_t CalxCoordPanel::getPlaneCount() {
+	std::size_t CalxCoordPanel::getPlaneCount() {
 		return coords.size();
 	}
 
-	CalxCoordPane *CalxCoordPanel::getCoordCtrl(size_t sz) {
+	CalxCoordPane *CalxCoordPanel::getCoordCtrl(std::size_t sz) {
 		return sz < coords.size() ? coords.at(sz) : nullptr;
 	}
 
@@ -131,13 +131,13 @@ namespace CalXUI {
 		}
 	}
 
-	size_t CalxCoordPanel::getLayoutColumnCount() {
+	std::size_t CalxCoordPanel::getLayoutColumnCount() {
 		return this->layout.size();
 	}
 
 	bool CalxCoordPanel::addComponentFactory(std::string title,
 	                                         CalxCoordComponentFactory *fact,
-	                                         size_t column, bool hidden) {
+	                                         std::size_t column, bool hidden) {
 		if (column >= this->layout.size()) {
 			return false;
 		}
@@ -149,7 +149,7 @@ namespace CalXUI {
 	void CalxCoordPanel::addPlane(std::shared_ptr<CoordHandle> handle) {
 		CalxCoordPane *ctrl = new CalxCoordPane(this->mainPanel, wxID_ANY, handle,
 		                                        this->layout.size());
-		for (size_t i = 0; i < this->layout.size(); i++) {
+		for (std::size_t i = 0; i < this->layout.size(); i++) {
 			for (const auto &fact : this->layout.at(i)) {
 				ctrl->addComponent(fact.title, fact.factory, i, fact.hidden);
 			}
@@ -161,7 +161,7 @@ namespace CalXUI {
 		wxGetApp().getMainFrame()->getPanel()->updateUI();
 	}
 
-	void CalxCoordPanel::removePlane(size_t pl) {
+	void CalxCoordPanel::removePlane(std::size_t pl) {
 		if (coords.at(pl)->getWatchers()->hasWatchers()) {
 			wxMessageBox("Watchers are attached to this plane. Detach them first.",
 			             "Error", wxICON_ERROR);
@@ -181,7 +181,7 @@ namespace CalXUI {
 			}
 		}
 		while (!this->coords.empty()) {
-			size_t pl = 0;
+			std::size_t pl = 0;
 			this->mainPanel->GetSizer()->Detach(coords.at(pl));
 			this->coordList->Delete((unsigned int) pl);
 			coords.at(pl)->Close(true);
@@ -202,7 +202,7 @@ namespace CalXUI {
 
 	void CalxCoordPanel::OnRemoveButtonClick(wxCommandEvent &evt) {
 		if (this->coordList->GetSelection() != wxNOT_FOUND) {
-			removePlane((size_t) this->coordList->GetSelection());
+			removePlane((std::size_t) this->coordList->GetSelection());
 		} else {
 			wxMessageBox(__("Select plane to remove"), __("Warning"),
 			             wxOK | wxICON_WARNING);

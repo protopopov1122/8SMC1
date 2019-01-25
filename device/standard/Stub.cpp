@@ -116,7 +116,7 @@ DWORD USMC_SaveParametersToFlash(DWORD dev) {
 	return FALSE;
 }
 
-void USMC_GetLastErr(char *str, size_t len) {}
+void USMC_GetLastErr(char *str, std::size_t len) {}
 
 DWORD USMC_GetEncoderState(DWORD dev, USMC_EncoderState &encState) {
 	return FALSE;

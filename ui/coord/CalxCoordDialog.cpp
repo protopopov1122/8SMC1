@@ -70,7 +70,7 @@ namespace CalXUI {
 		buttonSizer->Add(okButton);
 		buttonSizer->Add(cancelButton);
 
-		for (size_t i = 0; i < sysman->getMotorControllerSet().getDeviceCount();
+		for (std::size_t i = 0; i < sysman->getMotorControllerSet().getDeviceCount();
 		     i++) {
 			std::string devId = FORMAT(__("Device #%s"), std::to_string(i));
 			xChoice->Append(devId);
@@ -79,7 +79,7 @@ namespace CalXUI {
 
 		instrChoice->Append(__("No instrument"));
 
-		for (size_t i = 0;
+		for (std::size_t i = 0;
 		     i < sysman->getInstrumentControllerSet().getDeviceCount(); i++) {
 			std::string devId = FORMAT(__("Instrument #%s"), std::to_string(i));
 			instrChoice->Append(devId);

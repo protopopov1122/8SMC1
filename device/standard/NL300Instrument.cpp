@@ -135,8 +135,8 @@ namespace CalX {
 		NL300SystemCommand syscom(NL300_LASER_NAME, "SAY", "", NL300_PC_NAME);
 		std::pair<std::string, std::string> say_response =
 		    getSystemCommandResponse(syscom);
-		size_t index = 0;
-		const size_t MAX_SAY = getCoreEntry()->getInt("start_say_count", 10);
+		std::size_t index = 0;
+		const std::size_t MAX_SAY = getCoreEntry()->getInt("start_say_count", 10);
 		const int SAY_SLEEP = getCoreEntry()->getInt("start_say_sleep", 1000);
 		while (say_response.first.compare("READY") != 0 && index < MAX_SAY) {
 			index++;
@@ -327,7 +327,7 @@ namespace CalX {
 
 		const int MAX_LEN = 128;
 		char mesg[MAX_LEN];
-		size_t offset = 0;
+		std::size_t offset = 0;
 		char chr;
 		bool timeout;
 		do {
@@ -414,7 +414,7 @@ namespace CalX {
 					}
 					bool integer = true;
 					bool fp = false;
-					for (size_t i = 0; i < strlen(ptr); i++) {
+					for (std::size_t i = 0; i < strlen(ptr); i++) {
 						char chr = ptr[i];
 						if (isdigit(chr)) {
 							continue;

@@ -383,7 +383,7 @@ namespace CalX {
 		}
 		/* Starting real work */
 		motor_point_t pnt;
-		size_t count = 0;
+		std::size_t count = 0;
 		if (!work) {
 			return ErrorCode::NoError;
 		}

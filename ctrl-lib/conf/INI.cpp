@@ -61,7 +61,7 @@ namespace CalX {
 		});
 	}
 
-	size_t skipWhitespaces(const char *line, size_t start) {
+	std::size_t skipWhitespaces(const char *line, std::size_t start) {
 		while (start < strlen(line) && isspace(line[start])) {
 			start++;
 		}
@@ -83,14 +83,14 @@ namespace CalX {
 			is.getline(rawline, LINE_LEN);
 			line_num++;
 			// Remove comments
-			for (size_t i = 0; i < strlen(rawline); i++) {
+			for (std::size_t i = 0; i < strlen(rawline); i++) {
 				if (rawline[i] == '#') {
 					rawline[i] = '\0';
 					break;
 				}
 			}
 			// Trim input line
-			size_t start = 0, end = strlen(rawline) - 1;
+			std::size_t start = 0, end = strlen(rawline) - 1;
 			while (start < strlen(rawline) && isspace(rawline[start])) {
 				start++;
 			}
@@ -119,7 +119,7 @@ namespace CalX {
 					    << std::endl;
 				} else {
 					std::string key;
-					size_t pos = 0;
+					std::size_t pos = 0;
 					while (
 					    pos < strlen(line) &&
 					    (isalpha(line[pos]) || isdigit(line[pos]) || line[pos] == '_')) {
@@ -148,7 +148,7 @@ namespace CalX {
 	}
 
 	ConfigurationValue INIConfiguration::parseValue(const char *input) {
-		size_t pos = 0;
+		std::size_t pos = 0;
 		pos = skipWhitespaces(input, pos);
 		const char *val = &input[pos];
 		if (val[0] == '\"') {
@@ -166,7 +166,7 @@ namespace CalX {
 			return ConfigurationValue(boolval);
 		} else {
 			bool integer = true, real = false;
-			for (size_t i = 0; i < strlen(val); i++) {
+			for (std::size_t i = 0; i < strlen(val); i++) {
 				if (val[i] == '.') {
 					if (!real) {
 						real = true;

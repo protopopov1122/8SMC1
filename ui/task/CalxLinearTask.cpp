@@ -25,7 +25,7 @@
 namespace CalXUI {
 
 	CalxLinearTaskHandle::CalxLinearTaskHandle(wxWindow *win, wxWindowID id,
-	                                           size_t tid)
+	                                           std::size_t tid)
 	    : CalxTaskHandle(win, id) {
 		this->id = tid;
 		std::string units = wxGetApp().getUnitProcessor().getUnits();

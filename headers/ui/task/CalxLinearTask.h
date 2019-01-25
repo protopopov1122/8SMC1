@@ -32,12 +32,12 @@ namespace CalXUI {
 		virtual CalxTaskHandle *newTask(wxWindow *);
 
 	 private:
-		size_t next_id = 0;
+		std::size_t next_id = 0;
 	};
 
 	class CalxLinearTaskHandle : public CalxTaskHandle {
 	 public:
-		CalxLinearTaskHandle(wxWindow *, wxWindowID, size_t);
+		CalxLinearTaskHandle(wxWindow *, wxWindowID, std::size_t);
 		std::string getName() const override;
 		std::shared_ptr<CoordTask> getTask() override;
 		std::shared_ptr<CoordTranslator> getTranslator() override;
@@ -51,7 +51,7 @@ namespace CalXUI {
 		void OnFieldChange(wxCommandEvent &);
 		void OnExit(wxCloseEvent &);
 		std::shared_ptr<LinearCoordTask> task;
-		size_t id;
+		std::size_t id;
 		std::shared_ptr<CoordTranslator> trans;
 		wxSpinCtrlDouble *xCoord;
 		wxSpinCtrlDouble *yCoord;

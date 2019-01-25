@@ -63,8 +63,8 @@ namespace CalX {
 			OPER(',', OperatorType::COMMA)
 #undef OPER
 		}
-		const size_t BUF_SZ = 256;
-		size_t offset = 0;
+		const std::size_t BUF_SZ = 256;
+		std::size_t offset = 0;
 		char buf[BUF_SZ];
 		if (isdigit(chr)) {
 			bool real = false;

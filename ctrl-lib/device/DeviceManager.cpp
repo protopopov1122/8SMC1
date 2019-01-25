@@ -47,14 +47,14 @@ namespace CalX {
 		if (d >= (device_id_t) this->motors.size() || d < 0) {
 			return nullptr;
 		}
-		return this->motors.at((size_t) d).get();
+		return this->motors.at((std::size_t) d).get();
 	}
 
-	size_t DeviceManager::getMotorCount() const {
+	std::size_t DeviceManager::getMotorCount() const {
 		return this->motors.size();
 	}
 
-	size_t DeviceManager::getInstrumentCount() const {
+	std::size_t DeviceManager::getInstrumentCount() const {
 		return this->instruments.size();
 	}
 
@@ -62,7 +62,7 @@ namespace CalX {
 		if (id >= (device_id_t) this->instruments.size() || id < 0) {
 			return nullptr;
 		}
-		return this->instruments.at((size_t) id).get();
+		return this->instruments.at((std::size_t) id).get();
 	}
 
 	void DeviceManager::getConnectionTypes(

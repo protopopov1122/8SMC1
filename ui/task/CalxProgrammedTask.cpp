@@ -24,7 +24,7 @@
 
 namespace CalXUI {
 	CalxProgrammedTaskHandle::CalxProgrammedTaskHandle(wxWindow *win,
-	                                                   wxWindowID id, size_t tid)
+	                                                   wxWindowID id, std::size_t tid)
 	    : CalxTaskHandle::CalxTaskHandle(win, id) {
 		this->task = std::make_shared<ProgrammedCoordTask>();
 		this->id = tid;
@@ -108,7 +108,7 @@ namespace CalXUI {
 			s->Hide();
 		}
 		if (stepList->GetSelection() != wxNOT_FOUND) {
-			this->steps.at((size_t) stepList->GetSelection())->Show(true);
+			this->steps.at((std::size_t) stepList->GetSelection())->Show(true);
 			this->moveUpButton->Enable(stepList->GetSelection() > 0);
 			this->moveDownButton->Enable(stepList->GetSelection() <
 			                             (int) (task->getSubCount() - 1));
@@ -160,10 +160,10 @@ namespace CalXUI {
 			return;
 		}
 
-		std::shared_ptr<TaskStep> step = task->pollStep((size_t) sel);
-		task->insertStep((size_t) sel - 1, step);
+		std::shared_ptr<TaskStep> step = task->pollStep((std::size_t) sel);
+		task->insertStep((std::size_t) sel - 1, step);
 
-		CalxTaskStepHandle *handle = steps.at((size_t) sel);
+		CalxTaskStepHandle *handle = steps.at((std::size_t) sel);
 		steps.erase(steps.begin() + sel);
 		steps.insert(steps.begin() + sel - 1, handle);
 
@@ -180,10 +180,10 @@ namespace CalXUI {
 			return;
 		}
 
-		std::shared_ptr<TaskStep> step = task->pollStep((size_t) sel);
-		task->insertStep((size_t) sel + 1, step);
+		std::shared_ptr<TaskStep> step = task->pollStep((std::size_t) sel);
+		task->insertStep((std::size_t) sel + 1, step);
 
-		CalxTaskStepHandle *handle = steps.at((size_t) sel);
+		CalxTaskStepHandle *handle = steps.at((std::size_t) sel);
 		steps.erase(steps.begin() + sel);
 		steps.insert(steps.begin() + sel + 1, handle);
 
@@ -196,8 +196,8 @@ namespace CalXUI {
 
 	void CalxProgrammedTaskHandle::OnRemoveClick(wxCommandEvent &evt) {
 		if (this->stepList->GetSelection() != wxNOT_FOUND) {
-			task->removeStep((size_t) this->stepList->GetSelection());
-			this->steps.at((size_t) this->stepList->GetSelection())->Destroy();
+			task->removeStep((std::size_t) this->stepList->GetSelection());
+			this->steps.at((std::size_t) this->stepList->GetSelection())->Destroy();
 			this->steps.erase(this->steps.begin() + this->stepList->GetSelection());
 			stepList->Delete((unsigned int) this->stepList->GetSelection());
 			updateUI();

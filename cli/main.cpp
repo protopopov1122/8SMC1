@@ -41,7 +41,7 @@ class EchoCMD : public CLICommand {
 	virtual ~EchoCMD() {}
 
 	virtual void execute(CLI *cli, std::vector<std::string> &args) {
-		for (size_t i = 0; i < args.size(); i++) {
+		for (std::size_t i = 0; i < args.size(); i++) {
 			std::cout << args.at(i) << " ";
 		}
 		std::cout << std::endl;

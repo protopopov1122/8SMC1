@@ -239,10 +239,10 @@ namespace CalXUI {
 			t->Show(false);
 		}
 		if (taskList->GetSelection() != wxNOT_FOUND) {
-			this->list.at((size_t) taskList->GetSelection())->Show(true);
+			this->list.at((std::size_t) taskList->GetSelection())->Show(true);
 		}
 		plane->Clear();
-		for (size_t i = 0;
+		for (std::size_t i = 0;
 		     i < wxGetApp().getSystemManager()->getCoordPlaneSet().getCoordCount();
 		     i++) {
 			if (std::shared_ptr<CoordHandle> handle = wxGetApp()
@@ -295,7 +295,7 @@ namespace CalXUI {
 
 	void CalxTaskPanel::OnRemoveClick(wxCommandEvent &evt) {
 		if (taskList->GetSelection() != wxNOT_FOUND) {
-			size_t sel = (size_t) taskList->GetSelection();
+			std::size_t sel = (std::size_t) taskList->GetSelection();
 			taskList->Delete((unsigned int) sel);
 			this->list.at(sel)->Close(true);
 			this->list.erase(this->list.begin() + (std::ptrdiff_t) sel);
@@ -316,19 +316,19 @@ namespace CalXUI {
 	void CalxTaskPanel::OnBuildClick(wxCommandEvent &evt) {
 		if (taskList->GetSelection() != wxNOT_FOUND &&
 		    plane->GetSelection() != wxNOT_FOUND) {
-			list.at((size_t) taskList->GetSelection())->update();
+			list.at((std::size_t) taskList->GetSelection())->update();
 			std::shared_ptr<CoordTask> task =
-			    list.at((size_t) taskList->GetSelection())->getTask();
+			    list.at((std::size_t) taskList->GetSelection())->getTask();
 			if (std::shared_ptr<CoordHandle> handle =
 			        wxGetApp()
 			            .getSystemManager()
 			            ->getCoordPlaneSet()
-			            .getCoord((size_t) plane->GetSelection())
+			            .getCoord((std::size_t) plane->GetSelection())
 			            .lock()) {
 				float speed = this->speed->GetValue();
 				TaskParameters prms = { (float) speed };
 				queue->addAction(std::make_unique<CalxTaskAction>(
-				    this, handle, task, *list.at((size_t) taskList->GetSelection()),
+				    this, handle, task, *list.at((std::size_t) taskList->GetSelection()),
 				    prms));
 			}
 		} else {
@@ -346,14 +346,14 @@ namespace CalXUI {
 	void CalxTaskPanel::OnPreviewClick(wxCommandEvent &evt) {
 		if (taskList->GetSelection() != wxNOT_FOUND &&
 		    plane->GetSelection() != wxNOT_FOUND) {
-			list.at((size_t) taskList->GetSelection())->update();
+			list.at((std::size_t) taskList->GetSelection())->update();
 			std::shared_ptr<CoordTask> task =
-			    list.at((size_t) taskList->GetSelection())->getTask();
+			    list.at((std::size_t) taskList->GetSelection())->getTask();
 			if (std::shared_ptr<CoordHandle> handle =
 			        wxGetApp()
 			            .getSystemManager()
 			            ->getCoordPlaneSet()
-			            .getCoord((size_t) plane->GetSelection())
+			            .getCoord((std::size_t) plane->GetSelection())
 			            .lock()) {
 				if (!handle->isMeasured()) {
 					wxMessageBox(__("Plane need to be measured before preview"),
@@ -383,14 +383,14 @@ namespace CalXUI {
 	void CalxTaskPanel::OnLinearizeClick(wxCommandEvent &evt) {
 		if (taskList->GetSelection() != wxNOT_FOUND &&
 		    plane->GetSelection() != wxNOT_FOUND) {
-			list.at((size_t) taskList->GetSelection())->update();
+			list.at((std::size_t) taskList->GetSelection())->update();
 			std::shared_ptr<CoordTask> task =
-			    list.at((size_t) taskList->GetSelection())->getTask();
+			    list.at((std::size_t) taskList->GetSelection())->getTask();
 			if (std::shared_ptr<CoordHandle> handle =
 			        wxGetApp()
 			            .getSystemManager()
 			            ->getCoordPlaneSet()
-			            .getCoord((size_t) plane->GetSelection())
+			            .getCoord((std::size_t) plane->GetSelection())
 			            .lock()) {
 				if (!handle->isMeasured()) {
 					wxMessageBox(__("Plane need to be measured to linearize"),
@@ -403,7 +403,7 @@ namespace CalXUI {
 				std::shared_ptr<TaskState> state = std::make_shared<TaskState>();
 				std::shared_ptr<GCodeWriter> writer = std::make_shared<GCodeWriter>(
 				    handle->getPosition(), handle->getSize(),
-				    list.at((size_t) taskList->GetSelection())->getTranslator(), ss);
+				    list.at((std::size_t) taskList->GetSelection())->getTranslator(), ss);
 				this->setEnabled(false);
 				wxGetApp().getErrorHandler()->handle(
 				    task->perform(writer, prms, wxGetApp().getSystemManager(), state));
@@ -422,7 +422,7 @@ namespace CalXUI {
 				ss.seekg(0);
 
 				std::unique_ptr<CoordTranslator> translator =
-				    list.at((size_t) taskList->GetSelection())
+				    list.at((std::size_t) taskList->GetSelection())
 				        ->getTranslator()
 				        ->clone(nullptr);
 				std::shared_ptr<ComplexCoordTranslator> trans = nullptr;
@@ -481,14 +481,14 @@ namespace CalXUI {
 	void CalxTaskPanel::OnMoveToStartClick(wxCommandEvent &evt) {
 		if (taskList->GetSelection() != wxNOT_FOUND &&
 		    plane->GetSelection() != wxNOT_FOUND) {
-			list.at((size_t) taskList->GetSelection())->update();
+			list.at((std::size_t) taskList->GetSelection())->update();
 			std::shared_ptr<CoordTask> task =
-			    list.at((size_t) taskList->GetSelection())->getTask();
+			    list.at((std::size_t) taskList->GetSelection())->getTask();
 			if (std::shared_ptr<CoordHandle> handle =
 			        wxGetApp()
 			            .getSystemManager()
 			            ->getCoordPlaneSet()
-			            .getCoord((size_t) plane->GetSelection())
+			            .getCoord((std::size_t) plane->GetSelection())
 			            .lock()) {
 				std::pair<motor_point_t, bool> start =
 				    task->getStartPoint(handle->getPosition(), handle->getSize(),
@@ -509,7 +509,7 @@ namespace CalXUI {
 					wxGetApp()
 					    .getMainFrame()
 					    ->getPlaneList()
-					    ->getPlaneHandle((size_t) plane->GetSelection())
+					    ->getPlaneHandle((std::size_t) plane->GetSelection())
 					    ->getController()
 					    ->move(dest, unit_speed, false, false);
 				}

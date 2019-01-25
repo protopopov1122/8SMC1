@@ -24,7 +24,7 @@
 
 namespace CalX {
 
-	CoordHandle::CoordHandle(size_t id, std::shared_ptr<CoordController> root)
+	CoordHandle::CoordHandle(std::size_t id, std::shared_ptr<CoordController> root)
 	    : CoordPlaneStack::CoordPlaneStack(root) {
 		this->id = id;
 		this->root = root;
@@ -34,7 +34,7 @@ namespace CalX {
 		    std::make_shared<FloatCoordPlane>(offset, scale, 1.0, root);
 	}
 
-	size_t CoordHandle::getID() const {
+	std::size_t CoordHandle::getID() const {
 		return this->id;
 	}
 

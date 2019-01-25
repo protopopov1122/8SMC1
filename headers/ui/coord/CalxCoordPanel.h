@@ -49,23 +49,23 @@ namespace CalXUI {
 
 	class CalxCoordPanel : public CalxPanelPane, public CalxPlaneList {
 	 public:
-		CalxCoordPanel(wxWindow *, wxWindowID, size_t);
+		CalxCoordPanel(wxWindow *, wxWindowID, std::size_t);
 
 		std::size_t getPlaneCount() override;
-		CalxCoordPane *getCoordCtrl(size_t sz);
+		CalxCoordPane *getCoordCtrl(std::size_t sz);
 		void updateList(std::shared_ptr<CoordHandle>, bool *) override;
-		CalxPlaneHandle *getPlaneHandle(size_t) override;
+		CalxPlaneHandle *getPlaneHandle(std::size_t) override;
 		void updateUI() override;
 		void shutdown() override;
 		bool isBusy() override;
 		void stop() override;
-		size_t getLayoutColumnCount();
-		bool addComponentFactory(std::string, CalxCoordComponentFactory *, size_t,
+		std::size_t getLayoutColumnCount();
+		bool addComponentFactory(std::string, CalxCoordComponentFactory *, std::size_t,
 		                         bool = true);
 
 	 private:
 		void addPlane(std::shared_ptr<CoordHandle>);
-		void removePlane(size_t);
+		void removePlane(std::size_t);
 
 		void OnExit(wxCloseEvent &);
 		void OnAddButtonClick(wxCommandEvent &);

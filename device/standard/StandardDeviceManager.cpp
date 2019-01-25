@@ -30,7 +30,7 @@ namespace CalX {
 	StandardDeviceManager::StandardDeviceManager()
 	    : DeviceManager::DeviceManager() {
 		this->refresh();
-		for (size_t i = 0; i < devs.NOD; i++) {
+		for (std::size_t i = 0; i < devs.NOD; i++) {
 			this->motors.push_back(
 			    std::make_unique<_8SMC1Motor>((device_id_t) i, *this));
 		}
@@ -62,7 +62,7 @@ namespace CalX {
 			}
 		} while (strlen(er) > 0);
 
-		for (size_t i = 0; i < this->motors.size(); i++) {
+		for (std::size_t i = 0; i < this->motors.size(); i++) {
 			Motor *m = this->motors.at(i).get();
 			while (m->hasErrors()) {
 				this->error_queue.push_back(m->pollError());
@@ -71,7 +71,7 @@ namespace CalX {
 	}
 
 	void StandardDeviceManager::saveInstrumentError() {
-		for (size_t i = 0; i < this->instruments.size(); i++) {
+		for (std::size_t i = 0; i < this->instruments.size(); i++) {
 			Instrument *ins = this->instruments.at(i).get();
 			while (ins->hasErrors()) {
 				this->error_queue.push_back(ins->pollError());

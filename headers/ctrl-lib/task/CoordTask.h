@@ -66,10 +66,10 @@ namespace CalX {
 		ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
 		                  SystemManager *, std::shared_ptr<TaskState>) override;
 		void addStep(std::shared_ptr<TaskStep>);
-		size_t getSubCount() const;
-		bool removeStep(size_t);
-		std::shared_ptr<TaskStep> pollStep(size_t);
-		bool insertStep(size_t, std::shared_ptr<TaskStep>);
+		std::size_t getSubCount() const;
+		bool removeStep(std::size_t);
+		std::shared_ptr<TaskStep> pollStep(std::size_t);
+		bool insertStep(std::size_t, std::shared_ptr<TaskStep>);
 
 	 private:
 		std::vector<std::shared_ptr<TaskStep>> list;

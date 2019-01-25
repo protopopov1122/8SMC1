@@ -82,7 +82,7 @@ namespace CalX {
 	}
 
 	std::ostream &CoordPlaneStack::operator<<(std::ostream &os) const {
-		for (size_t i = this->stack.size() - 1; i < this->stack.size(); i--) {
+		for (std::size_t i = this->stack.size() - 1; i < this->stack.size(); i--) {
 			std::shared_ptr<CoordPlane> plane = this->stack.at(i);
 			os << "\t" << plane << std::endl;
 		}
@@ -105,7 +105,7 @@ namespace CalX {
 	    std::shared_ptr<CoordPlane> plane) {
 		std::unique_ptr<CoordPlaneStack> stack =
 		    std::make_unique<CoordPlaneStack>(plane);
-		for (size_t i = 1; i < this->stack.size(); i++) {
+		for (std::size_t i = 1; i < this->stack.size(); i++) {
 			stack->pushPlane(this->stack.at(i)->clone(stack->peekPlane()));
 		}
 		return stack;

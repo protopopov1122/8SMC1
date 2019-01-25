@@ -37,7 +37,7 @@ namespace CalX {
 		coord_point_t floatGet(coord_point_t) const override;
 
 		std::size_t getSize() const;
-		std::shared_ptr<CoordTranslator> getTranslator(size_t) const;
+		std::shared_ptr<CoordTranslator> getTranslator(std::size_t) const;
 		void add(std::shared_ptr<CoordTranslator>);
 		bool remove(std::size_t);
 		bool insert(std::size_t, std::shared_ptr<CoordTranslator>);

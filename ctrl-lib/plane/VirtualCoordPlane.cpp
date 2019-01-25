@@ -86,7 +86,7 @@ namespace CalX {
 			return ErrorCode::ArcError;
 		}
 		motor_point_t pnt;
-		size_t count = 0;
+		std::size_t count = 0;
 		do {
 			if (clockwise) {
 				pnt = cir.getPrevElement();

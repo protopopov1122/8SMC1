@@ -109,7 +109,7 @@ namespace CalXUI {
 			t->Show(false);
 		}
 		if (this->scriptList->GetSelection() != wxNOT_FOUND) {
-			this->scripts.at((size_t) scriptList->GetSelection())->Show(true);
+			this->scripts.at((std::size_t) scriptList->GetSelection())->Show(true);
 		}
 		this->scriptPanel->Layout();
 		this->Layout();
@@ -165,7 +165,7 @@ namespace CalXUI {
 
 	void CalxScriptPanel::OnRemoveScriptClick(wxCommandEvent &evt) {
 		if (this->scriptList->GetSelection() != wxNOT_FOUND) {
-			size_t sel = (size_t) this->scriptList->GetSelection();
+			std::size_t sel = (std::size_t) this->scriptList->GetSelection();
 			this->scriptList->Delete((unsigned int) sel);
 			this->scripts.at(sel)->Close(true);
 			this->scripts.erase(this->scripts.begin() + (std::ptrdiff_t) sel);

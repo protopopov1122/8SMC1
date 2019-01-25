@@ -44,8 +44,8 @@ namespace CalX {
 		virtual ~DeviceManager() = default;
 		virtual void refresh() = 0;  // Refresh device list, reinitialise them.
 		virtual Motor *getMotor(device_id_t) const;  // Return device by id
-		virtual size_t getMotorCount() const;        // Get device count
-		virtual size_t getInstrumentCount() const;   // Get instrument count
+		virtual std::size_t getMotorCount() const;        // Get device count
+		virtual std::size_t getInstrumentCount() const;   // Get instrument count
 		virtual Instrument *getInstrument(
 		    device_id_t) const;           // Get instrument by id
 		virtual bool hasError() const;    // Check errors

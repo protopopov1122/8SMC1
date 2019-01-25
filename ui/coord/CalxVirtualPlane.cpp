@@ -143,7 +143,7 @@ namespace CalXUI {
 		double lastX = 0, lastY = 0;
 		std::vector<std::pair<motor_point_t, bool>> *path =
 		    this->tracker->getPath();
-		for (size_t i = 0; i < path->size(); i++) {
+		for (std::size_t i = 0; i < path->size(); i++) {
 			motor_point_t point = path->at(i).first;
 			bool move = path->at(i).second;
 			if (move) {

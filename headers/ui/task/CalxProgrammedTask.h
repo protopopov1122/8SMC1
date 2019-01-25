@@ -33,12 +33,12 @@ namespace CalXUI {
 		CalxTaskHandle *newTask(wxWindow *) override;
 
 	 private:
-		size_t next_id = 0;
+		std::size_t next_id = 0;
 	};
 
 	class CalxProgrammedTaskHandle : public CalxTaskHandle {
 	 public:
-		CalxProgrammedTaskHandle(wxWindow *, wxWindowID, size_t);
+		CalxProgrammedTaskHandle(wxWindow *, wxWindowID, std::size_t);
 		std::string getName() const override;
 		std::shared_ptr<CoordTask> getTask() override;
 		std::shared_ptr<CoordTranslator> getTranslator() override;
@@ -59,7 +59,7 @@ namespace CalXUI {
 		void OnExit(wxCloseEvent &);
 
 		std::shared_ptr<ProgrammedCoordTask> task;
-		size_t id;
+		std::size_t id;
 		std::vector<CalxTaskStepHandle *> steps;
 		wxPanel *mainPanel;
 		wxListBox *stepList;

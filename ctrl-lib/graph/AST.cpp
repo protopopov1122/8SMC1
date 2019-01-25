@@ -114,7 +114,7 @@ namespace CalX {
 
 	engine_value_t FunctionNode::eval(MathEngine &eng) const {
 		std::vector<double> vec;
-		for (size_t i = 0; i < this->args->size(); i++) {
+		for (std::size_t i = 0; i < this->args->size(); i++) {
 			engine_value_t val = eng.eval(*this->args->at(i));
 			if (val.err != MathError::MNoError) {
 				val.value = 0;

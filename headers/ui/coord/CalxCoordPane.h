@@ -45,7 +45,7 @@ namespace CalXUI {
 	                      public CalxCoordFilterListener,
 	                      public CalxPlaneHandle {
 	 public:
-		CalxCoordPane(wxWindow *, wxWindowID, std::shared_ptr<CoordHandle>, size_t);
+		CalxCoordPane(wxWindow *, wxWindowID, std::shared_ptr<CoordHandle>, std::size_t);
 
 		void updateUI();
 		void shutdown();
@@ -54,9 +54,9 @@ namespace CalXUI {
 		void newWatcher() override;
 		void stop() override;
 		CalxCoordController *getController() override;
-		bool addComponent(const std::string &, CalxCoordComponentFactory *, size_t,
+		bool addComponent(const std::string &, CalxCoordComponentFactory *, std::size_t,
 		                  bool = true);
-		size_t getComponentPaneCount();
+		std::size_t getComponentPaneCount();
 
 		bool isBusy();
 		void use();

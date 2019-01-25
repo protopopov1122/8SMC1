@@ -278,7 +278,7 @@ namespace CalXUI {
 			this->trans = std::make_shared<ComplexCoordTranslator>(basic);
 			addFilter(basic);
 		} else {
-			for (size_t i = 0; i < trans->getSize(); i++) {
+			for (std::size_t i = 0; i < trans->getSize(); i++) {
 				addFilter(trans->getTranslator(i));
 			}
 		}
@@ -301,7 +301,7 @@ namespace CalXUI {
 		this->removeButton->Enable(filterList->GetSelection() != 0 &&
 		                           filterList->GetSelection() != wxNOT_FOUND);
 		if (filterList->GetSelection() != wxNOT_FOUND) {
-			this->filter.at((size_t) filterList->GetSelection())->Show(true);
+			this->filter.at((std::size_t) filterList->GetSelection())->Show(true);
 		}
 		Layout();
 		wxGetApp().getMainFrame()->getPanel()->updateUI();
@@ -343,7 +343,7 @@ namespace CalXUI {
 
 	void CalxCoordFilterCtrl::OnRemoveClick(wxCommandEvent &evt) {
 		if (filterList->GetSelection() != wxNOT_FOUND) {
-			size_t i = (size_t) filterList->GetSelection();
+			std::size_t i = (std::size_t) filterList->GetSelection();
 			filter.at(i)->Destroy();
 			filter.erase(filter.begin() + (std::ptrdiff_t) i);
 			filterList->Delete((unsigned int) i);

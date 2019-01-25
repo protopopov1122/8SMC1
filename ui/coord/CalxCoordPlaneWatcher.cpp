@@ -306,7 +306,7 @@ namespace CalXUI {
 		wxBrush jump_brush(this->jump_colour);
 		double lastX = 0, lastY = 0;
 		std::vector<std::pair<motor_point_t, bool>> *path = &this->history;
-		for (size_t i = 0; i < path->size(); i++) {
+		for (std::size_t i = 0; i < path->size(); i++) {
 			motor_point_t point = path->at(i).first;
 			bool move = path->at(i).second;
 			if (move) {
