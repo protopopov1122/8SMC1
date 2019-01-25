@@ -416,6 +416,21 @@ namespace CalXLua {
 		return std::make_unique<LuaCalXPlane>(this->env, planeId);
 	}
 
+	LuaCalXTasks::LuaCalXTasks(CalXScriptUIEnvironment &env)
+		: env(env) {}
+	
+	std::size_t LuaCalXTasks::getTaskCount() {
+		return this->env.getTasks().getTaskCount();
+	}
+
+	void LuaCalXTasks::removeTask(std::size_t idx) {
+		this->env.getTasks().removeTask(idx);
+	}
+
+	void LuaCalXTasks::newGCodeFile(const std::string &title, const std::string &path) {
+		this->env.getTasks().newGCodeFile(title, path);
+	}
+
 	LuaCalXConfig::LuaCalXConfig(CalXScriptUIEnvironment &env) : env(env) {
 		this->halt_on_fail =
 		    env.getConfiguration()

@@ -38,6 +38,8 @@
 namespace CalXUI {
 
 	wxDEFINE_EVENT(wxEVT_TASK_PANEL_ENABLE, wxThreadEvent);
+	wxDEFINE_EVENT(wxEVT_TASK_PANEL_ATTACH_TASK, wxThreadEvent);
+	wxDEFINE_EVENT(wxEVT_TASK_PANEL_REMOVE_TASK, wxThreadEvent);
 
 	std::ostream &operator<<(std::ostream &out, const CalxTaskDescriptor &descr) {
 		descr.dump(out);
@@ -210,6 +212,8 @@ namespace CalXUI {
 		taskList->Bind(wxEVT_LISTBOX, &CalxTaskPanel::OnListClick, this);
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxTaskPanel::OnExit, this);
 		this->Bind(wxEVT_TASK_PANEL_ENABLE, &CalxTaskPanel::OnEnableEvent, this);
+		this->Bind(wxEVT_TASK_PANEL_ATTACH_TASK, &CalxTaskPanel::OnAttachTask, this);
+		this->Bind(wxEVT_TASK_PANEL_REMOVE_TASK, &CalxTaskPanel::OnRemoveTask, this);
 	}
 
 	void CalxTaskPanel::attachTaskFactory(const std::string &name,
@@ -232,6 +236,22 @@ namespace CalXUI {
 
 	void CalxTaskPanel::stop() {
 		this->queue->stopCurrent();
+	}
+
+	std::size_t CalxTaskPanel::getTaskCount() {
+		return this->list.size();
+	}
+
+	void CalxTaskPanel::removeTask(std::size_t idx) {
+		wxThreadEvent evt(wxEVT_TASK_PANEL_REMOVE_TASK);
+		evt.SetPayload(idx);
+		wxPostEvent(this, evt);
+	}
+
+	void CalxTaskPanel::attachTask(const std::string &title, std::shared_ptr<CalxTaskFactory> factory) {
+		wxThreadEvent evt(wxEVT_TASK_PANEL_ATTACH_TASK);
+		evt.SetPayload(std::make_pair(title, factory));
+		wxPostEvent(this, evt);
 	}
 
 	void CalxTaskPanel::updateUI() {
@@ -268,6 +288,38 @@ namespace CalXUI {
 		wxPostEvent(this, evt);
 	}
 
+	void CalxTaskPanel::attachTaskImpl(const std::string &title, CalxTaskFactory &factory) {
+		CalxTaskHandle *task = factory.newTask(this->mainPanel);
+		if (task != nullptr) {
+			list.push_back(task);
+			taskList->Append(title.empty() ? task->getName() : title);
+			mainPanel->GetSizer()->Add(task, 1, wxALL | wxEXPAND, 5);
+			taskList->SetSelection((int) list.size() - 1);
+			Layout();
+			updateUI();
+		}
+	}
+
+	void CalxTaskPanel::removeTaskImpl(std::size_t idx) {
+		if (idx < this->list.size()) {
+			taskList->Delete(static_cast<unsigned int>(idx));
+			this->list.at(idx)->Close(true);
+			this->list.erase(this->list.begin() + idx);
+			updateUI();
+		}
+	}
+
+	void CalxTaskPanel::OnAttachTask(wxThreadEvent &evt) {
+		using Payload = std::pair<std::string, std::shared_ptr<CalxTaskFactory>>;
+		Payload taskInfo = evt.GetPayload<Payload>();
+		this->attachTaskImpl(taskInfo.first, *taskInfo.second);
+	}
+
+	void CalxTaskPanel::OnRemoveTask(wxThreadEvent &evt) {
+		std::size_t idx = evt.GetPayload<std::size_t>();
+		this->removeTaskImpl(idx);
+	}
+
 	void CalxTaskPanel::OnExit(wxCloseEvent &evt) {
 		for (const auto &kv : this->factories) {
 			delete kv.second;
@@ -281,25 +333,14 @@ namespace CalXUI {
 	void CalxTaskPanel::OnNewTaskClick(wxCommandEvent &evt) {
 		if (this->factories.count(evt.GetEventObject()) != 0) {
 			CalxTaskFactory *fact = this->factories[evt.GetEventObject()];
-			CalxTaskHandle *task = fact->newTask(mainPanel);
-			if (task != nullptr) {
-				list.push_back(task);
-				taskList->Append(task->getName());
-				mainPanel->GetSizer()->Add(task, 1, wxALL | wxEXPAND, 5);
-				taskList->SetSelection((int) list.size() - 1);
-				Layout();
-				updateUI();
-			}
+			this->attachTaskImpl("", *fact);
 		}
 	}
 
 	void CalxTaskPanel::OnRemoveClick(wxCommandEvent &evt) {
 		if (taskList->GetSelection() != wxNOT_FOUND) {
 			std::size_t sel = (std::size_t) taskList->GetSelection();
-			taskList->Delete((unsigned int) sel);
-			this->list.at(sel)->Close(true);
-			this->list.erase(this->list.begin() + (std::ptrdiff_t) sel);
-			updateUI();
+			this->removeTaskImpl(sel);
 		} else {
 			std::string message = __("Select task to remove");
 			wxMessageDialog *dialog = new wxMessageDialog(

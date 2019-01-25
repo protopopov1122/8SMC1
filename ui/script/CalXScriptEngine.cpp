@@ -75,6 +75,7 @@ namespace CalXUI {
 	      app(app),
 	      devices(app),
 	      planes(app),
+				tasks(app),
 	      ui(app) {}
 
 	CalXScriptDevices &CalXAppScriptEnvironment::getDevices() {
@@ -83,6 +84,10 @@ namespace CalXUI {
 
 	CalXScriptPlanes &CalXAppScriptEnvironment::getPlanes() {
 		return this->planes;
+	}
+
+	CalXScriptTasks &CalXAppScriptEnvironment::getTasks() {
+		return this->tasks;
 	}
 
 	JournalLogger &CalXAppScriptEnvironment::getLogger() {

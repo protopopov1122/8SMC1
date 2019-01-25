@@ -108,6 +108,14 @@ namespace CalX {
 		virtual std::unique_ptr<CalXScriptPlane> getPlane(std::size_t) = 0;
 	};
 
+	class CalXScriptTasks {
+	 public:
+		virtual ~CalXScriptTasks() = default;
+		virtual std::size_t getTaskCount() = 0;
+		virtual void removeTask(std::size_t) = 0;
+		virtual void newGCodeFile(const std::string &, const std::string &) = 0;
+	};
+
 	class CalXScriptEnvironment {
 	 public:
 		CalXScriptEnvironment(ConfigurationCatalogue &, SettingsRepository *);
@@ -118,6 +126,7 @@ namespace CalX {
 
 		virtual CalXScriptDevices &getDevices() = 0;
 		virtual CalXScriptPlanes &getPlanes() = 0;
+		virtual CalXScriptTasks &getTasks() = 0;
 		virtual JournalLogger &getLogger() = 0;
 
 	 private:

@@ -153,6 +153,13 @@ namespace CalXLua {
 		lcb::ClassBinder<LuaCalXPlanes>::bind(
 		    lua, "create", &LuaCalXPlanes::create, "count",
 		    &LuaCalXPlanes::getPlaneCount, "get", &LuaCalXPlanes::getPlane);
+		
+		lcb::ClassBinder<LuaCalXTasks>::bind(
+			lua,
+			"count", &LuaCalXTasks::getTaskCount,
+			"remove", &LuaCalXTasks::removeTask,
+			"gcodeFile", &LuaCalXTasks::newGCodeFile
+		);
 
 		lcb::ClassBinder<ConfiguationFlatDictionary>::bind(
 		    lua, "has", &ConfiguationFlatDictionary::has, "int",
@@ -187,6 +194,7 @@ namespace CalXLua {
 		this->lua["calx"]["instruments"] =
 		    std::make_unique<LuaCalXInstruments>(this->env);
 		this->lua["calx"]["planes"] = std::make_unique<LuaCalXPlanes>(this->env);
+		this->lua["calx"]["tasks"] = std::make_unique<LuaCalXTasks>(this->env);
 		this->lua["calx"]["config"] = std::make_unique<LuaCalXConfig>(this->env);
 		this->lua["calx"]["settings"] =
 		    std::make_unique<LuaCalXSettings>(this->env);

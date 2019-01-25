@@ -24,6 +24,7 @@
 #define CALX_UI_TASK_CALX_TASK_LIST_H_
 
 #include "ui/CalxApp.h"
+#include "ui/task/CalxTaskFactory.h"
 
 namespace CalXUI {
 
@@ -31,6 +32,9 @@ namespace CalXUI {
 	 public:
 		virtual ~CalxTaskList() = default;
 		virtual void stop() = 0;
+                virtual std::size_t getTaskCount() = 0;
+                virtual void removeTask(std::size_t) = 0;
+                virtual void attachTask(const std::string &, std::shared_ptr<CalxTaskFactory>) = 0;
 	};
 }  // namespace CalXUI
 

@@ -121,6 +121,16 @@ namespace CalXUI {
 		CalxApp &app;
 	};
 
+	class CalXAppScriptTasks : public CalXScriptTasks {
+	 public:
+	 	CalXAppScriptTasks(CalxApp &);
+		std::size_t getTaskCount() override;
+		void removeTask(std::size_t) override;
+		void newGCodeFile(const std::string &, const std::string &) override;
+	 private:
+		CalxApp &app;
+	};
+
 	class CalXAppScriptUIMath : public CalXScriptUIMath {
 	 public:
 		CalXAppScriptUIMath(CalxApp &);
@@ -150,6 +160,7 @@ namespace CalXUI {
 
 		CalXScriptDevices &getDevices() override;
 		CalXScriptPlanes &getPlanes() override;
+		CalXScriptTasks &getTasks() override;
 		JournalLogger &getLogger() override;
 		CalXScriptUI &getUI() override;
 		JournalLogger &getJournal() override;
@@ -158,6 +169,7 @@ namespace CalXUI {
 		CalxApp &app;
 		CalXAppScriptDevices devices;
 		CalXAppScriptPlanes planes;
+		CalXAppScriptTasks tasks;
 		CalXAppScriptUI ui;
 	};
 

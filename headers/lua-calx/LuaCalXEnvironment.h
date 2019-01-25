@@ -145,6 +145,17 @@ namespace CalXLua {
 		CalXScriptUIEnvironment &env;
 	};
 
+	class LuaCalXTasks {
+	 public:
+		LuaCalXTasks(CalXScriptUIEnvironment &);
+		std::size_t getTaskCount();
+		void removeTask(std::size_t);
+		void newGCodeFile(const std::string &, const std::string &);
+	 
+	 private:
+		CalXScriptUIEnvironment &env;
+	};
+
 	class LuaCalXConfig {
 	 public:
 		LuaCalXConfig(CalXScriptUIEnvironment &);

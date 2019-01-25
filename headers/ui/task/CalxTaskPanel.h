@@ -39,6 +39,8 @@ namespace CalXUI {
 	class CalxTaskHandle;  // Forward referencing
 
 	wxDECLARE_EVENT(wxEVT_TASK_PANEL_ENABLE, wxThreadEvent);
+	wxDECLARE_EVENT(wxEVT_TASK_PANEL_ATTACH_TASK, wxThreadEvent);
+	wxDECLARE_EVENT(wxEVT_TASK_PANEL_REMOVE_TASK, wxThreadEvent);
 
 	class CalxTaskPanel : public CalxPanelPane, public CalxTaskList {
 	 public:
@@ -49,6 +51,9 @@ namespace CalXUI {
 		bool isBusy() override;
 		void setEnabled(bool);
 		void stop() override;
+		std::size_t getTaskCount() override;
+		void removeTask(std::size_t) override;
+		void attachTask(const std::string &, std::shared_ptr<CalxTaskFactory>) override;
 
 		void attachTaskFactory(const std::string &, CalxTaskFactory *);
 
@@ -64,6 +69,11 @@ namespace CalXUI {
 		void OnStopClick(wxCommandEvent &);
 		void OnEnableEvent(wxThreadEvent &);
 		void OnMoveToStartClick(wxCommandEvent &);
+		void OnAttachTask(wxThreadEvent &);
+		void OnRemoveTask(wxThreadEvent &);
+
+		void attachTaskImpl(const std::string &, CalxTaskFactory &);
+		void removeTaskImpl(std::size_t);
 
 		wxListBox *taskList;
 		wxPanel *mainPanel;
