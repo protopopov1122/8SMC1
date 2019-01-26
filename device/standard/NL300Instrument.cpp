@@ -574,7 +574,7 @@ namespace CalX {
 	}
 
 	std::string NL300Instrument::getSystemCommandResponse(const std::string &cmd,
-	                                                      std::string def) {
+	                                                      const std::string &def) {
 		this->log("Sending system command: " + cmd + "; " + def);
 		NL300SystemCommand syscom(NL300_LASER_NAME, cmd, "", NL300_PC_NAME);
 		std::pair<std::string, std::string> res = getSystemCommandResponse(syscom);
