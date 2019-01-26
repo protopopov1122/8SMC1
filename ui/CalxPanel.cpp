@@ -29,7 +29,7 @@ namespace CalX::UI {
 		Bind(wxEVT_CLOSE_WINDOW, &CalxPanel::OnExit, this);
 	}
 
-	void CalxPanel::addPane(std::string title, CalxPanelPane *pane) {
+	void CalxPanel::addPane(const std::string &title, CalxPanelPane *pane) {
 		this->panes.push_back(pane);
 		this->AddPage(pane, title);
 	}

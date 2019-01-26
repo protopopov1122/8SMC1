@@ -142,7 +142,7 @@ namespace CalX::UI {
 		}
 	}
 
-	CalxFrame::CalxFrame(std::string title)
+	CalxFrame::CalxFrame(const std::string &title)
 	    : wxFrame::wxFrame(nullptr, wxID_ANY, title) {
 		this->CreateStatusBar(1);
 		this->SetStatusText(__("CalX UI"), 0);

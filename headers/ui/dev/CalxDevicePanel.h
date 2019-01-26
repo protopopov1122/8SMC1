@@ -41,7 +41,7 @@ namespace CalX::UI {
 		bool isBusy() override;
 		void updateUI() override;
 		void appendDevice(CalxDeviceConstructor *, bool * = nullptr) override;
-		virtual void appendDeviceFactory(std::string, CalxDeviceFactory *);
+		virtual void appendDeviceFactory(const std::string &, CalxDeviceFactory *);
 
 		std::size_t getMotorCount() override;
 		CalxMotorHandle *getMotor(device_id_t) override;

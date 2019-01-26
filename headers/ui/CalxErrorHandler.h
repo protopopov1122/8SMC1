@@ -32,7 +32,7 @@ namespace CalX::UI {
 		CalxErrorHandler(SystemManager &);
 		void handle(ErrorCode);
 		void display(ErrorCode);
-		void alert(std::string, std::string, long);
+		void alert(const std::string &, const std::string &, long);
 
 	 private:
 		SystemManager &sysman;

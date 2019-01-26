@@ -41,7 +41,8 @@ namespace CalX {
 	class NL300Message {
 	 public:
 		// Arguments: receiver, message, sender
-		NL300Message(NL300MessageType, std::string, std::string, std::string);
+		NL300Message(NL300MessageType, const std::string &, const std::string &,
+		             const std::string &);
 		virtual ~NL300Message();
 		NL300MessageType getType();
 		std::string getReceiver();
@@ -66,7 +67,7 @@ namespace CalX {
 		virtual std::string getString() = 0;
 		int64_t getInt(int64_t);
 		double getReal(double);
-		std::string getString(std::string);
+		std::string getString(const std::string &);
 
 	 private:
 		NL300ParameterType type;
@@ -96,7 +97,7 @@ namespace CalX {
 
 	class NL300StringParameter : public NL300Parameter {
 	 public:
-		NL300StringParameter(std::string);
+		NL300StringParameter(const std::string &);
 		virtual ~NL300StringParameter();
 		std::string getValue();
 		virtual std::string getString();

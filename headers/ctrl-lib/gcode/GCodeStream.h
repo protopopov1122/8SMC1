@@ -101,7 +101,7 @@ namespace CalX {
 		void find_lexems(std::istream &, std::vector<std::string> &);
 		void find_tokens(std::vector<std::string> &, std::vector<GCodeToken> &);
 		void find_commands(std::vector<GCodeToken> &, std::vector<GCodeCmd> &);
-		bool parse_parameter(GCodeParameter &, std::string);
+		bool parse_parameter(GCodeParameter &, const std::string &);
 		std::vector<GCodeCmd> commands;
 		std::size_t position;
 	};

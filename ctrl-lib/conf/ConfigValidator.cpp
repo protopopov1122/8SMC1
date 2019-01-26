@@ -47,7 +47,7 @@ namespace CalX {
 	}
 
 	ConfigKeyValidator::ConfigKeyValidator(
-	    std::string k, std::unique_ptr<ConfigValueValidator> v, bool opt)
+	    const std::string &k, std::unique_ptr<ConfigValueValidator> v, bool opt)
 	    : AbstractValidator::AbstractValidator(opt),
 	      key(k),
 	      value(std::move(v)) {}
@@ -68,7 +68,7 @@ namespace CalX {
 		return this->value->validate(value);
 	}
 
-	ConfigEntryValidator::ConfigEntryValidator(std::string nm, bool opt)
+	ConfigEntryValidator::ConfigEntryValidator(const std::string &nm, bool opt)
 	    : AbstractValidator::AbstractValidator(opt), name(nm) {}
 
 	std::string ConfigEntryValidator::getEntryName() {

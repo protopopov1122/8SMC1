@@ -27,7 +27,7 @@
 namespace CalX::UI {
 
 	CalxConfigLoader::CalxConfigLoader(wxWindow *win, wxWindowID id,
-	                                   std::string path)
+	                                   const std::string &path)
 	    : wxDialog::wxDialog(win, id, __("CalX Configuration Loader"),
 	                         wxDefaultPosition, wxDefaultSize,
 	                         wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER) {

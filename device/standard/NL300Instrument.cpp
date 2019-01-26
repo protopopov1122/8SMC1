@@ -464,7 +464,7 @@ namespace CalX {
 		return out;
 	}
 
-	bool NL300Instrument::writeSerial(std::string stdStr) {
+	bool NL300Instrument::writeSerial(const std::string &stdStr) {
 		if (this->aborting) {
 			return false;
 		}
@@ -573,7 +573,7 @@ namespace CalX {
 		return out;
 	}
 
-	std::string NL300Instrument::getSystemCommandResponse(std::string cmd,
+	std::string NL300Instrument::getSystemCommandResponse(const std::string &cmd,
 	                                                      std::string def) {
 		this->log("Sending system command: " + cmd + "; " + def);
 		NL300SystemCommand syscom(NL300_LASER_NAME, cmd, "", NL300_PC_NAME);

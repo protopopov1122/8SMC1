@@ -38,7 +38,7 @@ namespace CalX::UI {
 
 	class CalxFrame : public wxFrame {
 	 public:
-		CalxFrame(std::string);
+		CalxFrame(const std::string &);
 		CalxPanel *getPanel();
 		CalxPanel *getQuickstart();
 

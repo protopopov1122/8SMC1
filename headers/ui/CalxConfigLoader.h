@@ -39,7 +39,7 @@ namespace CalX::UI {
 
 	class CalxConfigLoader : public wxDialog {
 	 public:
-		CalxConfigLoader(wxWindow *, wxWindowID, std::string = "");
+		CalxConfigLoader(wxWindow *, wxWindowID, const std::string & = "");
 		void load();
 		std::string getFileName();
 		bool isExiting();

@@ -58,7 +58,8 @@ namespace CalX {
 		                                std::vector<DeviceConnectionType> &) const;
 		virtual bool canMotorConnect(DeviceConnectionType) const;
 		virtual bool canInstrumentConnect(DeviceConnectionType) const;
-		virtual bool loadConfiguration(std::string, ConfigurationCatalogue &);
+		virtual bool loadConfiguration(const std::string &,
+		                               ConfigurationCatalogue &);
 		void lock();
 		void unlock();
 		bool tryLock();

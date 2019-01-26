@@ -55,8 +55,8 @@ namespace CalX {
 
 	class ConfigKeyValidator : public AbstractValidator {
 	 public:
-		ConfigKeyValidator(std::string, std::unique_ptr<ConfigValueValidator>,
-		                   bool = false);
+		ConfigKeyValidator(const std::string &,
+		                   std::unique_ptr<ConfigValueValidator>, bool = false);
 		std::string getKey();
 		ConfigValueValidator *getValue();
 		bool validate(ConfiguationFlatDictionary *);
@@ -68,7 +68,7 @@ namespace CalX {
 
 	class ConfigEntryValidator : public AbstractValidator {
 	 public:
-		ConfigEntryValidator(std::string, bool = false);
+		ConfigEntryValidator(const std::string &, bool = false);
 		std::string getEntryName();
 		bool validate(ConfigurationCatalogue *);
 		void addKeyValidator(std::unique_ptr<ConfigKeyValidator>);

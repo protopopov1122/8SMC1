@@ -87,7 +87,7 @@ namespace CalX {
 		                 d) != instrumentConnectionType.end();
 	}
 
-	bool DeviceManager::loadConfiguration(std::string path,
+	bool DeviceManager::loadConfiguration(const std::string &path,
 	                                      ConfigurationCatalogue &conf) {
 		std::ifstream cnf(path);
 		if (!cnf.good()) {

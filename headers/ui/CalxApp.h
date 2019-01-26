@@ -67,7 +67,7 @@ namespace CalX::UI {
 		bool hasScriptEngine();
 		std::shared_ptr<CalXScriptUIEnvironment> getScriptEnvironment();
 		std::shared_ptr<CalXScriptUIFactory> getScriptFactory();
-		std::unique_ptr<CalXScript> loadScript(std::string);
+		std::unique_ptr<CalXScript> loadScript(const std::string &);
 		JournalLogger &getJournal();
 
 		CalxUnitProcessor &getUnitProcessor();

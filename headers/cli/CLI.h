@@ -50,8 +50,8 @@ namespace CalX {
 		CLI(std::ostream &, std::istream &);
 		virtual ~CLI();
 		bool shell();
-		void error(std::string);
-		void addCommand(std::string, CLICommand *);
+		void error(const std::string &);
+		void addCommand(const std::string &, CLICommand *);
 
 	 private:
 		std::map<std::string, CLICommand *> commands;

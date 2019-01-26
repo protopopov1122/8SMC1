@@ -40,11 +40,11 @@ namespace CalX {
 		}
 	}
 
-	void CLI::error(std::string err) {
+	void CLI::error(const std::string &err) {
 		*out << "Error: " << err << std::endl;
 	}
 
-	void CLI::addCommand(std::string name, CLICommand *cmd) {
+	void CLI::addCommand(const std::string &name, CLICommand *cmd) {
 		if (this->commands.count(name) != 0) {
 			this->error("(CLI) Command '" + name + "' already exists");
 			return;

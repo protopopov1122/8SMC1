@@ -55,8 +55,8 @@ namespace CalX::UI {
 		}
 	}
 
-	void CalxErrorHandler::alert(std::string text, std::string title,
-	                             long style) {
+	void CalxErrorHandler::alert(const std::string &text,
+	                             const std::string &title, long style) {
 		auto params = std::make_tuple(text, title, style);
 		wxThreadEvent evt(wxEVT_APP_ALERT);
 		evt.SetPayload(params);

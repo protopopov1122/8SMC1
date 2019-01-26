@@ -32,7 +32,7 @@ namespace CalX::UI {
 	class CalxPanel : public wxNotebook {
 	 public:
 		CalxPanel(wxWindow *, wxWindowID);
-		void addPane(std::string, CalxPanelPane *);
+		void addPane(const std::string &, CalxPanelPane *);
 		void updateUI();
 		bool isBusy();
 

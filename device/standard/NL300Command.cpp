@@ -27,8 +27,10 @@
 
 namespace CalX {
 
-	NL300SystemCommand::NL300SystemCommand(std::string recv, std::string com,
-	                                       std::string parm, std::string send)
+	NL300SystemCommand::NL300SystemCommand(const std::string &recv,
+	                                       const std::string &com,
+	                                       const std::string &parm,
+	                                       const std::string &send)
 	    : NL300Message::NL300Message(NL300MessageType::System, recv,
 	                                 com + (parm.empty() ? "" : "=" + parm),
 	                                 send) {
@@ -46,11 +48,11 @@ namespace CalX {
 		return this->parameter;
 	}
 
-	NL300GeneralCommand::NL300GeneralCommand(std::string recv, char array,
+	NL300GeneralCommand::NL300GeneralCommand(const std::string &recv, char array,
 	                                         uint16_t index,
 	                                         NL300GeneralAction action,
 	                                         NL300Parameter *parm,
-	                                         std::string send)
+	                                         const std::string &send)
 	    : NL300Message::NL300Message(
 	          NL300MessageType::General, recv,
 	          array + std::to_string(index) + '/' + static_cast<char>(action) +

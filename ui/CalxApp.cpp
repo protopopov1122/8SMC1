@@ -341,7 +341,7 @@ namespace CalX::UI {
 		return this->scriptFactory;
 	}
 
-	std::unique_ptr<CalXScript> CalxApp::loadScript(std::string path) {
+	std::unique_ptr<CalXScript> CalxApp::loadScript(const std::string &path) {
 		if (this->scriptFactory == nullptr) {
 			wxMessageBox(FORMAT(__("Scripting engine is not loaded! Script '%s' "
 			                       "can\'t be loaded"),

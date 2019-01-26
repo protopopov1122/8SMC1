@@ -190,7 +190,8 @@ namespace CalX {
 		}
 	}
 
-	bool GCodeStream::parse_parameter(GCodeParameter &prm, std::string par) {
+	bool GCodeStream::parse_parameter(GCodeParameter &prm,
+	                                  const std::string &par) {
 		/*static std::regex int_regex("[-+]?[0-9]+", std::regex_constants::basic);
 		static std::regex float_regex("[-+]?[0-9]*\\.?[0-9]+",
 		std::regex_constants::basic);

@@ -28,7 +28,7 @@ namespace CalX::UI {
 
 	class CalxScriptHookCallAction : public CalxAction {
 	 public:
-		CalxScriptHookCallAction(CalXScript &script, std::string hook)
+		CalxScriptHookCallAction(CalXScript &script, const std::string &hook)
 		    : script(script), hook(std::move(hook)) {}
 
 		ErrorCode perform(SystemManager &sysman) override {
@@ -45,7 +45,7 @@ namespace CalX::UI {
 
 	class CalxScriptExecuteAction : public CalxAction {
 	 public:
-		CalxScriptExecuteAction(CalXScript &script, std::string code)
+		CalxScriptExecuteAction(CalXScript &script, const std::string &code)
 		    : script(script), code(code) {}
 
 		ErrorCode perform(SystemManager &sysman) override {

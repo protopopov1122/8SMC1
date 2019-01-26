@@ -136,7 +136,7 @@ namespace CalX::UI {
 		return this->layout.size();
 	}
 
-	bool CalxCoordPanel::addComponentFactory(std::string title,
+	bool CalxCoordPanel::addComponentFactory(const std::string &title,
 	                                         CalxCoordComponentFactory *fact,
 	                                         std::size_t column, bool hidden) {
 		if (column >= this->layout.size()) {

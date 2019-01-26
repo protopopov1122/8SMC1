@@ -38,7 +38,7 @@ namespace CalX::UI {
 
 	struct CalxCoordComponentFactoryHandle {
 	 public:
-		CalxCoordComponentFactoryHandle(std::string title,
+		CalxCoordComponentFactoryHandle(const std::string &title,
 		                                CalxCoordComponentFactory *factory,
 		                                bool hidden)
 		    : title(title), factory(factory), hidden(hidden) {}
@@ -60,7 +60,7 @@ namespace CalX::UI {
 		bool isBusy() override;
 		void stop() override;
 		std::size_t getLayoutColumnCount();
-		bool addComponentFactory(std::string, CalxCoordComponentFactory *,
+		bool addComponentFactory(const std::string &, CalxCoordComponentFactory *,
 		                         std::size_t, bool = true);
 
 	 private:

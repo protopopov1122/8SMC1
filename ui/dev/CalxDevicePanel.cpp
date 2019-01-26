@@ -95,7 +95,7 @@ namespace CalX::UI {
 		wxPostEvent(this, evt);
 	}
 
-	void CalxDevicePanel::appendDeviceFactory(std::string name,
+	void CalxDevicePanel::appendDeviceFactory(const std::string &name,
 	                                          CalxDeviceFactory *fact) {
 		wxButton *button =
 		    new wxButton(this->connectPanel, wxID_ANY, __("Connect ") + name);

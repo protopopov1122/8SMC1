@@ -40,7 +40,8 @@ namespace CalX {
 	class NL300SystemCommand : public NL300Message {
 	 public:
 		// Arguments: receiver, command, parameter, sender
-		NL300SystemCommand(std::string, std::string, std::string, std::string);
+		NL300SystemCommand(const std::string &, const std::string &,
+		                   const std::string &, const std::string &);
 		virtual ~NL300SystemCommand();
 		std::string getCommand();
 		std::string getParameter();
@@ -60,8 +61,8 @@ namespace CalX {
 	class NL300GeneralCommand : public NL300Message {
 	 public:
 		// Arguments: receiver, array, index, action, parameter, sender
-		NL300GeneralCommand(std::string, char, uint16_t, NL300GeneralAction,
-		                    NL300Parameter *, std::string);
+		NL300GeneralCommand(const std::string &, char, uint16_t, NL300GeneralAction,
+		                    NL300Parameter *, const std::string &);
 		virtual ~NL300GeneralCommand();
 		char getArray();
 		uint16_t getIndex();

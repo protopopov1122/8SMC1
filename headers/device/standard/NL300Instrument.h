@@ -62,12 +62,13 @@ namespace CalX {
 
 	 private:
 		virtual bool changeMode(InstrumentMode);
-		bool writeSerial(std::string);
+		bool writeSerial(const std::string &);
 		int readSerial(bool *);
 
 		std::pair<std::string, std::string> getSystemCommandResponse(
 		    NL300SystemCommand &);
-		std::string getSystemCommandResponse(std::string, std::string);
+		std::string getSystemCommandResponse(const std::string &,
+		                                     const std::string &);
 		NL300GeneralCommand *inquireGeneralParameter(char, uint16_t);
 		int64_t inquireIntegerParameter(char, uint16_t, int64_t);
 		ConfiguationFlatDictionary *getCoreEntry();

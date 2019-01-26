@@ -27,8 +27,8 @@
 
 namespace CalX {
 
-	NL300Message::NL300Message(NL300MessageType type, std::string recv,
-	                           std::string msg, std::string snd) {
+	NL300Message::NL300Message(NL300MessageType type, const std::string &recv,
+	                           const std::string &msg, const std::string &snd) {
 		this->type = type;
 		this->receiver = recv;
 		this->message = msg;
@@ -84,7 +84,7 @@ namespace CalX {
 		}
 	}
 
-	std::string NL300Parameter::getString(std::string def) {
+	std::string NL300Parameter::getString(const std::string &def) {
 		if (this->type == NL300ParameterType::String) {
 			return ((NL300StringParameter *) this)->getValue();
 		} else {
@@ -122,7 +122,7 @@ namespace CalX {
 		return std::to_string(this->value);
 	}
 
-	NL300StringParameter::NL300StringParameter(std::string v)
+	NL300StringParameter::NL300StringParameter(const std::string &v)
 	    : NL300Parameter::NL300Parameter(NL300ParameterType::String) {
 		this->value = v;
 	}
