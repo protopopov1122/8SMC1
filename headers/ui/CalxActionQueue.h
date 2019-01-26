@@ -24,56 +24,8 @@
 #define CALX_UI_CALX_ACTION_QUEUE_H_
 
 #include "ui/calx.h"
-#include <vector>
 #include <wx/event.h>
-#include <wx/thread.h>
 
 wxDECLARE_EVENT(wxEVT_COMMAND_QUEUE_UPDATE, wxThreadEvent);
-
-namespace CalXUI {
-
-	struct ActionResult {
-		bool ready;
-		bool stopped;
-		ErrorCode errcode;
-	};
-
-	class CalxAction {
-	 public:
-		virtual ~CalxAction() = default;
-		virtual void perform(SystemManager &) = 0;
-		virtual void stop() = 0;
-	};
-
-	struct CalxActionHandle {
-		std::unique_ptr<CalxAction> action;
-		bool *status;
-	};
-
-	class CalxActionQueue : public wxThread {
-	 public:
-		CalxActionQueue(SystemManager &, wxEvtHandler *);
-		virtual ~CalxActionQueue();
-		void addAction(std::unique_ptr<CalxAction>, bool * = nullptr);
-		bool isEmpty();
-		bool isBusy();
-		void stop();
-		void stopCurrent();
-
-	 protected:
-		ExitCode Entry() override;
-
-	 private:
-		bool finished;
-		wxEvtHandler *evtHandle;
-		wxMutex *mutex;
-		wxCondition *cond;
-		wxMutex condMutex;
-		std::vector<CalxActionHandle> queue;
-		CalxAction *current;
-		bool work;
-		SystemManager &sysman;
-	};
-}  // namespace CalXUI
 
 #endif

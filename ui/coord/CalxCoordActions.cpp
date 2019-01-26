@@ -40,22 +40,14 @@ namespace CalXUI {
 
 	CalxCoordActionMove::CalxCoordActionMove(std::shared_ptr<CoordHandle> handle,
 	                                         coord_point_t dest, double speed,
-	                                         bool sync, bool relative,
-	                                         ActionResult *act_res)
+	                                         bool sync, bool relative)
 	    : handle(handle),
 	      dest(dest),
 	      speed(speed),
 	      sync(sync),
-	      relative(relative),
-	      action_result(act_res) {
-		if (this->action_result != nullptr) {
-			this->action_result->ready = false;
-			this->action_result->stopped = false;
-			this->action_result->errcode = ErrorCode::NoError;
-		}
-	}
+	      relative(relative) {}
 
-	void CalxCoordActionMove::perform(SystemManager &sysman) {
+	ErrorCode CalxCoordActionMove::perform(SystemManager &sysman) {
 		ErrorCode errcode;
 		ResourceSession session(*this->handle);
 		Info(wxGetApp().getJournal())
@@ -70,41 +62,27 @@ namespace CalXUI {
 		}
 		wxGetApp().getErrorHandler()->handle(errcode);
 		coordActionFinished(*handle, errcode);
-		if (this->action_result != nullptr) {
-			this->action_result->errcode = errcode;
-			this->action_result->ready = true;
-		}
+		return errcode;
 	}
 
 	void CalxCoordActionMove::stop() {
 		handle->stop();
 		coordActionStopped(*handle);
-		if (this->action_result != nullptr) {
-			this->action_result->stopped = true;
-		}
 	}
 
 	CalxCoordActionArc::CalxCoordActionArc(std::shared_ptr<CoordHandle> handle,
 	                                       coord_point_t dest, coord_point_t cen,
 	                                       int splitter, double speed,
-	                                       bool clockwise, bool relative,
-	                                       ActionResult *act_res)
+	                                       bool clockwise, bool relative)
 	    : handle(handle),
 	      dest(dest),
 	      cen(cen),
 	      splitter(splitter),
 	      speed(speed),
 	      clockwise(clockwise),
-	      relative(relative),
-	      action_result(act_res) {
-		if (this->action_result != nullptr) {
-			this->action_result->ready = false;
-			this->action_result->stopped = false;
-			this->action_result->errcode = ErrorCode::NoError;
-		}
-	}
+	      relative(relative) {}
 
-	void CalxCoordActionArc::perform(SystemManager &sysman) {
+	ErrorCode CalxCoordActionArc::perform(SystemManager &sysman) {
 		ErrorCode errcode;
 		ResourceSession session(*this->handle);
 		Info(wxGetApp().getJournal())
@@ -122,31 +100,19 @@ namespace CalXUI {
 		}
 		wxGetApp().getErrorHandler()->handle(errcode);
 		coordActionFinished(*handle, errcode);
-		if (this->action_result != nullptr) {
-			this->action_result->errcode = errcode;
-			this->action_result->ready = true;
-		}
+		return errcode;
 	}
 
 	void CalxCoordActionArc::stop() {
 		handle->stop();
 		coordActionStopped(*handle);
-		if (this->action_result != nullptr) {
-			this->action_result->stopped = true;
-		}
 	}
 
 	CalxCoordActionCalibrate::CalxCoordActionCalibrate(
-	    std::shared_ptr<CoordHandle> handle, TrailerId tr, ActionResult *act_res)
-	    : handle(handle), trailer(tr), action_result(act_res) {
-		if (this->action_result != nullptr) {
-			this->action_result->ready = false;
-			this->action_result->stopped = false;
-			this->action_result->errcode = ErrorCode::NoError;
-		}
-	}
+	    std::shared_ptr<CoordHandle> handle, TrailerId tr)
+	    : handle(handle), trailer(tr) {}
 
-	void CalxCoordActionCalibrate::perform(SystemManager &sysman) {
+	ErrorCode CalxCoordActionCalibrate::perform(SystemManager &sysman) {
 		ResourceSession session(*this->handle);
 		Info(wxGetApp().getJournal())
 		    << "Calibrating coordinate plane #" << handle->getID()
@@ -154,30 +120,19 @@ namespace CalXUI {
 		ErrorCode errcode = handle->calibrate(trailer);
 		wxGetApp().getErrorHandler()->handle(errcode);
 		coordActionFinished(*handle, errcode);
-		if (this->action_result != nullptr) {
-			this->action_result->errcode = errcode;
-			this->action_result->ready = true;
-		}
+		return errcode;
 	}
+
 	void CalxCoordActionCalibrate::stop() {
 		this->handle->stop();
 		coordActionStopped(*handle);
-		if (this->action_result != nullptr) {
-			this->action_result->stopped = true;
-		}
 	}
 
 	CalxCoordActionMeasure::CalxCoordActionMeasure(
-	    std::shared_ptr<CoordHandle> handle, TrailerId tr, ActionResult *act_res)
-	    : handle(handle), trailer(tr), action_result(act_res) {
-		if (this->action_result != nullptr) {
-			this->action_result->ready = false;
-			this->action_result->stopped = false;
-			this->action_result->errcode = ErrorCode::NoError;
-		}
-	}
+	    std::shared_ptr<CoordHandle> handle, TrailerId tr)
+	    : handle(handle), trailer(tr) {}
 
-	void CalxCoordActionMeasure::perform(SystemManager &sysman) {
+	ErrorCode CalxCoordActionMeasure::perform(SystemManager &sysman) {
 		ResourceSession session(*this->handle);
 		Info(wxGetApp().getJournal())
 		    << "Measuring coordinate plane #" << handle->getID()
@@ -185,36 +140,24 @@ namespace CalXUI {
 		ErrorCode errcode = handle->measure(trailer);
 		wxGetApp().getErrorHandler()->handle(errcode);
 		coordActionFinished(*handle, errcode);
-		if (this->action_result != nullptr) {
-			this->action_result->errcode = errcode;
-			this->action_result->ready = true;
-		}
+		return errcode;
 	}
+
 	void CalxCoordActionMeasure::stop() {
 		this->handle->stop();
 		coordActionStopped(*handle);
-		if (this->action_result != nullptr) {
-			this->action_result->stopped = true;
-		}
 	}
 
 	CalxCoordActionConfigure::CalxCoordActionConfigure(
 	    std::shared_ptr<CoordHandle> handle, CalxCoordController *ctrl,
-	    coord_point_t dest, double speed, ActionResult *act_res)
+	    coord_point_t dest, double speed)
 	    : handle(handle),
 	      controller(ctrl),
 	      dest(dest),
 	      speed(speed),
-	      work(false),
-	      action_result(act_res) {
-		if (this->action_result != nullptr) {
-			this->action_result->ready = false;
-			this->action_result->stopped = false;
-			this->action_result->errcode = ErrorCode::NoError;
-		}
-	}
+	      work(false) {}
 
-	void CalxCoordActionConfigure::perform(SystemManager &sysman) {
+	ErrorCode CalxCoordActionConfigure::perform(SystemManager &sysman) {
 		ResourceSession session(*this->handle);
 		Info(wxGetApp().getJournal())
 		    << "Configuring coordinate plane #" << handle->getID()
@@ -239,19 +182,13 @@ namespace CalXUI {
 		}
 		wxGetApp().getErrorHandler()->handle(errcode);
 		coordActionFinished(*handle, errcode);
-		if (this->action_result != nullptr) {
-			this->action_result->errcode = errcode;
-			this->action_result->ready = true;
-		}
+		return errcode;
 	}
 
 	void CalxCoordActionConfigure::stop() {
 		this->work = false;
 		handle->stop();
 		coordActionStopped(*handle);
-		if (this->action_result != nullptr) {
-			this->action_result->stopped = true;
-		}
 	}
 
 	CalxCoordActionGraphBuild::CalxCoordActionGraphBuild(
@@ -267,7 +204,7 @@ namespace CalXUI {
 		this->state->work = false;
 	}
 
-	void CalxCoordActionGraphBuild::perform(SystemManager &sysman) {
+	ErrorCode CalxCoordActionGraphBuild::perform(SystemManager &sysman) {
 		ResourceSession session(*this->handle);
 		Info(wxGetApp().getJournal())
 		    << "Plotting graph on coordinate plane #" << handle->getID()
@@ -276,6 +213,7 @@ namespace CalXUI {
 		                                        *translator, speed, *state);
 		wxGetApp().getErrorHandler()->handle(errcode);
 		coordActionFinished(*handle, errcode);
+		return errcode;
 	}
 
 	void CalxCoordActionGraphBuild::stop() {
@@ -295,13 +233,14 @@ namespace CalXUI {
 		this->state->work = false;
 	}
 
-	void CalxCoordActionGraphPreview::perform(SystemManager &sysman) {
+	ErrorCode CalxCoordActionGraphPreview::perform(SystemManager &sysman) {
 		dialog->Enable(false);
-		wxGetApp().getErrorHandler()->handle(builder->floatBuild(
-		    sysman, dialog->getFloatPlane(), *translator, speed, *state));
-		;
+		ErrorCode errcode = builder->floatBuild(
+		    sysman, dialog->getFloatPlane(), *translator, speed, *state);
+		wxGetApp().getErrorHandler()->handle(errcode);
 		dialog->Refresh();
 		dialog->Enable(true);
+		return errcode;
 	}
 
 	void CalxCoordActionGraphPreview::stop() {

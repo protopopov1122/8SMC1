@@ -62,7 +62,7 @@ namespace CalXUI {
 			this->state->work = false;
 		}
 
-		void perform(SystemManager &sysman) override {
+		ErrorCode perform(SystemManager &sysman) override {
 			Info(wxGetApp().getJournal())
 			    << "Start execution of task: " << this->descriptor;
 			handle->open_session();
@@ -73,6 +73,7 @@ namespace CalXUI {
 			handle->close_session();
 			Info(wxGetApp().getJournal()) << "End of execution of task with errcode "
 			                              << static_cast<int>(errcode);
+			return errcode;
 		}
 
 		void stop() override {
@@ -102,14 +103,15 @@ namespace CalXUI {
 			this->state->work = false;
 		}
 
-		void perform(SystemManager &sysman) override {
+		ErrorCode perform(SystemManager &sysman) override {
 			dialog->setEnabled(false);
 			panel->setEnabled(false);
-			wxGetApp().getErrorHandler()->handle(
-			    task->perform(dialog->getPlane(), prms, sysman, state));
+			ErrorCode errcode = task->perform(dialog->getPlane(), prms, sysman, state);
+			wxGetApp().getErrorHandler()->handle(errcode);
 			panel->setEnabled(true);
 			dialog->setEnabled(true);
 			dialog->Refresh();
+			return errcode;
 		}
 
 		void stop() override {
@@ -127,8 +129,10 @@ namespace CalXUI {
 	CalxTaskPanel::CalxTaskPanel(wxWindow *win, wxWindowID id)
 	    : CalxPanelPane::CalxPanelPane(win, id) {
 		std::string units = wxGetApp().getUnitProcessor().getUnits();
-		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
-		this->queue->Run();
+		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), [this]() {
+			wxQueueEvent(this, new wxThreadEvent(wxEVT_COMMAND_QUEUE_UPDATE));
+		});
+		this->queue->start();
 		wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 		SetSizer(sizer);
 		wxSplitterWindow *splitter = new wxSplitterWindow(this, wxID_ANY);

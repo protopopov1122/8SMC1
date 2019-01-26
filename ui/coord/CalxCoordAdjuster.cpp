@@ -36,7 +36,7 @@ namespace CalXUI {
 	      step(step),
 	      speed(speed) {}
 
-	void CalxCoordAdjustAction::perform(SystemManager &sysman) {
+	ErrorCode CalxCoordAdjustAction::perform(SystemManager &sysman) {
 		coord_point_t dest;
 		switch (this->direction) {
 			case CalxAdjustDirection::Up:
@@ -55,10 +55,11 @@ namespace CalXUI {
 
 		dialog->setEnabled(false);
 		handle->open_session();
-		wxGetApp().getErrorHandler()->handle(
-		    handle->getFloatPlane()->relativeMove(dest, speed, false));
+		ErrorCode errcode = handle->getFloatPlane()->relativeMove(dest, speed, false);
+		wxGetApp().getErrorHandler()->handle(errcode);
 		handle->close_session();
 		dialog->setEnabled(true);
+		return errcode;
 	}
 
 	void CalxCoordAdjustAction::stop() {
@@ -70,13 +71,14 @@ namespace CalXUI {
 	    coord_point_t dest, double speed)
 	    : dialog(dialog), handle(handle), dest(dest), speed(speed) {}
 
-	void CalxCoordAdjustMoveAction::perform(SystemManager &sysman) {
+	ErrorCode CalxCoordAdjustMoveAction::perform(SystemManager &sysman) {
 		dialog->setEnabled(false);
 		handle->open_session();
-		wxGetApp().getErrorHandler()->handle(
-		    handle->getFloatPlane()->move(dest, speed, false));
+		ErrorCode errcode = handle->getFloatPlane()->move(dest, speed, false);
+		wxGetApp().getErrorHandler()->handle(errcode);
 		handle->close_session();
 		dialog->setEnabled(true);
+		return errcode;
 	}
 
 	void CalxCoordAdjustMoveAction::stop() {
@@ -284,8 +286,10 @@ namespace CalXUI {
 		buttonSizer->Add(downButton, 1, wxALL | wxALIGN_CENTER);
 		buttonSizer->Add(stopButton, 1, wxALL | wxALIGN_CENTER);
 
-		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
-		this->queue->Run();
+		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), [this]() {
+			wxQueueEvent(this, new wxThreadEvent(wxEVT_COMMAND_QUEUE_UPDATE));
+		});
+		this->queue->start();
 		int_conf_t interval =
 		    wxGetApp()
 		        .getSystemManager()

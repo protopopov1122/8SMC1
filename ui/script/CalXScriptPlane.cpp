@@ -37,16 +37,12 @@ namespace CalXUI {
 		if (handle == nullptr) {
 			return ErrorCode::UnknownResource;
 		} else {
-			volatile bool ready = false;
-			ActionResult res = { false, false, ErrorCode::NoError };
-			handle->getController()->move(dest, speed, sync, relative,
-			                              const_cast<bool *>(&ready), &res);
-			while (!ready) {
-			}
-			if (res.stopped) {
+			auto res = handle->getController()->move(dest, speed, sync, relative);
+			res.wait();
+			if (res.getStatus() == CalxActionStatus::Stopped) {
 				return ErrorCode::Interrupted;
 			} else {
-				return res.errcode;
+				return res.getError();
 			}
 		}
 	}
@@ -60,16 +56,13 @@ namespace CalXUI {
 		if (handle == nullptr) {
 			return ErrorCode::UnknownResource;
 		} else {
-			volatile bool ready = false;
-			ActionResult res = { false, false, ErrorCode::NoError };
-			handle->getController()->arc(dest, cen, splitter, speed, clockwise,
-			                             relative, const_cast<bool *>(&ready), &res);
-			while (!ready) {
-			}
-			if (res.stopped) {
+			auto res = handle->getController()->arc(dest, cen, splitter, speed, clockwise,
+			                             relative);
+			res.wait();
+			if (res.getStatus() == CalxActionStatus::Stopped) {
 				return ErrorCode::Interrupted;
 			} else {
-				return res.errcode;
+				return res.getError();
 			}
 		}
 	}
@@ -81,15 +74,12 @@ namespace CalXUI {
 		if (handle == nullptr) {
 			return ErrorCode::UnknownResource;
 		} else {
-			volatile bool ready = false;
-			ActionResult res = { false, false, ErrorCode::NoError };
-			handle->getController()->calibrate(tid, const_cast<bool *>(&ready), &res);
-			while (!ready) {
-			}
-			if (res.stopped) {
+			auto res = handle->getController()->calibrate(tid);
+			res.wait();
+			if (res.getStatus() == CalxActionStatus::Stopped) {
 				return ErrorCode::Interrupted;
 			} else {
-				return res.errcode;
+				return res.getError();
 			}
 		}
 	}
@@ -101,15 +91,12 @@ namespace CalXUI {
 		if (handle == nullptr) {
 			return ErrorCode::UnknownResource;
 		} else {
-			volatile bool ready = false;
-			ActionResult res = { false, false, ErrorCode::NoError };
-			handle->getController()->measure(tid, const_cast<bool *>(&ready), &res);
-			while (!ready) {
-			}
-			if (res.stopped) {
+			auto res = handle->getController()->measure(tid);
+			res.wait();
+			if (res.getStatus() == CalxActionStatus::Stopped) {
 				return ErrorCode::Interrupted;
 			} else {
-				return res.errcode;
+				return res.getError();
 			}
 		}
 	}
@@ -121,16 +108,12 @@ namespace CalXUI {
 		if (handle == nullptr) {
 			return ErrorCode::UnknownResource;
 		} else {
-			volatile bool ready = false;
-			ActionResult res = { false, false, ErrorCode::NoError };
-			handle->getController()->move(dest, speed, const_cast<bool *>(&ready),
-			                              &res);
-			while (!ready) {
-			}
-			if (res.stopped) {
+			auto res = handle->getController()->move(dest, speed);
+			res.wait();
+			if (res.getStatus() == CalxActionStatus::Stopped) {
 				return ErrorCode::Interrupted;
 			} else {
-				return res.errcode;
+				return res.getError();
 			}
 		}
 	}
@@ -142,16 +125,12 @@ namespace CalXUI {
 		if (handle == nullptr) {
 			return ErrorCode::UnknownResource;
 		} else {
-			volatile bool ready = false;
-			ActionResult res = { false, false, ErrorCode::NoError };
-			handle->getController()->configure(dest, speed,
-			                                   const_cast<bool *>(&ready), &res);
-			while (!ready) {
-			}
-			if (res.stopped) {
+			auto res = handle->getController()->configure(dest, speed);
+			res.wait();
+			if (res.getStatus() == CalxActionStatus::Stopped) {
 				return ErrorCode::Interrupted;
 			} else {
-				return res.errcode;
+				return res.getError();
 			}
 		}
 	}

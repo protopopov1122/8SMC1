@@ -43,9 +43,8 @@ namespace CalXUI {
 		virtual ~CalxMotorHandle() = default;
 		virtual void stopMovement() = 0;
 		virtual ErrorCode setPower(bool) = 0;
-		virtual ErrorCode roll(TrailerId, ActionResult * = nullptr) = 0;
-		virtual ErrorCode move(motor_coord_t, float, bool,
-		                       ActionResult * = nullptr) = 0;
+		virtual CalxActionResult roll(TrailerId) = 0;
+		virtual CalxActionResult move(motor_coord_t, float, bool) = 0;
 	};
 
 	class CalxInstrumentHandle {

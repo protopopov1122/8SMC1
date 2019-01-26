@@ -33,9 +33,9 @@ namespace CalXUI {
 	class CalxCoordActionMove : public CalxAction {
 	 public:
 		CalxCoordActionMove(std::shared_ptr<CoordHandle>, coord_point_t, double,
-		                    bool, bool, ActionResult * = nullptr);
+		                    bool, bool);
 
-		void perform(SystemManager &) override;
+		ErrorCode perform(SystemManager &) override;
 		void stop() override;
 
 	 private:
@@ -44,16 +44,14 @@ namespace CalXUI {
 		double speed;
 		bool sync;
 		bool relative;
-		ActionResult *action_result;
 	};
 
 	class CalxCoordActionArc : public CalxAction {
 	 public:
 		CalxCoordActionArc(std::shared_ptr<CoordHandle>, coord_point_t,
-		                   coord_point_t, int, double, bool, bool,
-		                   ActionResult * = nullptr);
+		                   coord_point_t, int, double, bool, bool);
 
-		void perform(SystemManager &) override;
+		ErrorCode perform(SystemManager &) override;
 		void stop() override;
 
 	 private:
@@ -64,44 +62,38 @@ namespace CalXUI {
 		double speed;
 		bool clockwise;
 		bool relative;
-		ActionResult *action_result;
 	};
 
 	class CalxCoordActionCalibrate : public CalxAction {
 	 public:
-		CalxCoordActionCalibrate(std::shared_ptr<CoordHandle>, TrailerId,
-		                         ActionResult * = nullptr);
+		CalxCoordActionCalibrate(std::shared_ptr<CoordHandle>, TrailerId);
 
-		void perform(SystemManager &) override;
+		ErrorCode perform(SystemManager &) override;
 		void stop() override;
 
 	 private:
 		std::shared_ptr<CoordHandle> handle;
 		TrailerId trailer;
-		ActionResult *action_result;
 	};
 
 	class CalxCoordActionMeasure : public CalxAction {
 	 public:
-		CalxCoordActionMeasure(std::shared_ptr<CoordHandle>, TrailerId,
-		                       ActionResult * = nullptr);
+		CalxCoordActionMeasure(std::shared_ptr<CoordHandle>, TrailerId);
 
-		void perform(SystemManager &override);
+		ErrorCode perform(SystemManager &) override;
 		void stop() override;
 
 	 private:
 		std::shared_ptr<CoordHandle> handle;
 		TrailerId trailer;
-		ActionResult *action_result;
 	};
 
 	class CalxCoordActionConfigure : public CalxAction {
 	 public:
 		CalxCoordActionConfigure(std::shared_ptr<CoordHandle>,
-		                         CalxCoordController *, coord_point_t, double,
-		                         ActionResult * = nullptr);
+		                         CalxCoordController *, coord_point_t, double);
 
-		void perform(SystemManager &) override;
+		ErrorCode perform(SystemManager &) override;
 		void stop() override;
 
 	 private:
@@ -110,7 +102,6 @@ namespace CalXUI {
 		coord_point_t dest;
 		double speed;
 		bool work;
-		ActionResult *action_result;
 	};
 
 	class CalxCoordActionGraphBuild : public CalxAction {
@@ -119,7 +110,7 @@ namespace CalXUI {
 		                          std::shared_ptr<CoordTranslator>,
 		                          std::unique_ptr<GraphBuilder>, double);
 
-		void perform(SystemManager &) override;
+		ErrorCode perform(SystemManager &) override;
 		void stop() override;
 
 	 private:
@@ -136,7 +127,7 @@ namespace CalXUI {
 		                            std::shared_ptr<CoordTranslator>,
 		                            std::unique_ptr<GraphBuilder>, double);
 
-		void perform(SystemManager &) override;
+		ErrorCode perform(SystemManager &) override;
 		void stop() override;
 
 	 private:

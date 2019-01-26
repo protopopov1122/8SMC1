@@ -45,8 +45,10 @@ namespace CalXUI {
 		this->ctrl = ctrl;
 		this->used = 0;
 
-		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
-		this->queue->Run();
+		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), [this]() {
+			wxQueueEvent(this, new wxThreadEvent(wxEVT_COMMAND_QUEUE_UPDATE));
+		});
+		this->queue->start();
 
 		this->controller = new CalxCoordController(this->ctrl, this->queue);
 		this->watchers = new CalxWatcherPool(this, this->ctrl);

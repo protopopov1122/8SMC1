@@ -37,7 +37,7 @@ namespace CalXUI {
 			delete this->prms;
 		}
 
-		void perform(SystemManager &sysman) override {
+		ErrorCode perform(SystemManager &sysman) override {
 			std::shared_ptr<MotorController> ctrl =
 			    sysman.getMotorControllerSet().connectDevice(prms).lock();
 			if (ctrl == nullptr) {
@@ -46,7 +46,9 @@ namespace CalXUI {
 			} else {
 				pool->appendDevice(new CalxMotorConstructor(pool, ctrl));
 			}
+			return ErrorCode::NoError;
 		}
+		
 		void stop() override {}
 
 	 private:

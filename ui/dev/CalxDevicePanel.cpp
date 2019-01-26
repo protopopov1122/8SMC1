@@ -34,7 +34,9 @@ namespace CalXUI {
 
 	CalxDevicePanel::CalxDevicePanel(wxWindow *win, wxWindowID id)
 	    : CalxPanelPane::CalxPanelPane(win, id) {
-		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
+		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), [this]() {
+			wxQueueEvent(this, new wxThreadEvent(wxEVT_COMMAND_QUEUE_UPDATE));
+		});
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		this->SetSizer(sizer);
 
@@ -50,7 +52,7 @@ namespace CalXUI {
 		     this);
 		Bind(wxEVT_DEVICE_PANEL_DEVICE_APPEND, &CalxDevicePanel::OnDeviceAppend,
 		     this);
-		this->queue->Run();
+		this->queue->start();
 	}
 
 	void CalxDevicePanel::shutdown() {

@@ -37,7 +37,7 @@ namespace CalXUI {
 			delete this->prms;
 		}
 
-		void perform(SystemManager &sysman) override {
+		ErrorCode perform(SystemManager &sysman) override {
 			std::shared_ptr<InstrumentController> ctrl =
 			    sysman.getInstrumentControllerSet().connectDevice(prms).lock();
 			if (ctrl == nullptr) {
@@ -46,6 +46,7 @@ namespace CalXUI {
 			} else {
 				pool->appendDevice(new CalxInstrumentConstructor(pool, ctrl));
 			}
+			return ErrorCode::NoError;
 		}
 
 		void stop() override {}

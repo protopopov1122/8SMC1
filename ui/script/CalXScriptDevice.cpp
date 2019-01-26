@@ -76,14 +76,12 @@ namespace CalXUI {
 			    __("Script: Unknown motor"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
-			ActionResult res = { false, false, ErrorCode::NoError };
-			motor->move(pos, speed, false, &res);
-			while (!res.ready) {
-			}
-			if (res.stopped) {
+			auto res = motor->move(pos, speed, false);
+			res.wait();
+			if (res.getStatus() == CalxActionStatus::Stopped) {
 				return ErrorCode::Interrupted;
 			} else {
-				return res.errcode;
+				return res.getError();
 			}
 		}
 	}
@@ -97,15 +95,12 @@ namespace CalXUI {
 			    __("Script: Unknown motor"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
-			ActionResult res = { false, false, ErrorCode::NoError };
-			motor->move(pos, speed, true, &res);
-			while (!res.ready) {
-			}
-			if (res.stopped) {
+			auto res = motor->move(pos, speed, true);
+			res.wait();
+			if (res.getStatus() == CalxActionStatus::Stopped) {
 				return ErrorCode::Interrupted;
 			} else {
-				return res.errcode;
-				;
+				return res.getError();
 			}
 		}
 	}
@@ -149,14 +144,11 @@ namespace CalXUI {
 			    __("Script: Unknown motor"), wxICON_WARNING);
 			return ErrorCode::UnknownResource;
 		} else {
-			ActionResult res = { false, false, ErrorCode::NoError };
-			motor->roll(tr, &res);
-			while (!res.ready) {
-			}
-			if (res.stopped) {
+			auto res = motor->roll(tr);
+			if (res.getStatus() == CalxActionStatus::Stopped) {
 				return ErrorCode::Interrupted;
 			} else {
-				return res.errcode;
+				return res.getError();
 			}
 		}
 	}

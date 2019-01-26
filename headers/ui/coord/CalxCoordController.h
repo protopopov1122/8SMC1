@@ -29,8 +29,6 @@
 
 namespace CalXUI {
 
-	struct ActionResult;  // Forward referencing
-
 	class CalxCoordFilterListener {
 	 public:
 		virtual ~CalxCoordFilterListener() = default;
@@ -64,20 +62,16 @@ namespace CalXUI {
 		float getValidateMaxSpeed();
 		void setValidateMaxSpeed(float);
 
-		void move(coord_point_t, double, bool, bool, bool * = nullptr,
-		          ActionResult * = nullptr);
-		void arc(coord_point_t, coord_point_t, int, double, bool, bool,
-		         bool * = nullptr, ActionResult * = nullptr);
-		void calibrate(TrailerId, bool * = nullptr, ActionResult * = nullptr);
-		void measure(TrailerId, bool * = nullptr, ActionResult * = nullptr);
-		void move(coord_point_t, double, bool * = nullptr,
-		          ActionResult * = nullptr);
-		void configure(coord_point_t, double, bool * = nullptr,
-		               ActionResult * = nullptr);
-		void build(std::shared_ptr<CoordTranslator>, std::unique_ptr<GraphBuilder>,
-		           double, bool * = nullptr);
-		void preview(CalxVirtualPlaneDialog *, std::shared_ptr<CoordTranslator>,
-		             std::unique_ptr<GraphBuilder>, double, bool * = nullptr);
+		CalxActionResult move(coord_point_t, double, bool, bool);
+		CalxActionResult arc(coord_point_t, coord_point_t, int, double, bool, bool);
+		CalxActionResult calibrate(TrailerId);
+		CalxActionResult measure(TrailerId);
+		CalxActionResult move(coord_point_t, double);
+		CalxActionResult configure(coord_point_t, double);
+		CalxActionResult build(std::shared_ptr<CoordTranslator>, std::unique_ptr<GraphBuilder>,
+		           double);
+		CalxActionResult preview(CalxVirtualPlaneDialog *, std::shared_ptr<CoordTranslator>,
+		             std::unique_ptr<GraphBuilder>, double);
 
 	 private:
 		std::shared_ptr<CoordHandle> handle;

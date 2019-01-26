@@ -35,10 +35,11 @@ namespace CalXUI {
 		                        std::unique_ptr<CalxAction> action)
 		    : panel(panel), action(std::move(action)) {}
 
-		void perform(SystemManager &sysman) override {
+		ErrorCode perform(SystemManager &sysman) override {
 			panel->setEnabled(false);
-			action->perform(sysman);
+			ErrorCode errcode = action->perform(sysman);
 			panel->setEnabled(true);
+			return errcode;
 		}
 
 		void stop() override {
@@ -89,8 +90,10 @@ namespace CalXUI {
 
 		Layout();
 
-		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
-		this->queue->Run();
+		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), [this]() {
+			wxQueueEvent(this, new wxThreadEvent(wxEVT_COMMAND_QUEUE_UPDATE));
+		});
+		this->queue->start();
 
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxScriptPanel::OnExit, this);
 		this->Bind(wxEVT_ENABLE_EVENT, &CalxScriptPanel::OnEnableEvent, this);

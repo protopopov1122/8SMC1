@@ -79,10 +79,12 @@ namespace CalXUI {
 			this->ctrl = ctrl;
 		}
 
-		void perform(SystemManager &sysman) override {
+		ErrorCode perform(SystemManager &sysman) override {
 			ctrl->use();
-			wxGetApp().getErrorHandler()->handle(ctrl->flipState());
+			ErrorCode errcode = ctrl->flipState();
+			wxGetApp().getErrorHandler()->handle(errcode);
 			ctrl->unuse();
+			return errcode;
 		}
 
 		void stop() override {}
@@ -97,14 +99,17 @@ namespace CalXUI {
 			this->ctrl = ctrl;
 		}
 
-		void perform(SystemManager &sysman) override {
+		ErrorCode perform(SystemManager &sysman) override {
 			ctrl->use();
+			ErrorCode errcode = ErrorCode::NoError;
 			if (ctrl->isSessionOpened()) {
-				wxGetApp().getErrorHandler()->handle(ctrl->close_session());
+				errcode = ctrl->close_session();
 			} else {
-				wxGetApp().getErrorHandler()->handle(ctrl->open_session());
+				errcode = ctrl->open_session();
 			}
+			wxGetApp().getErrorHandler()->handle(errcode);
 			ctrl->unuse();
+			return errcode;
 		}
 
 		void stop() override {}
@@ -119,10 +124,11 @@ namespace CalXUI {
 			this->ctrl = ctrl;
 		}
 
-		void perform(SystemManager &sysman) override {
+		ErrorCode perform(SystemManager &sysman) override {
 			ctrl->use();
 			ctrl->setRunnable(!ctrl->isRunnable());
 			ctrl->unuse();
+			return ErrorCode::NoError;
 		}
 
 		void stop() override {}
@@ -138,10 +144,11 @@ namespace CalXUI {
 			this->mode = m;
 		}
 
-		void perform(SystemManager &sysman) override {
+		ErrorCode perform(SystemManager &sysman) override {
 			ctrl->use();
 			this->ctrl->setMode(this->mode);
 			ctrl->unuse();
+			return ErrorCode::NoError;
 		}
 
 		void stop() override {}
@@ -155,7 +162,9 @@ namespace CalXUI {
 	    wxWindow *win, wxWindowID id, std::shared_ptr<InstrumentController> ctrl)
 	    : CalxDeviceHandle::CalxDeviceHandle(win, id) {
 		this->ctrl = ctrl;
-		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), this);
+		this->queue = new CalxActionQueue(wxGetApp().getSystemManager(), [this]() {
+			wxQueueEvent(this, new wxThreadEvent(wxEVT_COMMAND_QUEUE_UPDATE));
+		});
 		this->listener = std::make_shared<CalxInstrumentEventListener>(this);
 
 		wxStaticBox *box = new wxStaticBox(
@@ -218,7 +227,7 @@ namespace CalXUI {
 		Layout();
 
 		ctrl->addEventListener(listener);
-		this->queue->Run();
+		this->queue->start();
 		this->timer = new CalxInstrumentTimer(this);
 		timer->Start(100);
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxInstrumentComponent::OnExit, this);

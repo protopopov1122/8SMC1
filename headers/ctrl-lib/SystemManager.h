@@ -36,6 +36,7 @@
 #include "ctrl-lib/plane/CoordPlaneSet.h"
 #include "ctrl-lib/task/CoordTask.h"
 #include "ctrl-lib/task/TaskSet.h"
+#include "ctrl-lib/ActionQueue.h"
 
 /* SystemManager is component that store and control most system
    objects like devices, coord planes, tasks and configuration.
