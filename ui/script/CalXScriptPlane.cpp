@@ -56,8 +56,8 @@ namespace CalXUI {
 		if (handle == nullptr) {
 			return ErrorCode::UnknownResource;
 		} else {
-			auto res = handle->getController()->arc(dest, cen, splitter, speed, clockwise,
-			                             relative);
+			auto res = handle->getController()->arc(dest, cen, splitter, speed,
+			                                        clockwise, relative);
 			res.wait();
 			if (res.getStatus() == CalxActionStatus::Stopped) {
 				return ErrorCode::Interrupted;

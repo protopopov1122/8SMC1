@@ -37,7 +37,8 @@ namespace CalXUI {
 
 	class CalxLinearTaskHandle : public CalxTaskHandle {
 	 public:
-		CalxLinearTaskHandle(wxWindow *, wxWindowID, std::size_t, CalxLinearTaskParameters * = nullptr);
+		CalxLinearTaskHandle(wxWindow *, wxWindowID, std::size_t,
+		                     CalxLinearTaskParameters * = nullptr);
 		std::string getName() const override;
 		std::shared_ptr<CoordTask> getTask() override;
 		std::shared_ptr<CoordTranslator> getTranslator() override;

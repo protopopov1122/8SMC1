@@ -110,12 +110,12 @@ namespace CalX {
 
 	struct CalxLinearTaskParameters {
 		CalxLinearTaskParameters(coord_rect_t area, double spacing, bool vertical)
-			: area(area), spacing(spacing), vertical(vertical) {}
+		    : area(area), spacing(spacing), vertical(vertical) {}
 		const coord_rect_t area;
 		const double spacing;
 		const bool vertical;
 	};
-	
+
 	class CalXScriptTasks {
 	 public:
 		virtual ~CalXScriptTasks() = default;

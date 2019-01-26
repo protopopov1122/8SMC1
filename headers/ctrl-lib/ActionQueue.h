@@ -33,7 +33,7 @@
 
 namespace CalX {
 
-	class SystemManager; // Forward referencing
+	class SystemManager;  // Forward referencing
 
 	class CalxAction {
 	 public:
@@ -54,10 +54,11 @@ namespace CalX {
 		CalxActionResult();
 		void wait() const;
 		CalxActionStatus getStatus() const;
-		ErrorCode getError() const;	
+		ErrorCode getError() const;
 		void update(CalxActionStatus, ErrorCode = ErrorCode::NoError);
+
 	 private:
-	 	struct ResultHandle;
+		struct ResultHandle;
 		std::shared_ptr<ResultHandle> handle;
 	};
 

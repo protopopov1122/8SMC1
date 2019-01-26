@@ -55,7 +55,8 @@ namespace CalXUI {
 
 		dialog->setEnabled(false);
 		handle->open_session();
-		ErrorCode errcode = handle->getFloatPlane()->relativeMove(dest, speed, false);
+		ErrorCode errcode =
+		    handle->getFloatPlane()->relativeMove(dest, speed, false);
 		wxGetApp().getErrorHandler()->handle(errcode);
 		handle->close_session();
 		dialog->setEnabled(true);

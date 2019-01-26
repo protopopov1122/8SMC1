@@ -348,8 +348,8 @@ namespace CalXUI {
 	}
 
 	CalxActionResult CalxMotorComponent::roll(TrailerId tr) {
-		return this->queue->addAction(std::make_unique<CalxMotorCalibrationAction>(
-		    this, dev.get(), tr));
+		return this->queue->addAction(
+		    std::make_unique<CalxMotorCalibrationAction>(this, dev.get(), tr));
 	}
 
 	void CalxMotorComponent::rollToTrailer1(wxCommandEvent &evt) {
@@ -369,7 +369,7 @@ namespace CalXUI {
 	}
 
 	CalxActionResult CalxMotorComponent::move(motor_coord_t dest, float speed,
-	                                   bool relative) {
+	                                          bool relative) {
 		return this->queue->addAction(std::make_unique<CalxMotorMoveAction>(
 		    this, dev.get(), dest, speed, relative));
 	}

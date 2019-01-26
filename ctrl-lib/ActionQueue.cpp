@@ -24,9 +24,10 @@
 #include "ctrl-lib/SystemManager.h"
 
 namespace CalX {
-	
+
 	struct CalxActionResult::ResultHandle {
-		ResultHandle() : status(CalxActionStatus::Pending), errcode(ErrorCode::NoError) {}
+		ResultHandle()
+		    : status(CalxActionStatus::Pending), errcode(ErrorCode::NoError) {}
 		CalxActionStatus status;
 		ErrorCode errcode;
 	};
@@ -36,7 +37,9 @@ namespace CalX {
 	}
 
 	void CalxActionResult::wait() const {
-		while (this->handle->status != CalxActionStatus::Finished && this->handle->status != CalxActionStatus::Stopped) {}
+		while (this->handle->status != CalxActionStatus::Finished &&
+		       this->handle->status != CalxActionStatus::Stopped) {
+		}
 	}
 
 	CalxActionStatus CalxActionResult::getStatus() const {
@@ -46,7 +49,7 @@ namespace CalX {
 	ErrorCode CalxActionResult::getError() const {
 		return this->handle->errcode;
 	}
-	
+
 	void CalxActionResult::update(CalxActionStatus status, ErrorCode errcode) {
 		if (static_cast<int>(status) > static_cast<int>(this->handle->status)) {
 			this->handle->status = status;
@@ -54,7 +57,8 @@ namespace CalX {
 		}
 	}
 
-	CalxActionQueue::CalxActionQueue(SystemManager &sysman, std::function<void()> queueUpdate)
+	CalxActionQueue::CalxActionQueue(SystemManager &sysman,
+	                                 std::function<void()> queueUpdate)
 	    : queueUpdate(std::move(queueUpdate)), sysman(sysman) {
 		this->work.store(true);
 		this->current = nullptr;
@@ -103,9 +107,7 @@ namespace CalX {
 
 	void CalxActionQueue::start() {
 		if (this->thread.get_id() == std::thread::id()) {
-			this->thread = std::thread([this]() {
-				this->entry();
-			});
+			this->thread = std::thread([this]() { this->entry(); });
 			this->thread.detach();
 		}
 	}
@@ -126,9 +128,8 @@ namespace CalX {
 				this->queueUpdate();
 			}
 			std::unique_lock<std::mutex> lock(this->condMutex);
-			cond.wait(lock, [&]() {
-				return !this->queue.empty() || !this->work.load();
-			});
+			cond.wait(lock,
+			          [&]() { return !this->queue.empty() || !this->work.load(); });
 		}
 	}
 }  // namespace CalX

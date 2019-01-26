@@ -416,9 +416,8 @@ namespace CalXLua {
 		return std::make_unique<LuaCalXPlane>(this->env, planeId);
 	}
 
-	LuaCalXTasks::LuaCalXTasks(CalXScriptUIEnvironment &env)
-		: env(env) {}
-	
+	LuaCalXTasks::LuaCalXTasks(CalXScriptUIEnvironment &env) : env(env) {}
+
 	std::size_t LuaCalXTasks::getTaskCount() {
 		return this->env.getTasks().getTaskCount();
 	}
@@ -427,15 +426,18 @@ namespace CalXLua {
 		this->env.getTasks().removeTask(idx);
 	}
 
-	void LuaCalXTasks::newGCodeFile(const std::string &title, const std::string &path) {
+	void LuaCalXTasks::newGCodeFile(const std::string &title,
+	                                const std::string &path) {
 		this->env.getTasks().newGCodeFile(title, path);
 	}
-	
-	void LuaCalXTasks::newGCode(const std::string &title, const std::string &gcode) {
+
+	void LuaCalXTasks::newGCode(const std::string &title,
+	                            const std::string &gcode) {
 		this->env.getTasks().newGCode(title, gcode);
 	}
-	
-	void LuaCalXTasks::newLinear(const std::string &title, CalxLinearTaskParameters &prms) {
+
+	void LuaCalXTasks::newLinear(const std::string &title,
+	                             CalxLinearTaskParameters &prms) {
 		this->env.getTasks().newLinear(title, prms);
 	}
 

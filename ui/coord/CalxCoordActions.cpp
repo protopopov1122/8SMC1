@@ -235,8 +235,8 @@ namespace CalXUI {
 
 	ErrorCode CalxCoordActionGraphPreview::perform(SystemManager &sysman) {
 		dialog->Enable(false);
-		ErrorCode errcode = builder->floatBuild(
-		    sysman, dialog->getFloatPlane(), *translator, speed, *state);
+		ErrorCode errcode = builder->floatBuild(sysman, dialog->getFloatPlane(),
+		                                        *translator, speed, *state);
 		wxGetApp().getErrorHandler()->handle(errcode);
 		dialog->Refresh();
 		dialog->Enable(true);

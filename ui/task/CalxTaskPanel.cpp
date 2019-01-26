@@ -106,7 +106,8 @@ namespace CalXUI {
 		ErrorCode perform(SystemManager &sysman) override {
 			dialog->setEnabled(false);
 			panel->setEnabled(false);
-			ErrorCode errcode = task->perform(dialog->getPlane(), prms, sysman, state);
+			ErrorCode errcode =
+			    task->perform(dialog->getPlane(), prms, sysman, state);
 			wxGetApp().getErrorHandler()->handle(errcode);
 			panel->setEnabled(true);
 			dialog->setEnabled(true);
@@ -216,8 +217,10 @@ namespace CalXUI {
 		taskList->Bind(wxEVT_LISTBOX, &CalxTaskPanel::OnListClick, this);
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxTaskPanel::OnExit, this);
 		this->Bind(wxEVT_TASK_PANEL_ENABLE, &CalxTaskPanel::OnEnableEvent, this);
-		this->Bind(wxEVT_TASK_PANEL_ATTACH_TASK, &CalxTaskPanel::OnAttachTask, this);
-		this->Bind(wxEVT_TASK_PANEL_REMOVE_TASK, &CalxTaskPanel::OnRemoveTask, this);
+		this->Bind(wxEVT_TASK_PANEL_ATTACH_TASK, &CalxTaskPanel::OnAttachTask,
+		           this);
+		this->Bind(wxEVT_TASK_PANEL_REMOVE_TASK, &CalxTaskPanel::OnRemoveTask,
+		           this);
 	}
 
 	void CalxTaskPanel::attachTaskFactory(const std::string &name,
@@ -252,7 +255,8 @@ namespace CalXUI {
 		wxPostEvent(this, evt);
 	}
 
-	void CalxTaskPanel::attachTask(const std::string &title, std::shared_ptr<CalxTaskFactory> factory) {
+	void CalxTaskPanel::attachTask(const std::string &title,
+	                               std::shared_ptr<CalxTaskFactory> factory) {
 		wxThreadEvent evt(wxEVT_TASK_PANEL_ATTACH_TASK);
 		evt.SetPayload(std::make_pair(title, factory));
 		wxPostEvent(this, evt);
@@ -292,7 +296,8 @@ namespace CalXUI {
 		wxPostEvent(this, evt);
 	}
 
-	void CalxTaskPanel::attachTaskImpl(const std::string &title, CalxTaskFactory &factory) {
+	void CalxTaskPanel::attachTaskImpl(const std::string &title,
+	                                   CalxTaskFactory &factory) {
 		CalxTaskHandle *task = factory.newTask(this->mainPanel);
 		if (task != nullptr) {
 			list.push_back(task);

@@ -75,7 +75,7 @@ namespace CalXUI {
 	      app(app),
 	      devices(app),
 	      planes(app),
-				tasks(app),
+	      tasks(app),
 	      ui(app) {}
 
 	CalXScriptDevices &CalXAppScriptEnvironment::getDevices() {

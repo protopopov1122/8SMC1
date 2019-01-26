@@ -53,7 +53,8 @@ namespace CalXUI {
 		void stop() override;
 		std::size_t getTaskCount() override;
 		void removeTask(std::size_t) override;
-		void attachTask(const std::string &, std::shared_ptr<CalxTaskFactory>) override;
+		void attachTask(const std::string &,
+		                std::shared_ptr<CalxTaskFactory>) override;
 
 		void attachTaskFactory(const std::string &, CalxTaskFactory *);
 

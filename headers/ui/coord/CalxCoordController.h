@@ -68,10 +68,11 @@ namespace CalXUI {
 		CalxActionResult measure(TrailerId);
 		CalxActionResult move(coord_point_t, double);
 		CalxActionResult configure(coord_point_t, double);
-		CalxActionResult build(std::shared_ptr<CoordTranslator>, std::unique_ptr<GraphBuilder>,
-		           double);
-		CalxActionResult preview(CalxVirtualPlaneDialog *, std::shared_ptr<CoordTranslator>,
-		             std::unique_ptr<GraphBuilder>, double);
+		CalxActionResult build(std::shared_ptr<CoordTranslator>,
+		                       std::unique_ptr<GraphBuilder>, double);
+		CalxActionResult preview(CalxVirtualPlaneDialog *,
+		                         std::shared_ptr<CoordTranslator>,
+		                         std::unique_ptr<GraphBuilder>, double);
 
 	 private:
 		std::shared_ptr<CoordHandle> handle;

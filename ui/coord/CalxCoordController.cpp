@@ -154,19 +154,18 @@ namespace CalXUI {
 		    this->listeners.end());
 	}
 
-	CalxActionResult CalxCoordController::move(coord_point_t dest, double speed, bool sync,
-	                               bool relative) {
-		return this->queue->addAction(
-		    std::make_unique<CalxCoordActionMove>(this->handle, dest, speed, sync,
-		                                          relative));
+	CalxActionResult CalxCoordController::move(coord_point_t dest, double speed,
+	                                           bool sync, bool relative) {
+		return this->queue->addAction(std::make_unique<CalxCoordActionMove>(
+		    this->handle, dest, speed, sync, relative));
 	}
 
-	CalxActionResult CalxCoordController::arc(coord_point_t dest, coord_point_t cen,
-	                              int splitter, double speed, bool clockwise,
-	                              bool relative) {
+	CalxActionResult CalxCoordController::arc(coord_point_t dest,
+	                                          coord_point_t cen, int splitter,
+	                                          double speed, bool clockwise,
+	                                          bool relative) {
 		return this->queue->addAction(std::make_unique<CalxCoordActionArc>(
-		                           this->handle, dest, cen, splitter, speed,
-		                           clockwise, relative));
+		    this->handle, dest, cen, splitter, speed, clockwise, relative));
 	}
 
 	CalxActionResult CalxCoordController::calibrate(TrailerId tr) {
@@ -187,23 +186,23 @@ namespace CalXUI {
 		return this->move(dest, speed, false, false);
 	}
 
-	CalxActionResult CalxCoordController::configure(coord_point_t pos, double speed) {
+	CalxActionResult CalxCoordController::configure(coord_point_t pos,
+	                                                double speed) {
 		return this->queue->addAction(std::make_unique<CalxCoordActionConfigure>(
-		                           this->handle, this, pos, speed));
+		    this->handle, this, pos, speed));
 	}
 
-	CalxActionResult CalxCoordController::build(std::shared_ptr<CoordTranslator> trans,
-	                                std::unique_ptr<GraphBuilder> builder,
-	                                double speed) {
+	CalxActionResult CalxCoordController::build(
+	    std::shared_ptr<CoordTranslator> trans,
+	    std::unique_ptr<GraphBuilder> builder, double speed) {
 		return this->queue->addAction(std::make_unique<CalxCoordActionGraphBuild>(
-		                           this->handle, trans, std::move(builder), speed));
+		    this->handle, trans, std::move(builder), speed));
 	}
 
-	CalxActionResult CalxCoordController::preview(CalxVirtualPlaneDialog *dialog,
-	                                  std::shared_ptr<CoordTranslator> trans,
-	                                  std::unique_ptr<GraphBuilder> builder,
-	                                  double speed) {
+	CalxActionResult CalxCoordController::preview(
+	    CalxVirtualPlaneDialog *dialog, std::shared_ptr<CoordTranslator> trans,
+	    std::unique_ptr<GraphBuilder> builder, double speed) {
 		return this->queue->addAction(std::make_unique<CalxCoordActionGraphPreview>(
-		                           dialog, trans, std::move(builder), speed));
+		    dialog, trans, std::move(builder), speed));
 	}
 }  // namespace CalXUI

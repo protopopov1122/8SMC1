@@ -48,7 +48,7 @@ namespace CalXUI {
 			}
 			return ErrorCode::NoError;
 		}
-		
+
 		void stop() override {}
 
 	 private:
