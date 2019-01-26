@@ -24,7 +24,7 @@
 #include "ui/coord/CalxCoordActions.h"
 #include <algorithm>
 
-namespace CalXUI {
+namespace CalX::UI {
 	CalxCoordController::CalxCoordController(std::shared_ptr<CoordHandle> handle,
 	                                         CalxActionQueue *queue)
 	    : handle(handle), queue(queue) {
@@ -205,4 +205,4 @@ namespace CalXUI {
 		return this->queue->addAction(std::make_unique<CalxCoordActionGraphPreview>(
 		    dialog, trans, std::move(builder), speed));
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

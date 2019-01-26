@@ -30,7 +30,7 @@
 #include <wx/listbox.h>
 #include <vector>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	wxDECLARE_EVENT(wxEVT_ENABLE_EVENT, wxThreadEvent);
 
@@ -63,6 +63,6 @@ namespace CalXUI {
 		wxPanel *scriptPanel;
 		std::vector<CalxScriptHandle *> scripts;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

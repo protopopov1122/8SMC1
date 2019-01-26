@@ -34,7 +34,7 @@
 #include <wx/listbox.h>
 #include <wx/spinctrl.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxTaskHandle;  // Forward referencing
 
@@ -88,6 +88,6 @@ namespace CalXUI {
 		wxSpinCtrlDouble *speed;
 		CalxActionQueue *queue;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

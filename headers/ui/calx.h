@@ -39,6 +39,4 @@
 #endif
 #include "ctrl-lib/SystemManager.h"
 
-using namespace CalX;
-
 #endif

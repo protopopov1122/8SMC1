@@ -25,9 +25,7 @@
 
 #include "ctrl-lib/SystemManager.h"
 
-using namespace CalX;
-
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxApp;  // Forward referencing
 
@@ -39,6 +37,6 @@ namespace CalXUI {
 
 	typedef UIExtEngine *(*UIExtEngine_getter)();
 	extern "C" LIBEXPORT UIExtEngine *getUIExtEngine();
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

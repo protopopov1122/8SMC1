@@ -27,7 +27,7 @@
 #include "ui/CalxErrorHandler.h"
 #include <sstream>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	CalxCoordComponent *CalxCoordGraphComponentFactory::newComponent(
 	    wxWindow *win, CalxCoordController *ctrl) {
@@ -216,4 +216,4 @@ namespace CalXUI {
 		dialog->ShowModal();
 		delete dialog;
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

@@ -28,7 +28,7 @@
 #include <string>
 #include <wx/textctrl.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxGcodeLoader : public wxDialog {
 	 public:
@@ -48,6 +48,6 @@ namespace CalXUI {
 		CalxCoordFilterCtrl *translator;
 		bool state;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

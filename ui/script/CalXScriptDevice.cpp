@@ -24,7 +24,7 @@
 #include "ui/dev/CalxDeviceConstructor.h"
 #include "ui/CalxErrorHandler.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	CalXAppScriptMotor::CalXAppScriptMotor(CalxApp &app, device_id_t motor_id)
 	    : app(app), motor_id(motor_id) {}
@@ -430,4 +430,4 @@ namespace CalXUI {
 	    device_id_t id) {
 		return std::make_unique<CalXAppScriptInstrument>(this->app, id);
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

@@ -22,7 +22,7 @@
 
 #include "ui/coord/CalxCoordPositionComponent.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	CalxCoordComponent *CalxCoordPositionComponentFactory::newComponent(
 	    wxWindow *win, CalxCoordController *ctrl) {
@@ -137,4 +137,4 @@ namespace CalXUI {
 			    ->put(CalxCoordPositionConfiguration::Y, yPosition);
 		}
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

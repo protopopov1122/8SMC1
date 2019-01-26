@@ -27,7 +27,7 @@
 #include "ui/coord/CalxWatcherPool.h"
 #include "ui/coord/CalxCoordController.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxPlaneHandle {
 	 public:
@@ -45,6 +45,6 @@ namespace CalXUI {
 		virtual CalxPlaneHandle *getPlaneHandle(std::size_t) = 0;
 		virtual void stop() = 0;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

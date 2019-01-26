@@ -22,7 +22,7 @@
 
 #include "ui/config/CalxConfigEditor.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	CalxNewKeyDialog::CalxNewKeyDialog(wxWindow *win, wxWindowID id,
 	                                   ConfiguationFlatDictionary *entry)
@@ -237,4 +237,4 @@ namespace CalXUI {
 		this->editor->Close(true);
 		Hide();
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

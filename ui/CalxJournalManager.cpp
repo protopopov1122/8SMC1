@@ -30,7 +30,7 @@
 #include <algorithm>
 #include <wx/filename.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	static constexpr auto FullTimestampFormat = "%H-%M-%S_%d-%m-%Y";
 	static constexpr auto ShortTimestampFormat = "%d-%m-%Y";
@@ -123,4 +123,4 @@ namespace CalXUI {
 			}
 		}
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

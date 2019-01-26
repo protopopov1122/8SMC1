@@ -27,13 +27,13 @@
 #include "ui/CalxApp.h"
 #include "ui/dev/CalxDeviceHandle.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxDeviceFactory {
 	 public:
 		virtual ~CalxDeviceFactory() {}
 		virtual void newDevice(wxWindow *, CalxDevicePool *, CalxActionQueue *) = 0;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

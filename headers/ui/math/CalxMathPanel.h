@@ -30,7 +30,7 @@
 wxDECLARE_EVENT(wxEVT_ADD_FORMULA, wxThreadEvent);
 wxDECLARE_EVENT(wxEVT_REMOVE_FORMULA, wxThreadEvent);
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxMathEngine {
 	 public:
@@ -65,6 +65,6 @@ namespace CalXUI {
 		wxPanel *mathObjectListPanel;
 		std::vector<CalxMathObject *> contents;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

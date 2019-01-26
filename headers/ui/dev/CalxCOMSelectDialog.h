@@ -27,7 +27,7 @@
 #include <wx/choice.h>
 #include <wx/spinctrl.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxCOMSelectDialog : public wxDialog {
 	 public:
@@ -47,6 +47,6 @@ namespace CalXUI {
 		int32_t speed;
 		SerialPortParity parity;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

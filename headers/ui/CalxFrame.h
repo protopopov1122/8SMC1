@@ -29,7 +29,7 @@
 #include <string>
 #include <wx/menu.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxDevicePool;  // Forward referencing
 	class CalxPlaneList;   // Forward referencing
@@ -66,6 +66,6 @@ namespace CalXUI {
 		CalxTaskList *task_list;
 		CalxMathEngine *math_engine;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

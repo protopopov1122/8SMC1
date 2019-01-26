@@ -23,7 +23,7 @@
 #include "ui/CalxUnitProcessor.h"
 #include <sstream>
 
-namespace CalXUI {
+namespace CalX::UI {
 	CalxUnitProcessor::CalxUnitProcessor(ConfigurationCatalogue &conf)
 	    : config(conf) {}
 
@@ -72,4 +72,4 @@ namespace CalXUI {
 		};
 		return offset;
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

@@ -25,7 +25,7 @@
 #include "ui/config/CalxConfigEditor.h"
 #include <wx/sizer.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	wxDEFINE_EVENT(wxEVT_INSTRUMENT_CTRL_ENABLE, wxThreadEvent);
 
@@ -304,4 +304,4 @@ namespace CalXUI {
 		bool e = evt.GetPayload<bool>();
 		Enable(e);
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

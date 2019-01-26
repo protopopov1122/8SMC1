@@ -25,7 +25,7 @@
 wxDEFINE_EVENT(wxEVT_FILTER_UPDATE_OFFSET, wxThreadEvent);
 wxDEFINE_EVENT(wxEVT_FILTER_UPDATE_SCALE, wxThreadEvent);
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	CalxCoordComponent *CalxCoordFilterComponentFactory::newComponent(
 	    wxWindow *win, CalxCoordController *ctrl) {
@@ -224,4 +224,4 @@ namespace CalXUI {
 	void CalxCoordFilterComponent::OnExit(wxCloseEvent &evt) {
 		this->controller->removeFilterListener(this);
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

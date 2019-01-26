@@ -26,7 +26,7 @@
 #include "ui/CalxApp.h"
 #include "ui/coord/CalxCoordController.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxCoordComponent : public wxPanel {
 	 public:
@@ -43,6 +43,6 @@ namespace CalXUI {
 		virtual CalxCoordComponent *newComponent(wxWindow *,
 		                                         CalxCoordController *) = 0;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

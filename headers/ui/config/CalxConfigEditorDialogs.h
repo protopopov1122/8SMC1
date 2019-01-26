@@ -27,7 +27,7 @@
 #include "ui/CalxApp.h"
 #include <wx/spinctrl.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxConfigEditor;  // Forward referencing
 
@@ -74,6 +74,6 @@ namespace CalXUI {
 		void OnOkClick(wxCommandEvent &);
 		CalxConfigEditor *editor;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

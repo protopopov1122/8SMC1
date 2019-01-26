@@ -24,7 +24,7 @@
 #include "ui/coord/CalxCoordPlaneWatcher.h"
 #include <algorithm>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	CalxWatcherPool::CalxWatcherPool(wxWindow *win,
 	                                 std::shared_ptr<CoordHandle> handle)
@@ -68,4 +68,4 @@ namespace CalXUI {
 		watcher->Show(true);
 		return watcher->getWatcher();
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

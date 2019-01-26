@@ -31,7 +31,7 @@
 #include <wx/stattext.h>
 #include <wx/timer.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	wxDECLARE_EVENT(wxEVT_INSTRUMENT_CTRL_ENABLE, wxThreadEvent);
 
@@ -66,6 +66,6 @@ namespace CalXUI {
 		std::shared_ptr<InstrumentEventListener> listener;
 		wxTimer *timer;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

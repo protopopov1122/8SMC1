@@ -35,7 +35,7 @@
 #include "ui/coord/CalxPlaneList.h"
 #include "ctrl-lib/logger/Shortcuts.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	wxDEFINE_EVENT(wxEVT_TASK_PANEL_ENABLE, wxThreadEvent);
 	wxDEFINE_EVENT(wxEVT_TASK_PANEL_ATTACH_TASK, wxThreadEvent);
@@ -576,4 +576,4 @@ namespace CalXUI {
 			dialog->Destroy();
 		}
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

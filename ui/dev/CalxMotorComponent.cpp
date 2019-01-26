@@ -32,7 +32,7 @@
 #include <signal.h>
 #include <wx/statbox.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 	wxDEFINE_EVENT(wxEVT_MOTOR_CTRL_ENABLE, wxThreadEvent);
 
 	void CalxMotorTimer::Notify() {
@@ -410,4 +410,4 @@ namespace CalXUI {
 		editor->ShowModal();
 		delete editor;
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

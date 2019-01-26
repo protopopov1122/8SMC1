@@ -28,7 +28,7 @@
 wxDEFINE_EVENT(wxEVT_ADD_FORMULA, wxThreadEvent);
 wxDEFINE_EVENT(wxEVT_REMOVE_FORMULA, wxThreadEvent);
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	struct CalxFormulaData {
 		std::string title;
@@ -139,4 +139,4 @@ namespace CalXUI {
 	void CalxMathPanel::OnRemoveFormula(wxThreadEvent &evt) {
 		this->removeMathObject(evt.GetPayload<std::size_t>());
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

@@ -26,7 +26,7 @@
 #include "ui/CalxApp.h"
 #include <vector>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxCoordPlaneWatcher;  // Forward referencing
 
@@ -46,6 +46,6 @@ namespace CalXUI {
 		std::shared_ptr<CoordHandle> handle;
 		std::vector<CalxCoordPlaneWatcher *> watchers;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

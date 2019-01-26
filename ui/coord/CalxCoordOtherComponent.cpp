@@ -23,7 +23,7 @@
 #include "ui/coord/CalxCoordOtherComponent.h"
 #include <wx/collpane.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	CalxCoordComponent *CalxCoordOtherComponentFactory::newComponent(
 	    wxWindow *win, CalxCoordController *ctrl) {
@@ -119,4 +119,4 @@ namespace CalXUI {
 		                                                  : TrailerId::Trailer2;
 		this->controller->measure(tr);
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

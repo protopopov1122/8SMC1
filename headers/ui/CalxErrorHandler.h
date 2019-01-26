@@ -25,7 +25,7 @@
 
 #include "ui/CalxApp.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxErrorHandler {
 	 public:
@@ -37,6 +37,6 @@ namespace CalXUI {
 	 private:
 		SystemManager &sysman;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

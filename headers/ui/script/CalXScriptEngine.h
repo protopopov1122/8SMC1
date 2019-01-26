@@ -31,7 +31,7 @@
 #include "ui/coord/CalxPlaneList.h"
 #include "ui/math/CalxMathPanel.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalXAppScriptMotor : public CalXScriptMotor {
 	 public:
@@ -187,6 +187,6 @@ namespace CalXUI {
 		std::string path;
 		std::string hook;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

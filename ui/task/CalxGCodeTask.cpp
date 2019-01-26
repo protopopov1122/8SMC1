@@ -24,7 +24,7 @@
 #include "ui/task/CalxGcodeLoader.h"
 #include <iostream>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	CalxGcodeHandle::CalxGcodeHandle(wxWindow *win, wxWindowID id,
 	                                 const std::string &sid, std::istream *is,
@@ -93,4 +93,4 @@ namespace CalXUI {
 		loader->Destroy();
 		return handle;
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

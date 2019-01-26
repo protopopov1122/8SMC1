@@ -26,7 +26,7 @@
 #include "ui/CalxApp.h"
 #include "ui/task/CalxTaskFactory.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxTaskList {
 	 public:
@@ -37,6 +37,6 @@ namespace CalXUI {
 		virtual void attachTask(const std::string &,
 		                        std::shared_ptr<CalxTaskFactory>) = 0;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

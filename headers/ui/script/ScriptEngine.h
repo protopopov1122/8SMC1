@@ -25,7 +25,7 @@
 
 #include "ctrl-lib/script/ScriptEngine.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalXScriptUIMath {
 	 public:
@@ -59,6 +59,6 @@ namespace CalXUI {
 
 	typedef CalXScriptUIFactory *(*ScriptUIEngine_getter)();
 	extern "C" LIBEXPORT CalXScriptUIFactory *getScriptUIEngine();
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

@@ -28,7 +28,7 @@
 #include <wx/sizer.h>
 #include <wx/splitter.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	wxDEFINE_EVENT(wxEVT_COORD_PANEL_UPDATE, wxThreadEvent);
 
@@ -220,4 +220,4 @@ namespace CalXUI {
 		addPlane(pair.first);
 		*pair.second = true;
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

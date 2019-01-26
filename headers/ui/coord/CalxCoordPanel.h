@@ -32,7 +32,7 @@
 #include <vector>
 #include <wx/listbox.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	wxDECLARE_EVENT(wxEVT_COORD_PANEL_UPDATE, wxThreadEvent);
 
@@ -79,6 +79,6 @@ namespace CalXUI {
 		wxPanel *mainPanel;
 		int nextId;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

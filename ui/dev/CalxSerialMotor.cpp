@@ -24,7 +24,7 @@
 #include "ui/dev/CalxCOMSelectDialog.h"
 #include "ui/dev/CalxDeviceConstructor.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxSerialMotorConnectAction : public CalxAction {
 	 public:
@@ -71,4 +71,4 @@ namespace CalXUI {
 		}
 		dialog->Destroy();
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

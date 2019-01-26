@@ -26,7 +26,7 @@
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	CalxCOMSelectDialog::CalxCOMSelectDialog(wxWindow *win, wxWindowID id)
 	    : wxDialog::wxDialog(win, id, __("Select COM Port")) {
@@ -143,4 +143,4 @@ namespace CalXUI {
 	void CalxCOMSelectDialog::OnCancelClick(wxCommandEvent &evt) {
 		Hide();
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

@@ -27,7 +27,7 @@
 #include "ui/CalxApp.h"
 #include "ui/coord/CalxVirtualPlane.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxCoordFilterListener {
 	 public:
@@ -85,6 +85,6 @@ namespace CalXUI {
 		std::shared_ptr<CoordPlaneValidator> validator;
 		std::shared_ptr<CoordPlaneMap> unit_map;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

@@ -25,7 +25,7 @@
 
 #include "ui/calx.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxUnitProcessor {
 	 public:
@@ -42,6 +42,6 @@ namespace CalXUI {
 	 private:
 		ConfigurationCatalogue &config;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

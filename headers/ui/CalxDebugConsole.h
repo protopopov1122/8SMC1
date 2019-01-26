@@ -26,7 +26,7 @@
 #include "ui/CalxApp.h"
 #include <wx/thread.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxDebugConsole : public wxThread {
 	 public:
@@ -40,6 +40,6 @@ namespace CalXUI {
 		DeviceManager &devman;
 		VectorTaskSet taskSet;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

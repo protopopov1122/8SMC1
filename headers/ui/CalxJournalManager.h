@@ -29,7 +29,7 @@
 #include <chrono>
 #include <string>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxJournalManager {
 	 public:
@@ -46,6 +46,6 @@ namespace CalXUI {
 		std::unique_ptr<ConfigurableJournal> journal;
 		ConfigurationCatalogue &config;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

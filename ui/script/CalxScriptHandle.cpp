@@ -24,7 +24,7 @@
 #include <wx/splitter.h>
 #include <iostream>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxScriptHookCallAction : public CalxAction {
 	 public:
@@ -158,4 +158,4 @@ namespace CalXUI {
 	void CalxScriptShellHandle::OnExit(wxCloseEvent &evt) {
 		Destroy();
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

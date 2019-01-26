@@ -28,7 +28,7 @@
 #include <wx/spinctrl.h>
 #include <wx/stattext.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxCoordAdjustDialog;  // Forward reference
 
@@ -121,6 +121,6 @@ namespace CalXUI {
 		CalxCoordAdjustRepaintTimer *timer;
 		CalxCoordAdjustViewer *viewer;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

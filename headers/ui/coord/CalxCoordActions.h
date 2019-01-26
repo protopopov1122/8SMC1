@@ -28,7 +28,7 @@
 #include "ui/coord/CalxCoordController.h"
 #include "ui/coord/CalxVirtualPlane.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxCoordActionMove : public CalxAction {
 	 public:
@@ -137,6 +137,6 @@ namespace CalXUI {
 		double speed;
 		std::shared_ptr<TaskState> state;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

@@ -26,7 +26,7 @@
 #include <wx/splitter.h>
 #include <wx/stattext.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	CalxConfigEventListener::CalxConfigEventListener(CalxConfigEditor *editor) {
 		this->editor = editor;
@@ -505,4 +505,4 @@ namespace CalXUI {
 		}
 		dialog->Destroy();
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

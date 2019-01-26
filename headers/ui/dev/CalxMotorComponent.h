@@ -30,7 +30,7 @@
 #include <wx/stattext.h>
 #include <wx/timer.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxMotorComponent;  // Forward reference
 	wxDECLARE_EVENT(wxEVT_MOTOR_CTRL_ENABLE, wxThreadEvent);
@@ -112,6 +112,6 @@ namespace CalXUI {
 		wxStaticText *hardwareInfo;
 		wxStaticText *runtimeInfo;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

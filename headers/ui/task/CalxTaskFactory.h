@@ -26,13 +26,13 @@
 #include "ui/CalxApp.h"
 #include "ui/task/CalxTaskHandle.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxTaskFactory {
 	 public:
 		virtual ~CalxTaskFactory() = default;
 		virtual CalxTaskHandle *newTask(wxWindow *) = 0;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

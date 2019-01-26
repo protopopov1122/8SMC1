@@ -44,7 +44,7 @@
 #include <tuple>
 #include <string>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	wxDEFINE_EVENT(wxEVT_APP_ERROR, wxThreadEvent);
 	wxDEFINE_EVENT(wxEVT_APP_ALERT, wxThreadEvent);
@@ -437,6 +437,6 @@ namespace CalXUI {
 		auto params = evt.GetPayload<std::tuple<std::string, std::string, long>>();
 		wxMessageBox(std::get<0>(params), std::get<0>(params), std::get<2>(params));
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
-wxIMPLEMENT_APP(CalXUI::CalxApp);
+wxIMPLEMENT_APP(CalX::UI::CalxApp);

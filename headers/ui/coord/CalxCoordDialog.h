@@ -27,7 +27,7 @@
 #include <string>
 #include <wx/choice.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	extern std::string ABOUT_TEXT;
 
@@ -47,6 +47,6 @@ namespace CalXUI {
 		SystemManager &sysman;
 		std::shared_ptr<CoordHandle> ctrl;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

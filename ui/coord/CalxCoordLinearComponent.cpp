@@ -23,7 +23,7 @@
 #include "ui/coord/CalxCoordActions.h"
 #include "ui/coord/CalxCoordLinearComponent.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	CalxCoordComponent *CalxCoordLinearComponentFactory::newComponent(
 	    wxWindow *win, CalxCoordController *ctrl) {
@@ -104,4 +104,4 @@ namespace CalXUI {
 		this->controller->move(dest, this->speed->GetValue(), false,
 		                       this->relative->GetValue());
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

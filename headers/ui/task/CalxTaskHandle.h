@@ -32,7 +32,7 @@
 #include <wx/spinctrl.h>
 #include <wx/textctrl.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxTaskDescriptor {
 	 public:
@@ -55,6 +55,6 @@ namespace CalXUI {
 		virtual std::shared_ptr<CoordTranslator> getTranslator() = 0;
 		virtual void update() = 0;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

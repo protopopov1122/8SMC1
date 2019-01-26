@@ -27,7 +27,7 @@
 #include "ui/calx.h"
 #include <wx/notebook.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxPanel : public wxNotebook {
 	 public:
@@ -41,6 +41,6 @@ namespace CalXUI {
 
 		std::vector<CalxPanelPane *> panes;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

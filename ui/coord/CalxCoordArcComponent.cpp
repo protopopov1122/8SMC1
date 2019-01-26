@@ -23,7 +23,7 @@
 #include "ui/coord/CalxCoordActions.h"
 #include "ui/coord/CalxCoordArcComponent.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	CalxCoordComponent *CalxCoordArcComponentFactory::newComponent(
 	    wxWindow *win, CalxCoordController *ctrl) {
@@ -124,4 +124,4 @@ namespace CalXUI {
 		                      this->speed->GetValue(), this->clockwise->GetValue(),
 		                      this->relative->GetValue());
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

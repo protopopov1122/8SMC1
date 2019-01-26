@@ -22,7 +22,7 @@
 
 #include "ui/dev/CalxDeviceConstructor.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	CalxMotorConstructor::CalxMotorConstructor(
 	    CalxDevicePool *pool, std::shared_ptr<MotorController> ctrl) {
@@ -43,4 +43,4 @@ namespace CalXUI {
 	CalxDeviceHandle *CalxInstrumentConstructor::construct(wxWindow *win) {
 		return new CalxInstrumentComponent(win, wxID_ANY, ctrl);
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

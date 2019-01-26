@@ -28,7 +28,7 @@
 #include <vector>
 #include <wx/stattext.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxPlaneTracker : public VirtualCoordPlane {
 	 public:
@@ -88,6 +88,6 @@ namespace CalXUI {
 		wxStaticText *mouseCoords;
 		wxButton *okButton;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

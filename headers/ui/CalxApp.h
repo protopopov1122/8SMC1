@@ -43,7 +43,7 @@
 
 #define FORMAT(str, ...) (wxString::Format(str, __VA_ARGS__).ToStdString())
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalXScriptUIEnvironment;  // Forward referencing
 	class CalxDebugConsole;         // Forward referencing
@@ -99,7 +99,7 @@ namespace CalXUI {
 		std::shared_ptr<CalXScriptUIFactory> scriptFactory;
 		std::unique_ptr<CalxJournalManager> journalManager;
 	};
-}  // namespace CalXUI
-wxDECLARE_APP(CalXUI::CalxApp);
+}  // namespace CalX::UI
+wxDECLARE_APP(CalX::UI::CalxApp);
 
 #endif

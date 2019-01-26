@@ -26,7 +26,7 @@
 #include "ui/CalxApp.h"
 #include "ctrl-lib/graph/Formula.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxMathObject : public wxPanel {
 	 public:
@@ -51,6 +51,6 @@ namespace CalXUI {
 		wxStaticText *resultText;
 		std::map<std::string, double> variableValues;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

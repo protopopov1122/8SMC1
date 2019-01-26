@@ -33,7 +33,7 @@
 #include <wx/stattext.h>
 #include <wx/timer.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	wxDEFINE_EVENT(wxEVT_COORD_CTRL_WATCHER, wxThreadEvent);
 	wxDEFINE_EVENT(wxEVT_COORD_CTRL_ENABLE, wxThreadEvent);
@@ -314,4 +314,4 @@ namespace CalXUI {
 		dialog->ShowModal();
 		delete dialog;
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

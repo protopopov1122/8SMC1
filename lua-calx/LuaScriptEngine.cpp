@@ -24,7 +24,7 @@
 #include "lua-calx/LuaScriptEngine.h"
 #include <iostream>
 
-namespace CalXLua {
+namespace CalX::UI::Lua {
 
 	std::unique_ptr<CalXScript> LuaCalXScriptFactory::newScript(
 	    CalXScriptUIEnvironment &env) {
@@ -210,4 +210,4 @@ namespace CalXLua {
 		this->lua["calx"]["journal"] =
 		    std::make_unique<LuaCalXJournal>(this->env.getJournal());
 	}
-}  // namespace CalXLua
+}  // namespace CalX::UI::Lua

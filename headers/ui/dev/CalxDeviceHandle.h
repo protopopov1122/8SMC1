@@ -26,7 +26,7 @@
 #include "ui/CalxApp.h"
 #include "ui/CalxActionQueue.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxDeviceHandle : public wxPanel {
 	 public:
@@ -68,6 +68,6 @@ namespace CalXUI {
 		virtual CalxInstrumentHandle *getInstrument(device_id_t) = 0;
 		virtual void stop() = 0;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

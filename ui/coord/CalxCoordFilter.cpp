@@ -26,7 +26,7 @@
 #include "ui/CalxPanel.h"
 #include <string>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	CalxCoordFilter::CalxCoordFilter(wxWindow *win, wxWindowID id)
 	    : wxPanel::wxPanel(win, id) {}
@@ -393,4 +393,4 @@ namespace CalXUI {
 		filterList->SetSelection((int) (filter.size() - 1));
 		updateUI();
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

@@ -37,7 +37,7 @@
 wxDECLARE_EVENT(wxEVT_FILTER_UPDATE_OFFSET, wxThreadEvent);
 wxDECLARE_EVENT(wxEVT_FILTER_UPDATE_SCALE, wxThreadEvent);
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxCoordFilterComponentFactory : public CalxCoordComponentFactory {
 	 public:
@@ -73,6 +73,6 @@ namespace CalXUI {
 
 		CalxCoordController *controller;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

@@ -27,7 +27,7 @@
 
 wxDEFINE_EVENT(wxEVT_WATCHER_UPDATE, wxThreadEvent);
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	wxDEFINE_EVENT(wxEVT_WATCHER_APPEND_POINT, wxThreadEvent);
 
@@ -450,4 +450,4 @@ namespace CalXUI {
 			this->mouseCoords->SetLabel(res);
 		}
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

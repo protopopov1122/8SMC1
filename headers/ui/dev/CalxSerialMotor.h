@@ -25,12 +25,12 @@
 
 #include "ui/dev/CalxDeviceFactory.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxSerialMotorFactory : public CalxDeviceFactory {
 	 public:
 		void newDevice(wxWindow *, CalxDevicePool *, CalxActionQueue *) override;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

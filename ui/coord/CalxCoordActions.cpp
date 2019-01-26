@@ -25,7 +25,7 @@
 #include "ui/CalxErrorHandler.h"
 #include "ctrl-lib/logger/Shortcuts.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	void coordActionFinished(CoordHandle &handle, ErrorCode errcode) {
 		Info(wxGetApp().getJournal())
@@ -246,4 +246,4 @@ namespace CalXUI {
 	void CalxCoordActionGraphPreview::stop() {
 		this->state->stop();
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

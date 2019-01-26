@@ -26,7 +26,7 @@
 #include "ui/task/CalxLinearTask.h"
 #include <sstream>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	static std::shared_ptr<ComplexCoordTranslator> getDefaultTranslator() {
 		ConfigurationCatalogue &conf =
@@ -144,4 +144,4 @@ namespace CalXUI {
 		this->app.getMainFrame()->getTaskList()->attachTask(
 		    title, std::make_shared<CalxLinearTaskBuilder>(0, prms));
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

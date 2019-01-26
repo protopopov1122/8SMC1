@@ -33,7 +33,7 @@
 #include <wx/spinctrl.h>
 #include <wx/textctrl.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxConfigEditor;  // Forward referencing
 
@@ -100,6 +100,6 @@ namespace CalXUI {
 		ConfigurationCatalogue &config;
 		std::shared_ptr<CalxConfigEventListener> listener;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

@@ -30,7 +30,7 @@
 
 wxDECLARE_EVENT(wxEVT_WATCHER_UPDATE, wxThreadEvent);
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxCoordPlaneWatcher;  // Forward referencing
 
@@ -121,6 +121,6 @@ namespace CalXUI {
 		std::shared_ptr<CoordHandle> handle;
 		wxStaticText *mouseCoords;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

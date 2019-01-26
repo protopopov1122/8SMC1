@@ -26,7 +26,7 @@
 #include "ui/CalxApp.h"
 #include "ui/CalxActionQueue.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxActionReceiver {
 	 public:
@@ -67,6 +67,6 @@ namespace CalXUI {
 		CalxActionReceiver *recv;
 		std::unique_ptr<CalXScript> script;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

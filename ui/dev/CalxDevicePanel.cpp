@@ -27,7 +27,7 @@
 #include <wx/listctrl.h>
 #include <wx/sizer.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	wxDEFINE_EVENT(wxEVT_DEVICE_PANEL_UPDATE, wxThreadEvent);
 	wxDEFINE_EVENT(wxEVT_DEVICE_PANEL_DEVICE_APPEND, wxThreadEvent);
@@ -168,4 +168,4 @@ namespace CalXUI {
 			motor.second->stopMovement();
 		}
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

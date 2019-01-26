@@ -24,7 +24,7 @@
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	CalxTaskLinearStepHandle::CalxTaskLinearStepHandle(wxWindow *win,
 	                                                   wxWindowID id)
@@ -312,4 +312,4 @@ namespace CalXUI {
 	void CalxTaskArcStepHandle::OnFieldChange(wxCommandEvent &evt) {
 		update();
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

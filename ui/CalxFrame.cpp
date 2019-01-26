@@ -46,7 +46,7 @@
 #include <wx/app.h>
 #include <wx/splitter.h>
 #include <wx/textctrl.h>
-namespace CalXUI {
+namespace CalX::UI {
 
 	CalxDevicePanel *newDevicePanel(wxWindow *win) {
 		CalxDevicePanel *devPanel = new CalxDevicePanel(win, wxID_ANY);
@@ -284,4 +284,4 @@ namespace CalXUI {
 		this->panel->Show(!this->panel->IsShown());
 		Layout();
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

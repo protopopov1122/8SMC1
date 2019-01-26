@@ -26,7 +26,7 @@
 #include "ui/task/CalxProgrammedTaskStep.h"
 #include "ui/task/CalxTaskFactory.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxProgrammedTaskFactory : public CalxTaskFactory {
 	 public:
@@ -67,6 +67,6 @@ namespace CalXUI {
 		wxButton *moveDownButton;
 		std::shared_ptr<CoordTranslator> trans;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

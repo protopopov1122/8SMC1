@@ -28,7 +28,7 @@
 #include "ui/coord/CalxCoordController.h"
 #include <wx/spinctrl.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxCoordPositionComponentFactory : public CalxCoordComponentFactory {
 		virtual CalxCoordComponent *newComponent(wxWindow *, CalxCoordController *);
@@ -49,6 +49,6 @@ namespace CalXUI {
 
 		CalxCoordController *controller;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

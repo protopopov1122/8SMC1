@@ -36,7 +36,7 @@
 #include <wx/spinctrl.h>
 #include <wx/stattext.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	wxDECLARE_EVENT(wxEVT_COORD_CTRL_WATCHER, wxThreadEvent);
 	wxDECLARE_EVENT(wxEVT_COORD_CTRL_ENABLE, wxThreadEvent);
@@ -97,6 +97,6 @@ namespace CalXUI {
 		wxStaticText *generalInfoText;
 		CalxCoordTimer timer;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

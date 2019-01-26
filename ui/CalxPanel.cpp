@@ -22,7 +22,7 @@
 
 #include "ui/CalxPanel.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	CalxPanel::CalxPanel(wxWindow *win, wxWindowID id)
 	    : wxNotebook::wxNotebook(win, id) {
@@ -65,4 +65,4 @@ namespace CalXUI {
 
 		Destroy();
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

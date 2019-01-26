@@ -24,7 +24,7 @@
 #include "ui/CalxErrorHandler.h"
 #include "ui/coord/CalxCoordPane.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	void CalxCoordTimer::Notify() {
 		ctrl->updateUI();
@@ -72,4 +72,4 @@ namespace CalXUI {
 	void CalxCoordInstrumentListener::onUnuse() {
 		ctrl->unuse();
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

@@ -25,7 +25,7 @@
 
 #include "ui/task/CalxTaskFactory.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxLinearTaskFactory : public CalxTaskFactory {
 	 public:
@@ -61,6 +61,6 @@ namespace CalXUI {
 		wxSpinCtrlDouble *spacing;
 		wxCheckBox *vertical;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

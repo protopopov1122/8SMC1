@@ -24,7 +24,7 @@
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	CalxErrorHandler::CalxErrorHandler(SystemManager &sysman) : sysman(sysman) {}
 
@@ -62,4 +62,4 @@ namespace CalXUI {
 		evt.SetPayload(params);
 		wxPostEvent(&wxGetApp(), evt);
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

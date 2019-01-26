@@ -22,7 +22,7 @@
 
 #include "ui/script/CalXScriptEngine.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	CalXScriptHookThread::CalXScriptHookThread(const std::string &path,
 	                                           const std::string &hook)
@@ -102,4 +102,4 @@ namespace CalXUI {
 		return this->ui;
 	}
 
-}  // namespace CalXUI
+}  // namespace CalX::UI

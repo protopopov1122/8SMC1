@@ -23,7 +23,7 @@
 #include "ui/CalxDebugConsole.h"
 #include "cli/DevCLI.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class EchoCMD : public CLICommand {
 		virtual ~EchoCMD() {}
@@ -68,4 +68,4 @@ namespace CalXUI {
 		} while (cli.shell());
 		return nullptr;
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

@@ -24,7 +24,7 @@
 #include "ctrl-lib/conf/INI.h"
 #include <wx/sizer.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	CalxConfigLoader::CalxConfigLoader(wxWindow *win, wxWindowID id,
 	                                   std::string path)
@@ -137,4 +137,4 @@ namespace CalXUI {
 		this->exiting = true;
 		Hide();
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

@@ -28,7 +28,7 @@
 #include <wx/listbox.h>
 #include <wx/spinctrl.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxCoordFilter : public wxPanel {
 	 public:
@@ -116,6 +116,6 @@ namespace CalXUI {
 		std::shared_ptr<ComplexCoordTranslator> trans;
 		std::vector<CalxCoordFilter *> filter;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

@@ -25,7 +25,7 @@
 
 #include "ui/calx.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxPanelPane : public wxScrolledWindow {
 	 public:
@@ -35,6 +35,6 @@ namespace CalXUI {
 		virtual void shutdown() = 0;
 		virtual void updateUI() = 0;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

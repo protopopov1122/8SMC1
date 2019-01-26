@@ -25,7 +25,7 @@
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	CalxGcodeLoader::CalxGcodeLoader(wxWindow *win, wxWindowID id)
 	    : wxDialog::wxDialog(win, id, __("Load GCode")) {
@@ -142,4 +142,4 @@ namespace CalXUI {
 			dialog->Destroy();
 		}
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

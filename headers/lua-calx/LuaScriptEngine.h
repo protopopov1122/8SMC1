@@ -25,7 +25,7 @@
 
 #include "lua-calx/LuaCalXEnvironment.h"
 
-namespace CalXLua {
+namespace CalX::UI::Lua {
 
 	class LuaCalXScript : public CalXScript {
 	 public:
@@ -46,6 +46,6 @@ namespace CalXLua {
 	 public:
 		std::unique_ptr<CalXScript> newScript(CalXScriptUIEnvironment &) override;
 	};
-}  // namespace CalXLua
+}  // namespace CalX::UI::Lua
 
 #endif

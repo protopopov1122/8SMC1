@@ -26,7 +26,7 @@
 #include <limits>
 #include <iostream>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	CalxMathFormulaPanel::CalxMathFormulaPanel(
 	    wxWindow *parent, wxWindowID id, const std::string &title,
@@ -91,4 +91,4 @@ namespace CalXUI {
 		}
 		this->Layout();
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

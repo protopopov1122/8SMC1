@@ -29,7 +29,7 @@
 #include <wx/filesys.h>
 #include <wx/textctrl.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	struct CalxConfigFile {
 		std::string path;
@@ -55,6 +55,6 @@ namespace CalXUI {
 		std::vector<CalxConfigFile> found;
 		wxDataViewListCtrl *configList;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

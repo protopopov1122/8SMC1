@@ -22,7 +22,7 @@
 
 #include "lua-calx/LuaCalXEnvironment.h"
 
-namespace CalXLua {
+namespace CalX::UI::Lua {
 
 	CalXException::CalXException(ErrorCode errcode) : errcode(errcode) {}
 
@@ -541,4 +541,4 @@ namespace CalXLua {
 	void LuaCalXJournal::critical(const std::string &msg) {
 		this->logger.stream(LoggingSeverity::Critical) << msg << Flush();
 	}
-}  // namespace CalXLua
+}  // namespace CalX::UI::Lua

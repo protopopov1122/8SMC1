@@ -27,7 +27,7 @@
 #include "ui/dev/CalxInstrumentComponent.h"
 #include "ui/dev/CalxMotorComponent.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxMotorConstructor : public CalxDeviceConstructor {
 	 public:
@@ -49,6 +49,6 @@ namespace CalXUI {
 		CalxDevicePool *pool;
 		std::shared_ptr<InstrumentController> ctrl;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

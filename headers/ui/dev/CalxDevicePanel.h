@@ -29,7 +29,7 @@
 #include "ui/CalxPanelPane.h"
 #include "ui/dev/CalxDeviceFactory.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	wxDECLARE_EVENT(wxEVT_DEVICE_PANEL_UPDATE, wxThreadEvent);
 	wxDECLARE_EVENT(wxEVT_DEVICE_PANEL_DEVICE_APPEND, wxThreadEvent);
@@ -64,6 +64,6 @@ namespace CalXUI {
 		std::map<device_id_t, CalxMotorHandle *> motors;
 		std::map<device_id_t, CalxInstrumentHandle *> instrs;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

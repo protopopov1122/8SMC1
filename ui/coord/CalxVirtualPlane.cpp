@@ -25,7 +25,7 @@
 #include <wx/sizer.h>
 #include <wx/utils.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	CalxPlaneTracker::CalxPlaneTracker(motor_point_t pos, motor_rect_t sz)
 	    : VirtualCoordPlane::VirtualCoordPlane(pos, sz) {}
@@ -282,4 +282,4 @@ namespace CalXUI {
 			this->mouseCoords->SetLabel(res);
 		}
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

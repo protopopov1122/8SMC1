@@ -22,7 +22,7 @@
 
 #include "ui/task/CalxLinearTask.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	CalxLinearTaskHandle::CalxLinearTaskHandle(
 	    wxWindow *win, wxWindowID id, std::size_t tid,
@@ -199,4 +199,4 @@ namespace CalXUI {
 	CalxTaskHandle *CalxLinearTaskFactory::newTask(wxWindow *win) {
 		return new CalxLinearTaskHandle(win, wxID_ANY, ++this->next_id);
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

@@ -26,7 +26,7 @@
 #include "ui/CalxApp.h"
 #include <wx/spinctrl.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxTaskStepHandle : public wxPanel {
 	 public:
@@ -89,6 +89,6 @@ namespace CalXUI {
 		wxCheckBox *clockwise;
 		wxCheckBox *relative;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

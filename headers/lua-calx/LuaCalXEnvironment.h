@@ -27,11 +27,9 @@
 #include "luacppb/LuaCppB.h"
 #include <exception>
 
-using namespace CalX;
-using namespace CalXUI;
 namespace lcb = LuaCppB;
 
-namespace CalXLua {
+namespace CalX::UI::Lua {
 
 	class CalXException : public std::exception {
 	 public:
@@ -207,6 +205,6 @@ namespace CalXLua {
 	 private:
 		JournalLogger &logger;
 	};
-}  // namespace CalXLua
+}  // namespace CalX::UI::Lua
 
 #endif

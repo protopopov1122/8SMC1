@@ -24,7 +24,7 @@
 #include "ui/coord/CalxCoordActions.h"
 #include "ui/CalxErrorHandler.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	CalXAppScriptPlane::CalXAppScriptPlane(CalxApp &app, std::size_t id)
 	    : app(app), plane_id(id) {}
@@ -242,4 +242,4 @@ namespace CalXUI {
 	    std::size_t id) {
 		return std::make_unique<CalXAppScriptPlane>(this->app, id);
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

@@ -25,7 +25,7 @@
 
 #include "ui/task/CalxTaskFactory.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	class CalxGCodeTaskFactory : public CalxTaskFactory {
 	 public:
@@ -53,6 +53,6 @@ namespace CalXUI {
 
 		std::shared_ptr<GCodeCoordTask> task;
 	};
-}  // namespace CalXUI
+}  // namespace CalX::UI
 
 #endif

@@ -25,7 +25,7 @@
 #include <wx/dcbuffer.h>
 #include <wx/sizer.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	CalxCoordAdjustAction::CalxCoordAdjustAction(
 	    CalxCoordAdjustDialog *dialog, std::shared_ptr<CoordHandle> handle,
@@ -408,4 +408,4 @@ namespace CalXUI {
 		    wxGetApp().getUnitProcessor().formatDouble(pos.y),
 		    wxGetApp().getUnitProcessor().getUnits()));
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

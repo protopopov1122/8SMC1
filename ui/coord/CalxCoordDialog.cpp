@@ -24,7 +24,7 @@
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	CalxCoordDialog::CalxCoordDialog(wxWindow *win, wxWindowID id,
 	                                 SystemManager &sysman)
@@ -137,4 +137,4 @@ namespace CalXUI {
 	void CalxCoordDialog::OnCancelButtonClick(wxCommandEvent &evt) {
 		Hide();
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

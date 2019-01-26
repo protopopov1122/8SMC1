@@ -25,7 +25,7 @@
 #include <wx/sizer.h>
 #include <wx/splitter.h>
 
-namespace CalXUI {
+namespace CalX::UI {
 
 	wxDEFINE_EVENT(wxEVT_ENABLE_EVENT, wxThreadEvent);
 
@@ -198,4 +198,4 @@ namespace CalXUI {
 		this->scriptList->SetSelection(this->scripts.size() - 1);
 		this->updateUI();
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

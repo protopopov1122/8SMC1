@@ -22,7 +22,7 @@
 
 #include "ui/task/CalxProgrammedTask.h"
 
-namespace CalXUI {
+namespace CalX::UI {
 	CalxProgrammedTaskHandle::CalxProgrammedTaskHandle(wxWindow *win,
 	                                                   wxWindowID id,
 	                                                   std::size_t tid)
@@ -217,4 +217,4 @@ namespace CalXUI {
 	CalxTaskHandle *CalxProgrammedTaskFactory::newTask(wxWindow *win) {
 		return new CalxProgrammedTaskHandle(win, wxID_ANY, ++this->next_id);
 	}
-}  // namespace CalXUI
+}  // namespace CalX::UI

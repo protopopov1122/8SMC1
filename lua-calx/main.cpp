@@ -23,6 +23,6 @@
 #include <iostream>
 #include "lua-calx/LuaScriptEngine.h"
 
-extern "C" LIBEXPORT CalXScriptUIFactory *getScriptUIEngine() {
-	return new CalXLua::LuaCalXScriptFactory();
+extern "C" LIBEXPORT CalX::UI::CalXScriptUIFactory *getScriptUIEngine() {
+	return new CalX::UI::Lua::LuaCalXScriptFactory();
 }
