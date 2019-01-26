@@ -151,6 +151,8 @@ namespace CalXLua {
 		std::size_t getTaskCount();
 		void removeTask(std::size_t);
 		void newGCodeFile(const std::string &, const std::string &);
+		void newGCode(const std::string &, const std::string &);
+		void newLinear(const std::string &, CalxLinearTaskParameters &);
 	 
 	 private:
 		CalXScriptUIEnvironment &env;

@@ -430,6 +430,14 @@ namespace CalXLua {
 	void LuaCalXTasks::newGCodeFile(const std::string &title, const std::string &path) {
 		this->env.getTasks().newGCodeFile(title, path);
 	}
+	
+	void LuaCalXTasks::newGCode(const std::string &title, const std::string &gcode) {
+		this->env.getTasks().newGCode(title, gcode);
+	}
+	
+	void LuaCalXTasks::newLinear(const std::string &title, CalxLinearTaskParameters &prms) {
+		this->env.getTasks().newLinear(title, prms);
+	}
 
 	LuaCalXConfig::LuaCalXConfig(CalXScriptUIEnvironment &env) : env(env) {
 		this->halt_on_fail =

@@ -25,22 +25,31 @@
 namespace CalXUI {
 
 	CalxLinearTaskHandle::CalxLinearTaskHandle(wxWindow *win, wxWindowID id,
-	                                           std::size_t tid)
+	                                           std::size_t tid, CalxLinearTaskParameters *taskParameters)
 	    : CalxTaskHandle(win, id) {
 		this->id = tid;
 		std::string units = wxGetApp().getUnitProcessor().getUnits();
 
-		ConfiguationFlatDictionary *confEntry =
-		    wxGetApp().getSystemManager().getConfiguration().getEntry(
-		        CalxConfiguration::LinearTask);
-		coord_rect_t rect = {
-			confEntry->getReal(CalxLinearTaskConfiguration::XStart, 0.0),
-			confEntry->getReal(CalxLinearTaskConfiguration::YStart, 0.0),
-			confEntry->getReal(CalxLinearTaskConfiguration::Width, 1000.0),
-			confEntry->getReal(CalxLinearTaskConfiguration::Height, 1000.0)
-		};
-		double spac = confEntry->getReal(CalxLinearTaskConfiguration::Spacing, 1.0);
-		bool vert = confEntry->getBool(CalxLinearTaskConfiguration::Vertical, true);
+		coord_rect_t rect;
+		double spac;
+		bool vert;
+		if (taskParameters) {
+			rect = taskParameters->area;
+			spac = taskParameters->spacing;
+			vert = taskParameters->vertical;
+		} else {
+			ConfiguationFlatDictionary *confEntry =
+				wxGetApp().getSystemManager().getConfiguration().getEntry(
+					CalxConfiguration::LinearTask);
+			rect = {
+				confEntry->getReal(CalxLinearTaskConfiguration::XStart, 0.0),
+				confEntry->getReal(CalxLinearTaskConfiguration::YStart, 0.0),
+				confEntry->getReal(CalxLinearTaskConfiguration::Width, 1000.0),
+				confEntry->getReal(CalxLinearTaskConfiguration::Height, 1000.0)
+			};
+			spac = confEntry->getReal(CalxLinearTaskConfiguration::Spacing, 1.0);
+			vert = confEntry->getBool(CalxLinearTaskConfiguration::Vertical, true);
+		}
 
 		motor_rect_t mrect = { 0, 0, 0, 0 };
 		motor_coord_t mspac = 0;

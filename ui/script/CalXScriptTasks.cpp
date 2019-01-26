@@ -23,13 +23,13 @@
 #include "ui/script/CalXScriptEngine.h"
 #include "ui/task/CalxTaskList.h"
 #include "ui/task/CalxGCodeTask.h"
+#include "ui/task/CalxLinearTask.h"
+#include <sstream>
 
 namespace CalXUI {
-
-  class CalxGCodeTaskBuilder : public CalxTaskFactory {
-   public:
-    CalxGCodeTaskBuilder(const std::string &path) : path(path) {
-      ConfigurationCatalogue &conf =
+	
+  static std::shared_ptr<ComplexCoordTranslator> getDefaultTranslator() {
+	  ConfigurationCatalogue &conf =
 		    wxGetApp().getSystemManager().getConfiguration();
       coord_point_t trans_offset = {
         static_cast<double>(conf.getEntry(CalxConfiguration::Coordinates)
@@ -51,8 +51,15 @@ namespace CalXUI {
       std::shared_ptr<LinearCoordTranslator> trans =
           std::make_shared<LinearCoordTranslator>(trans_offset, trans_scale,
                                                   unit_trans);
-      this->translator = std::make_shared<ComplexCoordTranslator>(unit_trans);
-      this->translator->add(trans);
+      auto translator = std::make_shared<ComplexCoordTranslator>(unit_trans);
+      translator->add(trans);
+	  return translator;
+  }
+
+  class CalxGCodeFileTaskBuilder : public CalxTaskFactory {
+   public:
+    CalxGCodeFileTaskBuilder(const std::string &path) : path(path) {
+      this->translator = getDefaultTranslator();
     }
   
     CalxTaskHandle *newTask(wxWindow *win) override {
@@ -70,6 +77,40 @@ namespace CalXUI {
     std::shared_ptr<ComplexCoordTranslator> translator;
   };
   
+  class CalxGCodeStringTaskBuilder : public CalxTaskFactory {
+   public:
+    CalxGCodeStringTaskBuilder(const std::string &title, const std::string &gcode) : title(title), gcode(gcode) {
+      this->translator = getDefaultTranslator();
+    }
+  
+    CalxTaskHandle *newTask(wxWindow *win) override {
+      CalxGcodeHandle *handle = nullptr;
+      std::stringstream is(this->gcode);
+      handle = new CalxGcodeHandle(win, wxID_ANY, this->title, &is,
+								  this->translator);
+      return handle;
+    }
+   private:
+	std::string title;
+    std::string gcode;
+    std::shared_ptr<ComplexCoordTranslator> translator;
+  };
+  
+  class CalxLinearTaskBuilder : public CalxTaskFactory {
+   public:
+    CalxLinearTaskBuilder(std::size_t id, CalxLinearTaskParameters &prms) : id(id), prms(prms) {
+	  this->translator = getDefaultTranslator();
+	}
+	
+    CalxTaskHandle *newTask(wxWindow *win) override {
+	  return new CalxLinearTaskHandle(win, wxID_ANY, id, &prms);
+	}
+   private:
+    std::size_t id;
+    CalxLinearTaskParameters prms;
+    std::shared_ptr<ComplexCoordTranslator> translator;
+  };
+  
   CalXAppScriptTasks::CalXAppScriptTasks(CalxApp &app)
     : app(app) {}
   
@@ -82,6 +123,14 @@ namespace CalXUI {
   }
 
   void CalXAppScriptTasks::newGCodeFile(const std::string &title, const std::string &path) {
-    this->app.getMainFrame()->getTaskList()->attachTask(title, std::make_shared<CalxGCodeTaskBuilder>(path));
+    this->app.getMainFrame()->getTaskList()->attachTask(title, std::make_shared<CalxGCodeFileTaskBuilder>(path));
+  }
+  
+  void CalXAppScriptTasks::newGCode(const std::string &title, const std::string &path) {
+    this->app.getMainFrame()->getTaskList()->attachTask(title, std::make_shared<CalxGCodeStringTaskBuilder>(title, path));
+  }
+  
+  void CalXAppScriptTasks::newLinear(const std::string &title, CalxLinearTaskParameters &prms) {
+	this->app.getMainFrame()->getTaskList()->attachTask(title, std::make_shared<CalxLinearTaskBuilder>(0, prms));
   }
 }

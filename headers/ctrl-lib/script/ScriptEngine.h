@@ -108,12 +108,22 @@ namespace CalX {
 		virtual std::unique_ptr<CalXScriptPlane> getPlane(std::size_t) = 0;
 	};
 
+	struct CalxLinearTaskParameters {
+		CalxLinearTaskParameters(coord_rect_t area, double spacing, bool vertical)
+			: area(area), spacing(spacing), vertical(vertical) {}
+		const coord_rect_t area;
+		const double spacing;
+		const bool vertical;
+	};
+	
 	class CalXScriptTasks {
 	 public:
 		virtual ~CalXScriptTasks() = default;
 		virtual std::size_t getTaskCount() = 0;
 		virtual void removeTask(std::size_t) = 0;
 		virtual void newGCodeFile(const std::string &, const std::string &) = 0;
+		virtual void newGCode(const std::string &, const std::string &) = 0;
+		virtual void newLinear(const std::string &, CalxLinearTaskParameters &) = 0;
 	};
 
 	class CalXScriptEnvironment {

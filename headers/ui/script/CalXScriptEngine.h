@@ -127,6 +127,8 @@ namespace CalXUI {
 		std::size_t getTaskCount() override;
 		void removeTask(std::size_t) override;
 		void newGCodeFile(const std::string &, const std::string &) override;
+		void newGCode(const std::string &, const std::string &) override;
+		void newLinear(const std::string &, CalxLinearTaskParameters &) override;
 	 private:
 		CalxApp &app;
 	};

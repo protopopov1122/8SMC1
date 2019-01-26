@@ -136,6 +136,12 @@ namespace CalXLua {
 		    lua, "x", &coord_rect_t::x, "y", &coord_rect_t::y, "w",
 		    &coord_rect_t::w, "h", &coord_rect_t::h, "new",
 		    &lcb::LuaCppConstructor<coord_rect_t, double, double, double, double>);
+		
+		auto linearTaskPrms = lcb::ClassBinder<CalxLinearTaskParameters>::bind(
+			lua, "area", &CalxLinearTaskParameters::area,
+			"spacing", &CalxLinearTaskParameters::spacing,
+			"vertical", &CalxLinearTaskParameters::vertical,
+			"new", &lcb::LuaCppConstructor<CalxLinearTaskParameters, coord_rect_t, double, bool>);
 
 		lcb::ClassBinder<LuaCalXPlane>::bind(
 		    lua, "id", &LuaCalXPlane::getPlaneID, "move",
@@ -158,7 +164,10 @@ namespace CalXLua {
 			lua,
 			"count", &LuaCalXTasks::getTaskCount,
 			"remove", &LuaCalXTasks::removeTask,
-			"gcodeFile", &LuaCalXTasks::newGCodeFile
+			"gcodeFile", &LuaCalXTasks::newGCodeFile,
+			"gcode", &LuaCalXTasks::newGCode,
+			"linear", &LuaCalXTasks::newLinear,
+			"linearTask", lcb::LuaFactory::wrap(lua, linearTaskPrms)
 		);
 
 		lcb::ClassBinder<ConfiguationFlatDictionary>::bind(
