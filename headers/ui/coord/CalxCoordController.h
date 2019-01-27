@@ -32,21 +32,24 @@ namespace CalX::UI {
 	class CalxCoordFilterListener {
 	 public:
 		virtual ~CalxCoordFilterListener() = default;
-		virtual void updateOffset(motor_point_t) = 0;
-		virtual void updateScale(motor_scale_t) = 0;
+		virtual void updateOffset(motor_point_t) {}
+		virtual void updateScale(motor_scale_t) {}
+		virtual void updateSpeed(float) {}
 	};
 
-	class CalxCoordController {
+	class CalxCoordController : public PlaneMapper {
 	 public:
 		CalxCoordController(std::shared_ptr<CoordHandle>, CalxActionQueue *);
 		virtual ~CalxCoordController() = default;
 
 		std::shared_ptr<CoordHandle> getHandle();
 
-		motor_point_t getOffset();
-		motor_scale_t getScale();
-		void setOffset(motor_point_t);
-		void setScale(motor_scale_t);
+		motor_point_t getOffset() const override;
+		motor_scale_t getScale() const override;
+		float getSpeedScale() const override;
+		void setOffset(motor_point_t) override;
+		void setScale(motor_scale_t) override;
+		void setSpeedScale(float) override;
 		void addFilterListener(CalxCoordFilterListener *);
 		void removeFilterListener(CalxCoordFilterListener *);
 
@@ -77,6 +80,7 @@ namespace CalX::UI {
 	 private:
 		std::shared_ptr<CoordHandle> handle;
 		CalxActionQueue *queue;
+		ErrorHandlerCallback error_handler;
 
 		// Filters
 		std::vector<CalxCoordFilterListener *> listeners;

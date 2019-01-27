@@ -28,6 +28,7 @@
 #include "ctrl-lib/ConfigKeys.h"
 #include <cinttypes>
 #include <iosfwd>
+#include <functional>
 
 /* This file contains basic structures, enums and constants that commonly used
  * by other library parts. */
@@ -164,6 +165,8 @@ namespace CalX {
 			return *this;
 		}
 	};
+
+	using ErrorHandlerCallback = std::function<void(ErrorCode)>;
 }  // namespace CalX
 
 #endif

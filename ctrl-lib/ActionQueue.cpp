@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/ActionQueue.h"
+#include "ctrl-lib/actions/ActionQueue.h"
 #include "ctrl-lib/SystemManager.h"
 
 namespace CalX {

@@ -23,103 +23,13 @@
 #ifndef CALX_UI_COORD_CALX_COORD_ACTIONS_H_
 #define CALX_UI_COORD_CALX_COORD_ACTIONS_H_
 
+#include "ctrl-lib/actions/PlaneActions.h"
 #include "ui/CalxActionQueue.h"
 #include "ui/CalxApp.h"
 #include "ui/coord/CalxCoordController.h"
 #include "ui/coord/CalxVirtualPlane.h"
 
 namespace CalX::UI {
-
-	class CalxCoordActionMove : public CalxAction {
-	 public:
-		CalxCoordActionMove(std::shared_ptr<CoordHandle>, coord_point_t, double,
-		                    bool, bool);
-
-		ErrorCode perform(SystemManager &) override;
-		void stop() override;
-
-	 private:
-		std::shared_ptr<CoordHandle> handle;
-		coord_point_t dest;
-		double speed;
-		bool sync;
-		bool relative;
-	};
-
-	class CalxCoordActionArc : public CalxAction {
-	 public:
-		CalxCoordActionArc(std::shared_ptr<CoordHandle>, coord_point_t,
-		                   coord_point_t, int, double, bool, bool);
-
-		ErrorCode perform(SystemManager &) override;
-		void stop() override;
-
-	 private:
-		std::shared_ptr<CoordHandle> handle;
-		coord_point_t dest;
-		coord_point_t cen;
-		int splitter;
-		double speed;
-		bool clockwise;
-		bool relative;
-	};
-
-	class CalxCoordActionCalibrate : public CalxAction {
-	 public:
-		CalxCoordActionCalibrate(std::shared_ptr<CoordHandle>, TrailerId);
-
-		ErrorCode perform(SystemManager &) override;
-		void stop() override;
-
-	 private:
-		std::shared_ptr<CoordHandle> handle;
-		TrailerId trailer;
-	};
-
-	class CalxCoordActionMeasure : public CalxAction {
-	 public:
-		CalxCoordActionMeasure(std::shared_ptr<CoordHandle>, TrailerId);
-
-		ErrorCode perform(SystemManager &) override;
-		void stop() override;
-
-	 private:
-		std::shared_ptr<CoordHandle> handle;
-		TrailerId trailer;
-	};
-
-	class CalxCoordActionConfigure : public CalxAction {
-	 public:
-		CalxCoordActionConfigure(std::shared_ptr<CoordHandle>,
-		                         CalxCoordController *, coord_point_t, double);
-
-		ErrorCode perform(SystemManager &) override;
-		void stop() override;
-
-	 private:
-		std::shared_ptr<CoordHandle> handle;
-		CalxCoordController *controller;
-		coord_point_t dest;
-		double speed;
-		bool work;
-	};
-
-	class CalxCoordActionGraphBuild : public CalxAction {
-	 public:
-		CalxCoordActionGraphBuild(std::shared_ptr<CoordHandle>,
-		                          std::shared_ptr<CoordTranslator>,
-		                          std::unique_ptr<GraphBuilder>, double);
-
-		ErrorCode perform(SystemManager &) override;
-		void stop() override;
-
-	 private:
-		std::shared_ptr<CoordHandle> handle;
-		std::shared_ptr<CoordTranslator> translator;
-		std::unique_ptr<GraphBuilder> builder;
-		double speed;
-		std::shared_ptr<TaskState> state;
-	};
 
 	class CalxCoordActionGraphPreview : public CalxAction {
 	 public:
