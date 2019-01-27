@@ -60,89 +60,6 @@ namespace CalX::UI {
 		}
 	}
 
-	void deviceActionFinished(MotorController &dev, ErrorCode errcode) {
-		Info(wxGetApp().getJournal())
-		    << "Device #" << dev.getID() << " action finished with error code "
-		    << static_cast<int>(errcode);
-	}
-
-	void deviceActionStopped(MotorController &dev) {
-		Info(wxGetApp().getJournal())
-		    << "Device #" << dev.getID() << " action stopped";
-	}
-
-	class CalxMotorMoveAction : public CalxAction {
-	 public:
-		CalxMotorMoveAction(CalxMotorComponent *ctrl, MotorController *dev,
-		                    int dest, float speed, bool rel) {
-			this->ctrl = ctrl;
-			this->dev = dev;
-			this->dest = dest;
-			this->speed = speed;
-			this->rel = rel;
-		}
-
-		ErrorCode perform(SystemManager &sysman) override {
-			ErrorCode errcode;
-			Info(wxGetApp().getJournal())
-			    << "Starting device #" << dev->getID() << (rel ? " relative " : " ")
-			    << "move"
-			    << " to " << dest << " with speed " << speed;
-			dev->use();
-			if (rel) {
-				errcode = dev->startRelativeMove(dest, speed);
-			} else {
-				errcode = dev->startMove(dest, speed);
-			}
-			dev->unuse();
-			wxGetApp().getErrorHandler()->handle(errcode);
-			deviceActionFinished(*dev, errcode);
-			return errcode;
-		}
-
-		void stop() override {
-			dev->stop();
-		}
-
-	 private:
-		CalxMotorComponent *ctrl;
-		MotorController *dev;
-		int dest;
-		float speed;
-		bool rel;
-	};
-
-	class CalxMotorCalibrationAction : public CalxAction {
-	 public:
-		CalxMotorCalibrationAction(CalxMotorComponent *ctrl, MotorController *dev,
-		                           TrailerId tr) {
-			this->ctrl = ctrl;
-			this->dev = dev;
-			this->tr = tr;
-		}
-
-		ErrorCode perform(SystemManager &sysman) override {
-			Info(wxGetApp().getJournal())
-			    << "Starting device #" << dev->getID() << " calibration to trailer #"
-			    << static_cast<int>(tr);
-			dev->use();
-			ErrorCode errcode = dev->moveToTrailer(tr);
-			dev->unuse();
-			wxGetApp().getErrorHandler()->handle(errcode);
-			return errcode;
-		}
-
-		void stop() override {
-			dev->stop();
-			deviceActionStopped(*dev);
-		}
-
-	 private:
-		CalxMotorComponent *ctrl;
-		MotorController *dev;
-		TrailerId tr;
-	};
-
 	CalxMotorComponent::CalxMotorComponent(
 	    wxWindow *win, wxWindowID id, std::shared_ptr<CalX::MotorController> dev)
 	    : CalxDeviceHandle::CalxDeviceHandle(win, id) {
@@ -348,8 +265,11 @@ namespace CalX::UI {
 	}
 
 	CalxActionResult CalxMotorComponent::roll(TrailerId tr) {
-		return this->queue->addAction(
-		    std::make_unique<CalxMotorCalibrationAction>(this, dev.get(), tr));
+		auto error_handler = [](ErrorCode errcode) {
+			wxGetApp().getErrorHandler()->handle(errcode);
+		};
+		return this->queue->addAction(std::make_unique<CalxMotorCalibrationAction>(
+		    *this->dev, error_handler, wxGetApp().getJournal(), tr));
 	}
 
 	void CalxMotorComponent::rollToTrailer1(wxCommandEvent &evt) {
@@ -370,8 +290,12 @@ namespace CalX::UI {
 
 	CalxActionResult CalxMotorComponent::move(motor_coord_t dest, float speed,
 	                                          bool relative) {
+		auto error_handler = [](ErrorCode errcode) {
+			wxGetApp().getErrorHandler()->handle(errcode);
+		};
 		return this->queue->addAction(std::make_unique<CalxMotorMoveAction>(
-		    this, dev.get(), dest, speed, relative));
+		    *this->dev, error_handler, wxGetApp().getJournal(), dest, speed,
+		    relative));
 	}
 
 	void CalxMotorComponent::moveClick(wxCommandEvent &evt) {

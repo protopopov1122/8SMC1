@@ -73,91 +73,6 @@ namespace CalX::UI {
 		CalxInstrumentComponent *ctrl;
 	};
 
-	class CalxInstrumentEnableAction : public CalxAction {
-	 public:
-		CalxInstrumentEnableAction(InstrumentController *ctrl) {
-			this->ctrl = ctrl;
-		}
-
-		ErrorCode perform(SystemManager &sysman) override {
-			ctrl->use();
-			ErrorCode errcode = ctrl->flipState();
-			wxGetApp().getErrorHandler()->handle(errcode);
-			ctrl->unuse();
-			return errcode;
-		}
-
-		void stop() override {}
-
-	 private:
-		InstrumentController *ctrl;
-	};
-
-	class CalxInstrumentSessionAction : public CalxAction {
-	 public:
-		CalxInstrumentSessionAction(InstrumentController *ctrl) {
-			this->ctrl = ctrl;
-		}
-
-		ErrorCode perform(SystemManager &sysman) override {
-			ctrl->use();
-			ErrorCode errcode = ErrorCode::NoError;
-			if (ctrl->isSessionOpened()) {
-				errcode = ctrl->close_session();
-			} else {
-				errcode = ctrl->open_session();
-			}
-			wxGetApp().getErrorHandler()->handle(errcode);
-			ctrl->unuse();
-			return errcode;
-		}
-
-		void stop() override {}
-
-	 private:
-		InstrumentController *ctrl;
-	};
-
-	class CalxInstrumentStateAction : public CalxAction {
-	 public:
-		CalxInstrumentStateAction(InstrumentController *ctrl) {
-			this->ctrl = ctrl;
-		}
-
-		ErrorCode perform(SystemManager &sysman) override {
-			ctrl->use();
-			ctrl->setRunnable(!ctrl->isRunnable());
-			ctrl->unuse();
-			return ErrorCode::NoError;
-		}
-
-		void stop() override {}
-
-	 private:
-		InstrumentController *ctrl;
-	};
-
-	class CalxInstrumentModeAction : public CalxAction {
-	 public:
-		CalxInstrumentModeAction(InstrumentController *ctrl, InstrumentMode m) {
-			this->ctrl = ctrl;
-			this->mode = m;
-		}
-
-		ErrorCode perform(SystemManager &sysman) override {
-			ctrl->use();
-			this->ctrl->setMode(this->mode);
-			ctrl->unuse();
-			return ErrorCode::NoError;
-		}
-
-		void stop() override {}
-
-	 private:
-		InstrumentController *ctrl;
-		InstrumentMode mode;
-	};
-
 	CalxInstrumentComponent::CalxInstrumentComponent(
 	    wxWindow *win, wxWindowID id, std::shared_ptr<InstrumentController> ctrl)
 	    : CalxDeviceHandle::CalxDeviceHandle(win, id) {
@@ -233,6 +148,9 @@ namespace CalX::UI {
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxInstrumentComponent::OnExit, this);
 		this->Bind(wxEVT_INSTRUMENT_CTRL_ENABLE,
 		           &CalxInstrumentComponent::OnEnableEvent, this);
+		this->error_handler = [](ErrorCode errcode) {
+			wxGetApp().getErrorHandler()->handle(errcode);
+		};
 	}
 
 	DeviceController *CalxInstrumentComponent::getController() {
@@ -273,13 +191,13 @@ namespace CalX::UI {
 	}
 
 	void CalxInstrumentComponent::OnEnableButton(wxCommandEvent &evt) {
-		queue->addAction(
-		    std::make_unique<CalxInstrumentEnableAction>(this->ctrl.get()));
+		queue->addAction(std::make_unique<CalxInstrumentEnableAction>(
+		    *this->ctrl, this->error_handler, wxGetApp().getJournal()));
 	}
 
 	void CalxInstrumentComponent::OnSessionSwitch(wxCommandEvent &evt) {
-		queue->addAction(
-		    std::make_unique<CalxInstrumentSessionAction>(this->ctrl.get()));
+		queue->addAction(std::make_unique<CalxInstrumentSessionAction>(
+		    *this->ctrl, this->error_handler, wxGetApp().getJournal()));
 	}
 
 	void CalxInstrumentComponent::OnConfClick(wxCommandEvent &evt) {
@@ -295,8 +213,8 @@ namespace CalX::UI {
 			InstrumentMode mode = sel == 0 ? InstrumentMode::Off
 			                               : (sel == 1 ? InstrumentMode::Prepare
 			                                           : InstrumentMode::Full);
-			queue->addAction(
-			    std::make_unique<CalxInstrumentModeAction>(this->ctrl.get(), mode));
+			queue->addAction(std::make_unique<CalxInstrumentModeAction>(
+			    *this->ctrl, this->error_handler, wxGetApp().getJournal(), mode));
 		}
 	}
 
