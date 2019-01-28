@@ -20,6 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "ui/CalxErrorHandler.h"
 #include "ui/coord/CalxCoordController.h"
 #include "ui/coord/CalxCoordActions.h"
 #include <algorithm>
@@ -77,18 +78,26 @@ namespace CalX::UI {
 		    static_cast<float>(wxGetApp().getUnitProcessor().getSpeedScale());
 		handle->getFloatPlane()->setScale(unit_scale);
 		handle->getFloatPlane()->setSpeedScale(unit_speed_scale);
+
+		this->error_handler = [](ErrorCode errcode) {
+			wxGetApp().getErrorHandler()->handle(errcode);
+		};
 	}
 
 	std::shared_ptr<CoordHandle> CalxCoordController::getHandle() {
 		return this->handle;
 	}
 
-	motor_point_t CalxCoordController::getOffset() {
+	motor_point_t CalxCoordController::getOffset() const {
 		return this->map->getOffset();
 	}
 
-	motor_scale_t CalxCoordController::getScale() {
+	motor_scale_t CalxCoordController::getScale() const {
 		return this->map->getScale();
+	}
+
+	float CalxCoordController::getSpeedScale() const {
+		return this->map->getSpeedScale();
 	}
 
 	void CalxCoordController::setOffset(motor_point_t m) {
@@ -104,6 +113,14 @@ namespace CalX::UI {
 			l->updateScale(sc);
 		}
 	}
+
+	void CalxCoordController::setSpeedScale(float scale) {
+		this->map->setSpeedScale(scale);
+		for (const auto &l : this->listeners) {
+			l->updateSpeed(scale);
+		}
+	}
+
 	bool CalxCoordController::isLoggingActions() {
 		return this->log->isLoggingActions();
 	}
@@ -156,26 +173,32 @@ namespace CalX::UI {
 
 	CalxActionResult CalxCoordController::move(coord_point_t dest, double speed,
 	                                           bool sync, bool relative) {
+		JournalLogger &journal = wxGetApp().getJournal();
 		return this->queue->addAction(std::make_unique<CalxCoordActionMove>(
-		    this->handle, dest, speed, sync, relative));
+		    this->handle, this->error_handler, journal, dest, speed, sync,
+		    relative));
 	}
 
 	CalxActionResult CalxCoordController::arc(coord_point_t dest,
 	                                          coord_point_t cen, int splitter,
 	                                          double speed, bool clockwise,
 	                                          bool relative) {
+		JournalLogger &journal = wxGetApp().getJournal();
 		return this->queue->addAction(std::make_unique<CalxCoordActionArc>(
-		    this->handle, dest, cen, splitter, speed, clockwise, relative));
+		    this->handle, this->error_handler, journal, dest, cen, splitter, speed,
+		    clockwise, relative));
 	}
 
 	CalxActionResult CalxCoordController::calibrate(TrailerId tr) {
-		return this->queue->addAction(
-		    std::make_unique<CalxCoordActionCalibrate>(this->handle, tr));
+		JournalLogger &journal = wxGetApp().getJournal();
+		return this->queue->addAction(std::make_unique<CalxCoordActionCalibrate>(
+		    this->handle, this->error_handler, journal, tr));
 	}
 
 	CalxActionResult CalxCoordController::measure(TrailerId tr) {
-		return this->queue->addAction(
-		    std::make_unique<CalxCoordActionMeasure>(this->handle, tr));
+		JournalLogger &journal = wxGetApp().getJournal();
+		return this->queue->addAction(std::make_unique<CalxCoordActionMeasure>(
+		    this->handle, this->error_handler, journal, tr));
 	}
 
 	CalxActionResult CalxCoordController::move(coord_point_t pos, double speed) {
@@ -188,15 +211,18 @@ namespace CalX::UI {
 
 	CalxActionResult CalxCoordController::configure(coord_point_t pos,
 	                                                double speed) {
+		JournalLogger &journal = wxGetApp().getJournal();
 		return this->queue->addAction(std::make_unique<CalxCoordActionConfigure>(
-		    this->handle, this, pos, speed));
+		    this->handle, this->error_handler, journal, *this, pos, speed));
 	}
 
 	CalxActionResult CalxCoordController::build(
 	    std::shared_ptr<CoordTranslator> trans,
 	    std::unique_ptr<GraphBuilder> builder, double speed) {
+		JournalLogger &journal = wxGetApp().getJournal();
 		return this->queue->addAction(std::make_unique<CalxCoordActionGraphBuild>(
-		    this->handle, trans, std::move(builder), speed));
+		    this->handle, this->error_handler, journal, trans, std::move(builder),
+		    speed));
 	}
 
 	CalxActionResult CalxCoordController::preview(

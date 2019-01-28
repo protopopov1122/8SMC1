@@ -27,16 +27,27 @@
 
 namespace CalX {
 
-	class CoordPlaneMap : public ProxyCoordPlane {
+	class PlaneMapper {
+	 public:
+		virtual ~PlaneMapper() = default;
+		virtual motor_point_t getOffset() const = 0;
+		virtual motor_scale_t getScale() const = 0;
+		virtual float getSpeedScale() const = 0;
+		virtual void setOffset(motor_point_t) = 0;
+		virtual void setScale(motor_scale_t) = 0;
+		virtual void setSpeedScale(float) = 0;
+	};
+
+	class CoordPlaneMap : public ProxyCoordPlane, public PlaneMapper {
 	 public:
 		CoordPlaneMap(motor_point_t, motor_scale_t, float,
 		              std::shared_ptr<CoordPlane>);
-		motor_point_t getOffset() const;
-		motor_scale_t getScale() const;
-		float getSpeedScale() const;
-		void setOffset(motor_point_t);
-		void setScale(motor_scale_t);
-		void setSpeedScale(float);
+		motor_point_t getOffset() const override;
+		motor_scale_t getScale() const override;
+		float getSpeedScale() const override;
+		void setOffset(motor_point_t) override;
+		void setScale(motor_scale_t) override;
+		void setSpeedScale(float) override;
 
 		ErrorCode move(motor_point_t, float, bool) override;
 		ErrorCode arc(motor_point_t, motor_point_t, int, float, bool,

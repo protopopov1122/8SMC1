@@ -65,6 +65,8 @@ namespace CalX::UI {
 		std::shared_ptr<InstrumentController> ctrl;
 		std::shared_ptr<InstrumentEventListener> listener;
 		wxTimer *timer;
+
+		ErrorHandlerCallback error_handler;
 	};
 }  // namespace CalX::UI
 

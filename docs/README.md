@@ -14,4 +14,5 @@ This guide is trying to explain essential concepts of this system and give pract
 * [Other notes](other.md)
 * [Compatibility](compat.md)
 * [Programming](prog.md)
+* [Lua API manual](lua.md)
 * [Device API manual](devapi.md)

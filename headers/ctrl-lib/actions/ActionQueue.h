@@ -20,8 +20,8 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CALX_CTRL_LIB_ACTION_QUEUE_H_
-#define CALX_CTRL_LIB_ACTION_QUEUE_H_
+#ifndef CALX_CTRL_LIB_ACTIONS_ACTION_QUEUE_H_
+#define CALX_CTRL_LIB_ACTIONS_ACTION_QUEUE_H_
 
 #include "ctrl-lib/CtrlCore.h"
 #include <vector>

@@ -20,33 +20,11 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CALX_UI_COORD_CALX_COORD_ACTIONS_H_
-#define CALX_UI_COORD_CALX_COORD_ACTIONS_H_
+#ifndef CALX_CTRL_LIB_ACTIONS_ACTIONS_H_
+#define CALX_CTRL_LIB_ACTIONS_ACTIONS_H_
 
+#include "ctrl-lib/actions/ActionQueue.h"
+#include "ctrl-lib/actions/DeviceActions.h"
 #include "ctrl-lib/actions/PlaneActions.h"
-#include "ui/CalxActionQueue.h"
-#include "ui/CalxApp.h"
-#include "ui/coord/CalxCoordController.h"
-#include "ui/coord/CalxVirtualPlane.h"
-
-namespace CalX::UI {
-
-	class CalxCoordActionGraphPreview : public CalxAction {
-	 public:
-		CalxCoordActionGraphPreview(CalxVirtualPlaneDialog *,
-		                            std::shared_ptr<CoordTranslator>,
-		                            std::unique_ptr<GraphBuilder>, double);
-
-		ErrorCode perform(SystemManager &) override;
-		void stop() override;
-
-	 private:
-		CalxVirtualPlaneDialog *dialog;
-		std::shared_ptr<CoordTranslator> translator;
-		std::unique_ptr<GraphBuilder> builder;
-		double speed;
-		std::shared_ptr<TaskState> state;
-	};
-}  // namespace CalX::UI
 
 #endif
