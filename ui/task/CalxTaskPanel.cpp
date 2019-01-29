@@ -541,10 +541,10 @@ namespace CalX::UI {
 			            .getCoordPlaneSet()
 			            .getCoord((std::size_t) plane->GetSelection())
 			            .lock()) {
-				std::pair<motor_point_t, bool> start =
+				std::optional<motor_point_t> start =
 				    task->getStartPoint(handle->getPosition(), handle->getSize(),
 				                        wxGetApp().getSystemManager());
-				if (start.second) {
+				if (start.has_value()) {
 					float scale = wxGetApp()
 					                  .getSystemManager()
 					                  .getConfiguration()
@@ -556,7 +556,7 @@ namespace CalX::UI {
 					        .getConfiguration()
 					        .getEntry(CalxConfiguration::Units)
 					        ->getReal(CalxUnitConfiguration::UnitSpeed, 1.25f);
-					coord_point_t dest = { start.first.x / scale, start.first.y / scale };
+					coord_point_t dest = { start.value().x / scale, start.value().y / scale };
 					wxGetApp()
 					    .getMainFrame()
 					    ->getPlaneList()

@@ -28,36 +28,31 @@ namespace CalX {
 	class BarrierVirtualPlane : public VirtualCoordPlane {
 	 public:
 		BarrierVirtualPlane(motor_point_t offset, motor_rect_t size)
-		    : VirtualCoordPlane::VirtualCoordPlane(offset, size) {
-			this->actual = false;
-			this->res = { 0, 0 };
-		}
+		    : VirtualCoordPlane::VirtualCoordPlane(offset, size) {}
 
-		virtual bool jump(motor_point_t point, bool sync) {
+		bool jump(motor_point_t point, bool sync) override {
 			if (sync) {
-				this->res = point;
-				this->actual = true;
 				return false;
 			} else {
+				this->res = point;
 				return true;
 			}
 		}
 
-		virtual std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane> pl) {
+		std::unique_ptr<CoordPlane> clone(std::shared_ptr<CoordPlane> pl) override {
 			return std::make_unique<BarrierVirtualPlane>(pl->getPosition(),
 			                                             pl->getSize());
 		}
 
-		std::pair<motor_point_t, bool> getResult() {
-			return std::make_pair(this->res, this->actual);
+		std::optional<motor_point_t> getResult() {
+			return this->res;
 		}
 
 	 private:
-		bool actual;
-		motor_point_t res;
+		std::optional<motor_point_t> res;
 	};
 
-	std::pair<motor_point_t, bool> CoordTask::getStartPoint(
+	std::optional<motor_point_t> CoordTask::getStartPoint(
 	    motor_point_t offset, motor_rect_t size, SystemManager &sysman) {
 		std::shared_ptr<BarrierVirtualPlane> plane =
 		    std::make_shared<BarrierVirtualPlane>(offset, size);

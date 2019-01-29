@@ -67,8 +67,8 @@ namespace CalX {
 		}
 		virtual ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
 		                          SystemManager &, std::shared_ptr<TaskState>) = 0;
-		std::pair<motor_point_t, bool> getStartPoint(motor_point_t, motor_rect_t,
-		                                             SystemManager &);
+		std::optional<motor_point_t> getStartPoint(motor_point_t, motor_rect_t,
+		                                           SystemManager &);
 
 	 private:
 		CoordTaskType type;
