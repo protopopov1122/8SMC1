@@ -56,7 +56,6 @@ namespace CalX::UI {
 		      handle(handle),
 		      task(task),
 		      prms(prms) {
-			this->prms.speed *= this->handle->getFloatPlane()->getSpeedScale();
 			this->state = std::make_shared<TaskState>();
 			this->state->plane = nullptr;
 			this->state->work = false;
@@ -64,10 +63,12 @@ namespace CalX::UI {
 
 		ErrorCode perform(SystemManager &sysman) override {
 			Info(wxGetApp().getJournal())
-			    << "Start execution of task: " << this->descriptor;
+			    << "Start execution of task (with speed " << this->prms.speed << "): " << this->descriptor;
+			TaskParameters parameters(this->prms);
+			parameters.speed *= this->handle->getFloatPlane()->getSpeedScale();
 			handle->open_session();
 			panel->setEnabled(false);
-			ErrorCode errcode = task->perform(handle, prms, sysman, state);
+			ErrorCode errcode = task->perform(this->handle, parameters, sysman, this->state);
 			wxGetApp().getErrorHandler()->handle(errcode);
 			panel->setEnabled(true);
 			handle->close_session();
