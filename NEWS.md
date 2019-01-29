@@ -158,3 +158,6 @@ There are several major tasks:
 * test existing version of CalX in the real environment.
 * extend scripting bindings.
 * document recently added system features and Lua scripting APIs.
+
+##### 29/01/2019
+Test in the real environment. The core functionality was tested. Recently added functions work properly.
