@@ -63,12 +63,14 @@ namespace CalX::UI {
 
 		ErrorCode perform(SystemManager &sysman) override {
 			Info(wxGetApp().getJournal())
-			    << "Start execution of task (with speed " << this->prms.speed << "): " << this->descriptor;
+			    << "Start execution of task (with speed " << this->prms.speed
+			    << "): " << this->descriptor;
 			TaskParameters parameters(this->prms);
 			parameters.speed *= this->handle->getFloatPlane()->getSpeedScale();
 			handle->open_session();
 			panel->setEnabled(false);
-			ErrorCode errcode = task->perform(this->handle, parameters, sysman, this->state);
+			ErrorCode errcode =
+			    task->perform(this->handle, parameters, sysman, this->state);
 			wxGetApp().getErrorHandler()->handle(errcode);
 			panel->setEnabled(true);
 			handle->close_session();
@@ -557,7 +559,8 @@ namespace CalX::UI {
 					        .getConfiguration()
 					        .getEntry(CalxConfiguration::Units)
 					        ->getReal(CalxUnitConfiguration::UnitSpeed, 1.25f);
-					coord_point_t dest = { start.value().x / scale, start.value().y / scale };
+					coord_point_t dest = { start.value().x / scale,
+						                     start.value().y / scale };
 					wxGetApp()
 					    .getMainFrame()
 					    ->getPlaneList()

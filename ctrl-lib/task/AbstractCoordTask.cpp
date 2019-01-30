@@ -52,8 +52,9 @@ namespace CalX {
 		std::optional<motor_point_t> res;
 	};
 
-	std::optional<motor_point_t> CoordTask::getStartPoint(
-	    motor_point_t offset, motor_rect_t size, SystemManager &sysman) {
+	std::optional<motor_point_t> CoordTask::getStartPoint(motor_point_t offset,
+	                                                      motor_rect_t size,
+	                                                      SystemManager &sysman) {
 		std::shared_ptr<BarrierVirtualPlane> plane =
 		    std::make_shared<BarrierVirtualPlane>(offset, size);
 		TaskParameters prms = { 1.0f };

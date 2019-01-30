@@ -20,6 +20,8 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "ctrl-lib/conf/INI.h"
+#include "ctrl-lib/conf/ConfigManager.h"
 #include "ui/CalxFrame.h"
 #include "ui/CalxPanel.h"
 #include "ui/config/CalxConfigEditor.h"
@@ -46,9 +48,26 @@
 #include <wx/app.h>
 #include <wx/splitter.h>
 #include <wx/textctrl.h>
+
 namespace CalX::UI {
 
-	CalxDevicePanel *newDevicePanel(wxWindow *win) {
+	std::unique_ptr<ConfigurationCatalogue> loadUIConfiguration() {
+		std::string uiConfigPath = wxGetApp()
+		                               .getSystemManager()
+		                               .getConfiguration()
+		                               .getEntry("ui")
+		                               ->getString("ui_configuration", "");
+		if (!uiConfigPath.empty()) {
+			std::ifstream is(uiConfigPath);
+			return INIConfiguration::load(is, std::cout);
+		} else {
+			return std::make_unique<ConfigManager>();
+		}
+	}
+
+	CalxDevicePanel *newDevicePanel(wxWindow *win,
+	                                ConfigurationCatalogue &uiConfig) {
+		auto &devicesConfig = *uiConfig.getEntry("devices");
 		CalxDevicePanel *devPanel = new CalxDevicePanel(win, wxID_ANY);
 		std::vector<DeviceConnectionType> devConType;
 		std::vector<DeviceConnectionType> instrConType;
@@ -56,18 +75,22 @@ namespace CalX::UI {
 		    devConType, instrConType);
 		for (const auto &devCon : devConType) {
 			switch (devCon) {
-				case DeviceConnectionType::SerialPort: {
-					devPanel->appendDeviceFactory(__("COM Motor"),
-					                              new CalxSerialMotorFactory());
-				} break;
+				case DeviceConnectionType::SerialPort:
+					if (devicesConfig.getBool("com_motor", true)) {
+						devPanel->appendDeviceFactory(__("COM Motor"),
+						                              new CalxSerialMotorFactory());
+					}
+					break;
 			}
 		}
 		for (const auto &instrCon : instrConType) {
 			switch (instrCon) {
-				case DeviceConnectionType::SerialPort: {
-					devPanel->appendDeviceFactory(__("COM Instrument"),
-					                              new CalxSerialInstrumentFactory());
-				} break;
+				case DeviceConnectionType::SerialPort:
+					if (devicesConfig.getBool("com_instrument", true)) {
+						devPanel->appendDeviceFactory(__("COM Instrument"),
+						                              new CalxSerialInstrumentFactory());
+					}
+					break;
 			}
 		}
 
@@ -99,29 +122,63 @@ namespace CalX::UI {
 		return devPanel;
 	}
 
-	CalxCoordPanel *newCoordPanel(wxWindow *win) {
-		CalxCoordPanel *coordPanel = new CalxCoordPanel(win, wxID_ANY, 2);
-		coordPanel->addComponentFactory(__("Linear movement"),
-		                                new CalxCoordLinearComponentFactory(), 0);
-		coordPanel->addComponentFactory(__("Arc movement"),
-		                                new CalxCoordArcComponentFactory(), 0);
-		coordPanel->addComponentFactory(
-		    __("Function graph"), new CalxCoordGraphComponentFactory(), 0, false);
-		coordPanel->addComponentFactory(
-		    __("Other"), new CalxCoordOtherComponentFactory(), 1, false);
-		coordPanel->addComponentFactory(
-		    __("Position"), new CalxCoordPositionComponentFactory(), 1, false);
-		coordPanel->addComponentFactory(__("Filters"),
-		                                new CalxCoordFilterComponentFactory(), 1);
+	CalxCoordPanel *newCoordPanel(wxWindow *win,
+	                              ConfigurationCatalogue &uiConfig) {
+		auto &planesConfig = *uiConfig.getEntry("planes");
+		CalxCoordPanel *coordPanel =
+		    new CalxCoordPanel(win, wxID_ANY, planesConfig.getInt("columns", 2));
+		if (planesConfig.getBool("linear_movement", true)) {
+			coordPanel->addComponentFactory(
+			    __("Linear movement"), new CalxCoordLinearComponentFactory(),
+			    planesConfig.getInt("linear_movement_col", 0),
+			    planesConfig.getBool("linear_movement_min", true));
+		}
+		if (planesConfig.getBool("arc_movement", true)) {
+			coordPanel->addComponentFactory(
+			    __("Arc movement"), new CalxCoordArcComponentFactory(),
+			    planesConfig.getInt("arc_movement_col", 0),
+			    planesConfig.getBool("arc_movement_min", true));
+		}
+		if (planesConfig.getBool("function", true)) {
+			coordPanel->addComponentFactory(
+			    __("Function graph"), new CalxCoordGraphComponentFactory(),
+			    planesConfig.getInt("function_col", 0),
+			    planesConfig.getBool("function_min", false));
+		}
+		if (planesConfig.getBool("other", true)) {
+			coordPanel->addComponentFactory(__("Other"),
+			                                new CalxCoordOtherComponentFactory(),
+			                                planesConfig.getInt("other_col", 1),
+			                                planesConfig.getBool("other_min", false));
+		}
+		if (planesConfig.getBool("position", true)) {
+			coordPanel->addComponentFactory(
+			    __("Position"), new CalxCoordPositionComponentFactory(),
+			    planesConfig.getInt("position_col", 1),
+			    planesConfig.getBool("position_min", false));
+		}
+		if (planesConfig.getBool("filters", true)) {
+			coordPanel->addComponentFactory(
+			    __("Filters"), new CalxCoordFilterComponentFactory(),
+			    planesConfig.getInt("filters_col", 1),
+			    planesConfig.getBool("filters_min", true));
+		}
 		return coordPanel;
 	}
 
-	CalxTaskPanel *newTaskPanel(wxWindow *win) {
+	CalxTaskPanel *newTaskPanel(wxWindow *win, ConfigurationCatalogue &uiConfig) {
 		CalxTaskPanel *taskPanel = new CalxTaskPanel(win, wxID_ANY);
-		taskPanel->attachTaskFactory(__("GCode"), new CalxGCodeTaskFactory());
-		taskPanel->attachTaskFactory(__("Programmed"),
-		                             new CalxProgrammedTaskFactory());
-		taskPanel->attachTaskFactory(__("Linear"), new CalxLinearTaskFactory());
+		auto &tasksConfig = *uiConfig.getEntry("tasks");
+		if (tasksConfig.getBool("gcode", true)) {
+			taskPanel->attachTaskFactory(__("GCode"), new CalxGCodeTaskFactory());
+		}
+		if (tasksConfig.getBool("programmed", true)) {
+			taskPanel->attachTaskFactory(__("Programmed"),
+			                             new CalxProgrammedTaskFactory());
+		}
+		if (tasksConfig.getBool("linear", true)) {
+			taskPanel->attachTaskFactory(__("Linear"), new CalxLinearTaskFactory());
+		}
 		return taskPanel;
 	}
 
@@ -150,10 +207,8 @@ namespace CalX::UI {
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		this->SetSizer(sizer);
 		this->panel = new CalxPanel(this, wxID_ANY);
-		this->quickstartPanel = new CalxPanel(this, wxID_ANY);
 		wxPanel *statusPanel = new wxPanel(this, wxID_ANY);
 		sizer->Add(this->panel, 1, wxEXPAND | wxALL);
-		sizer->Add(this->quickstartPanel, 1, wxEXPAND | wxALL);
 		sizer->Add(statusPanel, 0, wxEXPAND | wxALL);
 
 		Bind(wxEVT_CLOSE_WINDOW, &CalxFrame::OnClose, this);
@@ -168,9 +223,11 @@ namespace CalX::UI {
 		this->menuBar->Append(this->aboutMenu, __("About"));
 		SetMenuBar(this->menuBar);
 
-		CalxDevicePanel *devicePanel = newDevicePanel(panel);
-		CalxCoordPanel *coordPanel = newCoordPanel(panel);
-		CalxTaskPanel *taskPanel = newTaskPanel(panel);
+		std::unique_ptr<ConfigurationCatalogue> uiConfig = loadUIConfiguration();
+
+		CalxDevicePanel *devicePanel = newDevicePanel(panel, *uiConfig);
+		CalxCoordPanel *coordPanel = newCoordPanel(panel, *uiConfig);
+		CalxTaskPanel *taskPanel = newTaskPanel(panel, *uiConfig);
 		this->device_pool = devicePanel;
 		this->plane_list = coordPanel;
 		this->task_list = taskPanel;
@@ -179,26 +236,32 @@ namespace CalX::UI {
 		CalxMathPanel *mathPanel = new CalxMathPanel(panel, wxID_ANY);
 		this->math_engine = mathPanel;
 
-		panel->addPane(__("Devices"), devicePanel);
-		panel->addPane(__("Coordinate planes"), coordPanel);
-		panel->addPane(__("Tasks"), taskPanel);
-		panel->addPane(__("Configuration"), newConfigPanel(panel));
-		if (scriptPanel != nullptr) {
+		auto &uiPanes = *uiConfig->getEntry("panes");
+		if (uiPanes.getBool("devices", true)) {
+			panel->addPane(__("Devices"), devicePanel);
+		}
+		if (uiPanes.getBool("planes", true)) {
+			panel->addPane(__("Coordinate planes"), coordPanel);
+		}
+		if (uiPanes.getBool("tasks", true)) {
+			panel->addPane(__("Tasks"), taskPanel);
+		}
+		if (uiPanes.getBool("configuration", true)) {
+			panel->addPane(__("Configuration"), newConfigPanel(panel));
+		}
+		if (scriptPanel != nullptr && uiPanes.getBool("scripts", true)) {
 			panel->addPane(__("Scripts"), scriptPanel);
 		}
-		panel->addPane(__("Math"), mathPanel);
+		if (uiPanes.getBool("math", true)) {
+			panel->addPane(__("Math"), mathPanel);
+		}
+		panel->SetSelection(uiPanes.getInt("default", 0));
 
 		wxBoxSizer *statusSizer = new wxBoxSizer(wxHORIZONTAL);
 		statusPanel->SetSizer(statusSizer);
-		/*this->switchButton =
-		    new wxButton(statusPanel, wxID_ANY, __("Quickstart/Advanced"));
-		statusSizer->Add(this->switchButton);
-		switchButton->Bind(wxEVT_BUTTON, &CalxFrame::OnSwitchClick, this);*/
 		wxButton *stopButton = new wxButton(statusPanel, wxID_ANY, __("Stop All"));
 		statusSizer->Add(stopButton);
 		stopButton->Bind(wxEVT_BUTTON, &CalxFrame::OnStopClick, this);
-
-		this->quickstartPanel->Show(false);
 
 		Layout();
 		Fit();
@@ -206,10 +269,6 @@ namespace CalX::UI {
 
 	CalxPanel *CalxFrame::getPanel() {
 		return this->panel;
-	}
-
-	CalxPanel *CalxFrame::getQuickstart() {
-		return this->quickstartPanel;
 	}
 
 	CalxDevicePool *CalxFrame::getDevicePool() {
@@ -273,15 +332,5 @@ namespace CalX::UI {
 		about.SetLicense(LICENSE);
 
 		wxAboutBox(about);
-	}
-
-	void CalxFrame::OnSwitchClick(wxCommandEvent &evt) {
-		this->switch_modes();
-	}
-
-	void CalxFrame::switch_modes() {
-		this->quickstartPanel->Show(!this->quickstartPanel->IsShown());
-		this->panel->Show(!this->panel->IsShown());
-		Layout();
 	}
 }  // namespace CalX::UI

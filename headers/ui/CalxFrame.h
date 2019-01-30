@@ -40,7 +40,6 @@ namespace CalX::UI {
 	 public:
 		CalxFrame(const std::string &);
 		CalxPanel *getPanel();
-		CalxPanel *getQuickstart();
 
 		CalxDevicePool *getDevicePool();
 		CalxPlaneList *getPlaneList();
@@ -48,18 +47,14 @@ namespace CalX::UI {
 		CalxMathEngine *getMathEngine();
 
 	 private:
-		void switch_modes();
-
 		void OnStopClick(wxCommandEvent &);
 		void OnClose(wxCloseEvent &);
 		void OnAboutMenuClick(wxCommandEvent &);
-		void OnSwitchClick(wxCommandEvent &);
 
 		wxMenuBar *menuBar;
 		wxMenu *aboutMenu;
 
 		CalxPanel *panel;
-		CalxPanel *quickstartPanel;
 
 		CalxDevicePool *device_pool;
 		CalxPlaneList *plane_list;
