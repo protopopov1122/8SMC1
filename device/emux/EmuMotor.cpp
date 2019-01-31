@@ -103,13 +103,12 @@ namespace CalX {
 	void EmuMotor::terminate() {}
 
 	void EmuMotor::motorThread() {
-		const int MAX_SPEED = 4000 * SPEED_FACTOR;
+		const float MAX_SPEED = 4000 * SPEED_FACTOR;
 		const int DISCR = 100;  // times per second
 		while (this->motorWorks) {
 			if (this->destination != this->pos) {
-				const int MOTOR_SPEED =
-				    this->speed > MAX_SPEED ? MAX_SPEED : static_cast<int>(this->speed);
-				const int MOTOR_STEP = MOTOR_SPEED / DISCR;
+				const float MOTOR_SPEED = fmin(MAX_SPEED, this->speed);
+				const int MOTOR_STEP = static_cast<int>(ceil(MOTOR_SPEED / DISCR));
 				if (abs(this->destination - this->pos) <= MOTOR_STEP) {
 					this->pos = this->destination;
 				} else {
