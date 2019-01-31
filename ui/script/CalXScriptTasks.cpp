@@ -66,7 +66,7 @@ namespace CalX::UI {
 			CalxGcodeHandle *handle = nullptr;
 			std::fstream is(this->path);
 			if (is.good()) {
-				handle = new CalxGcodeHandle(win, wxID_ANY, this->path, &is,
+				handle = new CalxGcodeHandle(win, wxID_ANY, this->path, is,
 				                             this->translator);
 			}
 			is.close();
@@ -89,8 +89,8 @@ namespace CalX::UI {
 		CalxTaskHandle *newTask(wxWindow *win) override {
 			CalxGcodeHandle *handle = nullptr;
 			std::stringstream is(this->gcode);
-			handle = new CalxGcodeHandle(win, wxID_ANY, this->title, &is,
-			                             this->translator);
+			handle =
+			    new CalxGcodeHandle(win, wxID_ANY, this->title, is, this->translator);
 			return handle;
 		}
 

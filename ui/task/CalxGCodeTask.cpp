@@ -27,7 +27,7 @@
 namespace CalX::UI {
 
 	CalxGcodeHandle::CalxGcodeHandle(wxWindow *win, wxWindowID id,
-	                                 const std::string &sid, std::istream *is,
+	                                 const std::string &sid, std::istream &is,
 	                                 std::shared_ptr<ComplexCoordTranslator> tr)
 	    : CalxTaskHandle::CalxTaskHandle(win, id) {
 		this->id = sid;
@@ -44,7 +44,7 @@ namespace CalX::UI {
 
 		std::string code;
 		int chr;
-		while ((chr = is->get()) != EOF) {
+		while ((chr = is.get()) != EOF) {
 			code += (char) chr;
 		}
 		codeText->SetValue(code);
@@ -86,7 +86,7 @@ namespace CalX::UI {
 		loader->ShowModal();
 		if (loader->isLoaded()) {
 			std::fstream is(loader->getPath());
-			handle = new CalxGcodeHandle(win, wxID_ANY, loader->getPath(), &is,
+			handle = new CalxGcodeHandle(win, wxID_ANY, loader->getPath(), is,
 			                             loader->getTranslator());
 			is.close();
 		}

@@ -28,6 +28,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <memory>
 
 /* CLI is abstract command line implementation that store
    command definitions and work with command line:
@@ -41,22 +42,22 @@ namespace CalX {
 
 	class CLICommand {
 	 public:
-		virtual ~CLICommand(){};
+		virtual ~CLICommand() = default;
 		virtual void execute(CLI *, std::vector<std::string> &) = 0;
 	};
 
 	class CLI {
 	 public:
 		CLI(std::ostream &, std::istream &);
-		virtual ~CLI();
+		virtual ~CLI() = default;
 		bool shell();
 		void error(const std::string &);
-		void addCommand(const std::string &, CLICommand *);
+		void addCommand(const std::string &, std::unique_ptr<CLICommand>);
 
 	 private:
-		std::map<std::string, CLICommand *> commands;
-		std::ostream *out;
-		std::istream *in;
+		std::map<std::string, std::unique_ptr<CLICommand>> commands;
+		std::ostream &out;
+		std::istream &in;
 	};
 }  // namespace CalX
 

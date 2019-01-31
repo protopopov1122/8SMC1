@@ -29,35 +29,27 @@
 
 namespace CalX {
 
-	CLI::CLI(std::ostream &os, std::istream &is) {
-		this->in = &is;
-		this->out = &os;
-	}
-
-	CLI::~CLI() {
-		for (const auto &kv : this->commands) {
-			delete kv.second;
-		}
-	}
+	CLI::CLI(std::ostream &os, std::istream &is) : out(os), in(is) {}
 
 	void CLI::error(const std::string &err) {
-		*out << "Error: " << err << std::endl;
+		this->out << "Error: " << err << std::endl;
 	}
 
-	void CLI::addCommand(const std::string &name, CLICommand *cmd) {
+	void CLI::addCommand(const std::string &name,
+	                     std::unique_ptr<CLICommand> cmd) {
 		if (this->commands.count(name) != 0) {
 			this->error("(CLI) Command '" + name + "' already exists");
 			return;
 		}
-		this->commands[name] = cmd;
+		this->commands[name] = std::move(cmd);
 	}
 
 	bool CLI::shell() {
 		// Read and execute one shell command
 		const std::string PROMPT = ">>> ";
-		*out << PROMPT;
+		this->out << PROMPT;
 		std::string input;
-		getline(*in, input);
+		getline(this->in, input);
 
 		if (input.length() == 0) {
 			return true;
@@ -125,8 +117,8 @@ namespace CalX {
 		}
 
 		try {
-			CLICommand *cmd = this->commands[command];
-			cmd->execute(this, args);
+			CLICommand &cmd = *this->commands[command];
+			cmd.execute(this, args);
 		} catch (...) {
 			std::cout << "Command execution error" << std::endl;
 		}

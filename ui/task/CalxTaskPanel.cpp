@@ -489,7 +489,7 @@ namespace CalX::UI {
 				}
 				CalxGcodeHandle *gcodeHandle = new CalxGcodeHandle(
 				    mainPanel, wxID_ANY,
-				    __("Linear ") + taskList->GetStringSelection().ToStdString(), &ss,
+				    __("Linear ") + taskList->GetStringSelection().ToStdString(), ss,
 				    trans);
 
 				list.push_back(gcodeHandle);

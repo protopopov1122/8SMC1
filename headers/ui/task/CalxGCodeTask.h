@@ -34,7 +34,7 @@ namespace CalX::UI {
 
 	class CalxGcodeHandle : public CalxTaskHandle {
 	 public:
-		CalxGcodeHandle(wxWindow *, wxWindowID, const std::string &, std::istream *,
+		CalxGcodeHandle(wxWindow *, wxWindowID, const std::string &, std::istream &,
 		                std::shared_ptr<ComplexCoordTranslator>);
 		std::string getName() const override;
 		std::shared_ptr<CoordTask> getTask() override;

@@ -26,8 +26,7 @@
 namespace CalX::UI {
 
 	class EchoCMD : public CLICommand {
-		virtual ~EchoCMD() {}
-
+	 public:
 		void execute(CLI *cli, std::vector<std::string> &args) override {
 			for (std::size_t i = 0; i < args.size(); i++) {
 				std::cout << args.at(i) << " ";
@@ -37,8 +36,7 @@ namespace CalX::UI {
 	};
 
 	class HelpCMD : public CLICommand {
-		virtual ~HelpCMD() {}
-
+	 public:
 		void execute(CLI *cli, std::vector<std::string> &args) override {
 			std::cout << "See cli/README.md in project repo to get CLI manual"
 			          << std::endl;
@@ -50,14 +48,15 @@ namespace CalX::UI {
 
 	void *CalxDebugConsole::Entry() {
 		CLI cli(std::cout, std::cin);
-		cli.addCommand("echo", new EchoCMD());
-		cli.addCommand("ls", new LsCommand(sysman, taskSet));
-		cli.addCommand("x", new HaltCommand(sysman, taskSet));
-		cli.addCommand("dev", new MotorCommand(sysman, taskSet));
-		cli.addCommand("coord", new CoordCommand(sysman, taskSet));
-		cli.addCommand("refresh", new RefreshCommand(sysman, taskSet));
-		cli.addCommand("task", new TaskCommand(sysman, taskSet));
-		cli.addCommand("help", new HelpCMD());
+		cli.addCommand("echo", std::make_unique<EchoCMD>());
+		cli.addCommand("ls", std::make_unique<LsCommand>(sysman, taskSet));
+		cli.addCommand("x", std::make_unique<HaltCommand>(sysman, taskSet));
+		cli.addCommand("dev", std::make_unique<MotorCommand>(sysman, taskSet));
+		cli.addCommand("coord", std::make_unique<CoordCommand>(sysman, taskSet));
+		cli.addCommand("refresh",
+		               std::make_unique<RefreshCommand>(sysman, taskSet));
+		cli.addCommand("task", std::make_unique<TaskCommand>(sysman, taskSet));
+		cli.addCommand("help", std::make_unique<HelpCMD>());
 		do {
 			if (devman.hasError()) {
 				std::cout << "Errors occured during execution" << std::endl;
