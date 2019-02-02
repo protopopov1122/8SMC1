@@ -30,9 +30,9 @@
 
 namespace CalX {
 
-#define ROLL_STEP 30000
-#define ROLL_SPEED 4000.0f
-#define TRAILER_COMEBACK 800
+	static constexpr unsigned int ROLL_STEP = 30000;
+	static constexpr float ROLL_SPEED = 4000.0f;
+	static constexpr unsigned int TRAILER_COMEBACK = 800;
 
 	class MotorController
 	    : public DeviceController,

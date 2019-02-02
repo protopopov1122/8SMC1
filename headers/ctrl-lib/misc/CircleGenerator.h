@@ -34,7 +34,7 @@
 
 namespace CalX {
 
-#define COMPARISON_RADIUS 10
+	static constexpr int COMPARISON_RADIUS = 10;
 
 	class Circle {
 	 public:
