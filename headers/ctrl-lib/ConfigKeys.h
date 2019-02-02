@@ -171,6 +171,7 @@ namespace CalX {
 		static constexpr auto JournalDir = "journal_dir";
 		static constexpr auto MaxSavedSessions = "journal_max_sessions";
 		static constexpr auto DailyJournal = "daily_journal";
+		static constexpr auto RedirectStdout = "redirect_stdout";
 	};
 }  // namespace CalX
 

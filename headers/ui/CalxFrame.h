@@ -35,6 +35,7 @@ namespace CalX::UI {
 	class CalxPlaneList;   // Forward referencing
 	class CalxTaskList;    // Forward referencing
 	class CalxMathEngine;  // Forward referencing
+	class CalxLogSink;     // Forward referencing
 
 	class CalxFrame : public wxFrame {
 	 public:
@@ -45,6 +46,7 @@ namespace CalX::UI {
 		CalxPlaneList *getPlaneList();
 		CalxTaskList *getTaskList();
 		CalxMathEngine *getMathEngine();
+		CalxLogSink *getLogSink();
 
 	 private:
 		void OnStopClick(wxCommandEvent &);
@@ -60,6 +62,7 @@ namespace CalX::UI {
 		CalxPlaneList *plane_list;
 		CalxTaskList *task_list;
 		CalxMathEngine *math_engine;
+		CalxLogSink *logSink;
 	};
 }  // namespace CalX::UI
 

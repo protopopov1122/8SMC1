@@ -43,6 +43,7 @@
 #include "ui/task/CalxTaskPanel.h"
 #include "ui/script/CalxScriptPanel.h"
 #include "ui/math/CalxMathPanel.h"
+#include "ui/logs/CalxLogPanel.h"
 #include <iostream>
 #include <wx/aboutdlg.h>
 #include <wx/app.h>
@@ -234,7 +235,9 @@ namespace CalX::UI {
 
 		CalxScriptPanel *scriptPanel = newScriptPanel(panel);
 		CalxMathPanel *mathPanel = new CalxMathPanel(panel, wxID_ANY);
+		CalxLogPanel *logsPanel = new CalxLogPanel(panel, wxID_ANY);
 		this->math_engine = mathPanel;
+		this->logSink = logsPanel;
 
 		auto &uiPanes = *uiConfig->getEntry("panes");
 		if (uiPanes.getBool("devices", true)) {
@@ -254,6 +257,9 @@ namespace CalX::UI {
 		}
 		if (uiPanes.getBool("math", true)) {
 			panel->addPane(__("Math"), mathPanel);
+		}
+		if (uiPanes.getBool("logs", true)) {
+			panel->addPane(__("Logs"), logsPanel);
 		}
 		panel->SetSelection(uiPanes.getInt("default", 0));
 
@@ -285,6 +291,10 @@ namespace CalX::UI {
 
 	CalxMathEngine *CalxFrame::getMathEngine() {
 		return this->math_engine;
+	}
+
+	CalxLogSink *CalxFrame::getLogSink() {
+		return this->logSink;
 	}
 
 	void CalxFrame::OnStopClick(wxCommandEvent &evt) {

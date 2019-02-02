@@ -80,6 +80,7 @@ namespace CalX::UI {
 		void initDebugConsole(ConfigurationCatalogue &);
 		void startDebugConsole(ConfigurationCatalogue &);
 		void initLogging(ConfigurationCatalogue &);
+		void updateLogging(ConfigurationCatalogue &);
 		std::unique_ptr<ExtEngine> loadExtensionEngine(ConfigurationCatalogue &);
 		void loadScriptEngine(ConfigurationCatalogue &);
 		void startInitScript(ConfigurationCatalogue &);

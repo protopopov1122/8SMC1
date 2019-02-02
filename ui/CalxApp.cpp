@@ -38,6 +38,7 @@
 #include "ctrl-lib/logger/Global.h"
 #include "ctrl-lib/logger/Filter.h"
 #include "ctrl-lib/logger/Shortcuts.h"
+#include "ui/logs/LogSink.h"
 #include <cmath>
 #include <fstream>
 #include <sstream>
@@ -148,7 +149,7 @@ namespace CalX::UI {
 			JournalSink &sink = GlobalLogger::getController().newStreamSink(         \
 			    GlobalLogger::getSink(dest), std::cout);                             \
 			sink.setFilter(filter);                                                  \
-		} else if (logger.length() > 0) {                                          \
+		} else if (logger.compare("uiout") != 0 && logger.length() > 0) {            \
 			JournalSink &sink = GlobalLogger::getController().newFileSink(           \
 			    GlobalLogger::getSink(dest), logger);                                \
 			sink.setFilter(filter);                                                  \
@@ -168,6 +169,35 @@ namespace CalX::UI {
 #undef SETUP_LOG
 
 		this->journalManager = std::make_unique<CalxJournalManager>(conf);
+	}
+
+	void CalxApp::updateLogging(ConfigurationCatalogue &conf) {
+		CalxLogSink *logSink = this->frame->getLogSink();
+		if (logSink != nullptr) {
+			bool replaceStdout = conf.getEntry(CalxConfiguration::Logging)->getBool(CalxLoggingConfiguration::RedirectStdout, false);
+#define SETUP_LOG(id, dest, sever)                                             \
+	{                                                                            \
+		std::string logger =                                                       \
+			conf.getEntry(CalxConfiguration::Logging)->getString(id, "");          \
+		auto filter = LoggerFilter::severity_exact(sever);                         \
+		if (logger.compare("uiout") == 0 || (logger.compare("stdout") == 0 && replaceStdout)) {      \
+			GlobalLogger::getController().dropSink(GlobalLogger::getSink(dest)); \
+			JournalSink &sink = GlobalLogger::getController().appendSink(         \
+				GlobalLogger::getSink(dest), logSink->getSink(GlobalLogger::getSink(dest)));                             \
+			sink.setFilter(filter);                                                  \
+		} \
+	}
+		SETUP_LOG(CalxLoggingConfiguration::Errors, GlobalLoggingSink::Errors,
+		          LoggingSeverity::Error)
+		SETUP_LOG(CalxLoggingConfiguration::Warnings, GlobalLoggingSink::Warnings,
+		          LoggingSeverity::Warning)
+		SETUP_LOG(CalxLoggingConfiguration::Debug, GlobalLoggingSink::Debug,
+		          LoggingSeverity::Debug)
+		SETUP_LOG(CalxLoggingConfiguration::Info, GlobalLoggingSink::Information,
+		          LoggingSeverity::Info)
+#undef SETUP_LOG
+		}
+
 	}
 
 	std::unique_ptr<ExtEngine> CalxApp::loadExtensionEngine(
@@ -316,6 +346,9 @@ namespace CalX::UI {
 		    __("CalX UI"));  // lgtm [cpp/resource-not-released-in-destructor]
 		this->frame->Show(true);
 		this->frame->Maximize(true);
+
+		// Update logging
+		this->updateLogging(conf);
 
 		// Init signal and SEH handlers which perform emergency shutdown if needed
 		setup_signals(*this->sysman);
