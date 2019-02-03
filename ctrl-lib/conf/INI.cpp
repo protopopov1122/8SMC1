@@ -91,7 +91,9 @@ namespace CalX {
 
 	static std::regex LITERAL(R"(^[a-zA-Z_]+\w*)");
 
-	ConfiguationFlatDictionary *parseSectionDeclaration(std::string &line, std::ostream &err, ConfigurationCatalogue &manager, uint32_t lineNumber) {
+	ConfiguationFlatDictionary *parseSectionDeclaration(
+	    std::string &line, std::ostream &err, ConfigurationCatalogue &manager,
+	    uint32_t lineNumber) {
 		line.erase(0, 1);
 		leftTrimWhitespaces(line);
 		std::smatch match;
@@ -122,7 +124,8 @@ namespace CalX {
 		if (std::regex_search(line, match, FLOAT) && !match.empty()) {
 			return ConfigurationValue(std::stod(match.str()));
 		} else if (std::regex_search(line, match, INTEGER) && !match.empty()) {
-			return ConfigurationValue(static_cast<int_conf_t>(std::stoll(match.str())));
+			return ConfigurationValue(
+			    static_cast<int_conf_t>(std::stoll(match.str())));
 		} else if (std::regex_search(line, match, BOOL) && !match.empty()) {
 			return ConfigurationValue(match.str().compare("true") == 0);
 		} else if (std::regex_search(line, match, STRING) && !match.empty()) {
@@ -133,7 +136,9 @@ namespace CalX {
 		}
 	}
 
-	static void parseSectionEntry(std::string &line, std::ostream &err, ConfiguationFlatDictionary &entry, uint32_t lineNumber) {
+	static void parseSectionEntry(std::string &line, std::ostream &err,
+	                              ConfiguationFlatDictionary &entry,
+	                              uint32_t lineNumber) {
 		std::smatch keyMatch;
 		std::regex_search(line, keyMatch, LITERAL);
 		std::string key = keyMatch.str();
@@ -149,7 +154,8 @@ namespace CalX {
 		entry.put(key, value);
 	}
 
-	std::unique_ptr<ConfigurationCatalogue> INIConfiguration::load(std::istream &is, std::ostream &err, ConfigurationCatalogue *manager) {
+	std::unique_ptr<ConfigurationCatalogue> INIConfiguration::load(
+	    std::istream &is, std::ostream &err, ConfigurationCatalogue *manager) {
 		std::unique_ptr<ConfigurationCatalogue> newManager = nullptr;
 		if (manager == nullptr) {
 			newManager = std::make_unique<ConfigManager>();
@@ -175,6 +181,6 @@ namespace CalX {
 				err << "Unknown statement at line " << lineNumber << std::endl;
 			}
 		}
-		return newManager;	
+		return newManager;
 	}
 }  // namespace CalX

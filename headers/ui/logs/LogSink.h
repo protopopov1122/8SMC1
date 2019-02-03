@@ -27,11 +27,11 @@
 
 namespace CalX::UI {
 
-  class CalxLogSink {
-   public:
-    virtual ~CalxLogSink() = default;
-    virtual std::shared_ptr<JournalSink> getSink(const std::string &) = 0;
-  };
-}
+	class CalxLogSink {
+	 public:
+		virtual ~CalxLogSink() = default;
+		virtual std::shared_ptr<JournalSink> getSink(const std::string &) = 0;
+	};
+}  // namespace CalX::UI
 
 #endif

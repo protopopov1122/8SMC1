@@ -149,7 +149,7 @@ namespace CalX::UI {
 			JournalSink &sink = GlobalLogger::getController().newStreamSink(         \
 			    GlobalLogger::getSink(dest), std::cout);                             \
 			sink.setFilter(filter);                                                  \
-		} else if (logger.compare("uiout") != 0 && logger.length() > 0) {            \
+		} else if (logger.compare("uiout") != 0 && logger.length() > 0) {          \
 			JournalSink &sink = GlobalLogger::getController().newFileSink(           \
 			    GlobalLogger::getSink(dest), logger);                                \
 			sink.setFilter(filter);                                                  \
@@ -174,30 +174,33 @@ namespace CalX::UI {
 	void CalxApp::updateLogging(ConfigurationCatalogue &conf) {
 		CalxLogSink *logSink = this->frame->getLogSink();
 		if (logSink != nullptr) {
-			bool replaceStdout = conf.getEntry(CalxConfiguration::Logging)->getBool(CalxLoggingConfiguration::RedirectStdout, false);
+			bool replaceStdout =
+			    conf.getEntry(CalxConfiguration::Logging)
+			        ->getBool(CalxLoggingConfiguration::RedirectStdout, false);
 #define SETUP_LOG(id, dest, sever)                                             \
 	{                                                                            \
 		std::string logger =                                                       \
-			conf.getEntry(CalxConfiguration::Logging)->getString(id, "");          \
+		    conf.getEntry(CalxConfiguration::Logging)->getString(id, "");          \
 		auto filter = LoggerFilter::severity_exact(sever);                         \
-		if (logger.compare("uiout") == 0 || (logger.compare("stdout") == 0 && replaceStdout)) {      \
-			GlobalLogger::getController().dropSink(GlobalLogger::getSink(dest)); \
-			JournalSink &sink = GlobalLogger::getController().appendSink(         \
-				GlobalLogger::getSink(dest), logSink->getSink(GlobalLogger::getSink(dest)));                             \
+		if (logger.compare("uiout") == 0 ||                                        \
+		    (logger.compare("stdout") == 0 && replaceStdout)) {                    \
+			GlobalLogger::getController().dropSink(GlobalLogger::getSink(dest));     \
+			JournalSink &sink = GlobalLogger::getController().appendSink(            \
+			    GlobalLogger::getSink(dest),                                         \
+			    logSink->getSink(GlobalLogger::getSink(dest)));                      \
 			sink.setFilter(filter);                                                  \
-		} \
+		}                                                                          \
 	}
-		SETUP_LOG(CalxLoggingConfiguration::Errors, GlobalLoggingSink::Errors,
-		          LoggingSeverity::Error)
-		SETUP_LOG(CalxLoggingConfiguration::Warnings, GlobalLoggingSink::Warnings,
-		          LoggingSeverity::Warning)
-		SETUP_LOG(CalxLoggingConfiguration::Debug, GlobalLoggingSink::Debug,
-		          LoggingSeverity::Debug)
-		SETUP_LOG(CalxLoggingConfiguration::Info, GlobalLoggingSink::Information,
-		          LoggingSeverity::Info)
+			SETUP_LOG(CalxLoggingConfiguration::Errors, GlobalLoggingSink::Errors,
+			          LoggingSeverity::Error)
+			SETUP_LOG(CalxLoggingConfiguration::Warnings, GlobalLoggingSink::Warnings,
+			          LoggingSeverity::Warning)
+			SETUP_LOG(CalxLoggingConfiguration::Debug, GlobalLoggingSink::Debug,
+			          LoggingSeverity::Debug)
+			SETUP_LOG(CalxLoggingConfiguration::Info, GlobalLoggingSink::Information,
+			          LoggingSeverity::Info)
 #undef SETUP_LOG
 		}
-
 	}
 
 	std::unique_ptr<ExtEngine> CalxApp::loadExtensionEngine(

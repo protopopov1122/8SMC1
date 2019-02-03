@@ -143,7 +143,8 @@ namespace CalX {
 		virtual JournalSink &newFileSink(const std::string &,
 		                                 const std::string &) = 0;
 		virtual JournalSink &newNullSink(const std::string &) = 0;
-		virtual JournalSink &appendSink(const std::string &, std::shared_ptr<JournalSink>) = 0;
+		virtual JournalSink &appendSink(const std::string &,
+		                                std::shared_ptr<JournalSink>) = 0;
 		virtual void dropSink(const std::string &) = 0;
 	};
 

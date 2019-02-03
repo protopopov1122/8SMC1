@@ -79,7 +79,8 @@ namespace CalX {
 		return *sink;
 	}
 
-	JournalSink &JournalDefaultLogger::appendSink(const std::string &name, std::shared_ptr<JournalSink> sink) {
+	JournalSink &JournalDefaultLogger::appendSink(
+	    const std::string &name, std::shared_ptr<JournalSink> sink) {
 		this->sinks[name] = sink;
 		return *sink;
 	}

@@ -31,69 +31,71 @@ wxDEFINE_EVENT(wxEVT_FLUSH_TEXT, wxThreadEvent);
 
 namespace CalX::UI {
 
-
 	class CalxLogPanel::UIJournalSink : public JournalAbstractSink {
 	 public:
-    UIJournalSink(wxWindow *win, const std::string &name)
-      : JournalAbstractSink::JournalAbstractSink(name),  win(win) {}
-    
-    void reset() {
-      this->win = nullptr;
-    }
+		UIJournalSink(wxWindow *win, const std::string &name)
+		    : JournalAbstractSink::JournalAbstractSink(name), win(win) {}
+
+		void reset() {
+			this->win = nullptr;
+		}
+
 	 protected:
 		void log(const std::string &text) const override {
-      if (win) {
-        wxThreadEvent evt(wxEVT_FLUSH_TEXT);
-        evt.SetPayload(text);
-        wxPostEvent(this->win, evt);
-      } else {
-        std::cout << text;
-      }
-    }
-   private:
-    wxWindow *win;
+			if (win) {
+				wxThreadEvent evt(wxEVT_FLUSH_TEXT);
+				evt.SetPayload(text);
+				wxPostEvent(this->win, evt);
+			} else {
+				std::cout << text;
+			}
+		}
+
+	 private:
+		wxWindow *win;
 	};
 
-  CalxLogPanel::CalxLogPanel(wxWindow *parent, wxWindowID id)
-    : CalxPanelPane::CalxPanelPane(parent, id) {
-    wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
+	CalxLogPanel::CalxLogPanel(wxWindow *parent, wxWindowID id)
+	    : CalxPanelPane::CalxPanelPane(parent, id) {
+		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		this->SetSizer(sizer);
 
-    this->logPane = new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY);
-    sizer->Add(this->logPane, 1, wxALL | wxEXPAND);
+		this->logPane =
+		    new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxDefaultSize,
+		                   wxTE_MULTILINE | wxTE_READONLY);
+		sizer->Add(this->logPane, 1, wxALL | wxEXPAND);
 
-    this->Bind(wxEVT_FLUSH_TEXT, &CalxLogPanel::OnFlushText, this);
-    this->Bind(wxEVT_CLOSE_WINDOW, &CalxLogPanel::OnClose, this);
-  }
-  
-  bool CalxLogPanel::isBusy() {
-    return false;
-  }
+		this->Bind(wxEVT_FLUSH_TEXT, &CalxLogPanel::OnFlushText, this);
+		this->Bind(wxEVT_CLOSE_WINDOW, &CalxLogPanel::OnClose, this);
+	}
 
-  void CalxLogPanel::shutdown() {
-  }
+	bool CalxLogPanel::isBusy() {
+		return false;
+	}
 
-  void CalxLogPanel::updateUI() {
-    this->Refresh();
-  }
+	void CalxLogPanel::shutdown() {}
 
-  std::shared_ptr<JournalSink> CalxLogPanel::getSink(const std::string &name) {
-    auto sink = std::make_shared<CalxLogPanel::UIJournalSink>(this, name);
-    this->sinks.push_back(sink);
-    return sink;
-  }
+	void CalxLogPanel::updateUI() {
+		this->Refresh();
+	}
 
-  void CalxLogPanel::OnFlushText(wxThreadEvent &evt) {
-    std::ostream os(this->logPane);
-    os << evt.GetPayload<std::string>();
-  }
+	std::shared_ptr<JournalSink> CalxLogPanel::getSink(const std::string &name) {
+		auto sink = std::make_shared<CalxLogPanel::UIJournalSink>(this, name);
+		this->sinks.push_back(sink);
+		return sink;
+	}
 
-  void CalxLogPanel::OnClose(wxCloseEvent &evt) {
-    for (auto &sink : this->sinks) {
-      if (std::shared_ptr<UIJournalSink> uiSink = sink.lock()) {
-        uiSink->reset();
-      }
-    }
-    this->Destroy();
-  }
-}
+	void CalxLogPanel::OnFlushText(wxThreadEvent &evt) {
+		std::ostream os(this->logPane);
+		os << evt.GetPayload<std::string>();
+	}
+
+	void CalxLogPanel::OnClose(wxCloseEvent &evt) {
+		for (auto &sink : this->sinks) {
+			if (std::shared_ptr<UIJournalSink> uiSink = sink.lock()) {
+				uiSink->reset();
+			}
+		}
+		this->Destroy();
+	}
+}  // namespace CalX::UI

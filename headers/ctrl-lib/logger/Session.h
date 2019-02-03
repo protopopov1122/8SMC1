@@ -43,7 +43,8 @@ namespace CalX {
 		JournalSink &newStreamSink(const std::string &, std::ostream &) override;
 		JournalSink &newFileSink(const std::string &, const std::string &) override;
 		JournalSink &newNullSink(const std::string &) override;
-		JournalSink &appendSink(const std::string &, std::shared_ptr<JournalSink>) override;
+		JournalSink &appendSink(const std::string &,
+		                        std::shared_ptr<JournalSink>) override;
 		void dropSink(const std::string &) override;
 
 	 private:

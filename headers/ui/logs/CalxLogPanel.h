@@ -29,22 +29,23 @@
 
 namespace CalX::UI {
 
-  class CalxLogPanel : public CalxPanelPane, public CalxLogSink {
-   public:
-    CalxLogPanel(wxWindow *, wxWindowID);
+	class CalxLogPanel : public CalxPanelPane, public CalxLogSink {
+	 public:
+		CalxLogPanel(wxWindow *, wxWindowID);
 		bool isBusy() override;
 		void shutdown() override;
 		void updateUI() override;
 
-    std::shared_ptr<JournalSink> getSink(const std::string &) override;
-   private:
-    class UIJournalSink;
-    void OnFlushText(wxThreadEvent &);
-    void OnClose(wxCloseEvent &);
+		std::shared_ptr<JournalSink> getSink(const std::string &) override;
 
-    wxTextCtrl *logPane;
-    std::vector<std::weak_ptr<UIJournalSink>> sinks;
-  };
-}
+	 private:
+		class UIJournalSink;
+		void OnFlushText(wxThreadEvent &);
+		void OnClose(wxCloseEvent &);
+
+		wxTextCtrl *logPane;
+		std::vector<std::weak_ptr<UIJournalSink>> sinks;
+	};
+}  // namespace CalX::UI
 
 #endif
