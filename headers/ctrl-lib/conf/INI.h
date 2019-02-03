@@ -36,7 +36,6 @@ namespace CalX {
 
 	 private:
 		static void store(ConfiguationFlatDictionary &, std::ostream &);
-		static ConfigurationValue parseValue(const char *);
 	};
 }  // namespace CalX
 
