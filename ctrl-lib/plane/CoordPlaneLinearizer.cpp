@@ -72,11 +72,7 @@ namespace CalX {
 			if (!work) {
 				break;
 			}
-			if (clockwise) {
-				pnt = cir.getPrevElement();
-			} else {
-				pnt = cir.getNextElement();
-			}
+			pnt = cir.next();
 			if (count++ % splitter == 0) {
 				ErrorCode err = this->move(pnt, speed, true);
 				if (err != ErrorCode::NoError) {

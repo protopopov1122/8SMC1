@@ -21,21 +21,20 @@
 */
 
 #include "ctrl-lib/misc/CircleGenerator.h"
-#include <iostream>
-#include <math.h>
-#include <stdio.h>
+#include <cmath>
 
 namespace CalX {
 
-	Circle::Circle(motor_point_t cen, int64_t rad, bool cw, float scale) {
-		this->center = cen;
-		this->radius = rad;
+	Circle::Circle(motor_point_t center, int64_t radius, bool clockwise,
+	               float scale) {
+		this->center = center;
+		this->radius = radius;
 		this->scale = scale;
-		this->curx = rad;
-		this->cury = 0;
-		this->curerr = 0;
-		this->stage = 0;
-		this->cw = cw;
+		this->offset_x = radius;
+		this->offset_y = 0;
+		this->criterion = 0;
+		this->sector = 0;
+		this->clockwise = clockwise;
 	}
 
 	motor_point_t Circle::getCenter() const {
@@ -46,97 +45,16 @@ namespace CalX {
 		return this->radius;
 	}
 
-	motor_point_t Circle::getNextElement() {
-		motor_point_t point;
-		if (stage % 4 == 0) {
-			if (curerr <= 0) {
-				cury += 1;
-				curerr += 2 * cury + 1;
-			} else {
-				curx -= 1;
-				curerr -= 2 * curx + 1;
-			}
-		} else if (stage % 4 == 1) {
-			if (curerr <= 0) {
-				cury -= 1;
-				curerr += 2 * cury - 1;
-			} else {
-				curx -= 1;
-				curerr += 2 * curx - 1;
-			}
-		} else if (stage % 4 == 2) {
-			if (curerr <= 0) {
-				cury -= 1;
-				curerr -= 2 * cury - 1;
-			} else {
-				curx += 1;
-				curerr += 2 * curx + 1;
-			}
-		} else if (stage % 4 == 3) {  // TODO Fix coefs
-			if (curerr <= 0) {
-				cury += 1;
-				curerr -= 2 * cury - 1;
-			} else {
-				curx += 1;
-				curerr -= 2 * curx + 1;
-			}
+	motor_point_t Circle::next() {
+		if (!this->clockwise) {
+			return this->getNextElement();
+		} else {
+			return this->getPrevElement();
 		}
-		point.x = curx + center.x;
-		point.y = cury + center.y;
-		if (curx == 0 || cury == 0) {
-			stage++;
-			stage %= 4;
-		}
-		return point;
-	}
-
-	motor_point_t Circle::getPrevElement() {
-		motor_point_t point;
-		// TODO Rewrite code
-		if (stage % 4 == 0) {
-			if (curerr <= 0) {
-				cury += 1;
-				curerr += 2 * cury + 1;
-			} else {
-				curx -= 1;
-				curerr -= 2 * curx + 1;
-			}
-		} else if (stage % 4 == 1) {
-			if (curerr <= 0) {
-				cury -= 1;
-				curerr += 2 * cury - 1;
-			} else {
-				curx -= 1;
-				curerr += 2 * curx - 1;
-			}
-		} else if (stage % 4 == 2) {
-			if (curerr <= 0) {
-				cury -= 1;
-				curerr -= 2 * cury - 1;
-			} else {
-				curx += 1;
-				curerr += 2 * curx + 1;
-			}
-		} else if (stage % 4 == 3) {  // TODO Fix coefs
-			if (curerr <= 0) {
-				cury += 1;
-				curerr -= 2 * cury - 1;
-			} else {
-				curx += 1;
-				curerr -= 2 * curx + 1;
-			}
-		}
-		point.x = curx + center.x;
-		point.y = -cury + center.y;
-		if (curx == 0 || cury == 0) {
-			stage++;
-			stage %= 4;
-		}
-		return point;
 	}
 
 	bool Circle::skip(motor_point_t pnt, bool *work) {
-		if (pnt.x == curx && pnt.y == cury) {
+		if (pnt.x == offset_x && pnt.y == offset_y) {
 			return false;
 		}
 		int64_t r1 = (pnt.x - center.x) * (pnt.x - center.x) +
@@ -144,18 +62,14 @@ namespace CalX {
 		if ((int64_t) sqrt(r1) != radius) {
 			return false;
 		}
-		motor_point_t start = { curx, cury };
+		motor_point_t start = { offset_x, offset_y };
 		motor_point_t cur = start;
 
 		do {
 			if (work != nullptr && !*work) {
 				return true;
 			}
-			if (!cw) {
-				cur = this->getNextElement();
-			} else {
-				cur = this->getPrevElement();
-			}
+			cur = this->next();
 			if (cur.x == start.x && cur.y == start.y) {
 				break;
 			}
@@ -165,5 +79,79 @@ namespace CalX {
 			return false;
 		}
 		return true;
+	}
+
+	motor_point_t Circle::getNextElement() {
+		if (this->criterion <= 0) {
+			this->offset_y += 1;
+			this->criterion += 2 * offset_y + 1;
+		} else {
+			this->offset_x -= 1;
+			this->criterion -= 2 * offset_x + 1;
+		}
+		motor_point_t point = center;
+		switch (this->sector) {
+			case 0:
+				point.x += this->offset_x;
+				point.y += this->offset_y;
+				break;
+			case 1:
+				point.x -= this->offset_y;
+				point.y += this->offset_x;
+				break;
+			case 2:
+				point.x -= this->offset_x;
+				point.y -= this->offset_y;
+				break;
+			case 3:
+				point.x += this->offset_y;
+				point.y -= this->offset_x;
+				break;
+		}
+		if (this->offset_x == 0 || this->offset_y == 0) {
+			this->sector++;
+			this->sector %= 4;
+			this->offset_x = radius;
+			this->offset_y = 0;
+			this->criterion = 0;
+		}
+		return point;
+	}
+
+	motor_point_t Circle::getPrevElement() {
+		if (criterion <= 0) {
+			this->offset_y += 1;
+			this->criterion += 2 * offset_y + 1;
+		} else {
+			this->offset_x -= 1;
+			this->criterion -= 2 * offset_x + 1;
+		}
+		motor_point_t point = center;
+		switch (this->sector) {
+			case 0:
+				point.x += this->offset_x;
+				point.y -= this->offset_y;
+				break;
+			case 1:
+				point.x -= this->offset_y;
+				point.y -= this->offset_x;
+				break;
+			case 2:
+				point.x -= this->offset_x;
+				point.y += this->offset_y;
+				break;
+			case 3:
+				point.x += this->offset_y;
+				point.y += this->offset_x;
+				break;
+		}
+		if (this->offset_x == 0 || this->offset_y == 0) {
+			this->sector++;
+			this->sector %= 4;
+			this->offset_x = radius;
+			this->offset_y = 0;
+			this->criterion = 0;
+		}
+		return point;
 	}
 }  // namespace CalX

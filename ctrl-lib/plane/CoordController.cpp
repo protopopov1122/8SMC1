@@ -404,11 +404,7 @@ namespace CalX {
 				break;
 			}
 			/* Get the next point */
-			if (clockwise) {
-				pnt = cir.getPrevElement();
-			} else {
-				pnt = cir.getNextElement();
-			}
+			pnt = cir.next();
 			/* Check received point gives us new chord. If so,
 			   than move to it */
 			if (count++ % splitter == 0) {

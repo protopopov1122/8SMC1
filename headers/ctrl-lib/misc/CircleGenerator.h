@@ -41,21 +41,23 @@ namespace CalX {
 		Circle(motor_point_t, int64_t, bool, float);
 		int64_t getRadius() const;
 		motor_point_t getCenter() const;
-		motor_point_t getNextElement();
-		motor_point_t getPrevElement();
 		bool skip(motor_point_t, bool *);
+		motor_point_t next();
 
 	 private:
+		motor_point_t getNextElement();
+		motor_point_t getPrevElement();
+
 		motor_point_t center;
 		int64_t radius;
 		float scale;
 
-		int64_t curx;
-		int64_t cury;
-		int64_t curerr;
+		int64_t offset_x;
+		int64_t offset_y;
+		int64_t criterion;
 
-		int stage;
-		bool cw;
+		int sector;
+		bool clockwise;
 	};
 }  // namespace CalX
 

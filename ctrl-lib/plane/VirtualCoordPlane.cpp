@@ -88,11 +88,7 @@ namespace CalX {
 		motor_point_t pnt;
 		std::size_t count = 0;
 		do {
-			if (clockwise) {
-				pnt = cir.getPrevElement();
-			} else {
-				pnt = cir.getNextElement();
-			}
+			pnt = cir.next();
 			if (count++ % splitter == 0) {
 				ErrorCode err = this->move(pnt, speed, true);
 				if (err != ErrorCode::NoError) {
