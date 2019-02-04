@@ -21,7 +21,6 @@
 */
 
 #include "ctrl-lib/graph/FunctionParser.h"
-#include <iostream>
 
 namespace CalX {
 

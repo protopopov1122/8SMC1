@@ -27,8 +27,8 @@
 #include "device/emux/EmuInstrument.h"
 #include "device/emux/EmuMotor.h"
 #include <cinttypes>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 #include <string>
 #include <vector>
 

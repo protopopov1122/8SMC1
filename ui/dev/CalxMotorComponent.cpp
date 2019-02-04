@@ -27,8 +27,7 @@
 #include "ui/CalxErrorHandler.h"
 #include "ui/config/CalxConfigEditor.h"
 #include "ctrl-lib/logger/Shortcuts.h"
-#include <iostream>
-#include <limits.h>
+#include <limits>
 #include <signal.h>
 #include <wx/statbox.h>
 

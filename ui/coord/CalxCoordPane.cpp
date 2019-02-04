@@ -27,7 +27,7 @@
 #include "ui/coord/CalxCoordAdjuster.h"
 #include "ui/coord/CalxCoordPlaneWatcher.h"
 #include <algorithm>
-#include <math.h>
+#include <cmath>
 #include <sstream>
 #include <wx/sizer.h>
 #include <wx/stattext.h>

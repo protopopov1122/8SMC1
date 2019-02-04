@@ -30,7 +30,6 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include <stdio.h>
 
 namespace CalX {
 	void LsCommand::execute(CLI *cli, std::vector<std::string> &args) {

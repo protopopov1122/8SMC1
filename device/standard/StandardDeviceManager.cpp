@@ -23,7 +23,7 @@
 #include "device/standard/StandardDeviceManager.h"
 #include <iostream>
 #include <stdio.h>
-#include <string.h>
+#include <cstring>
 
 namespace CalX {
 

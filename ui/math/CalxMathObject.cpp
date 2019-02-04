@@ -24,7 +24,6 @@
 #include <wx/sizer.h>
 #include <wx/spinctrl.h>
 #include <limits>
-#include <iostream>
 
 namespace CalX::UI {
 

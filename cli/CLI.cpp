@@ -22,8 +22,7 @@
 
 #include "cli/CLI.h"
 #include <iostream>
-#include <stdio.h>
-#include <string.h>
+#include <cstring>
 #include <string>
 #include <vector>
 

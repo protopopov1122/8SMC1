@@ -25,9 +25,9 @@
 
 #include "USMCDLL.h"
 #include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
+#include <cstdio>
+#include <cstdlib>
+#include <ctime>
 
 const int LENGTH = 150000;
 struct {

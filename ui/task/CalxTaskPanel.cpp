@@ -27,7 +27,6 @@
 #include "ui/coord/CalxVirtualPlane.h"
 #include "ui/task/CalxGCodeTask.h"
 #include <fstream>
-#include <iostream>
 #include <sstream>
 #include <wx/sizer.h>
 #include <wx/splitter.h>

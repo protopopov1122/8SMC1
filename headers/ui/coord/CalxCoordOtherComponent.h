@@ -27,7 +27,7 @@
 #include "ui/CalxApp.h"
 #include "ui/coord/CalxCoordComponent.h"
 #include "ui/coord/CalxCoordController.h"
-#include <math.h>
+#include <cmath>
 #include <wx/checkbox.h>
 #include <wx/choice.h>
 #include <wx/collpane.h>

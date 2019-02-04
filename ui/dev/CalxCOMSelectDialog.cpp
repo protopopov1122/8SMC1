@@ -22,7 +22,6 @@
 
 #include "ui/dev/CalxCOMSelectDialog.h"
 #include "ui/CalxApp.h"
-#include <iostream>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 

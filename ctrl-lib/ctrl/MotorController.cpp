@@ -22,7 +22,6 @@
 
 #include "ctrl-lib/ctrl/MotorController.h"
 #include <algorithm>
-#include <iostream>
 
 namespace CalX {
 

@@ -22,9 +22,7 @@
 
 #include "ctrl-lib/graph/FunctionParser.h"
 #include <cinttypes>
-#include <stdio.h>
-#include <string.h>
-#include <iostream>
+#include <cstring>
 
 namespace CalX {
 

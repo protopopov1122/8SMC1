@@ -22,7 +22,7 @@
 
 #include "device/standard/NL300Instrument.h"
 #include "device/standard/StandardDeviceManager.h"
-#include <string.h>
+#include <cstring>
 #include <string>
 
 namespace CalX {

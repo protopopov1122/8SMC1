@@ -21,7 +21,7 @@
 */
 
 #include "ctrl-lib/graph/MathEngine.h"
-#include <math.h>
+#include <cmath>
 #include <iostream>
 
 namespace CalX {

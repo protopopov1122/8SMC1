@@ -29,7 +29,7 @@
 #include <cinttypes>
 #include <fstream>
 #include <iostream>
-#include <stdlib.h>
+#include <cstdlib>
 #include <string>
 #include <vector>
 

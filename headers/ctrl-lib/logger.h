@@ -35,7 +35,7 @@
 #include "platform.h"
 #include "ctrl-lib/logger/Global.h"
 #include <string>
-#include <string.h>
+#include <cstring>
 
 #ifdef LOGGING
 #define WRITE_LOG(__output, tag, msg)                                          \

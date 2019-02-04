@@ -23,7 +23,6 @@
 #include "ui/math/CalxMathPanel.h"
 #include <wx/sizer.h>
 #include <wx/splitter.h>
-#include <iostream>
 
 wxDEFINE_EVENT(wxEVT_ADD_FORMULA, wxThreadEvent);
 wxDEFINE_EVENT(wxEVT_REMOVE_FORMULA, wxThreadEvent);

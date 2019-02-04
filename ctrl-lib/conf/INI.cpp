@@ -23,7 +23,7 @@
 #include "ctrl-lib/conf/INI.h"
 #include "ctrl-lib/conf/ConfigManager.h"
 #include <iostream>
-#include <string.h>
+#include <cstring>
 #include <regex>
 
 namespace CalX {

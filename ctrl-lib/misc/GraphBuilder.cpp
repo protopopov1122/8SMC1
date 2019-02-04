@@ -23,7 +23,7 @@
 #include "ctrl-lib/SystemManager.h"
 #include <cinttypes>
 #include <limits>
-#include <math.h>
+#include <cmath>
 #include <iostream>
 
 namespace CalX {
@@ -83,12 +83,12 @@ namespace CalX {
 			if (y > this->max.y || y < this->min.y) {
 				y = nan;
 			}
-			if (isnan(y)) {
+			if (std::isnan(y)) {
 				last = y;
 				continue;
 			}
 			motor_point_t pnt = trans.get(x, y);
-			if (isnan(last)) {
+			if (std::isnan(last)) {
 				errcode = plane->move(pnt, speed, false);
 			} else {
 				errcode = plane->move(pnt, speed, true);
@@ -140,12 +140,12 @@ namespace CalX {
 			if (y > this->max.y || y < this->min.y) {
 				y = nan;
 			}
-			if (isnan(y)) {
+			if (std::isnan(y)) {
 				last = y;
 				continue;
 			}
 			coord_point_t pnt = trans.floatGet(x, y);
-			if (isnan(last)) {
+			if (std::isnan(last)) {
 				errcode = plane->move(pnt, speed, false);
 			} else {
 				errcode = plane->move(pnt, speed, true);

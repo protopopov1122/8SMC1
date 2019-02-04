@@ -22,7 +22,6 @@
 
 #include "ui/task/CalxGCodeTask.h"
 #include "ui/task/CalxGcodeLoader.h"
-#include <iostream>
 
 namespace CalX::UI {
 

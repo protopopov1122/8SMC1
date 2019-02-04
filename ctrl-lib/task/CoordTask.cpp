@@ -23,9 +23,8 @@
 #include "ctrl-lib/task/CoordTask.h"
 #include "ctrl-lib/SystemManager.h"
 #include <cinttypes>
-#include <iostream>
 #include <limits>
-#include <math.h>
+#include <cmath>
 
 namespace CalX {
 

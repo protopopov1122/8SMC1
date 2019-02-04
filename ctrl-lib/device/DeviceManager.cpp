@@ -26,7 +26,6 @@
 #include <algorithm>
 #include <fstream>
 #include <iostream>
-#include <stdio.h>
 
 namespace CalX {
 

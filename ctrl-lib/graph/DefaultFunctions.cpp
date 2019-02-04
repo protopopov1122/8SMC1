@@ -21,7 +21,7 @@
 */
 
 #include "ctrl-lib/graph/MathEngine.h"
-#include <math.h>
+#include <cmath>
 
 /* This file contains implementation of some mathematical functions*
    that can be used with math evaluator.*/

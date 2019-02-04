@@ -21,8 +21,7 @@
 */
 
 #include "ctrl-lib/translator/CoordTranslator.h"
-#include <iostream>
-#include <math.h>
+#include <cmath>
 
 namespace CalX {
 
