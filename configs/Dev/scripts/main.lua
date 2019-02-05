@@ -8,9 +8,9 @@ function init()
 		configure_y = settings:get('relative_pos'):float('y', configure_y)
 	end
 
-	local m1 = calx.motors:get(0)
-	local m2 = calx.motors:get(1)
-  local i1= calx.instruments:connect(1, 19200, calx.serial.parity.No)
+	local m1 = calx.motors:connect(1, 9600, calx.serial.parity.No)
+	local m2 = calx.motors:connect(2, 9600, calx.serial.parity.No)
+  local i1= calx.instruments:connect(4, 19200, calx.serial.parity.No)
 	local p1 = calx.planes:create(m1, m2, i1)
 	p1:configure(calx.point.new(configure_x, configure_y), 1.25)
 	p1:openWatcher()
