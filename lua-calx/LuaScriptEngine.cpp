@@ -34,6 +34,7 @@ namespace CalX::UI::Lua {
 	LuaCalXScript::LuaCalXScript(CalXScriptUIEnvironment &env)
 	    : CalXScript(env), lua(true), env(env) {
 		this->initBindings();
+		this->loadLibrary();
 	}
 
 	bool LuaCalXScript::loadScript(const std::string &path) {
@@ -209,5 +210,9 @@ namespace CalX::UI::Lua {
 		    std::make_unique<LuaCalXJournal>(this->env.getLogger());
 		this->lua["calx"]["journal"] =
 		    std::make_unique<LuaCalXJournal>(this->env.getJournal());
+	}
+
+	void LuaCalXScript::loadLibrary() {
+		this->lua.load("scripts/lib.lua");
 	}
 }  // namespace CalX::UI::Lua

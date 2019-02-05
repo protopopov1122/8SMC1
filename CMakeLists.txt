@@ -27,11 +27,16 @@ if (MINGW)
 endif (MINGW)
 
 # Preparations for build
-set (THIRD_PARTY ${CMAKE_SOURCE_DIR}/third-party)
+if (BUILD_CONFIGURATION)
+	set(CONFIG_DIR ${CMAKE_SOURCE_DIR}/configs/${BUILD_CONFIGURATION})
+else ()
+	set(CONFIG_DIR ${CMAKE_SOURCE_DIR}/configs/TFI-Lab)
+endif (BUILD_CONFIGURATION)
+set(THIRD_PARTY ${CMAKE_SOURCE_DIR}/third-party)
 set(build_directory ${CMAKE_BINARY_DIR}/build CACHE INTERNAL "")
 add_custom_target(make-build-directory ALL COMMAND ${CMAKE_COMMAND} -E make_directory ${build_directory})
 add_custom_target(calx-init-target ALL
-	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/misc/main.conf.ini ${build_directory}
+	COMMAND ${CMAKE_COMMAND} -E copy ${CONFIG_DIR}/main.conf.ini ${build_directory}
 	DEPENDS make-build-directory
 )
 

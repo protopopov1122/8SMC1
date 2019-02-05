@@ -37,6 +37,7 @@ namespace CalX::UI::Lua {
 
 	 private:
 		void initBindings();
+		void loadLibrary();
 
 		lcb::LuaEnvironment lua;
 		CalXScriptUIEnvironment &env;

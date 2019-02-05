@@ -25,4 +25,7 @@ if (LUACPPB)
   add_custom_command(TARGET lua-calx POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/scripts ${build_directory}/scripts
   )
+  add_custom_command(TARGET lua-calx POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CONFIG_DIR}/scripts ${build_directory}/scripts
+  )
 endif (LUACPPB)

@@ -37,7 +37,7 @@ if (wxWidgets_FOUND)
     	COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:calx_ui> ${build_directory}
 	)
 	add_custom_command(TARGET calx_ui POST_BUILD
-    	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/misc/ui.ini ${build_directory}
+    	COMMAND ${CMAKE_COMMAND} -E copy ${CONFIG_DIR}/ui.ini ${build_directory}
 	)
 	add_dependencies(calx_ui calx-init-target)
 	if (WIN32)
