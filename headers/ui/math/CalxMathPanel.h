@@ -27,10 +27,10 @@
 #include "ui/CalxPanelPane.h"
 #include "ui/math/CalxMathObject.h"
 
-wxDECLARE_EVENT(wxEVT_ADD_FORMULA, wxThreadEvent);
-wxDECLARE_EVENT(wxEVT_REMOVE_FORMULA, wxThreadEvent);
-
 namespace CalX::UI {
+
+	wxDECLARE_EVENT(wxEVT_ADD_FORMULA, wxThreadEvent);
+	wxDECLARE_EVENT(wxEVT_REMOVE_FORMULA, wxThreadEvent);
 
 	class CalxMathEngine {
 	 public:

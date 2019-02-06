@@ -22,10 +22,10 @@
 
 #include "ui/coord/CalxCoordFilterComponent.h"
 
-wxDEFINE_EVENT(wxEVT_FILTER_UPDATE_OFFSET, wxThreadEvent);
-wxDEFINE_EVENT(wxEVT_FILTER_UPDATE_SCALE, wxThreadEvent);
-
 namespace CalX::UI {
+
+	wxDEFINE_EVENT(wxEVT_FILTER_UPDATE_OFFSET, wxThreadEvent);
+	wxDEFINE_EVENT(wxEVT_FILTER_UPDATE_SCALE, wxThreadEvent);
 
 	CalxCoordComponent *CalxCoordFilterComponentFactory::newComponent(
 	    wxWindow *win, CalxCoordController *ctrl) {

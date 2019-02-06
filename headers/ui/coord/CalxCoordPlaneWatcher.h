@@ -28,12 +28,11 @@
 #include <wx/bitmap.h>
 #include <wx/stattext.h>
 
-wxDECLARE_EVENT(wxEVT_WATCHER_UPDATE, wxThreadEvent);
-
 namespace CalX::UI {
 
 	class CalxCoordPlaneWatcher;  // Forward referencing
 
+	wxDECLARE_EVENT(wxEVT_WATCHER_UPDATE, wxThreadEvent);
 	wxDECLARE_EVENT(wxEVT_WATCHER_APPEND_POINT, wxThreadEvent);
 
 	class CalxCoordPlaneWatcherTimer : public wxTimer {

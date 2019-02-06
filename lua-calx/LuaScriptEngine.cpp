@@ -215,7 +215,8 @@ namespace CalX::UI::Lua {
 	void LuaCalXScript::loadLibrary() {
 		auto package = this->lua["package"];
 		std::string path = package["path"];
-		std::string libPath = this->env.getConfiguration().getEntry("script")->getString("path", "");
+		std::string libPath =
+		    this->env.getConfiguration().getEntry("script")->getString("path", "");
 		if (!libPath.empty()) {
 			if (path.empty()) {
 				package["path"] = libPath;

@@ -24,10 +24,10 @@
 #include <wx/sizer.h>
 #include <wx/splitter.h>
 
-wxDEFINE_EVENT(wxEVT_ADD_FORMULA, wxThreadEvent);
-wxDEFINE_EVENT(wxEVT_REMOVE_FORMULA, wxThreadEvent);
-
 namespace CalX::UI {
+
+	wxDEFINE_EVENT(wxEVT_ADD_FORMULA, wxThreadEvent);
+	wxDEFINE_EVENT(wxEVT_REMOVE_FORMULA, wxThreadEvent);
 
 	struct CalxFormulaData {
 		std::string title;

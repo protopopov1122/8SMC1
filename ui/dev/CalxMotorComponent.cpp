@@ -32,6 +32,7 @@
 #include <wx/statbox.h>
 
 namespace CalX::UI {
+
 	wxDEFINE_EVENT(wxEVT_MOTOR_CTRL_ENABLE, wxThreadEvent);
 
 	void CalxMotorTimer::Notify() {

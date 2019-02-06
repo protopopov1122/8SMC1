@@ -34,10 +34,10 @@
 #include <wx/spinctrl.h>
 #include <wx/stattext.h>
 
-wxDECLARE_EVENT(wxEVT_FILTER_UPDATE_OFFSET, wxThreadEvent);
-wxDECLARE_EVENT(wxEVT_FILTER_UPDATE_SCALE, wxThreadEvent);
-
 namespace CalX::UI {
+
+	wxDECLARE_EVENT(wxEVT_FILTER_UPDATE_OFFSET, wxThreadEvent);
+	wxDECLARE_EVENT(wxEVT_FILTER_UPDATE_SCALE, wxThreadEvent);
 
 	class CalxCoordFilterComponentFactory : public CalxCoordComponentFactory {
 	 public:

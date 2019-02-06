@@ -26,10 +26,10 @@
 #include <wx/textctrl.h>
 #include <iostream>
 
-wxDECLARE_EVENT(wxEVT_FLUSH_TEXT, wxThreadEvent);
-wxDEFINE_EVENT(wxEVT_FLUSH_TEXT, wxThreadEvent);
-
 namespace CalX::UI {
+
+	wxDECLARE_EVENT(wxEVT_FLUSH_TEXT, wxThreadEvent);
+	wxDEFINE_EVENT(wxEVT_FLUSH_TEXT, wxThreadEvent);
 
 	class CalxLogPanel::UIJournalSink : public JournalAbstractSink {
 	 public:

@@ -25,10 +25,9 @@
 #include <wx/dcmemory.h>
 #include <wx/sizer.h>
 
-wxDEFINE_EVENT(wxEVT_WATCHER_UPDATE, wxThreadEvent);
-
 namespace CalX::UI {
 
+	wxDEFINE_EVENT(wxEVT_WATCHER_UPDATE, wxThreadEvent);
 	wxDEFINE_EVENT(wxEVT_WATCHER_APPEND_POINT, wxThreadEvent);
 
 	CalxCoordPlaneWatcherTimer::CalxCoordPlaneWatcherTimer(

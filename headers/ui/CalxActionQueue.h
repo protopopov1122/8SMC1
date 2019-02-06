@@ -26,6 +26,9 @@
 #include "ui/calx.h"
 #include <wx/event.h>
 
-wxDECLARE_EVENT(wxEVT_COMMAND_QUEUE_UPDATE, wxThreadEvent);
+namespace CalX::UI {
+
+	wxDECLARE_EVENT(wxEVT_COMMAND_QUEUE_UPDATE, wxThreadEvent);
+}
 
 #endif
