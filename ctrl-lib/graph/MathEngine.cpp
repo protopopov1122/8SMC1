@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/graph/MathEngine.h"
+#include "calx/ctrl-lib/graph/MathEngine.h"
 
 namespace CalX {
 

@@ -20,8 +20,8 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/logs/CalxLogPanel.h"
-#include "ctrl-lib/logger/Sink.h"
+#include "calx/ui/logs/CalxLogPanel.h"
+#include "calx/ctrl-lib/logger/Sink.h"
 #include <wx/sizer.h>
 #include <wx/textctrl.h>
 #include <iostream>

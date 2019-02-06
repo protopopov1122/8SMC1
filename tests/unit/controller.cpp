@@ -1,8 +1,8 @@
 #include "catch.hpp"
-#include "ctrl-lib/ctrl/MotorController.h"
-#include "ctrl-lib/ctrl/InstrumentController.h"
-#include "device/emulated/EmuDeviceManager.h"
-#include "ctrl-lib/conf/ConfigManager.h"
+#include "calx/ctrl-lib/ctrl/MotorController.h"
+#include "calx/ctrl-lib/ctrl/InstrumentController.h"
+#include "calx/device/emulated/EmuDeviceManager.h"
+#include "calx/ctrl-lib/conf/ConfigManager.h"
 
 using namespace CalX;
 

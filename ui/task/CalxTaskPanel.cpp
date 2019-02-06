@@ -20,19 +20,19 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/task/CalxTaskPanel.h"
-#include "ctrl-lib/gcode/GCodeWriter.h"
-#include "ui/CalxApp.h"
-#include "ui/CalxErrorHandler.h"
-#include "ui/coord/CalxVirtualPlane.h"
-#include "ui/task/CalxGCodeTask.h"
+#include "calx/ui/task/CalxTaskPanel.h"
+#include "calx/ctrl-lib/gcode/GCodeWriter.h"
+#include "calx/ui/CalxApp.h"
+#include "calx/ui/CalxErrorHandler.h"
+#include "calx/ui/coord/CalxVirtualPlane.h"
+#include "calx/ui/task/CalxGCodeTask.h"
 #include <fstream>
 #include <sstream>
 #include <wx/sizer.h>
 #include <wx/splitter.h>
 #include <wx/stattext.h>
-#include "ui/coord/CalxPlaneList.h"
-#include "ctrl-lib/logger/Shortcuts.h"
+#include "calx/ui/coord/CalxPlaneList.h"
+#include "calx/ctrl-lib/logger/Shortcuts.h"
 
 namespace CalX::UI {
 

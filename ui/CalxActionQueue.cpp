@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/CalxActionQueue.h"
+#include "calx/ui/CalxActionQueue.h"
 #include <wx/event.h>
 
 namespace CalX::UI {

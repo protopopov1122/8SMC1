@@ -20,10 +20,10 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/coord/CalxCoordPanel.h"
-#include "ui/CalxErrorHandler.h"
-#include "ui/CalxPanel.h"
-#include "ui/coord/CalxCoordDialog.h"
+#include "calx/ui/coord/CalxCoordPanel.h"
+#include "calx/ui/CalxErrorHandler.h"
+#include "calx/ui/CalxPanel.h"
+#include "calx/ui/coord/CalxCoordDialog.h"
 #include <wx/listbook.h>
 #include <wx/sizer.h>
 #include <wx/splitter.h>

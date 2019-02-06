@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/script/CalxScriptHandle.h"
+#include "calx/ui/script/CalxScriptHandle.h"
 #include <wx/splitter.h>
 #include <iostream>
 

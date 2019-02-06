@@ -20,9 +20,9 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/SystemManager.h"
-#include "ctrl-lib/conf/INI.h"
-#include "ctrl-lib/conf/FileSettings.h"
+#include "calx/ctrl-lib/SystemManager.h"
+#include "calx/ctrl-lib/conf/INI.h"
+#include "calx/ctrl-lib/conf/FileSettings.h"
 
 namespace CalX {
 

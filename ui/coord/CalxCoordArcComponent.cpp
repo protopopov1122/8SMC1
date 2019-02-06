@@ -20,8 +20,8 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/coord/CalxCoordActions.h"
-#include "ui/coord/CalxCoordArcComponent.h"
+#include "calx/ui/coord/CalxCoordActions.h"
+#include "calx/ui/coord/CalxCoordArcComponent.h"
 
 namespace CalX::UI {
 

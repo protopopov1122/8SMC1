@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/plane/ProxyCoordPlane.h"
+#include "calx/ctrl-lib/plane/ProxyCoordPlane.h"
 #include <iostream>
 
 namespace CalX {

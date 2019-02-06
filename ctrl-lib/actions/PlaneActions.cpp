@@ -20,9 +20,9 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/actions/PlaneActions.h"
-#include "ctrl-lib/SystemManager.h"
-#include "ctrl-lib/logger/Shortcuts.h"
+#include "calx/ctrl-lib/actions/PlaneActions.h"
+#include "calx/ctrl-lib/SystemManager.h"
+#include "calx/ctrl-lib/logger/Shortcuts.h"
 
 namespace CalX {
 

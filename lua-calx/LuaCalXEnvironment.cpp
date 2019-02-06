@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "lua-calx/LuaCalXEnvironment.h"
+#include "calx/lua-calx/LuaCalXEnvironment.h"
 
 namespace CalX::UI::Lua {
 

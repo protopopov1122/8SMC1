@@ -21,9 +21,9 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/coord/CalxCoordActions.h"
-#include "ui/CalxErrorHandler.h"
-#include "ctrl-lib/logger/Shortcuts.h"
+#include "calx/ui/coord/CalxCoordActions.h"
+#include "calx/ui/CalxErrorHandler.h"
+#include "calx/ctrl-lib/logger/Shortcuts.h"
 
 namespace CalX::UI {
 

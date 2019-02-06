@@ -20,8 +20,8 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "device/emulated/EmuMotor.h"
-#include "device/emulated/EmuDeviceManager.h"
+#include "calx/device/emulated/EmuMotor.h"
+#include "calx/device/emulated/EmuDeviceManager.h"
 
 namespace CalX {
 

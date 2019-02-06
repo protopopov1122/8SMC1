@@ -20,8 +20,8 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/coord/CalxCoordAdjuster.h"
-#include "ui/CalxErrorHandler.h"
+#include "calx/ui/coord/CalxCoordAdjuster.h"
+#include "calx/ui/CalxErrorHandler.h"
 #include <wx/dcbuffer.h>
 #include <wx/sizer.h>
 

@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/SignalHandler.h"
+#include "calx/ctrl-lib/SignalHandler.h"
 #include <signal.h>
 
 #ifdef OS_WIN

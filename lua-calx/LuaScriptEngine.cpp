@@ -21,7 +21,7 @@
 */
 
 #include <exception>
-#include "lua-calx/LuaScriptEngine.h"
+#include "calx/lua-calx/LuaScriptEngine.h"
 #include <iostream>
 
 namespace CalX::UI::Lua {

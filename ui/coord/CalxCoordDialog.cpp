@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/coord/CalxCoordDialog.h"
+#include "calx/ui/coord/CalxCoordDialog.h"
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 

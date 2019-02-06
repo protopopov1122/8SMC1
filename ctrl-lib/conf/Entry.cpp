@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/conf/ConfigManager.h"
+#include "calx/ctrl-lib/conf/ConfigManager.h"
 
 namespace CalX {
 

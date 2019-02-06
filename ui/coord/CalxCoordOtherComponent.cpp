@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/coord/CalxCoordOtherComponent.h"
+#include "calx/ui/coord/CalxCoordOtherComponent.h"
 #include <wx/collpane.h>
 
 namespace CalX::UI {

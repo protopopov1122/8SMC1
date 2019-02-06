@@ -20,8 +20,8 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/logger/Global.h"
-#include "ctrl-lib/logger/TimedJournal.h"
+#include "calx/ctrl-lib/logger/Global.h"
+#include "calx/ctrl-lib/logger/TimedJournal.h"
 
 namespace CalX {
 

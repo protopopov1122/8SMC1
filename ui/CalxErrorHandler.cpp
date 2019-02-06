@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/CalxErrorHandler.h"
+#include "calx/ui/CalxErrorHandler.h"
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 

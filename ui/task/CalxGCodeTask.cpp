@@ -20,8 +20,8 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/task/CalxGCodeTask.h"
-#include "ui/task/CalxGcodeLoader.h"
+#include "calx/ui/task/CalxGCodeTask.h"
+#include "calx/ui/task/CalxGcodeLoader.h"
 
 namespace CalX::UI {
 

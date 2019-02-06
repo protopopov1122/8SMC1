@@ -1,7 +1,7 @@
 #include "catch.hpp"
-#include "ctrl-lib/plane/CoordPlane.h"
-#include "device/emulated/EmuDeviceManager.h"
-#include "ctrl-lib/conf/ConfigManager.h"
+#include "calx/ctrl-lib/plane/CoordPlane.h"
+#include "calx/device/emulated/EmuDeviceManager.h"
+#include "calx/ctrl-lib/conf/ConfigManager.h"
 
 using namespace CalX;
 

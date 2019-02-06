@@ -20,8 +20,8 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/CalxDebugConsole.h"
-#include "cli/DevCLI.h"
+#include "calx/ui/CalxDebugConsole.h"
+#include "calx/cli/DevCLI.h"
 
 namespace CalX::UI {
 

@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/CalxUnitProcessor.h"
+#include "calx/ui/CalxUnitProcessor.h"
 #include <sstream>
 
 namespace CalX::UI {

@@ -20,8 +20,8 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/coord/CalxWatcherPool.h"
-#include "ui/coord/CalxCoordPlaneWatcher.h"
+#include "calx/ui/coord/CalxWatcherPool.h"
+#include "calx/ui/coord/CalxCoordPlaneWatcher.h"
 #include <algorithm>
 
 namespace CalX::UI {

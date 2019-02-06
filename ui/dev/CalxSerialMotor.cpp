@@ -20,9 +20,9 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/dev/CalxSerialMotor.h"
-#include "ui/dev/CalxCOMSelectDialog.h"
-#include "ui/dev/CalxDeviceConstructor.h"
+#include "calx/ui/dev/CalxSerialMotor.h"
+#include "calx/ui/dev/CalxCOMSelectDialog.h"
+#include "calx/ui/dev/CalxDeviceConstructor.h"
 
 namespace CalX::UI {
 

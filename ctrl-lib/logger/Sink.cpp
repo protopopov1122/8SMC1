@@ -20,9 +20,9 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/logger/Sink.h"
-#include "ctrl-lib/logger/Format.h"
-#include "ctrl-lib/logger/Filter.h"
+#include "calx/ctrl-lib/logger/Sink.h"
+#include "calx/ctrl-lib/logger/Format.h"
+#include "calx/ctrl-lib/logger/Filter.h"
 #include <ctime>
 #include <chrono>
 #include <sstream>

@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/plane/CoordHandle.h"
+#include "calx/ctrl-lib/plane/CoordHandle.h"
 
 namespace CalX {
 

@@ -20,9 +20,9 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/CalxErrorHandler.h"
-#include "ui/coord/CalxCoordController.h"
-#include "ui/coord/CalxCoordActions.h"
+#include "calx/ui/CalxErrorHandler.h"
+#include "calx/ui/coord/CalxCoordController.h"
+#include "calx/ui/coord/CalxCoordActions.h"
 #include <algorithm>
 
 namespace CalX::UI {

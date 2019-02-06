@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/ctrl/DeviceControllerSet.h"
+#include "calx/ctrl-lib/ctrl/DeviceControllerSet.h"
 
 namespace CalX {
 	VectorMotorControllerSet::VectorMotorControllerSet(

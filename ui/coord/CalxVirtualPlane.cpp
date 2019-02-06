@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/coord/CalxVirtualPlane.h"
+#include "calx/ui/coord/CalxVirtualPlane.h"
 #include <wx/dcbuffer.h>
 #include <wx/sizer.h>
 #include <wx/utils.h>

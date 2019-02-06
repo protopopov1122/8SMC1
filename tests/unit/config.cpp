@@ -21,7 +21,7 @@
 */
 
 #include "catch.hpp"
-#include "ctrl-lib/conf/ConfigManager.h"
+#include "calx/ctrl-lib/conf/ConfigManager.h"
 
 using namespace CalX;
 

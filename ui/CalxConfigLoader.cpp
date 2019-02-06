@@ -20,8 +20,8 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/CalxConfigLoader.h"
-#include "ctrl-lib/conf/INI.h"
+#include "calx/ui/CalxConfigLoader.h"
+#include "calx/ctrl-lib/conf/INI.h"
 #include <wx/sizer.h>
 
 namespace CalX::UI {

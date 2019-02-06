@@ -20,8 +20,8 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/graph/Formula.h"
-#include "ctrl-lib/graph/FunctionParser.h"
+#include "calx/ctrl-lib/graph/Formula.h"
+#include "calx/ctrl-lib/graph/FunctionParser.h"
 #include <sstream>
 
 namespace CalX {

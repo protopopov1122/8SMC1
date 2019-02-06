@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/gcode/GCodeStream.h"
+#include "calx/ctrl-lib/gcode/GCodeStream.h"
 #include <cstring>
 
 namespace CalX {

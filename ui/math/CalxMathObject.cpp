@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/math/CalxMathObject.h"
+#include "calx/ui/math/CalxMathObject.h"
 #include <wx/sizer.h>
 #include <wx/spinctrl.h>
 #include <limits>

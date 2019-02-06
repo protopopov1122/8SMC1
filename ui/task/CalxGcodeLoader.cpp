@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/task/CalxGcodeLoader.h"
+#include "calx/ui/task/CalxGcodeLoader.h"
 #include <wx/gdicmn.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>

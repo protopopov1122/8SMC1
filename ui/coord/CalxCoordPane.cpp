@@ -21,11 +21,11 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/coord/CalxCoordPane.h"
-#include "ui/CalxApp.h"
-#include "ui/CalxErrorHandler.h"
-#include "ui/coord/CalxCoordAdjuster.h"
-#include "ui/coord/CalxCoordPlaneWatcher.h"
+#include "calx/ui/coord/CalxCoordPane.h"
+#include "calx/ui/CalxApp.h"
+#include "calx/ui/CalxErrorHandler.h"
+#include "calx/ui/coord/CalxCoordAdjuster.h"
+#include "calx/ui/coord/CalxCoordPlaneWatcher.h"
 #include <algorithm>
 #include <cmath>
 #include <sstream>

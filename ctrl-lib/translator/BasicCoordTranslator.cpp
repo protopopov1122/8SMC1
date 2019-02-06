@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/translator/CoordTranslator.h"
+#include "calx/ctrl-lib/translator/CoordTranslator.h"
 #include <cmath>
 
 namespace CalX {

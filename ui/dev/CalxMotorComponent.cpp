@@ -20,13 +20,13 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/dev/CalxMotorComponent.h"
-#include "ctrl-lib/SystemManager.h"
-#include "ctrl-lib/device/DeviceManager.h"
-#include "ui/CalxApp.h"
-#include "ui/CalxErrorHandler.h"
-#include "ui/config/CalxConfigEditor.h"
-#include "ctrl-lib/logger/Shortcuts.h"
+#include "calx/ui/dev/CalxMotorComponent.h"
+#include "calx/ctrl-lib/SystemManager.h"
+#include "calx/ctrl-lib/device/DeviceManager.h"
+#include "calx/ui/CalxApp.h"
+#include "calx/ui/CalxErrorHandler.h"
+#include "calx/ui/config/CalxConfigEditor.h"
+#include "calx/ctrl-lib/logger/Shortcuts.h"
 #include <limits>
 #include <signal.h>
 #include <wx/statbox.h>

@@ -20,8 +20,8 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/dev/CalxCOMSelectDialog.h"
-#include "ui/CalxApp.h"
+#include "calx/ui/dev/CalxCOMSelectDialog.h"
+#include "calx/ui/CalxApp.h"
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 

@@ -20,8 +20,8 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "device/standard/NL300Instrument.h"
-#include "device/standard/StandardDeviceManager.h"
+#include "calx/device/standard/NL300Instrument.h"
+#include "calx/device/standard/StandardDeviceManager.h"
 #include <cstring>
 #include <string>
 

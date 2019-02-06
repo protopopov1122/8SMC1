@@ -20,10 +20,10 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/coord/CalxCoordFilter.h"
-#include "ui/CalxApp.h"
-#include "ui/CalxFrame.h"
-#include "ui/CalxPanel.h"
+#include "calx/ui/coord/CalxCoordFilter.h"
+#include "calx/ui/CalxApp.h"
+#include "calx/ui/CalxFrame.h"
+#include "calx/ui/CalxPanel.h"
 #include <string>
 
 namespace CalX::UI {

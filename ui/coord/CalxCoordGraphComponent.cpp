@@ -20,11 +20,11 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/coord/CalxCoordGraphComponent.h"
-#include "ctrl-lib/graph/MathEngine.h"
-#include "ctrl-lib/graph/FunctionParser.h"
-#include "ctrl-lib/misc/GraphBuilder.h"
-#include "ui/CalxErrorHandler.h"
+#include "calx/ui/coord/CalxCoordGraphComponent.h"
+#include "calx/ctrl-lib/graph/MathEngine.h"
+#include "calx/ctrl-lib/graph/FunctionParser.h"
+#include "calx/ctrl-lib/misc/GraphBuilder.h"
+#include "calx/ui/CalxErrorHandler.h"
 #include <sstream>
 
 namespace CalX::UI {

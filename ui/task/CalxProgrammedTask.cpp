@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/task/CalxProgrammedTask.h"
+#include "calx/ui/task/CalxProgrammedTask.h"
 
 namespace CalX::UI {
 	CalxProgrammedTaskHandle::CalxProgrammedTaskHandle(wxWindow *win,

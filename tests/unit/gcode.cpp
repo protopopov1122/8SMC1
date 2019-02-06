@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include "ctrl-lib/gcode/GCodeStream.h"
+#include "calx/ctrl-lib/gcode/GCodeStream.h"
 
 using namespace CalX;
 

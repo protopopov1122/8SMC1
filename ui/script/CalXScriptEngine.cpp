@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/script/CalXScriptEngine.h"
+#include "calx/ui/script/CalXScriptEngine.h"
 
 namespace CalX::UI {
 

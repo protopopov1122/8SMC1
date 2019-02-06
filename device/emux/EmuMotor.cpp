@@ -23,8 +23,8 @@
 #include <thread>
 #include <chrono>
 #include <cmath>
-#include "device/emux/EmuMotor.h"
-#include "device/emux/EmuDeviceManager.h"
+#include "calx/device/emux/EmuMotor.h"
+#include "calx/device/emux/EmuDeviceManager.h"
 
 namespace CalX {
 

@@ -20,13 +20,13 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "cli/DevCLI.h"
-#include "ctrl-lib/gcode/GCodeInterpreter.h"
-#include "ctrl-lib/gcode/GCodeStream.h"
-#include "ctrl-lib/graph/MathEngine.h"
-#include "ctrl-lib/graph/FunctionParser.h"
-#include "ctrl-lib/misc/CircleGenerator.h"
-#include "ctrl-lib/misc/GraphBuilder.h"
+#include "calx/cli/DevCLI.h"
+#include "calx/ctrl-lib/gcode/GCodeInterpreter.h"
+#include "calx/ctrl-lib/gcode/GCodeStream.h"
+#include "calx/ctrl-lib/graph/MathEngine.h"
+#include "calx/ctrl-lib/graph/FunctionParser.h"
+#include "calx/ctrl-lib/misc/CircleGenerator.h"
+#include "calx/ctrl-lib/misc/GraphBuilder.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>

@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "cli/CLI.h"
+#include "calx/cli/CLI.h"
 #include <iostream>
 #include <cstring>
 #include <string>

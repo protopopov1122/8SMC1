@@ -20,8 +20,8 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/conf/INI.h"
-#include "ctrl-lib/conf/ConfigManager.h"
+#include "calx/ctrl-lib/conf/INI.h"
+#include "calx/ctrl-lib/conf/ConfigManager.h"
 #include <iostream>
 #include <cstring>
 #include <regex>

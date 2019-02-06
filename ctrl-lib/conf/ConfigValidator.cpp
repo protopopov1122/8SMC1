@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/conf/ConfigValidator.h"
+#include "calx/ctrl-lib/conf/ConfigValidator.h"
 
 namespace CalX {
 

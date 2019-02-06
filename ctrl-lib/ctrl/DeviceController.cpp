@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/ctrl/DeviceController.h"
+#include "calx/ctrl-lib/ctrl/DeviceController.h"
 
 namespace CalX {
 

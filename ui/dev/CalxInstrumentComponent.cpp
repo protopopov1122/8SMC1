@@ -20,9 +20,9 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/dev/CalxInstrumentComponent.h"
-#include "ui/CalxErrorHandler.h"
-#include "ui/config/CalxConfigEditor.h"
+#include "calx/ui/dev/CalxInstrumentComponent.h"
+#include "calx/ui/CalxErrorHandler.h"
+#include "calx/ui/config/CalxConfigEditor.h"
 #include <wx/sizer.h>
 
 namespace CalX::UI {

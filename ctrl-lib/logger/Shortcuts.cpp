@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/logger/Shortcuts.h"
+#include "calx/ctrl-lib/logger/Shortcuts.h"
 
 namespace CalX {
 

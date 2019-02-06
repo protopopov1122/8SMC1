@@ -20,25 +20,25 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/CalxApp.h"
+#include "calx/ui/CalxApp.h"
 #ifdef OS_WIN
 #include <windows.h>
 #endif
-#include "ctrl-lib/device/DeviceManager.h"
-#include "ui/CalxConfigLoader.h"
-#include "ui/CalxDebugConsole.h"
-#include "ui/CalxErrorHandler.h"
-#include "ui/coord/CalxCoordPanel.h"
-#include "ui/script/CalXScriptEngine.h"
+#include "calx/ctrl-lib/device/DeviceManager.h"
+#include "calx/ui/CalxConfigLoader.h"
+#include "calx/ui/CalxDebugConsole.h"
+#include "calx/ui/CalxErrorHandler.h"
+#include "calx/ui/coord/CalxCoordPanel.h"
+#include "calx/ui/script/CalXScriptEngine.h"
 #include <wx/filedlg.h>
 
-#include "ctrl-lib/SignalHandler.h"
-#include "ctrl-lib/conf/ConfigManager.h"
-#include "ctrl-lib/conf/ConfigValidator.h"
-#include "ctrl-lib/logger/Global.h"
-#include "ctrl-lib/logger/Filter.h"
-#include "ctrl-lib/logger/Shortcuts.h"
-#include "ui/logs/LogSink.h"
+#include "calx/ctrl-lib/SignalHandler.h"
+#include "calx/ctrl-lib/conf/ConfigManager.h"
+#include "calx/ctrl-lib/conf/ConfigValidator.h"
+#include "calx/ctrl-lib/logger/Global.h"
+#include "calx/ctrl-lib/logger/Filter.h"
+#include "calx/ctrl-lib/logger/Shortcuts.h"
+#include "calx/ui/logs/LogSink.h"
 #include <cmath>
 #include <fstream>
 #include <sstream>

@@ -20,8 +20,8 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/conf/Value.h"
-#include "ctrl-lib/conf/Dictionary.h"
+#include "calx/ctrl-lib/conf/Value.h"
+#include "calx/ctrl-lib/conf/Dictionary.h"
 
 namespace CalX {
 

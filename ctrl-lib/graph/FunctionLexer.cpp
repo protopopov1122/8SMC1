@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/graph/FunctionParser.h"
+#include "calx/ctrl-lib/graph/FunctionParser.h"
 #include <cinttypes>
 #include <cstring>
 

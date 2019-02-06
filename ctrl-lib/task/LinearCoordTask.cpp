@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/task/CoordTask.h"
+#include "calx/ctrl-lib/task/CoordTask.h"
 
 namespace CalX {
 

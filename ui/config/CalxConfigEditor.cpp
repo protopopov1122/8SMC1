@@ -20,8 +20,8 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/config/CalxConfigEditor.h"
-#include "ctrl-lib/conf/INI.h"
+#include "calx/ui/config/CalxConfigEditor.h"
+#include "calx/ctrl-lib/conf/INI.h"
 #include <wx/sizer.h>
 #include <wx/splitter.h>
 #include <wx/stattext.h>

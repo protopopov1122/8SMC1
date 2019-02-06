@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include "ctrl-lib/translator/CoordTranslator.h"
+#include "calx/ctrl-lib/translator/CoordTranslator.h"
 
 using namespace CalX;
 

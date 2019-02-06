@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/SystemManager.h"
+#include "calx/ctrl-lib/SystemManager.h"
 #include <cinttypes>
 #include <limits>
 #include <cmath>

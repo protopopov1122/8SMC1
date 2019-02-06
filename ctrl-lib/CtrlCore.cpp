@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/CtrlCore.h"
+#include "calx/ctrl-lib/CtrlCore.h"
 #include <iostream>
 
 namespace CalX {

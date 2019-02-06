@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/task/CalxLinearTask.h"
+#include "calx/ui/task/CalxLinearTask.h"
 
 namespace CalX::UI {
 

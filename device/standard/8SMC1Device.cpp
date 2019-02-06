@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "device/standard/StandardDeviceManager.h"
+#include "calx/device/standard/StandardDeviceManager.h"
 #include <iostream>
 #include <cstring>
 

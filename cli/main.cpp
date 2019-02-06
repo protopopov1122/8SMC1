@@ -20,12 +20,12 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "cli/DevCLI.h"
-#include "ctrl-lib/SignalHandler.h"
-#include "ctrl-lib/conf/ConfigManager.h"
-#include "ctrl-lib/SystemManager.h"
-#include "ctrl-lib/device/DeviceManager.h"
-#include "ctrl-lib/translator/CoordTranslator.h"
+#include "calx/cli/DevCLI.h"
+#include "calx/ctrl-lib/SignalHandler.h"
+#include "calx/ctrl-lib/conf/ConfigManager.h"
+#include "calx/ctrl-lib/SystemManager.h"
+#include "calx/ctrl-lib/device/DeviceManager.h"
+#include "calx/ctrl-lib/translator/CoordTranslator.h"
 #include <cinttypes>
 #include <fstream>
 #include <iostream>

@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/misc/CircleGenerator.h"
+#include "calx/ctrl-lib/misc/CircleGenerator.h"
 #include <cmath>
 
 namespace CalX {

@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/ctrl/MotorController.h"
+#include "calx/ctrl-lib/ctrl/MotorController.h"
 #include <algorithm>
 
 namespace CalX {

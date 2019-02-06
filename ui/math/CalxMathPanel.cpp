@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/math/CalxMathPanel.h"
+#include "calx/ui/math/CalxMathPanel.h"
 #include <wx/sizer.h>
 #include <wx/splitter.h>
 

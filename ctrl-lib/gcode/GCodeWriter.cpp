@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/gcode/GCodeWriter.h"
+#include "calx/ctrl-lib/gcode/GCodeWriter.h"
 #include <iostream>
 
 namespace CalX {

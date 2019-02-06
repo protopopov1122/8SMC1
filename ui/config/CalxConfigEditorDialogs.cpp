@@ -20,7 +20,7 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/config/CalxConfigEditor.h"
+#include "calx/ui/config/CalxConfigEditor.h"
 
 namespace CalX::UI {
 

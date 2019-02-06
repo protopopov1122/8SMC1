@@ -20,9 +20,9 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/device/DeviceManager.h"
-#include "ctrl-lib/conf/Dictionary.h"
-#include "ctrl-lib/conf/INI.h"
+#include "calx/ctrl-lib/device/DeviceManager.h"
+#include "calx/ctrl-lib/conf/Dictionary.h"
+#include "calx/ctrl-lib/conf/INI.h"
 #include <algorithm>
 #include <fstream>
 #include <iostream>

@@ -21,7 +21,7 @@
 */
 
 #include <fstream>
-#include "ui/script/CalxScriptPanel.h"
+#include "calx/ui/script/CalxScriptPanel.h"
 #include <wx/sizer.h>
 #include <wx/splitter.h>
 

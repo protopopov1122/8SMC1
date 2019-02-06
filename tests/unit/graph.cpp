@@ -1,6 +1,6 @@
 #include "catch.hpp"
-#include "ctrl-lib/graph/FunctionParser.h"
-#include "ctrl-lib/graph/MathEngine.h"
+#include "calx/ctrl-lib/graph/FunctionParser.h"
+#include "calx/ctrl-lib/graph/MathEngine.h"
 #include <sstream>
 
 using namespace CalX;

@@ -20,9 +20,9 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctrl-lib/logger/Logger.h"
-#include "ctrl-lib/logger/Session.h"
-#include "ctrl-lib/logger/Filter.h"
+#include "calx/ctrl-lib/logger/Logger.h"
+#include "calx/ctrl-lib/logger/Session.h"
+#include "calx/ctrl-lib/logger/Filter.h"
 #include <iostream>
 
 namespace CalX {

@@ -20,9 +20,9 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/dev/CalxDevicePanel.h"
-#include "ui/CalxApp.h"
-#include "ui/dev/CalxDeviceFactory.h"
+#include "calx/ui/dev/CalxDevicePanel.h"
+#include "calx/ui/CalxApp.h"
+#include "calx/ui/dev/CalxDeviceFactory.h"
 #include <vector>
 #include <wx/listctrl.h>
 #include <wx/sizer.h>

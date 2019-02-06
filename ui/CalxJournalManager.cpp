@@ -20,9 +20,9 @@
         along with CalX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui/CalxJournalManager.h"
-#include "ctrl-lib/logger/TimedJournal.h"
-#include "ctrl-lib/logger/Logger.h"
+#include "calx/ui/CalxJournalManager.h"
+#include "calx/ctrl-lib/logger/TimedJournal.h"
+#include "calx/ctrl-lib/logger/Logger.h"
 #include <wx/dir.h>
 #include <iomanip>
 #include <sstream>
