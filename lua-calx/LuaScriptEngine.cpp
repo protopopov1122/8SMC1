@@ -213,6 +213,15 @@ namespace CalX::UI::Lua {
 	}
 
 	void LuaCalXScript::loadLibrary() {
-		this->lua.load("scripts/lib.lua");
+		auto package = this->lua["package"];
+		std::string path = package["path"];
+		std::string libPath = this->env.getConfiguration().getEntry("script")->getString("path", "");
+		if (!libPath.empty()) {
+			if (path.empty()) {
+				package["path"] = libPath;
+			} else {
+				package["path"] = path + ";" + libPath;
+			}
+		}
 	}
 }  // namespace CalX::UI::Lua

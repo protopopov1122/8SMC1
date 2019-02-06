@@ -1,4 +1,6 @@
-function repl()
+local calxLib = {}
+
+function calxLib.repl()
 	local function print_results(...)
 		if select('#', ...) > 1 then
 			print(select(2, ...))
@@ -53,3 +55,5 @@ function repl()
 	end
 	print('Exiting Lua REPL')
 end
+
+return calxLib

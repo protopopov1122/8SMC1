@@ -1,3 +1,5 @@
+local calxLib = require 'calxLib'
+
 function init()
 	local configure_x = 0.5
 	local configure_y = 0.5
@@ -15,6 +17,6 @@ function init()
 	p1:configure(calx.point.new(configure_x, configure_y), 1.25)
 	p1:openWatcher()
 	if calx.config:get('script'):bool('repl', false) then
-		repl()
+		calxLib.repl()
 	end
 end
