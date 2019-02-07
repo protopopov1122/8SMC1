@@ -28,12 +28,15 @@ function calxLib.repl()
 	end
 	
 	print('Starting Lua REPL')
-	environment = {
+	local environment = {
 		PROMPT = '> ',
 		EXPR_MODE = true,
 		_REPL_WORK = true,
-		exit = function () environment._REPL_WORK = false end
+		calxLib = package.loaded.calxLib
 	}
+	function environment.exit()
+		environment._REPL_WORK = false
+	end
 	setmetatable(environment, {
 		__index = _ENV
 	})
@@ -42,9 +45,9 @@ function calxLib.repl()
 		io.stdout:flush()
 		local code = read_code()
 	
-		local f, err = load(code, 'stdin', nil, environment)
+		local f, err = load('return (' .. code .. ')', 'stdin', nil, environment)
 		if err and environment.EXPR_MODE then
-			f = load('return (' .. code .. ')', 'stdin', nil, environment)
+			f = load(code, 'stdin', nil, environment)
 		end
 	
 		if f then
