@@ -76,14 +76,6 @@ namespace CalX {
 		}
 	}
 
-	static void removeComments(std::string &str) {
-		static std::regex COMMENT(R"(#.*)");
-		std::smatch match;
-		if (std::regex_search(str, match, COMMENT) && !match.empty()) {
-			str.erase(str.length() - match.length(), str.length());
-		}
-	}
-
 	static bool regexMatches(const std::string &str, const std::regex &rx) {
 		std::smatch match;
 		return std::regex_search(str, match, rx) && !match.empty();
@@ -132,7 +124,9 @@ namespace CalX {
 			std::string str = match.str().substr(1, match.length() - 2);
 			return ConfigurationValue(str);
 		} else {
-			return ConfigurationValue(line);
+			std::size_t idx = line.find('#');
+			std::size_t value_length = idx == std::string::npos ? line.length() : idx;
+			return ConfigurationValue(line.substr(0, value_length));
 		}
 	}
 
@@ -166,7 +160,6 @@ namespace CalX {
 		for (uint32_t lineNumber = 1; is.good(); lineNumber++) {
 			std::string line;
 			std::getline(is, line);
-			removeComments(line);
 			leftTrimWhitespaces(line);
 			rightTrimWhitespaces(line);
 			if (!line.empty() && line.at(0) == '[') {
@@ -177,7 +170,7 @@ namespace CalX {
 				} else {
 					err << "Entry not defined at line " << lineNumber << std::endl;
 				}
-			} else if (!line.empty()) {
+			} else if (!line.empty() && line.at(0) != '#') {
 				err << "Unknown statement at line " << lineNumber << std::endl;
 			}
 		}
