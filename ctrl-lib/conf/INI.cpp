@@ -80,7 +80,7 @@ namespace CalX {
 		static std::regex COMMENT(R"(#.*)");
 		std::smatch match;
 		if (std::regex_search(str, match, COMMENT) && !match.empty()) {
-			str.erase(str.length() - (match.length() + 1), str.length());
+			str.erase(str.length() - match.length(), str.length());
 		}
 	}
 
