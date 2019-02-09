@@ -112,4 +112,57 @@ entry:string('key', '')                   -- get 'key' string value or ''
 entry:bool('key', true)                   -- get 'key' boolean value or true
 ```
 
-### TODO
+### Planes
+Lua bindings include plane-related functions
+1. `calx.planes` - create and obtain plane objects
+```lua
+local plane = calx.planes:create(motor1, motor2, instrument) -- Create new coordinate plane providing appropriate device objects
+calx.planes:count()                                          -- Count of currently registered planes
+local plane2 = calx.planes:get(0)                            -- Get the 0th plane
+```
+2. Plane controller returned by `calx.planes.get`
+```lua
+local plane = calx.planes:get(0)                       -- Get the plane controller
+plane:id()                                             -- Get plane identifier
+plane:move(calx.point.new(x, y), speed, true, true)    -- Move coordinate plane pointer to the (x;y) with given speed synchroniously/asinchroniously in absolute/relative coordinates
+plane:arc(calx.point.new(dx, dy), calx.point.new(cx, cy), splitter, speed, true, true) -- Perform arc movement to the point (dx; dy) with center in (cx; cy) splitting in into N hordes with given speed, clockwise/counter-clockwise in absolute/relative coordinates
+plane:calibrate(calx.motors.trailer.Top)               -- Calibrate coordinate plane to the given trailer
+plane:measure(calx.motors.trailer.Top)                 -- Measure coordinate plane starting at the given trailer
+plane:fmove(calx.point.new(0.5, 0.5), speed)           -- Move coordinate plane pointer to the point (x;y) where x and y are in [0; 1] with given speed
+plane:configure(calx.point.new(0.5, 0.5), speed)       -- Combines measure and fmove operations
+plane:position()                                       -- Obtain coordinate plane pointer position
+plane:size()                                           -- Obtain coordinate plane size
+plane:measured()                                       -- Check if coordinate plane is measured
+plane:asCenter()                                       -- Use current position as the center
+plane:openWatcher()                                    -- Open watcher dialog for this plane
+```
+
+### Tasks
+Lua bindings include basic facilities for task management using `calx.tasks` object.
+```lua
+calx.tasks:count()                      -- Count of currently registered tasks
+calx.tasks:remove(0)                    -- Remove Nth task
+calx.tasks:gcodeFile(title, filePath)   -- Load GCode from file, giving the title to new task
+calx.tasks:gcode(title, code)           -- Load GCode from string, giving the title to new task
+calx.tasks:linear(title, calx.tasks.linearTask.new(calx.rect.new(x, y, w, h), speed, true)) -- Create linear grid task for the rectangle [x; y; width; height] with given speed and vertical/horizontal lines
+```
+
+### Math
+Lua bindings provide basic control math formula UI using `calx.math` object.
+```lua
+calx.math:count()                             -- Registered math formula count
+calx.math:add(title, formula, {               -- Register a new formula with the given title
+  { name='x', description='Variable x' }      -- and a table of variable descriptions
+})
+calx.math:remove(0)                           -- Remove Nth formula
+```
+
+### Journaling
+Lua bindings provide access to the system journal and logs, using `calx.logger` and `calx.journal` objects. Both objects implement the same interface - multiple methods that log the message with given severity.
+```lua
+calx.journal:debug('Message')
+calx.journal:info('Message')
+calx.journal:warning('Message')
+calx.journal:error('Message')
+calx.journal:critical('Message')
+```
