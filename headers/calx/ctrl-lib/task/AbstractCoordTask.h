@@ -29,6 +29,7 @@
 #include <memory>
 #include <sstream>
 #include <vector>
+#include <optional>
 
 /* Task is complex action which as can be performed on any coordinate plane.
    Usually task consists of a set of elementar actions, their speed is

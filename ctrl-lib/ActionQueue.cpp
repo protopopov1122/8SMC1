@@ -22,14 +22,15 @@
 
 #include "calx/ctrl-lib/actions/ActionQueue.h"
 #include "calx/ctrl-lib/SystemManager.h"
+#include <iostream>
 
 namespace CalX {
 
 	struct CalxActionResult::ResultHandle {
 		ResultHandle()
 		    : status(CalxActionStatus::Pending), errcode(ErrorCode::NoError) {}
-		CalxActionStatus status;
-		ErrorCode errcode;
+		volatile CalxActionStatus status;
+		volatile ErrorCode errcode;
 	};
 
 	CalxActionResult::CalxActionResult() {
