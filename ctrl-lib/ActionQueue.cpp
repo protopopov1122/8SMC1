@@ -22,7 +22,8 @@
 
 #include "calx/ctrl-lib/actions/ActionQueue.h"
 #include "calx/ctrl-lib/SystemManager.h"
-#include <iostream>
+#include <mutex>
+#include <condition_variable>
 
 namespace CalX {
 
@@ -31,6 +32,8 @@ namespace CalX {
 		    : status(CalxActionStatus::Pending), errcode(ErrorCode::NoError) {}
 		volatile CalxActionStatus status;
 		volatile ErrorCode errcode;
+		std::mutex mutex;
+		std::condition_variable cond;
 	};
 
 	CalxActionResult::CalxActionResult() {
@@ -38,9 +41,11 @@ namespace CalX {
 	}
 
 	void CalxActionResult::wait() const {
-		while (this->handle->status != CalxActionStatus::Finished &&
-		       this->handle->status != CalxActionStatus::Stopped) {
-		}
+		std::unique_lock<std::mutex> lock(this->handle->mutex);
+		this->handle->cond.wait(lock, [&] {
+			return this->handle->status == CalxActionStatus::Finished ||
+		  	this->handle->status == CalxActionStatus::Stopped;
+		});
 	}
 
 	CalxActionStatus CalxActionResult::getStatus() const {
@@ -55,6 +60,8 @@ namespace CalX {
 		if (static_cast<int>(status) > static_cast<int>(this->handle->status)) {
 			this->handle->status = status;
 			this->handle->errcode = errcode;
+			std::unique_lock<std::mutex> lock(this->handle->mutex);
+			this->handle->cond.notify_all();
 		}
 	}
 
