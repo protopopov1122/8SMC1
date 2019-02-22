@@ -25,19 +25,55 @@
 
 #include "calx/ctrl-lib/CtrlCore.h"
 #include "calx/ctrl-lib/conf/Dictionary.h"
-#include "calx/ctrl-lib/gcode/GCodeStream.h"
 #include "calx/ctrl-lib/plane/CoordPlane.h"
 #include "calx/ctrl-lib/translator/CoordTranslator.h"
+#include "gcodelib/ir/Interpreter.h"
+#include <set>
 
 /* GCode interpreter executes parser produced commands
    on given coordinate plane with given speeed. */
 
+namespace gcl = GCodeLib;
+
 namespace CalX {
-	class GCodeInterpreter {
+
+	enum class GCodeOperation {
+		None = -1,
+		RapidMove = 0,
+		LinearMove = 1,
+		ClockwiseArc = 2,
+		CounterClockwiseArc = 3,
+		SwitchInches = 20,
+		SwitchMillimeters = 21,
+		Home = 28,
+		AbsolutePositioning = 90,
+		RelativePositioning = 91,
+		SetPosition = 92
+	};
+
+	extern std::set<int16_t> GCODE_OPERATIONS;
+
+	class GCodeInterpreter : public gcl::GCodeInterpreter {
 	 public:
-		static ErrorCode execute(GCodeStream &, CoordPlane &,
-		                         std::shared_ptr<CoordTranslator>,
-		                         ConfigurationCatalogue &, float, TaskState &);
+                GCodeInterpreter(CoordPlane &, std::shared_ptr<CoordTranslator>, ConfigurationCatalogue &, float, TaskState &);
+                ErrorCode run(gcl::GCodeIRModule &);
+         protected:
+                void execute(gcl::GCodeIRInstruction &) override;
+		// static ErrorCode execute(gcl::GCodeIRModule &, CoordPlane &,
+		//                          std::shared_ptr<CoordTranslator>,
+		//                          ConfigurationCatalogue &, float, TaskState &);
+         private:
+                CoordPlane &plane;
+                std::shared_ptr<CoordTranslator> trans;
+                ConfigurationCatalogue &config;
+                float speed;
+                TaskState &state;
+
+                std::shared_ptr<LinearCoordTranslator> unit_trans;
+                std::shared_ptr<LinearCoordTranslator> translator;
+                motor_point_t offset;
+                int invert;
+                bool relative_pos;
 	};
 }  // namespace CalX
 

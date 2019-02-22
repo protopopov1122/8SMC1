@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.1)
 project(CalX)
 
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_SOURCE_DIR}/third-party/gcodelib/cmake/")
 find_package(Threads REQUIRED)
+find_package(GCodeLib REQUIRED)
 
 add_definitions(-DLOGGING)
 file(GLOB_RECURSE SRCS *.cpp)
@@ -9,8 +11,8 @@ add_library(calx SHARED ${SRCS})
 if (MINGW)
 	SET_TARGET_PROPERTIES(calx PROPERTIES PREFIX "")
 endif (MINGW)
-target_include_directories(calx PUBLIC ${CMAKE_SOURCE_DIR}/headers)
-target_link_libraries(calx ${CMAKE_THREAD_LIBS_INIT})
+target_include_directories(calx PUBLIC ${CMAKE_SOURCE_DIR}/headers ${GCODELIB_HEADERS})
+target_link_libraries(calx ${CMAKE_THREAD_LIBS_INIT} ${GCODELIB_LIBS})
 add_custom_command(TARGET calx POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:calx> ${build_directory}
 )

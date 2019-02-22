@@ -23,6 +23,8 @@
 #include "calx/ctrl-lib/SystemManager.h"
 #include "calx/ctrl-lib/gcode/GCodeInterpreter.h"
 #include "calx/ctrl-lib/task/CoordTask.h"
+#include "gcodelib/parser/Parser.h"
+#include "gcodelib/ir/Translator.h"
 
 namespace CalX {
 
@@ -36,7 +38,10 @@ namespace CalX {
 		}
 		this->code = ss.str();
 		ss.seekg(0);
-		this->stream = std::make_shared<GCodeStream>(ss);
+		gcl::GCodeDefaultScanner scanner(ss);
+		gcl::GCodeParser parser(scanner);
+		auto root = parser.parse();
+		this->module = gcl::GCodeIRTranslator::translate(*root);
 		this->translator = trans;
 	}
 
@@ -45,9 +50,8 @@ namespace CalX {
 	                                  std::shared_ptr<TaskState> state) {
 		state->plane = plane;
 		state->work = true;
-		ErrorCode errcode = GCodeInterpreter::execute(
-		    *this->stream.get(), *plane.get(), this->translator,
-		    sysman.getConfiguration(), prms.speed, *state.get());
+		GCodeInterpreter interpreter(*plane, this->translator, sysman.getConfiguration(), prms.speed, *state);
+		ErrorCode errcode = interpreter.run(*this->module);
 		state->work = false;
 		return errcode;
 	}

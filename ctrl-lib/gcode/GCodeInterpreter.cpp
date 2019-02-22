@@ -24,172 +24,213 @@
 
 namespace CalX {
 
-#define TO_REAL(prm)                                                           \
-	(prm.type == GCodeParameterType::Real                                        \
-	     ? prm.value.real                                                        \
-	     : static_cast<double>(prm.value.integer))
+	std::set<int16_t> GCODE_OPERATIONS = {
+		0,   // Rapid move
+		1,   // Linear move
+		2,   // Clockwise arc
+		3,   // Counter-clockwise arc
+		20,  // Switch to inches
+		21,  // Switch to millimeters
+		28,  // Go home
+		90,  // Absolute positioning
+		91,  // Relative positioning
+		92   // Set position
+	};
 
-	ErrorCode GCodeInterpreter::execute(GCodeStream &input, CoordPlane &plane,
-	                                    std::shared_ptr<CoordTranslator> trans,
-	                                    ConfigurationCatalogue &config,
-	                                    float speed, TaskState &state) {
-		input.reset();
+	static GCodeOperation getGCodeOperation(gcl::GCodeIRCommand &cmd) {
+		if (cmd.getFunctionType() == gcl::GCodeIRCommand::FunctionType::General && GCODE_OPERATIONS.count(cmd.getFunction().getInteger()) != 0) {
+			return static_cast<GCodeOperation>(cmd.getFunction().getInteger());
+		} else {
+			return GCodeOperation::None;
+		}
+	}
 
-		coord_point_t troffset = { 0, 0 };
-		coord_scale_t trscale = { 1, 1 };
-		std::shared_ptr<LinearCoordTranslator> unit_trans =
-		    std::make_shared<LinearCoordTranslator>(troffset, trscale, trans);
-		std::shared_ptr<LinearCoordTranslator> translator =
-		    std::make_shared<LinearCoordTranslator>(troffset, trscale, unit_trans);
+	static double getRealConstant(const gcl::GCodeIRConstant &cnst) {
+		if (cnst.is(gcl::GCodeIRConstant::Type::Integer)) {
+			return static_cast<double>(cnst.getFloat());
+		} else {
+			return cnst.getFloat();
+		}
+	}
 
-		motor_point_t offset = translator->get(0, 0);
-		int invert = 1;
+	GCodeInterpreter::GCodeInterpreter(CoordPlane &plane, std::shared_ptr<CoordTranslator> trans, ConfigurationCatalogue &config, float speed, TaskState &state)
+		: plane(plane), trans(trans), config(config), speed(speed), state(state) {
+		
+
+		this->unit_trans =
+		    std::make_shared<LinearCoordTranslator>(coord_point_t(0, 0), coord_scale_t(1, 1), trans);
+		this->translator =
+		    std::make_shared<LinearCoordTranslator>(coord_point_t(0, 0), coord_scale_t(1, 1), unit_trans);
+
+		this->offset = translator->get(0, 0);
+		this->invert = 1;
 		if (translator->get(1, 0).x < offset.x) {
-			invert *= -1;
+			this->invert *= -1;
 		}
 		if (translator->get(0, 1).y < offset.y) {
-			invert *= -1;
+			this->invert *= -1;
 		}
-		bool relative_pos = false;
+		this->relative_pos = false;
+	}
+
+	ErrorCode GCodeInterpreter::run(gcl::GCodeIRModule &module) {
+		try {
+			this->gcl::GCodeInterpreter::execute(module);
+			return ErrorCode::NoError;
+		} catch (ErrorCode errcode) {
+			return errcode;
+		} catch (...) {
+			return ErrorCode::LowLevelError;
+		}
+	}
+
+	void GCodeInterpreter::execute(gcl::GCodeIRInstruction &instr) {
+		if (!instr.is(gcl::GCodeIRInstruction::Type::Command)) {
+			return;
+		}
+		if (!this->state.work) {
+			throw ErrorCode::NoError;
+		}
+		gcl::GCodeIRCommand &cmd = dynamic_cast<gcl::GCodeIRCommand &>(instr);
 		const int_conf_t CHORD_COUNT =
 		    config.getEntry(CalxConfiguration::Core)->getInt("chord_count", 100);
 		ErrorCode errcode = ErrorCode::NoError;
-		while (input.hasNext() && state.work && errcode == ErrorCode::NoError) {
-			motor_point_t rel_offset = { 0, 0 };
-			if (relative_pos) {
-				rel_offset = plane.getPosition();
-			}
-			GCodeCmd cmd = input.next();
-			switch (cmd.getOperation()) {
-				case GCodeOperation::RapidMove: {
-					coord_point_t dest = translator->get(plane.getPosition());
-					if (cmd.hasArgument('X')) {
-						GCodeParameter prm = cmd.getArgument('X');
-						dest.x = TO_REAL(prm);
-					}
-					if (cmd.hasArgument('Y')) {
-						GCodeParameter prm = cmd.getArgument('Y');
-						dest.y = TO_REAL(prm);
-					}
-					motor_point_t mdest = translator->get(dest.x, dest.y);
-					mdest.x += rel_offset.x;
-					mdest.y += rel_offset.y;
-					errcode = plane.move(mdest, speed, false);
-				} break;
-				case GCodeOperation::LinearMove: {
-					coord_point_t dest = translator->get(plane.getPosition());
-					if (cmd.hasArgument('X')) {
-						GCodeParameter prm = cmd.getArgument('X');
-						dest.x = TO_REAL(prm);
-					}
-					if (cmd.hasArgument('Y')) {
-						GCodeParameter prm = cmd.getArgument('Y');
-						dest.y = TO_REAL(prm);
-					}
-					motor_point_t mdest = translator->get(dest.x, dest.y);
-					mdest.x += rel_offset.x;
-					mdest.y += rel_offset.y;
-					errcode = plane.move(mdest, speed, true);
-				} break;
-				case GCodeOperation::ClockwiseArc:
-					if (cmd.hasArgument('I') || cmd.hasArgument('J')) {
-						coord_point_t dest = translator->get(plane.getPosition());
-						coord_point_t cen = { 0, 0 };
-						if (cmd.hasArgument('X')) {
-							GCodeParameter prm = cmd.getArgument('X');
-							dest.x = TO_REAL(prm);
-						}
-						if (cmd.hasArgument('Y')) {
-							GCodeParameter prm = cmd.getArgument('Y');
-							dest.y = TO_REAL(prm);
-						}
-						if (cmd.hasArgument('I')) {
-							GCodeParameter prm = cmd.getArgument('I');
-							cen.x = TO_REAL(prm);
-						}
-						if (cmd.hasArgument('J')) {
-							GCodeParameter prm = cmd.getArgument('J');
-							cen.y = TO_REAL(prm);
-						}
-						motor_point_t current = plane.getPosition();
-						motor_point_t mdest = translator->get(dest.x, dest.y);
-						motor_point_t mcen = translator->get(cen.x, cen.y);
-						mcen.x -= offset.x;
-						mcen.y -= offset.y;
-						mcen.x += current.x;
-						mcen.y += current.y;
-						mdest.x += rel_offset.x;
-						mdest.y += rel_offset.y;
-						errcode = plane.arc(mdest, mcen, CHORD_COUNT, speed, invert == 1);
-					}
-					break;
-				case GCodeOperation::CounterClockwiseArc:
-					if (cmd.hasArgument('I') || cmd.hasArgument('J')) {
-						coord_point_t dest = translator->get(plane.getPosition());
-						coord_point_t cen = { 0, 0 };
-						if (cmd.hasArgument('X')) {
-							GCodeParameter prm = cmd.getArgument('X');
-							dest.x = TO_REAL(prm);
-						}
-						if (cmd.hasArgument('Y')) {
-							GCodeParameter prm = cmd.getArgument('Y');
-							dest.y = TO_REAL(prm);
-						}
-						if (cmd.hasArgument('I')) {
-							GCodeParameter prm = cmd.getArgument('I');
-							cen.x = TO_REAL(prm);
-						}
-						if (cmd.hasArgument('J')) {
-							GCodeParameter prm = cmd.getArgument('J');
-							cen.y = TO_REAL(prm);
-						}
-						motor_point_t current = plane.getPosition();
-						motor_point_t mdest = translator->get(dest.x, dest.y);
-						motor_point_t mcen = translator->get(cen.x, cen.y);
-						mcen.x -= offset.x;
-						mcen.y -= offset.y;
-						mcen.x += current.x;
-						mcen.y += current.y;
-						mdest.x += rel_offset.x;
-						mdest.y += rel_offset.y;
-						errcode = plane.arc(mdest, mcen, CHORD_COUNT, speed, invert != 1);
-					}
-					break;
-				case GCodeOperation::SwitchInches: {
-					coord_scale_t scale = { 25.4, 25.4 };
-					unit_trans->setScale(scale);
-				} break;
-				case GCodeOperation::SwitchMillimeters: {
-					coord_scale_t scale = { 1.0, 1.0 };
-					unit_trans->setScale(scale);
-				} break;
-				case GCodeOperation::Home: {
-					coord_point_t dest = { 0, 0 };
-					errcode = plane.move(translator->get(dest.x, dest.y), speed, false);
-				} break;
-				case GCodeOperation::AbsolutePositioning: {
-					relative_pos = false;
-				} break;
-				case GCodeOperation::RelativePositioning: {
-					relative_pos = true;
-				} break;
-				case GCodeOperation::SetPosition: {
-					coord_point_t curpos = unit_trans->get(plane.getPosition());
-					coord_point_t offset = translator->getOffset();
-					if (cmd.hasArgument('X')) {
-						double newx = TO_REAL(cmd.getArgument('X'));
-						offset.x = curpos.x - newx;
-					}
-					if (cmd.hasArgument('Y')) {
-						double newy = TO_REAL(cmd.getArgument('Y'));
-						offset.y = curpos.y - newy;
-					}
-					translator->setOffset(offset);
-				} break;
-				default:
-					break;
-			}
+		motor_point_t rel_offset = { 0, 0 };
+		if (relative_pos) {
+			rel_offset = plane.getPosition();
 		}
-		return errcode;
+		switch (getGCodeOperation(cmd)) {
+			case GCodeOperation::RapidMove: {
+				coord_point_t dest = translator->get(plane.getPosition());
+				if (cmd.hasParameter('X')) {
+					gcl::GCodeIRConstant prm = cmd.getParameter('X');
+					dest.x = getRealConstant(prm);
+				}
+				if (cmd.hasParameter('Y')) {
+					gcl::GCodeIRConstant prm = cmd.getParameter('Y');
+					dest.y = getRealConstant(prm);
+				}
+				motor_point_t mdest = translator->get(dest.x, dest.y);
+				mdest.x += rel_offset.x;
+				mdest.y += rel_offset.y;
+				errcode = plane.move(mdest, speed, false);
+			} break;
+			case GCodeOperation::LinearMove: {
+				coord_point_t dest = translator->get(plane.getPosition());
+				if (cmd.hasParameter('X')) {
+					gcl::GCodeIRConstant prm = cmd.getParameter('X');
+					dest.x = getRealConstant(prm);
+				}
+				if (cmd.hasParameter('Y')) {
+					gcl::GCodeIRConstant prm = cmd.getParameter('Y');
+					dest.y = getRealConstant(prm);
+				}
+				motor_point_t mdest = translator->get(dest.x, dest.y);
+				mdest.x += rel_offset.x;
+				mdest.y += rel_offset.y;
+				errcode = plane.move(mdest, speed, true);
+			} break;
+			case GCodeOperation::ClockwiseArc:
+				if (cmd.hasParameter('I') || cmd.hasParameter('J')) {
+					coord_point_t dest = translator->get(plane.getPosition());
+					coord_point_t cen = { 0, 0 };
+					if (cmd.hasParameter('X')) {
+						gcl::GCodeIRConstant prm = cmd.getParameter('X');
+						dest.x = getRealConstant(prm);
+					}
+					if (cmd.hasParameter('Y')) {
+						gcl::GCodeIRConstant prm = cmd.getParameter('Y');
+						dest.y = getRealConstant(prm);
+					}
+					if (cmd.hasParameter('I')) {
+						gcl::GCodeIRConstant prm = cmd.getParameter('I');
+						cen.x = getRealConstant(prm);
+					}
+					if (cmd.hasParameter('J')) {
+						gcl::GCodeIRConstant prm = cmd.getParameter('J');
+						cen.y = getRealConstant(prm);
+					}
+					motor_point_t current = plane.getPosition();
+					motor_point_t mdest = translator->get(dest.x, dest.y);
+					motor_point_t mcen = translator->get(cen.x, cen.y);
+					mcen.x -= offset.x;
+					mcen.y -= offset.y;
+					mcen.x += current.x;
+					mcen.y += current.y;
+					mdest.x += rel_offset.x;
+					mdest.y += rel_offset.y;
+					errcode = plane.arc(mdest, mcen, CHORD_COUNT, speed, invert == 1);
+				}
+				break;
+			case GCodeOperation::CounterClockwiseArc:
+				if (cmd.hasParameter('I') || cmd.hasParameter('J')) {
+					coord_point_t dest = translator->get(plane.getPosition());
+					coord_point_t cen = { 0, 0 };
+					if (cmd.hasParameter('X')) {
+						gcl::GCodeIRConstant prm = cmd.getParameter('X');
+						dest.x = getRealConstant(prm);
+					}
+					if (cmd.hasParameter('Y')) {
+						gcl::GCodeIRConstant prm = cmd.getParameter('Y');
+						dest.y = getRealConstant(prm);
+					}
+					if (cmd.hasParameter('I')) {
+						gcl::GCodeIRConstant prm = cmd.getParameter('I');
+						cen.x = getRealConstant(prm);
+					}
+					if (cmd.hasParameter('J')) {
+						gcl::GCodeIRConstant prm = cmd.getParameter('J');
+						cen.y = getRealConstant(prm);
+					}
+					motor_point_t current = plane.getPosition();
+					motor_point_t mdest = translator->get(dest.x, dest.y);
+					motor_point_t mcen = translator->get(cen.x, cen.y);
+					mcen.x -= offset.x;
+					mcen.y -= offset.y;
+					mcen.x += current.x;
+					mcen.y += current.y;
+					mdest.x += rel_offset.x;
+					mdest.y += rel_offset.y;
+					errcode = plane.arc(mdest, mcen, CHORD_COUNT, speed, invert != 1);
+				}
+				break;
+			case GCodeOperation::SwitchInches: {
+				coord_scale_t scale = { 25.4, 25.4 };
+				unit_trans->setScale(scale);
+			} break;
+			case GCodeOperation::SwitchMillimeters: {
+				coord_scale_t scale = { 1.0, 1.0 };
+				unit_trans->setScale(scale);
+			} break;
+			case GCodeOperation::Home: {
+				coord_point_t dest = { 0, 0 };
+				errcode = plane.move(translator->get(dest.x, dest.y), speed, false);
+			} break;
+			case GCodeOperation::AbsolutePositioning: {
+				relative_pos = false;
+			} break;
+			case GCodeOperation::RelativePositioning: {
+				relative_pos = true;
+			} break;
+			case GCodeOperation::SetPosition: {
+				coord_point_t curpos = unit_trans->get(plane.getPosition());
+				coord_point_t offset = translator->getOffset();
+				if (cmd.hasParameter('X')) {
+					double newx = getRealConstant(cmd.getParameter('X'));
+					offset.x = curpos.x - newx;
+				}
+				if (cmd.hasParameter('Y')) {
+					double newy = getRealConstant(cmd.getParameter('Y'));
+					offset.y = curpos.y - newy;
+				}
+				translator->setOffset(offset);
+			} break;
+			default:
+				break;
+		}
+		
+		if (errcode != ErrorCode::NoError) {
+			throw errcode;
+		}
 	}
 }  // namespace CalX

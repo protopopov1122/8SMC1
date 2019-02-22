@@ -23,11 +23,11 @@
 #ifndef CALX_CTRL_LIB_TASK_COORD_TASK_H_
 #define CALX_CTRL_LIB_TASK_COORD_TASK_H_
 
-#include "calx/ctrl-lib/gcode/GCodeStream.h"
 #include "calx/ctrl-lib/graph/MathEngine.h"
 #include "calx/ctrl-lib/misc/GraphBuilder.h"
 #include "calx/ctrl-lib/task/AbstractCoordTask.h"
 #include "calx/ctrl-lib/task/CoordTaskStep.h"
+#include "gcodelib/ir/IR.h"
 
 /* Coordinate task is abstraction that perform actions on coordiate plane
    according to implemenation. These are few implemenations available:
@@ -38,6 +38,8 @@
                         parameters for it.
            * CoordTaskWrapper - wraps task and plane filter parameters. May be
    removed.*/
+
+namespace gcl = GCodeLib;
 
 namespace CalX {
 
@@ -99,7 +101,7 @@ namespace CalX {
 
 	 private:
 		std::string code;
-		std::shared_ptr<GCodeStream> stream;
+		std::unique_ptr<gcl::GCodeIRModule> module;
 		std::shared_ptr<CoordTranslator> translator;
 	};
 }  // namespace CalX

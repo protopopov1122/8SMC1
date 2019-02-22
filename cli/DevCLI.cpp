@@ -21,8 +21,6 @@
 */
 
 #include "calx/cli/DevCLI.h"
-#include "calx/ctrl-lib/gcode/GCodeInterpreter.h"
-#include "calx/ctrl-lib/gcode/GCodeStream.h"
 #include "calx/ctrl-lib/graph/MathEngine.h"
 #include "calx/ctrl-lib/graph/FunctionParser.h"
 #include "calx/ctrl-lib/misc/CircleGenerator.h"
