@@ -51,8 +51,8 @@ namespace CalX {
 	                                  std::shared_ptr<TaskState> state) {
 		state->plane = plane;
 		state->work = true;
-		GCodeInterpreter interpreter(*plane, this->translator, sysman.getConfiguration(), prms.speed, *state);
-		ErrorCode errcode = interpreter.run(*this->module);
+		GCodeInterpreter interpreter(*this->module, *plane, this->translator, sysman.getConfiguration(), prms.speed, *state);
+		ErrorCode errcode = interpreter.run();
 		state->work = false;
 		return errcode;
 	}

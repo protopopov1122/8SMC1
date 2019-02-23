@@ -53,10 +53,10 @@ namespace CalX {
 
 	class GCodeInterpreter : public gcl::GCodeInterpreter {
 	 public:
-                GCodeInterpreter(CoordPlane &, std::shared_ptr<CoordTranslator>, ConfigurationCatalogue &, float, TaskState &);
-                ErrorCode run(gcl::GCodeIRModule &);
+                GCodeInterpreter(gcl::GCodeIRModule &, CoordPlane &, std::shared_ptr<CoordTranslator>, ConfigurationCatalogue &, float, TaskState &);
+                ErrorCode run();
          protected:
-                void execute(const gcl::GCodeSystemCommand &) override;
+              void syscall(gcl::GCodeSyscallType, const gcl::GCodeIRValue &, const std::map<unsigned char, gcl::GCodeIRValue> &) override;
          private:
                 CoordPlane &plane;
                 std::shared_ptr<CoordTranslator> trans;
