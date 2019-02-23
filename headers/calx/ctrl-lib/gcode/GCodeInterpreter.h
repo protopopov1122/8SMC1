@@ -51,17 +51,12 @@ namespace CalX {
 		SetPosition = 92
 	};
 
-	extern std::set<int16_t> GCODE_OPERATIONS;
-
 	class GCodeInterpreter : public gcl::GCodeInterpreter {
 	 public:
                 GCodeInterpreter(CoordPlane &, std::shared_ptr<CoordTranslator>, ConfigurationCatalogue &, float, TaskState &);
                 ErrorCode run(gcl::GCodeIRModule &);
          protected:
-                void execute(gcl::GCodeIRInstruction &) override;
-		// static ErrorCode execute(gcl::GCodeIRModule &, CoordPlane &,
-		//                          std::shared_ptr<CoordTranslator>,
-		//                          ConfigurationCatalogue &, float, TaskState &);
+                void execute(const gcl::GCodeSystemCommand &) override;
          private:
                 CoordPlane &plane;
                 std::shared_ptr<CoordTranslator> trans;

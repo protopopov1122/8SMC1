@@ -24,7 +24,7 @@
 
 namespace CalX {
 
-	std::set<int16_t> GCODE_OPERATIONS = {
+	static const std::set<int16_t> GCODE_OPERATIONS = {
 		0,   // Rapid move
 		1,   // Linear move
 		2,   // Clockwise arc
@@ -37,8 +37,8 @@ namespace CalX {
 		92   // Set position
 	};
 
-	static GCodeOperation getGCodeOperation(gcl::GCodeIRCommand &cmd) {
-		if (cmd.getFunctionType() == gcl::GCodeIRCommand::FunctionType::General && GCODE_OPERATIONS.count(cmd.getFunction().getInteger()) != 0) {
+	static GCodeOperation getGCodeOperation(const gcl::GCodeSystemCommand &cmd) {
+		if (cmd.getFunctionType() == gcl::GCodeSystemCommand::FunctionType::General && GCODE_OPERATIONS.count(cmd.getFunction().getInteger()) != 0) {
 			return static_cast<GCodeOperation>(cmd.getFunction().getInteger());
 		} else {
 			return GCodeOperation::None;
@@ -84,14 +84,10 @@ namespace CalX {
 		}
 	}
 
-	void GCodeInterpreter::execute(gcl::GCodeIRInstruction &instr) {
-		if (!instr.is(gcl::GCodeIRInstruction::Type::Command)) {
-			return;
-		}
+	void GCodeInterpreter::execute(const gcl::GCodeSystemCommand &cmd) {
 		if (!this->state.work) {
 			throw ErrorCode::NoError;
 		}
-		gcl::GCodeIRCommand &cmd = dynamic_cast<gcl::GCodeIRCommand &>(instr);
 		const int_conf_t CHORD_COUNT =
 		    config.getEntry(CalxConfiguration::Core)->getInt("chord_count", 100);
 		ErrorCode errcode = ErrorCode::NoError;

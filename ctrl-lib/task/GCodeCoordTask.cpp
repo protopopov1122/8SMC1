@@ -41,7 +41,8 @@ namespace CalX {
 		gcl::GCodeDefaultScanner scanner(ss);
 		gcl::GCodeParser parser(scanner);
 		auto root = parser.parse();
-		this->module = gcl::GCodeIRTranslator::translate(*root);
+		gcl::GCodeIRTranslator translator;
+		this->module = translator.translate(*root);
 		this->translator = trans;
 	}
 
