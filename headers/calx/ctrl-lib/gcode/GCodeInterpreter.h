@@ -27,7 +27,7 @@
 #include "calx/ctrl-lib/conf/Dictionary.h"
 #include "calx/ctrl-lib/plane/CoordPlane.h"
 #include "calx/ctrl-lib/translator/CoordTranslator.h"
-#include "gcodelib/ir/Interpreter.h"
+#include "gcodelib/runtime/Interpreter.h"
 #include <set>
 
 /* GCode interpreter executes parser produced commands
@@ -56,7 +56,7 @@ namespace CalX {
                 GCodeInterpreter(gcl::GCodeIRModule &, CoordPlane &, std::shared_ptr<CoordTranslator>, ConfigurationCatalogue &, float, TaskState &);
                 ErrorCode run();
          protected:
-              void syscall(gcl::GCodeSyscallType, const gcl::GCodeIRValue &, const std::map<unsigned char, gcl::GCodeIRValue> &) override;
+              void syscall(gcl::GCodeSyscallType, const gcl::GCodeRuntimeValue &, const gcl::GCodeVariableScope<unsigned char> &) override;
          private:
                 CoordPlane &plane;
                 std::shared_ptr<CoordTranslator> trans;

@@ -27,7 +27,7 @@
 #include "calx/ctrl-lib/misc/GraphBuilder.h"
 #include "calx/ctrl-lib/task/AbstractCoordTask.h"
 #include "calx/ctrl-lib/task/CoordTaskStep.h"
-#include "gcodelib/ir/IR.h"
+#include "gcodelib/runtime/IR.h"
 
 /* Coordinate task is abstraction that perform actions on coordiate plane
    according to implemenation. These are few implemenations available:

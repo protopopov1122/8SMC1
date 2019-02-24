@@ -24,7 +24,7 @@
 #include "calx/ctrl-lib/gcode/GCodeInterpreter.h"
 #include "calx/ctrl-lib/task/CoordTask.h"
 #include "gcodelib/parser/Parser.h"
-#include "gcodelib/ir/Translator.h"
+#include "gcodelib/runtime/Translator.h"
 
 namespace CalX {
 
