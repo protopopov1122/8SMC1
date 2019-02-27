@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.1)
 project(CalX)
 
-set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_SOURCE_DIR}/third-party/gcodelib/cmake/")
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_SOURCE_DIR}/gcodelib/cmake/")
 find_package(Threads REQUIRED)
 find_package(GCodeLib REQUIRED)
 

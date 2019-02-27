@@ -1,0 +1,3 @@
+[submodule "gcodelib"]
+	path = gcodelib
+	url = https://github.com/protopopov1122/GCodeLib
