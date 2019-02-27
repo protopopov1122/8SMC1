@@ -229,4 +229,8 @@ namespace CalX {
 			throw errcode;
 		}
 	}
+
+	gclr::GCodeVariableScope &GCodeInterpreter::getSystemScope() {
+		return this->systemScope;
+	}
 }  // namespace CalX

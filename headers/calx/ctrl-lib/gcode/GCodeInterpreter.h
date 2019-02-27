@@ -57,6 +57,7 @@ namespace CalX {
                 ErrorCode run();
          protected:
               void syscall(gclr::GCodeSyscallType, const gclr::GCodeRuntimeValue &, const gclr::GCodeScopedDictionary<unsigned char> &) override;
+              gclr::GCodeVariableScope &getSystemScope() override;
          private:
                 CoordPlane &plane;
                 std::shared_ptr<CoordTranslator> trans;
@@ -69,6 +70,8 @@ namespace CalX {
                 motor_point_t offset;
                 int invert;
                 bool relative_pos;
+
+                gclr::GCodeCascadeVariableScope systemScope;
 	};
 }  // namespace CalX
 
