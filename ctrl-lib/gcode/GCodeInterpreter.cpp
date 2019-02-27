@@ -38,7 +38,7 @@ namespace CalX {
 		92   // Set position
 	};
 
-	static GCodeOperation getGCodeOperation(const gcl::GCodeRuntimeValue &function) {
+	static GCodeOperation getGCodeOperation(const gclr::GCodeRuntimeValue &function) {
 		if (GCODE_OPERATIONS.count(function.getInteger()) != 0) {
 			return static_cast<GCodeOperation>(function.getInteger());
 		} else {
@@ -46,12 +46,12 @@ namespace CalX {
 		}
 	}
 
-	static double getRealConstant(const gcl::GCodeRuntimeValue &cnst) {
+	static double getRealConstant(const gclr::GCodeRuntimeValue &cnst) {
 		return cnst.asFloat();
 	}
 
-	GCodeInterpreter::GCodeInterpreter(gcl::GCodeIRModule &module, CoordPlane &plane, std::shared_ptr<CoordTranslator> trans, ConfigurationCatalogue &config, float speed, TaskState &state)
-		: gcl::GCodeInterpreter::GCodeInterpreter(module), plane(plane), trans(trans), config(config), speed(speed), state(state) {
+	GCodeInterpreter::GCodeInterpreter(gclr::GCodeIRModule &module, CoordPlane &plane, std::shared_ptr<CoordTranslator> trans, ConfigurationCatalogue &config, float speed, TaskState &state)
+		: gclr::GCodeInterpreter::GCodeInterpreter(module), plane(plane), trans(trans), config(config), speed(speed), state(state) {
 		
 
 		this->unit_trans =
@@ -72,7 +72,7 @@ namespace CalX {
 
 	ErrorCode GCodeInterpreter::run() {
 		try {
-			this->gcl::GCodeInterpreter::execute();
+			this->gclr::GCodeInterpreter::execute();
 			return ErrorCode::NoError;
 		} catch (ErrorCode errcode) {
 			return errcode;
@@ -81,11 +81,11 @@ namespace CalX {
 		}
 	}
 
-	void GCodeInterpreter::syscall(gcl::GCodeSyscallType type, const gcl::GCodeRuntimeValue &function, const gcl::GCodeVariableScope<unsigned char> &args) {
+	void GCodeInterpreter::syscall(gclr::GCodeSyscallType type, const gclr::GCodeRuntimeValue &function, const gclr::GCodeScopedDictionary<unsigned char> &args) {
 		if (!this->state.work) {
 			throw ErrorCode::NoError;
 		}
-		if (type != gcl::GCodeSyscallType::General) {
+		if (type != gclr::GCodeSyscallType::General) {
 			return;
 		}
 		const int_conf_t CHORD_COUNT =
@@ -99,11 +99,11 @@ namespace CalX {
 			case GCodeOperation::RapidMove: {
 				coord_point_t dest = translator->get(plane.getPosition());
 				if (args.has('X')) {
-					gcl::GCodeRuntimeValue prm = args.get('X');
+					gclr::GCodeRuntimeValue prm = args.get('X');
 					dest.x = getRealConstant(prm);
 				}
 				if (args.has('Y')) {
-					gcl::GCodeRuntimeValue prm = args.get('Y');
+					gclr::GCodeRuntimeValue prm = args.get('Y');
 					dest.y = getRealConstant(prm);
 				}
 				motor_point_t mdest = translator->get(dest.x, dest.y);
@@ -114,11 +114,11 @@ namespace CalX {
 			case GCodeOperation::LinearMove: {
 				coord_point_t dest = translator->get(plane.getPosition());
 				if (args.has('X')) {
-					gcl::GCodeRuntimeValue prm = args.get('X');
+					gclr::GCodeRuntimeValue prm = args.get('X');
 					dest.x = getRealConstant(prm);
 				}
 				if (args.has('Y')) {
-					gcl::GCodeRuntimeValue prm = args.get('Y');
+					gclr::GCodeRuntimeValue prm = args.get('Y');
 					dest.y = getRealConstant(prm);
 				}
 				motor_point_t mdest = translator->get(dest.x, dest.y);
@@ -131,19 +131,19 @@ namespace CalX {
 					coord_point_t dest = translator->get(plane.getPosition());
 					coord_point_t cen = { 0, 0 };
 					if (args.has('X')) {
-						gcl::GCodeRuntimeValue prm = args.get('X');
+						gclr::GCodeRuntimeValue prm = args.get('X');
 						dest.x = getRealConstant(prm);
 					}
 					if (args.has('Y')) {
-						gcl::GCodeRuntimeValue prm = args.get('Y');
+						gclr::GCodeRuntimeValue prm = args.get('Y');
 						dest.y = getRealConstant(prm);
 					}
 					if (args.has('I')) {
-						gcl::GCodeRuntimeValue prm = args.get('I');
+						gclr::GCodeRuntimeValue prm = args.get('I');
 						cen.x = getRealConstant(prm);
 					}
 					if (args.has('J')) {
-						gcl::GCodeRuntimeValue prm = args.get('J');
+						gclr::GCodeRuntimeValue prm = args.get('J');
 						cen.y = getRealConstant(prm);
 					}
 					motor_point_t current = plane.getPosition();
@@ -163,19 +163,19 @@ namespace CalX {
 					coord_point_t dest = translator->get(plane.getPosition());
 					coord_point_t cen = { 0, 0 };
 					if (args.has('X')) {
-						gcl::GCodeRuntimeValue prm = args.get('X');
+						gclr::GCodeRuntimeValue prm = args.get('X');
 						dest.x = getRealConstant(prm);
 					}
 					if (args.has('Y')) {
-						gcl::GCodeRuntimeValue prm = args.get('Y');
+						gclr::GCodeRuntimeValue prm = args.get('Y');
 						dest.y = getRealConstant(prm);
 					}
 					if (args.has('I')) {
-						gcl::GCodeRuntimeValue prm = args.get('I');
+						gclr::GCodeRuntimeValue prm = args.get('I');
 						cen.x = getRealConstant(prm);
 					}
 					if (args.has('J')) {
-						gcl::GCodeRuntimeValue prm = args.get('J');
+						gclr::GCodeRuntimeValue prm = args.get('J');
 						cen.y = getRealConstant(prm);
 					}
 					motor_point_t current = plane.getPosition();

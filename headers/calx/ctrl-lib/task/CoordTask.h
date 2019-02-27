@@ -39,7 +39,7 @@
            * CoordTaskWrapper - wraps task and plane filter parameters. May be
    removed.*/
 
-namespace gcl = GCodeLib;
+namespace gclr = GCodeLib::Runtime;
 
 namespace CalX {
 
@@ -101,7 +101,7 @@ namespace CalX {
 
 	 private:
 		std::string code;
-		std::unique_ptr<gcl::GCodeIRModule> module;
+		std::unique_ptr<gclr::GCodeIRModule> module;
 		std::shared_ptr<CoordTranslator> translator;
 	};
 }  // namespace CalX

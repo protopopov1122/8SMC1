@@ -33,7 +33,7 @@
 /* GCode interpreter executes parser produced commands
    on given coordinate plane with given speeed. */
 
-namespace gcl = GCodeLib;
+namespace gclr = GCodeLib::Runtime;
 
 namespace CalX {
 
@@ -51,12 +51,12 @@ namespace CalX {
 		SetPosition = 92
 	};
 
-	class GCodeInterpreter : public gcl::GCodeInterpreter {
+	class GCodeInterpreter : public gclr::GCodeInterpreter {
 	 public:
-                GCodeInterpreter(gcl::GCodeIRModule &, CoordPlane &, std::shared_ptr<CoordTranslator>, ConfigurationCatalogue &, float, TaskState &);
+                GCodeInterpreter(gclr::GCodeIRModule &, CoordPlane &, std::shared_ptr<CoordTranslator>, ConfigurationCatalogue &, float, TaskState &);
                 ErrorCode run();
          protected:
-              void syscall(gcl::GCodeSyscallType, const gcl::GCodeRuntimeValue &, const gcl::GCodeVariableScope<unsigned char> &) override;
+              void syscall(gclr::GCodeSyscallType, const gclr::GCodeRuntimeValue &, const gclr::GCodeScopedDictionary<unsigned char> &) override;
          private:
                 CoordPlane &plane;
                 std::shared_ptr<CoordTranslator> trans;

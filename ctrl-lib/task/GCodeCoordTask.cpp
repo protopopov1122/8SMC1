@@ -23,8 +23,7 @@
 #include "calx/ctrl-lib/SystemManager.h"
 #include "calx/ctrl-lib/gcode/GCodeInterpreter.h"
 #include "calx/ctrl-lib/task/CoordTask.h"
-#include "gcodelib/parser/Parser.h"
-#include "gcodelib/runtime/Translator.h"
+#include "gcodelib/Frontend.h"
 
 namespace CalX {
 
@@ -38,11 +37,8 @@ namespace CalX {
 		}
 		this->code = ss.str();
 		ss.seekg(0);
-		gcl::GCodeDefaultScanner scanner(ss);
-		gcl::GCodeParser parser(scanner);
-		auto root = parser.parse();
-		gcl::GCodeIRTranslator translator;
-		this->module = translator.translate(*root);
+		GCodeLib::GCodeLinuxCNC compiler;
+		this->module = compiler.compile(ss);
 		this->translator = trans;
 	}
 
