@@ -76,8 +76,6 @@ namespace CalX {
 			return ErrorCode::NoError;
 		} catch (ErrorCode errcode) {
 			return errcode;
-		} catch (...) {
-			return ErrorCode::LowLevelError;
 		}
 	}
 

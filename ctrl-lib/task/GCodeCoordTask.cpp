@@ -23,12 +23,17 @@
 #include "calx/ctrl-lib/SystemManager.h"
 #include "calx/ctrl-lib/gcode/GCodeInterpreter.h"
 #include "calx/ctrl-lib/task/CoordTask.h"
+#include "calx/ctrl-lib/logger/Shortcuts.h"
 #include "gcodelib/Frontend.h"
+#include "gcodelib/runtime/Error.h"
+
+namespace gcl = GCodeLib;
 
 namespace CalX {
 
 	GCodeCoordTask::GCodeCoordTask(std::istream &input,
-	                               std::shared_ptr<CoordTranslator> trans)
+	                               std::shared_ptr<CoordTranslator> trans,
+																 ConfigurationCatalogue &config)
 	    : CoordTask::CoordTask(CoordTaskType::GCodeTask) {
 		int ch;
 		std::stringstream ss;
@@ -37,8 +42,21 @@ namespace CalX {
 		}
 		this->code = ss.str();
 		ss.seekg(0);
-		GCodeLib::GCodeLinuxCNC compiler;
-		this->module = compiler.compile(ss);
+		std::unique_ptr<gcl::GCodeCompilerFrontend> compiler;
+		if (config.getEntry(CalxConfiguration::Core)->getString(CalxCoreConfiguration::GCodeEngine, "reprap").compare("linuxcnc") == 0) {
+			compiler = std::make_unique<gcl::GCodeLinuxCNC>();
+		} else {
+			compiler = std::make_unique<gcl::GCodeRepRap>();
+		}
+		try {
+			this->module = compiler->compile(ss);
+		} catch (gcl::Parser::GCodeParseException &ex) {
+			if (ex.getLocation().has_value()) {
+				Error(GlobalLogger::getLogger()) << "G-Code compilation error at " << ex.getLocation().value() << " \"" << ex.getMessage() << '\"' << Flush();
+			} else {
+				Error(GlobalLogger::getLogger()) << "G-Code compilation error \"" << ex.getMessage() << '\"' << Flush();
+			}
+		} catch (...) {}
 		this->translator = trans;
 	}
 
@@ -47,8 +65,19 @@ namespace CalX {
 	                                  std::shared_ptr<TaskState> state) {
 		state->plane = plane;
 		state->work = true;
-		GCodeInterpreter interpreter(*this->module, *plane, this->translator, sysman.getConfiguration(), prms.speed, *state);
-		ErrorCode errcode = interpreter.run();
+		ErrorCode errcode = ErrorCode::LowLevelError;
+		if (this->module) {
+			try {
+				GCodeInterpreter interpreter(*this->module, *plane, this->translator, sysman.getConfiguration(), prms.speed, *state);
+				errcode = interpreter.run();
+			} catch (gcl::Runtime::GCodeRuntimeError &ex) {
+				if (ex.getLocation().has_value()) {
+					Error(GlobalLogger::getLogger()) << "G-Code runtime error at " << ex.getLocation().value() << " \"" << ex.getMessage() << '\"' << Flush();
+				} else {
+					Error(GlobalLogger::getLogger()) << "G-Code runtime error \"" << ex.getMessage() << '\"' << Flush();
+				}
+			} catch (...) {}
+		}
 		state->work = false;
 		return errcode;
 	}

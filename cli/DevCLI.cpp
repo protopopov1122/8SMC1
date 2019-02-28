@@ -840,7 +840,7 @@ namespace CalX {
 			    std::make_shared<BasicCoordTranslator>(center, scale);
 			std::string path = args.at(5);
 			std::ifstream is(path, std::ifstream::in);
-			tasks.addTask(std::make_unique<GCodeCoordTask>(is, trans));
+			tasks.addTask(std::make_unique<GCodeCoordTask>(is, trans, sysman.getConfiguration()));
 			is.close();
 		} else if (args.at(0).compare(CalxConfiguration::Graph) == 0) {
 			if (args.size() < 12) {

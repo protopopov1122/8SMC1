@@ -49,7 +49,7 @@ namespace CalX::UI {
 		codeText->SetValue(code);
 
 		std::stringstream ss(code);
-		this->task = std::make_shared<GCodeCoordTask>(ss, tr);
+		this->task = std::make_shared<GCodeCoordTask>(ss, tr, wxGetApp().getSystemManager().getConfiguration());
 
 		Layout();
 		this->Bind(wxEVT_CLOSE_WINDOW, &CalxGcodeHandle::OnExit, this);

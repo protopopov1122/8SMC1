@@ -49,6 +49,7 @@ namespace CalX {
 		static constexpr auto JumpSpeed = "jump_speed";
 		static constexpr auto Settings = "settings";
 		static constexpr auto AutoPowerMotors = "auto_power_motors";
+		static constexpr auto GCodeEngine = "gcode_engine";
 	};
 
 	class CalxExtensionsConfiguration {

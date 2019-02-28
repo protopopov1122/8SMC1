@@ -92,7 +92,7 @@ namespace CalX {
 
 	class GCodeCoordTask : public CoordTask {
 	 public:
-		GCodeCoordTask(std::istream &, std::shared_ptr<CoordTranslator>);
+		GCodeCoordTask(std::istream &, std::shared_ptr<CoordTranslator>, ConfigurationCatalogue &);
 		ErrorCode perform(std::shared_ptr<CoordPlane>, TaskParameters &,
 		                  SystemManager &, std::shared_ptr<TaskState>) override;
 
