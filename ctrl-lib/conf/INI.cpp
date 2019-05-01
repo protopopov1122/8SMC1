@@ -105,6 +105,20 @@ namespace CalX {
 			}
 		}
 	}
+	
+	static std::string &ltrim_string(std::string &str, const std::string& chars = "\t\n\v\f\r ") {
+		str.erase(0, str.find_first_not_of(chars));
+		return str;
+	}
+	 
+	static std::string &rtrim_string(std::string &str, const std::string& chars = "\t\n\v\f\r ") {
+		str.erase(str.find_last_not_of(chars) + 1);
+		return str;
+	}
+	 
+	static std::string &trim_string(std::string &str, const std::string& chars = "\t\n\v\f\r ") {
+		return ltrim_string(rtrim_string(str, chars), chars);
+	}
 
 	ConfigurationValue parseValue(std::string &line) {
 		static std::regex INTEGER(R"(^-?[0-9]+)");
@@ -126,7 +140,8 @@ namespace CalX {
 		} else {
 			std::size_t idx = line.find('#');
 			std::size_t value_length = idx == std::string::npos ? line.length() : idx;
-			return ConfigurationValue(line.substr(0, value_length));
+			std::string str = line.substr(0, value_length);
+			return ConfigurationValue(trim_string(str));
 		}
 	}
 
