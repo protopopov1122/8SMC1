@@ -1,3 +1,5 @@
 This product includes software developed as part of:
-* wxWidgets library <https://www.wxwidgets.org/>
-* Lua 5.3 <https://www.lua.org/>
+* wxWidgets library <https://www.wxwidgets.org/> - GUI toolkit
+* Lua 5.3 <https://www.lua.org/> - scripting engine
+* LuaCppB <https://github.com/protopopov1122/LuaCppB> - Lua bindings
+* GCodeLib <https://github.com/protopopov1122/GCodeLib> - G-Code interpretation library

@@ -557,7 +557,7 @@ namespace CalX::UI {
 					        .getSystemManager()
 					        .getConfiguration()
 					        .getEntry(CalxConfiguration::Units)
-					        ->getReal(CalxUnitConfiguration::UnitSpeed, 1.25f);
+					        ->getReal(CalxUnitConfiguration::UnitSpeed, 4000.0);
 					coord_point_t dest = { start.value().x / scale,
 						                     start.value().y / scale };
 					wxGetApp()

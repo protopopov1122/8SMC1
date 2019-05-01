@@ -161,3 +161,6 @@ There are several major tasks:
 
 ##### 29/01/2019
 Test in the real environment. The core functionality was tested. Recently added functions work properly.
+
+##### 01/05/2019
+Minor updates. Tomorrow will be the final test of CalX.

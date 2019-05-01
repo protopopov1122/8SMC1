@@ -220,7 +220,7 @@ namespace CalX::UI {
 		wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 		SetSizer(sizer);
 		sizer->Add(new wxStaticText(this, wxID_ANY,
-		                            __("Polar coordinate filter have not any "
+		                            __("Polar coordinate filter does not have any "
 		                               "parameters.\n Add other filters.")));
 	}
 
