@@ -30,6 +30,15 @@
 #define M_PI 3.14159265358979323846
 #endif
 
+/* DISCLAIMER! Read this before editing!
+   This module is the most complicated and messy in terms of source code (in my opinion).
+   The algorithms used there may seem strange, some if's, while's and other
+   checks may seem redundant. However, they are not. Device drivers sometimes behave quite unexpectedly.
+   They may tell you that they are not moving and in a second they will report an error because they are still moving.
+   Each "redundant" construction in fact tries to compensate this behavior and is a result of some seemingly impossible errors during the tests.
+   Before editing or refactoring, make sure that you understand what you are doing and do as much tests as possible.
+*/
+
 namespace CalX {
 
 	const char *COORD_CTRL_TAG = "CoordCtrl";
@@ -146,9 +155,9 @@ namespace CalX {
 		ResourceUse instrUse;
 
 		/* Determine if instrument is present, mark it as used and enable it (if
-		   necesarry). Even if the instrument is enabled here, it will continue work
+		   necessary). Even if the instrument is enabled here, it will continue work
 		   after method finished
-		   (for optimisation purposes) and will be disabled on session close */
+		   (for optimization purposes) and will be disabled on session close */
 		if (this->instr != nullptr) {
 			instrUse.swap(*this->instr);
 			ErrorCode errcode = this->instr->enable(sync);
@@ -186,12 +195,12 @@ namespace CalX {
 		while (this->xAxis->isMoving() || this->yAxis->isMoving()) {
 			if (this->xAxis->isMoving()) {
 				ErrorCode code = xAxis->checkTrailers();
-				if (code != ErrorCode::NoError) { /* Motor reached trailes, stop plane,
+				if (code != ErrorCode::NoError) { /* Motor reached trailers, stop plane,
 					                                   unuse devices, produce error */
 					xAxis->asyncStop(code, point.x, x_speed);
 					yAxis->asyncStop(code, point.y, y_speed);
 
-					/* Emit necesarry errors */
+					/* Emit necessary errors */
 					CoordErrorEvent eevt = { code };
 					sendStoppedEvent(eevt);
 					return code;
@@ -245,7 +254,7 @@ namespace CalX {
 			return ErrorCode::NoError;
 		}
 		CoordStatusHandle statusHandle(&this->status, CoordPlaneStatus::Jump);
-		/* Determne movement parameters. They are stored in configuration */
+		/* Determine movement parameters. They are stored in configuration */
 		int_conf_t roll_step =
 		    config.getEntry(CalxConfiguration::Core)
 		        ->getInt(CalxMotorConfiguration::RollStep, ROLL_STEP);
@@ -272,19 +281,19 @@ namespace CalX {
 		/* Run loop while at least one motor have not reached trailer
 		   and further work is allowed.
 		   Motors move by series of jumps, because it's easier to
-		   prevent corruption if trailer is not enough sensetive */
+		   prevent corruption if trailer is not enough sensitive */
 		ErrorCode errcode = ErrorCode::NoError;
 		while (!(xpr && ypr) && work) {
 			if (!xAxis->isTrailerPressed(tr)) {
 				/* Trailer is not pressed, do one more motor jump if motor is idle */
 				if (!xpr && !xAxis->isMoving()) {
-					if ((errcode = xAxis->asyncMove(xAxis->getPosition() + dest,
+					if (!xAxis->isMoving() && (errcode = xAxis->asyncMove(xAxis->getPosition() + dest,
 					                                roll_speed)) != ErrorCode::NoError) {
-						/* Error occured. Stop motors, emit errors, halt */;
+						/* Error occurred. Stop motors, emit errors, halt */;
 						xAxis->asyncStop(errcode, xAxis->getPosition() + dest, roll_speed);
 						yAxis->asyncStop(errcode, yAxis->getPosition() + dest, roll_speed);
 						sendCalibratedEvent(evt);
-						return ErrorCode::LowLevelError;
+						return errcode;
 					}
 				}
 			} else {
@@ -299,12 +308,12 @@ namespace CalX {
 			/* Similar as above */
 			if (!yAxis->isTrailerPressed(tr)) {
 				if (!ypr && !yAxis->isMoving()) {
-					if ((errcode = yAxis->asyncMove(yAxis->getPosition() + dest,
+					if (!yAxis->isMoving() && (errcode = yAxis->asyncMove(yAxis->getPosition() + dest,
 					                                roll_speed)) != ErrorCode::NoError) {
 						xAxis->asyncStop(errcode, xAxis->getPosition() + dest, roll_speed);
 						yAxis->asyncStop(errcode, yAxis->getPosition() + dest, roll_speed);
 						sendCalibratedEvent(evt);
-						return ErrorCode::LowLevelError;
+						return errcode;
 					}
 				}
 			} else {
