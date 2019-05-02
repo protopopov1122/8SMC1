@@ -37,6 +37,10 @@ namespace CalX::UI {
 		std::string units = wxGetApp().getUnitProcessor().getUnits();
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 		SetSizer(sizer);
+		
+		ConfiguationFlatDictionary *coreEntry =
+		    wxGetApp().getSystemManager().getConfiguration().getEntry(
+		        CalxConfiguration::Core);
 
 		this->xCoord = new wxSpinCtrlDouble(
 		    this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
@@ -70,7 +74,7 @@ namespace CalX::UI {
 		    wxGetApp().getUnitProcessor().getSpeedPrecision());
 		this->splitter =
 		    new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		                   wxDefaultSize, wxSP_ARROW_KEYS, 0, 1000, 200);
+		                   wxDefaultSize, wxSP_ARROW_KEYS, 0, 1000, coreEntry->getInt(CalxCoreConfiguration::ChordCount, 200));
 		this->clockwise = new wxCheckBox(this, wxID_ANY, __("Clockwise"));
 		this->relative = new wxCheckBox(this, wxID_ANY, __("Relative"));
 		wxButton *moveButton = new wxButton(this, wxID_ANY, __("Move"));

@@ -191,7 +191,10 @@ namespace CalX::UI {
 		std::string units = wxGetApp().getUnitProcessor().getUnits();
 
 		motor_point_t pnt = { 0, 0 };
-		this->step = std::make_shared<ArcTaskStep>(pnt, pnt, 200, 1.0f, false);
+		ConfiguationFlatDictionary *coreEntry =
+		    wxGetApp().getSystemManager().getConfiguration().getEntry(
+		        CalxConfiguration::Core);
+		this->step = std::make_shared<ArcTaskStep>(pnt, pnt, coreEntry->getInt(CalxCoreConfiguration::ChordCount, 200), 1.0f, false);
 
 		wxFlexGridSizer *sizer = new wxFlexGridSizer(3);
 		SetSizer(sizer);

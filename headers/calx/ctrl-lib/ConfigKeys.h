@@ -50,6 +50,7 @@ namespace CalX {
 		static constexpr auto Settings = "settings";
 		static constexpr auto AutoPowerMotors = "auto_power_motors";
 		static constexpr auto GCodeEngine = "gcode_engine";
+		static constexpr auto ChordCount = "chord_count";
 	};
 
 	class CalxExtensionsConfiguration {
