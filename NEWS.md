@@ -164,3 +164,13 @@ Test in the real environment. The core functionality was tested. Recently added 
 
 ##### 01/05/2019
 Minor updates. Tomorrow will be the final test of CalX.
+
+##### 02/05/2019
+Testing on the real hardware. Most probably it was the last test and software will not be updated furthermore.
+Users reported some bugs in the software, some were fixed on immediately, some were not reproducible. Current version is declared
+stable and no improvements other than bugfixes will take place. Till the end of may I am waiting for bug reports from users. During that
+month I'm planning to update and finish documentation, use static and dynamic analysis to verify the code, so that in the end of may I could
+completely finish the project.
+I was working on the code for more than two years and I must admit that it was quite fun and helped me to improve C++ skills a lot. Thanks to institute
+personnel who allowed me to work with this hardware, thanks to all the people who helped me to test, configure and improve this software, as well as
+accompanied and entertained me while I was working on it.
